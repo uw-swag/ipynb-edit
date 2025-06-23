@@ -1,0 +1,32 @@
+
+    The code you provided is for a machine learning pipeline using Kernel PCA and Logistic Regression. It's a good example of how to use GridSearchCV for hyperparameter tuning. However, it's important to note that the sklearn version you're using (0.18) is quite old.
+
+    The recommended way to handle this is to use the newer versions of scikit-learn, which have better support for cross-validation and grid search. Here's how you can do it:
+
+    ```python
+    from sklearn.model_selection import GridSearchCV, cross_val_score
+    from sklearn.pipeline import Pipeline
+    from sklearn.decomposition import PCA
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import fetch_mldata
+
+    mnist = fetch_mldata('MNIST original')
+    X = mnist["data"]
+    y = mnist["target"]
+
+    clf = Pipeline([
+        ("kpca", PCA(n_components=2)),
+        ("log_reg", LogisticRegression())
+    ])
+
+    param_grid = [
+        {"kpca__gamma": np.linspace(0.03, 0.05, 10), "kpca__kernel": ["rbf", "sigmoid"]}
+    ]
+
+    grid_search = GridSearchCV(clf, param_grid, cv=3)
+    grid_search.fit(X, y)
+
+    print(grid_search.best_params_)
+    ```
+
+    This will give you the best parameters found by the grid search, which should be more accurate and faster.

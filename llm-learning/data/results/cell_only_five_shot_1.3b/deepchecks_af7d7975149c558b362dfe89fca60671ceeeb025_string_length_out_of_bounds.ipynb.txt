@@ -1,0 +1,24 @@
+
+    # Example of outliers
+    # Let's assume we have a DataFrame with a column 'column_name' with some outliers.
+    df = pd.DataFrame({'column_name': ['a', 'b', 'c', 'd', 'e', 'f', 'gh', 'i', 'j', 'k', 'l', 'mno', 'pqr', 'st', 'uv', 'w', 'xy', '1234567890', 'abc', 'defgh', 'ijk', 'lmnopqr', 'stuvwxyz']})
+
+    # Now, let's check for outliers in the 'column_name' column
+    outliers = StringLengthOutOfBounds(column_name='column_name', min_length=1, max_length=100)
+    outliers.run(df)
+
+    # This will return a DataFrame with the outliers and their corresponding column_name and length.
+
+    # You can then decide which outliers to remove based on your specific use case.
+
+    # Note: This is a simple example and might not be suitable for all use cases.
+
+    # You can also add more checks like IsNull, IsNotNull, IsIn, IsNotIn, IsBetween, IsNotBetween, etc.
+
+    # You can also add more visualizations like BoxPlot, Histogram, etc.
+
+    # This is just a starting point, you can customize it according to your needs.
+
+    # Remember to replace 'column_name' and 'min_length' and 'max_length' with your actual column name and the length range you want to check.
+
+    # Also, remember to replace 'df' with your actual DataFrame.

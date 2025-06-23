@@ -1,0 +1,21 @@
+!git clone https://github.com/PeizeSun/OneNet.git
+!pip install torch===1.7.1+cu110 torchvision===0.8.2+cu110 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+cd OneNet
+!pip install pyyaml==5.1 pycocotools>=2.0.1
+import torch, torchvision
+print(torch.__version__, torch.cuda.is_available())
+!python setup.py build develop
+!mkdir -p datasets/coco
+!ln -s /path_to_coco_dataset/annotations datasets/coco/annotations
+!ln -s /path_to_coco_dataset/train2017 datasets/coco/train2017
+!ln -s /path_to_coco_dataset/val2017 datasets/coco/val2017
+pip install -U iopath
+!nvcc --version
+pip install torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+!python projects/OneNet/train_net.py --num-gpus 1 \
+    --config-file projects/OneNet/configs/onenet.res50.dcn.yaml
+!pip install -U 'git+https://github.com/facebookresearch/iopath'
+!python projects/OneNet/train_net.py --num-gpus 1 \
+    --config-file projects/OneNet/configs/onenet.res50.dcn.yaml \
+    --eval-only MODEL.WEIGHTS path/to/model.pth
+

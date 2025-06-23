@@ -1,0 +1,54 @@
+
+    '''
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap
+
+    from sklearn.datasets import make_classification
+    from sklearn.model_selection import train_test_split
+
+    from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.layers import Input, Dense
+    from tensorflow.keras.models import Model
+<\Cell_0>
+<Cell_1>
+N = 2000  # total number of examples
+C = 3  # number of classes
+
+X, Y = make_classification(n_samples=N,
+                           n_classes=C,
+                           n_clusters_per_class=1,
+                           n_features=2,
+                           n_redundant=0,
+                           n_informative=2,
+                           random_state=42)
+
+# one-hot encoding of class labels
+Y1h = to_categorical(Y, C)
+
+# split into training/validation subsets
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y1h, test_size=0.2)
+<\Cell_1>
+<Cell_2>
+def dnn_model(input_shape=(2,), classes=C):
+
+    inputs = Input(shape=input_shape)
+    x = Dense(16, activation='relu')(inputs)
+    x = Dense(16, activation='relu')(x)
+    x = Dense(classes, activation='softmax')(x)
+
+    return Model(inputs, x)
+
+
+model = dnn_model()
+model.summary()
+<\Cell_2>
+<Cell_3>
+def train_model(loss):
+    
+    model = dnn_model()
+    model.compile(loss=loss, optimizer="ad

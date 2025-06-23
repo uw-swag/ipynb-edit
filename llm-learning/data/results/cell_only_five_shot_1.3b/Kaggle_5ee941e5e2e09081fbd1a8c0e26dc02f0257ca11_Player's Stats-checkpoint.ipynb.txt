@@ -1,0 +1,29 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.manifold import TSNE
+
+    # Assuming df is your DataFrame and it has columns 'Player', 'Stat1', 'Stat2', 'Stat3'
+    df = pd.read_csv('player_stats.csv')
+
+    # Select the player stats you want to use for t-SNE
+    stats = df[['Stat1', 'Stat2', 'Stat3']]
+
+    # Create a t-SNE instance
+    tsne = TSNE(n_components=2, random_state=0)
+
+    # Fit and transform the data
+    transformed_data = tsne.fit_transform(stats)
+
+    # Create a DataFrame for the t-SNE plot
+    df_tsne = pd.DataFrame(transformed_data, columns=['x', 'y'])
+    df_tsne['Player'] = df['Player']
+
+    # Plot the t-SNE plot
+    plt.figure(figsize=(10, 8))
+    plt.scatter(df_tsne['x'], df_tsne['y'])
+    for i, player in enumerate(df_tsne['Player']):
+        plt.annotate(player, (df_tsne['x'][i], df_tsne['y'][i]))
+    plt.show()
+    ```
+    This script uses t-SNE to reduce the dimensionality of the player stats data and plots the results. The t-SNE algorithm is a dimensionality reduction technique that can help visualize high-dimensional data in a lower-dimensional space.

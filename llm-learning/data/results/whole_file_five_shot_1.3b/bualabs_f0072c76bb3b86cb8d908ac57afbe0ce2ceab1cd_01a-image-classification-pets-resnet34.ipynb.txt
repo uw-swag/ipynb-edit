@@ -1,0 +1,34 @@
+
+    '''
+    [
+    Commit Message: "correct type 94 percent"
+    Original Code Cells:
+    '''
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    from fastai import *
+    from fastai.vision import *
+    from fastai.metrics import accuracy
+    URLs.PETS
+    path = untar_data(URLs.PETS)
+    path.ls()
+    path_annotations = path/'annotations'
+    path_images = path/'images'
+    filenames = get_image_files(path_images)
+    batchsize = 64
+    np.random.seed(0)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+    databunch = ImageDataBunch.from_name_re(path_images, filenames, regex_pattern, ds_tfms=get_transforms(), size=224, bs=batchsize).normalize(imagenet_stats)
+    len(databunch.train_ds), len(databunch.valid_ds)
+    databunch.show_batch(rows=3, figsize=(12, 9))
+    print(databunch.classes)
+    print(databunch.c)
+    len(databunch.classes)
+    learner.unfreeze()
+    learner.lr_find()
+    learner.recorder.plot()
+    learner.fit_one_cycle(3, max_lr=slice(1e-6, 5e-4))
+    learner.save('resnet34-2')
+    '''
+    ]

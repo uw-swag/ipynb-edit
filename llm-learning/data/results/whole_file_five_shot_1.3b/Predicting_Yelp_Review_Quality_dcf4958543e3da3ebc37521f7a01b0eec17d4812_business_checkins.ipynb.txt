@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added presentation video"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sqlalchemy import create_engine
+<\Cell_0>
+<Cell_1>
+pd.set_option("display.max_columns", 100)
+pd.set_option("display.precision", 2)
+%matplotlib inline
+plt.style.use('fivethirtyeight')
+plt.rcParams.update({'font.size': 16, 'font.family': 'sans'})
+<\Cell_1>
+<Cell_2>
+def load_dataframe_from_yelp_2(query):
+    """
+    Connects to yelp_2 database on Postgres and
+    loads a Pandas dataframe based off sql query.
+
+    Args:
+        query (string): Sql query to select data from yelp_2.
+
+    Returns:
+        Dataframe: Pandas dataframe of records
+                    from sql query of yelp_2 database.
+    """
+    connect = 'postgresql+psycopg2://postgres:password@localhost:5432/yelp_2'
+    engine = create_engine(connect)
+    df = pd.read_sql(query, con=engine)
+    df = df.copy()
+    return df
+
+def counter(x):
+    if x in ['None', None, '']:
+        return 0
+    else:
+        y = x.split(',')
+        return len(y)
+<\Cell_2>
+<Cell_3>
+query = '''
+        SELECT *
+        FROM checkin_expanded
+        LIMIT 10000
+        ;
+        '''
+df = load_dataframe_from_yelp_2(query)
+<\Cell_3>
+<Cell_4>
+overall = df.describe(include='all')
+<\Cell_4>
+<Cell_5>
+overall
+<\Cell_5>

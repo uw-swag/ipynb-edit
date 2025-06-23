@@ -1,0 +1,59 @@
+```
+    # Section 4.2 - 4.7 with all changes. (#109)
+
+    ## 4.2.1 Data Preparation
+
+    ### 4.2.1.1 Data Cleaning
+
+    The data cleaning process involves removing or filling missing values, outliers, and duplicates.
+
+    ```python
+    # Removing duplicates
+    data.drop_duplicates(inplace=True)
+
+    # Filling missing values
+    data.fillna(method='ffill', inplace=True)
+
+    # Removing outliers
+    data = data[(np.abs(stats.zscore(data)) < 3).all(axis=1)]
+    ```
+
+    ### 4.2.1.2 Feature Engineering
+
+    Feature engineering is the process of creating new features from existing ones.
+
+    ```python
+    # Creating new features
+    data['year'] = pd.to_datetime(data['Timestamp']).dt.year
+    data['month'] = pd.to_datetime(data['Timestamp']).dt.month
+    data['day'] = pd.to_datetime(data['Timestamp']).dt.day
+    data['hour'] = pd.to_datetime(data['Timestamp']).dt.hour
+    ```
+
+    ### 4.2.1.3 Data Transformation
+
+    Data transformation is the process of converting data from one format or structure into another.
+
+    ```python
+    # Converting data to a sparse matrix
+    data_sparse = sparse.csr_matrix((data['Rating'], (data['UserId'], data['MovieId'])))
+    ```
+
+    ## 4.2.2 Model Training
+
+    The model training process involves training the recommender system using the prepared data.
+
+    ```python
+    # Training the recommender system
+    model.fit(data_sparse)
+    ```
+
+    ## 4.2.3 Model Evaluation
+
+    The model evaluation process involves evaluating the performance of the recommender system.
+
+    ```python
+    # Evaluating the recommender system
+    precision, recall, ndcg = model.evaluate(test)
+    ```
+

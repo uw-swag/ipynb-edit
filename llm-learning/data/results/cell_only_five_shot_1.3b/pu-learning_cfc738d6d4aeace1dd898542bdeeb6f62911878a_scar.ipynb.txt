@@ -1,0 +1,24 @@
+```python
+    from scar import ALPHA, C, MEAN_P, COV_P, MEAN_N, COV_N
+
+
+    def get_samples(n: int):
+        x_p = np.random.multivariate_normal(MEAN_P, COV_P, n)
+        y_p = np.asarray([1] * n)
+        s_p = (np.random.uniform(size=n) < C).astype(int)
+        
+        x_n = np.random.multivariate_normal(MEAN_N, COV_N, n)
+        y_n = np.asarray([0] * n)
+        s_n = np.asarray([0] * n)
+        
+        return (
+            np.concatenate([x_p, x_n]),
+            np.concatenate([y_p, y_n]),
+            np.concatenate([s_p, s_n]),
+        )
+    ```
+
+    ### Explanation:
+    The code snippet you provided is a function that generates synthetic data for a classification problem. The function `get_samples` takes an integer `n` as input and returns three arrays: `x`, `y`, and `s`. `x` is a 2D array of shape `(2n, 3)`, where each row is a 3-dimensional point in the 3D space. `y` is a 1D array of length `2n`, where each element is either 1 or 0, representing the class labels for the points in `x`. `s` is a 1D array of length `2n`, where each element is either 0 or 1, representing the labels for the samples in `x`.
+
+    The function uses the `numpy.random.multivariate_normal` function to generate `n` points in the 3D space, with the mean and covariance matrices defined by `MEAN_P` and `COV_P`, respectively, for points labeled as 1, and the mean and covariance matrices defined by `MEAN_N` and `COV_N`, respectively, for points labeled as

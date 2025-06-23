@@ -1,0 +1,70 @@
+#Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.feature_selection import SelectFromModel
+from sklearn.linear_model import LogisticRegression
+from sklearn import svm
+import xgboost as xgb
+#Reading data. Input the path to the files instead of "../input".
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+svc = svm.SVC(kernel='linear')
+svc.fit(X, Y_train)
+svc_pred = svc.predict(Xt)
+
+clf = RandomForestClassifier(n_estimators=20, n_jobs=-1, criterion = 'gini', max_features = 'sqrt',
+                             min_samples_split=2, min_weight_fraction_leaf=0.0,
+                             max_leaf_nodes=40, max_depth=100)
+
+calibrated_clf = CalibratedClassifierCV(clf, method='sigmoid', cv=5)
+calibrated_clf.fit(X, Y_train)
+for_pred = calibrated_clf.predict_proba(Xt)
+
+log_reg.fit(X, Y_train)
+log_pred = log_reg.predict_proba(Xt)
+
+#I decided to try adding xgboost.
+params = {"objective": "multi:softprob", "num_class": 3, 'eta': 0.01, 'min_child_weight' : 10, 'max_depth': 5}
+param = list(params.items())
+gbm = xgb.train(params, xgb.DMatrix(X, Y_train), 300)
+x_pred = gbm.predict(xgb.DMatrix(Xt))
+#Predicted values
+s = le.inverse_transform(svc_pred)
+l = pd.DataFrame(log_pred, columns=le.classes_).idxmax(axis=1).values
+f = pd.DataFrame(for_pred, columns=le.classes_).idxmax(axis=1).values
+x = pd.DataFrame(x_pred, columns=le.classes_).idxmax(axis=1).values
+#Average of models, which give probability predictions.
+q = pd.DataFrame(((log_pred + for_pred + x_pred)/3), columns=le.classes_).idxmax(axis=1).values
+#As LR and SVC game the best results, I compare them
+for i in range(len(s)):
+    if l[i] != s[i]:
+        print(i, l[i], s[i], f[i], x[i], q[i])
+from collections import Counter
+for i in range(len(s)):
+    type_list = [l[i], s[i], f[i], x[i], q[i]]
+    c = Counter(type_list)
+    if l[i] != c.most_common()[0][0]:
+        print(i, l[i], s[i], f[i], x[i], q[i], '!' + c.most_common()[0][0])
+#I tried several ways and here is the current version:
+l[3] = 'Goblin'
+l[44] = 'Ghost'
+l[98] = 'Ghoul'
+l[107] = 'Goblin'
+l[112] = 'Ghost'
+l[134] = 'Goblin'
+l[162] = 'Ghoul'
+l[173] = 'Goblin'
+l[263] = 'Goblin'
+l[309] = 'Goblin'
+l[441] = 'Goblin'
+l[445] = 'Ghost'
+submission = pd.DataFrame({'id':test_id, 'type':l})
+submission.to_csv('GGG_submission3.csv', index=False)

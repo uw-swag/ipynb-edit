@@ -1,0 +1,34 @@
+
+    '''
+    '''
+
+    def read_and_store_data (dataset_folder, sample_rate) :
+        path = os.path.join(os.getcwd(), dataset_folder)
+        os.chdir(dataset_folder)
+    
+        patients = [d for d in os.listdir() if os.path.isdir(d)]
+        patients.sort()
+    
+        for p in patients:
+            os.chdir(p)
+            print('Reading data of patient', p)
+            l=[]
+        
+            # for each patient specify the edf files and the seizure files
+            edf = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('edf')]
+            edf.sort()
+            seizures = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('seizures')]
+            seizures.sort()
+    
+            # edf files contain 23 channels/columns and a 24th column that indicates the seizure
+            arr = np.zeros((1,24))
+            for e in edf:
+                sigbufs = readEdfFile(e)
+                print('Reading data file', e, 'with', sigbufs.shape[0], 'records')
+                sigbufs = np.append(sigbufs, np.zeros((sigbufs.shape[0],1)), axis=1)
+                if seizures and seizures[0].startswith(e):
+                    (start, length) = get_seizure_period(seizures[0])
+                    print('Reading seizure file', seizures[0], ': (start =',start,'sec /',start*sample_rate,'records, length =',length,'sec /', (start+length)*sample_rate,'records)')
+                    for i in range(start*sample_rate, (start+length)*sample_rate+1): sigbufs[i][23] = 1
+                    seizures.pop(0)
+                arr = np.concatenate([arr, sigbufs])

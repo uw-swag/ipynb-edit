@@ -1,0 +1,30 @@
+```
+    def get_databunch(transform):
+        batchsize = 32
+        sample = 5000
+        np.random.seed(555)
+        regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+        return ImageDataBunch.from_name_re(path_images, 
+                                           random.sample(filenames, sample), 
+                                           regex_pattern, 
+                                           ds_tfms=transform, 
+                                           size=224, bs=batchsize).normalize(imagenet_stats)
+
+    def get_ex(): return open_image(f'{path_images}/pug_147.jpg')
+
+    def plots_f(rows, cols, width, height, **kwargs):
+        [get_ex().apply_tfms(transform[0], **kwargs).show(ax=ax) for i,ax in enumerate(plt.subplots(
+            rows,cols,figsize=(width,height))[1].flatten())]
+
+    transform = ([], [])
+    databunch = get_databunch(transform)
+    learner = cnn_learner(databunch, models.vgg16_bn, ps=0.0, wd=0.0, 
+                          metrics=accuracy, callback_fns=ShowGraph).to_fp16()
+    plots_f(3, 3, 9, 9, size=224)
+    learner.unfreeze()
+    learner.fit_one_cycle(10, max_lr=slice(3e-6, 1e-2))
+
+    # transform = get_transforms(do_flip=True, flip_vert=False, max_rotate=10.0, max_zoom=1.1, max_lighting=0.2, max_warp=0.2, p_affine=0.75, p_lighting=0.75)
+    # databunch = get_databunch(transform)
+    # learner = cnn_learner(databunch, models.vgg1

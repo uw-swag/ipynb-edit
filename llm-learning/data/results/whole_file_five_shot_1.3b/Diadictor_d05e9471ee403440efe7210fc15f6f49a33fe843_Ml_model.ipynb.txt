@@ -1,0 +1,50 @@
+```python
+    <Cell_0>
+    # Import necessary libraries
+    import torch
+    from torch import nn
+    from torch.utils.data import DataLoader
+    from torchvision import transforms, datasets
+
+    # Define the model
+    class MLP(nn.Module):
+        def __init__(self):
+            super(MLP, self).__init__()
+            self.fc1 = nn.Linear(784, 128)
+            self.fc2 = nn.Linear(128, 64)
+            self.fc3 = nn.Linear(64, 10)
+
+        def forward(self, x):
+            x = torch.flatten(x, 1)
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+            return x
+
+    # Define transformations
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+
+    # Load the data
+    trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
+    trainloader = DataLoader(trainset, batch_size=64, shuffle=True)
+
+    # Define the model
+    model = MLP()
+
+    # Define the loss function and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+    # Train the model
+    for epoch in range(10):
+        running_loss = 0.0
+        for i, data in enumerate(trainloader, 0):
+            inputs, labels = data
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.item()
+        print(f'Epoch {epoch + 1}, Loss: {running

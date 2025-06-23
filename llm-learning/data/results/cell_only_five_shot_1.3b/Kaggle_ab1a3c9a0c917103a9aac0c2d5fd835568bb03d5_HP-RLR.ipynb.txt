@@ -1,0 +1,41 @@
+
+    The code you provided is incomplete and does not contain the complete code for the Ridge Model. Here is a complete version of the code:
+
+```python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import Ridge
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+
+# Load the data
+train_DF = pd.read_csv('train.csv')
+test_DF = pd.read_csv('test.csv')
+
+# Print the training data information
+print("------Training Data Information-------\n")
+train_DF.info()
+
+# Print the test data information
+print("\n\n------Test Data Information-------\n")
+test_DF.info()
+
+# Fixing other numeric skewed metrics
+numeric_features_train = train_DF.dtypes[train_DF.dtypes != 'object'].index
+numeric_features_test = test_DF.dtypes[train_DF.dtypes != 'object'].index
+
+skewed_features_train = train_DF[numeric_features_train].apply(lambda x: skew(x))
+skewed_features_test = test_DF[numeric_features_test].apply(lambda x: skew(x))
+
+skewed_features_train = skewed_features_train[skewed_features_train > 0.75]
+skewed_features_test = skewed_features_test[skewed_features_test > 0.75]
+skewed_features_train = skewed_features_train.index
+skewed_features_test = skewed_features_test.index
+
+train_DF[skewed_features_train] = np.log1p(train_DF[skewed_features_train])
+test_DF[skewed_features_test] = np.log1p(test_DF[skewed_features_test])
+
+# Getting dummies for all the non numeric data
+train_DF = pd.get_dummies(train_DF)
+test_DF

@@ -1,0 +1,58 @@
+```
+    import os
+    from os.path import isdir, join
+    from pathlib import Path
+    import pandas as pd
+
+    # Math
+    import numpy as np
+    from scipy.fftpack import fft
+    from scipy import signal
+    from scipy.io import wavfile
+    import librosa
+
+    from sklearn.decomposition import PCA
+
+    # Visualization
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import IPython.display as ipd
+    import librosa.display
+
+    import plotly.offline as py
+    py.init_notebook_mode(connected=True)
+    import plotly.graph_objs as go
+    import plotly.tools as tls
+    import pandas as pd
+
+    %matplotlib inline
+
+    from sklearn.datasets import fetch_mldata
+    mnist = fetch_mldata('MNIST original')
+
+    X, y = mnist["data"], mnist["target"]
+    X.shape
+
+    y.shape
+
+    28*28
+
+    def plot_digit(data):
+        image = data.reshape(28, 28)
+        plt.imshow(image, cmap = matplotlib.cm.binary,
+                   interpolation="nearest")
+        plt.axis("off")
+
+    some_digit_index = 36000
+    some_digit = X[some_digit_index]
+    plot_digit(some_digit)
+    plt.show()
+
+    # EXTRA
+
+    # Implemented in https://github.com/scikit-learn/scikit-learn/pull/6671
+    # Pushed to master but not yet in pip module.
+
+    # END
+    ```
+    This code is used to import necessary libraries and functions for the subsequent cells.

@@ -1,0 +1,19 @@
+```python
+    import torch
+    import torch.nn as nn
+
+    class BatchNormLayer(nn.Module):
+        def __init__(self, num_features):
+            super(BatchNormLayer, self).__init__()
+            self.num_features = num_features
+            self.gamma = nn.Parameter(torch.ones(num_features))
+            self.beta = nn.Parameter(torch.zeros(num_features))
+            self.bn = nn.BatchNorm2d(num_features)
+
+        def forward(self, x):
+            x = self.bn(x)
+            return x
+    ```
+    '''
+    }
+    ```

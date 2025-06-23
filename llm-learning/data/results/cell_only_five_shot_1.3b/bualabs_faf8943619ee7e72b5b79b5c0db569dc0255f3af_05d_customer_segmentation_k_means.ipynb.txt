@@ -1,0 +1,46 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.cluster import KMeans
+    from sklearn.preprocessing import StandardScaler
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Load the dataset
+    df = pd.read_csv('Mall_Customers.csv')
+
+    # Preprocess the data
+    df.drop(['CustomerID'], axis=1, inplace=True)
+
+    # Standardize the features
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Create a DataFrame for the scaled data
+    df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
+
+    # Create a DataFrame for the elbow plot
+    df_elbow = pd.DataFrame()
+
+    # Calculate the Within Distance Sum of Squares (a.k.a. inertia) for k values 1 through 10
+    for i in range(1, 11):
+        kmeans = KMeans(n_clusters=i, random_state=42)
+        kmeans.fit(df_scaled)
+        df_elbow['cluster{}'.format(i)] = kmeans.inertia_
+
+    # Plot the elbow plot
+    plt.figure(figsize=(10, 5))
+    sns.lineplot(data=df_elbow, palette='viridis')
+    plt.title('Elbow Plot')
+    plt.xlabel('Number of clusters')
+    plt.ylabel('Within Distance Sum of Squares (a.k.a. inertia)')
+    plt.show()
+
+    # Use the elbow plot to determine the optimal number of clusters
+    optimal_clusters = 3
+
+    # Create a KMeans model with the optimal number of clusters
+    kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+
+    # Fit the model to the data
+    kmeans.fit(df

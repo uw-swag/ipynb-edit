@@ -1,0 +1,18 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.decomposition import PCA
+
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Perform PCA
+    pca = PCA(n_components=2)
+    principalComponents = pca.fit_transform(df)
+
+    # Create a DataFrame for the principal components
+    principalDf = pd.DataFrame(data = principalComponents, columns = ['principal component 1', 'principal component 2'])
+
+    # Print the principal components DataFrame
+    print(principalDf)
+    ```

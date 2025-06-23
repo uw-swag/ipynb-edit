@@ -1,0 +1,47 @@
+```python
+    # If you don't have deepchecks installed yet:
+    import sys
+    !{sys.executable} -m pip install deepchecks -U --quiet #--user
+
+    # Import necessary libraries
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.suites import full_suite
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    # Load the model
+    yolo = coco.load_model(pretrained=True)
+
+    # Load the datasets
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    # Create a label formatter
+    label_formatter=DetectionLabelFormatter(coco.yolo_label_formatter)
+
+    # Create a VisionData object
+    train_ds = VisionData(coco_train_loader, label_formatter=label_formatter, num_classes=80)
+    test_ds = VisionData(coco_test_loader, label_formatter=label_formatter, num_classes=80)
+
+    # Run the suite
+    suite = full_suite()
+
+    # Create a prediction formatter
+    det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+
+    # Run the suite
+    result = suite.run(train_dataset=train_ds, test_dataset=test_ds, model=yolo, prediction_formatter=det_formatter)
+
+    # Save the result
+    result.save_as_html('full_suite_result.html')
+
+    # Print the result
+    result
+
+    # Check for label drift
+    check = TrainTestLabelDrift()
+    result = check.run(train_ds, test_ds)
+
+    # Print the result
+    result.value
+    ```

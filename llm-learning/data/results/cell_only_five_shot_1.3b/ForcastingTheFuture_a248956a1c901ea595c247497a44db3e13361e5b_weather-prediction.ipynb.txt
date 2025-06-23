@@ -1,0 +1,45 @@
+```ruby
+    # Importing necessary libraries
+    require 'numo/narray'
+    require 'ruby_linear_regression'
+    require 'daru'
+    require 'daru/plotly'
+    include Daru::Plotly::Methods # Creates `plot` and `generate_data` method
+
+    # Importing the dataframe
+    df = Daru::DataFrame.new([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+
+    # Adding a description for what EDA is and why we must do it
+    # This function checks if a row contains nil values
+    def containsNil?(vector)
+      vector.each { |col| return true if col.nil?}
+      return false
+    end
+
+    # This function drops nil values from a dataframe
+    def dropNil(df)
+      df.each(:row).each { |row| (puts containsNil?(row)) }
+    end
+
+    # This function handles nil values
+    def handleNilValues(df)
+      df_core_drop_nils = df_core.each(:row).map{|row| containsNil?(row) ? nil : row }.compact
+      df_mod = df_core.each(:row).first
+      temp = df_mod.dup
+      df_mod[1] = nil
+      df_with_nil = df_mod
+      df_mod = temp
+      puts df_with_nil.inspect
+      puts df_mod.inspect
+      puts containsNil?(df_with_nil)
+      puts containsNil?(df_mod)
+      puts df_mod.index
+    end
+
+    # This function returns the size of the dataframe
+    def size(df)
+      df.size
+    end
+    ```
+
+    The above code is a simple example of how to perform EDA (Exploratory Data Analysis) on a dataframe in Ruby using the Daru library. The code includes functions to drop nil values, check for nil values, and return the size of the dataframe.

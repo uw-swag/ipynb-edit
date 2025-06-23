@@ -1,0 +1,35 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.datasets import make_classification
+    from sklearn.model_selection import train_test_split
+
+    # Drafting 16a, b basic neural networks
+
+    # Drafting 16a
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, n_redundant=5, random_state=42)
+
+    # Drafting 16b
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a simple neural network with one hidden layer
+    mlp = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+
+    # Train the model
+    mlp.fit(X_train, y_train)
+
+    # Evaluate the model
+    print("Accuracy:", mlp.score(X_test, y_test))
+
+    # Plot the decision boundary
+    h = .02  # step size in the mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z = mlp.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    # Put the result into a color plot
+    Z = Z.reshape(xx.shape)
+    plt.figure(figsize=(8, 6))
+    plt.pcolormesh(xx, yy, Z, cmap=plt

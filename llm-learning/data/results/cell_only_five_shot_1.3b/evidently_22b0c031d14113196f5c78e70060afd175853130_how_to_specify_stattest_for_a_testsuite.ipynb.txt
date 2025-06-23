@@ -1,0 +1,45 @@
+
+    # Update presets and data drift parameters
+    ## Presets
+    # The presets are used to store the parameters of the data drift tests.
+    # You can use them to re-run the tests with different parameters.
+    ## Data Drift
+    # The data drift parameters are used to control the behavior of the data drift tests.
+    # You can use them to adjust the behavior of the data drift tests.
+
+    ### Code:
+
+    ## Presets
+    # Define the presets
+    presets = {
+        "data_drift_column_tests": {
+            "stat_test_option": stat_test_option,
+            "data_drift_column_tests": data_drift_column_tests
+        },
+        "data_drift_dataset_tests": {
+            "stat_test_option": stat_test_option,
+            "data_drift_dataset_tests": data_drift_dataset_tests
+        }
+    }
+
+    ## Data Drift
+    # Define the data drift options
+    data_drift_options = DataDriftOptions(
+        all_features_stattest='psi',
+        num_features_stattest='psi',
+        cat_features_stattest='jensenshannon',
+        per_feature_stattest=per_feature_stattest,
+        mann_whitney_stat_test=mann_whitney_stat_test
+    )
+
+    # Run the data drift tests
+    for test_name, test_options in presets.items():
+        test_suite = presets[test_name]["data_drift_column_tests"]
+        test_suite.run(reference_data=adult_ref, current_data=adult_cur)
+
+    for test_name, test_options in presets.items():
+        test_suite = presets[test_name]["data_drift_dataset_tests"]
+        test_suite.run(reference_data=adult_ref, current_data=adult_cur)
+
+    # Update the data drift options
+    data_drift_options.all_features_stattest =

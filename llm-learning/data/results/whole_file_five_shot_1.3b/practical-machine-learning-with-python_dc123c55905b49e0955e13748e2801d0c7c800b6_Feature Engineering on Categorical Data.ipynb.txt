@@ -1,0 +1,24 @@
+```
+    The code provided is a series of operations performed on a dataset. Here's a brief explanation of what each section of code does:
+
+    1. `import pandas as pd` and `import numpy as np`: These lines import the pandas and numpy libraries, which are used for data manipulation and numerical computations respectively.
+
+    2. `vg_df = pd.read_csv('datasets/vgsales.csv', encoding='utf-8')`: This line reads a CSV file into a pandas DataFrame.
+
+    3. `vg_df[['Name', 'Platform', 'Year', 'Genre', 'Publisher']].iloc[1:7]`: This line selects the first 6 rows of the DataFrame, which includes the column headers.
+
+    4. `genres = np.unique(vg_df['Genre'])`: This line gets the unique genres from the 'Genre' column of the DataFrame.
+
+    5. `gle = LabelEncoder()` and `gle.fit_transform(vg_df['Genre'])`: These lines create a LabelEncoder object and fit it to the 'Genre' column of the DataFrame, respectively. The LabelEncoder object is then used to transform the 'Genre' column.
+
+    6. `genre_mappings`: This is a dictionary that maps the original genres to the encoded genres.
+
+    7. `vg_df['GenreLabel'] = genre_labels`: This line adds a new column to the DataFrame, 'GenreLabel', which is the encoded version of the 'Genre' column.
+
+    8. `poke_df = pd.read_csv('datasets/Pokemon.csv', encoding='utf-8')`: This line reads a CSV file into a pandas DataFrame.
+
+    9. `np.unique(poke_df['Generation'])`: This line gets the unique generations from the 'Generation' column of the DataFrame.
+
+    10. `gen_ord_map`: This is a dictionary that maps the original generations to their ordinal values.
+
+    11. `poke_df['GenerationLabel

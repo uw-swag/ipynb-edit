@@ -1,0 +1,50 @@
+
+# Documentation of whole dataset drift check
+
+## Overview
+
+The whole dataset drift check is a method used to detect if the data in a dataset has drifted beyond the expected value. This is often the case when the data is generated in real-time and the expected value changes over time.
+
+## How it works
+
+The whole dataset drift check works by comparing the overall drift value of the dataset to a predefined threshold. If the overall drift value is greater than the threshold, the check considers the dataset to be in a drifted state.
+
+## Conditions
+
+The check provides several conditions to add to the drift check. These conditions can be used to further refine the check. For example, you can add a condition to only consider data points where a certain feature has a drifted value.
+
+## How to use
+
+To use the whole dataset drift check, you first need to create an instance of the check. Then, you can run the check on your dataset. The check will return a boolean value indicating whether the dataset is in a drifted state.
+
+## Examples
+
+Here is an example of how to use the whole dataset drift check:
+
+```python
+from drift_check import WholeDatasetDrift
+
+# Create an instance of the check
+check = WholeDatasetDrift().add_condition_overall_drift_value_not_greater_than()
+
+# Run the check on your dataset
+check.run(train_dataset=train_ds, test_dataset=test_ds)
+
+# Check the result
+if check.is_drifted:
+    print("The dataset is in a drifted state.")
+else:
+    print("The dataset is not in a drifted state.")
+```
+
+## Troubleshooting
+
+If you encounter any issues with the whole dataset drift check, you can refer to the [troubleshooting guide](https://github.com/your-username/drift-check/blob/main/TROUBLESHOOTING.md).
+
+## Contributing
+
+We welcome contributions from everyone. By participating in this project, you agree to abide by our [code of conduct](https://github.com/your-username/drift-check/blob/main/CODE_OF_CONDUCT.md).
+
+## License
+
+The

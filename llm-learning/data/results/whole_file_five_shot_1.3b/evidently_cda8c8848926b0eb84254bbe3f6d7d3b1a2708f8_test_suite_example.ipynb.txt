@@ -1,0 +1,50 @@
+
+    [
+    Commit Message: "Add visualization with reference."
+    Original Code Cells:
+    '''
+    <Cell_0>
+    try:
+        import evidently
+    except:
+        !pip install git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+    <\Cell_0>
+    <Cell_1>
+    import pandas as pd
+    import numpy as np
+
+    from evidently.v2.metrics import DataIntegrityMetrics
+    from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+    from evidently.v2.test_suite import TestSuite
+    from evidently.v2.tests import TestNumberOfColumns
+    from evidently.v2.tests import TestNumberOfDriftedFeatures
+    from evidently.v2.tests import TestValueMAE, TestValueMeanError
+    <\Cell_1>
+    <Cell_2>
+    from evidently import ColumnMapping
+    from datetime import datetime
+    from sklearn.datasets import fetch_openml
+
+    suite = TestSuite(tests=[TestNumberOfColumns(
+        NumberRange(left_side_threshold=1),
+        data_integrity_metric=DataIntegrityMetrics(),
+    ),
+    TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+    ])
+
+    data = fetch_openml(name='adult', version=2, as_frame='auto')
+    df = data.frame
+
+    ref = df[:20000]
+    curr = df[20000:]
+
+    curr['target'] = curr['education-num']
+    curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+    ref['target'] = ref['education-num']
+    ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+    suite.run(reference_data=ref,
+    current_data=curr, column_mapping=

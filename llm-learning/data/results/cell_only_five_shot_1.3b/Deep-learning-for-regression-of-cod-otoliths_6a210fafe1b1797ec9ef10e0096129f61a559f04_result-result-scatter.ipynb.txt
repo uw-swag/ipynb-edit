@@ -1,0 +1,21 @@
+
+The code you've provided is a function for aggregating predictions from multiple folds of a machine learning model. The function `aggregate_predsV2` is for a version that uses pandas DataFrames, while the function `aggregate_predsV1` is for a version that uses list of pandas DataFrames.
+
+The function `aggregate_predsV2` takes a string that represents the path to the fold predictions, and it reads the CSV files from the path. It then calculates the aggregate prediction by summing up the predictions from all the folds. The accuracy and mean squared error of the aggregate prediction are then printed.
+
+The function `aggregate_predsV1` takes a string that represents the path to the fold predictions, and it reads the CSV files from the path. It then calculates the aggregate prediction by summing up the predictions from all the folds. The accuracy and mean squared error of the aggregate prediction are then printed.
+
+The function `aggregate_predsV1` is more efficient than `aggregate_predsV2` because it uses a list of pandas DataFrames, which is more memory-efficient.
+
+The function `aggregate_predsV2` and `aggregate_predsV1` are used to calculate the aggregate predictions for the EFFNet model, which is a type of convolutional neural network.
+
+The code is not complete because it does not include the part where the results are visualized. You would need to use matplotlib or another library to create a plot of the results.
+
+Here is a simple example of how you might create a plot of the results:
+
+```python
+import matplotlib.pyplot as plt
+
+# Assuming you have a list of predictions and corresponding labels
+predictions = [l_all, l_middle, m_min, m_middle, m_max, m_all, b4_min, b4_middle, b4_max, b5_min, b6_min, b6_middle, b6_max]
+labels = ['l_all', 'l_middle', 'm_min', 'm_middle', 'm_max', 'm_all', 'b4_min', 'b4_middle', 'b4_max',

@@ -1,0 +1,18 @@
+
+    The commit message "Upgrade to djl 0.13.0 (#176)" is updating the code to use the latest version of the Deep Java Library (djl) which is version 0.13.0. 
+
+    The code includes the following changes:
+
+    1. The SequentialBlock class has been replaced with the MLPBlock class from the ai.djl.nn package.
+    2. The Linear class has been replaced with the LinearBlock class from the ai.djl.nn package.
+    3. The Accuracy class has been replaced with the AccuracyEvaluator class from the ai.djl.metric package.
+    4. The FashionMnist class has been replaced with the CIFAR10 class from the ai.djl.basicdataset.cv.classification package.
+    5. The SequentialBlock.add() method has been replaced with the MLPBlock.add() method.
+    6. The SequentialBlock.setInitializer() method has been replaced with the MLPBlock.setInitializer() method.
+    7. The Tracker class has been replaced with the FixedTracker class from the ai.djl.training.optimizer package.
+    8. The Optimizer.sgd() method has been replaced with the Optimizer.sgd(LearningRate.fixed(0.5f)) method.
+    9. The Loss.softmaxCrossEntropyLoss() method has been replaced with the Loss.softmaxCrossEntropyLoss(0.5f) method.
+    10. The DefaultTrainingConfig.addEvaluator() method has been replaced with the DefaultTrainingConfig.addEvaluator(new Accuracy()) method.
+    11. The Model.newInstance() method has been replaced with the Model.newInstance("mlp") method.
+    12. The Trainer.getMetrics() method has been replaced with the Trainer.getEvaluators().stream().forEach() method.
+    13. The Metrics.getMetric() method has been replaced with the Metrics.getMetric("train_epoch_" + evaluator.getName()).stream().mapToDouble(x -> x.getValue().doubleValue

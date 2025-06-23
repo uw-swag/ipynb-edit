@@ -1,0 +1,16 @@
+```python
+    from fastai.vision import ImageDataBunch, ImageModel, imagenet_stats
+    from fastai.vision.data import get_transforms
+
+    # Change the model resolution to 512
+    databunch = databunch.resize(512)
+
+    # Now, let's train the model
+    learn = ImageModel.fit(databunch, model, loss_func=nn.CrossEntropyLoss(), 
+                           optim_func=optim.Adam, metrics=accuracy)
+
+    # Uncomment to fine-tune the model
+    # learn.fit_one_cycle(1, 1e-2)
+    ```
+
+    The above code will resize the images to 512x512 and then train the model. The `learn.fit_one_cycle` function is used to train the model. The number of epochs and learning rate can be adjusted as per the requirements.

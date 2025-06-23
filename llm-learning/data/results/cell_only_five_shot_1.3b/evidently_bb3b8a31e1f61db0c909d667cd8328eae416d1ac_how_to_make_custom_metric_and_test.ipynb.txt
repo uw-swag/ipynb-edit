@@ -1,0 +1,43 @@
+```
+    from abc import ABC
+from evidently.utils.types import Numeric
+from evidently.renderers.base_renderer import TestHtmlInfo
+from evidently.renderers.base_renderer import TestRenderer
+from evidently.tests.base_test import BaseCheckValueTest
+from evidently.tests.base_test import GroupData
+from evidently.tests.base_test import GroupingTypes
+from evidently.tests.base_test import TestValueCondition
+
+# make a group for test. It used for groupping tests in the report
+MY_GROUP = GroupData("my_group", "My Group", "")
+GroupingTypes.TestGroup.add_value(MY_GROUP)
+
+class MyTest(BaseCheckValueTest, ABC):
+    name = "My test"
+    group = MY_GROUP.id
+
+    column_name: str
+    # define a metric used for calculation
+    _metric: MyMetric
+
+    def __init__(
+        self,
+        column_name: str,
+        eq: Optional[Numeric] = None,
+        gt: Optional[Numeric] = None,
+        gte: Optional[Numeric] = None,
+        is_in: Optional[List[Union[Numeric, str, bool]]] = None,
+        lt: Optional[Numeric] = None,
+        lte: Optional[Numeric] = None,
+        not_eq: Optional[Numeric] = None,
+        not_in: Optional[List[Union[Numeric, str, bool]]] = None,
+    ):
+        self.column_name = column_name
+        super().__init__(eq=eq, gt=gt, gte=gte, is_in=is_in, lt=lt, lte=lte, not_eq=not_eq, not_in=not_in)
+        self._metric = MyMetric(self.column_name)
+
+    def get_condition(self) -> TestValueCondition:
+        # if condition specified like lte=8 or gt=3 etc
+        if self.condition.has_condition():
+            return self.condition
+        # if there is no condition but we have reference and we want to calculate the condition by

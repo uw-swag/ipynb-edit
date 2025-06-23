@@ -1,0 +1,53 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import cv2
+
+    from sklearn import datasets
+    from sklearn import metrics
+    from sklearn import model_selection
+    from sklearn import linear_model
+
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+    plt.style.use('ggplot')
+    plt.rcParams.update({'font.size': 16})
+    <\Cell_0>
+    <Cell_1>
+    boston = datasets.load_boston()
+    <\Cell_1>
+    <Cell_2>
+    dir(boston)
+    <\Cell_2>
+    <Cell_3>
+    boston.data.shape
+    <\Cell_3>
+    <Cell_4>
+    boston.target.shape
+    <\Cell_4>
+    <Cell_5>
+    linreg = linear_model.LinearRegression()
+    <\Cell_5>
+    <Cell_6>
+    X_train, X_test, y_train, y_test = model_selection.train_test_split(boston.data, boston.target,
+                                                                        test_size=0.1, random_state=42)
+    <\Cell_6>
+    <Cell_7>
+    linreg.fit(X_train, y_train)
+    <\Cell_7>
+    <Cell_8>
+    metrics.mean_squared_error(y_train, linreg.predict(X_train))
+    <\Cell_8>
+    <Cell_9>
+    linreg.score(X_train, y_train)
+    <\Cell_9>
+    <Cell_10>
+    y_pred = linreg.predict(X_test)
+    <\Cell_10>
+    <Cell_11>
+    metrics.mean_squared_error(y_test, y_pred)
+    <\Cell_11>
+    <Cell_12>
+    plt.figure(figsize=(10, 6))
+    plt.plot(y_test, linewidth=3, label='ground truth')
+    plt.plot(y_pred, linewidth=3

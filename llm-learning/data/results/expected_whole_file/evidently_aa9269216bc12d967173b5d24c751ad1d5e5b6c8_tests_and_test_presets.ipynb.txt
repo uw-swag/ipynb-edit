@@ -1,0 +1,164 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+from evidently import ColumnMapping
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+
+from evidently.test_preset import NoTargetPerformance, DataQuality, DataStability, DataDrift
+<\Cell_1>
+<Cell_2>
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+#target and prediction
+df['target'] = df['education-num']
+df['prediction'] = df['education-num'].values + np.random.normal(0, 6, df.shape[0])
+
+#reference data
+ref = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+#current data
+curr = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+<\Cell_2>
+<Cell_3>
+data_integrity_dataset_tests = TestSuite(tests=[
+    TestNumberOfColumns(),
+    TestNumberOfRows(),
+    TestNumberOfNANs(),
+    TestNumberOfColumnsWithNANs(),
+    TestNumberOfRowsWithNANs(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfEmptyRows(),
+    TestNumberOfEmptyColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+])
+
+data_integrity_dataset_tests.run(reference_data=ref, current_data=curr)
+data_integrity_dataset_tests
+<\Cell_3>
+<Cell_4>
+data_integrity_dataset_tests.json()
+<\Cell_4>
+<Cell_5>
+data_integrity_dataset_tests.as_dict()
+<\Cell_5>
+<Cell_6>
+data_quality_dataset_tests = TestSuite(tests=[
+    TestTargetPredictionCorrelation(),
+    TestHighlyCorrelatedFeatures(),
+    TestTargetFeaturesCorrelations(),
+    TestPredictionFeaturesCorrelations(),
+    TestCorrelationChanges(),
+])
+
+data_quality_dataset_tests.run(reference_data=ref, current_data=curr)
+data_quality_dataset_tests
+<\Cell_6>
+<Cell_7>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestNumberOfDriftedFeatures(),
+    TestShareOfDriftedFeatures(),    
+])
+
+data_drift_dataset_tests.run(reference_data=ref, current_data=curr)
+data_drift_dataset_tests
+<\Cell_7>
+<Cell_8>
+data_integrity_column_tests = TestSuite(tests=[
+    TestColumnNANShare(column_name='education'),
+    TestColumnAllConstantValues(column_name='education'),
+    TestColumnAllUniqueValues(column_name='education'),
+    TestColumnValueRegExp(column_name='education',reg_exp='^[0..9]')
+])
+
+data_integrity_column_tests.run(reference_data=ref, current_data=curr)
+data_integrity_column_tests
+<\Cell_8>
+<Cell_9>
+data_quality_column_tests = TestSuite(tests=[
+    TestFeatureValueMin(column_name='education-num'),
+    TestFeatureValueMax(column_name='education-num'),
+    TestFeatureValueMean(column_name='education-num'),
+    TestFeatureValueMedian(column_name='education-num'),
+    TestFeatureValueStd(column_name='education-num'),
+    TestNumberOfUniqueValues(column_name='education'),
+    TestUniqueValuesShare(column_name='education'),
+    TestMostCommonValueShare(column_name='education'),
+    TestMeanInNSigmas(column_name='education-num'),
+    TestValueRange(column_name='education-num'),
+    TestNumberOfOutRangeValues(column_name='education-num'),
+    TestShareOfOutRangeValues(column_name='education-num'),
+    TestValueList(column_name='education'),
+    TestNumberOfOutListValues(column_name='education'),
+    TestShareOfOutListValues(column_name='education'),
+    TestValueQuantile(column_name='education-num', quantile=0.25),
+    TestShareOfOutListValues(column_name='education-num'),
+])
+
+data_quality_column_tests.run(reference_data=ref, current_data=curr)
+data_quality_column_tests
+<\Cell_9>
+<Cell_10>
+data_drift_column_tests = TestSuite(tests=[
+    TestFeatureValueDrift(column_name='education-num')
+])
+
+data_drift_column_tests.run(reference_data=ref, current_data=curr)
+data_drift_column_tests
+<\Cell_10>
+<Cell_11>
+feature_level_tests = TestSuite(tests=[
+    TestMeanInNSigmas(column_name='hours-per-week', n_sigmas=3),
+    TestShareOfOutRangeValues(column_name='hours-per-week', lte=0),
+    TestColumnNANShare(column_name='education', lt=0.2),
+])
+
+feature_level_tests.run(reference_data=ref, current_data=curr)
+feature_level_tests
+<\Cell_11>
+<Cell_12>
+no_target_performance = TestSuite(tests=[
+    NoTargetPerformance(most_important_features=['education-num', 'hours-per-week']),
+])
+
+no_target_performance.run(reference_data=ref,current_data=curr)
+no_target_performance
+<\Cell_12>
+<Cell_13>
+data_drift = TestSuite(tests=[
+    DataDrift(),
+])
+
+data_drift.run(reference_data=ref, current_data=curr)
+data_drift
+<\Cell_13>
+<Cell_14>
+data_stability = TestSuite(tests=[
+    DataStability(),
+])
+
+data_stability.run(reference_data=ref, current_data=curr)
+data_stability
+<\Cell_14>
+<Cell_15>
+data_quality = TestSuite(tests=[
+    DataQuality(),
+])
+
+data_quality.run(reference_data=ref,current_data=curr)
+data_quality
+<\Cell_15>

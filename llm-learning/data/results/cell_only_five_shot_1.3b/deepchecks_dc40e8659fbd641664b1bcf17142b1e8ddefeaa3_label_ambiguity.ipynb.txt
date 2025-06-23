@@ -1,0 +1,42 @@
+```python
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.impute import SimpleImputer
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.pipeline import Pipeline
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import classification_report
+    from sklearn.metrics import confusion_matrix
+
+    class LabelAmbiguity:
+        def __init__(self, n_to_show=5, columns=None):
+            self.n_to_show = n_to_show
+            self.columns = columns
+
+        def run(self, dataset):
+            df = dataset.df
+            if self.columns:
+                df = df[self.columns]
+            if 'my_label' not in df.columns:
+                raise ValueError("'my_label' not found in the dataset")
+            y = df['my_label']
+            X = df.drop('my_label', axis=1)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            pipeline = Pipeline([
+                ('imputer', SimpleImputer(strategy='most_frequent')),
+                ('clf', RandomForestClassifier(n_estimators=100, random_state=42))
+            ])
+            pipeline.fit(X_train, y_train)
+            y_pred = pipeline.predict(X_test)
+            print(classification_report(y_test, y_pred))
+            print(confusion_matrix(y_test, y_pred))
+            print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+
+    class Dataset:
+        def __init__(self, df, label, label_type):
+            self.df = df
+            self.label = label
+            self.label_type = label_type
+
+    dataset = Dataset(pd.DataFrame({"col1":

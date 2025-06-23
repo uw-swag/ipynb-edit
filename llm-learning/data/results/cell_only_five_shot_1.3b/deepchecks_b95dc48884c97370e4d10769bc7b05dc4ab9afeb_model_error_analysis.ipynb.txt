@@ -1,0 +1,12 @@
+```
+    %load_ext autoreload
+%autoreload 2
+from deepchecks import Dataset
+
+cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                'race', 'sex', 'native-country']
+train_ds = Dataset(train_df, label_name='label', cat_features=cat_features)
+test_ds = Dataset(test_df, label_name='label', cat_features=cat_features)
+
+numeric_features = [feat_name for feat_name in train_ds.features if feat_name not in train_ds.cat_features]
+    ```

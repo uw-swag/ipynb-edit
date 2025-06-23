@@ -1,0 +1,49 @@
+```python
+    # Import necessary libraries
+    from google.cloud import storage
+
+    # Initialize the client
+    storage_client = storage.Client()
+
+    # Define the bucket name
+    bucket_name = 'my_bucket'
+
+    # Get the bucket
+    bucket = storage_client.get_bucket(bucket_name)
+
+    # List all the blobs in the bucket
+    blobs = bucket.list_blobs()
+
+    for blob in blobs:
+        print(blob.name)
+    ```
+    This script will list all the blobs (files) in the specified Google Cloud Storage bucket.
+
+    Please replace 'my_bucket' with your actual bucket name.
+
+    Also, make sure you have the necessary permissions to access the bucket and to list its contents.
+
+    If you're using a service account, you'll need to authenticate with the service account before you can access the bucket. You can do this by setting the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of your service account key file.
+
+    This script is a basic example and may need to be adjusted based on your specific use case.
+
+    Please note that the `google.cloud.storage` library is not included in the standard Python library, so you'll need to install it using pip:
+
+    ```bash
+    pip install google-cloud-storage
+    ```
+
+    Also, remember to handle your Google Cloud Storage credentials securely, as they provide access to your storage resources.
+
+    Finally, this script assumes that you're running it in a Google Cloud environment (like Google Cloud Shell, Compute Engine, or Kubernetes Engine). If you're running it locally, you'll need to authenticate with the Google Cloud SDK before you can access the bucket.
+
+    This script is a basic example and may need to be adjusted based on your specific use case.
+
+    Please note that the `google.cloud.storage` library is not included in the standard Python library, so you'll need to install it using pip:
+
+    ```bash
+    pip install google-cloud-storage
+    ```
+
+    Also, remember to handle your Google Cloud Storage credentials securely, as they provide access to your storage resources.
+

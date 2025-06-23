@@ -1,0 +1,31 @@
+```python
+from deepchecks.checks.integrity.new_category import CategoryMismatchTrainTest
+from deepchecks.base import Dataset
+import pandas as pd
+
+def test_data_creation():
+    """
+    This function creates test data for the CategoryMismatchTrainTest check.
+    """
+    test_data = {"col1": ["somebody", "once", "told", "me"] * 10}
+    val_data = {"col1": ["the","world","is", "gonna", "role", "me"] * 10}
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1"])
+    val = Dataset(pd.DataFrame(data=val_data), cat_features=["col1"])
+    return test, val
+
+def val_data_creation():
+    """
+    This function creates validation data for the CategoryMismatchTrainTest check.
+    """
+    test_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": ['a','b','b','q']*10}
+    val_data = {"col1": ["a","b","d"] * 10, "col2": ['a', '2', '1']*10}
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1","col2"])
+    val = Dataset(pd.DataFrame(data=val_data), cat_features=["col1", "col2"])
+    return test, val
+
+test, val = test_data_creation()
+
+# Run the check
+CategoryMismatchTrainTest().run(val, test)
+
+```

@@ -1,0 +1,13 @@
+```python
+    class Model(nn.Module):
+        # number of input feature, number of hidden feature, number of output feature
+        def __init__(self, n_in, nh, n_out):
+            super().__init__()
+            self.layers = nn.Sequential(
+                nn.Linear(n_in, nh),
+                nn.ReLU(),
+                nn.Linear(nh, n_out)
+            )
+        def forward(self, x):
+            return self.layers(x)
+    ```

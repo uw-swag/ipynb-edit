@@ -1,0 +1,31 @@
+```python
+    from deepchecks.checks.integrity import LabelAmbiguity
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                    "col2":[1,2,1,2,5,2,5,2,3,2],
+                                    "my_label":[2,3,4,4,4,3,4,5,6,4]}),
+                      label="my_label",
+                      label_type="classification_label")
+
+    LabelAmbiguity().run(dataset)
+
+    LabelAmbiguity(n_to_show=1).run(dataset)
+
+    LabelAmbiguity(columns=['col1', 'my_label']).run(dataset)
+
+    clean_dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                          "col2":[1,2,1,2,5,2,5,2,3,2],
+                                          "my_label":[2,3,2,3,4,3,4,3,6,3]}),
+                            label="my_label",
+                            label_type="classification_label")
+
+    LabelAmbiguity().run(clean_dataset)
+    ```
+
+    The `LabelAmbiguity` check in Deepchecks is used to find and report instances where the same label is present in multiple rows. This can be useful for identifying and handling instances where the same label is used in multiple places.
+
+    The `LabelAmbiguity` function can be used with different parameters to customize the check. For example, you can specify the number of rows to show, the columns to consider for the check, and the threshold for the number of instances to report.
+
+    The `run` method of the `LabelAmbiguity` class is used to execute the check on a given dataset. It returns a report of the check results.

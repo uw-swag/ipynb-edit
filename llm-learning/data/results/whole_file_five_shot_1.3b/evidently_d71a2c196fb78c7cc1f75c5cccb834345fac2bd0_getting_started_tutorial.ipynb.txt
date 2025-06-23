@@ -1,0 +1,57 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    from sklearn.datasets import fetch_california_housing
+
+    from evidently import ColumnMapping
+
+    from evidently.report import Report
+    from evidently.metric_preset import DataDriftPreset
+    from evidently.metric_preset import NumTargetDrift
+
+    from evidently.test_suite import TestSuite
+    from evidently.test_preset import DataStabilityTestPreset
+    from evidently.tests import *
+
+    data = fetch_california_housing(as_frame=True)
+    housing_data = data.frame
+
+    housing_data.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+    housing_data['prediction'] = housing_data['target'].values + np.random.normal(0, 5, housing_data.shape[0])
+
+    housing_data.head()
+
+    reference = housing_data.sample(n=5000, replace=False)
+    current = housing_data.sample(n=5000, replace=False)
+
+    data_stability = TestSuite(tests=[
+        DataStabilityTestPreset(),
+    ])
+
+    data_stability.run(reference_data=reference, current_data=current)
+    data_stability
+
+    drift_report = Report(metrics=[DataDriftPreset(), NumTargetDrift()])
+
+    drift_report.run(reference_data=reference, current_data=current)
+    drift_report
+
+    tests = TestSuite(tests=[
+        TestNumberOfColumnsWithNulls(),
+        TestNumberOfRowsWithNulls(),
+        TestNumberOfConstantColumns(),
+        TestNumberOfDuplicatedRows(),
+        TestNumberOfDuplicatedColumns(),
+        TestColumnsType(),
+        TestNumberOfDriftedFeatures(), 
+    ])
+
+    tests.run(reference_data=reference, current_data=current)
+
+    # show HTML
+    tests
+
+    # get JSON
+    tests.json()
+    ```

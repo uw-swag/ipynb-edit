@@ -1,0 +1,76 @@
+```{toggle}
+    ## Adding data cleaning notebooks.
+
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning Notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+
+    df = pd.read_csv("../../assets/data/diabetes.tsv", sep='\t')
+    df.head()
+    <\Cell_0>
+    <Cell_1>
+    df_mean = df.mean()
+    df_mean
+    <\Cell_1>
+    <Cell_2>
+    # Check result
+
+    assert df_mean == 70.68022081447964
+    <\Cell_2>
+    <Cell_3>
+    ## Data Cleaning
+
+    ## Removing rows with missing values
+
+    df_clean = df.dropna()
+
+    ## Checking for missing values
+
+    df_clean.isnull().sum()
+    <\Cell_3>
+    <Cell_4>
+    ## Data Cleaning
+
+    ## Handling outliers
+
+    ## Removing outliers
+
+    df_clean = df_clean[(np.abs(stats.zscore(df_clean)) < 3).all(axis=1)]
+
+    ## Checking for outliers
+
+    df_clean.boxplot()
+    <\Cell_4>
+    <Cell_5>
+    ## Data Cleaning
+
+    ## Handling categorical variables
+
+    ## Removing categorical variables
+
+    df_clean = df_clean.select_dtypes(include=[np.number])
+
+    ## Checking for categorical variables
+
+    df_clean.dtypes
+    <\Cell_5>
+    <Cell_6>
+    ## Data Cleaning
+
+    ## Handling duplicate rows
+
+    ## Removing duplicate rows
+
+    df_clean = df_clean.drop_duplicates()
+
+    ## Checking for duplicate rows
+
+    df_clean.duplicated().sum()
+    <\Cell_6>
+    <Cell_7>
+    ##

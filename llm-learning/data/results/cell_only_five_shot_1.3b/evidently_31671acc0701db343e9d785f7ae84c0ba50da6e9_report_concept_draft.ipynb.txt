@@ -1,0 +1,42 @@
+
+    The code you provided is a demonstration of how to use the `Report` class from the `evidently` library to generate a data drift report. The `DataDrift` metric is used to measure the difference between the reference and current data.
+
+    However, the code you provided is not complete and does not include the actual data. I'll provide a complete example of how to use the `Report` class to generate a data drift report.
+
+    Here's an example of how to use the `Report` class:
+
+    ```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import (DataDrift, DataQuality, CatTargetDrift, NumTargetDrift, 
+                                     RegressionPerformance, ClassificationPerformance)
+
+# Load your data
+# adult_ref = pd.read_csv('reference_data.csv')
+# adult_cur = pd.read_csv('current_data.csv')
+
+# Define the column mapping
+column_mapping = ColumnMapping()
+column_mapping.add_dataset_column("numeric_column_1", numeric_column_1)
+column_mapping.add_dataset_column("numeric_column_2", numeric_column_2)
+
+# Create a report
+data_drift_report = Report(metrics=[
+    DataDrift(),
+], column_mapping=column_mapping)
+
+# Run the report
+data_drift_report.run(reference_data=adult_ref, current_data=adult_cur)
+
+# Print the report
+print(data_drift_report)
+    ```
+
+    In this example, `adult_ref` and `adult_cur` are the reference and current data respectively. The `column_mapping` is used to map the columns in the dataframes to the columns in the report.
+
+    Please replace `'reference_data.csv'` and `'current_data.csv'` with your actual data file names. Also, replace `'numeric_column_1'` and `'numeric_column_2'` with your actual column names.

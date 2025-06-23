@@ -1,0 +1,34 @@
+
+    The function `computeTimeDomainFeatures` is used to compute several time-domain features of a given signal `x`. These features include the mean, variance, skewness, kurtosis, standard deviation, median, zero crossing rate (ZCR), coherence variation (CV), root mean square (RMS), peak-to-peak (P2P), and sample entropy.
+
+    The function `computeTimeDomainFeatures` is based on the following formulas:
+
+    - Mean: `np.mean(x)`
+    - Variance: `np.var(x)`
+    - Skewness: `skew(x)`
+    - Kurtosis: `kurtosis(x)`
+    - Standard Deviation: `np.std(x)`
+    - Median: `np.median(x)`
+    - Zero Crossing Rate (ZCR): `((x[:-1] * x[1:]) < 0).sum()`
+    - Coherence Variation (CV): `variation(x)` if `x.mean() != 0`, else `math.nan`
+    - Root Mean Square (RMS): `np.sqrt(x.dot(x)/x.size)` if `x.size > 0`, else `math.nan`
+    - Peak-to-Peak (P2P): `x.max() - x.min()`
+    - Sample Entropy: `entropy.sample_entropy(x, 1)[0]`
+
+    The function `computeTimeDomainFeatures` returns a list of these features.
+
+    The function `computeTimeDomainFeatures` uses the following Python libraries:
+
+    - `numpy` for mathematical operations
+    - `scipy.stats` for skewness, kurtosis, and variation
+    - `scipy.stats.entropy` for sample entropy
+
+    The function `computeTimeDomainFeatures` assumes that `x` is a 1-dimensional numpy array.
+
+    The function `computeTimeDomainFeatures` uses the following Python packages:
+
+    - `numpy`
+    - `scipy.stats`
+    - `scipy.stats.entropy`
+
+    The function `compute

@@ -1,0 +1,33 @@
+```python
+    import pickle
+    from sklearn.linear_model import LogisticRegression
+    from flask import Flask, request, jsonify
+
+    app = Flask(__name__)
+
+    @app.route('/pickle', methods=['POST'])
+    def pickle_model():
+        data = request.get_json()
+        model = pickle.load(open('model.pkl', 'rb'))
+        prediction = model.predict([data['features']])
+        return jsonify({'prediction': prediction[0]})
+
+    @app.route('/logistic_regression', methods=['POST'])
+    def logistic_regression():
+        data = request.get_json()
+        with open('model.pkl', 'rb') as f:
+            model = pickle.load(f)
+        prediction = model.predict([data['features']])
+        return jsonify({'prediction': prediction[0]})
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+
+    This code adds two new routes to the Flask application:
+
+    - `/pickle`: This route uses the pickle module to load a pre-trained model and make a prediction. The model is loaded from a file named 'model.pkl'.
+
+    - `/logistic_regression`: This route uses the Logistic Regression model from scikit-learn. The model is loaded from a file named 'model.pkl'.
+
+    The `pickle_model` and `logistic_regression` functions are decorated with `@app.route`, which means they are accessible at the corresponding URLs. The `request.get_json()` function is used to get the JSON data from the request, and the `jsonify` function is used to return a JSON response.

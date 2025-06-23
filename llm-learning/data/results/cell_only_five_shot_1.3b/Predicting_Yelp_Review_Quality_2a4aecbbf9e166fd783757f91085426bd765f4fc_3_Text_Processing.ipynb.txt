@@ -1,0 +1,44 @@
+```
+    ## Code: Split up and organized text processing notebooks.
+
+    # Common Libraries
+    import re
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    # Main NLP libraries
+    import nltk
+    import gensim
+    # Wordclouds
+    from wordcloud import WordCloud, STOPWORDS
+    # Reading Level and Basic Stats
+    import textstat
+    from nltk.corpus import stopwords as nltk_stopwords
+    # Sentiment Analysis
+    from textblob import TextBlob
+    # Parts of Speech, Named Entities, Syntactic Dependencies
+    import spacy
+    # Classification
+    from sklearn.model_selection import cross_validate, GridSearchCV, train_test_split
+    from sklearn.pipeline import Pipeline
+    from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
+    from sklearn.metrics import make_scorer, recall_score, precision_score
+    from sklearn.naive_bayes import MultinomialNB
+    #
+    from nltk.stem import WordNetLemmatizer
+    from sklearn.feature_selection import chi2
+    # Word2Vec
+    from gensim.models import Word2Vec
+    import gensim.downloader as api
+
+    pd.set_option('display.float_format', lambda x: '%.5f' % x)
+    file_location = "../data/full_data/analytics_ready/"
+    filename = "text_data.json"
+    num_records_to_load = 1000
+    df = pd.read_json(file_location + filename, nrows=num_records_to_load, orient="records", lines=True)
+    df.head(5)
+    df.info()
+    df.target_ufc_bool.value_counts()
+    corpus = df.review_text
+    text_target = df[['target_ufc_

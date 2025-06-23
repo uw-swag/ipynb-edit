@@ -1,0 +1,49 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    class CovNet(nn.Module):
+
+        def __init__(self, input_size, hidden_size, num_classes):
+            super(CovNet, self).__init__()
+            self.fc1 = nn.Linear(input_size, hidden_size) 
+            self.fc2 = nn.Linear(hidden_size, hidden_size) 
+            self.fc3 = nn.Linear(hidden_size, num_classes)
+        
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+            return x
+
+    # Create a CovNet instance
+    covnet = CovNet(input_size=100, hidden_size=50, num_classes=10)
+
+    # Define a loss function and an optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(covnet.parameters(), lr=0.001)
+
+    # Training loop
+    for epoch in range(num_epochs):
+        for i, (images, labels) in enumerate(train_loader):
+            outputs = covnet(images)
+            loss = criterion(outputs, labels)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+    # Test the model
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in test_loader:
+            outputs = covnet(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        print('Accuracy of the network on the test images: {} %'.format(100 * correct / total))
+    ```

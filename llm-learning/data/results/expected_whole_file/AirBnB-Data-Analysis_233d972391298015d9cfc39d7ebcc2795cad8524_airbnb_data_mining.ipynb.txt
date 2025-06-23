@@ -1,0 +1,83 @@
+<Cell_0>
+# Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Communicating with operating and file system
+import os
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+<\Cell_0>
+<Cell_1>
+DATASET = "./data/train.csv"
+df = pd.read_csv(DATASET)
+df.info()
+<\Cell_1>
+<Cell_2>
+df['room_type'].value_counts().plot(kind = 'bar', color=['red', 'green', 'blue'], figsize = (8, 6))
+plt.title('Bar Chart for Room Type Distribution', fontsize = 20)
+plt.xlabel('Room Type')
+plt.ylabel('Number of entries')
+plt.show()
+<\Cell_2>
+<Cell_3>
+print('Number of entries for "Entire home/apartment": {}'.format(max(df['room_type'].value_counts())))
+<\Cell_3>
+<Cell_4>
+# In order to plot numerical data we have to clean 'price' column by remove '$' symbol in each row
+def remove_dollar(row):
+    if row[0] == '$':
+        return row[1:]
+    return row
+
+df['price'] = df['price'].apply(lambda row: float(remove_dollar(row).replace(',','')))
+<\Cell_4>
+<Cell_5>
+# Calculate mean price for each month
+mean_prices = []
+months = ['February', 'March', 'April']
+for month in months:
+    mean_prices.append(np.mean(df.loc[df['month'] == month]['price']))
+<\Cell_5>
+<Cell_6>
+# Plot price fluctuation over the 3 months
+plot = plt.plot(months, mean_prices)
+plt.xlabel('Month')
+plt.ylabel('Price $')
+plt.title('Mean Price Fluctuation over February, March and April')
+plt.show()
+<\Cell_6>
+<Cell_7>
+for i, month in enumerate(months):
+    print("Mean price in month {}: ${:.2f}".format(month, mean_prices[i]))
+<\Cell_7>

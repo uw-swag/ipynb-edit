@@ -1,0 +1,23 @@
+```python
+    from bs4 import BeautifulSoup
+
+    # create a object containing the string with tags
+    soup = BeautifulSoup('<tr><th scope="col">Date</th><th scope="col">HS Code</th><th scope="col">Description</th><th scope="col">Origin Country</th><th scope="col">Port of Discharge</th><th scope="col">Unit</th><th scope="col">Quantity</th><th scope="col">Value (INR)</th><th scope="col">Per Unit (INR)</th></tr>')
+
+    # create the list with all <th> tags
+    list_th = soup.find_all('th')
+    print(list_th)
+
+    for th in list_th:
+        print(f'{th.text},')
+
+    # open a file and if doesn't exist, creates one in the same directory
+    f = open("text.csv", "w+")
+
+    # write the content
+    for th in list_th:
+        f.write(f'{th.text} \n')  # along a column
+
+    # Don't forget to close the opened file
+    f.close()
+    ```

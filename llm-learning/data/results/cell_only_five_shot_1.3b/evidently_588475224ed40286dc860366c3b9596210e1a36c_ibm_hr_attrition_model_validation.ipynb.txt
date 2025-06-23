@@ -1,0 +1,39 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding new cells to the notebook (#685)"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    # Plot parameters
+    sns.set()
+    %pylab inline
+    pylab.rcParams['figure.figsize'] = (4, 4)
+    plt.rcParams['xtick.major.size'] = 0
+    plt.rcParams['ytick.major.size'] = 0
+    # Avoid inaccurate floating values (for inverse matrices in dot product for instance)
+    # See https://stackoverflow.com/questions/24537791/numpy-matrix-inversion-rounding-errors
+    np.set_printoptions(suppress=True)
+    v = np.array([2, 4, 3, 1])
+    np.diag(v)
+    A = np.array([[2, 0, 0, 0], [0, 4, 0, 0], [0, 0, 3, 0], [0, 0, 0, 1]])
+    A
+    A.dot(A_inv)
+    A = np.array([[2, 4, -1], [4, -8, 0], [-1, 0, 3]])
+    A
+    A.T
+    x = [0,0,2,2]
+    y = [0,0,2,-2]
+
+    plt.quiver([x[0], y[0]],
+               [x[1], y[1]],
+               [x[2], y[2]],
+               [x[3], y[3]],
+               angles='xy', scale_units='xy', scale=1)
+
+    plt.xlim(-2, 4)
+    plt.ylim(-3, 3)
+    plt.axvline(x=0, color='grey')
+    plt.axhline(y=0, color

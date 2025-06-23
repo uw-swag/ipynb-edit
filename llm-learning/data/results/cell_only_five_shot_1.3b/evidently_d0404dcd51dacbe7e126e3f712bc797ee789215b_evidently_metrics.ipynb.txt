@@ -1,0 +1,52 @@
+```python
+    import pandas as pd
+
+    # Load the raw data
+    raw_data = pd.read_csv('raw_data.csv')
+
+    # Display the first few rows of the data
+    print(raw_data.head())
+
+    # Display the summary statistics of the data
+    print(raw_data.describe())
+
+    # Display the unique values in the 'column_name' column
+    print(raw_data['column_name'].unique())
+
+    # Display the count of unique values in the 'column_name' column
+    print(raw_data['column_name'].value_counts())
+
+    # Display the count of missing values in each column
+    print(raw_data.isnull().sum())
+
+    # Display the count of missing values in each column
+    print(raw_data.isnull().sum()/raw_data.shape[0]*100)
+
+    # Display the correlation matrix
+    print(raw_data.corr())
+
+    # Display the pairwise relationship
+    print(raw_data.pairwise_relations())
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='bar'))
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='pie'))
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='hist'))
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='box'))
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='hist', stacked=True))
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='line'))
+
+    # Display the distribution of the target variable
+    print(raw_data['target_variable'].value_counts().plot(kind='barh'))
+
+    # Display the distribution of

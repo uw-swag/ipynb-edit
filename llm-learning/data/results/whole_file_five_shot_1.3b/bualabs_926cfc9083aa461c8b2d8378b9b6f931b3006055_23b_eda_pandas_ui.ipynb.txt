@@ -1,0 +1,67 @@
+
+<Cell_0>
+# unmount google drive
+drive.unmount()
+<\Cell_0>
+<Cell_1>
+# Save the model
+model.save('tea_classifier.h5')
+<\Cell_1>
+<Cell_2>
+# Load the model
+from tensorflow.keras.models import load_model
+model = load_model('tea_classifier.h5')
+<\Cell_2>
+<Cell_3>
+# Test the model
+test_loss, test_acc = model.evaluate(X_test, y_test)
+print('Test accuracy:', test_acc)
+<\Cell_3>
+<Cell_4>
+# Predict
+predictions = model.predict(X_test)
+<\Cell_4>
+<Cell_5>
+# Convert predictions to class labels
+predicted_val = [1 if p > 0.5 else 0 for p in predictions]
+<\Cell_5>
+<Cell_6>
+# Create submission dataframe
+submission_df = pd.DataFrame({'id':id_line, 'label':predicted_val})
+<\Cell_6>
+<Cell_7>
+# Save the submission dataframe to a csv file
+submission_df.to_csv("submission.csv", index=False)
+<\Cell_7>
+<Cell_8>
+# Display the submission dataframe
+submission_df
+<\Cell_8>
+<Cell_9>
+# Display the test data
+X_test
+<\Cell_9>
+<Cell_10>
+# Display the test labels
+y_test
+<\Cell_10>
+<Cell_11>
+# Display the test predictions
+predictions
+<\Cell_11>
+<Cell_12>
+# Display the test ids
+id_line
+<\Cell_12>
+<Cell_13>
+# Display the test accuracy
+test_acc
+<\Cell_13>
+<Cell_14>
+# Display the test loss
+test_loss
+<\Cell_14>
+<Cell_15>
+# Display the model summary
+model.summary()
+<\Cell_

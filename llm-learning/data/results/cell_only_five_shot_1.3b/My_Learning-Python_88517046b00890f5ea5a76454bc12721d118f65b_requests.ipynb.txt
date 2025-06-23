@@ -1,0 +1,14 @@
+```python
+    # Adding 'query string parameters'
+    from flask import request
+
+    @app.route('/search', methods=['GET'])
+    def search():
+        query_string_parameters = request.args.to_dict()
+        # Now you can use query_string_parameters as per your requirement
+        return jsonify(query_string_parameters)
+    ```
+
+    In the above code, we are using Flask's `request` object to access the query string parameters. The `request.args` object is a dictionary-like object that allows you to access query string parameters. The `to_dict()` method is used to convert the query string parameters into a dictionary.
+
+    Please note that you need to import the `request` object from the `flask` module to use it.

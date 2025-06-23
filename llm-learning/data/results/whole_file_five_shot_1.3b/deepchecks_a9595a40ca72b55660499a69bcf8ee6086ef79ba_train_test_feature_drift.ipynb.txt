@@ -1,0 +1,26 @@
+
+    '''
+    Commit Message: "fixing docs (#898)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+
+    np.random.seed(42)
+
+    train_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=['apple', 'orange', 'banana'], p=[0.5, 0.3, 0.2], size=(1000, 2))], axis=1)
+    test_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=['apple', 'orange', 'banana'], p=[0.5, 0.3, 0.2], size=(1000, 2))], axis=1)
+
+    df_train = pd.DataFrame(train_data, columns=['numeric_without_drift', 'numeric_with_drift', 'categorical_without_drift', 'categorical_with_drift'])
+    df_test = pd.DataFrame(test_data, columns=df_train.columns)
+
+    df_train = df_train.astype({'numeric_without_drift': 'float', 'numeric_with_drift': 'float'})
+    df_test = df_test.astype({'numeric_without_drift': 'float', 'numeric_with_drift': 'float'})
+<\Cell_0>
+<Cell_1>
+df_train.head()
+<\Cell_1>
+<Cell_2>
+df_test['numeric_with_drift'] = df_test['numeric_with_drift'].astype('float') + abs(np.random.randn(1000)) + np.arange(0, 1, 0.001) * 4
+df_test['categorical_with_drift'] = np.random.choice(a=['apple', 'orange', 'banana', 'lemon'], p

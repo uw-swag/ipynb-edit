@@ -1,0 +1,21 @@
+```python
+    import pandas as pd
+    from deepchecks.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.base import Dataset
+
+    test_data = {"col1": ["somebody", "once", "told", "me"] * 10}
+    val_data = {"col1": ["the","world","is", "gonna", "role", "me"] * 10}
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1"])
+    val = Dataset(pd.DataFrame(data=val_data), cat_features=["col1"])
+
+    CategoryMismatchTrainTest().run(val, test)
+
+    test_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": ['a','b','b','q']*10}
+    val_data = {"col1": ["a","b","d"] * 10, "col2": ['a', '2', '1']*10}
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1","col2"])
+    val = Dataset(pd.DataFrame(data=val_data), cat_features=["col1", "col2"])
+
+    CategoryMismatchTrainTest().run(val, test)
+    ```
+
+    The output size is limited to 1000 rows because the maximum number of rows that can be displayed in a Jupyter notebook is 1000. If you want to see more rows, you can increase the output size limit.

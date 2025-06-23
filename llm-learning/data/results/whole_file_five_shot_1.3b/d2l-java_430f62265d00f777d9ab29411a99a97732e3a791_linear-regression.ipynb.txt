@@ -1,0 +1,48 @@
+```
+
+    ### Instruction:
+    [
+    Commit Message: "Migrate github organization to deepjavalibrary (#115)"
+    Original Code Cells:
+    '''
+    %maven ai.djl:api:0.10.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+<\Cell_1>
+<Cell_2>
+import ai.djl.ndarray.*;
+import ai.djl.ndarray.index.*;
+import ai.djl.ndarray.types.*;
+import ai.djl.plotly.api.*;
+import ai.djl.plotly.components.*;
+import tech.tablesaw.api.*;
+import tech.tablesaw.plotly.api.*;
+import tech.tablesaw.api.FloatColumn;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+float[] x = new float[10000];
+float[] y1 = normal(x, 0, 1);
+float[] y2 = normal(x, 0, 2);
+float[] y3 = normal(x, 3, 1);
+
+String[] params = new String[x.length * 3];
+
+LinePlot.create("Normal Distributions", normalDistributions, "z", "p(z)", "params");
+<\Cell_2>
+<Cell_3>
+int start = -7;
+int end = 14;
+float step = 0.01f;
+int count = (int) (end / step);
+
+float[] x = new float[count];
+float[] y1 = normal(x, 0, 1);
+float[] y2 = normal(x, 0, 2);
+float[] y3 = normal(x, 3, 1);
+
+String[] params = new String[x.length * 3];
+
+LinePlot.create("Normal Distributions", normalDistributions, "z", "p(z)", "params");
+<\Cell_3>
+<Cell_4>

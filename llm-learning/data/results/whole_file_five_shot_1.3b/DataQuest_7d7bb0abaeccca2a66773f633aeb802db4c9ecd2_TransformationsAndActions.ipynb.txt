@@ -1,0 +1,63 @@
+
+    '''
+    <Cell_0>
+# Find path to PySpark
+import findspark
+findspark.init()
+
+# Import PySpark and initalize SparkContext object
+import pyspark
+sc = pyspark.SparkContext()
+
+# read the hamlet.txt file into an RDD (Resilient Distributed Data Set)
+raw_hamlet = sc.textFile('hamlet.txt')
+raw_hamlet.take(5)
+<\Cell_0>
+<Cell_1>
+split_hamlet = raw_hamlet.map(lambda line: line.split('\t'))
+split_hamlet.take(5)
+<\Cell_1>
+<Cell_2>
+def hamlet_speaks(line):
+    id = line[0]
+    speaketh = False
+    
+    if "HAMLET" in line:
+        speaketh = True
+    
+    if speaketh:
+        yield id,"hamlet speaketh!"
+
+hamlet_spoken = split_hamlet.flatMap(lambda x: hamlet_speaks(x))
+hamlet_spoken.take(10)
+<\Cell_2>
+<Cell_3>
+def filter_hamlet_speaks(line):
+    if "HAMLET" in line:
+        return True
+    else:
+        return False
+    
+hamlet_spoken_lines = split_hamlet.filter(lambda line: filter_hamlet_speaks(line))
+hamlet_spoken_lines.take(5)
+<\Cell_3>
+<Cell_4>
+spoken_count = hamlet_spoken_lines.count()
+spoken_count
+<\Cell_4>
+<Cell_5>
+spoken_collect = hamlet_spoken_lines.collect()
+spoken_101 = spoken_collect[100]
+spoken_101
+<\Cell_5>
+
+    '''
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Transforming Hamplet into a Data Set, 3/4 Done"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Find

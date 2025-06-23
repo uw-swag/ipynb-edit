@@ -1,0 +1,30 @@
+```python
+    def fit2():
+    # e = epoch number
+    for e in range(epoch):
+
+        # Set Model in Train Mode
+        model.train()
+
+        for xb, yb in train_dl:
+            yhatb = model(xb)
+            loss = loss_func(yhatb, yb)
+            loss.backward()
+            optim.step()
+            optim.zero_grad()
+
+        # Set Model in Evaluation Mode
+        model.eval()
+
+        # Metrics
+        with torch.no_grad():
+            # tot_loss = total loss, tot_acc = total accuracy
+            tot_loss, tot_acc = 0., 0.
+            for xb, yb in valid_dl:
+                yhatb = model(xb)
+                tot_acc += accuracy(yhatb, yb)
+                tot_loss += loss_func(yhatb, yb)
+            nv = len(valid_ds)/bs
+            print(f'epoch={e}, valid_loss={tot_loss/nv}, valid_acc={tot_acc/nv}')            
+    return tot_loss/nv, tot_acc/nv
+    ```

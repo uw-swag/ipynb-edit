@@ -1,0 +1,32 @@
+```python
+    # Import necessary libraries
+    import deepchecks as dc
+    import pandas as pd
+
+    # Load your dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Create a DeepChecks dataset
+    dataset = dc.Dataset(df)
+
+    # Perform a drift check
+    check = dc.drift.Check(dataset)
+
+    # Run the check
+    report = check.run()
+
+    # Print the report
+    print(report)
+    ```
+
+    This script will perform a dataset drift check using DeepChecks, a Python library for data drift detection. The check is performed on the dataset loaded from a CSV file. The report will provide information about the drift, such as the drift type (if any), the drift score, and the drift explanation.
+
+    Please replace 'your_dataset.csv' with the path to your actual dataset.
+
+    If you don't have DeepChecks installed, you can install it using pip:
+
+    ```bash
+    pip install deepchecks --quiet
+    ```
+
+    This script assumes that you have a CSV file with your dataset. If your dataset is in a different format, you'll need to adjust the code accordingly.

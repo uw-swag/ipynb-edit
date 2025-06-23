@@ -1,0 +1,60 @@
+```python
+    from deepchecks.tabular.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.tabular.base import Dataset
+    import pandas as pd
+
+    # Assuming you have a pandas DataFrame `df`
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [1, 2, 3, 4, 5],
+        'C': [1, 2, 3, 4, 5],
+        'D': [1, 2, 3, 4, 5]
+    })
+
+    # Create a Dataset
+    ds = Dataset(df, label='A')
+
+    # Create a new category 'E'
+    ds.add_category('E', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+    # Create a new check
+    check = CategoryMismatchTrainTest(train_test_split=0.7)
+
+    # Run the check
+    result = check.run(ds)
+
+    # Print the result
+    print(result)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to the base class (#988)"
+    Original Code Cells:
+    '''
+    from deepchecks.tabular.base import Dataset
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from deepchecks.tabular.base import Dataset
+
+    class MyDataset(Dataset):
+        def new_function(self):
+            # Your function implementation here
+            pass
+
+        def another_function(self):
+            # Another function implementation here
+            pass
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to the core class (#989)"
+    Original Code Cells:
+    '''
+    from deepchecks.tabular.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.tabular.base import Dat

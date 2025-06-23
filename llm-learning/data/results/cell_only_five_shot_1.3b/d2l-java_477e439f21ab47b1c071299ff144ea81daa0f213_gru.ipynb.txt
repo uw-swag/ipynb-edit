@@ -1,0 +1,37 @@
+
+The code you provided is for upgrading the DL library, DL4J, from version 0.12.0 to 0.13.0. 
+
+The changes in version 0.13.0 include:
+
+1. The `NDManager` class has been removed.
+2. The `getParams` and `initGruState` functions have been moved to the `RNNModelScratch` class.
+3. The `gru` function has been moved to the `RNNModelScratch` class.
+
+Here's the updated code:
+
+```java
+import org.deeplearning4j.nn.api.OptimizationAlgorithm;
+import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
+import org.deeplearning4j.nn.conf.layers.RnnLayer;
+import org.deeplearning4j.nn.conf.layers.RnnOutputLayer;
+import org.deeplearning4j.nn.conf.layers.SubsamplingLayer;
+import org.deeplearning4j.nn.conf.layers.SubsamplingOutputLayer;
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.deeplearning4j.nn.weights.WeightInit;
+import org.nd4j.linalg.activations.Activation;
+import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.lossfunctions.LossFunctions;
+
+//...
+
+int vocabSize = vocab.length();
+int numHiddens = 256;
+Device device = Functions.tryGpu(0);
+int numEpochs = Integer.getInteger("MAX_EPOCH", 500);
+
+int lr = 1;
+
+Functions.TriFunction<Integer, Integer, Device, NDList> getParamsFn = (a, b, c) -> getParams(a, b, c);
+Functions.TriFunction<Integer, Integer, Device, NDList> initGruStateFn =
+        (a, b, c) -> initGruState(a, b, c);
+Functions.TriFunction<NDArray

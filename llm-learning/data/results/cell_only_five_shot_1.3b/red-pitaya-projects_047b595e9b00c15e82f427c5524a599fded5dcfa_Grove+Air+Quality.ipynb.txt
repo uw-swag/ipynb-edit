@@ -1,0 +1,43 @@
+```python
+    # Grove Sensor Tests
+    def test_grove_sensor_temperature(self):
+        # Test the temperature sensor
+        sensor = GroveTemperatureSensor(self.i2c_bus)
+        self.assertIsNone(sensor.temperature)
+        sensor.start_temperature_sensor()
+        time.sleep(1)  # Wait for sensor to stabilize
+        self.assertIsNotNone(sensor.temperature)
+        sensor.stop_temperature_sensor()
+
+    def test_grove_sensor_pressure(self):
+        # Test the pressure sensor
+        sensor = GrovePressureSensor(self.i2c_bus)
+        self.assertIsNone(sensor.pressure)
+        sensor.start_pressure_sensor()
+        time.sleep(1)  # Wait for sensor to stabilize
+        self.assertIsNotNone(sensor.pressure)
+        sensor.stop_pressure_sensor()
+
+    def test_grove_sensor_humidity(self):
+        # Test the humidity sensor
+        sensor = GroveHumiditySensor(self.i2c_bus)
+        self.assertIsNone(sensor.humidity)
+        sensor.start_humidity_sensor()
+        time.sleep(1)  # Wait for sensor to stabilize
+        self.assertIsNotNone(sensor.humidity)
+        sensor.stop_humidity_sensor()
+
+    def test_grove_sensor_light(self):
+        # Test the light sensor
+        sensor = GroveLightSensor(self.i2c_bus)
+        self.assertIsNone(sensor.light)
+        sensor.start_light_sensor()
+        time.sleep(1)  # Wait for sensor to stabilize
+        self.assertIsNotNone(sensor.light)
+        sensor.stop_light_sensor()
+
+    def test_grove_sensor_sound(self):
+        # Test the sound sensor
+        sensor = GroveSoundSensor(self.i2c_bus)
+        self.assertIsNone(sensor.sound)
+        sensor.start_sound_s

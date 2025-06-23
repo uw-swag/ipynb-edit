@@ -1,0 +1,52 @@
+```python
+    import tkinter as tk
+    from tkinter import messagebox
+
+    def button_click(row, col):
+        current_label = board[row][col].cget("text")
+        if current_label == "":
+            if turn == "X":
+                board[row][col].config(text="X")
+                if check_win("X"):
+                    messagebox.showinfo("Result", "Player X wins!")
+                    reset_board()
+                else:
+                    switch_player()
+            else:
+                board[row][col].config(text="O")
+                if check_win("O"):
+                    messagebox.showinfo("Result", "Player O wins!")
+                    reset_board()
+                else:
+                    switch_player()
+
+    def check_win(player):
+        for i in range(3):
+            if all(board[i][j].cget("text") == player for j in range(3)):
+                return True
+        for i in range(3):
+            if all(board[j][i].cget("text") == player for j in range(3)):
+                return True
+        if board[0][0].cget("text") == player and board[1][1].cget("text") == player and board[2][2].cget("text") == player:
+            return True
+        if board[2][0].cget("text") == player and board[1][1].cget("text") == player and board[0][2].cget("text") == player:
+            return True
+        return False
+
+    def reset_board():
+        for i in range(3):
+            for j in range(3):
+                board[i][j].config(text="")
+        turn = "X"
+
+    def switch_player():
+        global turn
+        if turn == "X":
+            turn = "O"
+        else:
+            turn = "X"
+
+    def create_board():
+        for i in range(3):
+            for j in range(3):
+                button = tk.Button(master, text="", command=lambda row=i, col=j: button

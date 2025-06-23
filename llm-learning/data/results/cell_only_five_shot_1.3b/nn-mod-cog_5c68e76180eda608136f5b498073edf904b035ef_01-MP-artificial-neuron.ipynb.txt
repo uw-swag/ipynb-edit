@@ -1,0 +1,18 @@
+```python
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+
+    import os
+    import subprocess
+
+    def sync_script(script_path):
+        if os.path.exists(script_path):
+            subprocess.run(['python', script_path])
+        else:
+            print(f"Script {script_path} not found.")
+
+    if __name__ == "__main__":
+        script_path = "your_script.py"  # replace with your script path
+        sync_script(script_path)
+    ```
+    This script will run the Python script located at the path specified. If the script does not exist, it will print a message indicating that the script was not found.

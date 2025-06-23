@@ -1,0 +1,15 @@
+```python
+    from deepchecks import Dataset
+
+    # We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+    # If the dataset has categorical features, the best practice is to pass a list with their names
+
+    ds_train = Dataset(df_train, label=label_col, cat_features=[], use_index=False, date=None)
+    ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+    # note that we set check_datasets_policy to 'both' so that for single dataset checks (e.g. some of the integrity checks),
+    # both the test and the train data will be checked.
+
+    suite.run(train_dataset=ds_train, test_dataset=ds_test, model=rf_clf, check_datasets_policy='both')
+    ```
+
+    The code above is an example of how to use the DeepChecks library to perform integrity checks on a dataset. The DeepChecks library is a Python library that provides a unified interface to perform a variety of checks on datasets, including data integrity, consistency, and quality.

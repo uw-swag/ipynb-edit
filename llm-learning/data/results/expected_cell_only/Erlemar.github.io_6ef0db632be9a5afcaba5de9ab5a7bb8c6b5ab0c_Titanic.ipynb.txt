@@ -1,0 +1,143 @@
+import pandas as pd
+pd.set_option('display.max_columns', None)
+import numpy as np
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+
+import re
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split, GridSearchCV
+from sklearn.feature_selection import SelectFromModel
+#Age is read as float, because later I'll need more precision for calculations.
+train = pd.read_csv('../input/train.csv', dtype={'Age': np.float64}, )
+test = pd.read_csv('../input/test.csv', dtype={'Age': np.float64}, )
+df_train['Title'] = df_train['Name'].apply(lambda x: (re.search(' ([a-zA-Z]+)\.', x)).group(1))
+df_test['Title'] = df_test['Name'].apply(lambda x: (re.search(' ([a-zA-Z]+)\.', x)).group(1))
+
+df_train['Title'].value_counts()
+titles = {'Capt':       'Officer',
+          'Col':        'Officer',
+          'Major':      'Officer',
+          'Jonkheer':   'Royalty',
+          'Don':        'Royalty',
+          'Sir' :       'Royalty',
+          'Dr':         'Officer',
+          'Rev':        'Officer',
+          'Countess':   'Royalty',
+          'Dona':       'Royalty',
+          'Mme':        'Mrs',
+          'Mlle':       'Miss',
+          'Ms':         'Mrs',
+          'Mr' :        'Mr',
+          'Mrs' :       'Mrs',
+          'Miss' :      'Miss',
+          'Master' :    'Master',
+          'Lady' :      'Royalty'
+                    } 
+
+for k,v in titles.items():
+    df_train.loc[df_train['Title'] == k, 'Title'] = v
+    df_test.loc[df_test['Title'] == k, 'Title'] = v
+
+#New frequencies.
+df_train['Title'].value_counts()
+df_train['Age'] = df_train.groupby(['Sex','Pclass','Title'])['Age'].apply(lambda x: x.fillna(x.median()))
+df_test['Age'] = df_test.groupby(['Sex','Pclass','Title'])['Age'].apply(lambda x: x.fillna(x.median()))
+df_train.groupby(['Pclass', 'Sex'])['Survived'].value_counts(normalize=True)
+df_train['Family'] = df_train['Parch'] + df_train['SibSp']
+df_test['Family'] = df_test['Parch'] + df_test['SibSp']
+def FamilySize(x):
+    """
+    A function for Family size transformation
+    """
+    if x == 1 or x == 2:
+        return 'little'
+    elif x == 3:
+        return 'medium'
+    elif x >= 5:
+        return 'big'
+    else:
+        return 'single'
+
+df_train['Family'] = df_train['Family'].apply(lambda x : FamilySize(x))
+df_test['Family'] = df_test['Family'].apply(lambda x : FamilySize(x))
+df_train.groupby(['Pclass', 'Family'])['Survived'].mean()
+def Ticket_Prefix(x):
+    """
+    Function for extracting prefixes. Tickets have length of 1-3.
+    """
+    l = x.split()
+    if len(x.split()) == 3:
+        return x.split()[0] + x.split()[1]
+    elif len(x.split()) == 2:
+        return x.split()[0]
+    else:
+        return 'None'
+
+df_train['TicketPrefix'] = df_train['Ticket'].apply(lambda x: Ticket_Prefix(x))
+df_test['TicketPrefix'] = df_test['Ticket'].apply(lambda x: Ticket_Prefix(x))
+df_train.Cabin.fillna('Unknown',inplace=True)
+df_test.Cabin.fillna('Unknown',inplace=True)
+
+df_train['Cabin'] = df_train['Cabin'].map(lambda x: x[0])
+df_test['Cabin'] = df_test['Cabin'].map(lambda x: x[0])
+#Factorplot shows that most people, for whom there is no info on Cabin, didn't survive.
+sns.factorplot('Survived', col='Cabin', col_wrap=4, data=df_train[df_train.Cabin == 'U'], kind='count', size=2.5, aspect=.8)
+MedEmbarked = df_train.groupby('Embarked').count()['PassengerId']
+df_train.Embarked.fillna(MedEmbarked, inplace=True)
+#Pclass in fact is a categorical variable, though it's type isn't object.
+for col in df_train.columns:
+    if df_train[col].dtype == 'object' or col == 'Pclass':
+        dummies = pd.get_dummies(df_train[col], drop_first=False)
+        dummies = dummies.add_prefix('{}_'.format(col))
+        df_train.drop(col, axis=1, inplace=True)
+        df_train = df_train.join(dummies)
+for col in df_test.columns:
+    if df_test[col].dtype == 'object' or col == 'Pclass':
+        dummies = pd.get_dummies(df_test[col], drop_first=False)
+        dummies = dummies.add_prefix('{}_'.format(col))
+        df_test.drop(col, axis=1, inplace=True)
+        df_test = df_test.join(dummies)
+
+X_train = df_train.drop('Survived',axis=1)
+Y_train = df_train['Survived']
+X_test  = df_test
+clf = RandomForestClassifier(n_estimators = 15,
+                                criterion = 'gini',
+                                max_features = 'sqrt',
+                                max_depth = None,                                
+                                min_samples_split =7,
+                                min_weight_fraction_leaf = 0.0,
+                                max_leaf_nodes = 18)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+print('Feature ranking:')
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]], clf.feature_importances_[indices[f]]))
+best_features = X_train.columns[indices[0:train_new.shape[1]]]
+X = X_train[best_features]
+Xt = X_test[best_features]
+best_features
+X_train, X_test, y_train, y_test = train_test_split(X, Y_train, test_size=0.33, random_state=44)
+#My optimal parameters
+clf = RandomForestClassifier(n_estimators = 200,
+                                criterion = 'entropy',
+                                max_features = None,
+                                max_depth = 50,                                
+                                min_samples_split =7,
+                                min_weight_fraction_leaf = 0.0,
+                                max_leaf_nodes = 18)
+
+clf.fit(X, Y_train)
+Y_pred_RF = clf.predict(Xt)
+
+clf.score(X_test,y_test)
+submission = pd.DataFrame({
+        'PassengerId': df_test['PassengerId'],
+        'Survived': Y_pred_RF
+    })
+submission.to_csv('titanic.csv', index=False)

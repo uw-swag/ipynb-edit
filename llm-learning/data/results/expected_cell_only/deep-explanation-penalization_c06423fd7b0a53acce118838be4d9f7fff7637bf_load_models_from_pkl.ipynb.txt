@@ -1,0 +1,20 @@
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+out_dir = '/scratch/users/vision/yu_dl/raaz.rsk/test/5_5_test' # directory containing model pkls
+fnames = sorted([oj(out_dir, fname) for fname in os.listdir(out_dir)]) # filenames in the directory
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in tqdm(fnames) 
+                if not 'weights' in fname and not 'idx' in fname] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+print(results.shape)

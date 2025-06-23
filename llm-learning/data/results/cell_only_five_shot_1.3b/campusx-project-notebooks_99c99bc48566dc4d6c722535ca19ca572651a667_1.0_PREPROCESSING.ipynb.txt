@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Refactor/notebook versions (#3)"
+    Original Code Cells:
+    '''
+    # df['areaWithType'] =
+df['areaWithType'].str.extract(r'\W(\d+)\W?').isnull().sum()
+df.rename(columns={'noOfFloor': 'totalFloors'}, inplace=True)
+df.to_csv('data/processed/1.0_CLEANING_houses.csv', index=False)
+
+    '''
+    ]
+
+    ### Response:
+    The code cells in the original commit message are not provided, but I can provide a refactored version of the notebook.
+
+    Here's a refactored version of the notebook:
+
+    ```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Load the data
+    df = pd.read_csv('data/processed/1.0_CLEANING_houses.csv')
+
+    # Check for missing values in 'areaWithType' column
+    missing_count = df['areaWithType'].isnull().sum()
+    print(f'The number of missing values in the "areaWithType" column is: {missing_count}')
+
+    # Extract the number from 'areaWithType' column
+    df['areaWithType'] = df['areaWithType'].str.extract(r'\W(\d+)\W?')
+
+    # Convert the 'areaWithType' column to integer
+    df['areaWithType'] = df['areaWithType'].astype(int)
+
+    # Rename the column
+    df.rename(columns={'noOfFloor': 'totalFloors'}, inplace=True)
+
+    # Save the dataframe to a new csv file
+    df.to_csv('data/processed/1.0_CLEANING_houses.csv', index=False)
+    ```
+
+    This refactored version of the notebook does the following:
+
+    1. Loads the data from a CSV file.
+    2. Checks for missing values in the 'areaWithType' column

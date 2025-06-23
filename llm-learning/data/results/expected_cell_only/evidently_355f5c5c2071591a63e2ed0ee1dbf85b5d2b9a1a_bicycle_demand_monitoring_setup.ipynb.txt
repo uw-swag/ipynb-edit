@@ -1,0 +1,150 @@
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+import datetime
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+import json
+
+from sklearn import datasets, ensemble, model_selection
+from scipy.stats import anderson_ksamp
+
+from evidently.metrics import RegressionQualityMetric, RegressionErrorPlot, RegressionErrorDistribution
+from evidently.metric_preset import DataDriftPreset, RegressionPreset
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+regression_performance_report = Report(metrics=[
+    RegressionPreset(),
+])
+
+regression_performance_report.run(reference_data=X_train.sort_index(), current_data=X_test.sort_index(),
+                                  column_mapping=column_mapping)
+regression_performance_report
+regression_performance_report = Report(metrics=[
+    RegressionPreset(),
+])
+
+regression_performance_report.run(reference_data=None, current_data=reference,
+                                  column_mapping=column_mapping)
+regression_performance_report
+regression_performance_report.run(reference_data=reference, current_data=current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'],
+                                  column_mapping=column_mapping)
+regression_performance_report
+regression_performance_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution()
+])
+
+regression_performance_report.run(reference_data=reference, current_data=current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                            column_mapping=column_mapping)
+regression_performance_report.show()
+regression_performance_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution()
+])
+
+regression_performance_report.run(reference_data=reference, current_data=current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                            column_mapping=column_mapping)
+regression_performance_report.show()
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+
+data_drift_report.run(
+    reference_data=reference,
+    current_data=current.loc['2011-02-14 00:00:00':'2011-02-21 23:00:00'],
+    column_mapping=column_mapping_drift,
+)
+data_drift_report
+from evidently.calculations.stattests import StatTest
+
+def _anderson_stat_test(reference_data: pd.Series, current_data: pd.Series, feature_type: str, threshold: float):
+    p_value = anderson_ksamp(np.array([reference_data, current_data]))[2]
+    return p_value, p_value < threshold
+
+anderson_stat_test = StatTest(
+    name="anderson",
+    display_name="Anderson test (p_value)",
+    func=_anderson_stat_test,
+    allowed_feature_types=["num"]
+)
+
+# options = DataDriftOptions(feature_stattest_func=anderson_stat_test, all_features_threshold=0.9, nbinsx=20)
+the_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution(),
+    DataDriftPreset(stattest=anderson_stat_test, stattest_threshold=0.9),
+])
+
+
+the_report.run(
+    reference_data=reference,
+    current_data=current.loc['2011-02-14 00:00:00':'2011-02-21 23:00:00'], 
+    column_mapping=column_mapping_drift
+)
+the_report
+try:
+    import mlflow
+except:
+    !pip install mlflow
+the_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution(),
+    DataDriftPreset(stattest=anderson_stat_test, stattest_threshold=0.9),
+])
+
+the_report.run(
+    reference_data=reference, 
+    current_data=current.loc[experiment_batches[0][0]:experiment_batches[0][1]],
+    column_mapping=column_mapping_drift
+)
+logged_json = json.loads(the_report.json())
+logged_json
+[x['metric'] for x in logged_json['metrics']]
+logged_json['metrics'][0]['result']['current']['mean_error']
+logged_json['metrics'][3]['result']['drift_share']
+#log into MLflow
+client = MlflowClient()
+
+#set experiment
+mlflow.set_experiment('Model Quality Evaluation')
+
+#start new run
+for date in experiment_batches:
+    with mlflow.start_run() as run: #inside brackets run_name='test'
+        
+        # Log parameters
+        mlflow.log_param("begin", date[0])
+        mlflow.log_param("end", date[1])
+
+        # Get metrics
+        the_report = Report(metrics=[
+            RegressionQualityMetric(),
+            RegressionErrorPlot(),
+            RegressionErrorDistribution(),
+            DataDriftPreset(stattest=anderson_stat_test, stattest_threshold=0.9),
+        ])
+        the_report.run(
+            reference_data=reference, 
+            current_data=current.loc[date[0]:date[1]],
+            column_mapping=column_mapping_drift)
+        logged_json = json.loads(the_report.json())
+        
+        me = logged_json['metrics'][0]['result']['current']['mean_error']
+        mae = logged_json['metrics'][0]['result']['current']["mean_abs_error"]
+        drift_share = logged_json['metrics'][3]['result']['drift_share']
+        
+        # Log metrics
+        mlflow.log_metric('me', round(me, 3))
+        mlflow.log_metric('mae', round(mae, 3))
+        mlflow.log_metric('drift_share', round(drift_share, 3))
+
+        print(run.info)

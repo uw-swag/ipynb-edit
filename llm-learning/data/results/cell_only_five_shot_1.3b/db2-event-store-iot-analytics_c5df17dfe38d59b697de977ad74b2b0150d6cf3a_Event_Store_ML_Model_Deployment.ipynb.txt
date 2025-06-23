@@ -1,0 +1,48 @@
+```python
+    # Set your host IP address
+HOST = "XXX.XXX.XXX.XXX"
+
+# Port will be 1100 for version 1.1.2 or later (5555 for version 1.1.1)
+PORT = "1100"
+
+# Database name
+DB_NAME = "TESTDB"
+
+# Table name
+TABLE_NAME = "IOT_TEMPERATURE"
+
+# If you are using IBM Cloud for your ML deployment...
+#
+# * The use_cloud_ml toggle should be set to True.
+# * You need to set wml_credentials to your service credentials JSON.
+# * You most likely will need to restart your kernel after running the pip install (below).
+# * After the pip install runs once, you may want to comment out that line.
+
+if use_cloud_ml:
+    print('Using IBM Cloud Machine Learning')
+    
+    !pip install --user watson-machine-learning-client==1.0.351
+    from watson_machine_learning_client import WatsonMachineLearningAPIClient
+    
+    # EDIT HERE TO SET YOUR CREDENTIALS:
+    wml_credentials = {}
+    
+    client = WatsonMachineLearningAPIClient(wml_credentials)
+    
+    # Store the model
+    saved_model = client.repository.store_model(
+        model=model,
+        pipeline=pipeline,
+        training_data=training,
+        meta_props={client.repository.ModelMetaNames.NAME: "Linear regression model to predict IOT sensor temperature"})
+
+    published_model_uid = client.repository.get_model_uid(saved_model)
+    model_details = client.repository.get_details(published_model_uid)
+    print('Model Details:')
+    print(json.dumps(model_details, indent=2))
+    print('List Models:')
+    client.repository.list_models()
+
+    # Create an online deployment
+    created_deployment = client.deployments.create(published_model_uid, name="Product line prediction")
+    scoring_endpoint = client.deployments.

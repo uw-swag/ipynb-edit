@@ -1,0 +1,47 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+<\Cell_0>
+<Cell_1>
+bcancer_data = datasets.load_breast_cancer(as_frame=True)
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+<\Cell_1>
+<Cell_2>
+data_drift_report = Report(
+    metrics=[DataDriftPreset()]
+)
+
+data_drift_report.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+<\Cell_2>
+<Cell_3>
+data_drift_report.show(mode='inline')
+<\Cell_3>
+<Cell_4>
+data_drift_report.json()
+<\Cell_4>
+<Cell_5>
+data_drift_report.as_dict()
+<\Cell_5>
+<Cell_6>
+data_drift_report.save_html('data_drift_report.html')
+<\Cell_6>
+<Cell_7>
+data_drift_report.save_json('data_drift_report.json')
+<\Cell_7>
+<Cell_8>
+data_drift_report.save('snapshot.json')
+<\Cell_8>
+<Cell_9>
+loaded_report = Report.load('snapshot.json')
+<\Cell_9>
+<Cell_10>
+loaded_report.show(mode='inline')
+<\Cell_10>

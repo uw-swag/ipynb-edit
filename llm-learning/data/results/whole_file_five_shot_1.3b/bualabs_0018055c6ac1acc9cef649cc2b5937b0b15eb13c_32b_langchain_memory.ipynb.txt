@@ -1,0 +1,28 @@
+
+    The ConversationBufferWindowMemory class in LangChain is a memory that stores the conversation context in a window. It's useful for keeping track of the last N messages in the conversation.
+
+    Here's a brief overview of the class:
+
+    - `ConversationBufferWindowMemory(k: int = 1)`: This creates a new instance of ConversationBufferWindowMemory. The `k` parameter specifies the number of context messages to keep in the memory.
+
+    - `save_context(input: Dict[str, Any], output: str)`: This method saves a new context message. The `input` parameter is a dictionary containing the input message and the `output` parameter is the expected output.
+
+    - `load_memory_variables(variables: Dict[str, Any])`: This method loads the memory variables. The `variables` parameter is a dictionary containing the variables to load.
+
+    - `get_contexts()`: This method returns a list of the saved contexts.
+
+    - `clear_memory()`: This method clears the memory.
+
+    The ConversationTokenBufferMemory class in LangChain is a memory that uses a tokenizer to count the number of tokens in the conversation. It's useful for keeping track of the number of tokens in the conversation.
+
+    Here's a brief overview of the class:
+
+    - `ConversationTokenBufferMemory(llm: LLMBase, max_token_limit: int = 1000)`: This creates a new instance of ConversationTokenBufferMemory. The `llm` parameter is the LLM to use for answering questions, and the `max_token_limit` parameter is the maximum number of tokens to keep in the memory.
+
+    - `save_context(input: Dict[str, Any], output: str)`: This method saves a new context message. The `input` parameter is a dictionary containing the input message and the `output` parameter is the expected output.
+
+    - `load_memory_variables(variables: Dict[str, Any])`: This method loads the memory variables. The `variables` parameter is a dictionary containing the variables to load.
+
+    - `get_contexts()`: This method returns a list of the saved contexts.
+
+    -

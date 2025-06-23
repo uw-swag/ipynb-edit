@@ -1,0 +1,46 @@
+```
+    # Final push of RandomForest and Neural Network
+
+    # Push the RandomForest model to the database
+    attrition_df.to_sql('new_encoded_data', connection, if_exists='replace', index = False)
+
+    # Push the Neural Network model to the database
+    # Here, you need to convert the model to a format that can be saved to the database
+    # For example, you can use joblib or pickle to save the model
+    # Then, you can load the model from the database and use it for prediction
+
+    # Push the trained RandomForest model to the database
+    # Here, you need to convert the model to a format that can be saved to the database
+    # For example, you can use joblib or pickle to save the model
+    # Then, you can load the model from the database and use it for prediction
+
+    # Push the trained Neural Network model to the database
+    # Here, you need to convert the model to a format that can be saved to the database
+    # For example, you can use joblib or pickle to save the model
+    # Then, you can load the model from the database and use it for prediction
+    ```
+    ### Instruction:
+    [
+    Commit Message: "final push of RandomForest and Neural Network"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# dependencies
+import pandas as pd
+import sklearn as skl
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler,OneHotEncoder
+%matplotlib inline
+# import dependencies
+from getpass import getpass
+import sqlalchemy
+from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+from matplotlib import pyplot as plt
+from sklearn.datasets import make_classification
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score,

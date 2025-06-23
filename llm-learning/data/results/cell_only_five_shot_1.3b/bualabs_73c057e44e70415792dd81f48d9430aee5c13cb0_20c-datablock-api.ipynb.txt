@@ -1,0 +1,52 @@
+```
+    # Introduction
+    Contrastive learning is a type of machine learning algorithm that is used in various applications, including image classification, natural language processing, and more. It's a method of learning representations by training a model to learn how similar instances are to each other.
+
+    # Getting Started
+    To get started with contrastive learning, you need to install the `fastai` and `fastbook` libraries. You can do this using pip:
+
+    ```python
+    pip install fastai fastbook
+    ```
+
+    ## File Description
+    - `fastai`: This is the main library for fastai. It provides a set of tools for building and training models.
+    - `fastbook`: This is a collection of Jupyter notebooks that provide a quick introduction to fastai.
+    - `fastai.vision`: This module provides a set of pre-trained models for image classification, and tools for loading and preprocessing images.
+    - `fastai.metrics`: This module provides metrics for evaluating the performance of a model.
+
+    ## Usage
+    Here's a simple example of how to use contrastive learning:
+
+    ```python
+    from fastai import *
+    from fastai.vision import *
+    from fastai.metrics import accuracy
+
+    # Load the data
+    data = ImageDataBunch.from_folder(path='./data')
+
+    # Create the model
+    model = ContrastiveLearningModel(data)
+
+    # Train the model
+    model.fit(10, 1e-2)
+
+    # Evaluate the model
+    model.evaluate(test_dl=data.test_dl())
+    ```
+
+    ## License
+    fastai is licensed under the MIT license.
+    ```
+    ## Contributing
+    fastai is an open-source project and we're glad to hear that you're interested in contributing. Please read our contributing guide for more information.
+    ```
+
+    ## Credits
+    fastai was created by the team at fast.ai.
+    ```
+
+    ## Disclaimer
+    fastai is a research tool and should not be used for any serious machine learning projects without proper testing and validation.
+    

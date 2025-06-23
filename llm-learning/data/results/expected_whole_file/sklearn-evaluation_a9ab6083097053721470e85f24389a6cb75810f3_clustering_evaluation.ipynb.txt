@@ -1,0 +1,45 @@
+<Cell_0>
+import matplotlib
+from sklearn import datasets
+from sklearn.cluster import KMeans
+from sklearn_evaluation import plot
+<\Cell_0>
+<Cell_1>
+matplotlib.rcParams["figure.figsize"] = (7, 7)
+matplotlib.rcParams["font.size"] = 18
+<\Cell_1>
+<Cell_2>
+# get data for clustering
+X, y = datasets.make_blobs(
+    n_samples=500,
+    n_features=2,
+    centers=4,
+    cluster_std=1,
+    center_box=(-10.0, 10.0),
+    shuffle=True,
+    random_state=1,
+)
+
+# Fit kMeans on the data
+kmeans = KMeans(random_state=10)
+<\Cell_2>
+<Cell_3>
+silhouette = plot.silhouette_plot(X, kmeans)
+<\Cell_3>
+<Cell_4>
+X, y = datasets.make_blobs(
+    n_samples=500,
+    n_features=2,
+    centers=4,
+    cluster_std=1,
+    center_box=(-10.0, 10.0),
+    shuffle=True,
+    random_state=1,
+)
+
+kmeans = KMeans(n_clusters=4, random_state=1)
+cluster_labels = kmeans.fit_predict(X)
+<\Cell_4>
+<Cell_5>
+silhouette = plot.silhouette_plot_from_results(X, cluster_labels)
+<\Cell_5>

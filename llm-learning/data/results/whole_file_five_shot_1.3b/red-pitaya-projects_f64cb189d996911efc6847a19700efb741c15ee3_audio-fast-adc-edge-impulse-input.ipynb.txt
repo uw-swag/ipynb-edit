@@ -1,0 +1,57 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Signed sample_key trial"
+    Original Code Cells:
+    '''
+    from redpitaya.overlay.mercury import mercury as overlay
+    import IPython.display as ipd
+    import matplotlib.pyplot as plt
+
+    #Audio processing requirements
+    import numpy as np
+    from scipy.io.wavfile import write
+
+    in2.decimation = 4167 #125 Msps / 4167 = 30 Ksps
+
+    in2.trigger_pre = 0
+    in2.trigger_post = N
+
+    # show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+
+    plt.plot(data)
+    plt.show()
+<\Cell_8>
+<Cell_9>
+# data rate decimation 
+in2.decimation = 4167 #125 Msps / 4167 = 30 Ksps
+
+# trigger sources are the default,
+# which is the module itself
+in2.reset()
+in2.start()
+in2.trigger()
+<\Cell_9>
+<Cell_10>
+# Install requests via: `pip3 install requests`
+import requests
+import os
+from app_key import * #Import personal keys for the Edge Impulse project
+
+# Add the files you want to upload to Edge Impulse
+files = [
+    'float_wave_test_raw.wav']
+# # Replace the label with your own.
+label = 'audio-test'
+# Upload the file to Edge Impulse using the API, and print the response.
+res = requests.post(url='https://ingestion.edgeimpulse.com/api/training/files',
+                    headers={
+                        'x-label': label,
+                        'x-api-key': api_key,
+                    },
+                    # Creating the data payload for the request.
+                    files=(('data', (os.path.basename(i), open(
+                        i, 'rb'), 'audio/wav')) for i in files)
+                    )
+
+if

@@ -1,0 +1,15 @@
+```python
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'path_to_your_notebooks'
+    destination_dir = 'path_to_your_destination_folder'
+
+    # Get a list of all notebook files in the source directory
+    notebook_files = [f for f in os.listdir(source_dir) if f.endswith('.ipynb')]
+
+    # Move each notebook file to the destination directory
+    for notebook_file in notebook_files:
+        shutil.move(os.path.join(source_dir, notebook_file), destination_dir)
+    ```

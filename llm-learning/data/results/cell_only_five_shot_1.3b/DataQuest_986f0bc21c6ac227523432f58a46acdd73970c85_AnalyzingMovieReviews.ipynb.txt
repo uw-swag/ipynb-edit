@@ -1,0 +1,48 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Loading the dataset
+    df = pd.read_csv('movie_reviews.csv')
+
+    # Data exploration
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+
+    # Data Cleaning
+    # Removing any null values
+    df = df.dropna()
+
+    # Vectorizing the text data
+    vectorizer = CountVectorizer(stop_words='english')
+    X = vectorizer.fit_transform(df['review'])
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, df['sentiment'], test_size=0.2, random_state=42)
+
+    # Training the model
+    model = MultinomialNB()
+    model.fit(X_train, y_train)
+
+    # Predicting the sentiment of the test set
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Predicting the sentiment of a new review
+    new_review = ["This movie is so good"]
+    new_review_vectorized = vectorizer.transform(new_review)
+    print(model.predict(new_review_vectorized))
+    ```
+
+    Please note that the 'movie_reviews.csv' file is a dataset provided by UCI Machine Learning Repository. You can download it from the following link: https://archive.ics.uci.edu/ml/datasets/

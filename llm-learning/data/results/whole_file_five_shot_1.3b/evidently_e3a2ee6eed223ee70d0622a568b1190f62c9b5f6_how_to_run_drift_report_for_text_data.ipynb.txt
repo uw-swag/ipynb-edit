@@ -1,0 +1,18 @@
+```python
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+
+    # Create a sample DataFrame
+    df = pd.DataFrame({
+        'category': ['a', 'b', 'a', 'b', 'a', 'a'],
+        'value': [1, 2, 3, 4, 5, 6]
+    })
+
+    # Create a LabelEncoder
+    le = LabelEncoder()
+
+    # Fit and transform the 'category' column
+    df['category'] = le.fit_transform(df['category'])
+
+    print(df)
+    ```

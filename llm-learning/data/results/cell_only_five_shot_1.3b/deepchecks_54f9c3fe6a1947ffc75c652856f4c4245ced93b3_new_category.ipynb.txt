@@ -1,0 +1,45 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import fetch_openml
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load the MNIST dataset
+    mnist = fetch_openml('mnist_784')
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(mnist.data, mnist.target, test_size=0.2, random_state=42)
+
+    # Training a Random Forest Classifier
+    rf_clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    rf_clf.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = rf_clf.predict(X_test)
+
+    # Checking the accuracy of the model
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy}")
+
+    # Plotting the confusion matrix
+    import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+
+    cm = confusion_matrix(y_test, y_pred)
+    sns.heatmap(cm, annot=True, fmt="d")
+    plt.ylabel('Actual')
+    plt.xlabel('Predicted')
+    plt.show()
+
+    # Plotting the ROC curve
+    from sklearn.metrics import roc_curve
+
+    probs = rf_clf.predict_proba(X_test)
+    probs = probs[:, 1]
+    fpr, tpr, thresholds = roc_curve(y_test, probs)
+
+    plt.plot(fpr, tpr, label="ROC curve (area = %0.2f)" % accuracy)
+   

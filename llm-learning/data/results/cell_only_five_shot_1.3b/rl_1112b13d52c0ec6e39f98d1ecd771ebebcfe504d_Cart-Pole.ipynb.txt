@@ -1,0 +1,57 @@
+```python
+    # based on Deep Learning Illustrated by Jon Krohn
+# https://www.amazon.com/Deep-Learning-Illustrated-Intelligence-Addison-Wesley/dp/0135116694
+# in turn based on bit.ly/keonDQN
+
+import os
+from collections import deque
+import random
+import time
+import resource
+import pickle
+import math
+
+import pdb
+
+import numpy as np
+import pandas as pd
+
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras.models import Model, Sequential, load_model
+from tensorflow.keras.layers import Input, Dense, Dropout
+from tensorflow.keras.optimizers import Adam
+import tensorflow.keras.backend as K
+
+import plotly.express as px
+import plotly.graph_objects as go
+
+from IPython.display import clear_output, display, HTML
+
+# requires python 3.6
+# conda install -c akode gym
+import gym
+
+# set seeds for reproducibility
+# np.random.uniform(0,10000) 4465
+GLOBAL_SEED = 4465
+random.seed(GLOBAL_SEED)
+np.random.seed(GLOBAL_SEED)
+tf.random.set_seed(GLOBAL_SEED)
+
+#https://gym.openai.com/envs/CartPole-v0/
+env = gym.make('CartPole-v1')
+env.seed(GLOBAL_SEED)
+state_size = env.observation_space.shape[0]
+action_size = env.action_space.n
+sample_size = 128
+max_timesteps = 500
+n_episodes = 400
+win_reward = 10
+
+output_dir = 'model_output/cartpole/'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+#load earlier model
+start_epoch=400
+loadmodel = '%04d' %

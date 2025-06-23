@@ -1,0 +1,22 @@
+```
+    # This function is used to run the linear regression model on the data.
+    # It takes in the metric to use for the regression, the tics to use, the turning points dictionary, the coef list dictionary, the y pred list dictionary, the normalized coef list dictionary, and the plot flag.
+    # It returns the all data segment, all label segment, and all index segment.
+    def run_linear_model(metric,tics,turning_points_dict,coef_list_dict,y_pred_dict,norm_coef_list_dict,plot,savefig,regime_num=4,low=-0.5,high=0.5):
+        all_data_seg = []
+        all_label_seg = []
+        all_index_seg = []
+        for i,tic in enumerate(tics):
+            turning_points = turning_points_dict[tic]
+            coef_list = coef_list_dict[tic]
+            y_pred_list = y_pred_dict[tic]
+            norm_coef_list = norm_coef_list_dict[tic]
+            label,data_seg,label_seg,index_seg = linear_regession_label(data_dict[tic],y_pred_list,turning_points,low,high,norm_coef_list,metric,tic,regime_num)
+            all_data_seg.extend(data_seg)
+            all_label_seg.extend(label_seg)
+            all_index_seg.extend(index_seg)
+            data_dict[tic]['label'] = label
+            if plot and plot > i:
+                linear_regession_plot(data_dict[tic],tic,y_pred_list,turning_points,low,high,savefig=savefig,normalized_coef_list=norm_coef_list,regime_num=3)
+        return all_data_seg,all_label_seg,all_index_seg
+    ```

@@ -1,0 +1,40 @@
+train = pd.read_csv('../input/labeledTrainData.tsv', header=0, delimiter='\t', quoting=3)
+test = pd.read_csv('../input/testData.tsv', header=0, delimiter='\t', quoting=3)
+def text_to_words(text):
+    """
+    Extract words from text.
+    """
+    text = BeautifulSoup(text, 'lxml').get_text()
+    letters = re.sub('[^a-zA-Z]', ' ', text)
+    words = letters.lower().split()
+    stops = set(stopwords.words('english')) 
+    meaningful_words = [w for w in words if not w in stops]
+    return (' '.join(meaningful_words))
+def clean(a):
+    """
+    Cleaning data.
+    """
+    for i in range(0, a.size):
+        yield text_to_words(a[i])
+vectorizer = CountVectorizer(analyzer = 'word',
+                             tokenizer = None,
+                             preprocessor = None,
+                             stop_words = None,
+                             max_df = 0.5,
+                             max_features = 10000)
+train_reviews = list(clean(train['review']))
+train_data_features = vectorizer.fit_transform(train_reviews)
+test_reviews = list(clean(test['review'])) 
+test_data_features = vectorizer.transform(test_reviews)
+Xtrain, Xtest, ytrain, ytest = train_test_split(train_data_features, train['sentiment'], test_size=0.20, random_state=36)
+mnb = MultinomialNB(alpha=0.0001)
+y_val_m = mnb.fit(Xtrain, ytrain).predict_proba(Xtest)[:,1]
+y_pred_m = mnb.fit(train_data_features, train['sentiment']).predict_proba(test_data_features)[:,1]
+
+#Accuracy of prediction on validation set
+roc_auc_score(ytest, y_val_m)
+#Ensemble of models seems to be the best.
+roc_auc_score(ytest, y_val_m + y_val_f)
+output = pd.DataFrame(data={'id':test['id'], 'sentiment':y_pred_m + y_pred_f})
+
+output.to_csv('Bag_of_Words_model.csv', index=False, quoting=3)

@@ -1,0 +1,51 @@
+```python
+    # Import the necessary libraries
+    import numpy as np
+    import pandas as pd
+    from pathlib import Path
+    import joblib
+    import nbformat as nbf
+    from nbconvert import HTMLExporter
+
+    # Load the model
+    model_folder = Path.cwd() / 'modele'
+    model_file = 'logistic-regression-gs.joblib'
+    model_path = Path(model_folder / model_file)
+
+    # Check if the model file exists at the correct location
+    if not model_folder.is_dir():
+        raise FileNotFoundError(
+            f'Model file not found: the directory \'{model_folder}\' does not exist.'
+        )
+    elif not model_path.is_file():
+        raise FileNotFoundError(
+            f'Model file not found: the file \'{model_file}\' is missing.'
+        )
+    else:
+        clf = joblib.load(model_path)
+        print('Model loading successful.')
+
+    # Initialize the path of the directory containing the files to test
+    data_folder = Path.cwd() / 'datasets'
+
+    # Initialize the index of the file selected
+    j = -1
+
+    # Check if the 'datasets' directory exists and list the CSV files it contains,
+    # and retrieve the user's choice
+    if not data_folder.is_dir():
+        raise FileNotFoundError(f'Directory {data_folder} does not exist.')
+    else:
+        csv_files = [x for x in list(data_folder.glob('*.csv')) if x.is_file()]
+        if len(csv_files) != 0:
+            print('Files available for testing:')
+            for i, file in enumerate(csv_files):
+                print(f'{i} | {file.parts[-1]}')
+        else:
+            raise FileNotFoundError(
+                'No CSV files in your directory to test.')
+
+        while j not in range(0, len(csv_files)):
+            j = int(input('Enter the number of the file to test.'))
+
+       

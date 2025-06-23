@@ -1,0 +1,54 @@
+```
+    #@title Zomato Data Analysis
+    #@markdown This is a Jupyter notebook for analyzing Zomato data.
+
+    #@markdown The Zomato dataset is a large-scale dataset of restaurant reviews. It includes details about the restaurant, the user, the date, the review text, and the rating.
+
+    #@markdown The dataset can be downloaded from the [Kaggle page](https://www.kaggle.com/c/zomato-dataset/data).
+
+    #@markdown The following Python code will load the dataset, perform some basic data analysis, and visualize the data.
+
+    #@markdown Please install the necessary libraries before running the code.
+
+    #@markdown You can install the necessary libraries using the following command:
+    #@markdown ```
+    #@markdown !pip install pandas numpy matplotlib seaborn sklearn jupyter
+    #@markdown ```
+
+    #@markdown ## Load the dataset
+
+    #@markdown The dataset is a CSV file, so we will use the `pandas` library to load it.
+
+    #@markdown The following code will load the dataset:
+
+    ```python
+    import pandas as pd
+
+    # Load the dataset
+    df = pd.read_csv('zomato.csv')
+
+    # Check the first few rows of the dataset
+    df.head()
+    ```
+
+    #@markdown ## Data Analysis
+
+    #@markdown The dataset contains a lot of information, but we can perform some basic data analysis to get a sense of what we're dealing with.
+
+    #@markdown The following code will perform some basic data analysis:
+
+    ```python
+    # Check the basic information of the dataset
+    df.info()
+
+    # Check the summary statistics of the dataset
+    df.describe()
+
+    # Check the distribution of the ratings
+    df['Rating'].hist(bins=5)
+
+    # Check the distribution of the reviews
+    df['Review Text'].apply(lambda x: len(str(x).split(" "))).hist(bins=50)
+    ```
+
+    #@mark

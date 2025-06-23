@@ -1,0 +1,32 @@
+```python
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import classification_report
+
+    # Convert categorical variables to numerical
+    le = LabelEncoder()
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            df[col] = le.fit_transform(df[col])
+
+    # Split the data into features and target variable
+    X = df.drop('Survived', axis=1)
+    y = df['Survived']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a KNN classifier
+    knn = KNeighborsClassifier(n_neighbors=bestK)
+
+    # Fit the classifier to the training data
+    knn.fit(X_train, y_train)
+
+    # Predict the labels for the test data
+    y_pred = knn.predict(X_test)
+
+    # Print the classification report
+    print(classification_report(y_test, y_pred))
+
+    # Print the accuracy score
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    ```

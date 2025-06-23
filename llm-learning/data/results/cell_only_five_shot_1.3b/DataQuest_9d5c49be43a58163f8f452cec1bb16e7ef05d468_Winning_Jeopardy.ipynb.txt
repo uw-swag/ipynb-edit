@@ -1,0 +1,46 @@
+```python
+    %matplotlib inline
+    import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy.stats import pearsonr
+from scipy.stats import linregress
+
+# Load the data
+df = pd.read_csv('jeopardy.csv')
+
+# Clean the data
+df = df.dropna()
+
+# Convert the 'value' column to a numerical value
+df['value'] = df['value'].apply(lambda x: int(x.replace('$', '').replace(',', '')))
+
+# Create a function to calculate the correlation between two columns
+def calculate_correlation(col1, col2):
+    corr, _ = pearsonr(df[col1], df[col2])
+    return corr
+
+# Calculate the correlation between 'value' and 'round'
+round_value_correlation = calculate_correlation('round', 'value')
+print(f'Correlation between "round" and "value": {round_value_correlation}')
+
+# Calculate the correlation between 'value' and 'category'
+category_value_correlation = calculate_correlation('category', 'value')
+print(f'Correlation between "category" and "value": {category_value_correlation}')
+
+# Calculate the correlation between 'value' and 'question'
+question_value_correlation = calculate_correlation('question', 'value')
+print(f'Correlation between "question" and "value": {question_value_correlation}')
+
+# Plot the correlation
+categories = ['round', 'category', 'question']
+colors = ['blue', 'green', 'red']
+
+for i, category in enumerate(categories):
+    plt.figure(figsize=(10, 5))
+    plt.scatter(df[category], df['value'], color=colors[i])
+    plt.xlabel(category)
+    plt.ylabel('Value')
+    plt.title(f'Correlation between {category} and "value"')
+    plt.show()
+    ```

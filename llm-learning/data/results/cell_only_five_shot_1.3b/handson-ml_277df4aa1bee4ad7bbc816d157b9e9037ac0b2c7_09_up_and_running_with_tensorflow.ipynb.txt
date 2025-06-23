@@ -1,0 +1,36 @@
+```python
+    import tensorflow as tf
+
+    tf.reset_default_graph()
+
+    def relu(X):
+        with tf.variable_scope("relu"):
+            threshold = tf.get_variable("threshold", shape=(), initializer=tf.constant_initializer(0.0))
+            w_shape = int(X.get_shape()[1]), 1
+            w = tf.Variable(tf.random_normal(w_shape), name="weights")
+            b = tf.Variable(0.0, name="bias")
+            linear = tf.add(tf.matmul(X, w), b, name="linear")
+            return tf.maximum(linear, threshold, name="max")
+
+    X = tf.placeholder(tf.float32, shape=(None, n_features), name="X")
+    with tf.variable_scope("") as scope:
+        first_relu = relu(X)     # create the shared variable
+        scope.reuse_variables()  # then reuse it
+        relus = [first_relu] + [relu(X) for i in range(4)]
+    output = tf.add_n(relus, name="output")
+
+    summary_writer = tf.train.SummaryWriter("logs/relu8", tf.get_default_graph())
+    summary_writer.close()
+    tf.reset_default_graph()
+
+    with tf.variable_scope("param"):
+        x = tf.get_variable("x", shape=(), initializer=tf.constant_initializer(0.))
+        #x = tf.Variable(0., name="x")
+    with tf.variable_scope("param", reuse=True):
+        y = tf.get_variable("x")
+
+    with tf.variable_scope("", reuse=True):
+        z = tf.get_variable("param/x", shape=(), initializer=tf.constant_initializer(0.))
+
+    print(x is y)
+    print(x.op.

@@ -1,0 +1,31 @@
+```
+    ## Loading the data
+    from scar import load_scar
+    x, y, s = load_scar()
+
+    ## SVM model
+    from sklearn.svm import SVC
+    from utils import f1_prime
+
+    best_f1_prime = -1.0
+    best_clf = None
+    for class_weight_p in np.arange(0.5, 1.0, 0.05):
+        class_weight_n = 1.0 - class_weight_p
+        class_weight = {1: class_weight_p}
+        clf = SVC(class_weight=class_weight, random_state=0, probability=True).fit(x, s)
+
+        y_hat = clf.predict(x)
+
+        f1_prime_ = f1_prime(y, y_hat)
+        if f1_prime_ > best_f1_prime:
+            print(f"The best classifier is updated: class weight is {class_weight}.")
+            best_f1_prime = f1_prime_
+            best_clf = clf
+
+    ## Visualization
+    y_hat = best_clf.predict(x)
+    y_hat_prob = best_clf.predict_proba(x)[:, 1]
+    visualize_pn_data(x, y)
+    visualize_pn_data(x, y_hat)
+    visualize_pn_data_proba(x, y_hat_prob)
+    ```

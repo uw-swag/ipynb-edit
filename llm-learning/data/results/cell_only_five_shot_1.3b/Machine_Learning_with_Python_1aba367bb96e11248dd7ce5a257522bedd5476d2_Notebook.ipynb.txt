@@ -1,0 +1,30 @@
+```python
+    import pandas as pd
+    from sklearn.metrics.pairwise import cosine_similarity
+    from scipy import sparse
+
+    class CollaborativeFiltering:
+        def __init__(self, ratings):
+            self.ratings = ratings
+            self.n_users = ratings['user_id'].nunique()
+            self.n_movies = ratings['movie_id'].nunique()
+
+        def fit(self):
+            user_movie_mat = self.ratings.pivot(index='user_id',
+                                                columns='movie_id',
+                                                values='rating').fillna(0)
+            user_movie_mat_sparse = sparse.csr_matrix(user_movie_mat.values)
+            self.user_similarity = cosine_similarity(user_movie_mat_sparse.T)
+            self.movie_similarity = cosine_similarity(user_movie_mat_sparse)
+
+        def predict(self, user_id, movie_id):
+            if movie_id in self.ratings[self.ratings['user_id'] == user_id].movie_id.values:
+                return self.user_similarity[user_id].dot(self.ratings[self.ratings['user_id'] == user_id]['rating']) / \
+                       self.movie_similarity[movie_id].dot(self.ratings[self.ratings['user_id'] == user_id]['rating'])
+            else:
+                return self.user_similarity[user_id]
+
+        def recommend(self, user_id, num_recommendations):
+            user_predictions = self.predict(user_id, self.ratings.movie_id.values)
+            recommended_movies = self.ratings.loc[self.ratings['user_id'] == user_id, 'movie_id'].sort_values(ascending=False)[:num_recommendations]
+            return pd.DataFrame({'movie_id': recommended_movies.index, 'prediction': user_predictions[recommended_mov

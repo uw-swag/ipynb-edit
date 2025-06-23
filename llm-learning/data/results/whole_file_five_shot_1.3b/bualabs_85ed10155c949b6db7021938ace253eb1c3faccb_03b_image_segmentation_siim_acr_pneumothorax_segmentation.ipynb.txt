@@ -1,0 +1,28 @@
+```python
+    from fastbook import *
+    from fastai.vision.all import *
+
+    # Load the data
+    path = untar_data(URLs.PNEUMONIA_SIIM_ACR)
+    dls = ImageDataLoaders.from_folder(path)
+
+    # Define the model
+    learn = vision_learner(dls, resnet34, metrics=accuracy)
+
+    # Train the model
+    learn.fit_one_cycle(10)
+
+    # Predict on a sample image
+    img = open_image(path/'1.jpeg')
+    pred_class, pred_idx, outputs = learn.predict(img)
+
+    # Display the results
+    print(f"Predicted class: {pred_class}")
+    print(f"Predicted index: {pred_idx}")
+    print(f"Outputs: {outputs}")
+    ```
+    Please note that you need to have the fastbook and fastai libraries installed. You can install them using pip:
+    ```
+    pip install fastbook fastai
+    ```
+    Also, the URLs.PNEUMONIA_SIIM_ACR is a placeholder URL, you need to replace it with the actual URL of the dataset you want to use.

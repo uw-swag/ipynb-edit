@@ -1,0 +1,51 @@
+```python
+    class IrisColumnMapping:
+        """
+        Mapping of columns in the Iris dataset.
+        """
+
+        SEPAL_LENGTH = "sepal_length"
+        SEPAL_WIDTH = "sepal_width"
+        PETAL_LENGTH = "petal_length"
+        PETAL_WIDTH = "petal_width"
+        SPECIES = "species"
+
+    iris_column_mapping = IrisColumnMapping
+
+    class IrisModelPerformanceTab:
+        """
+        Tab for model performance in the Iris dataset.
+        """
+
+        def __init__(self):
+            self.title = "Iris Model Performance"
+
+        def calculate(self, reference, production, column_mapping):
+            # Calculate model performance here
+            pass
+
+        def show(self):
+            # Show model performance in a dashboard
+            pass
+
+    class IrisClassificationPerformanceProfileSection:
+        """
+        Section for classification performance in the Iris dataset.
+        """
+
+        def __init__(self):
+            self.title = "Iris Classification Performance"
+
+        def calculate(self, reference, production, column_mapping):
+            # Calculate classification performance here
+            pass
+
+    iris_model_performance_dashboard = Dashboard(tabs=[IrisModelPerformanceTab])
+    iris_model_performance_dashboard.calculate(reference, production, column_mapping=iris_column_mapping)
+    iris_model_performance_dashboard.show()
+
+    iris_classification_performance_profile = Profile(sections=[IrisClassificationPerformanceProfileSection])
+    iris_classification_performance_profile.calculate(reference, production, column_mapping=iris_column_mapping)
+    ```
+
+    This code first defines a class `IrisColumnMapping` to map the columns in the Iris dataset. Then, it defines two classes `IrisModelPerformanceTab` and `IrisClassificationPerformanceProfileSection` to represent the tab and section for model performance in the Iris dataset, respectively. Finally, it creates an instance of these classes and calculates the model performance and classification performance.

@@ -1,0 +1,69 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing a function to handle missing data"
+    Original Code Cells:
+    '''
+    <Cell_0>
+def handle_missing_data(df):
+    # Check for missing values
+    missing_values = df.isnull().sum()
+    
+    # Check for missing values in each column
+    missing_in_each_column = missing_values[missing_values > 0]
+    
+    # Drop rows with missing values
+    df = df.dropna()
+    
+    # Fill missing values with the mean of the column
+    df = df.fillna(df.mean())
+    
+    # Fill missing values with the median of the column
+    df = df.fillna(df.median())
+    
+    return df
+<\Cell_0>
+<Cell_1>
+df = handle_missing_data(df)
+<\Cell_1>
+<Cell_2>
+# Check the results
+print(df.isnull().sum())
+<\Cell_2>
+<Cell_3>
+# Check the results
+print(df.info())
+<\Cell_3>
+<Cell_4>
+# Check the results
+print(df.describe())
+<\Cell_4>
+<Cell_5>
+# Check the results
+print(df.head())
+<\Cell_5>
+<Cell_6>
+# Check the results
+print(df.shape)
+<\Cell_6>
+<Cell_7>
+# Check the results
+print(df.duplicated().sum())
+<\Cell_7>
+<Cell_8>
+# Check the results
+print(df.drop_duplicates().shape)
+<\Cell_8>
+<Cell_9>
+# Check the results
+print(df.drop_duplicates().shape)
+<\Cell_9>
+<Cell_10>
+# Check the results
+print(df.drop_duplicates().shape)
+<\Cell_10>
+<Cell_11>
+# Check the results
+print(df.drop_duplicates().shape)
+<\Cell_11>
+<Cell_12

@@ -1,0 +1,38 @@
+```
+    ## Adding sample notebooks
+    ## You can add your own notebooks here.
+
+    ## Project Start Script
+    ## This is a simple script to start a new project.
+
+    ## Import necessary libraries
+    import os
+    import numpy as np
+    import tensorflow as tf
+    from keras.datasets import mnist
+
+    ## Load data
+    (X_train, Y_train), (X_test, Y_test) = mnist.load_data()
+    X_train = X_train.astype('float32')
+    X_test = X_test.astype('float32')
+    X_train /= 255
+    X_test /= 255
+
+    ## Define parameters
+    element_size = 28
+    time_steps = 28
+    num_classes = 10
+    batch_size = 128
+    hidden_layer_size = 128
+
+    ## Define LSTM model
+    U = tf.Variable(tf.zeros([4, element_size, hidden_layer_size]))
+    W = tf.Variable(tf.zeros([4, hidden_layer_size, hidden_layer_size]))
+
+    def lstm_step(previous_hidden_state, x):
+        output_state, cell_state = tf.unstack(previous_hidden_state)
+        input_gate = tf.sigmoid(tf.matmul(x, U[0]) + tf.matmul(output_state, W[0]))
+        forget_gate = tf.sigmoid(tf.matmul(x, U[1]) + tf.matmul(output_state, W[1]))
+        output_gate = tf.sigmoid(tf.matmul(x, U[2]) + tf.matmul(output_state, W[2]))
+        candidate_cell_state = tf.tanh(tf.matmul(x, U[3]) + tf.matmul(output_state, W[3]))
+        new_cell_state = forget_gate * cell_state + input

@@ -1,0 +1,191 @@
+<Cell_0>
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+from torch.utils.data import DataLoader
+from sklearn.metrics import auc,average_precision_score, roc_curve,roc_auc_score,precision_recall_curve, f1_score
+from torch.utils.data import Subset
+from torchvision import  transforms
+import pickle as pkl
+from os.path import join as oj
+from tqdm import tqdm_notebook
+import matplotlib.pyplot as plt
+import torch.optim as optim
+from torch.optim import lr_scheduler
+import os
+import argparse
+from torch import nn
+from numpy.random import randint
+import torchvision.models as models
+import time
+import copy
+from tqdm import tqdm
+sys.path.append('../../fit/')
+import cd
+import sys
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+from copy import deepcopy
+import pandas as pd
+import seaborn as sns
+sns.set()
+import torch.nn.functional as F
+from os.path import join as oj
+pd.set_option('precision', 2)
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+save_path = "../../results_for_export"
+trained_model_folder = '../old_feature_models/'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'pkl'  in fname]) 
+# other models were trained badly
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+
+<\Cell_1>
+<Cell_2>
+results['final_acc'] = [max(x) for x in results['val_acc_history']] #TODO change so it 
+results['final_acc_train'] = [max(x)  for x in results['train_acc_history']]
+results['AUC (no patches)'] =[0 for x in results['regularizer_rate']]
+results['final_cd'] = [min(x) for x in results['train_cd_history']]
+results['final_test_loss'] = [min(x) for x in results['val_loss_history']]
+results['final_train_loss'] = [min(x) for x in results['train_loss_history']]
+results['regularizer_rate'][6] =-1
+<\Cell_2>
+<Cell_3>
+results[['regularizer_rate','final_acc','AUC (no patches)']].sort_values(by = ['regularizer_rate']).groupby(['regularizer_rate']).mean()
+<\Cell_3>
+<Cell_4>
+results[['regularizer_rate','pid',]]
+<\Cell_4>
+<Cell_5>
+
+print(results[['regularizer_rate','final_acc', 'AUC (no patches)']].sort_values(by = ['regularizer_rate']).to_latex(index = False))
+<\Cell_5>
+<Cell_6>
+data_path = "../../../../datasets"
+save_path = oj(data_path, "ISIC_features")
+from torch.utils.data import TensorDataset, ConcatDataset
+with open(oj(save_path, "cancer.npy"), 'rb') as f:
+    cancer_featuress = np.load(f)
+with open(oj(save_path, "not_cancer.npy"), 'rb') as f:
+    not_cancer_featuress = np.load(f)
+    
+cancer_targets = np.ones((cancer_featuress.shape[0])).astype(np.int64)
+not_cancer_targets = np.zeros((not_cancer_featuress.shape[0])).astype(np.int64)
+with open(oj(save_path, "not_cancer_cd.npy"), 'rb') as f:
+    not_cancer_cd= np.load(f)
+not_cancer_dataset = TensorDataset(torch.from_numpy(not_cancer_featuress).float(), torch.from_numpy(not_cancer_targets),torch.from_numpy(not_cancer_cd).float())
+
+cancer_dataset = TensorDataset(torch.from_numpy(cancer_featuress).float(), torch.from_numpy(cancer_targets),torch.from_numpy(-np.ones((len(cancer_featuress), 2, 25088))).float())
+complete_dataset = ConcatDataset((cancer_dataset, not_cancer_dataset))
+
+
+
+num_total = len(complete_dataset)
+num_train = int(0.8 * num_total)
+num_val = int(0.1 * num_total)
+num_test = num_total - num_train - num_val
+torch.manual_seed(0);
+train_dataset, test_dataset, val_dataset= torch.utils.data.random_split(complete_dataset, [num_train, num_test, num_val])
+
+
+datasets = {'train' : train_dataset, 'test':test_dataset, 'val': val_dataset}
+dataset_sizes = {'train' : len(train_dataset), 'test':len(test_dataset), 'val': len(val_dataset)}
+<\Cell_6>
+<Cell_7>
+
+val_filtered_dataset = torch.utils.data.Subset(complete_dataset, [idx for idx in val_dataset.indices if complete_dataset[idx][2][0,0] ==-1])
+
+<\Cell_7>
+<Cell_8>
+device = torch.device(0)
+model = models.vgg16(pretrained=True)
+# make conv untrainable - test if needed
+model.classifier[-1] = nn.Linear(4096, 2)
+model = model.classifier.to(device)
+<\Cell_8>
+<Cell_9>
+def eval_model_on(model, dataset):
+    val_filtered_dataloader = torch.utils.data.DataLoader(dataset, batch_size=16,
+                                             shuffle=True, num_workers=4)
+    model.eval()
+    y = []
+    y_hat = []
+    softmax= torch.nn.Softmax()
+    with torch.no_grad() :
+        for inputs, labels, cd in val_filtered_dataloader:
+            y_hat.append((labels).cpu().numpy())
+            y.append(torch.nn.Softmax(dim=1)( model(inputs.cuda()))[:,0].detach().cpu().numpy())
+    y_hat = np.concatenate( y_hat, axis=0 )
+    y = np.concatenate( y, axis=0 )
+    return 1-y, y_hat
+
+<\Cell_9>
+<Cell_10>
+results_for_auc = results[['regularizer_rate','pid',]]
+roc_curves = {}
+f1_scores = {}
+auc_scores = {}
+
+auc_scorespid = {}
+for index, row in results_for_auc.iterrows():
+
+    with open(oj(trained_model_folder, str(row['pid']) + '.pt'), 'rb') as f:
+        
+        weights = torch.load(f)
+    model.load_state_dict(weights)
+    y, y_hat = eval_model_on(model, val_filtered_dataset)
+
+    precision, recall, _ = roc_curve(y_hat, y)
+
+    roc_curves[row['regularizer_rate']] = (precision, recall)
+    auc_scores[row['regularizer_rate']] = roc_auc_score(y_hat, y)
+    
+    auc_scorespid[row['pid']] = roc_auc_score(y_hat, y)
+    f1_scores[row['regularizer_rate']] = f1_score(y_hat, y > .5)
+
+results['AUC (no patches)'] =[auc_scorespid[x] for x in results['pid']]
+<\Cell_10>
+<Cell_11>
+fig, ax = plt.subplots(figsize = (10,10))
+
+for key in roc_curves.keys():
+    key_label = key
+    if key == 1.0 or key == 0.0 or key == -1:
+
+        ax.plot(roc_curves[key][1], 1-roc_curves[key][0], label = str(key_label) + " AUC: "+ "{:2.2f}".format(auc_scores[key]))
+ax.set_ylabel("Specificity");
+ax.set_xlabel("Sensitivity");
+fig.legend(loc=10)
+fig.suptitle("Malignant tumor classification ")
+save_path = "../../results_for_export"
+# fig.savefig(oj(save_path, "with_reg"))
+<\Cell_11>
+<Cell_12>
+val_filtered_dataloader = torch.utils.data.DataLoader(val_filtered_dataset, batch_size=16,
+                                             shuffle=True, num_workers=4)
+<\Cell_12>
+<Cell_13>
+for data, target,_ in val_filtered_dataloader:
+    break
+    num_one +=target.sum().cpu().item()
+<\Cell_13>
+<Cell_14>
+data.shape
+<\Cell_14>
+<Cell_15>
+test_out = model(data.cuda())
+<\Cell_15>
+<Cell_16>
+test_out.shape
+<\Cell_16>
+<Cell_17>
+torch.concat((test_out[:,0], test_out[:,1])).shape
+<\Cell_17>
+<Cell_18>
+
+<\Cell_18>

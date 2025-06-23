@@ -1,0 +1,40 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load the dataset
+    df = pd.read_csv('titanic.csv')
+
+    # Dropping the unnecessary columns
+    df = df[['Pclass', 'Sex', 'Age', 'Fare', 'Survived']]
+
+    # Filling the missing values with the mean of the respective column
+    df['Age'] = df.groupby('Sex')['Age'].transform(lambda x: x.fillna(x.mean()))
+
+    # Encoding the categorical variables
+    le = LabelEncoder()
+    df['Sex'] = le.fit_transform(df['Sex'])
+
+    # Splitting the dataset into features and target variable
+    X = df[['Pclass', 'Sex', 'Age', 'Fare']]
+    y = df['Survived']
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Creating a Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100)
+
+    # Training the model
+    rfc.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = rfc.predict(X_test)
+
+    # Checking the accuracy of the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    ```

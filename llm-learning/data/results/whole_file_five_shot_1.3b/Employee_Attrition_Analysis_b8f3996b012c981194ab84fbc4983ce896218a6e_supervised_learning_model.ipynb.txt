@@ -1,0 +1,50 @@
+```
+    # import dependencies
+    from getpass import getpass
+    import sqlalchemy
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pickle
+
+
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from imblearn.over_sampling import SMOTE
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import balanced_accuracy_score
+    from imblearn.metrics import classification_report_imbalanced
+    from collections import Counter
+
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+
+    # read in table from database
+    attrition_df = pd.read_sql('SELECT * FROM new_encoded_data', connection)
+
+    # heatmap to visualize where mulitcollinearity exists
+    figure = plt.figure(figsize=(14,10))
+    sns.heatmap(attrition_df[cols].corr(method = 'spearman'),
+                annot=True, 
+                fmt = ".1f", 
+                cmap = "cool")
+    plt.show()
+    figure.savefig("correlation_heatmap.png")
+
+    # drop strongly correlated columns to improve model
+    attrition_df.drop(['Total Working

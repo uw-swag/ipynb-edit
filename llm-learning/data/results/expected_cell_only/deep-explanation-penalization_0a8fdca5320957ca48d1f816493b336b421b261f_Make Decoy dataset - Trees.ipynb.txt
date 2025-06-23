@@ -1,0 +1,45 @@
+def write_dataset(name):
+    
+    
+    data_path = "./.data/sst/trees"
+    os.makedirs(data_path exist_ok=True)
+    with open(oj(data_path, name + ".txt")) as f:
+        content = []
+        content = f.read().splitlines()
+        
+    parsed_dataset = []
+    for line in (content):
+        t = Tree.fromstring(line)
+        text = t.leaves()
+        label = int(t.label()) 
+
+        if label !=2: 
+            label = int(label >2)
+            segment_labels = np.asarray([int(child.label()) for child in t])
+
+
+            if label ==1:
+                segment_labels = 4-segment_labels
+            diff = np.abs(segment_labels[0] - segment_labels[1])
+ 
+            segment_labels = (segment_labels >2).astype(np.float32)
+            if segment_labels.sum() ==0 or diff <2:
+                segment_labels = np.asarray([0.5, 0.5])
+            else:
+                segment_labels  =np.round(segment_labels/segment_labels.sum(), decimals =1)
+
+            stop_position = [int(len(child.leaves())) for child in t][0]
+            parsed_dataset.append((" ".join(text), label, segment_labels[0],segment_labels[1] , stop_position))
+
+    file_path = "../data"
+    file_name = name + '_segment_annotated_SST.csv'
+    print(len(parsed_dataset))
+    with open(os.path.join(file_path, file_name), 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        for line in parsed_dataset:
+
+            writer.writerow(line)
+
+
+
+# random testing below

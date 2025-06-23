@@ -1,0 +1,39 @@
+```python
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import time
+    import numpy as np
+    from functools import reduce
+    from lib.util import fetch_tweets, to_unix_tmsp, fetch_X
+
+    #Train and Test preprocessing
+    from sklearn.model_selection import train_test_split
+    from sklearn import preprocessing
+
+    #Classifiers:
+    from sklearn import svm
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.gaussian_process import GaussianProcessClassifier
+    from sklearn.gaussian_process.kernels import RBF
+
+    # Load data
+    fn = "data/threads/germanwings-crash.csv"
+    gw_thrds=fetch_X(fn)
+    gw_thrds_rumortags=gw_thrds["is_rumor"]
+    gw_thrds_without_rumor_tag=gw_thrds.drop(['is_rumor'], axis=1)
+
+    print(gw_thrds_without_rumor_tag.columns.values)
+
+    # Standardize data
+    gw_thrds_values=gw_thrds_without_rumor_tag.values
+    n,d=gw_thrds_values.shape
+    gw_thrds_values=convertTrueFalseTo01(gw_thrds_values[:,1:d])
+    n,d=gw_thrds_values.shape
+    print(gw_thrds_values.shape)
+
+    # Train model
+    model = svm.SVC(gamma='scale', kernel='linear')
+    test_model(model)
+    ```

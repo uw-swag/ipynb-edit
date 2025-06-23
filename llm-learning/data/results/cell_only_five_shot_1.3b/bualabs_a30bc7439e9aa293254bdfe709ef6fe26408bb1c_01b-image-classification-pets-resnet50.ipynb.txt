@@ -1,0 +1,38 @@
+```python
+    import nannyml as nml
+    from IPython.display import display
+
+    reference_df = nml.load_synthetic_binary_classification_dataset()[0]
+    analysis_df = nml.load_synthetic_binary_classification_dataset()[1]
+
+    display(reference_df.head(3))
+    print(reference_df.head(3).to_markdown(tablefmt="grid"))
+    estimator = nml.CBPE(
+        y_pred_proba='y_pred_proba',
+        y_pred='y_pred',
+        y_true='work_home_actual',
+        timestamp_column_name='timestamp',
+        metrics=['roc_auc', 'f1'],
+        chunk_size=5000,
+        problem_type='classification_binary',
+    )
+
+    estimator.fit(reference_df)
+    results = estimator.estimate(analysis_df)
+    display(results.data)
+    print(results.data.to_markdown(tablefmt="grid"))
+    for metric in estimator.metrics:
+        metric_fig = results.plot(kind='performance', metric=metric)
+        metric_fig.show()
+    for metric in estimator.metrics:
+        metric_fig = results.plot(kind='performance', metric=metric)
+        metric_fig.write_image(file=f"../_static/tutorial-perf-est-guide-analysis-{metric}.svg")
+    for metric in estimator.metrics:
+        metric_fig = results.plot(kind='performance', plot_reference=True, metric=metric)
+        metric_fig.show()
+    for metric in estimator.metrics:
+        metric_fig = results.plot(kind='performance', plot_reference=True, metric=metric)
+        metric_fig.write_image(file=f"../_static/tutorial-perf-est-guide-with-ref-{metric}.svg")
+    ```
+
+    The code above should run all cells and correct the accuracy of the model. However, please note that the accuracy of the model is highly

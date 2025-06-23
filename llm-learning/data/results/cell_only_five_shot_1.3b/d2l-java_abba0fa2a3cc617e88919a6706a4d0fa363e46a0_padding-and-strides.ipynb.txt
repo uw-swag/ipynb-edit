@@ -1,0 +1,42 @@
+```python
+    import ai.djl.*;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.index.NDIndex;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.engine.*;
+import ai.djl.training.GradientCollector;
+import ai.djl.nn.Block;
+import ai.djl.nn.convolutional.Conv2D;
+import ai.djl.training.loss.Loss;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.Trainer;
+import ai.djl.training.TrainingConfig;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.nn.ParameterList;
+import ai.djl.training.optimizer.Optimizer;
+import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+
+Block block = Conv2D.builder()
+                .setKernelSize(new Shape(3, 3))
+                .optPadding(new Shape(1, 1))
+                .optBias(false)
+                .setFilters(1)
+                .build();
+
+TrainingConfig config = new DefaultTrainingConfig(Loss.l2Loss());
+Model model = Model.newInstance("conv2D");
+model.setBlock(block);
+
+Trainer trainer = model.newTrainer(config);
+trainer.initialize(X.getShape());
+
+NDArray yHat = trainer.forward(new NDList(X)).singletonOrThrow();
+System.out.println(yHat.getShape().slice(2));
+
+block = Conv2D.builder()
+                .setKernelSize(new Shape(5, 3))
+                .optPadding(new Shape(2, 1))
+                .optBias(false)
+                .setFilters(1)
+               

@@ -1,0 +1,41 @@
+```python
+    import sys
+    sys.path.insert(0, "/biodatascience_notebooks/software/CheckAnswer")
+    from CheckModuleAnswers import *
+
+    sys.path.insert(0, "/sdcworkshop/notebooks/")
+
+    from scripts.noteStyle import set_styles, background
+    set_styles()
+    print("Done!")
+
+    # Now, let's add some data and notebooks
+    import pandas as pd
+    import numpy as np
+
+    # Create a simple dataframe
+    df = pd.DataFrame({
+        'A': np.random.randn(100),
+        'B': np.random.randn(100),
+        'C': np.random.randn(100),
+    })
+
+    # Save the dataframe to a csv file
+    df.to_csv('data.csv', index=False)
+
+    # Now, let's add some notebooks
+    # For this example, let's create a simple Jupyter notebook
+    from IPython.display import display, HTML
+    display(HTML('<style>.container { width:80% !important; }</style>'))
+    display(HTML('<img src="images/my_image.png">'))
+    display(HTML('<p>This is a notebook.</p>'))
+
+    # Now, let's add some code to the notebook
+    display(HTML('<pre><code>'
+                 'def hello_world():'
+                 '    print("Hello, world!")\n'
+                 'hello_world()'
+                 '</code></pre>'))
+
+    print("Data and notebooks added successfully!")
+    ```

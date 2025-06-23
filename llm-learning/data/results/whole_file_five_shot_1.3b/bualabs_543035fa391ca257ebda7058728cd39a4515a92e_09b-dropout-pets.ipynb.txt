@@ -1,0 +1,33 @@
+```
+    # Fix link image classification ep 3 to 1
+    from fastai.vision.all import *
+    from fastai.metrics import accuracy
+
+    path = untar_data(URLs.PETS)
+    path_images = path/'images'
+    filenames = get_image_files(path_images)
+
+    batchsize = 32
+    epoch = 8
+    lr = slice(3e-6, 1e-2)
+    np.random.seed(55)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+    transform = zoom_crop(scale=(1.0,1.0), do_rand=False)
+
+    def get_databunch():
+        return ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=transform, 
+                                   size=224, bs=batchsize).normalize(imagenet_stats)
+
+    def get_learner(databunch):
+        learner = cnn_learner(databunch, models.resnet34, 
+                      ps=ps, wd=1e-1, 
+                      metrics=accuracy, callback_fns=ShowGraph)
+        learner.unfreeze()
+        return learner
+
+    ps = 0.0
+
+    learner = get_learner(get_databunch())
+    learner.fit_one_cycle(epoch, max_lr=lr)
+    ```

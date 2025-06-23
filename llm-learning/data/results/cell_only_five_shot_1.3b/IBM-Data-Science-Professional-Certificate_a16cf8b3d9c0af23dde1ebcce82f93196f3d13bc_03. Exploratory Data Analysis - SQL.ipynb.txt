@@ -1,0 +1,10 @@
+```python
+    %sql SELECT SUM(PAYLOAD_MASS__KG_) FROM SPACEXTBL \
+    WHERE CUSTOMER = 'NASA (CRS)';
+    %sql SELECT AVG(PAYLOAD_MASS__KG_) FROM SPACEXTBL \
+    WHERE BOOSTER_VERSION = 'F9 v1.1';
+    %sql SELECT MIN(DATE) FROM SPACEXTBL \
+    WHERE LANDING__OUTCOME = 'Success (ground pad)';
+    ```
+
+    The above SQL queries are used to perform exploratory data analysis on the 'SPACEXTBL' table in the database. The first query is to find the total mass of payloads for the customer 'NASA (CRS)'. The second query is to find the average mass of payloads for the booster version 'F9 v1.1'. The third query is to find the earliest date for a successful landing outcome.

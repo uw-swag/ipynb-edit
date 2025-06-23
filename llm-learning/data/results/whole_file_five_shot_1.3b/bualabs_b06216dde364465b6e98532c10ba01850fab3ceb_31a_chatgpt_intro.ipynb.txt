@@ -1,0 +1,45 @@
+```python
+    # Add DALL-E Sample
+    import openai
+    import os
+    from getpass import getpass
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    openai.api_key = token
+
+    # list models
+    models = openai.Model.list()
+
+    print(len(models.data))
+  
+    # print(models.data)  
+    print([model.id for model in models.data])
+
+    # create a completion
+    completion = openai.Completion.create(model="ada", prompt="Hello world")
+
+    # print the completion
+    print(completion.choices[0].text)
+
+    # create a completion
+    completion2 = openai.Completion.create(model="ada", prompt="long long time ago in a galaxy far far")
+
+    # print(completion2.choices[0].text)
+
+    # create a completion
+    completion3 = openai.Completion.create(model="ada", prompt="DALL-E: A cute puppy in a stripe ninja suit, super realistic")
+
+    # print(completion3.choices[0].text)
+
+    # create a completion
+    completion4 = openai.Completion.create(model="ada", prompt="DALL-E: A cute puppy in a stripe ninja suit, super realistic, long long time ago in a galaxy far far")
+
+    # print(completion4.choices[0].text)
+
+    # create a completion
+    completion5 = openai.Completion.create(model="ada", prompt="DALL-E: A cute puppy in a stripe ninja suit, super realistic, long long time ago in a galaxy far far, why Thailand is such a good place to retire")
+
+    # print(completion5.choices[0].text)
+
+    # create a completion
+    completion6 = openai.Completion.create(model="ada", prompt="DALL-E: A cute puppy in a stripe ninja suit, super realistic, long long time ago in a galaxy far far, why Thailand is such a

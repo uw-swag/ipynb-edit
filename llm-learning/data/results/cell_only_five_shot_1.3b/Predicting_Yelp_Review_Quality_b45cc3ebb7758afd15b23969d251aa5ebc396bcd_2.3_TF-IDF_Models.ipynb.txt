@@ -1,0 +1,49 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.stem import WordNetLemmatizer
+    from nltk.tokenize import word_tokenize
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Load dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocessing
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+
+    def preprocess_text(text):
+        # Tokenize the text
+        tokens = word_tokenize(text)
+
+        # Remove stopwords
+        tokens = [token for token in tokens if token not in stop_words]
+
+        # Lemmatize the tokens
+        tokens = [lemmatizer.lemmatize(token) for token in tokens]
+
+        return " ".join(tokens)
+
+    df['text'] = df['text'].apply(preprocess_text)
+
+    # Vectorization
+    vectorizer = TfidfVectorizer(max_features=2000)
+    X = vectorizer.fit_transform(df['text']).toarray()
+
+    # Feature engineering
+    idf = vectorizer.idf_
+    tfidf_weight = X.dot(idf).T
+
+    # Create a new dataframe with the feature engineering
+    df_new = pd.DataFrame(tfidf_weight, columns=vectorizer.get_feature_names_out())
+
+    # Update the original dataframe with the new dataframe
+    df = pd.concat([df, df_new], axis=1)
+
+    # Save the updated dataframe
+    df.to_csv('updated_data.csv', index=False)
+    ```
+
+    This code is a major update to the NLP-based feature engineering process. It uses the NLTK library to preprocess the text, and then uses the TfidfVectorizer to create a new feature matrix. The updated dataframe is then saved to a new CSV file.

@@ -1,0 +1,53 @@
+```python
+    from mlchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from mlchecks.checks.performance import PerformanceReport
+
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    ds = Dataset(frame, 
+                features=iris.feature_names,
+                label='target')
+    clf.fit(X, Y)
+
+    check = PerformanceReport()
+    check.run(ds, clf)
+
+    check = PerformanceReport(alternative_metrics={'Recall - Micro': 'recall_micro'})
+    check.run(ds, clf)
+
+    from sklearn.datasets import load_diabetes
+
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    train = Dataset(diabetes, label='target')
+    clf = AdaBoostRegressor(random_state=0)
+    clf.fit(train.features_columns(), train.label_col())
+
+    check = PerformanceReport()
+    check.run(train, clf)
+    ```
+
+    ### Response:
+    ```python
+    from mlchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from mlchecks.checks.performance import PerformanceReport
+
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    ds = Dataset(frame, 
+                features=iris.feature_names,
+                label='target')
+    clf.fit(X, Y)
+
+    check = PerformanceReport()
+   

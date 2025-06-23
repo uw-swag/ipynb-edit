@@ -1,0 +1,40 @@
+```
+    import tensorflow as tf
+
+    from tensorflow.contrib.layers import fully_connected
+
+    n_inputs = 4
+    n_hidden = 4
+    n_outputs = 1
+
+    learning_rate=0.01
+
+    X = tf.placeholder(tf.float32, shape=[None, n_inputs])
+    y = tf.placeholder(tf.float32, shape=[None, n_outputs])
+    hidden = fully_connected(X, n_hidden, activation_fn=tf.nn.elu)
+    logits = fully_connected(hidden, n_outputs, activation_fn=None)
+    outputs = tf.nn.softmax(logits)
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits, y)
+    optimizer = tf.train.AdamOptimizer(learning_rate)
+    training_op = optimizer.minimize(cross_entropy)
+
+    init = tf.global_variables_initializer()
+
+    n_iterations = 1000
+    batch_size = 100
+    n_episodes = 10
+
+    with tf.Session() as sess:
+        sess.run(init)
+        for iteration in range(n_iterations):
+            n_batches = mnist.train.num_examples // batch_size
+            for batch_index in range(n_batches):
+                X_batch, y_batch = mnist.train.next_batch(batch_size)
+                sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
+
+        # Test the model
+        acc_count = 0
+        for x, y in mnist.test.images, mnist.test.labels:
+            acc_count += np.sum(np.argmax(sess.run(outputs, feed_dict={X: x}), axis=1) == np.argmax(y, axis=1))
+
+        print("Accuracy on test set:", acc_count / mn

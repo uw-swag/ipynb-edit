@@ -1,0 +1,24 @@
+```java
+    import org.deeplearning4j.optimize.api.BaseTrainingListener;
+    import org.deeplearning4j.optimize.api.IterationListener;
+    import org.deeplearning4j.optimize.api.TrainingListener;
+    import org.deeplearning4j.optimize.api.config.DefaultTrainingConfig;
+    import org.deeplearning4j.optimize.api.config.OptimizationAlgorithm;
+    import org.deeplearning4j.optimize.api.config.layers.LayerConfiguration;
+    import org.deeplearning4j.optimize.api.config.layers.impl.CudnnLayerConfiguration;
+    import org.deeplearning4j.optimize.api.config.layers.impl.LstmLayerConfiguration;
+    import org.deeplearning4j.optimize.api.config.layers.impl.RnnLayerConfiguration;
+    import org.deeplearning4j.optimize.api.config.layers.impl.Seq2SeqLayerConfiguration;
+    import org.deeplearning4j.optimize.api.config.layers.impl.SgdLayerConfiguration;
+    import org.deeplearning4j.optimize.api.config.layers.impl.TanhLayerConfiguration;
+    import org.deeplearning4j.optimize.api.iter.IterationListener;
+    import org.nd4j.linalg.activations.Activation;
+    import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+    import org.nd4j.linalg.lossfunctions.LossFunctions;
+    import org.nd4j.linalg.lossfunctions.LossFunctions.LossFunction;
+    import org.nd4j.linalg.optimize.listeners.IterationListener;
+    import org.nd4j.linalg.optimize.listeners.Nesterovs;
+    import org.nd4j.linalg.optimize.listeners.Sgd;
+    import org.nd4j.linalg.optimize.listeners.TrainingListener;
+    import org.nd4j.linalg.primitives.Factory;
+   

@@ -1,0 +1,13 @@
+```python
+    # Assuming you have a pandas DataFrame df with a column 'label'
+    # And you want to create a new label 'new_label'
+
+    # First, you need to find the index of the row with the new label
+    index = df[df['label'] == 'new_label'].index[0]
+
+    # Then, you can update the label of the row
+    df.at[index, 'label'] = 'new_label'
+
+    # Now, you can check if the new label has been correctly assigned
+    assert df.loc[index, 'label'] == 'new_label'
+    ```

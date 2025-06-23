@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[issue-650] functionality split (#751)"
+    Original Code Cells:
+    '''
+    from sklearn.ensemble import AdaBoostClassifier
+
+    clf = AdaBoostClassifier(random_state=0)
+    clf.fit(train_ds.data[train_ds.features], train_ds.data[train_ds.label_name])
+<\Cell_2>
+<Cell_3>
+# Affiche les indicateurs pour les pays retenus
+pays_retenus = pd.DataFrame(
+    pd.concat([train_df, val_df]).drop_duplicates()
+)
+<\Cell_3>
+<Cell_4>
+# Affiche les différences entre les liste
+pays_differents = ((pays_retenus-pays_retenus_kmeans)
+                   .union(pays_retenus)
+                   .reset_index(drop=True)
+)
+<\Cell_4>
+<Cell_5>
+# Affiche les indicateurs pour les pays retenus
+pays_retenus = pd.DataFrame(
+    pd.concat([train_df, val_df]).drop_duplicates()
+)
+<\Cell_5>
+<Cell_6>
+# Affiche les différences entre les liste
+pays_differents = ((pays_retenus-pays_retenus_kmeans)
+                   .reset_index(drop=True)
+)
+<\Cell_6>
+<Cell_7>
+# Affiche les indicateurs pour les pays retenus
+pays_retenus = pd.DataFrame(
+    pd.concat([train_df, val_df]).drop_duplicates()
+)
+<\Cell_7>
+<Cell_8>
+# Affiche les différences entre les liste
+pays_differents = ((pays_retenus-pays_retenus_kmeans)
+                   .reset_index(drop=True)
+)
+<\

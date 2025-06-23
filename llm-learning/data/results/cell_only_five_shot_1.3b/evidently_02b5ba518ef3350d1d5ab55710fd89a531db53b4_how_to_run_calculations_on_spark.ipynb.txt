@@ -1,0 +1,17 @@
+```python
+    # Remove nbextension
+    try:
+        nbextensions = get_ipython().nbconfig.NBExtensionsList()
+        for ext in nbextensions:
+            if ext.name == 'spark-intermediate':
+                ext.enabled = False
+                ext.remove()
+    except:
+        print("No nbextension found")
+
+    # Show the remaining cells
+    spark_drift_report.show(mode='inline')
+    spark_drift_preset_report.show(mode='inline')
+    drift_tests.show(mode='inline')
+    drift_test_preset.show(mode='inline')
+    ```

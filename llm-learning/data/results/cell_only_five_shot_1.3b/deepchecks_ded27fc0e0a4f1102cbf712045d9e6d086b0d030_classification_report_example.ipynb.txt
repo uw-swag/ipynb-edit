@@ -1,0 +1,11 @@
+```python
+    # Let's compute classification performance report
+    performance_calculator = nml.ClassificationPerformanceCalculator(model_metadata=metadata, chunk_size=DPP)
+    performance_calculator.fit(reference_data=reference, target_data=analysis)
+    performance_results = performance_calculator.calculate()
+
+    # Let's create plot with results
+    figure = performance_results.plot(kind='classification_report')
+    figure.show()
+    # figure.write_image(file=f"butterfly-classification-report.svg")
+    ```

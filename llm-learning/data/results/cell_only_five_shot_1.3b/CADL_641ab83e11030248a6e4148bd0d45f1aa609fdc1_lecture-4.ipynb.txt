@@ -1,0 +1,31 @@
+```python
+    with tf.Session(graph=g) as sess, g.device('/cpu:0'):
+        sess.run(tf.global_variables_initializer())
+        # map input to noise
+        n_iterations = 100
+        og_img = net_input.eval()
+        imgs = []
+        for it_i in range(n_iterations):
+            _, this_loss, synth = sess.run([optimizer, loss, net_input],
+                    feed_dict={
+                        'vgg/dropout_1/random_uniform:0':
+                            np.ones(g.get_tensor_by_name(
+                            'vgg/dropout_1/random_uniform:0').get_shape().as_list()),
+                        'vgg/dropout/random_uniform:0':
+                            np.ones(g.get_tensor_by_name(
+                            'vgg/dropout/random_uniform:0').get_shape().as_list())})
+            print("%d: %f, (%f - %f)" %
+                (it_i, this_loss, np.min(synth), np.max(synth)))
+            if it_i % 5 == 0:
+                imgs.append(np.clip(synth[0], 0, 1))
+                fig, ax = plt.subplots(1, 3, figsize=(22, 5))
+                ax[0].imshow(vgg16.deprocess(img))
+                ax[0].set_title('content image')
+                ax[1].imshow(vgg16.deprocess(style_img))
+                ax[1].set_title('style image')
+                ax[2].set_title('current synthesis')
+                ax[2].imshow(vgg16.deprocess(synth[0]))
+                plt.show()
+                fig.canvas.draw()
+        gif.build_gif(imgs, saveto='stylenet-bosch.gif')
+    ```

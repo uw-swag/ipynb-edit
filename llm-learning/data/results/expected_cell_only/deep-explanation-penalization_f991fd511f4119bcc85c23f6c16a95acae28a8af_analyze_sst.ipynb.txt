@@ -1,0 +1,3 @@
+trained_model_folder = '../models/SST'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) 
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 

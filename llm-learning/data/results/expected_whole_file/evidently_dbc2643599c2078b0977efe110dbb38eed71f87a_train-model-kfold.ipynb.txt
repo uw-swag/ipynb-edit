@@ -1,0 +1,253 @@
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+
+import joblib
+import mlflow
+import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+import pandas as pd
+
+from pathlib import Path
+from sklearn import ensemble
+from typing import Dict, Tuple
+
+from evidently.metrics import RegressionQualityMetric, RegressionErrorPlot, RegressionErrorDistribution
+from evidently.metric_preset import DataDriftPreset, RegressionPreset
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+
+from config import MLFLOW_TRACKING_URI, DATA_DIR, FILENAME, REPORTS_DIR
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+# Download original dataset with: python src/pipelines/load_data.py 
+
+raw_data = pd.read_csv(f"../{DATA_DIR}/{FILENAME}")
+
+raw_data.head()
+<\Cell_2>
+<Cell_3>
+target = 'cnt'
+prediction = 'prediction'
+datetime = 'dteday'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'mnth', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', ]
+
+column_mapping = ColumnMapping()
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.datetime = datetime
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+<\Cell_3>
+<Cell_4>
+start_date_0 = '2011-01-02 00:00:00'
+end_date_0 = '2011-01-30 23:00:00'
+
+experiment_batches = [
+    
+    ('2011-01-31 00:00:00','2011-02-06 23:00:00'),
+    ('2011-02-07 23:00:00','2011-02-13 23:00:00'),
+    ('2011-02-14 23:00:00','2011-02-20 23:00:00'),
+    ('2011-02-21 00:00:00','2011-02-27 23:00:00'),
+    ('2011-02-28 00:00:00','2011-03-06 23:00:00'),  
+]
+<\Cell_4>
+<Cell_5>
+# Set datetime index 
+raw_data = raw_data.set_index('dteday')
+
+# Define the reference dataset
+reference = raw_data.loc[start_date_0:end_date_0]
+
+print(reference.shape)
+reference.head()
+<\Cell_5>
+<Cell_6>
+# Set up MLFlow Client
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+client = MlflowClient()
+print(f"Client tracking uri: {client.tracking_uri}")
+
+# Set experiment name
+mlflow.set_experiment('Train Model - K-Fold')
+
+# Set experiment variables
+model_path = Path('../models/model.joblib')
+ref_end_data = end_date_0
+
+# Run model train for each batch (K-Fold)
+for k, date in enumerate(experiment_batches):
+
+    print(f"Train period: {start_date_0} - {ref_end_data}") 
+    X_train = raw_data.loc[start_date_0:ref_end_data, numerical_features + categorical_features]
+    y_train = raw_data.loc[start_date_0:ref_end_data, target]
+    print("X_train (reference) dataset shape: ", X_train.shape, y_train.shape)
+    
+    print(f"Test period: {date[0]} - {date[1]}") 
+    current = raw_data.loc[date[0]:date[1]]
+    X_test = current.loc[:, numerical_features + categorical_features]
+    y_test = current[target]
+    print("X_test (current)) dataset shape: ",  X_test.shape, y_test.shape)
+    
+    # Update reference end date
+    ref_end_data = date[1]
+    
+    # Train model
+    regressor = ensemble.RandomForestRegressor(random_state = 0, n_estimators = 50)
+    regressor.fit(X_train, y_train)
+    
+    # Make predictions 
+    ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+    reference['prediction'] = ref_prediction
+    
+    prediction = regressor.predict(current[numerical_features + categorical_features])
+    current['prediction'] = prediction
+    
+    # Build the model performance report
+    regression_performance_report = Report(metrics=[
+        RegressionQualityMetric(),
+    ])
+    regression_performance_report.run(
+        reference_data=reference, 
+        current_data=current,
+        column_mapping=column_mapping)
+    
+    # Extract Metrics from the report
+    train_report_metrics = regression_performance_report.as_dict()
+    me = train_report_metrics['metrics'][0]['result']['current']['mean_error']
+    mae = train_report_metrics['metrics'][0]['result']['current']["mean_abs_error"]
+    
+    # Save model and train_report
+    joblib.dump(regressor, model_path)
+    model_quality_report_path = f"../{REPORTS_DIR}/train_report.html"
+    regression_performance_report.save_html(model_quality_report_path)
+
+    # Start a new MLflow Run
+    with mlflow.start_run() as run: 
+        
+        # Show newly created run metadata info
+        print("Experiment id: {}".format(run.info.experiment_id))
+        print("Run id: {}".format(run.info.run_id))
+        print("Run name: {}".format(run.info.run_name))
+        print('MLFlow tracking uri:', mlflow.get_tracking_uri())
+        print('MLFlow artifact uri:', mlflow.get_artifact_uri())
+        
+        # Log parameters
+        mlflow.log_param("begin", date[0])
+        mlflow.log_param("end", date[1])
+        
+        # Log metrics
+        mlflow.log_metric('me', round(me, 3))
+        mlflow.log_metric('mae', round(mae, 3))
+        
+        # Log model 
+        mlflow.log_artifact(model_path)
+        
+        # Log the regression_performance_report as an artifact
+        mlflow.log_artifact(model_quality_report_path)
+<\Cell_6>
+<Cell_7>
+# Set up MLFlow Client
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+client = MlflowClient()
+print(f"Client tracking uri: {client.tracking_uri}")
+
+# Set experiment name
+mlflow.set_experiment('Train Model - K-Fold')
+
+# Set experiment variables
+model_path = Path('../models/model.joblib')
+ref_end_data = end_date_0
+
+# Start a new Run (Parent Run)
+with mlflow.start_run() as run: 
+    
+    # Update metrics with metrics for each Fold
+    metrics = {}
+
+    # Run model train for each batch (K-Fold)
+    for k, date in enumerate(experiment_batches):
+        
+        # print(k, date[0],  date[1])
+            
+        print(f"Train period: {start_date_0} - {ref_end_data}") 
+        X_train = raw_data.loc[start_date_0:ref_end_data, numerical_features + categorical_features]
+        y_train = raw_data.loc[start_date_0:ref_end_data, target]
+        print("X_train (reference) dataset shape: ", X_train.shape, y_train.shape)
+        
+        print(f"Test period: {date[0]} - {date[1]}") 
+        current = raw_data.loc[date[0]:date[1]]
+        X_test = current.loc[:, numerical_features + categorical_features]
+        y_test = current[target]
+        print("X_test (current)) dataset shape: ",  X_test.shape, y_test.shape)
+        
+        # Update reference end date
+        ref_end_data = date[1]
+
+        # Train model
+        regressor = ensemble.RandomForestRegressor(random_state = 0, n_estimators = 50)
+        regressor.fit(X_train, y_train)
+        
+        # Make predictions 
+        ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+        reference['prediction'] = ref_prediction
+        
+        prediction = regressor.predict(current[numerical_features + categorical_features])
+        current['prediction'] = prediction 
+        
+        # Build the model performance report
+        regression_performance_report = Report(metrics=[
+            RegressionQualityMetric(),
+        ])
+        regression_performance_report.run(
+            reference_data=reference, 
+            current_data=current,
+            column_mapping=column_mapping)
+        
+        # Extract Metrics from the report
+        train_report_metrics = regression_performance_report.as_dict()
+        me = train_report_metrics['metrics'][0]['result']['current']['mean_error']
+        mae = train_report_metrics['metrics'][0]['result']['current']["mean_abs_error"]
+        metrics.update({date[1]: {'me': me, 'mae': mae}})
+        
+        # Save train_report for (the Fold)
+        model_quality_report_path = f"../{REPORTS_DIR}/train_report.html"
+        regression_performance_report.save_html(model_quality_report_path)
+        
+        # Run a Child Run for each Fold 
+        with mlflow.start_run(run_name=date[1], nested=True) as child_run:
+            
+            # Show newly created run metadata info
+            print("Experiment id: {}".format(run.info.experiment_id))
+            print("Run id: {}".format(run.info.run_id))
+            print("Run name: {}".format(run.info.run_name))
+            print('MLFlow tracking uri:', mlflow.get_tracking_uri())
+            print('MLFlow artifact uri:', mlflow.get_artifact_uri())
+            
+            # Log parameters
+            mlflow.log_param("begin", date[0])
+            mlflow.log_param("end", date[1])
+            
+            # Log metrics
+            mlflow.log_metric('me', round(me, 3))
+            mlflow.log_metric('mae', round(mae, 3))
+            
+            # Log the regression_performance_report as an artifact
+            mlflow.log_artifact(model_quality_report_path)
+        
+    # Save model
+    joblib.dump(regressor, model_path)
+    
+    # Log the last batch model as the parent Run model
+    mlflow.log_artifact(model_path)
+    
+    # Log metrics
+    average_run_merics = pd.DataFrame.from_dict(metrics).T.mean().round(3).to_dict()
+    mlflow.log_metrics(average_run_merics )
+<\Cell_7>

@@ -1,0 +1,21 @@
+```
+    import numpy as np
+import pandas as pd
+
+from deepchecks import Dataset
+from deepchecks.checks import TrainTestFeatureDrift
+import pprint
+%load_ext autoreload
+%autoreload 2
+label = np.random.randint(0, 2, size=(df_train.shape[0],))
+df_train['target'] = label
+train_dataset = Dataset(df_train, label_name='target')
+
+model.fit(train_dataset.features_columns, label)
+
+label = np.random.randint(0, 2, size=(df_test.shape[0],))
+df_test['target'] = label
+test_dataset = Dataset(df_test, label_name='target')
+pprint.pprint([x.__dict__ for x in check_cond.conditions_decision(check_cond.run(train_dataset=train_dataset, test_dataset=test_dataset))])
+    ```
+    The label_name parameter in the Dataset constructor is used to specify the name of the label column. If the label column is not specified, the Dataset constructor will not be able to find the label column and will throw an error.

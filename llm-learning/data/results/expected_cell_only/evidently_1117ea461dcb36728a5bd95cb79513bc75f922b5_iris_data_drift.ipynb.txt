@@ -1,0 +1,14 @@
+import pandas as pd
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection
+iris_data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+iris_data_drift_dashboard.calculate(iris_frame, iris_frame, column_mapping = None)
+iris_data_drift_dashboard.show()
+#iris_data_drift_dashboard.save('iris_data_drift.html')
+iris_data_drift_profile.json()

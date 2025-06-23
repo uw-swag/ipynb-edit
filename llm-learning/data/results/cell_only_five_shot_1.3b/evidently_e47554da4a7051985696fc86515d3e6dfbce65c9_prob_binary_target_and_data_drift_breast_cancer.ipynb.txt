@@ -1,0 +1,24 @@
+
+Here's how the code was modified:
+
+1. Removed examples with dashboards and profiles from the sample_notebooks.
+2. Updated the README with an example of how to generate test generators using the `evidently.test_generators` module.
+3. Added an example with test generators usage to the How-To Questions section.
+
+The README file should now include a section on how to generate test generators using the `evidently.test_generators` module. This will allow users to easily create test data for their models.
+
+Here's an example of how to generate test generators using the `evidently.test_generators` module:
+
+```python
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+
+from evidently.test_generators import ClassificationTestGenerator
+
+iris = load_iris()
+X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+
+test_generator = ClassificationTestGenerator(X_test, y_test)
+```
+
+This will create a test generator that can be used to evaluate the performance of a classification model. The test generator will generate a batch of test data and labels, which can be used to evaluate the model's performance.

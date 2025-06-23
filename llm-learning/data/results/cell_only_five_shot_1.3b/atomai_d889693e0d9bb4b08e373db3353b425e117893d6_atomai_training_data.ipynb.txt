@@ -1,0 +1,28 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+
+    # Load the training data
+    data = pd.read_csv('path_to_your_training_data.csv')
+
+    # Split the data into features and target variable
+    X = data.drop('target_variable', axis=1)
+    y = data['target_variable']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Print the shape of the training data
+    print(X_train.shape)
+
+    # Print the shape of the testing data
+    print(X_test.shape)
+
+    # Print the shape of the target variable
+    print(y_train.shape)
+
+    # Print the shape of the target variable
+    print(y_test.shape)
+    ```
+    This notebook will prepare the training data for a machine learning model by loading the data, splitting it into features and target variable, and then splitting the data into training and testing sets. The shapes of the training and testing data will be printed to the console.

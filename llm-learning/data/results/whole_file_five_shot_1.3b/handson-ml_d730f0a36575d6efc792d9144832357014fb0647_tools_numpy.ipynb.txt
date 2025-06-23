@@ -1,0 +1,15 @@
+```
+    from flask import Flask, request, jsonify
+    app = Flask(__name__)
+
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        data = request.get_json()
+        # Here you can add your model prediction code
+        # For now, I'm just returning a static response
+        return jsonify({'churn': 'no'})
+
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=9696)
+    ```
+    This code will start a Flask server on port 9696. You can then use curl or any other HTTP client to send a POST request to this server with a JSON payload containing your data. The server will then return a JSON response with a 'churn' field indicating whether the customer will churn or not.

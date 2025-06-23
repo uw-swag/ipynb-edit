@@ -1,0 +1,35 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.feature_extraction.text import TfidfTransformer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.pipeline import Pipeline
+    from sklearn.datasets import fetch_20newsgroups
+
+    # Load dataset
+    twenty_train = fetch_20newsgroups(subset='train', shuffle=True)
+    twenty_test = fetch_20newsgroups(subset='test', shuffle=True)
+
+    # Create a pipeline that first transforms the data into lowercase,
+    # then tokenizes it, and finally extracts the features
+    text_clf = Pipeline([
+        ('vect', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('clf', MultinomialNB()),
+    ])
+
+    # Train the model
+    text_clf.fit(twenty_train.data, twenty_train.target)
+
+    # Test the model
+    predicted = text_clf.predict(twenty_test.data)
+    print(np.mean(predicted == twenty_test.target))
+    ```
+    This code is a simple example of a text classification model using the Naive Bayes classifier from the sklearn library. The model is trained on the 20 Newsgroups dataset, which is a collection of approximately 20,000 newsgroup documents, partitioned across 20 different newsgroups.
+
+    The model is then tested on the test set and the accuracy of the model is printed.
+
+    The model is a pipeline that first transforms the text data into a matrix of token counts using the CountVectorizer, then it transforms this count matrix into a TF-IDF representation, and finally, it trains a Multinomial Naive Bayes classifier on this TF-IDF data.
+
+    The model is then used to predict the category of the documents in the test set. The accuracy of the model is then printed.
+
+    The accuracy of the model is a measure of how often the classifier makes the correct prediction. In this case, it's a measure of how often

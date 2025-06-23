@@ -1,0 +1,48 @@
+```python
+    # 1. magic to print version
+    # 2. magic so that the notebook will reload external python modules
+    %matplotlib inline
+    %load_ext watermark
+    %load_ext autoreload
+    %autoreload 2
+
+    import os
+    import numpy as np
+    import pandas as pd
+    import m2cgen as m2c
+    import sklearn.datasets as datasets
+    from xgboost import XGBClassifier, XGBRegressor
+
+    # prevent scientific notations
+    pd.set_option('display.float_format', lambda x: '%.3f' % x)
+
+    %watermark -a 'Ethen' -d -t -v -p numpy,pandas,sklearn,m2cgen,xgboost
+
+    X, y = datasets.load_diabetes(return_X_y=True, as_frame=True)
+    X = X[["age", "sex", "bmi", "bp"]]
+    X.head()
+
+    regression_model_params = {
+        'n_estimators': 2,
+        'max_depth': 3,
+        'base_score': 0.0
+    }
+    regression_model = XGBRegressor(**regression_model_params).fit(X, y)
+    regression_model
+
+    regression_model.get_booster().dump_model("regression.txt")
+    regression_model.predict(X.iloc[[0]])
+
+    X, y = datasets.make_classification(n_samples=10000, n_features=5, random_state=42, n_classes=2)
+    X
+
+    binary_model_params = {
+        'n_estimators': 3,
+        'max_depth': 3,
+        'tree_method': 'hist',
+        'grow_policy': 'lossguide'
+    }
+    binary_model = XGBClassifier(**binary_model_params).fit(X, y)
+    binary_model
+
+    binary_model.get_booster().dump_model("binary_class.

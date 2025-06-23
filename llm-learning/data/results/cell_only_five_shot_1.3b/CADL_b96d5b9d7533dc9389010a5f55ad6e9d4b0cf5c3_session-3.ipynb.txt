@@ -1,0 +1,16 @@
+```python
+    # Write a function to preprocess/normalize an image, given its dataset object
+    # (which stores the mean and standard deviation!)
+    def preprocess(img, ds):
+        norm_img = (img - ds.mean) / ds.stddev
+        return norm_img
+
+    # Write a function to undo the normalization of an image, given its dataset object
+    # (which stores the mean and standard deviation!)
+    def deprocess(norm_img, ds):
+        img = norm_img * ds.stddev + ds.mean
+        return img
+
+    # Just to make sure that you've coded the previous two functions correctly:
+    assert(np.allclose(deprocess(preprocess(ds.X[0], ds), ds), ds.X[0]))
+    ```

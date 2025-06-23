@@ -1,0 +1,52 @@
+
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets
+
+from plotly.graph_objects import histogram
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.tabs import DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection
+from evidently.analyzers.data_drift_analyzer import DataDriftOptions
+<\Cell_0>
+<Cell_1>
+boston = datasets.load_boston()
+<\Cell_1>
+<Cell_2>
+boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)
+<\Cell_2>
+<Cell_3>
+boston_frame['target'] = boston.target
+<\Cell_3>
+<Cell_4>
+boston_frame.head()
+<\Cell_4>
+<Cell_5>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = None
+column_mapping.datetime = None
+
+column_mapping.numerical_features = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping.categorical_features = ['CHAS', 'RAD']
+<\Cell_5>
+<Cell_6>
+#set parameters to detect dataset drift: 
+# - confidence level for the individual features
+# - share of the drifted features to detect dataset drift
+
+data_drift_opts = DataDriftOptions()
+data_drift_opts.confidence = 0.99
+data_drift_opts.drift_share = 0.5
+
+#set the custom bins to plot in the datadrift table 
+data_drift_opts.xbins = {
+    'CRIM': dict(start=-10., end=100.,size=5.), # OPTION 1
+    'NOX': histogram.XBins(start=-0.5,

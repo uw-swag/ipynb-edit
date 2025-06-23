@@ -1,0 +1,55 @@
+```
+    ## Data Science Practical 03: Categorical variables into numerical
+
+    ## Importing necessary libraries and creating a dataframe
+    import pandas as pd
+    dataframe = pd.DataFrame()
+
+    ## Reading the CSV file
+    url = "practical 03\assets\Iris.csv"
+    df = pd.read_csv(url)
+
+    ## Showing first five rows
+    df.head()
+
+    ## Showing dimensions
+    print("Dimensions: {}".format(df.shape))
+
+    ## Showing Statistics
+    df.describe()
+
+    ## Selecting first row
+    print(df.iloc[0])
+
+    ## Selecting three rows
+    print(df.iloc[1:4])
+
+    ## All rows upto and including the fourth row
+    print(df.iloc[:4])
+
+    ## All columns
+    print(df.columns)
+
+    ## Setting index
+    df.set_index("Id")
+
+    ## Showing row
+    val = 1
+    df.loc[val]
+
+    ## Selecting top two rows where column "SepalLengthCm" is > 4
+    df[df['SepalLengthCm']>= 4].head(2)
+
+    ## Multiple Conditions
+    df[(df['SepalLengthCm']>= 4) & (df['SepalWidthCm']<= 3)]
+
+    ## Replacing any instance of "Iris-setosa" with "Iris-Setosa"
+    df['Species'].replace("Iris-setosa","Iris-Setosa").head()
+
+    ## Replacing any instance of "Iris-Setosa" with "Iris-setosa" and "Irisvirginica" with "Iris-Virginica"
+    df['Species'].replace(["Iris-Setosa","Iris-setosa"],["Irisvirginica","Iris-Virginica"]).head()
+
+    ## Replacing "One" with 1
+    df.replace(1,"One").head()
+
+    #

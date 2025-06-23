@@ -1,0 +1,54 @@
+import concurrent.futures
+import time
+import threading
+
+my_data = 0
+keep_going = True
+
+def do_something(seconds):
+    global my_data
+    print('Sleeping {} second(s)...'.format(seconds))
+    time.sleep(seconds)
+    print("my_data: " + str(my_data))
+    my_data = my_data + 1
+    while keep_going:
+        print("Still going")
+    return 'Done Sleeping...{}'.format(seconds)
+start = time.perf_counter()
+
+#with concurrent.futures.ThreadPoolExecutor() as executor:
+#    secs = [5, 4, 3, 2, 1]
+#    results = executor.map(do_something, secs)
+
+#    for result in results:
+#         print(result)
+
+# threads = []
+
+# for _ in range(10):
+#     t = threading.Thread(target=do_something, args=[1.5])
+#     t.start()
+#     threads.append(t)
+
+# for thread in threads:
+#     thread.join()
+
+t1=threading.Thread(target=do_something, args=[1.5])
+t2=threading.Thread(target=do_something, args=[1.5])
+
+t1.start()
+t2.start()
+
+finish = time.perf_counter()
+time_taken = round(finish-start, 2)
+
+print("my_data: " + str(my_data))
+print("Finished in {} second(s)".format(time_taken))
+keep_going
+t1
+keep_going = False
+time.sleep(0.1)
+t1
+my_data
+t1
+t2

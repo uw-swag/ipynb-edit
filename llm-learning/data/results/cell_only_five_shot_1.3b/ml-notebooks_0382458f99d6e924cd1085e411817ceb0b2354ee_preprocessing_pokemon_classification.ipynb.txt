@@ -1,0 +1,47 @@
+```python
+    ## This code cell will not be shown in the HTML version of this notebook
+    ## Add human activity recognition notebook
+
+    ## Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
+
+    ## Load the dataset
+    data = pd.read_csv('path_to_your_dataset.csv')
+
+    ## Preprocess the data
+    ## This step depends on the nature of your data and the preprocessing steps you want to apply
+
+    ## Split the data into features and target variable
+    X = data.drop('target_variable', axis=1)
+    y = data['target_variable']
+
+    ## Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    ## Train a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf.fit(X_train, y_train)
+
+    ## Make predictions
+    y_pred = clf.predict(X_test)
+
+    ## Evaluate the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    ## Save the model
+    import joblib
+    joblib.dump(clf, 'human_activity_recognition.pkl')
+
+    ## Load the model
+    loaded_model = joblib.load('human_activity_recognition.pkl')
+
+    ## Use the model to predict human activity
+    ## This step depends on the nature of your data and the model you want to use

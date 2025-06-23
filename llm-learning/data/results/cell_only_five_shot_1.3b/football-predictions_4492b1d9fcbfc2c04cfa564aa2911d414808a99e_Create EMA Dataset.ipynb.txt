@@ -1,0 +1,27 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    def create_df(path):
+        """
+        Function to convert date to datetime and add 'Id' column
+        """
+        df = (pd.read_csv(path)
+             .assign(Date=lambda df: pd.to_datetime(df.Date))
+             .pipe(lambda df: df.dropna(thresh=len(df) - 2, axis=1))  # Drop cols with NAs
+             .dropna(axis=0)  # Drop rows with NAs
+             .sort_values('season')
+             .reset_index(drop=True)
+             .assign(gameId=lambda df: list(df.index + 1))
+             )
+        return df
+
+    df = create_df('path_to_your_file.csv')
+    df.head()
+    df.shape
+    ```
+    This code will create a new function `create_df` that takes a path to a CSV file, converts the 'Date' column to a datetime object, and adds a 'gameId' column. The 'gameId' column is a list of integers starting from 1, with one more integer for each row in the DataFrame. The function returns the DataFrame.
+
+    The `create_df` function is then used to read a CSV file, convert the 'Date' column to a datetime object, drop columns with missing values, drop rows with missing values, sort the DataFrame by the 'season' column, reset the index, and add a 'gameId' column. The function returns the DataFrame.
+
+    The `df.head()` and `df.shape` lines are used to print the first few rows of the DataFrame and to print the shape of the DataFrame, respectively.

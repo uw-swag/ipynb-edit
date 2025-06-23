@@ -1,0 +1,38 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    from deepchecks.checks.overview import ColumnsInfo
+    from deepchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    num_fe = np.random.rand(500)
+    cat_fe = np.random.randint(3, size=500)
+    num_col = np.random.rand(500)
+    date = range(1635693229, 1635693729)
+    index = range(500)
+    data = {'index': index, 'date': date, 'a': cat_fe, 'b': num_fe, 'c': num_col, 'label': cat_fe}
+    df = pd.DataFrame.from_dict(data)
+
+    dataset = Dataset(df, label='label', datetime_name='date', index_name='index', features=['a', 'b'], cat_features=['a'])
+    <\Cell_1>
+    <Cell_2>
+    check = ColumnsInfo()
+    <\Cell_2>
+    <Cell_3>
+    check.run(dataset=dataset)
+    <\Cell_3>
+    <Cell_4>
+
+    <\Cell_4>
+    ```
+
+    The code above is a simple example of how to use the ColumnsInfo check in Deepchecks. This check is used to analyze the structure of the dataset, including the number of unique values in each column, the data type of each column, and the presence of missing values.
+
+    The `run` method of the `ColumnsInfo` check is used to execute the check on the given `Dataset` object. The result of the check is a report that includes a summary of the analysis, including the number of unique values in each column, the data type of each column, and the presence of missing values.
+
+    Please note that you need to have the Deepchecks library installed in your environment to run this code. You can install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```

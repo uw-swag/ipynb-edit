@@ -1,0 +1,63 @@
+```python
+    # Import necessary libraries
+    from google.cloud import bigquery
+    import pandas as pd
+    import numpy as np
+
+    # Set up the BigQuery client
+    client = bigquery.Client()
+
+    # Define the SQL query
+    query = """
+    SELECT
+        name,
+        COUNT(*) as count
+    FROM
+        `bigquery-public-data.usa_names.usa_1910_2013`
+    WHERE
+        state = 'TX'
+    GROUP BY
+        name
+    ORDER BY
+        count DESC
+    """
+
+    # Run the query and convert the result to a pandas DataFrame
+    df = client.query(query).to_dataframe()
+
+    # Print the DataFrame
+    print(df)
+
+    # Define the BigQuery ML model
+    ml_model = client.create_machine_learning_model(
+        "my_model",
+        "REGRESSION",
+        "COUNT_DIFF",
+        "name",
+        "count"
+    )
+
+    # Train the model
+    client.create_training_job(
+        config={
+            "machineType": "n1-standard-4",
+            "pythonVersion": "PYTHON_3",
+            "scriptPath": "gs://my_bucket/my_script.py",
+            "args": [
+                "--input_file=gs://my_bucket/input/input.csv",
+                "--output_file=gs://my_bucket/output/output.csv"
+            ]
+        },
+        job_name="my_job",
+        training_input={"lines": df.to_dict("records")},
+        prediction_input={"lines": df.to_dict("records")}
+    )
+
+    # Evaluate the model
+    client.create_evaluation(
+        config={
+            "machineType": "n1-standard-4",
+            "pythonVersion": "PYTHON_3",
+            "scriptPath": "gs://my_bucket/my_script.py",
+            "args": [
+                "--input_file=gs://my_bucket/output/

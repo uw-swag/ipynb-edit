@@ -1,0 +1,15 @@
+```
+    from deepchecks import Dataset
+    from deepchecks.checks.methodology.boosting_overfit import BoostingOverfit
+
+
+    train_ds = Dataset(train_df, label_name='target')
+    validation_ds = Dataset(val_df, label_name='target')
+
+    clf = AdaBoostClassifier(random_state=0)
+    clf.fit(train_ds.features_columns, train_ds.label_col)
+    BoostingOverfit().run(train_ds, validation_ds, clf)
+    ```
+    '''
+
+    ### End of Response

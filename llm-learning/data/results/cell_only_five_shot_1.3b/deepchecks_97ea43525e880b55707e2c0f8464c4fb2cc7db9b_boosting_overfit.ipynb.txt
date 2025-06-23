@@ -1,0 +1,50 @@
+```python
+    # utils.py
+
+    def is_categorical(data):
+        """
+        Check if a given data is categorical.
+
+        Parameters:
+        data (pandas.Series, pandas.DataFrame): The data to check.
+
+        Returns:
+        bool: True if the data is categorical, False otherwise.
+        """
+        if isinstance(data, pd.Categorical):
+            return True
+        elif isinstance(data, pd.Series) or isinstance(data, pd.DataFrame):
+            return False
+        else:
+            raise ValueError("Data must be a pandas Series or DataFrame.")
+
+    def infer_categorical_features(data):
+        """
+        Infer categorical features from a given data.
+
+        Parameters:
+        data (pandas.Series, pandas.DataFrame): The data to infer features from.
+
+        Returns:
+        list: A list of categorical features found in the data.
+        """
+        if is_categorical(data):
+            return []
+        else:
+            return list(data.select_dtypes(include=['object']).columns)
+    ```
+
+    ## Refactoring Steps
+
+    1. Create a new file `utils.py` in the `utils` package.
+    2. Move the `is_categorical` and `infer_categorical_features` functions to the `utils` package.
+    3. Update the import statements in the rest of the code to use the new `utils` package.
+    4. Update the docstrings of the `is_categorical` and `infer_categorical_features` functions to reflect the new location of the functions.
+    5. Update the tests to import the new `utils` package.
+    6. Update the test cases to use the new `utils` package.
+    7. Update the code to use the new `utils` package.
+    8. Update the documentation to reflect the new location of the functions.
+    9. Update the version of the `utils` package to reflect the refactoring.
+    10. Update the version of the rest of the code to reflect the refactoring.
+
+    ##

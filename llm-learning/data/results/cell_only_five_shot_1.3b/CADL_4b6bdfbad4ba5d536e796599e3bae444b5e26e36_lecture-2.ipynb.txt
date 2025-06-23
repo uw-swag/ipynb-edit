@@ -1,0 +1,23 @@
+
+    # Instead of a single factor and a bias, we'll create a polynomial function
+    # of different degrees.  We will then learn the influence that each
+    # degree of the input (X^0, X^1, X^2, ...) has on the final output (Y).
+    Y_pred = tf.Variable(tf.random_normal([1]), name='bias')
+    for pow_i in range(0, 5):
+        W = tf.Variable(
+            tf.random_normal([1], stddev=0.1), name='weight_%d' % pow_i)
+        Y_pred = tf.add(tf.mul(tf.pow(X, pow_i), W), Y_pred)
+
+    # And then we'll retrain with our new Y_pred
+    train(X, Y, Y_pred)
+
+    #tf 1.0.0 is the latest version of TensorFlow. It includes many improvements, bug fixes, and new features.
+    #In the code you provided, the TensorFlow 1.0.0 version is used to create a simple linear regression model.
+    #The model is trained with a single factor and a bias, and then it's retrained with a polynomial function of different degrees.
+    #The new model is then trained with the same data, and the new weights are saved to a file.
+    #The model is then loaded from the file and its summary is printed.
+    #The model is trained for 5 iterations, and the final weights are printed.
+
+    #Please note that TensorFlow 1.0.0 is still in beta version, and it's not recommended to use it in production environments.
+    #It's also worth noting that TensorFlow 1.0.0 is not backward compatible with TensorFlow 0.9.0.
+    #You should use TensorFlow 0.9.0 or a more recent version for new projects.

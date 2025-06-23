@@ -1,0 +1,40 @@
+```python
+    from deepchecks.base import Dataset
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RocReport
+    import pandas as pd
+
+    # Load the iris dataset
+    iris = load_iris()
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    df['target'] = iris.target
+
+    # Split the dataset into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    # Create a logistic regression model
+    model = LogisticRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Create a dataset from the train data
+    train_ds = Dataset(X_train, y_train, "train_data")
+
+    # Create a dataset from the test data
+    test_ds = Dataset(X_test, y_test, "test_data")
+
+    # Create a ROC report check
+    roc_report = RocReport(test_ds)
+
+    # Run the check
+    roc_report.run()
+
+    # Remove SHAP check
+    del roc_report
+
+    # Check the performance of the model
+    model.score(X_test, y_test)
+    ```

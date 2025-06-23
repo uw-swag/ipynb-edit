@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+    from sklearn.datasets import fetch_openml
+
+    # Load the data, this will return a dict-like object.
+    data, target, attribute = fetch_openml('mnist_784', version=1, return_X_y=True)
+
+    # Split the data into training and test sets.
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=0.2, random_state=42)
+
+    # Now, we can use the training data to train our model.
+    from sklearn.ensemble import RandomForestClassifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf.fit(X_train, y_train)
+
+    # Now, we can use the test data to evaluate the model.
+    from sklearn.metrics import accuracy_score
+    y_pred = clf.predict(X_test)
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+
+    # Now, we can use the test data to evaluate the model.
+    y_pred_sample = clf.predict(X_test[:5])
+    print("Predictions:", y_pred_sample)
+    print("True values:", y_test[:5])
+
+    # This will print the actual values of the first 5 samples.
+    # The model might have learned to predict the first 5 samples correctly,
+    # but it's not guaranteed.
+    ```
+
+    The code above demonstrates how to use the MNIST dataset from sklearn, which is a set of 70,000 small images of digits handwritten by high school students and employees of the US Census Bureau. The images are labeled originally. We then use a RandomForestClassifier to train a model on the training data and evaluate its performance on the test data.
+
+    The code also demonstrates how to use the test data to make predictions on the test data, but it's important to note that this is not a foolproof

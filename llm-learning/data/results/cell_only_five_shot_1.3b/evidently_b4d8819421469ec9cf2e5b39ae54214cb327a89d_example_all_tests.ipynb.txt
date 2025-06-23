@@ -1,0 +1,70 @@
+```python
+    try:
+        import evidently
+    except:
+        !yarn add -g yarn
+        !yarn add git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+
+    import pytest
+    from evidently.test_suite import TestSuite
+    from evidently.test_case import TestCase
+    from evidently.data import Data
+
+    # Define your test cases
+    class TestCase1(TestCase):
+        def test_case(self, data: Data):
+            # Add your test logic here
+            pass
+
+    class TestCase2(TestCase):
+        def test_case(self, data: Data):
+            # Add your test logic here
+            pass
+
+    # Create a test suite
+    test_suite = TestSuite(tests=[TestCase1(), TestCase2()])
+
+    # Run the test suite
+    test_suite.run()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add test generator and use it in test presets (#279)"
+    Original Code Cells:
+    '''
+    try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    try:
+        import evidently
+    except:
+        !yarn add -g yarn
+        !yarn add git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+
+    import pytest
+    from evidently.test_suite import TestSuite
+    from evidently.test_case import TestCase
+    from evidently.data import Data
+
+    # Define your test cases
+    class TestCase1(TestCase):
+        def test_case(self, data: Data):
+            # Add your test logic here
+            pass
+
+    class TestCase2(TestCase):
+        def test_case(self, data: Data):
+            # Add your test logic here
+            pass
+
+    # Create a test suite
+    test_suite = TestSuite(tests=

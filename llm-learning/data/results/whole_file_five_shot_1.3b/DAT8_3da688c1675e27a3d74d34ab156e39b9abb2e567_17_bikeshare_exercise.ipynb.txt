@@ -1,0 +1,39 @@
+```python
+    <Cell_0>
+%matplotlib inline
+import pandas as pd
+import numpy as np
+from sklearn.cross_validation import cross_val_score
+from sklearn.linear_model import LinearRegression
+from sklearn.tree import DecisionTreeRegressor, export_graphviz
+<\Cell_0>
+<Cell_1>
+# read the data and set "datetime" as the index
+url = 'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/bikeshare.csv'
+bikes = pd.read_csv(url, index_col='datetime', parse_dates=True)
+<\Cell_1>
+<Cell_2>
+# "count" is a method, so it's best to rename that column
+bikes.rename(columns={'count':'total'}, inplace=True)
+<\Cell_2>
+<Cell_3>
+# create "hour" as its own feature
+bikes['hour'] = bikes.index.hour
+<\Cell_3>
+<Cell_4>
+bikes.head()
+<\Cell_4>
+<Cell_5>
+bikes.tail()
+<\Cell_5>
+<Cell_6>
+bikes.groupby('workingday').total.mean()
+<\Cell_6>
+<Cell_7>
+bikes.groupby('hour').total.mean()
+<\Cell_7>
+<Cell_8>
+bikes.groupby('hour').total.mean().plot()
+<\Cell_8>
+
+```

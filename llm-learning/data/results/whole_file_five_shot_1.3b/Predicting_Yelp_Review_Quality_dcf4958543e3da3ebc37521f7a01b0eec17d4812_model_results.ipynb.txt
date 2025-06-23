@@ -1,0 +1,43 @@
+
+    '''
+    <Cell_0>
+import pprint
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+<\Cell_0>
+<Cell_1>
+pd.set_option("display.max_columns", 100)
+pd.set_option("display.max_rows", 100)
+pd.set_option('display.width', 100)
+pd.set_option("display.precision", 5)
+plt.style.use('fivethirtyeight')
+plt.rcParams.update({'font.size': 16, 'font.family': 'sans'})
+%matplotlib
+<\Cell_1>
+<Cell_2>
+filepath = '../models/model_info.csv'
+model_results = pd.read_csv(filepath).copy()
+<\Cell_2>
+<Cell_3>
+model_results.info()
+<\Cell_3>
+<Cell_4>
+show_results = model_results.query("record_type == 'test' & target == 'T2_CLS_ufc_>0' & model_type == 'Forest Cls'")
+<\Cell_4>
+<Cell_5>
+show_results = show_results.loc[:, ['record_id', 'data', 'model_type', 'Test_accuracy',
+                 'Test_balanced_accuracy', 'Test_f1_score',
+                 'Test_precision', 'Test_recall', 'Test_hamming_loss',
+                 'Test_jaccard_score', 'Test_log_loss',
+                 'hyperparameters']]
+<\Cell_5>
+<Cell_6>
+show_results = show_results.sort_values(by=['record_count', 'model_type', 'data', 'Test_accuracy'],
+                                        ascending=False, ignore_index=True).drop_duplicates(ignore_index=True,
+                                                                                           subset='record_id')
+show_results
+<\Cell_6>
+<Cell_7>
+show_results = show_results

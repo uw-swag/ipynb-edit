@@ -1,0 +1,39 @@
+
+    '''
+    '''
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    <\Cell_0>
+    <Cell_1>
+    %matplotlib widget
+    <\Cell_1>
+    <Cell_2>
+    N = 200  # total number of examples
+    alpha = 1.2  # true intercept
+    theta = [0.1, 0.25]  # true slopes
+
+    X = np.random.uniform(low=-5, high=10, size=(N,2))
+    Y = alpha + np.dot(X, theta) + .5 * np.random.normal(size=(N))
+    <\Cell_2>
+    <Cell_3>
+    Xt = np.concatenate((np.ones((len(X),1)), X), axis=1)
+    theta_hat = np.linalg.inv(Xt.T @ Xt) @ Xt.T @ Y
+    print('Estimated/true intercept: {0:.3f} / {1:.3f}'.format(theta_hat[0], alpha))
+    print('Estimated/true slopes: \n\t first dimension {0:.3f} / {1:.3f} \n\t second dimension {2:.3f} / {3:.3f}'.format(
+    theta_hat[1], theta[0], theta_hat[2], theta[1]))
+    <\Cell_3>
+    <Cell_4>
+    Y_hat = np.dot(Xt, theta_hat)
+    e = Y - Y_hat
+    mu_e = np.mean(e)
+    std_e = np.std(e) 
+
+    TSS = np.sum((Y - np.mean(Y))**2)
+    RSS = np.sum((Y-Y_hat)**2)
+    Rs = 1 - RSS/TSS
+
+    print('Mean of

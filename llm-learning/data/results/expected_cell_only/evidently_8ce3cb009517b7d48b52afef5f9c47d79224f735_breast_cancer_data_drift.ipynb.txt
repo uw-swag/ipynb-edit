@@ -1,0 +1,22 @@
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, CatTargetDriftTab, ProbClassificationPerformanceTab
+bcancer_data_drift = Dashboard(tabs=[DataDriftTab])
+bcancer_data_drift.calculate(bcancer_frame[:280], bcancer_frame[280:])
+bcancer_data_drift.show()
+#bcancer_data_drift.save('bcancer_data_drift_no_dates.html')
+bcancer_data_drift.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping)
+bcancer_data_drift.show()
+#bcancer_data_drift.save('bcancer_data_drift_with_dates.html')
+bcancer_data_and_target_drift = Dashboard(tabs=[DataDriftTab, CatTargetDriftTab])
+bcancer_data_and_target_drift.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping)
+#bcancer_data_and_target_drift.save('bcancer_data_and_target_drift.html')
+model_performance = Dashboard(tabs=[ProbClassificationPerformanceTab])
+model_performance.calculate(merged_reference, merged_production, column_mapping = column_mapping)
+model_performance.show()
+#model_performance.save('bcancer_prob_classification_performance.html')

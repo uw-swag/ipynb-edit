@@ -1,0 +1,41 @@
+```
+    ## ADALINE Conclusions
+    ## Review
+
+    ## Change Perceptron Images URL
+    ## You can change the URL of the perceptron images by modifying the 'url' parameter in the 'plot_perceptron' function.
+    ## For example, if you want to use a different URL, you can do:
+    ## plot_perceptron(X, y, url='https://example.com/images/perceptron.png')
+
+    ## Code:
+    from sklearn.linear_model import Perceptron
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+    from sklearn.preprocessing import StandardScaler
+
+    ## Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    ## Standardize the data
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    ## Initialize the Perceptron
+    perceptron = Perceptron(random_state=42)
+
+    ## Fit the model
+    perceptron.fit(X_train, y_train)
+
+    ## Predict the test set results
+    y_pred = perceptron.predict(X_test)
+
+    ## Calculate the accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(f'Accuracy: {accuracy}')
+    ```
+    ## Code Explanation:
+    ## This code is a simple implementation of a Perceptron classifier in scikit-learn. It first splits the data into a training set and a test set, then standardizes the data, and finally fits the model and calculates the accuracy of the predictions.
+    ## The 'url' parameter in the 'plot_perceptron' function allows you to change the URL of the perceptron images.
+    ## The 'random_state' parameter in the Perceptron class allows you to

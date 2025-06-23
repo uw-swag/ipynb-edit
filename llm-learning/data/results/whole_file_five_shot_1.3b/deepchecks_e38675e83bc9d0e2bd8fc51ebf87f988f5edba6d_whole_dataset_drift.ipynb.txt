@@ -1,0 +1,16 @@
+
+The feature importance returned by the deepchecks check is a dictionary where the keys are the feature names and the values are the importance scores. The importance score is a float between 0 and 1, where 0 means the feature is not useful, 1 means the feature is very useful.
+
+Here's an example of how to get the feature importance:
+
+```python
+# Assuming 'feature_importance' is the output of the deepchecks check
+for feature, importance in feature_importance.items():
+    print(f"Feature: {feature}, Importance: {importance}")
+```
+
+In the code you provided, the feature importance is calculated and returned by the deepchecks check. The returned importance score is a float between 0 and 1, where 0 means the feature is not useful, 1 means the feature is very useful.
+
+The feature importance is calculated based on the difference in the mean prediction of the model and the mean prediction of the model when the feature is not present. The importance score is then calculated as the ratio of the difference to the mean difference.
+
+The feature importance is a measure of how useful a feature is in predicting the target variable. Features with higher importance scores are considered more useful.

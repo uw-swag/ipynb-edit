@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Module 03: Code files added"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn import preprocessing
+    from math import sqrt
+    from sklearn.model_selection import train_test_split
+    def predict(row, coefficients):
+        yhat = coefficients[0]
+        for i in range(len(row)-1):
+            yhat += coefficients[i + 1] * row[i]
+        return yhat
+
+    def coefficients_sgd(train, l_rate, n_epoch):
+        coef = [0.0 for i in range(len(train[0]))]
+        print ('Coeficiente Inicial={0}' % (coef))
+        for epoch in range(n_epoch):
+            sum_error = 0
+            for row in train:
+                yhat = predict(row, coef)
+                error = yhat - row[-1]
+                sum_error += error**2
+                coef[0] = coef[0] - l_rate * error
+                for i in range(len(row)-1):
+                    coef[i + 1] = coef[i + 1] - l_rate * error * row[i] 
+            print(('epoch=%d, lrate=%.3f, error=%.3f' % (epoch, l_rate, sum_error)))
+        return coef
+
+    def rmse_metric(actual, predicted):
+        sum_error = 0.0
+        for i in range(len(actual)):
+            prediction_error = predicted[i] - actual[i]
+            sum_error += (prediction_error ** 2)
+        mean_error = sum_error / float(len(actual))
+        return sqrt(mean_error)
+
+
+    import random
+    def splitDataset(dataset, splitRatio):
+        trainSize = int(len(dataset) * splitRatio)
+        trainSet = []
+        copy = list(dataset)
+        while len(trainSet) < trainSize:
+            index = random.randrange

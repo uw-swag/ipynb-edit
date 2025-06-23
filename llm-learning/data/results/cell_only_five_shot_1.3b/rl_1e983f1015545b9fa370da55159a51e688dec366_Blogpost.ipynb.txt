@@ -1,0 +1,44 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    import numpy as np
+
+    # Assuming you have a DataFrame df with columns 'A', 'B', 'C'
+    df = pd.DataFrame({
+        'A': np.random.rand(10),
+        'B': np.random.rand(10),
+        'C': np.random.rand(10)
+    })
+
+    # Create a bar plot
+    plt.figure(figsize=(10, 6))
+    sns.barplot(x='A', y='B', data=df)
+    plt.title('Bar plot of A vs B')
+    plt.show()
+
+    # Create a line plot
+    plt.figure(figsize=(10, 6))
+    sns.lineplot(x='A', y='C', data=df)
+    plt.title('Line plot of A vs C')
+    plt.show()
+
+    # Create a scatter plot
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(x='A', y='B', data=df)
+    plt.title('Scatter plot of A vs B')
+    plt.show()
+
+    # Create a heatmap
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(df.corr(), annot=True)
+    plt.title('Correlation matrix')
+    plt.show()
+
+    # Create a pie chart
+    plt.figure(figsize=(10, 6))
+    df['A'].value_counts().plot(kind='pie', autopct='%1.1f%%')
+    plt.title('Distribution of A')
+    plt.show()
+    ```
+    This code will create a bar plot, a line plot, a scatter plot, a heatmap, and a pie chart for the DataFrame `df`.

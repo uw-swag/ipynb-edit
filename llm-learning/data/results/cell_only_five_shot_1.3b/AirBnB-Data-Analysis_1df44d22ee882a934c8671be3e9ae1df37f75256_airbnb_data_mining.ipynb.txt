@@ -1,0 +1,37 @@
+```python
+    # Loading the data
+    df = pd.read_csv('data.csv')
+
+    # Data preprocessing
+    df['text'] = df['text'].apply(lambda x: " ".join(x.lower() for x in x.split()))
+    df['text'] = df['text'].apply(lambda x: " ".join(x for x in x.split() if x not in stopwords.words('english')))
+    df['text'] = df['text'].apply(lambda x: " ".join(WordNetLemmatizer().lemmatize(x) for x in x.split()))
+    df['text'] = df['text'].apply(lambda x: " ".join(SnowballStemmer('english').stem(x) for x in x.split()))
+
+    # Vectorization
+    vectorizer = CountVectorizer(analyzer="word", tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
+    data_features = vectorizer.fit_transform(df['text'])
+
+    # Model training
+    X_train, X_test, y_train, y_test = train_test_split(data_features, df['label'], test_size=0.2, random_state=42)
+    model = MultinomialNB()
+    model.fit(X_train, y_train)
+
+    # Model evaluation
+    y_pred = model.predict(X_test)
+    print(classification_report(y_test, y_pred))
+
+    # Wordcloud generation
+    wordcloud = WordCloud(width = 800, height = 800, 
+                background_color ='white', 
+                stopwords = stopwords, 
+                min_font_size = 10).generate(str(df['text'])) 
+
+    # plot the WordCloud image                        
+    plt.figure(figsize = (8, 8), facecolor = None) 
+    plt.imshow(wordcloud) 
+    plt.axis("off") 
+    plt.tight_layout(pad = 0) 
+
+    plt.show() 
+    ```

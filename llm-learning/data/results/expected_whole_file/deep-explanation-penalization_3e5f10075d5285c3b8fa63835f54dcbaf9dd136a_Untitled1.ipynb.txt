@@ -1,0 +1,105 @@
+<Cell_0>
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+from colour import Color
+red = Color("red")
+colors = list(red.range_to(Color("green"),10))
+from os.path import join as oj
+mnist_trainset = datasets.MNIST(root='../data', train=True, download=True, transform=None)
+color_x = np.zeros((60000, 3, 28, 28))
+<\Cell_0>
+<Cell_1>
+from colour import Color
+red = Color("red")
+colors = list(red.range_to(Color("green"),10))
+colors = [x.get_rgb() for x in colors]
+<\Cell_1>
+<Cell_2>
+np.random
+<\Cell_2>
+<Cell_3>
+
+<\Cell_3>
+<Cell_4>
+
+<\Cell_4>
+<Cell_5>
+prob.sum()
+<\Cell_5>
+<Cell_6>
+np.argmax(prob)
+<\Cell_6>
+<Cell_7>
+(435 -15*28)
+<\Cell_7>
+<Cell_8>
+plt.imshow((mnist_trainset.data.numpy() ==0).mean(axis = (0))).sum()
+<\Cell_8>
+<Cell_9>
+
+mnist_trainset = datasets.MNIST(root='../data', train=False, download=True, transform=None)
+color_x = np.zeros((10000, 3, 28, 28))
+for i in range(10):
+    color_x[np.where((mnist_trainset.train_labels ==i)) ] = (mnist_trainset.data[np.where((mnist_trainset.train_labels ==i))].numpy().astype(np.float32)[:, np.newaxis, :,:]*np.asarray(colors[9-i])[None, :, None, None])
+color_y = mnist_trainset.train_labels.numpy().copy()
+color_x /=color_x.max()
+color_x = color_x*2 -1
+
+<\Cell_9>
+<Cell_10>
+import matplotlib.pyplot as plt
+%matplotlib inline
+<\Cell_10>
+<Cell_11>
+color_x[0].shape
+<\Cell_11>
+<Cell_12>
+color_x[0].min()
+<\Cell_12>
+<Cell_13>
+color_y[17]
+<\Cell_13>
+<Cell_14>
+i
+<\Cell_14>
+<Cell_15>
+test = np.arange(28*28)
+<\Cell_15>
+<Cell_16>
+np.random.shuffle(test)
+<\Cell_16>
+<Cell_17>
+train_x_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "train_x.npy")))
+train_y_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "train_y.npy"))).type(torch.int64)
+train_dataset = utils.TensorDataset(train_x_tensor,train_y_tensor) # create your datset
+<\Cell_17>
+<Cell_18>
+train_x_tensor.shape
+<\Cell_18>
+<Cell_19>
+(train_x_tensor).numpy().sum(axis =1)
+<\Cell_19>
+<Cell_20>
+
+<\Cell_20>
+<Cell_21>
+(color_y ==8).mean()
+<\Cell_21>
+<Cell_22>
+i =0
+print(color_y[i])
+test = color_x[i].swapaxes(0,2).swapaxes(0,1)
+test+=1
+test/=2
+plt.imshow(test)
+<\Cell_22>
+<Cell_23>
+model
+<\Cell_23>
+<Cell_24>
+
+<\Cell_24>

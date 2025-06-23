@@ -1,0 +1,16 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    import pytest
+
+    # Define a function to test for null values
+    def test_for_null_values(df):
+        # Check for null values in each column
+        null_counts = df.isnull().sum()
+        # Check if there are any null values
+        assert np.all(null_counts == 0), "Null values found in the dataframe"
+
+    # Use the function to test for null values in a DataFrame
+    test_for_null_values(df)
+    ```

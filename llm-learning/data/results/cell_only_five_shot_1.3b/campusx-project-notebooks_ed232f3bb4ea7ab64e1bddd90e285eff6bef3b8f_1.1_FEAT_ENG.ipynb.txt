@@ -1,0 +1,16 @@
+```python
+    import os
+    import shutil
+
+    # Rename notebooks directory
+    old_dir = "notebooks"
+    new_dir = "jupyter_notebooks"
+
+    old_dir_path = os.path.join(os.getcwd(), old_dir)
+    new_dir_path = os.path.join(os.getcwd(), new_dir)
+
+    if os.path.exists(old_dir_path):
+        os.rename(old_dir_path, new_dir_path)
+    else:
+        print(f"Directory {old_dir} not found.")
+    ```

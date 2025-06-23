@@ -1,0 +1,59 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Improve readability of code"
+    Original Code Cells:
+    '''
+    # Libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import silhouette_score
+
+    # Data
+    data = pd.read_csv('../input/seeds_dataset.txt', delimiter='\t+', names=['area', 'perimeter', 'compactness', 'length', 'width', 'asymmetry', 'length_g', 'type'])
+
+    # Data preprocessing
+    data = data.drop(['type'], axis=1)
+    data = StandardScaler().fit_transform(data)
+
+    # PCA
+    pca = PCA(n_components=2)
+    data = pca.fit_transform(data)
+
+    # KMeans
+    kmeans = KMeans(n_clusters=3, random_state=0).fit(data)
+
+    # Silhouette score
+    score = silhouette_score(data, kmeans.labels_)
+
+    # Plotting
+    plt.figure(figsize=(10, 6))
+    sns.scatterplot(data[:,0], data[:,1], hue=kmeans.labels_)
+    plt.title('KMeans Clustering')
+    plt.show()
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Improve readability of code"
+    Original Code Cells:
+    '''
+    # Libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import PCA
+    from sklearn.

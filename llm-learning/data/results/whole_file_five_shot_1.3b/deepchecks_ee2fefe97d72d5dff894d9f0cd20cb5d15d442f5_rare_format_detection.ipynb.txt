@@ -1,0 +1,22 @@
+```python
+    # Import necessary libraries
+    from mlchecks import Dataset
+    from mlchecks.checks.integrity.rare_format_detection import RareFormatDetection
+
+    # Create a new DataFrame with random data
+    np.random.seed(42)
+    datelist = pd.date_range(start=datetime.today(), periods=200, freq='D', normalize=True)
+    s_date = pd.Series([d.strftime('%Y-%m-%d') for d in datelist], name='date')
+
+    emaillist = [''.join(np.random.choice(a=list('abcdefghijklmnopqrstuvwxyz'), p=[1/26]*26, size=np.random.choice(a=[6,7,8], p=[0.2, 0.5, 0.3]))) + '@gmail.com' for x in range(200)]
+    s_email = pd.Series(emaillist, name='email')
+
+    df = pd.DataFrame([s_date, s_email]).T
+
+    # Run the check
+    ds = Dataset(df)
+    check = RareFormatDetection()
+
+    check.run(dataset=ds)
+    ```
+    ### End of Response

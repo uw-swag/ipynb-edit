@@ -1,0 +1,40 @@
+
+    '''
+    Commit Message: "add descriptions to code cells"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+x, y, s = load_scar()
+<\Cell_1>
+<Cell_2>
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression().fit(x, s)
+<\Cell_2>
+<Cell_3>
+s_prob_hat = clf.predict_proba(x)[:, 1]
+<\Cell_3>
+<Cell_4>
+y_prob_hat = np.minimum(s_prob_hat / C, 1.0)
+<\Cell_4>
+<Cell_5>
+y_hat = (y_prob_hat > 0.5).astype(np.int32)
+<\Cell_5>
+<Cell_6>
+from utils import visualize_pn_data
+<\Cell_6>
+<Cell_7>
+visualize_pn_data(x, y)
+<\Cell_7>
+<Cell_8>
+visualize_pn_data(x, y_hat)
+<\Cell_8>
+<Cell_9>
+
+    '''
+    '''
+

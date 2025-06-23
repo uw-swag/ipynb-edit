@@ -1,0 +1,34 @@
+```python
+    # load the data
+    df = pd.read_csv('data.csv')
+
+    # preprocess the data
+    df = df.dropna()
+
+    # define the features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # split the data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # scale the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # train the model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # make predictions
+    y_pred = model.predict(X_test)
+
+    # evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # save the model
+    with open('model.pkl', 'wb') as f:
+        pickle.dump(model, f)
+    ```

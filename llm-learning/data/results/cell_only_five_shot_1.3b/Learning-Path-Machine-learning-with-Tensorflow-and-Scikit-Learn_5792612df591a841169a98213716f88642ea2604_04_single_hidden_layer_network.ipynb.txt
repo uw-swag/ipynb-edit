@@ -1,0 +1,42 @@
+```python
+    # solutions/adult_classification.py
+
+    def adult_classification(age, sex, bmi, children, smoker, region):
+        """
+        This function classifies an adult as either 'Smoker' or 'Non-Smoker' based on the given parameters.
+
+        Parameters:
+        age (int): The age of the adult.
+        sex (str): The gender of the adult ('Male' or 'Female').
+        bmi (float): The Body Mass Index of the adult.
+        children (int): The number of children the adult has.
+        smoker (bool): A boolean value indicating whether the adult is a smoker (True) or not (False).
+        region (str): The region of the adult ('North', 'South', 'East', 'West').
+
+        Returns:
+        str: The classification of the adult ('Smoker' or 'Non-Smoker').
+        """
+
+        # Define the classification rules
+        smoker_rules = {
+            'age': lambda age: age > 30,
+            'sex': lambda sex: sex == 'Male',
+            'bmi': lambda bmi: bmi < 27,
+            'children': lambda children: children == 0,
+            'smoker': lambda smoke: smoke,
+            'region': lambda region: region in ['North', 'East']
+        }
+
+        non_smoker_rules = {
+            'age': lambda age: age > 25,
+            'sex': lambda sex: sex == 'Female',
+            'bmi': lambda bmi: bmi < 25,
+            'children': lambda children: children > 0,
+            'smoker': lambda smoke: not smoke,
+            'region': lambda region: region in ['South', 'West']
+        }
+
+        # Apply the rules
+        if all(smoker_rules[key](value) for key, value in locals().items() if key in ['age', 'sex', 'bmi', 'children', 'smoker', 'region']):
+            return 'Smoker'
+        elif all(non_smoker_rules[key](value) for key, value in locals().items() if key in

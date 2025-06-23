@@ -1,0 +1,258 @@
+<Cell_0>
+from evidently.descriptors import LLMEval, NegativityLLMEval, PIILLMEval, DeclineLLMEval, BiasLLMEval, ToxicityLLMEval, ContextQualityLLMEval
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+
+import requests
+from io import BytesIO
+
+from sklearn import datasets, ensemble, model_selection
+<\Cell_1>
+<Cell_2>
+from evidently.ui.workspace.cloud import CloudWorkspace
+
+from evidently import ColumnMapping
+from evidently.report import Report
+
+from evidently.metrics import ColumnSummaryMetric
+
+from evidently.metric_preset import DataQualityPreset, TextOverviewPreset, TextEvals
+<\Cell_2>
+<Cell_3>
+response = requests.get("https://raw.githubusercontent.com/evidentlyai/evidently/main/examples/how_to_questions/chat_df.csv")
+csv_content = BytesIO(response.content)
+<\Cell_3>
+<Cell_4>
+assistant_logs = pd.read_csv(csv_content, index_col=0, parse_dates=['start_time', 'end_time'])
+assistant_logs.index = assistant_logs.start_time
+assistant_logs.index.rename('index', inplace=True)
+<\Cell_4>
+<Cell_5>
+pd.set_option('display.max_colwidth', None)
+<\Cell_5>
+<Cell_6>
+assistant_logs[["question", "response"]].head()
+<\Cell_6>
+<Cell_7>
+column_mapping = ColumnMapping(
+    datetime='start_time',
+    datetime_features=['end_time'],
+    text_features=['question', 'response', 'target_response'],
+    categorical_features=['organization', 'model_ID', 'region', 'environment', 'feedback'],
+)
+<\Cell_7>
+<Cell_8>
+report = Report(metrics=[
+    TextEvals(column_name="question"),
+    TextEvals(column_name="response")
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_8>
+<Cell_9>
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        BiasLLMEval(),
+        ToxicityLLMEval()
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_9>
+<Cell_10>
+print(ToxicityLLMEval().get_template().get_prompt_template())
+<\Cell_10>
+<Cell_11>
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMEval()   
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMEval(), 
+        DeclineLLMEval()
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_11>
+<Cell_12>
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMEval(include_category=True)   
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMEval(include_reasoning=False), 
+        DeclineLLMEval(include_score=True)
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_12>
+<Cell_13>
+data = [
+    ["Why is the sky blue?",
+     "The sky is blue because molecules in the air scatter blue light from the sun more than they scatter red light.",
+     "The sky appears blue because air molecules scatter the sun’s blue light more than they scatter other colors."],
+
+    ["How do airplanes stay in the air?",
+     "Airplanes stay in the air because their wings create lift by forcing air to move faster over the top of the wing than underneath, which creates lower pressure on top.",
+     "Airplanes stay airborne because the shape of their wings causes air to move faster over the top than the bottom, generating lift."],
+    
+    #irrelevant one
+    ["How do airplanes stay in the air?",
+     "The moon changes shape, or goes through phases, because we see different portions of its illuminated half as it orbits the Earth.",
+     "Airplanes stay airborne because the shape of their wings causes air to move faster over the top than the bottom, generating lift."],
+
+    ["Why do we have seasons?",
+     "We have seasons because the Earth is tilted on its axis, which causes different parts of the Earth to receive more or less sunlight throughout the year.",
+     "Seasons occur because of the tilt of the Earth’s axis, leading to varying amounts of sunlight reaching different areas as the Earth orbits the sun."],
+
+    ["How do magnets work?",
+     "Magnets work because they have a magnetic field that can attract or repel certain metals, like iron, due to the alignment of their atomic particles.",
+     "Magnets generate a magnetic field, which can attract metals like iron by causing the electrons in those metals to align in a particular way, creating an attractive or repulsive force."],
+
+    ["Why does the moon change shape?",
+     "The moon changes shape, or goes through phases, because we see different portions of its illuminated half as it orbits the Earth.",
+     "The moon appears to change shape as it orbits Earth, which is because we see different parts of its lit-up half at different times. The sun lights up half of the moon, but as the moon moves around the Earth, we see varying portions of that lit-up side. So, the moon's shape in the sky seems to change gradually, from a thin crescent to a full circle and back to a crescent again."]
+]
+
+columns = ["question", "context", "target_context"]
+
+eval_data = pd.DataFrame(data, columns=columns)
+
+report = Report(metrics=[
+    TextEvals(column_name="context", descriptors=[
+        ContextQualityLLMEval(question="question"),
+    ])
+])
+
+report.run(reference_data=eval_data[:2], 
+           current_data=eval_data[2:])
+report 
+<\Cell_13>
+<Cell_14>
+#that's how you can see the prompt
+
+print(ContextQualityLLMEval(question="question").get_template().get_prompt_template())
+<\Cell_14>
+<Cell_15>
+from evidently.features.llm_judge import BinaryClassificationPromptTemplate
+<\Cell_15>
+<Cell_16>
+custom_judge = LLMEval(
+    subcolumn="category",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="concise",
+        non_target_category="verbose",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge(display_name="test")
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_16>
+<Cell_17>
+custom_judge = LLMEval(
+    subcolumn="score",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+       target_category="concise",
+        non_target_category="verbose",
+        uncertainty="unknown",
+        include_reasoning=True,
+        include_score=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_17>
+<Cell_18>
+multi_column_judge = LLMEval(
+        subcolumn="category",
+        additional_columns={"question": "question"},
+        template=BinaryClassificationPromptTemplate(
+            criteria=""""Relevance" refers to the response directly addresses the question and effectively meets the user's intent.  
+Relevant answer is an answer that directly addresses the question and effectively meets the user's intent.
+
+=====
+{question}
+=====
+            """,
+            target_category="Relevant",
+            non_target_category="Irrelevant",
+            include_reasoning=True,
+            pre_messages=[("system",
+                           "You are an expert evaluator assessing the quality of a Q&A system. Your goal is to determine if the provided answer is relevant to the question based on the criteria below.")],
+        ),
+        provider="openai",
+        model="gpt-4o-mini",
+        display_name="Relevancy"
+    )
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        multi_column_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+<\Cell_18>
+<Cell_19>
+
+<\Cell_19>

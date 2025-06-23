@@ -1,0 +1,21 @@
+```
+    boston_frame_reference = boston_frame[:200]
+    boston_frame_recent = boston_frame[200:]
+    column_mapping = {}
+
+    column_mapping['target'] = None
+    column_mapping['prediction'] = None
+    column_mapping['id'] = None
+    column_mapping['datetime'] = None
+
+    column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                            'PTRATIO', 'B', 'LSTAT']
+    column_mapping['categorical_features'] = ['CHAS', 'RAD']
+    boston_data_drift_report = Dashboard(boston_frame_reference, boston_frame_recent, column_mapping = column_mapping, 
+                                         tabs=[DriftTab])
+    boston_data_drift_report .show()
+    boston_data_drift_report .save('reports/boston_data_drift_report.html')
+    ```
+
+    ### Explanation:
+    The code is adding a new column to the dataframe `boston_frame`. The new columns are 'target', 'prediction', 'id', and 'datetime'. The 'target' and 'prediction' columns are not included in the column_mapping dictionary, as they are not used in the analysis. The 'id' and 'datetime' columns are included in the column_mapping dictionary, as they are used in the analysis. The 'numerical_features' and 'categorical_features' lists are used to specify the columns that are used in the analysis. The 'DriftTab' is a custom tab that is used to display the drift report. The 'boston_data_drift_report' object is then saved to an HTML file.

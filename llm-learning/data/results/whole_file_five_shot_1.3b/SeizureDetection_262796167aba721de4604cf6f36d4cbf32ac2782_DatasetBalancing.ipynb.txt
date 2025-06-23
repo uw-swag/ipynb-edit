@@ -1,0 +1,7 @@
+```
+    def oversamplingSMOTE(ft, ft_index, neighbors):
+        smote = SMOTE(sampling_strategy = 'minority', k_neighbors = neighbors)
+        smote_features, smote_indicator = smote.fit_sample(ft, ft_index)
+        smote_features['seizure'] = smote_indicator
+        return smote_features
+    ```

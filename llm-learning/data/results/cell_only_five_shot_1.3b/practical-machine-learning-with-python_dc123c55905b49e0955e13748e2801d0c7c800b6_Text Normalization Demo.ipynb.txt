@@ -1,0 +1,33 @@
+```
+    import spacy
+    import pandas as pd
+    import numpy as np
+    import nltk
+    from nltk.tokenize.toktok import ToktokTokenizer
+    import re
+    from bs4 import BeautifulSoup
+    from contractions import CONTRACTION_MAP
+    import unicodedata
+
+    nlp = spacy.load('en', parse = False, tag=False, entity=False)
+    tokenizer = ToktokTokenizer()
+    stopword_list = nltk.corpus.stopwords.words('english')
+    stopword_list.remove('no')
+    stopword_list.remove('not')
+
+    def strip_html_tags(text):
+        soup = BeautifulSoup(text, "html.parser")
+        stripped_text = soup.get_text()
+        return stripped_text
+
+    document = """<p>Héllo! Héllo! can you hear me! I just heard about <b>Python</b>!<br/>\r\n 
+                  It's an amazing language which can be used for Scripting, Web development,\r\n\r\n
+                  Information Retrieval, Natural Language Processing, Machine Learning & Artificial Intelligence!\n
+                  What are you waiting for? Go and get started.<br/> He's learning, she's learning, they've already\n\n
+                  got a headstart!</p>
+               """
+    document
+    normalize_corpus([document], text_lemmatization=False, stopword_removal=False, text_lower_case=False)
+    normalize_corpus([document])
+
+    ```

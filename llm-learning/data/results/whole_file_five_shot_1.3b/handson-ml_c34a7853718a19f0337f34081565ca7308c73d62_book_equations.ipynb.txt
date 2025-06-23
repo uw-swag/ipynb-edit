@@ -1,0 +1,49 @@
+```python
+    # Adding list of equations in the book
+
+    class Book:
+        def __init__(self, title, author, chapters):
+            self.title = title
+            self.author = author
+            self.chapters = chapters
+
+        def add_chapter(self, chapter):
+            self.chapters.append(chapter)
+
+        def remove_chapter(self, chapter):
+            self.chapters.remove(chapter)
+
+        def get_chapters(self):
+            return self.chapters
+
+    class Chapter:
+        def __init__(self, title, equations):
+            self.title = title
+            self.equations = equations
+
+        def add_equation(self, equation):
+            self.equations.append(equation)
+
+        def remove_equation(self, equation):
+            self.equations.remove(equation)
+
+        def get_equations(self):
+            return self.equations
+
+    class Equation:
+        def __init__(self, content):
+            self.content = content
+
+        def get_content(self):
+            return self.content
+
+    # Example usage:
+    book = Book("Test Book", "Test Author", [])
+    chapter = Chapter("Chapter 1", [])
+    equation = Equation("x^2 + y^2 = z^2")
+
+    chapter.add_equation(equation)
+    book.add_chapter(chapter)
+
+    print(book.get_chapters())
+    ```

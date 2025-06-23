@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from scipy.stats import chi2_contingency
+
+    # Assuming df is your DataFrame and 'column1', 'column2' are the two categorical columns
+    crosstab = pd.crosstab(df['column1'], df['column2'])
+
+    # Perform Chi-Square Test
+    chi2, p, dof, expected = chi2_contingency(crosstab)
+
+    print("Chi-Square statistic: ", chi2)
+    print("p-value: ", p)
+    print("Degrees of freedom: ", dof)
+    print("Expected frequencies table: ", expected)
+    ```
+
+    This code will perform a multi-category Chi-Square test on the two columns provided. The test is performed on the crosstab (a contingency table) of the two columns. The Chi-Square statistic, p-value, degrees of freedom, and expected frequencies table are all calculated and printed.
+
+    The p-value is the probability that the observed frequencies would have occurred by chance, assuming the null hypothesis is true. If the p-value is less than the chosen significance level (usually 0.05), we reject the null hypothesis and conclude that the observed frequencies do not occur by chance.
+
+    The degrees of freedom are the number of categories in each of the two columns. In a Chi-Square test, the degrees of freedom are the number of categories in the categorical variable.
+
+    The expected frequencies table is the expected number of occurrences of the categorical variables in the rows and columns of the crosstab.
+
+    The Chi-Square statistic is a measure of the observed frequencies in the contingency table compared to the expected frequencies. A large Chi-Square statistic (close to the expected frequencies) indicates a strong association between the two categorical variables.
+
+    The Chi-Square test is used to test the hypothesis that the categorical variables are independent. If the p-value is greater than the chosen significance level, we fail to reject the null hypothesis and conclude that the categorical variables are not independent.

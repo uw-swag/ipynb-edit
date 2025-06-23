@@ -1,0 +1,39 @@
+```python
+    # Import dependencies for this notebook
+    import pandas as pd
+    import numpy as np
+    import networkx as nx
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+    from lib.util import fetch_tweets
+
+    tweets = fetch_tweets("germanwings-crash")
+    tweets[["is_source_tweet","is_rumor"]] = tweets[["is_source_tweet", "is_rumor"]].astype(bool)
+    tweets.created = pd.to_datetime(tweets.created * 1e6)
+    tweets.describe()
+
+    # Create a beeswarm plot
+    sns.set(style="whitegrid")
+    ax = sns.boxplot(x="is_source_tweet", y="created", data=tweets)
+    ax.set(xlabel='Is Source Tweet', ylabel='Created')
+    plt.show()
+
+    # Add a beeswarm plot to the EDA
+    plt.figure(figsize=(10, 6))
+    sns.violinplot(x="is_source_tweet", y="created", data=tweets)
+    plt.show()
+
+    # Add a beeswarm plot to the EDA
+    plt.figure(figsize=(10, 6))
+    sns.stripplot(x="is_source_tweet", y="created", data=tweets, jitter=0.3)
+    plt.show()
+
+    # Add a beeswarm plot to the EDA
+    plt.figure(figsize=(10, 6))
+    sns.swarmplot(x="is_source_tweet", y="created", data=tweets)
+    plt.show()
+
+    # Add a beeswarm plot to the EDA
+    plt.figure(figsize=(10, 6))
+    sns.boxplot(x

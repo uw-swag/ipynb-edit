@@ -1,0 +1,13 @@
+```python
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    comparison = StringMismatchComparison()
+    result = comparison.run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    print(result)
+    ```
+
+    The `StringMismatchComparison` check is removed from the codebase as it's not needed anymore.

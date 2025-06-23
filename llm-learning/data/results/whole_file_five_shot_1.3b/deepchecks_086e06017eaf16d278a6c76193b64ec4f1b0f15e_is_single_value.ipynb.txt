@@ -1,0 +1,14 @@
+```python
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from deepchecks.checks.integrity.is_single_value import IsSingleValue
+
+    iris = load_iris()
+    X = iris.data
+    df = pd.DataFrame({'a':[3,4,1], 'b':[2,2,2], 'c':[None, None, None], 'd':['a', 4, 6]})
+
+    print(IsSingleValue().run(pd.DataFrame(X)))
+    print(IsSingleValue().run(pd.DataFrame({'a':[3,4], 'b':[2,2], 'c':[None, None], 'd':['a', 4]})))
+    print(IsSingleValue().run(df))
+    print(IsSingleValue(ignore_columns=['b','c']).run(df))
+    ```

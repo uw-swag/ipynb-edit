@@ -1,0 +1,38 @@
+
+    '''
+<\Cell_6>
+<Cell_7>
+# Count the outcomes of all games.
+outcomes = df["Result"].value_counts().compute()
+display(outcomes)
+# Calculate how often White won and lost in all games.
+num_white_wins = outcomes.loc["1-0"]
+white_wins_proportion = num_white_wins / outcomes.sum()
+print(
+    f"Out of {outcomes.sum()} games:\n  White won {num_white_wins} games "
+    f"({white_wins_proportion:.2%}).\n  White lost {num_white_losses} games "
+    f"({white_losses_proportion:.2%})."
+)
+
+# Plot the top 15 most common openings.
+sns.set("talk")
+sns.set(font_scale=1.5)
+sns.set_style("ticks")
+fig, ax = plt.subplots(figsize=(10, 6))
+indexes = higher_white_outcomes.index[:15]
+values = higher_white_outcomes.values[:15]
+ax.barh(indexes, values)
+ax.set_title("Top 15 Most Common Openings on Lichess in 2022 (Rated 1200 and Below)")
+plt.show()
+
+<\Cell_7>
+<Cell_8>
+# Count the outcomes of games where White had a higher rating.
+num_higher_white_wins = higher_white_outcomes.loc["1-0"]
+higher_white_wins_proportion = num_higher_white_wins / outcomes.sum()
+print(
+    f"Out of {outcomes.sum()} games when White had a higher rating:\n  "
+    f"White won {num_higher_white_wins} games ({higher_white_wins_proportion:.2%}).\n  "
+    f"White lost {num_higher_white_losses} games ({white_losses_proportion:.2%})."
+)
+

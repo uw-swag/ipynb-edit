@@ -1,0 +1,41 @@
+```python
+    <Cell_0>
+from deepchecks.vision.base import VisionData
+from deepchecks.vision.checks.performance import SimpleModelComparison
+<\Cell_0>
+<Cell_1>
+from deepchecks.vision.datasets.classification import mnist
+
+mnist_model = mnist.load_model()
+train_ds = mnist.load_dataset(train=True, object_type='VisionData')
+test_ds = mnist.load_dataset(train=False, object_type='VisionData')
+<\Cell_1>
+<Cell_2>
+from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+from torch import nn
+
+pred_formatter = ClassificationPredictionFormatter(mnist.mnist_prediction_formatter)
+<\Cell_2>
+<Cell_3>
+check = SimpleModelComparison(strategy='stratified')
+result = check.run(train_ds, test_ds, mnist_model, prediction_formatter=pred_formatter)
+<\Cell_3>
+<Cell_4>
+result
+<\Cell_4>
+<Cell_5>
+result.value.sort_values(by=['Class', 'Metric']).head(10)
+<\Cell_5>
+
+    '''
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)
+    ## WIP: Fix sphinx errors (#970)

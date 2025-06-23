@@ -1,0 +1,53 @@
+```python
+    <Cell_0>
+    import torch
+from transformers import CLIPSegProcessor, CLIPSegForImageSegmentation
+from diffusers import DiffusionPipeline
+from torch import autocast
+
+import json
+import base64
+from PIL import Image
+from io import BytesIO
+import numpy as np
+
+def model_fn(model_dir):
+    processor = CLIPSegProcessor.from_pretrained("CIDAS/clipseg-rd64-refined")
+    model = CLIPSegForImageSegmentation.from_pretrained("CIDAS/clipseg-rd64-refined")
+
+    # Diffusion Pipeline: https://huggingface.co/docs/diffusers/api/diffusion_pipeline
+    pipe = DiffusionPipeline.from_pretrained(
+        "runwayml/stable-diffusion-inpainting",
+        custom_pipeline="text_inpainting",
+        segmentation_model=model,
+        segmentation_processor=processor
+    )
+    
+    pipe = pipe.to("cuda")
+    return pipe
+
+def input_fn(data, content_type):
+    if content_type == 'application/json':
+        data = json.loads(data)
+    else:
+        raise TypeError('content_type is only allowed application/json')
+    return data
+
+def predict_fn(data, model):
+    pipe = model
+    image_decoded = BytesIO(base64.b64decode(data['image'].encode()))
+    image = Image.open(image_decoded).convert("RGB")
+    data["image"] = image
+    with autocast("cuda"):
+        image = pipe(**data).images[0]
+    # Convert to JSON Encoded Image
+    buffered = BytesIO()
+    image.save(buffered, format="JPEG")
+    return base64.b64encode(buffered.getvalue()).decode()
+
+
+def output_fn(data, accept_type):
+    if accept_type == 'application/json':
+        data = json.dumps({'generated_image' : data})
+    else:
+        raise

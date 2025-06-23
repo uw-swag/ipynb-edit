@@ -1,0 +1,50 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the data
+    salaries = pd.read_csv('Salaries.csv')
+    salaries.head()
+    <\Cell_0>
+    <Cell_1>
+    # Check for missing values
+    salaries.isnull().sum()
+    <\Cell_1>
+    <Cell_2>
+    # Check the distribution of the salary column
+    sns.distplot(salaries['BasePay'])
+    <\Cell_2>
+    <Cell_3>
+    # Check the correlation between different features
+    salaries.corr()
+    <\Cell_3>
+    <Cell_4>
+    # Encode categorical variables
+    labelencoder = LabelEncoder()
+    salaries['JobRole'] = labelencoder.fit_transform(salaries['JobRole'])
+    salaries['Location'] = labelencoder.fit_transform(salaries['Location'])
+    salaries['Attrition'] = labelencoder.fit_transform(salaries['Attrition'])
+    <\Cell_4>
+    <Cell_5>
+    # Split the data into train and test sets
+    X = salaries.drop('BasePay', axis=1)
+    y = salaries['BasePay']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    <\Cell_5>
+    <Cell_6>
+    # Train a logistic regression model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+    <\Cell_6>
+    <Cell_7>
+    # Make predictions
+    y_pred = model.predict(X_test)
+    <\Cell_7>
+    <Cell_8>
+    # Evaluate the model

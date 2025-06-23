@@ -1,0 +1,22 @@
+
+The code you've provided is used to load and preprocess the results of a machine learning experiment. The results are stored in a pandas DataFrame, which is a 2-dimensional labeled data structure with columns of potentially different types.
+
+Here's a breakdown of the code:
+
+1. `use_biased= True`: This line sets a boolean variable to True. This variable is used to determine whether the results should be biased or not.
+
+2. `results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)]`: This line loads the results from the pickle files and converts them into a pandas Series. The `fnames` variable is a list of file names.
+
+3. `results = pd.concat(results_list, axis=1).T.infer_objects()`: This line concatenates the results into a single DataFrame, converts the DataFrame to a transposed one, and infers the data types.
+
+4. `results = results[results.which_adversarial != "bias_gender"]`: This line filters the results to only include rows where the adversarial type is not "bias_gender".
+
+5. `results.pid`: This line prints the PID of the current process.
+
+6. `results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]]`: This line creates a new column in the results DataFrame, "Test Accuracy", which contains the maximum value of the "accs_test" column.
+
+7. `results["final_cd"] = [min(x) for x in results["explanation_divergence"]]`: This line creates a new column in the results DataFrame, "final_cd", which contains the minimum value of the "explanation_divergence" column.
+
+8. `results["final_test_loss"] = [x[-1] for x in results["losses_test"]]`: This line creates a new column in the results DataFrame, "final_test_loss", which contains the last value of the "losses_test" column.
+
+9. `results["final_train_loss

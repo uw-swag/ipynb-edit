@@ -1,0 +1,13 @@
+```python
+    from sklearn.datasets import load_diabetes
+    from deepchecks.checks.performance import PerformanceReport
+
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    train = Dataset(diabetes, label_name='target')
+    clf = AdaBoostRegressor(random_state=0)
+    clf.fit(train.features_columns, train.label_col)
+
+    check = PerformanceReport()
+    check.run(train, clf)
+    ```

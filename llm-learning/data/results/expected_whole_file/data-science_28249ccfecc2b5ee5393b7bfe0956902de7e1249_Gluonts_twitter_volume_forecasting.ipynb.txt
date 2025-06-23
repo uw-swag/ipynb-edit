@@ -1,0 +1,43 @@
+<Cell_0>
+pip install gluonts
+<\Cell_0>
+<Cell_1>
+pip install mxnet
+<\Cell_1>
+<Cell_2>
+from gluonts.dataset import common
+from gluonts.model import deepar
+from gluonts.trainer import Trainer
+
+import pandas as pd
+<\Cell_2>
+<Cell_3>
+url = "https://raw.githubusercontent.com/numenta/NAB/master/data/realTweets/Twitter_volume_AMZN.csv"
+df = pd.read_csv(url, header=0, index_col=0)
+df.head()
+<\Cell_3>
+<Cell_4>
+data = common.ListDataset([{
+    "start": df.index[0],
+    "target": df.value[:"2015-04-05 00:00:00"]
+}],
+                          freq="5min")
+
+<\Cell_4>
+<Cell_5>
+trainer = Trainer(epochs=10)
+estimator = deepar.DeepAREstimator(
+    freq="5min", prediction_length=12, trainer=trainer)
+predictor = estimator.train(training_data=data)
+
+prediction = next(predictor.predict(data))
+<\Cell_5>
+<Cell_6>
+print(prediction.mean)
+<\Cell_6>
+<Cell_7>
+prediction.plot(output_file='graph.png')
+<\Cell_7>
+<Cell_8>
+
+<\Cell_8>

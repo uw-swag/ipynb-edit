@@ -1,0 +1,25 @@
+```
+    <Cell_1>
+# Load the data
+df = sqlCtx.read.json("hdfs://localhost:9000/user/hadoop/data/")
+
+# Show the data
+df.show()
+<\Cell_1>
+
+<Cell_2>
+# Write the data back to HDFS
+df.write.json("hdfs://localhost:9000/user/hadoop/data/output/")
+<\Cell_2>
+
+<Cell_3>
+# Show the data in HDFS
+df = sqlCtx.read.json("hdfs://localhost:9000/user/hadoop/data/output/")
+df.show()
+<\Cell_3>
+
+<Cell_4>
+# Stop the SparkContext
+sc.stop()
+<\Cell_4>
+```

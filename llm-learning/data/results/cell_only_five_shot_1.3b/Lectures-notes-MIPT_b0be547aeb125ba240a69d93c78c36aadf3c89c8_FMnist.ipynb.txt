@@ -1,0 +1,46 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Flatten
+    from tensorflow.keras.optimizers import Adam
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from tensorflow.keras.applications import MobileNetV2
+    from tensorflow.keras.callbacks import EarlyStopping
+    from sklearn.metrics import confusion_matrix
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    import os
+    import cv2
+    from tqdm import tqdm
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Loading the dataset
+    # Assuming you have a dataset in the same directory as your python script
+    # and it's structured as follows:
+    # - main_folder
+    #     - sub_folder1
+    #         - image1.jpg
+    #         - image2.jpg
+    #     - sub_folder2
+    #         - image3.jpg
+    #         - image4.jpg
+    # Load the images and labels
+    images = []
+    labels = []
+    for folder in os.listdir('main_folder'):
+        for image in os.listdir('main_folder/' + folder):
+            img = cv2.imread('main_folder/' + folder + '/' + image)
+            img = cv2.resize(img, (224, 224))
+            images.append(img)
+            labels.append(folder)
+
+    # Convert the images and labels to numpy arrays
+    images = np.array(images)
+    labels = np.array(labels)
+
+    # Split the dataset into training and testing sets
+    x_train, x_test, y_train, y_test = train_test_split(images, labels, test_size=0.2,

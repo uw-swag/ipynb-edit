@@ -1,0 +1,46 @@
+```
+    # Code you have previously used to load data
+    import numpy as np
+    import pandas as pd
+    from sklearn.metrics import mean_absolute_error
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestRegressor
+
+    # Path of the file to read
+    iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+    home_data = pd.read_csv(iowa_file_path)
+    # Create target object and call it y
+    y = home_data.SalePrice
+    # Create X
+    features = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+    X = home_data[features]
+
+    # Split into validation and training data
+    train, test = train_test_split(home_data, test_size=0.2, random_state=1)
+
+    # Specify Model
+    model = RandomForestRegressor(random_state=1)
+    # Fit Model
+    model.fit(train.drop("SalePrice", axis=1), train["SalePrice"])
+
+    # Make validation predictions and calculate mean absolute error
+    preds = model.predict(test.drop("SalePrice", axis=1))
+    print(mean_absolute_error(test["SalePrice"], preds))
+    ```
+    '''
+    ]
+
+    ### Response:
+    ```
+    # Code you have previously used to load data
+    import numpy as np
+    import pandas as pd
+    from sklearn.metrics import mean_absolute_error
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestRegressor
+
+    # Path of the file to read
+    iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+
+    home_data = pd.read_csv(iowa_file_

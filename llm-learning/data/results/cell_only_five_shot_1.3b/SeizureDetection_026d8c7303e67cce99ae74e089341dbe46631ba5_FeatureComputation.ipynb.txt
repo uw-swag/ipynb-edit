@@ -1,0 +1,28 @@
+
+    The `els:` statement is missing a colon at the end. In Python, the `els` statement is used to handle the case where the condition in the `if` statement is not met. Here, it's used to handle the case where the mean of the array is zero.
+
+    Here's the corrected code:
+
+    ```python
+    def computeTimeDomainFeatures (x):
+        mean = np.mean(x)
+        var = np.var(x)
+        sk = skew(x)
+        kurt = kurtosis(x)
+        std = np.std(x)
+        median = np.median(x)
+        zcr = ((x[:-1] * x[1:]) < 0).sum()
+        if x.mean() != 0:
+            cv = variation(x)
+        else:
+            cv = math.nan
+        if x.size > 0:
+            rms = np.sqrt(x.dot(x)/x.size)
+        else:
+            rms = math.nan
+        p2p = x.max() - x.min()
+        sampEn = entropy.sample_entropy(x, 1)[0]
+        return mean, var, sk, kurt, std, median, zcr, cv, rms, p2p, sampEn
+    ```
+
+    This function computes time-domain features of an input array `x`. The features include the mean, variance, skewness, kurtosis, standard deviation, median, zero-crossing rate, coefficient of variation, root mean square (RMS), range, and sample entropy.

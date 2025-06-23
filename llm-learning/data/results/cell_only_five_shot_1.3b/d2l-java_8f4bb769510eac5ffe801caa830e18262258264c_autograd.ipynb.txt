@@ -1,0 +1,23 @@
+```java
+    import ai.djl.ndarray.*;
+    import ai.djl.training.GradientCollector;
+    import ai.djl.engine.Engine;
+    import ai.djl.ndarray.types.*;
+
+    // We allocate memory for a NDArrays's gradient by invoking `attachGradient`
+    x.attachGradient();
+    // After we calculate a gradient taken with respect to `x`, we will be able to
+    // access it via the `getGradient` attribute, whose values are initialized with 0s
+    x.getGradient()
+
+    NDArray a = manager.randomNormal(new Shape(1));
+    a.attachGradient();
+    try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+        NDArray d = f(a);
+        gc.backward(d);
+        
+        System.out.println(a.getGradient().eq(d.div(a)));
+    }
+    ```
+
+    The code above is a Java code snippet that uses the Deep Java Library (DJL) to perform a gradient computation. The code imports the necessary libraries, creates a gradient collector, and then uses it to compute the gradient of a function `f(a)` with respect to `a`. The gradient of `a` is then printed to the console.

@@ -1,0 +1,51 @@
+```python
+    # server.py
+    from django.core.asgi import get_asgi_application
+    from channels.routing import ProtocolTypeRouter, URLRouter
+    from django.urls import path
+    from . import learning_app
+    application = ProtocolTypeRouter({
+        "http": get_asgi_application(),
+        "websocket": learning_app.routing.websocket_application,
+    })
+
+    # learning_app.py
+    from channels.layers import get_channel_layer
+    from asgiref.sync import async_to_sync
+    from django.db.models.signals import post_save
+    from .models import User, LearningSession
+
+    channel_layer = get_channel_layer()
+
+    def update_user_status(user_id, status):
+        async_to_sync(channel_layer.group_send)(
+            f"user_{user_id}", {"type": "user.status", "payload": {"status": status}}
+        )
+
+    def handle_user_status_update(self, event):
+        payload = event["payload"]
+        user_id = payload["user_id"]
+        status = payload["status"]
+        # Update user status in the database
+        user = User.objects.get(id=user_id)
+        user.status = status
+        user.save()
+
+    post_save.connect(handle_user_status_update, sender=User)
+
+    # learning_app/routing.py
+    from django.urls import re_path
+    from .consumers import UserStatusConsumer
+
+    websocket_application = ProtocolTypeRouter({
+        "websocket": UserStatusConsumer,
+    })
+
+    # learning_app/consumers.py
+    from channels.generic.websocket import AsyncWebsocketConsumer
+
+    class UserStatusConsumer(AsyncWebsocketConsumer):
+        async def connect(self):
+            self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
+            self.room_group_name = f"chat_{self.room_name}"
+            await self.channel_layer.

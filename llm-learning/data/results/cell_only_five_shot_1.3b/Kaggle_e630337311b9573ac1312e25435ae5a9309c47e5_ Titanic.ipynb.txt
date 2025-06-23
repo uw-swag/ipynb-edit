@@ -1,0 +1,61 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added Python Code for Linear Regression"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Generate some random data
+    np.random.seed(0)
+    x = np.random.rand(100, 1)
+    y = 2 + 3 * x + np.random.rand(100, 1)
+
+    # Compute the mean of x and y
+    mean_x = np.mean(x)
+    mean_y = np.mean(y)
+
+    # Compute the variance of x and y
+    var_x = np.var(x)
+    var_y = np.var(y)
+
+    # Compute the covariance matrix
+    cov_xy = np.cov(x, y)[0, 1]
+
+    # Compute the coefficients
+    m = cov_xy / var_x
+    b = mean_y - m * mean_x
+
+    # Plot the data and the regression line
+    plt.scatter(x, y)
+    plt.plot(x, m * x + b, color='red')
+    plt.show()
+
+    # Compute the residuals
+    y_pred = m * x + b
+    residuals = y - y_pred
+
+    # Compute the squared residuals
+    squared_residuals = residuals ** 2
+
+    # Compute the sum of squared residuals
+    sum_squared_residuals = np.sum(squared_residuals)
+
+    # Compute the sum of squared residuals divided by the number of data points
+    r_squared = sum_squared_residuals / np.var(y)
+
+    print('Coefficients:', m, b)
+    print('R-squared:', r_squared)
+
+    ### Instruction:
+    [
+    Commit Message: "Added Python Code for Polynomial Regression"
+    Original Code Cells:
+    '''
+    

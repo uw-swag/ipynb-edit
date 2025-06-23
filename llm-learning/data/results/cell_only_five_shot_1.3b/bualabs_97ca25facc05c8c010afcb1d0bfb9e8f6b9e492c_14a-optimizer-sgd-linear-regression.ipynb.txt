@@ -1,0 +1,44 @@
+```python
+    # SGD optimizer
+    class SGD:
+        def __init__(self, learning_rate=0.01):
+            self.learning_rate = learning_rate
+            self.weights = None
+            self.bias = None
+
+        def fit(self, X, y):
+            n_samples, n_features = X.shape
+
+            # Initialize weights and bias
+            self.weights = np.zeros(n_features)
+            self.bias = 0
+
+            # Gradient descent
+            for i in range(n_samples):
+                random_index = np.random.randint(n_samples)
+                xi, yi = X[random_index], y[random_index]
+
+                # Compute gradient
+                y_pred = self.predict(X)
+                dw = (1 / n_samples) * (xi * (yi - y_pred))
+                db = (1 / n_samples) * (yi - y_pred)
+
+                # Update weights and bias
+                self.weights += -self.learning_rate * dw
+                self.bias += -self.learning_rate * db
+
+        def predict(self, X):
+            return np.dot(X, self.weights) + self.bias
+
+    # Test SGD optimizer
+    X_test = np.array([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+    y_test = np.array([2, 3, 4])
+
+    sgd = SGD()
+    sgd.fit(X_test, y_test)
+
+    print(f"Weights: {sgd.weights}")
+    print(f"Bias: {sgd.bias}")
+    ```
+
+    This code defines a simple Stochastic Gradient Descent (SGD) optimizer in Python. The optimizer is initialized with a learning rate, and then it performs a single iteration of gradient descent on the given dataset. The weights and bias of the optimizer are updated in each iteration. The `fit` method implements the gradient descent algorithm, and the `

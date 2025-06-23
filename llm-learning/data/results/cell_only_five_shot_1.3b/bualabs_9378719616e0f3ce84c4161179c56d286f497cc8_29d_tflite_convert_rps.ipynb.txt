@@ -1,0 +1,44 @@
+```python
+    import numpy as np
+import matplotlib.pylab as plt
+
+import tensorflow as tf
+import tensorflow_hub as hub
+
+from tqdm import tqdm
+
+print("\u2022 Using TensorFlow Version:", tf.__version__)
+print("\u2022 Using TensorFlow Hub Version: ", hub.__version__)
+print('\u2022 GPU Device Found.' if tf.test.is_gpu_available() else '\u2022 GPU Device Not Found. Running on CPU')
+# Prepare the examples by preprocessing the them and then batching them (and optionally prefetching them)
+
+# If you wish you can shuffle train set here
+train_batches = train_examples.cache().shuffle(num_examples//4).batch(BATCH_SIZE).map(format_image).prefetch(1)
+
+validation_batches = validation_examples.cache().batch(BATCH_SIZE).map(format_image)
+
+test_batches = test_examples.batch(1).map(format_image)
+# Intialize the TFLite converter to load the SavedModel
+converter = tf.lite.TFLiteConverter.from_saved_model(RPS_SAVED_MODEL)
+
+# Set the optimization strategy for 'size' in the converter 
+converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+
+# Use the tool to finally convert the model
+tflite_model = converter.convert()
+#@title Visualize the outputs { run: "auto" }
+index = 3 #@param {type:"slider", min:0, max:9, step:1}
+plt.figure(figsize=(6,3))
+plt.subplot(1,2,1)
+plot_image(index, predictions, test_labels, test_imgs)
+plt.show()
+
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added post-training integer quantization representative_data_gen"
+    Original Code Cells:
+    '''
+    import numpy as np
+import matplotlib.

@@ -1,0 +1,47 @@
+```python
+    # Updating the directory structure
+    import os
+    import shutil
+
+    # Define the directory structure
+    project_dir = "your_project_directory"
+    data_dir = os.path.join(project_dir, "data")
+    eda_dir = os.path.join(project_dir, "eda")
+    ml_dir = os.path.join(project_dir, "ml")
+
+    # Create directories
+    os.makedirs(project_dir, exist_ok=True)
+    os.makedirs(data_dir, exist_ok=True)
+    os.makedirs(eda_dir, exist_ok=True)
+    os.makedirs(ml_dir, exist_ok=True)
+
+    # Copy EDA and ML notebooks
+    shutil.copy(os.path.join(project_dir, "eda_notebook.ipynb"), eda_dir)
+    shutil.copy(os.path.join(project_dir, "ml_notebook.ipynb"), ml_dir)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new notebook for EDA"
+    Original Code Cells:
+    '''
+    %run ../../common/import_all.py
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score
+    from sklearn.metrics import accuracy_score
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Add a new notebook for EDA
+    with open(os.path.join(eda_dir, "eda_notebook.ipynb"), "w") as f:
+        f.write("""
+        # Your EDA notebook
+        %run ../../common/import_all.py
+        import pandas as pd
+        import num

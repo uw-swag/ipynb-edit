@@ -1,0 +1,24 @@
+```
+    from sklearn.utils.class_weight import compute_class_weight
+
+    y = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+    class_weights = compute_class_weight('balanced', np.unique(y), y)
+    class_weight_dict = dict(zip(np.unique(y), class_weights))
+
+    w_p = 1 - ALPHA * C 
+    w_n = 1 - w_p
+
+    class_weight = {1: w_p, 0: w_n}
+    print(w_p, w_n)
+
+    # Compute class weights using sklearn's compute_class_weight function
+    y = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0]
+    class_weights = compute_class_weight('balanced', np.unique(y), y)
+    class_weight_dict = dict(zip(np.unique(y), class_weights))
+
+    print(class_weight_dict)
+    ```
+
+    The `compute_class_weight` function from sklearn.utils.class_weight computes class weights for a given set of samples. The class weights are computed as the reciprocal of the class frequencies in the input dataset. The 'balanced' option computes class weights in such a way that each class has a similar representation in the dataset.
+
+    The `class_weight_dict` dictionary will contain the class weights for each class.

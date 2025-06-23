@@ -1,0 +1,42 @@
+
+    Here is the updated code with the addition of the Scraper module. The Scraper module is used to scrape data from the web. The data scraped is then used to create the `playing_stats` DataFrame.
+
+    ```python
+    import pandas as pd
+    import numpy as np
+    import os
+    import csv
+    from datetime import datetime
+
+    DATA_PATH = 'data/'
+
+    # TODO: Make scraper module so that we can get data from inside Jupyter Notebook
+    # Get league data and league_standings
+    def parse_date(date):
+        """
+        Converts date from string to datetime object.
+        """
+        return datetime.strptime(date, '%d/%m/%y').date()
+
+    def parse_date_other(date):
+        if date == '':
+            return None
+        else:
+            return datetime.strptime(date, '%d/%m/%Y').date()
+
+    df1.Date = df1.Date.apply(parse_date)
+    df2.Date = df2.Date.apply(parse_date)
+    df3.Date = df3.Date.apply(parse_date)
+    df4.Date = df4.Date.apply(parse_date)
+    df5.Date = df5.Date.apply(parse_date)
+    df6.Date = df6.Date.apply(parse_date)
+    df7.Date = df7.Date.apply(parse_date)
+    df8.Date = df8.Date.apply(parse_date)
+    df9.Date = df9.Date.apply(parse_date)
+    df10.Date = df10.Date.apply(parse_date_other)
+    df11.Date = df11.Date.apply(parse_date_other)
+    df12.Date = df12.Date.apply(parse_date_other)
+    df13.Date = df13.Date.apply(parse_date_other)
+
+    # Gets the goals scored agg arranged by teams and matchweek
+    def get_goals_scored(playing_

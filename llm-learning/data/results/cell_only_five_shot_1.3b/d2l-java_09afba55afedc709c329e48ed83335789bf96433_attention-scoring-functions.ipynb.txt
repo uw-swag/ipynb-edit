@@ -1,0 +1,36 @@
+```
+    %maven ai.djl:api:0.11.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+
+    %maven ai.djl.mxnet:mxnet-engine:0.11.0
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-backport
+    %load ../utils/plot-utils
+    %load ../utils/Functions.java
+    %load ../utils/PlotUtils.java
+    import ai.djl.Model;
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.DataType;
+    import ai.djl.ndarray.types.Shape;
+    import ai.djl.nn.AbstractBlock;
+    import ai.djl.nn.Parameter;
+    import ai.djl.training.*;
+    import ai.djl.nn.core.Linear;
+    import ai.djl.nn.norm.Dropout;
+    import ai.djl.training.listener.TrainingListener;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.tracker.Tracker;
+    import ai.djl.training.ParameterStore;
+    import ai.djl.training.initializer.UniformInitializer;
+    import ai.djl.util.PairList;
+    import ai.djl.translate.TranslateException;
+    import tech.tablesaw.plotly.Plot;
+    import tech.tablesaw.plotly.components.*;
+    import tech.tablesaw.plotly.traces.ScatterTrace;
+
+    java.io.IOException;
+    java.util.function.Function;
+    ```
+
+    The code above is a Maven configuration for the

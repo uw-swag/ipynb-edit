@@ -1,0 +1,35 @@
+
+<Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+
+import xgboost as xgb
+from catboost import CatBoostClassifier
+import lightgbm as lgb
+
+
+DATA_PATH = 'data/'
+<\Cell_0>
+<Cell_1>
+training_data = pd.read_csv('data/training_data.csv')
+training_data.drop(['Unnamed: 0', 'Date', 'HomeTeam', 'AwayTeam', 
+                 'HTGS', 'ATGS', 'HTGC', 'ATGC', 'HM1', 'HM2', 'HM3',
+                 'HM4', 'HM5', 'AM1', 'AM2', 'AM3', 'AM4',  
+                 'AM5', 'MW', 'HTFormPts', 'ATFormPts',
+                 'HTFormPtsStr', 'ATFormPtsStr'], 1, inplace=True)
+training_data.columns
+<\Cell_1>
+<Cell_2>
+EMA_data = pd.read_csv('data/EMA_data.csv')
+EMA_data.drop(['Unnamed: 0', 'f_DateHome', 'f_seasonHome', 'HomeTeam',
+               'homeGame_x', 'f_cornersAgainstHome', 'f_cornersForHome',
+               'f_freesAgainstHome', 'f_freesForHome', 'f_halfTimeGoalsAgainstHome',
+               'f_halfTimeGoalsForHome', 'f_redsAgainstHome', 'f_redsForHome',
+               'f_yellowsAgainstHome', 'f_yellowsForHome', 'f_DateAway', 'f_seasonAway', 
+               'AwayTeam', 'homeGame_y', 'f_cornersAgainstAway', 'f_cornersForAway', 

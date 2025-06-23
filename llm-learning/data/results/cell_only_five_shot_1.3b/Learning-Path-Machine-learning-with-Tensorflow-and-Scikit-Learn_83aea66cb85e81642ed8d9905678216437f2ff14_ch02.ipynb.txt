@@ -1,0 +1,33 @@
+```python
+    # Module 01: Code files added
+    # This is a module for the first part of the project.
+
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
+    from sklearn.metrics import roc_auc_score
+    from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import RandomizedSearchCV
+    from sklearn.preprocessing import FunctionTransformer
+    from sklearn.ensemble import VotingClassifier
+
+    # Loading the dataset
+    credit_train = pd.read_csv('cs-train.csv')
+    credit_test = pd.read_csv('cs-test.csv')
+
+    # Data preprocessing
+    X = credit_train.drop('SeriousDlqin2yrs', axis = 1)
+    y = credit_train['SeriousDlqin2yrs']
+
+    # Splitting the dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.25)
+
+    # Model training
+    knn = KNeighborsClassifier(n_neighbors = 5, weights = 'uniform', algorithm = 'auto', leaf_size = 30, metric_params = None)
+    logistic = LogisticRegression(penalty = 'l1', C = 1.0, verbose = 2, tol = 0.0001)
+    adaboost = AdaBoostClassifier(base_estimator = None, n_estimators = 200, learning_rate = 1.0)
+    gbdt = GradientBoostingClassifier(loss = 'deviance', learning_rate = 0.1, n_estimators = 200, min_samples_split = 2,

@@ -1,0 +1,28 @@
+```python
+    # Import necessary libraries
+    import nltk
+    import spacy
+    from spacy.lang.en import English
+    from nltk.stem import WordNetLemmatizer
+    from nltk.corpus import wordnet
+    nltk.download('wordnet')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('punkt')
+
+    # Initialize lemmatizer
+    lemmatizer = WordNetLemmatizer()
+
+    # Define a function to convert a list of words into their lemmatized form
+    def lemmatize_sentence(sentence):
+        # Tokenize the sentence
+        nltk_tokens = nltk.word_tokenize(sentence)
+
+        # Lemmatize each token
+        nltk_lemmatized = [lemmatizer.lemmatize(token) for token in nltk_tokens]
+
+        return nltk_lemmatized
+
+    # Test the function
+    sentence = "It is a sunny day. It is raining heavily."
+    print(lemmatize_sentence(sentence))
+    ```

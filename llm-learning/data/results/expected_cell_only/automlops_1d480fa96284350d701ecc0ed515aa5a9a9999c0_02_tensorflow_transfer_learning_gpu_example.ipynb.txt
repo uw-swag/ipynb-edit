@@ -1,0 +1,127 @@
+@dsl.component(
+    packages_to_install=[
+        'tensorflow',
+        'tensorflow_datasets',
+        'opencv-python-headless'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/custom_train_model.yaml',
+)
+def custom_train_model(
+    metrics: Output[Metrics],
+    model_dir: str,
+    output_model: Output[Model],
+    lr: float = 0.001,
+    epochs: int = 10,
+    steps: int = 200,
+    distribute: str = 'single'
+):
+    import faulthandler
+    import os
+    import sys
+
+    import tensorflow as tf
+    import tensorflow_datasets as tfds
+    from tensorflow.python.client import device_lib
+
+    faulthandler.enable()
+    tfds.disable_progress_bar()
+
+    print('Component start')
+
+    print(f'Python Version = {sys.version}')
+    print(f'TensorFlow Version = {tf.__version__}')
+    print(f'''TF_CONFIG = {os.environ.get('TF_CONFIG', 'Not found')}''')
+    print(f'DEVICES = {device_lib.list_local_devices()}')
+
+    # Single Machine, single compute device
+    if distribute == 'single':
+        if tf.test.is_gpu_available():
+            strategy = tf.distribute.OneDeviceStrategy(device='/gpu:0')
+        else:
+            strategy = tf.distribute.OneDeviceStrategy(device='/cpu:0')
+    # Single Machine, multiple compute device
+    elif distribute == 'mirror':
+        strategy = tf.distribute.MirroredStrategy()
+    # Multiple Machine, multiple compute device
+    elif distribute == 'multi':
+        strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
+
+    # Multi-worker configuration
+    print(f'num_replicas_in_sync = {strategy.num_replicas_in_sync}')
+
+    # Preparing dataset
+    BUFFER_SIZE = 10000
+    BATCH_SIZE = 64
+
+    def preprocess_data(image, label):
+        '''Resizes and scales images.'''
+
+        image = tf.image.resize(image, (300,300))
+        return tf.cast(image, tf.float32) / 255., label
+
+    def create_dataset(batch_size: int):
+        '''Loads Cassava dataset and preprocesses data.'''
+
+        data, info = tfds.load(name='cassava', as_supervised=True, with_info=True)
+        number_of_classes = info.features['label'].num_classes
+        train_data = data['train'].map(preprocess_data,
+                                       num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        train_data  = train_data.cache().shuffle(BUFFER_SIZE).repeat()
+        train_data  = train_data.batch(batch_size)
+        train_data  = train_data.prefetch(tf.data.experimental.AUTOTUNE)
+
+        # Set AutoShardPolicy
+        options = tf.data.Options()
+        options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.DATA
+        train_data = train_data.with_options(options)
+
+        return train_data, number_of_classes
+
+    # Build the ResNet50 Keras model    
+    def create_model(number_of_classes: int, lr: int = 0.001):
+        '''Creates and compiles pretrained ResNet50 model.'''
+
+        base_model = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
+        x = base_model.output
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.Dense(1016, activation='relu')(x)
+        predictions = tf.keras.layers.Dense(number_of_classes, activation='softmax')(x)
+        model = tf.keras.Model(inputs=base_model.input, outputs=predictions)
+
+        model.compile(
+            loss=tf.keras.losses.sparse_categorical_crossentropy,
+            optimizer=tf.keras.optimizers.Adam(lr),
+            metrics=['accuracy'])
+        return model
+
+    # Train the model
+    NUM_WORKERS = strategy.num_replicas_in_sync
+    # Here the batch size scales up by number of workers since
+    # `tf.data.Dataset.batch` expects the global batch size.
+    GLOBAL_BATCH_SIZE = BATCH_SIZE * NUM_WORKERS
+    train_dataset, number_of_classes = create_dataset(GLOBAL_BATCH_SIZE)
+
+    with strategy.scope():
+        # Creation of dataset, and model building/compiling need to be within `strategy.scope()`.
+        resnet_model = create_model(number_of_classes, lr)
+
+    h = resnet_model.fit(x=train_dataset, epochs=epochs, steps_per_epoch=steps)
+    acc = h.history['accuracy'][-1]
+    resnet_model.save(model_dir)
+    
+    output_model.path = model_dir
+    metrics.log_metric('accuracy', (acc * 100.0))
+    metrics.log_metric('framework', 'Tensorflow')
+AutoMLOps.go(project_id=PROJECT_ID, 
+             pipeline_params=pipeline_params, 
+             run_local=False,
+             schedule_pattern='59 11 * * 0', # retrain every Sunday at Midnight
+             base_image=TRAINING_IMAGE,
+             custom_training_job_specs = [{
+                'component_spec': 'custom_train_model',
+                'display_name': 'train-model-accelerated',
+                'machine_type': 'a2-highgpu-1g',
+                'accelerator_type': 'NVIDIA_TESLA_A100',
+                'accelerator_count': '1'
+             }]
+)

@@ -1,0 +1,32 @@
+
+    The code you provided is a Python script that uses the itertools library to generate all possible combinations of a list of numbers. It then calculates the accuracy and mean squared error for each combination and prints the best combination based on these metrics.
+
+    However, the code you provided is not complete and does not provide the expected output. The variable `y_true.age` is not defined in the provided code. 
+
+    You should replace `y_true.age` with the actual variable or function that you want to use to evaluate the accuracy of the models.
+
+    Also, the code does not handle the case where the number of combinations is larger than the number of elements in the list. You should add a check to handle this case.
+
+    Here is a complete version of the code:
+
+    ```python
+    from sklearn.metrics import mean_squared_error, accuracy_score
+    from itertools import combinations
+    import numpy as np
+
+    all_cnns = b4_min, b5_min, b6_min, m_min, l_min, b4_middle, b5_middle, b6_middle, m_middle, l_middle, b4_max, b5_max, b6_max, m_max, l_max, m_all, l_all
+
+    mseStr = ""
+    curr_models = np.asarray([])
+    for i in range(2, len(all_cnns)+1):
+        curr_acc = np.asarray([])
+        curr_acc_model = list()
+        curr_mse = np.asarray([])
+        curr_mse_model = list()
+        comb = list(combinations(all_cnns, i))
+        j_comb = list( combinations(range(len(all_cnns)), i) )
+        for k in range(0, len(comb)):
+            aggregate = sum(comb[k]) / i
+            y_pred = aggregate.round().astype("int")
+            score = accuracy_score(y_pred, y_true.age)  # replace y_true.age with your actual variable
+            curr_acc = np.append(curr_acc,

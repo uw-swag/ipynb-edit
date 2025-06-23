@@ -1,0 +1,40 @@
+
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+    # Load the glass dataset
+    glass = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/glass/glass.data', header=None)
+
+    # Define the feature set
+    X = glass.iloc[:, :-1]
+
+    # Define the target variable
+    y = glass.iloc[:, -1]
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the Random Forest Classifier
+    classifier = RandomForestClassifier(n_estimators=200, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(accuracy_score(y_test, y_pred))
+
+    # Now, you can use this classifier to classify new glass samples.
+    # For example, to classify a sample with attributes [0.203, 0.151, 0.198, 0.134, 0.274, 0.369, 0.267, 0.232, 0.158, 0.

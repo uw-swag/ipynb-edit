@@ -1,0 +1,59 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#332)"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+    from matplotlib import pyplot as plt
+    from math import sqrt
+    # function to run gradient descent for n iterations
+    def gradient_descent_runner(x,y,b_start=0,m_start=0,learning_rate=.0001,num_iteration=1000):
+        b_now = b_start
+        m_now = m_start
+        for i in range(num_iteration):
+            b_now, m_now = step_gradient(x,y,b_now,m_now,learning_rate)
+        return b_now, m_now
+    epochs = 1000
+    b_start = 0
+    m_start = 0
+    # linear regression plot function
+    def plot_linear_regression_result(x,y,predicted_y):
+        # plotting the actual points as a scatter
+        plt.figure(figsize=(12,8))
+        plt.scatter(x,y,color = "y", marker = "o",s=30)
+    
+        # plotting the regression line
+        plt.plot(x, predicted_y, color = "m", linewidth=2)
+ 
+        # putting labels
+        plt.title('Linear regression of Min/Max Temperature during World War 2')
+        plt.xlabel('Min Temperature')
+        plt.ylabel('Max Temperature')
+ 
+        # function to show plot
+        plt.show()
+
+    # generator parameters
+    iteration = 0
+
+    # plot parameters
+
+
+    # a generator function to generate the parameters for our gradient descent animation function
+    def generator_function():
+    
+        iteration += 1
+        return []
+    
+    # we create our plot
+    def init_function():
+        return None
+    
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a basic implementation of gradient descent in Python. It's

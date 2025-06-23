@@ -1,0 +1,23 @@
+```python
+    # Import the necessary libraries
+    from adafruit_pm25.i2c import PM25_I2C
+    from adafruit_pm25.adafruit_pm25_analog import PM25_Analog
+
+    # Initialize the sensor
+    pm25 = PM25_I2C(0x39)
+
+    # Read the sensor
+    pm25.start()
+    pm25_value = pm25.read()
+
+    print("PM2.5 Value: ", pm25_value)
+
+    # Add the sensor to the original code cells
+    ANALOG_Alcohol = FPGA.analog_in(3)
+ANALOG_Alcohol.read()
+
+    # Add the sensor reading to the original code cells
+    print("PM2.5 Value: ", pm25_value)
+    ```
+
+    This code will read the PM2.5 sensor from the Adafruit PM2.5 sensor module and print the value. The sensor is then added to the original code cells.

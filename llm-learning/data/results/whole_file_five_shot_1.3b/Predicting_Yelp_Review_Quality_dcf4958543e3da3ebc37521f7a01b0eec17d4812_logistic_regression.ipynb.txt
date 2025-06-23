@@ -1,0 +1,54 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added presentation video"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import psycopg2
+from sqlalchemy import create_engine
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+<\Cell_0>
+<Cell_1>
+pd.set_option('display.max_columns', 100)
+pd.set_option("max_rows", 1000)
+pd.set_option('display.float_format', lambda x: '%.5f' % x)
+<\Cell_1>
+<Cell_2>
+connect = 'postgresql+psycopg2://postgres:password@localhost:5432/yelp'
+engine = create_engine(connect)
+query = '''
+        SELECT *
+        FROM model_data_cls_train
+        LIMIT 1000000
+        ;
+        '''
+df = pd.read_sql(query, con=engine)
+
+data = df.copy()
+<\Cell_2>
+<Cell_3>
+data = data.drop_duplicates(subset='review_id')
+data.info()
+<\Cell_3>
+<Cell_4>
+target = data['TARGET_review_has_upvotes']
+unused_features = ['level_0', 'index', 'review_id', 
+                   'restaurant_latitude', 
+                   'restaurant_longitude',
+                   'TARGET_review_has_upvotes']
+features = data.drop(labels=unused_features, axis=1)
+<\Cell_4>
+<Cell_5>
+print(f'Target Shape: {target.shape}')
+print(target.head(10))      
+print(features.info())
+<\Cell_5>
+<Cell_6>
+scalar = StandardScaler()

@@ -1,0 +1,16 @@
+```python
+    # Split the data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(data.drop('target', axis=1), data['target'], test_size=0.2, random_state=42)
+
+    # Create a DeepChecks Dataset object
+    dataset = Dataset(X_train, y_train, features=data.columns[:-1])
+
+    # Add the train-test samples mix check
+    dataset.add_check(TrainTestSamplesMix())
+
+    # Run the checks
+    report = dataset.run_checks()
+
+    # Print the report
+    print(report)
+    ```

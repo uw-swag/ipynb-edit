@@ -1,0 +1,30 @@
+```python
+    # Modified Loss Function
+    def modified_loss(y_true, y_pred):
+        # Modify this function to suit your specific problem
+        # For example, you can use Mean Squared Error (MSE) as the loss function
+        # and Gradient Descent as the optimizer
+        return tf.reduce_mean(tf.square(y_true - y_pred))
+
+    # Modified Gradient Descent Function
+    def modified_gradient_descent(model, X, y, epochs, batch_size):
+        # Modify this function to suit your specific problem
+        # For example, you can use Stochastic Gradient Descent (SGD) as the optimizer
+        # and use Mean Squared Error (MSE) as the loss function
+        optimizer = tf.keras.optimizers.SGD(learning_rate=0.01)
+        for epoch in range(epochs):
+            # Shuffle the data
+            perm = np.random.permutation(len(X))
+            X_shuffled, y_shuffled = X[perm], y[perm]
+            for i in range(0, len(X_shuffled), batch_size):
+                # Get the batch
+                X_batch, y_batch = X_shuffled[i:i+batch_size], y_shuffled[i:i+batch_size]
+                # Compute the gradients
+                with tf.GradientTape() as tape:
+                    tape.watch(X_batch)
+                    y_pred = model(X_batch)
+                    loss = modified_loss(y_batch, y_pred)
+                gradients = tape.gradient(loss, model.trainable_variables)
+                # Update the model's weights
+                optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    ```

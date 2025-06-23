@@ -1,0 +1,186 @@
+<Cell_0>
+from nltk import FreqDist
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.stem.wordnet import WordNetLemmatizer
+lemma = WordNetLemmatizer()
+from nltk.corpus import stopwords
+stop = stopwords.words('english')
+
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+
+from gensim.models import Phrases
+from gensim.models.phrases import Phraser
+
+import os
+from collections import Counter
+import string
+punctuations = list(string.punctuation)
+#Add some more punctuation, as the list doesn't cover all cases.
+punctuations.extend(['”', '–', '``', "''"])
+stop = stop + punctuations
+<\Cell_0>
+<Cell_1>
+url = urlopen('http://news.sky.com/story/snap-election-to-be-held-in-march-after-northern-ireland-government-collapses-10731488')
+soup = BeautifulSoup(url.read().decode('utf8'), "lxml")
+text = '\n\n'.join(map(lambda p: p.text, soup.find_all('p')))
+
+text = text[text.find('An early election'):]
+title = soup.find('h1').text.strip()
+print(title, '\n', '_' * 60, '\n', text)
+<\Cell_1>
+<Cell_2>
+def intersection(sent1, sent2):
+    s1 = sent1.split(' ')
+    s2 = sent2.split(' ')
+
+    intersection = [i for i in s1 if i in s2]
+    #Normalization
+    return len(intersection) / ((len(s1) + len(s2)) / 2)
+<\Cell_2>
+<Cell_3>
+sentences = sent_tokenize(text)
+matrix = [[intersection(sentences[i], sentences[j]) for i in range(0,len(sentences))] for j in range(0,len(sentences))]
+matrix[:2]
+<\Cell_3>
+<Cell_4>
+scores = {sentences[i]: sum(matrix[i]) for i in range(len(matrix))}
+scores
+<\Cell_4>
+<Cell_5>
+sents = sorted(scores, key=scores.__getitem__, reverse=True)[:5]
+sents
+<\Cell_5>
+<Cell_6>
+tuples = [(i, text.find(i)) for i in sents]
+sorted_tuples = sorted(tuples, key=lambda x: x[0])
+#Leave only sentences.
+best_sents = [i[0] for i in sorted_tuples]
+best_sents
+<\Cell_6>
+<Cell_7>
+def intersection(sent1, sent2):
+    s1 = sent1.split(' ')
+    s2 = sent2.split(' ')
+    intersection = [i for i in s1 if i in s2]
+    return len(intersection) / ((len(s1) + len(s2)) / 2)
+
+def get_summary(text, limit=3):
+    sentences = sent_tokenize(text)
+    matrix = [[intersection(sentences[i], sentences[j]) for i in range(0,len(sentences))] for j in range(0,len(sentences))]
+    scores = {sentences[i]: sum(matrix[i]) for i in range(len(matrix))}
+    sents = sorted(scores, key=scores.__getitem__, reverse=True)[:limit]
+    best_sents = [i[0] for i in sorted([(i, text.find(i)) for i in sents], key=lambda x: x[0])]
+    return best_sents
+
+def summarize(text, limit=3):
+    summary = get_summary(text, limit)
+    print(title)
+    print()
+    print(' '.join(summary))
+<\Cell_7>
+<Cell_8>
+summarize(text,5)
+<\Cell_8>
+<Cell_9>
+def intersection(sent1, sent2):
+    s1 = [i for i in word_tokenize(sent1) if i not in punctuations and i not in stop]
+    s2 = [i for i in word_tokenize(sent2) if i not in punctuations and i not in stop]
+    intersection = [i for i in s1 if i in s2]
+    return len(intersection) / ((len(s1) + len(s2)) / 2)
+<\Cell_9>
+<Cell_10>
+summarize(text,5)
+<\Cell_10>
+<Cell_11>
+sents = sent_tokenize(text)
+#Phrases need input as list of lists of tokens.
+sentence_stream = [[i for i in word_tokenize(sent) if i not in stop] for sent in sents]
+bigram = Phrases(sentence_stream, min_count=2, threshold=2, delimiter=b' ')
+#Create Phraser object.
+bigram_phraser = Phraser(bigram)
+bigram_tokens = bigram_phraser[sentence_stream]
+trigram = Phrases(bigram_tokens, min_count=2, threshold=2, delimiter=b' ')
+trigram_phraser = Phraser(trigram)
+trigram_tokens = trigram_phraser[bigram_tokens]
+all_words = [i for j in trigram_tokens for i in j]
+
+Counter(all_words).most_common(20)
+<\Cell_11>
+<Cell_12>
+def intersection(sent1, sent2):
+    #As sentences are lists of tokens, there is no need to split them.
+    intersection = [i for i in sent1 if i in sent2]
+    return len(intersection) / ((len(sent1) + len(sent2)) / 2)
+
+def split_sentences(sents):
+    sentence_stream = [[i for i in word_tokenize(sent) if i not in stop] for sent in sents]
+    bigram = Phrases(sentence_stream, min_count=2, threshold=2, delimiter=b'_')
+    bigram_phraser = Phraser(bigram)
+    bigram_tokens = bigram_phraser[sentence_stream]
+    trigram = Phrases(bigram_tokens,min_count=2, threshold=2, delimiter=b'_')
+    trigram_phraser = Phraser(trigram)
+    trigram_tokens = trigram_phraser[bigram_tokens]
+    return [i for i in trigram_tokens]
+
+def get_summary(text, limit=3):
+    sents = sent_tokenize(text)
+    sentences = split_sentences(sents)
+    matrix = [[intersection(sentences[i], sentences[j]) for i in range(0,len(sentences))] for j in range(0,len(sentences))]
+    scores = {sents[i]: sum(matrix[i]) for i in range(len(matrix))}
+    sents = sorted(scores, key=scores.__getitem__, reverse=True)[:limit]
+    best_sents = [i[0] for i in sorted([(i, text.find(i)) for i in sents], key=lambda x: x[0])]
+    return best_sents
+<\Cell_12>
+<Cell_13>
+summarize(text,5)
+<\Cell_13>
+<Cell_14>
+def score_sentences(words, sentences):
+    #Return scores for sentences.
+    scores = Counter()
+    #Words - list of words and their scores, first element is the word, second - its score.
+    for word in words:
+        for i in range(0, len(sentences)):
+            #If word is also in title, then add double score to the sentence.
+            if word[0] in sentences[i] and word[0] in title:
+                scores[i] += 2 * word[1]
+            elif word[0] in sentences[i]:
+                scores[i] += word[1]
+    sentence_scores = sorted(scores.items(), key=scores.__getitem__, reverse=True)
+    return sentence_scores
+
+def split_sentences(sents):
+
+    sentence_stream = [[i for i in word_tokenize(sent) if i not in stop] for sent in sents]
+    bigram = Phrases(sentence_stream, min_count=2, threshold=2, delimiter=b'_')
+    bigram_phraser = Phraser(bigram)
+    bigram_tokens = bigram_phraser[sentence_stream]
+    trigram = Phrases(bigram_tokens,min_count=2, threshold=2, delimiter=b'_')
+    trigram_phraser = Phraser(trigram)
+    trigram_tokens = trigram_phraser[bigram_tokens]
+    
+    all_words = [i for j in trigram_tokens for i in j]
+    frequent_words = [i for i in Counter(all_words).most_common() if i[1] > 1]
+    sentences = [i for i in trigram_tokens]
+    
+    return frequent_words, sentences
+
+def get_summary(text, limit=3):
+    sents = sent_tokenize(text)
+    frequent_words, sentences = split_sentences(sents)
+    sentence_scores = score_sentences(frequent_words, sentences)
+    
+    limited_sents = [sents[num] for num, count in sentence_scores[:limit]]
+    best_sents = [i[0] for i in sorted([(i, text.find(i)) for i in limited_sents], key=lambda x: x[0])]
+    return best_sents
+
+def summarize(text, limit=3):
+    summary = get_summary(text, limit)
+    print(title)
+    print()
+    print(' '.join(summary))
+<\Cell_14>
+<Cell_15>
+summarize(text, 5)
+<\Cell_15>

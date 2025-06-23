@@ -1,0 +1,30 @@
+```python
+    from deepchecks.checks.methodology import DateTrainTestLeakageOverlap
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, datetime_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, datetime_name=datetime_name)
+
+    # Create a dataset
+    d = {'A': [1, 2, 3, 4, 5], 'B': [1, 2, 3, 4, 5], 'C': [1, 2, 3, 4, 5], 'D': [1, 2, 3, 4, 5]}
+    dataset = dataset_from_dict(d)
+
+    # Create a suite
+    suite = Suite(datasets=[dataset])
+
+    # Add a check
+    suite.add_check(DateTrainTestLeakageOverlap())
+
+    # Run the suite
+    result = suite.run()
+
+    # Print the result
+    print(result)
+    ```
+
+    The above code creates a dataset from a dictionary, then creates a suite with the dataset. It then adds a check to the suite, which is a method that detects if there is any leakage in the train-test overlap. The suite is then run, and the result is printed.
+
+    Please note that the `DateTrainTestLeakageOverlap` check is not included in the DeepChecks library. You would need to implement this check yourself or find a third-party library that provides it.

@@ -1,0 +1,18 @@
+```python
+    from deepchecks.checks.integrity.string_length_out_of_bounds import StringLengthOutOfBounds
+    import pandas as pd
+
+    # Create a DataFrame
+    df = pd.DataFrame({
+        'text': ['short', 'medium', 'very long string', 'short', 'medium']
+    })
+
+    # Create a check
+    check = StringLengthOutOfBounds(column='text', min_length=5, max_length=10)
+
+    # Run the check
+    result = check.run(df)
+
+    # Print the result
+    print(result)
+    ```

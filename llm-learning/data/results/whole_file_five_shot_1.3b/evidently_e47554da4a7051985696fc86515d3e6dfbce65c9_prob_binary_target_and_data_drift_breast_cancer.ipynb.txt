@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added examples with test generators usage to how_to_questions"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, CatTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection, CatTargetDriftProfileSection 
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+bcancer_frame['target'] = bcancer.target
+
+target = 'target'
+prediction = 'prediction'
+numerical_features = bcancer.feature_names
+categorical_features = []
+features = numerical_features.tolist() + categorical_features
+<\Cell_1>
+<Cell_2>
+train_data, test_data = model_selection.train_test_split(bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+<\Cell_2>
+<Cell_3>
+# make a data frame with predictions for each class
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = bcancer.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = bcancer.target_names
+<\Cell_3>
+<Cell_4>
+# get labels for target: [0, 1, 0, 2] -> ['setosa', 'versicolor', 'setosa', 'virginica']
+train_data['target'] = [bcancer.

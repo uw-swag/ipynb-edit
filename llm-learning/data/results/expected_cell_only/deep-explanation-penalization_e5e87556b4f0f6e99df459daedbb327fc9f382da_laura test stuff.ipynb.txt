@@ -1,0 +1,74 @@
+
+
+%load_ext autoreload
+%autoreload 3
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import torch
+import pickle
+import sys
+import os
+sys.path.append('../fit')
+import cd
+
+
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+
+from torchtext import data
+from torchtext import datasets
+from os.path import join
+%load_ext autoreload
+%autoreload 4
+%matplotlib inline
+%reload_ext autoreload
+from torchtext.data import TabularDataset
+dataset_path = '../data'
+inputs = data.Field(lower=True)
+answers = data.Field(sequential=False, unk_token=None)
+tv_datafields = [ ("text", inputs), ("answers", answers)]
+train, dev, test = TabularDataset.splits(
+                           path=dataset_path, # the root directory where the data lies
+                           train='train_decoy_SST.csv', validation="dev_decoy_SST.csv", test = "test_decoy_SST.csv",
+                           format='csv', 
+
+                           skip_header=False, # if your csv header has a header, make sure to pass this to ensure it doesn't get proceesed as data!
+                           fields=tv_datafields)
+dataset_path = '../data'
+train, dev, test = TabularDataset.splits(
+                           path=dataset_path, # the root directory where the data lies
+                           train='train_decoy_SST_' +str(100.0)+'.csv', validation="dev_decoy_SST.csv", test = "test_decoy_SST.csv",
+                           format='csv', 
+                           skip_header=False, # if your csv header has a header, make sure to pass this to ensure it doesn't get proceesed as data!
+                           fields=tv_datafields)
+len(train)
+vector_cache = '../data/.vector_cache/input_vectors.pt'
+word_vectors = 'glove.6B.300d'
+inputs.build_vocab(train, dev, test)
+if word_vectors:
+    if os.path.isfile(vector_cache):
+        inputs.vocab.vectors = torch.load(vector_cache)
+    else:
+        inputs.vocab.load_vectors(word_vectors)
+        os.makedirs(os.path.dirname(vector_cache), exist_ok=True)
+        torch.save(inputs.vocab.vectors, vector_cache)
+answers.build_vocab(train)
+train_iter, dev_iter, test_iter = data.BucketIterator.splits(
+    (train, dev, test), batch_size=3, sort_key=lambda x: len(x.text), sort = True, device=torch.device(0), shuffle = True)
+L
+for batch_idx, batch in enumerate(train_iter):
+    if batch_idx >20000:
+        break
+batch.text.shape
+class_decoy = (inputs.vocab.stoi['text'], inputs.vocab.stoi['video'])
+model_path = "../models/init_models"
+model_list = os.listdir(model_path)
+model = torch.load(join(model_path, model_list[0]), map_location=torch.device(0)).eval()
+from cd import *
+((batch.text ==class_decoy[0]) + (batch.text == class_decoy[1])).argmax(dim = 0)
+
+batch.text
+batch.text
+

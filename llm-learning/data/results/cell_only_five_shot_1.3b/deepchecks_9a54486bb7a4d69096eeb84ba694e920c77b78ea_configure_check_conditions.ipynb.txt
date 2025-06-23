@@ -1,0 +1,23 @@
+```python
+    # Rename folders
+    import os
+    import shutil
+
+    # Current directory
+    current_dir = os.getcwd()
+
+    # New directory name
+    new_dir_name = 'new_folder_name'
+
+    # New directory path
+    new_dir_path = os.path.join(current_dir, new_dir_name)
+
+    # Rename the current directory
+    os.rename(current_dir, new_dir_path)
+
+    # Check if the new directory was created
+    if os.path.exists(new_dir_path):
+        print(f'Directory {new_dir_name} has been renamed to {new_dir_path}')
+    else:
+        print(f'Failed to rename the directory {current_dir} to {new_dir_path}')
+    ```

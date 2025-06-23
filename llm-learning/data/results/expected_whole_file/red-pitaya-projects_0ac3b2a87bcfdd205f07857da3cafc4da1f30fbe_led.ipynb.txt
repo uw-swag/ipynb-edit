@@ -1,0 +1,29 @@
+<Cell_0>
+from redpitaya.overlay.mercury import mercury as FPGA
+overlay = FPGA()
+<\Cell_0>
+<Cell_1>
+LED = FPGA.led
+<\Cell_1>
+<Cell_2>
+led1 = LED(1, 0)
+<\Cell_2>
+<Cell_3>
+led1.write(1) 
+<\Cell_3>
+<Cell_4>
+led1.write(0)
+<\Cell_4>
+<Cell_5>
+import time
+<\Cell_5>
+<Cell_6>
+for _ in range(10):
+    led1.write(1)
+    time.sleep(0.5)
+    led1.write(0)
+    time.sleep(0.5)
+<\Cell_6>
+<Cell_7>
+led1.close()
+<\Cell_7>

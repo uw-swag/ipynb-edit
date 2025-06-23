@@ -1,0 +1,56 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add missing data imputation for missing age"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.tabular import *
+<\Cell_1>
+<Cell_2>
+# ! {sys.executable} -m pip install kaggle --upgrade
+<\Cell_2>
+<Cell_3>
+# ! mkdir -p ~/.kaggle/
+# ! mv kaggle.json ~/.kaggle/
+# ! chmod 600 ~/.kaggle/kaggle.json
+<\Cell_3>
+<Cell_4>
+path = Config.data_path()/'titanic'
+path.mkdir(parents=True, exist_ok=True)
+path
+<\Cell_4>
+<Cell_5>
+# ! kaggle competitions download -c titanic -f train.csv -p {path}  
+# ! kaggle competitions download -c titanic -f test.csv -p {path}  
+<\Cell_5>
+<Cell_6>
+path.ls()
+<\Cell_6>
+<Cell_7>
+dataframe_train = pd.read_csv(path/'train.csv')
+dataframe_test = pd.read_csv(path/'test.csv')
+dataframe_train.shape, dataframe_test.shape
+<\Cell_7>
+<Cell_8>
+dataframe_train.sample(10)
+<\Cell_8>
+<Cell_9>
+dataframe_test.sample(10)
+<\Cell_9>
+<Cell_10>
+dataframe_train.describe()
+<\Cell_10>
+<Cell_11>
+dataframe_train.describe(include='O')
+<\Cell_11>
+<Cell_12>
+dataframe_test.describe()
+<\Cell_12>
+<Cell

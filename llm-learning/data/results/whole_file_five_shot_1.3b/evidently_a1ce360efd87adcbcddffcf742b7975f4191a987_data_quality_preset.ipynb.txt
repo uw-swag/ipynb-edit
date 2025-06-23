@@ -1,0 +1,35 @@
+```python
+    # Adding DataQualityPreset
+    from databricks import kubernetes
+
+    # Create a Kubernetes client
+    kc = kubernetes.KubernetesClient(
+        host="https://my-cluster-url",
+        token="my-token",
+        verify_ssl=False
+    )
+
+    # Define the Data Quality Preset
+    data_quality_preset = {
+        "name": "my-data-quality-preset",
+        "description": "My data quality preset",
+        "preset_type": "data_quality",
+        "preset_parameters": {
+            "data_quality_parameters": {
+                "reject_list": [
+                    {
+                        "name": "reject_column1",
+                        "reject_values": ["value1", "value2"]
+                    },
+                    {
+                        "name": "reject_column2",
+                        "reject_values": ["value3", "value4"]
+                    }
+                ]
+            }
+        }
+    }
+
+    # Create the Data Quality Preset
+    kc.create_data_quality_preset(data_quality_preset)
+    ```

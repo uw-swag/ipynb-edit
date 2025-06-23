@@ -1,0 +1,30 @@
+```python
+    import matplotlib.pyplot as plt
+    from wordcloud import WordCloud
+
+    regexp = r"[ก-๙a-zA-Z']+"
+
+    text = "สักวา หวาน อื่น มี หมื่น แสน ไม่ เหมือนแม้น พจมาน ที่ หวาน หอม กลิ่นประเทียบ เปรียบดวง พวงพะยอม อาจ จะ น้อม จิต โน้ม"
+
+    path = '/content/THSarabunNew.ttf'
+
+    wordcloud = WordCloud(
+                          font_path=path, 
+                          relative_scaling = 0.3,
+                          min_font_size=1,
+                          background_color="white",
+                          width=1024,
+                          height=768,
+                          colormap='hsv', 
+                          scale=3,
+                          font_step=6,
+                          collocations=False,
+                          regexp=regexp,
+                          margin=2
+                          ).generate(text)
+
+    fig, ax = plt.subplots(1, 1, figsize=(16, 12))
+    ax.imshow(wordcloud, interpolation='bilinear')
+    ax.axis("off")
+    fig.show()
+    ```

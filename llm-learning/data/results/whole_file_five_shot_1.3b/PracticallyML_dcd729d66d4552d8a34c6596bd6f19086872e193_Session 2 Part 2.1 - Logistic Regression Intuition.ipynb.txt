@@ -1,0 +1,26 @@
+```python
+    from sklearn.linear_model import LogisticRegression
+
+    class LogisticRegressionWithL2(LogisticRegression):
+        def __init__(self, C=1.0, penalty='l2', dual=False, tol=0.0001, 
+                     solver='newton-cg', max_iter=1000, random_state=None):
+            super(LogisticRegressionWithL2, self).__init__(C=C, dual=dual, tol=tol, 
+                                                          solver=solver, max_iter=max_iter, 
+                                                          random_state=random_state)
+            self.penalty = penalty
+            self.C = C
+
+        def fit(self, X, y, sample_weight=None):
+            if self.penalty == 'l2':
+                self.C = 1.0 / self.l1_ratio
+            super(LogisticRegressionWithL2, self).fit(X, y, sample_weight)
+
+            return self
+    ```
+    This code adds a new class `LogisticRegressionWithL2` that inherits from `sklearn.linear_model.LogisticRegression` and overrides the `fit` method to apply L2 regularization. The regularization strength `C` is set to `1.0 / l1_ratio`, where `l1_ratio` is the inverse of the regularization strength.
+
+    Please note that this is a simple implementation and may not be suitable for all use cases. For more complex tasks, you may want to consider using `sklearn.linear_model.LogisticRegressionCV` or `sklearn.linear_model.RidgeClassifier`.
+
+    Also, please note that the `LogisticRegressionWithL2` class is a simple example and may not be suitable for all use cases. For more complex tasks, you may want to consider using `sklearn.linear_model.LogisticRegressionCV` or `sklearn.linear_model.RidgeClassifier`.
+
+    Also, please note that the `LogisticRegressionWithL2` class is a simple example and may not be suitable for all use cases. For more complex tasks, you may

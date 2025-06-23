@@ -1,0 +1,40 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split 
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Select the features and the target
+    X = df['feature_column'].values.reshape(-1,1)
+    y = df['target_column'].values.reshape(-1,1)
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a linear regression model
+    regressor = LinearRegression()  
+
+    # Train the model
+    regressor.fit(X_train, y_train)
+
+    # Make predictions using the testing set
+    y_pred = regressor.predict(X_test)
+
+    # The coefficients
+    print('Coefficients: \n', regressor.coef_)
+
+    # The mean squared error
+    print('Mean squared error: %.2f'
+            % metrics.mean_squared_error(y_test, y_pred))
+    print('Coefficient of determination: %.2f'
+            % metrics.r2_score(y_test, y_pred))
+
+    # Plot outputs
+    plt.scatter(X_test, y_test,  color='gray')
+    plt.plot(X_test, y_pred, color='red', linewidth=2)
+    plt.show()
+    ```

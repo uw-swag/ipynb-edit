@@ -1,0 +1,41 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.cluster import KMeans
+    from sklearn.metrics import silhouette_score
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your dataset and what you want to achieve
+    # For example, you might want to remove stop words, lowercase, remove punctuation, etc.
+
+    # Vectorize the text data
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(df['text'])
+
+    # Perform KMeans clustering
+    kmeans = KMeans(n_clusters=2)
+    kmeans.fit(X)
+
+    # Evaluate the model
+    score = silhouette_score(X, kmeans.labels_)
+    print(f'Silhouette score: {score}')
+
+    # Get the top features
+    feature_names = vectorizer.get_feature_names_out()
+    top_features = kmeans.cluster_centers_.argsort()[:, ::-1]
+    top_features = [feature_names[i] for i in top_features]
+
+    print(f'Top features: {top_features}')
+    ```
+
+    This script uses the TfidfVectorizer to convert the text data into a matrix of TF-IDF features, and then uses KMeans to cluster the data. The silhouette score is used to evaluate the model, and the top features are printed out.
+
+    Please replace 'your_dataset.csv' with the path to your actual dataset.
+
+    Also, please note that the preprocessing step (like removing stop words, lowercasing, etc.) is a placeholder. You should replace it with your actual preprocessing steps.
+
+    The silhouette score and the top features are just examples. You may need to adjust them according to your specific needs.

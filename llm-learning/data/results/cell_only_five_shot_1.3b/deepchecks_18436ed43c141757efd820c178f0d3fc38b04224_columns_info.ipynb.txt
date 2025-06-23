@@ -1,0 +1,38 @@
+```python
+    # Importing heart-disease.csv
+    patient_data = pd.read_csv("../data/heart-disease.csv")
+    patient_data
+    # Exporting the patient_data DataFrame to csv
+    patient_data.to_csv("../data/exported-patient-data.csv")
+    patient_data
+
+    # Importing car sales data with missing values
+    car_sales_missing = pd.read_csv("../data/car-sales-missing-data.csv")
+    car_sales_missing
+    # Fill Odometer column missing values with mean
+    car_sales_missing["Odometer"].fillna(car_sales_missing["Odometer"].mean(), inplace=True)
+    car_sales_missing
+    # Remove missing data
+    car_sales_missing.dropna(inplace=True)
+    car_sales_missing
+
+    # Create a column from a Python list
+    engine_sizes = [1.3, 2.0, 3.0, 4.2, 1.6, 1, 2.0, 2.3, 2.0, 3.0]
+    car_sales["Engine Size"] = engine_sizes
+    car_sales
+
+    # Sample car_sales
+    car_sales_sampled = car_sales.sample(frac=1)
+    car_sales_sampled
+    # Reset the indexes of car_sales_sampled
+    car_sales_sampled.reset_index()
+
+    # Change the Odometer values from kilometres to miles
+    car_sales["Odometer (KM)"].apply(lambda x: x / 1.6)
+    car_sales
+    # Reassign the Odometer column to be miles instead of kilometers
+    car_sales["Odometer (KM)"] = car_sales["Odometer (KM)"].apply(lambda x: x / 1.6)
+    car_sales
+
+    # Drop the Price per KM column
+    car_sales

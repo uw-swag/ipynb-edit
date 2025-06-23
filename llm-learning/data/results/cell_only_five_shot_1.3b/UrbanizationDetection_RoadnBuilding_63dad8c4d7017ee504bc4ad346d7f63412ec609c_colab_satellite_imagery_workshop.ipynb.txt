@@ -1,0 +1,33 @@
+```python
+    import os
+    import json
+    from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+    materials_in = []
+    current_folder = os.getcwd()
+    input_folder = "uploads"
+    for file in ["Ni.json", "Gr.json"]:
+        with open(f"{current_folder}/{input_folder}/{file}", "r") as f:
+            data = f.read()
+            materials_in.append(json.loads(data))
+
+    if "materials_in" in globals():
+        pymatgen_materials = [to_pymatgen(item) for item in materials_in]
+        if USE_CONVENTIONAL_CELL : pymatgen_materials = [SpacegroupAnalyzer(item).get_conventional_standard_structure() for item in pymatgen_materials]
+    for material in pymatgen_materials:
+        print(material, "\n")
+
+    optimizer = OPTIMIZER_MAP[SETTINGS["RELAXATION_PARAMETERS"]["RELAXER"]]
+    calculator = CALCULATOR_MAP[SETTINGS["RELAXATION_PARAMETERS"]["CALCULATOR"]]
+
+    results = []
+    # Cycle through HKL indices for substrate and (0,0,1) for layer
+    for h in range(0, MAX_MILLER["H"] + 1):
+        for k in range(0, MAX_MILLER["K"] + 1):
+            for l in range(0, MAX_MILLER["L"] + 1):
+                if h == 0 and k == 0 and l == 0:
+                    continue
+                SETTINGS["SUBSTRATE_PARAMETERS"]["MILLER_INDICES"] = (h, k, l)
+
+                print(
+                    f"Creating interface for substrate ({h},{k},{l}) and layer {SETTINGS['LAYER_PARAMETERS']['MILLER_INDICES']}")
+                interface, relaxed_energy, interface_energy = create_relaxed_interface_with

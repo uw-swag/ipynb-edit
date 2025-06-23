@@ -1,0 +1,42 @@
+```
+    from redpitaya.overlay.mercury import mercury as overlay
+    import IPython.display as ipd
+    import matplotlib.pyplot as plt
+
+    fpga = overlay()
+
+    in2 = fpga.osc(1, 1.0)
+
+    in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+
+    in2.trigger_pre = 0
+    in2.trigger_post = in2.buffer_size
+
+    in2.reset()
+    in2.start()
+    in2.trigger()
+
+    while in2.status_run():
+        pass
+
+    print('Recording complete')
+
+    data = in2.data(in2.buffer_size)
+
+    plt.plot(data)
+    plt.show()
+
+    import pydub 
+    import numpy as np
+
+    def read(file):
+        a = pydub.AudioSegment.from_wav(file)
+        y = np.array(a.get_array_of_samples())
+        if a.channels == 2:
+            y = y.reshape((-1, 2))
+        return np.float32(y) / 2**15
+
+    np_sound = read('/tmp/stream_files/data_file_2020-06-04_16-09-28.wav')
+
+    ipd.Audio(np_sound, rate=48000)
+    ```

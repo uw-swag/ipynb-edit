@@ -1,0 +1,642 @@
+<Cell_0>
+
+
+!pip install markdown2
+from __future__ import print_function
+from nltk.stem.snowball import SnowballStemmer
+import string
+from nltk.tag import pos_tag
+from gensim import corpora, models, similarities
+from sklearn.externals import joblib
+from sklearn.metrics import euclidean_distances
+from sklearn.metrics.pairwise import cosine_similarity
+import colorsys
+import markdown2
+
+
+import seaborn as sns
+from scipy.sparse import coo_matrix
+from sklearn.metrics import silhouette_samples, silhouette_score
+import sys
+from operator import itemgetter
+import time
+from tqdm.auto import tqdm
+import re
+
+from datetime import datetime
+from nltk.corpus import stopwords
+from nltk import word_tokenize, sent_tokenize
+from nltk.stem import PorterStemmer
+from nltk import pos_tag
+import nltk
+import math
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
+from matplotlib import figure
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.cluster import KMeans
+from sklearn import metrics
+from IPython.display import display, HTML
+
+import numpy as np  ##20.2
+import pandas as pd
+from pandas.io.common import EmptyDataError
+
+import matplotlib
+from pathlib import Path
+import shutil
+
+import ipywidgets as widgets
+
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+!rm -rf Text_ML_Classification_UMN
+!git clone https://github.com/Dkreitzer/Text_ML_Classification_UMN
+
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/AAR_Corp_.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/2U_Inc_.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/3M_Company.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/ADT_Inc_.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/180_Degree_Capital_Corp_.txt", 'Text_ML_Classification_UMN/Analyze')
+
+<\Cell_1>
+<Cell_2>
+def make_pipeline(NUMBER_OF_DOCS):
+    doclist = []
+    names = []
+    # %cd "
+    pathlist = Path(
+        "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+
+    for path in tqdm(pathlist):
+        path_in_str = str(path)
+    #     print(path_in_str)
+        name = path_in_str.split(".")[0].split("/")[3]
+        names.append(name.replace("_", " "))
+        # TODO SPLIT PATH TO COMPANY NAME, make Index
+        file = open(path, "r", encoding= 'Windows-1252')
+        # print "Output of Readlines after appending"
+        text = file.readlines()
+    #     print(text[:10])
+        doclist.append(text[0])
+      
+      
+            
+    df_to_split = pd.DataFrame(list(zip(names, doclist)),
+                               columns=['Company', 'Text'])
+    split_df = df_to_split.sample(n=NUMBER_OF_DOCS, random_state=42)
+    doclist, names =  split_df["Text"].tolist(), split_df["Company"].tolist()
+    print(split_df.head())
+    
+    
+    
+    return doclist, names
+
+<\Cell_2>
+<Cell_3>
+doclist, names = make_pipeline(1000)
+<\Cell_3>
+<Cell_4>
+def transform_tokens(doclist):
+    token_list = []
+    for doc in tqdm(doclist, desc="Tokenizing", leave=True, position=0):
+        dirty_tokens = nltk.sent_tokenize(doc)
+        token_list += [dirty_tokens]
+    return token_list
+<\Cell_4>
+<Cell_5>
+tokens = transform_tokens(doclist)
+tokens[0][:5]
+<\Cell_5>
+<Cell_6>
+import string
+def transform_filtered(token_list, doclist, names):
+
+    punc = ['.', ',', '"', "'", '?', '!', ':',
+            ';', '(', ')', '[', ']', '{', '}', "%"]
+    more_stops = ['\t',
+                  '\\t\\t\\', '\\t\\t\\t',
+                  '<U+25CF>', '<u+feff>',  '[1]', 'feff', '1a', 'item']
+    maybe_bad_stops = ['may', 'could',  'contents',
+                       'table', 'time', '25cf', 'factors', 'risk']
+    stopwords_list = stopwords.words(
+        'english') + more_stops + punc + maybe_bad_stops
+    filtered_tokens = []
+    names_list = []
+    
+    if type(token_list) != list:
+        token_list = [token_list]
+    index = 0
+              
+    for document in tqdm(token_list, desc="Filtering Documents"):
+        name = names[index]
+        for token in document:
+            filtered_token = [word.lower() for word in token.split(" ") if word.lower() not in stopwords_list and word.isalpha()]
+            filtered_token = ' '.join(filtered_token)
+            if len(filtered_token) != 0:
+                names_list.append(name)
+                filtered_tokens.append(filtered_token)
+        index += 1
+    
+    return filtered_tokens, names_list, stopwords_list
+<\Cell_6>
+<Cell_7>
+filtered_tokens, names_list, stopwords_list = transform_filtered(tokens, doclist, names)
+filtered_tokens[:10]
+<\Cell_7>
+<Cell_8>
+def transform_stemming(filtered_tokens):
+    stemmed = []
+    for token in tqdm(filtered_tokens, desc="Stemming"):
+        sentence = []
+        stemmed_token = [PorterStemmer().stem(word) for word in token.split(" ")]
+        stemmed_token = [word for word in stemmed_token if word not in stopwords_list]
+#         stemmed_token = [LancasterStemmer().stem(word) for word in token.split(" ")]
+#         stemmed_token = [SnowballStemmer('english').stem(word) for word in token.split(" ")]
+
+        stemmed_token = ' '.join(stemmed_token)
+        stemmed.append(stemmed_token)
+
+    return stemmed
+<\Cell_8>
+<Cell_9>
+stemmed = transform_stemming(filtered_tokens)
+stemmed[:5]
+<\Cell_9>
+<Cell_10>
+def transform_vectorize(stemmed, smallest_ngram, largest_ngram):
+
+    vectorizer = TfidfVectorizer(stop_words=stopwords_list,
+                                 ngram_range=(smallest_ngram, largest_ngram), max_df=0.55, min_df=0.01)
+#     vectorizer = CountVectorizer(stop_words=stopwords_list,
+#                                  ngram_range=(smallest_ngram, largest_ngram), max_df=0.75, min_df=0.01)
+    sparseMatrix = vectorizer.fit_transform(stemmed)
+    return sparseMatrix, vectorizer
+<\Cell_10>
+<Cell_11>
+smallest_ngram = 1
+largest_ngram = len(max(tokens, key=len))
+%time sparseMatrix, vectorizer = transform_vectorize(stemmed, smallest_ngram, largest_ngram)
+<\Cell_11>
+<Cell_12>
+vectorizer
+<\Cell_12>
+<Cell_13>
+least_used = dict(sorted(vectorizer.vocabulary_.items(),
+            key=itemgetter(1), reverse=False)[:5])
+most_used = dict(sorted(vectorizer.vocabulary_.items(),
+            key=itemgetter(1), reverse=True)[:5])
+print("Most Common Words", most_used)
+print("Least Common Words", least_used)
+
+
+##TODO GET VALUES NOT INDEX
+<\Cell_13>
+<Cell_14>
+
+def plot_coo_matrix(m):
+    if not isinstance(m, coo_matrix):
+        m = coo_matrix(m)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, facecolor='black')
+    ax.plot(m.col, m.row, 's', color='white', ms=1)
+    ax.set_xlim(0, m.shape[1])
+    ax.set_ylim(0, m.shape[0])
+    ax.set_aspect('equal')
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.invert_yaxis()
+    ax.set_aspect('equal')
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return ax
+<\Cell_14>
+<Cell_15>
+sparseMatrix
+<\Cell_15>
+<Cell_16>
+plot_coo_matrix(sparseMatrix).figure.show()
+<\Cell_16>
+<Cell_17>
+from sklearn.model_selection import GridSearchCV
+model = KMeans(init='k-means++', random_state=42, n_init=15
+                   )
+param_grid = {'max_iter': [10, 50, 100, 150, 200, 300, 350, 400, 500],
+             'n_clusters': [25,30, 33, 35],
+             }
+grid = GridSearchCV(model, param_grid, verbose=3, n_jobs=8)
+grid.fit(sparseMatrix)
+
+lids = model.cluster_centers_
+
+score = model.score(sparseMatrix)
+silhouette_score = metrics.silhouette_score(sparseMatrix, labels, metric='euclidean')
+<\Cell_17>
+<Cell_18>
+# # List the best parameters for this dataset
+print(grid.best_params_)
+# # List the best score
+print(grid.best_score_)
+<\Cell_18>
+<Cell_19>
+def estimator_cluster(sparseMatrix, vectorizer):
+    truek = 35  # FROM GRID SEARCH
+    model = KMeans(n_clusters=truek, init='k-means++',
+                   max_iter=50, n_init=1, random_state=42,
+                   )
+    model.fit(sparseMatrix)
+
+    model_time = datetime.now().strftime("%b%d-%I%M%p")
+    joblib.dump(model,  f'Text_ML_Classification_UMN/Model/model{model_time}.pkl')
+    joblib.dump(vectorizer,  f'Text_ML_Classification_UMN/Model/vec{model_time}.pkl')
+    order_centroids = model.cluster_centers_.argsort()[:, ::-1]
+    terms = vectorizer.get_feature_names()
+
+    return terms, order_centroids, model, truek, model_time
+<\Cell_19>
+<Cell_20>
+# THIS TAKES ~~ 1m per 100 documents
+%time terms, order_centroids, model, truek, model_time = estimator_cluster(sparseMatrix, vectorizer)
+<\Cell_20>
+<Cell_21>
+def move_to_history():
+    pathlist = Path(
+        "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+
+    for path in tqdm(pathlist):
+        shutil.move(str(path), 'Text_ML_Classification_UMN/History/Text_Files_History')
+move_to_history()
+<\Cell_21>
+<Cell_22>
+def estimator_ppscore(model):
+    labels = model.labels_
+    centroids = model.cluster_centers_
+
+    print(f"Model Generated at {model_time}")
+
+    print("Cluster id labels for inputted data")
+    print(labels)
+    print("Centroids data")
+    #print (centroids)
+
+    kmeans_score = model.score(sparseMatrix)
+    print("Score (Opposite of the value of X on the K-means objective, \n",
+          "which is Sum of distances of samples to their closest cluster center):")
+    print(kmeans_score)
+
+    silhouette_score = metrics.silhouette_score(
+        sparseMatrix, labels, metric='euclidean')
+
+    print("Silhouette_score: ", silhouette_score)
+
+    
+    
+    return kmeans_score, silhouette_score
+
+<\Cell_22>
+<Cell_23>
+def estimator_load_model(model_time):
+      
+      vectorizer = joblib.load(f'Text_ML_Classification_UMN/Model/vec{model_time}.pkl')
+      model = joblib.load(f'Text_ML_Classification_UMN/Model/model{model_time}.pkl')
+      estimator_ppscore(model)
+      return model, vectorizer
+<\Cell_23>
+<Cell_24>
+
+pathlist = Path(
+        "Text_ML_Classification_UMN/Model/").glob('**/*.pkl')
+# times = []
+
+times = set([str(path).split(".pkl")[0].split("/")[2].replace(
+        "model", "").replace("vec", "") for path in pathlist])
+#Dropdown Widget
+selection = widgets.Dropdown(
+        options=times,
+        description='Available Models:',
+        disabled=False,
+    )
+display(selection)
+
+
+<\Cell_24>
+<Cell_25>
+model_time = selection.value
+model, vectorizer = estimator_load_model(model_time)
+<\Cell_25>
+<Cell_26>
+
+#  https://stackoverflow.com/questions/876853/generating-color-ranges-in-python
+
+
+def get_N_HexCol(N):
+    HSV_tuples = [(x * 1.0 / N, 0.5, 0.5) for x in range(N)]
+    hex_out = []
+    for rgb in HSV_tuples:
+        rgb = map(lambda x: int(x * 255), colorsys.hsv_to_rgb(*rgb))
+        hex_out.append('#%02x%02x%02x' % tuple(rgb))
+    return hex_out
+
+nclosest_words_to_show = 6
+colormap = get_N_HexCol(truek)
+
+
+
+for label in range(truek):
+    nclosest_words = []
+    for ind in order_centroids[label, :nclosest_words_to_show]:
+        nclosest_words.append(terms[ind])
+    color = colormap[label]
+    display(HTML(f'<font color="{color}">Cluster {label}</font>'))
+    display(HTML(f'<font color="{color}">{nclosest_words}</font>'))
+
+<\Cell_26>
+<Cell_27>
+def estimator_predict_string(string):
+    empty_list = ["string"]
+    print('Input String: %s' % string)
+    print('\n')
+    print('Prediction:')
+    tokens = transform_tokens(empty_list)
+    filtered_tokens, names_list, stopwords_list = transform_filtered(tokens, empty_list, empty_list)
+    stemmed = transform_stemming(filtered_tokens)
+    X = vectorizer.transform(stemmed)
+    predicted = model.predict(X)
+    print('kmeans prediction: %s' % predicted)
+    print("closest centroid terms :")
+    for ind in order_centroids[predicted[0], :10]:
+        print(' %s' % terms[ind])
+
+<\Cell_27>
+<Cell_28>
+estimator_predict_string('The hackers stole all our bitcoin!')
+<\Cell_28>
+<Cell_29>
+# SUMMARIZATION OF CORPORATE RISK FACTOR DISCLOSURE THROUGH TOPIC MODELING by Bao, Datta
+strings = [
+    'Topic 0: investment, property, distribution, interest, agreement',
+    'Topic 1: regulation, change, law, financial, operation, tax, accounting ',
+    'Topic 2: gas, price, oil, natural, operation, production Input prices risks ',
+    'Topic 3: stock, price, share, market, future, dividend, security, stakeholder ',
+    'Topic 4: cost, regulation, environmental, law, operation, liability',
+    'Topic 5: control, financial, internal, loss, reporting, history ',
+    'Topic 6: financial, litigation, operation, condition, action, legal, liability, regulatory, claim, lawsuit'
+    'Topic 7: competitive, industry, competition, highly',
+    'Topic 8: cost, operation, labor, operating, employee, increase, acquisition ',
+    'Topic 9: product, candidate, development, approval, clinical, regulatory',
+    'Topic 10: tax, income, asset, net, goodwill, loss, distribution, impairment, intangible ',
+    'Topic 11: interest, director, officer, trust, combination, share, conflict ',
+    'Topic 12: product, liability, claim, market, insurance, sale, revenue Potential defects in products',
+    'Topic 13: loan, real, estate, investment, property, market, loss, portfolio ',
+    'Topic 14: personnel, key, retain, attract, management, employee ',
+    'Topic 15: stock, price, operating, stockholder, fluctuate, interest, volatile  ',
+    'Topic 16: acquisition, growth, future, operation, additional, capital, strategy ',
+    'Topic 17: condition, economic, financial, market, industry, change, affected, downturn, demand Macroeconomic risks ',
+    'Topic 18: system, service, information, failure, product, operation, software, network, breach, interruption Disruption of operations'
+    'Topic 19: cost, contract, operation, plan, increase, pension, delay',
+    'Topic 20: customer, product, revenue, sale, supplier, relationship, key, portion, contract, manufacturing, rely Rely on few large customers',
+    'Topic 21: property, intellectual, protect, proprietary, technology, patent, protection, harm',
+    'Topic 22: product, market, service, change, sale, demand, successfully, technology, competition Volatile demand and results',
+    'Topic 23: provision, law, control, change, stock, prevent, stockholder, Delaware, charter, delay, bylaw',
+    'Topic 24: regulation, government, change, revenue, contract, law, service',
+    'Topic 25: capital, credit, financial, market, cost, operation, rating, access, liquidity, downgrade ',
+    'Topic 26: debt, indebtedness, cash, obligation, financial, credit, ',
+    'Topic 27: operation, international, foreign, currency, rate, fluctuation',
+    'Topic 28: loss, insurance, financial, loan, reserve, operation, cover',
+    'Topic 29: operation, natural, facility, disaster, event, terrorist, weather ']
+topics = [topic.split(":")[1] for topic in strings]
+<\Cell_29>
+<Cell_30>
+targets = {
+    "Shareholder’s interest risk": topics[0],
+    "Regulation changes(accounting)": topics[1],
+    "Stakeholder’s profit": topics[2],
+    "Regulation changes(environment)": topics[3],
+    "Legal Risks": topics[4],
+    "Financial condition risks ": topics[5],
+    " Potential/Ongoing Lawsuits": topics[6],
+    "market Competition risks": topics[7],
+    "**Labor cost ": topics[8],
+    " New product introduction risks ": topics[9],
+    "**Accounting,  +Restructuring risks ": topics[10],
+    "**Management": topics[11],
+    " Potential defects in products": topics[12],
+    "**Investment": topics[13],
+    "Human resource risks": topics[13],
+    "Volatile stock price risks": topics[14],
+    "Merger & Acquisition risks": topics[15],
+    " +Industry is cyclical": topics[16],
+    " **Postpone ":  topics[17],
+    " +Infrastructure risks": topics[18],
+    "+Suppliers risks +Downstream risks": topics[19],
+    "license Intellectual property risks": topics[20],
+    "+Licensing related risks' ": topics[21],
+    "+ Competition risks ": topics[22],
+    "*Potential/Ongoing Lawsuits*": topics[23],
+    "Regulation changes": topics[24],
+    "Credit risks": topics[25],
+    "covenant Funding risks ": topics[26],
+    "International risks": topics[27],
+    #     "Insurance" : topics[28],
+    #     "Catastrophes" : topics[29]
+}
+<\Cell_30>
+<Cell_31>
+# for topic in topics:
+#     print(topic)
+#     estimator_predict_string(topic)
+<\Cell_31>
+<Cell_32>
+def estimator_predict_document(document, name):
+    dictionary_list = []
+    for counter, sentence in enumerate(document.split(".")):
+        if len(sentence) != 0:
+            vector_matrix = vectorizer.transform([sentence])
+            predicted_label = model.predict(vector_matrix)
+            sentence_len = len(sentence.split(" "))
+            sentence_info = {'company': name, 'sentence#': counter, 'text': sentence,
+                             'wordcount': sentence_len, 'label': predicted_label[0]}
+            dictionary_list.append(sentence_info)
+    dataframe = pd.DataFrame(dictionary_list)
+    dataframe["% of total"] = dataframe['wordcount'] / \
+        sum(dataframe['wordcount'])
+#         (name, sentence, predicted_label)
+    return(dataframe)
+<\Cell_32>
+<Cell_33>
+
+<\Cell_33>
+<Cell_34>
+def prep_for_heatmap(muliple_company_frame):
+    company_clusters = muliple_company_frame.groupby(['label', 'company']).agg(
+        {'% of total': 'sum'}).unstack(level='company').fillna(0).T
+
+    company_clusters = company_clusters.reset_index(level=0, drop=True)
+    return company_clusters
+
+<\Cell_34>
+<Cell_35>
+ import os
+
+#@title ## Save Documents
+To_Master_List= True #@param ["False", "True"] {type:"raw"}
+To_New_List =  True #@param ["False", "True"] {type:"raw"}
+
+def analyze_documents():
+  doclist = []
+  names = []
+  # %cd "
+  pathlist = Path(
+      "Text_ML_Classification_UMN/Analyze").glob('**/*.txt')
+# try:
+  for path in tqdm(pathlist):
+      path_in_str = str(path)
+  #     print(path_in_str)
+      name = path_in_str.split(".")[0].split("/")[2]
+      names.append(name.replace("_", " "))
+      # TODO SPLIT PATH TO COMPANY NAME, make Index
+      file = open(path, "r", encoding= 'Windows-1252')
+      # print "Output of Readlines after appending"
+      text = file.readlines()
+      doclist.append(text[0])
+
+
+
+  analysis_df = pd.DataFrame(list(zip(names, doclist)),
+                             columns=['Company', 'Text'])
+
+  analysis_df.head()
+
+  frames = []
+  for document, name in zip(doclist, names):
+      frame = estimator_predict_document(document, name)
+      frames.append(frame)
+
+  muliple_company_frame = pd.concat(frames)
+  muliple_company_frame.head()
+  grouped_frame = muliple_company_frame.groupby(
+    ['company', 'label']).agg({'% of total': 'sum'}).reset_index()
+  company_clusters = prep_for_heatmap(muliple_company_frame)
+  if To_Master_List == True:
+      # if file does not exist write header 
+      master_path = "Text_ML_Classification_UMN/Predicting/CSV/master.csv"
+      
+      with open(master_path, 'a') as f:
+          company_clusters.to_csv(f, header=f.tell()==0)
+      
+      ##!! THIS IS CAUSING DUPLICATES ##
+      
+      
+      
+#       if not os.path.isfile(master_path):
+#          company_clusters.to_csv(master_path, header=label)
+#       else: # else it exists so append without writing the header
+#         master = pd.read_csv(master_path)
+#         pd.concat([master, company_clusters], ignore_index=True).dropna().to_csv(master_path, index=False)
+
+#          company_clusters.to_csv('filename.csv', mode='a', header=True)
+    
+#       try:
+#           master = pd.read_csv('Text_ML_Classification_UMN/Predicting/CSV/master.csv')
+#           master = pd.concat([master, company_clusters.T]
+#                    ).drop_duplicates(names).set_index("label")
+#           master.to_csv('master.csv', header=True, mode="a")
+#           print('MASTER UPDATED')
+#       except FileNotFoundError:
+#            company_clusters.T.to_csv('Text_ML_Classification_UMN/Predicting/CSV/master.csv',header=True)
+
+    
+    
+  if To_New_List == True:
+    analysis_time = datetime.now().strftime("%b%d-%I%M%p")
+
+    with open(f'Text_ML_Classification_UMN/Predicting/CSV/{analysis_time}.csv', 'w') as f:
+        company_clusters.T.to_csv(f, header=True)
+#   except IndexError:
+#     print("Are there any files in /Analyze?")
+#     company_clusters, grouped_frame = len(names), False
+  return company_clusters, grouped_frame, muliple_company_frame
+
+<\Cell_35>
+<Cell_36>
+
+company_clusters, grouped_frame, muliple_company_frame = analyze_documents()
+company_clusters.T.head()
+
+<\Cell_36>
+<Cell_37>
+
+master = pd.read_csv('Text_ML_Classification_UMN/Predicting/CSV/master.csv')
+master = master.set_index("company")
+master
+<\Cell_37>
+<Cell_38>
+company_clusters.index.values
+to_plot = master.head()reset_index(drop=True).T
+to_plot.head()
+<\Cell_38>
+<Cell_39>
+f = plt.figure()
+master.plot(kind='bar', stacked=True, figsize=(15,10), use_index=True, ax=f.gca())
+plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+
+plt.show()
+<\Cell_39>
+<Cell_40>
+def plot_heatmap(company_clusters):
+    map_time = datetime.now().strftime("%b%d-%I%M%p")
+
+    fig2, ax2 = plt.subplots(figsize=(20, 14))
+    cmap = sns.light_palette('red', as_cmap=True)
+
+    sns.heatmap(company_clusters, ax=ax2, cmap=cmap)
+    
+
+    ax2.set_xlabel('Label', fontdict={'weight': 'bold', 'size': 14})
+    ax2.set_ylabel('Company', fontdict={'weight': 'bold', 'size': 14})
+    for label in ax2.get_xticklabels():
+        label.set_size(16)
+        label.set_weight("bold")
+    for label in ax2.get_yticklabels():
+        label.set_size(16)
+        label.set_weight("bold")
+    plt.savefig(
+        "Text_ML_Classification_UMN/Predicting/Images/Heatmap{map_time}.jpg",
+        dpi=None, facecolor='w', edgecolor='w',
+                orientation='portrait', papertype=None, format=None,
+                transparent=False, bbox_inches=None, pad_inches=0.1,
+                frameon=None, metadata=None)
+
+    def onhover(event):
+        print('%s click: button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %
+              ('double' if event.dblclick else 'single', event.button,
+               event.x, event.y, event.xdata, event.ydata))
+    cid = fig2.canvas.mpl_connect('motion_notify_event', onhover)
+
+<\Cell_40>
+<Cell_41>
+plot_heatmap(company_clusters)
+
+<\Cell_41>
+<Cell_42>
+# coloring txt file
+for counter, company in enumerate(muliple_company_frame['company'].unique()):
+  print(counter, company)
+  company = muliple_company_frame['company'].unique()[counter]
+  companyFrame = muliple_company_frame[muliple_company_frame['company'] == company]
+  Html_file= open(f'Text_ML_Classification_UMN/Predicting/Text_Files/{company.replace(" ", "_")}',"w")
+  
+
+  for text, label in zip(companyFrame['text'], companyFrame['label']):
+      color = colormap[label]
+      html_str = HTML(f'<font color="{color}">' +
+                       text + f'  ({label})' + '</font>')
+      display(html_str)
+  Html_file.close()
+<\Cell_42>

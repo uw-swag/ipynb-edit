@@ -1,0 +1,39 @@
+
+<Cell_0>
+%%javascript
+IPython.OutputArea.auto_scroll_threshold = 9999;
+<\Cell_0>
+<Cell_1>
+from tensorflow.keras.datasets import mnist
+<\Cell_1>
+<Cell_2>
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+<\Cell_2>
+<Cell_3>
+x_train = x_train / 127.5 - 1
+x_test = x_test / 127.5 - 1
+<\Cell_3>
+<Cell_4>
+x_train.min(), x_train.max()
+<\Cell_4>
+<Cell_5>
+x_train = x_train.reshape(-1, 784)
+x_train.shape
+<\Cell_5>
+<Cell_6>
+import tensorflow as tf
+from tensorflow.keras.layers import Dense, LeakyReLU, Dropout, Input
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.initializers import RandomNormal
+import numpy as np
+import matplotlib.pyplot as plt
+<\Cell_6>
+<Cell_7>
+# gan에 입력되는 noise에 대한 dimension
+NOISE_DIM = 10
+
+# adam optimizer 정의, learning_rate = 0.0002, beta_1로 줍니다.
+# Vanilla Gan과 DCGAN에서 이렇게 셋팅을 해주는데
+# 이렇게 해줘야 훨씬 학습을 잘합니다.
+adam = Adam(l

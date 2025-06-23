@@ -1,0 +1,38 @@
+```python
+    import tensorflow as tf
+
+    class CustomLayer(tf.keras.layers.Layer):
+        def __init__(self, units, activation=None):
+            super(CustomLayer, self).__init__()
+            self.units = units
+            self.activation = activation
+
+        def build(self, input_shape):
+            self.w = self.add_weight(name='kernel', 
+                                     shape=(input_shape[1], self.units),
+                                     initializer='uniform',
+                                     trainable=True)
+            self.b = self.add_weight(name='bias', 
+                                     shape=(self.units,),
+                                     initializer='zeros',
+                                     trainable=True)
+
+        def call(self, x):
+            return self.activation(tf.matmul(x, self.w) + self.b)
+
+        def compute_output_shape(self, input_shape):
+            return (input_shape[0], self.units)
+    ```
+    In the above code, we have defined a custom layer in TensorFlow. This layer multiplies the input matrix with a weight matrix, adds a bias, and then applies an activation function.
+
+    You can use this custom layer in a Keras model like this:
+
+    ```python
+    model = tf.keras.models.Sequential()
+    model.add(CustomLayer(10, activation='relu'))
+    model.add(tf.keras.layers.Dense(10, activation='softmax'))
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+    ```
+
+    This will create a model with a custom layer, compile it, and then train it.

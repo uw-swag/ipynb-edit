@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message:" added resources to create_resources script"
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip3 install ../dist/AutoMLOps-1.0.0-py2.py3-none-any.whl
+<\Cell_0>
+<Cell_1>
+import json
+import pandas as pd
+from kfp.v2 import compiler, dsl
+from kfp.v2.dsl import pipeline, component, Artifact, Dataset, Input, Metrics, Model, Output, InputPath, OutputPath
+from google.cloud import aiplatform
+from google.cloud import aiplatform_v1
+import datetime
+
+from AutoMLOps import AutoMLOps
+<\Cell_1>
+<Cell_2>
+@component(
+    packages_to_install=[
+        "google-cloud-bigquery", 
+        "pandas",
+        "pyarrow",
+        "db_dtypes"
+    ],
+    base_image="python:3.9",
+    output_component_file=f"{AutoMLOps.OUTPUT_DIR}/create_dataset.yaml"
+)
+def create_dataset(
+    bq_table: str,
+    output_data_path: OutputPath("Dataset"),
+    project: str
+):
+    from google.cloud import bigquery
+    import pandas as pd
+    bq_client = bigquery.Client(project=project)
+
+
+    def get_query(bq_input_table: str) -> str:
+        """Generates BQ Query to read data.
+
+        Args:
+        bq_input_table: The full name of the bq input table to be read into
+        the dataframe (e.g. <project>.<dataset>.<table>)
+        Returns: A BQ query string.
+        """
+        return f"""
+        SELECT *
+        FROM `{bq_input_table}`
+        """
+
+    def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+        """Loads data from bq into

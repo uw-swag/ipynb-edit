@@ -1,0 +1,44 @@
+
+    Here is the updated code:
+
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import f1_score
+    from utils import plot_x_s, plot_x_s_proba
+    <\Cell_0>
+    <Cell_1>
+    def load_data():
+        train, valid, test = load_scar()
+        train_x, _, train_s = train
+        return train_x, train_s, valid, test
+    <\Cell_1>
+    <Cell_2>
+    def train_model(train_x, train_s):
+        clf = LogisticRegression(random_state=0).fit(train_x, train_s)
+        return clf
+    <\Cell_2>
+    <Cell_3>
+    def test_model(clf, test_x, test_s):
+        test_s_hat = clf.predict(test_x)
+        test_s_prob_hat = clf.predict_proba(test_x)[:, 1]
+        return test_s_hat, test_s_prob_hat
+    <\Cell_3>
+    <Cell_4>
+    def evaluate_model(test_s, test_s_hat):
+        f1 = f1_score(test_s, test_s_hat)
+        return f1
+    <\Cell_4>
+    <Cell_5>
+    def plot_results(test_x, test_s, test_s_hat, test_s_prob_hat):
+        plot_x_s(test_x, test_s)
+        plot_x_s(test_x, test_s_hat)
+        plot_x_s_proba(test_x, test_s_prob_hat)
+    <\Cell_5>
+    <Cell_6>
+    def main():
+        train_x, train_s, valid, test = load_data()
+        clf = train_model(train_x, train_s)
+        test_s_hat, test_s_prob_hat = test

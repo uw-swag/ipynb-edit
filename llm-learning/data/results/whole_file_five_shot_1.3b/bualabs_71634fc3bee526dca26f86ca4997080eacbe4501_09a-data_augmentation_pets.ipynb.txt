@@ -1,0 +1,43 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add demo for data augmentation"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.PETS)
+path_images = path/'images'
+filenames = get_image_files(path_images)
+<\Cell_2>
+<Cell_3>
+def get_databunch(transform):
+    batchsize = 32
+    np.random.seed(0)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+    return ImageDataBunch.from_name_re(path_images, 
+                                       filenames, 
+                                       regex_pattern, 
+                                       ds_tfms=transform, 
+                                       size=224, bs=batchsize).normalize(imagenet_stats)
+
+def get_ex(): return open_image(f'{path_images}/pug_147.jpg')
+
+def plots_f(rows, cols, width, height, **kwargs):
+    [get_ex().apply_tfms(transform[0], **kwargs).show(ax=ax) for i,ax in enumerate(plt.subplots(
+        rows,cols,figsize=(width,height))[1].flatten())]
+<\Cell_3>
+<Cell_4>
+transform = get_transforms(do_flip=True, flip_vert=False, max_rotate=15.0, max_zoom=1.2, max_lighting=0.25, max_warp=0.25, p_affine=0.8, p_lighting=0.8)
+databunch = get_databunch(transform)
+learner = cnn_learner(databunch, models.vgg16

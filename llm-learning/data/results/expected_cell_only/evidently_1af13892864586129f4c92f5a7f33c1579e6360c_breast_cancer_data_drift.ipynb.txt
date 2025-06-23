@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, CatTargetDriftTab, ProbClassificationPerformanceTab
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+reference, production, y_train, y_test = model_selection.train_test_split(bcancer_frame, 
+                                                                          bcancer.target, 
+                                                                          random_state = 0)
+model = ensemble.RandomForestClassifier(random_state = 11)
+model.fit(reference, y_train)
+train_probas = pd.DataFrame(model.predict_proba(reference))
+train_probas.columns = bcancer.target_names
+test_probas = pd.DataFrame(model.predict_proba(production))
+test_probas.columns = bcancer.target_names
+reference.reset_index(inplace=True, drop=True)
+reference['target'] = [bcancer.target_names[x] for x in y_train]
+merged_reference = pd.concat([reference, train_probas], axis = 1)
+
+production.reset_index(inplace=True, drop=True)
+production['target'] = [bcancer.target_names[x] for x in y_test]
+merged_production = pd.concat([production, test_probas], axis = 1)
+column_mapping = {}
+
+column_mapping['target'] = 'target'
+column_mapping['prediction'] = bcancer.target_names.tolist()
+column_mapping['numerical_features'] = bcancer.feature_names
+model_performance = Dashboard(merged_reference, merged_production, column_mapping = column_mapping, 
+                       tabs=[ProbClassificationPerformanceTab])
+model_performance.show()
+model_performance.save('reports/bcancer_prob_classification_performance.html')

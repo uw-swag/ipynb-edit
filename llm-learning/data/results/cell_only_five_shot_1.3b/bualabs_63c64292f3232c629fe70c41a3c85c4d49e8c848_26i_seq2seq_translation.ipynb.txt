@@ -1,0 +1,49 @@
+```python
+    import torch
+    from torch.nn import functional as F
+    from torch.utils.data import DataLoader
+    from torchvision import transforms
+    from torch.utils.data import Dataset
+    from torchvision.models import resnet50
+    from torch.optim import Adam
+    from torch.nn import CrossEntropyLoss
+    from torch.optim.lr_scheduler import StepLR
+
+    class MyDataset(Dataset):
+        def __init__(self, inputs, targets, outputs):
+            self.inputs = inputs
+            self.targets = targets
+            self.outputs = outputs
+
+        def __len__(self):
+            return len(self.inputs)
+
+        def __getitem__(self, idx):
+            return self.inputs[idx], self.targets[idx], self.outputs[idx]
+
+    def train_model(model, dataloader, criterion, optimizer, device):
+        model.train()
+        for inputs, targets, outputs in dataloader:
+            inputs, targets, outputs = inputs.to(device), targets.to(device), outputs.to(device)
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            loss.backward()
+            optimizer.step()
+
+    def test_model(model, dataloader, criterion, device):
+        model.eval()
+        total_loss = 0
+        with torch.no_grad():
+            for inputs, targets, outputs in dataloader:
+                inputs, targets, outputs = inputs.to(device), targets.to(device), outputs.to(device)
+                outputs = model(inputs)
+                total_loss += criterion(outputs, targets).item()
+        return total_loss / len(dataloader)
+
+    def main():
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model = resnet50(pretrained=True)
+        model = model.to(device)
+        criterion = CrossEntropyLoss()
+        optimizer = Adam(model

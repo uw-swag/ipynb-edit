@@ -1,0 +1,49 @@
+```python
+    <Cell_0>
+    import random
+    import numpy as np
+    import pandas as pd
+    import seaborn as sb
+    import datetime as dt
+    import pandas_profiling as pp
+
+    from scipy.stats import norm
+    from matplotlib import pyplot as plt
+    from sklearn.decomposition import PCA
+    from sklearn.pipeline import Pipeline
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, make_scorer
+    from sklearn.model_selection import train_test_split, GridSearchCV
+
+    class MyClass:
+        def __init__(self, seed):
+            self.seed = seed
+            random.seed(seed)
+
+        def load_data(self, filename):
+            n = sum(1 for line in open(filename)) - 1
+            s = 75000
+            skip = sorted(random.sample(range(1, n + 1), n - s))
+            hotelData = pd.read_csv('Expedia_Hotel_Data/train.csv', skiprows=skip).dropna().reset_index(drop=True)
+            return hotelData
+
+        def print_data_shape(self, data):
+            print('Dataset shape: {:,} columns and {:,} rows'.format(data.shape[1], data.shape[0]))
+
+        def display_data(self, data):
+            data.head()
+
+        def profile_data(self, data):
+            pp.ProfileReport(data).to_notebook_iframe()
+
+        def merge_data(self, destData, destinations):
+            tmp = destData['hotel_cluster']
+            destData = destData.drop(['hotel_cluster'], axis=1)
+            destData.insert(0, 'hotel_cluster', tmp)
+            return destData
+
+        def balance_data(self, data):
+            balData = data.groupby('hotel_cluster')
+            balData = pd.Data

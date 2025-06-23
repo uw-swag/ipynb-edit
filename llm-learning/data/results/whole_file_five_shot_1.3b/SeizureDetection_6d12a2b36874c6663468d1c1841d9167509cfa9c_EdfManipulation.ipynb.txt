@@ -1,0 +1,31 @@
+```
+    import numpy as np
+    import pandas as pd
+    import os
+    import pathlib
+    import pyedflib
+
+    def readEdfFile(pathToFile, channels):
+        f = pyedflib.EdfReader(pathToFile)
+        n = channels
+        signal_labels = f.getSignalLabels()[:channels-1]
+        sigbufs = np.zeros((f.getNSamples()[0],n))
+        for i in np.arange(n):
+            sigbufs[:,i] = f.readSignal(i)
+        f._close()
+        del i,f,n,signal_labels
+        return sigbufs
+
+    def get_seizure_period(file_location):
+        bytes_array = []
+        for b in pathlib.Path(file_location).read_bytes(): bytes_array.append(b)
+        return int(str(bin(bytes_array[38]))[2:]+str(bin(bytes_array[41]))[2:],2), bytes_array[49]
+
+    def read_and_store_data (dataset_folder, sample_rate, channels) :
+        path = os.path.join(os.getcwd(), dataset_folder)
+        os.chdir(dataset_folder)
+        # your code here
+        os.chdir('..')
+        os.chdir('..')
+        return df
+    ```

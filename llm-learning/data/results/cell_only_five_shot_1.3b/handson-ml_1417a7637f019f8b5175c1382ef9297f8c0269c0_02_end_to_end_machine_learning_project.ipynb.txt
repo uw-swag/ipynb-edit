@@ -1,0 +1,26 @@
+```python
+    from sklearn.model_selection import GridSearchCV
+
+    param_grid = [
+        # try 12 (3×4) combinations of hyperparameters
+        {'n_estimators': [3, 10, 30], 'max_features': [2, 4, 6, 8]},
+        # then try 6 (2×3) combinations with bootstrap set as False
+        {'bootstrap': [False], 'n_estimators': [3, 10], 'max_features': [2, 3, 4]},
+        # and finally try 3 (1×3) combinations with bootstrap set as True
+        {'bootstrap': [True], 'n_estimators': [10, 30], 'max_features': [4, 6, 8]},
+      ]
+
+    forest_reg = RandomForestRegressor(random_state=42)
+    # train across 5 folds, that's a total of (12+6+3)*5=150 rounds of training 
+    grid_search = GridSearchCV(forest_reg, param_grid, cv=5,
+                               scoring='neg_mean_squared_error')
+    grid_search.fit(housing_prepared, housing_labels)
+
+    # find the best parameters
+    grid_search.best_params_
+
+    # find the best model
+    grid_search.best_estimator_
+    ```
+
+    This code will find the best parameters for the RandomForestRegressor model and then use these parameters to train a new model. The best parameters are then printed out.

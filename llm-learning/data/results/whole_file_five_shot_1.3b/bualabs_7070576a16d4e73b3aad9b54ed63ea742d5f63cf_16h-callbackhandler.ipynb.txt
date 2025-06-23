@@ -1,0 +1,48 @@
+
+    The code you provided seems to be a part of a larger project, and it's not clear what the issue is. However, the code you provided seems to be missing some imports and functions. 
+
+    Here's the corrected version of your code:
+
+```python
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+
+import torch
+from torch import tensor
+from torch.nn import *
+import torch.nn.functional as F
+from torch.utils.data import *
+from fastai import datasets
+from fastai.metrics import accuracy
+import pickle, gzip, math, torch
+
+class Dataset(Dataset):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+    def __len__(self):
+        return len(self.x)
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+
+MNIST_URL='http://deeplearning.net/data/mnist/mnist.pkl'
+
+def get_data():
+    path = datasets.download_data(MNIST_URL, ext='.gz')
+    with gzip.open(path, 'rb') as f:
+        ((x_train, y_train), (x_valid, y_valid), _) = pickle.load(f, encoding='latin-1')
+    return map(tensor, (x_train, y_train, x_valid, y_valid))
+
+x_train, y_train, x_valid, y_valid = get_data()
+
+def normalize(x, m, s): 
+    return (x-m)/s
+
+train_mean, train_std = x_train.mean(), x_train.std()
+x_train = normalize(x_train, train_mean, train_std)
+x_valid = normalize(x_valid, train_mean, train_std)
+
+nh, bs = 100, 32
+n, m = x_train.shape
+c = (y_train.max()+1).numpy()
+loss_func = F

@@ -1,0 +1,24 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import DataQuality
+from evidently.metric_preset import TargetDriftPreset
+from evidently.metric_preset import RegressionPerformance
+from evidently.metric_preset import ClassificationPerformance
+num_target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+num_target_drift_report.run(reference_data=housing_ref, current_data=housing_cur)
+num_target_drift_report
+cat_target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+cat_target_drift_report.run(reference_data=iris_ref, current_data=iris_cur)
+cat_target_drift_report

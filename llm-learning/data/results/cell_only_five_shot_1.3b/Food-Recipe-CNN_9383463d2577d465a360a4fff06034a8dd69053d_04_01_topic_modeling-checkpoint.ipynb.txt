@@ -1,0 +1,33 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding code to move images to correct directory"
+    Original Code Cells:
+    '''
+    import os
+    THUMBNAIL_DIR = 'input/images/search_thumbnails/'
+    OLD_IMG_DIR = 'input/images/search_images/'
+    files_moved = 0
+    for filename in os.listdir(THUMBNAIL_DIR):
+        if filename.endswith(".jpg"):
+            comp_id = filename.split('-')[1]
+            cat_val = id_key_cat_value.get(comp_id, '_')
+            if cat_val == '_': continue
+            cat_val = cat_val.replace(' ', '_')
+            new_image_dest = cat_val+'-'+str(comp_id)+'-'+ str(filename.split('-')[2])+'.jpg'
+            movePic(THUMBNAIL_DIR+filename, 'input/images/images/'+cat_val+'/'+new_image_dest)
+            files_moved+=1
+            if files_moved%10000==0: print('+= 10000')
+    print(len([name for name in os.listdir('input/images/images/no_cat/') if name.endswith(".jpg")]))
+    ALL_IMGS_DIR = 'input/images/images/'
+
+    for directory_ in directories_names:
+        print('{} -> '.format(directory_), end='')
+        print(len([name for name in os.listdir(os.path.join(ALL_IMGS_DIR, directory_)) if name.endswith(".jpg")]), end='\n')
+
+    '''
+    ]
+
+    ### Response:
+    The code provided moves the images from the 'input/images/search_thumbnails/' directory to the 'input/images/images/' directory based on the category of the image. The images are moved to the sub-directory of 'input/images/images/' with the name of the category. If the category does not exist

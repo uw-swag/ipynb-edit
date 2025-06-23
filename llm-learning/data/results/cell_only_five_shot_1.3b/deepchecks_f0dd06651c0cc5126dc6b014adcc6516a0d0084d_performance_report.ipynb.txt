@@ -1,0 +1,42 @@
+```python
+    from deepchecks.tabular.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from deepchecks.tabular.checks.performance import PerformanceReport
+
+    # Split the dataset into train and test sets
+    train_set, test_set = train_test_split(dataset, test_size=0.2, random_state=42)
+
+    # Create a base dataset object
+    base_dataset = Dataset(data=train_set, target=train_set.target)
+
+    # Create a dataset object for the core components
+    core_dataset = Dataset(data=train_set.drop(['target'], axis=1), target=train_set.target)
+
+    # Create a dataset object for the base components
+    base_dataset = Dataset(data=train_set.drop(['target'], axis=1), target=train_set.target)
+
+    # Train the AdaBoost classifier
+    ada_classifier = AdaBoostClassifier()
+    ada_classifier.fit(core_dataset.data, core_dataset.target)
+
+    # Train the AdaBoost regressor
+    ada_regressor = AdaBoostRegressor()
+    ada_regressor.fit(core_dataset.data, core_dataset.target)
+
+    # Create a performance report
+    report = PerformanceReport(base_dataset, ada_classifier, ada_regressor)
+
+    # Generate the report
+    report.generate()
+
+    # Plot the report
+    report.plot()
+
+    # Show the plot
+    plt.show()
+
+    ```

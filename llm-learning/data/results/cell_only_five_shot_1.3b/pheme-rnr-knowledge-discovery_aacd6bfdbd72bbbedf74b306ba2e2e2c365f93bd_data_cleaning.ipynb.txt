@@ -1,0 +1,36 @@
+```python
+    # Adding graph-based features to thread-level data
+
+    # First, let's create some basic visualizations
+    # We'll use matplotlib to create a scatter plot of the data
+
+    plt.figure(figsize=(10,6))
+    plt.scatter(gw_thrds['src.followers_count'], gw_thrds['src.tweets_total'])
+    plt.xlabel('Followers Count')
+    plt.ylabel('Tweets Total')
+    plt.title('Followers Count vs Tweets Total')
+    plt.show()
+
+    # Next, let's create a scatter plot of the data with the first response time
+    plt.figure(figsize=(10,6))
+    plt.scatter(gw_thrds['src.followers_count'], gw_thrds['time_to_first_resp'])
+    plt.xlabel('Followers Count')
+    plt.ylabel('Time to First Response')
+    plt.title('Followers Count vs Time to First Response')
+    plt.show()
+
+    # Now, let's create a scatter plot of the data with the last response time
+    plt.figure(figsize=(10,6))
+    plt.scatter(gw_thrds['src.followers_count'], gw_thrds['time_to_last_resp'])
+    plt.xlabel('Followers Count')
+    plt.ylabel('Time to Last Response')
+    plt.title('Followers Count vs Time to Last Response')
+    plt.show()
+
+    # Now, let's create a scatter plot of the data with the response variance
+    plt.figure(figsize=(10,6))
+    plt.scatter(gw_thrds['src.followers_count'], gw_thrds['resp_var'])
+    plt.xlabel('Followers Count')
+    plt.ylabel('Response Variance')
+    plt.title('Followers Count vs Response Variance')
+    plt.show

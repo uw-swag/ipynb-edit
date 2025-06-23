@@ -1,0 +1,27 @@
+```
+    from atomai import atomnet
+    from atomai.utils import plot_coord
+    import numpy as np
+    trained_model_1 = atomnet.trainer(
+        images_all_1, labels_all_1, 
+        images_test_all_1, labels_test_all_1,
+        training_cycles=1000).run()
+    # Load "validation" data
+    expdata = dataset_1['validation_img']
+    # Get raw NN output
+    nn_input, nn_output = atomnet.predictor(
+        expdata, trained_model_1, use_gpu=True).run()
+    # Transform NN output into atomic coordinates
+    coordinates_1 = atomnet.locator(nn_output).run()
+    plot_coord(expdata, coordinates_1[0], fsize=12)
+    trained_model_2 = atomnet.trainer(
+        images_all_2, labels_all_2, 
+        images_test_all_2, labels_test_all_2,
+        training_cycles=1000).run()
+    # Get raw NN output
+    nn_input, nn_output = atomnet.predictor(
+        expdata, trained_model_2, use_gpu=True).run()
+    # Transform NN output into atomic coordinates
+    coordinates_2 = atomnet.locator(nn_output).run()
+    plot_coord(expdata, coordinates_2[0], fsize=12)
+    ```

@@ -1,0 +1,33 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName('example').getOrCreate()
+
+    # Load data from a CSV file
+    df = spark.read.format('csv').option('header', 'true').load('path/to/your/data.csv')
+
+    # Show the data
+    df.show()
+
+    # Filter data
+    filtered_df = df.filter(col('column_name') > 100)
+
+    # Show the filtered data
+    filtered_df.show()
+
+    # Save the data to a new CSV file
+    filtered_df.write.format('csv').option('header', 'true').save('path/to/save/data.csv')
+
+    # Stop the SparkSession
+    spark.stop()
+    ```
+
+    This code will load data from a CSV file, filter the data based on a certain condition, and then save the filtered data to a new CSV file.
+
+    Please replace 'path/to/your/data.csv' and 'path/to/save/data.csv' with the actual paths to your data and where you want to save the filtered data, respectively.
+
+    Also, replace 'column_name' and 100 with the actual column name and value you want to filter by, respectively.
+
+    Please note that you need to have Spark installed and configured in your environment to run this code.

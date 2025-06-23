@@ -1,0 +1,22 @@
+```python
+    from selenium import webdriver
+    from selenium.webdriver.chrome.service import Service
+    from webdriver_manager.chrome import ChromeDriverManager
+    from selenium.webdriver.common.by import By
+
+    # Setup Selenium
+    s = Service(ChromeDriverManager().install())
+    driver = webdriver.Chrome(service=s)
+
+    # Open a webpage
+    driver.get("http://www.google.com")
+
+    # Find a specific element on the webpage
+    element = driver.find_element(By.ID, "some_id")
+
+    # Perform an action on the element
+    element.click()
+
+    # Close the browser
+    driver.quit()
+    ```

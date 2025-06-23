@@ -1,0 +1,39 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "fix: Update Image duplicate call to empty (#194)"
+    Original Code Cells:
+    '''
+    Image img2 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img2, 4, 4, Arrays.asList(0.15f));
+
+    img2.getWrappedImage()
+    Image img3 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img3, 2, 2, Arrays.asList(0.4f));
+
+    img3.getWrappedImage()
+    Image img4 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img4, 1, 1, Arrays.asList(0.8f));
+
+    img4.getWrappedImage()
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is correct. The `duplicate` method is used to create a new image that is a duplicate of the original image. The `getWrappedImage` method is used to get the wrapped image of the duplicate image.
+
+    The issue you're facing is that you're calling `getWrappedImage` on the duplicate image multiple times. This is not a good practice as it can lead to performance issues.
+
+    You should call `getWrappedImage` only once per duplicate image. Here's the corrected code:
+
+    ```java
+    Image img2 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img2, 4, 4, Arrays.asList(0.15f));
+
+    Image img3 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img3, 2, 2, Arrays.asList(0.4f));
+
+    Image img4 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img4, 1, 1, Arrays.asList(0.8f));
+    ```

@@ -1,0 +1,28 @@
+
+The "Single Feature Contribution Train Test" check is a method used in the DeepChecks library to evaluate the impact of a single feature on the model's prediction accuracy. This check is particularly useful when you want to understand the impact of a feature on the model's ability to generalize from the training set to the test set.
+
+The "Single Feature Contribution Train Test" check is run on two datasets: `train_dataset` and `test_dataset`. The check calculates the contribution of each feature to the model's prediction accuracy in both the training and test sets.
+
+The results of the check are a list of dictionaries, where each dictionary contains the name of the feature and the contribution of that feature to the model's accuracy. The contribution is a float between 0 and 1, where 0 means the feature has no impact on the model's accuracy, and 1 means the feature has a direct impact on the model's accuracy.
+
+The check returns a DataFrame with the results of the check, sorted by the contribution of the features in descending order.
+
+Here's an example of how to use the check:
+
+```python
+from deepchecks.base import Dataset
+from deepchecks.checks.methodology import SingleFeatureContributionTrainTest
+
+# Assuming df_train and df_test are your training and testing dataframes
+
+ds_train = Dataset(df_train, label='label')
+ds_test = Dataset(df_test, label='label')
+
+# Run the check
+result = SingleFeatureContributionTrainTest().run(train_dataset=ds_train, test_dataset=ds_test)
+
+# Print the results
+print(result)
+```
+
+This will print the results of the check, sorted by the contribution of the features in descending order.

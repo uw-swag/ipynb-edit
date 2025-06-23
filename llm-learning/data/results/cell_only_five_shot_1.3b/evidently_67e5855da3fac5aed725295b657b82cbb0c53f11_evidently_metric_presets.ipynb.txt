@@ -1,0 +1,13 @@
+
+The typo in the code is in the `cat_stattest` parameter in the `TargetDriftPreset`. The correct parameter is `cat_stattest`. Here is the corrected code:
+
+```python
+multiclass_cat_target_drift_report = Report(metrics=[
+    TargetDriftPreset(num_stattest='ks', cat_stattest='psi'),
+])
+
+cat_target_drift_report.run(reference_data=iris_ref, current_data=iris_cur)
+cat_target_drift_report
+```
+
+The `cat_stattest` parameter in the `TargetDriftPreset` is used to specify the categorical statistical test to be used in the report. The correct parameter is `cat_stattest`.

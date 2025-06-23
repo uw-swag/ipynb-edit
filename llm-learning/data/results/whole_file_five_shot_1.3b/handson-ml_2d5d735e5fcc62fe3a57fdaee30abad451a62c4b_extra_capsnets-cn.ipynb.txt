@@ -1,0 +1,43 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Improved the code by adding more features"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from __future__ import division, print_function, unicode_literals
+import numpy as np
+import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
+
+mnist = input_data.read_data_sets("/tmp/data/")
+
+n_samples = 5
+
+plt.figure(figsize=(n_samples * 2, 3))
+for index in range(n_samples):
+    plt.subplot(1, n_samples, index + 1)
+    sample_image = mnist.train.images[index].reshape(28, 28)
+    plt.imshow(sample_image, cmap="binary")
+    plt.axis("off")
+
+plt.show()
+
+plt.figure(figsize=(n_samples * 2, 3))
+for index in range(n_samples):
+    plt.subplot(1, n_samples, index + 1)
+    plt.title("Predicted:" + str(y_pred[index]))
+    plt.imshow(reconstructions[index], cmap="binary")
+    plt.axis("off")
+    
+plt.show()
+
+<\Cell_0>
+<Cell_1>
+caps2_output_value.shape
+<\Cell_1>
+<Cell_2>
+def tweak_pose_parameters(output_vectors, min=-0.5, max=0.5, n_steps=11):
+    steps = np.linspace(min, max, n_steps) # -0.25, -0.15, ..., +0.25
+    pose_parameters = np.arange(caps2_n_dims) # 0, 1, ..., 15
+    tweaks = np.zeros([caps2_n_dims, n_steps, 1, 1, 1, caps2_n

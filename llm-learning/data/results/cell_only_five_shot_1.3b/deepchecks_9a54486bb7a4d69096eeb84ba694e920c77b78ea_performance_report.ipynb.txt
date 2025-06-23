@@ -1,0 +1,44 @@
+```python
+    from deepchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import PerformanceReport
+
+    # Split the data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a dataset from the train data
+    train_ds = Dataset(X_train, y_train)
+
+    # Create a dataset from the test data
+    test_ds = Dataset(X_test, y_test)
+
+    # Train a classifier
+    clf = AdaBoostClassifier()
+    clf.fit(train_ds)
+
+    # Train a regressor
+    reg = AdaBoostRegressor()
+    reg.fit(train_ds)
+
+    # Evaluate the classifier and regressor
+    clf_report = PerformanceReport(clf, test_ds)
+    reg_report = PerformanceReport(reg, test_ds)
+
+    # Print the classifier performance report
+    print(clf_report)
+
+    # Print the regressor performance report
+    print(reg_report)
+
+    # Plot the classifier performance
+    clf_report.plot()
+
+    # Plot the regressor performance
+    reg_report.plot()
+
+    plt.show()
+    ```

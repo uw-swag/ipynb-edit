@@ -1,0 +1,272 @@
+#Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.stats as stats
+import seaborn as sns
+from matplotlib import rcParams
+import xgboost as xgb
+%matplotlib inline 
+sns.set_style('whitegrid')
+
+from scipy import stats
+from scipy.stats import pointbiserialr, spearmanr, skew, pearsonr
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.feature_selection import SelectFromModel
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import GridSearchCV
+import xgboost as xgb
+from sklearn.linear_model import Ridge, RidgeCV, LassoCV
+from sklearn import linear_model
+#Reading data. Input the path to the files instead of "../input".
+#train = pd.read_csv('../input/train.csv')
+#test = pd.read_csv('../input/test.csv')
+
+#Read the data.
+data = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/House Prices/train.csv')
+test = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/House Prices/test.csv')
+data.info()
+data.describe(include='all')
+data.head()
+#Columns with missing values in train.
+data[data.columns[data.isnull().sum() > 0].tolist()].info()
+list_data = data.columns[data.isnull().sum() > 0].tolist()
+list_test = test.columns[test.isnull().sum() > 0].tolist()
+test[list(i for i in list_test if i not in list_data)].info()
+data[list(i for i in list_data if i not in list_test)].info()
+#Create a list of column to fill NA with "None" or 0.
+to_null = ['Alley', 'MasVnrType', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'FireplaceQu',
+           'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'GarageYrBlt', 'BsmtFullBath', 'BsmtHalfBath',
+           'PoolQC', 'Fence', 'MiscFeature']
+for col in to_null:
+    if data[col].dtype == 'object':
+        #Fill with "None" for categorical.
+        data[col].fillna('None',inplace=True)
+        test[col].fillna('None',inplace=True)
+    else:
+        #Fill with 0 for numerical.
+        data[col].fillna(0,inplace=True)
+        test[col].fillna(0,inplace=True)
+#Fill NA with common values.
+test.loc[test.KitchenQual.isnull(), 'KitchenQual'] = 'TA'
+test.loc[test.MSZoning.isnull(), 'MSZoning'] = 'RL'
+test.loc[test.Utilities.isnull(), 'Utilities'] = 'AllPub'
+test.loc[test.Exterior1st.isnull(), 'Exterior1st'] = 'VinylSd'
+test.loc[test.Exterior2nd.isnull(), 'Exterior2nd'] = 'VinylSd'
+test.loc[test.Functional.isnull(), 'Functional'] = 'Typ'
+test.loc[test.SaleType.isnull(), 'SaleType'] = 'WD'
+data.loc[data['Electrical'].isnull(), 'Electrical'] = 'SBrkr'
+data.loc[data['LotFrontage'].isnull(), 'LotFrontage'] = data['LotFrontage'].mean()
+test.loc[test['LotFrontage'].isnull(), 'LotFrontage'] = test['LotFrontage'].mean()
+data.loc[data.MasVnrType == 'None', 'MasVnrArea'] = 0
+test.loc[test.MasVnrType == 'None', 'MasVnrArea'] = 0
+test.loc[test.BsmtFinType1=='None', 'BsmtFinSF1'] = 0
+test.loc[test.BsmtFinType2=='None', 'BsmtFinSF2'] = 0
+test.loc[test.BsmtQual=='None', 'BsmtUnfSF'] = 0
+test.loc[test.BsmtQual=='None', 'TotalBsmtSF'] = 0
+#And there is only one line where GarageCars and GarageArea is null, but it seems that there is no garage.
+test.loc[test.GarageCars.isnull() == True]
+test.loc[test.GarageCars.isnull(), 'GarageCars'] = 0
+test.loc[test.GarageArea.isnull(), 'GarageArea'] = 0
+corr = data.corr()
+plt.figure(figsize=(12, 12))
+sns.heatmap(corr, vmax=1)
+threshold = 0.8 # Threshold value.
+#I like yield, so here is a function for it.
+def correlation():
+    for i in data.columns:
+        for j in data.columns[list(data.columns).index(i)+1:]: #Ugly, but works. This way there won't be repetitions.
+            if data[i].dtype != 'object' and data[j].dtype != 'object':
+                if abs(pearsonr(data[i], data[j])[0]) >= threshold: #pearson is used by default for numerical.
+                    yield (pearsonr(data[i], data[j])[0], i, j)
+            else:
+                if abs(spearmanr(data[i], data[j])[0]) >= threshold: #spearman works for categorical.
+                    yield (spearmanr(data[i], data[j])[0], i, j)
+corr_list = list(correlation())
+corr_list
+#It seems that SalePrice is skewered, so it needs to be transformed.
+sns.distplot(data['SalePrice'], kde = False, color = 'c', hist_kws={'alpha': 0.9})
+#As expected price rises with the quality.
+sns.regplot(x = 'OverallQual', y = 'SalePrice', data = data, color = 'Orange')
+#Price also varies depending on neighborhood.
+plt.figure(figsize = (12, 6))
+sns.boxplot(x = 'Neighborhood', y = 'SalePrice',  data = data)
+xt = plt.xticks(rotation=30)
+#There are many little houses.
+plt.figure(figsize = (12, 6))
+sns.countplot(x = 'HouseStyle', data = data)
+xt = plt.xticks(rotation=30)
+#And most of the houses are single-family, so it isn't surprising that most of the them aren't large.
+sns.countplot(x = 'BldgType', data = data)
+xt = plt.xticks(rotation=30)
+#Most of fireplaces are of good or average quality. And nearly half of houses don't have fireplaces at all.
+pd.crosstab(data.Fireplaces, data.FireplaceQu)
+sns.factorplot('HeatingQC', 'SalePrice', hue = 'CentralAir', data = data)
+sns.factorplot('Heating', 'SalePrice', hue = 'CentralAir', data = data)
+#One more interesting point is that while pavement road access is valued more, the alley isn't that important.
+fig, ax = plt.subplots(1, 2, figsize = (12, 5))
+sns.boxplot(x = 'Street', y = 'SalePrice', data = data, ax = ax[0])
+sns.boxplot(x = 'Alley', y = 'SalePrice', data = data, ax = ax[1])
+#We can say that while quality is normally distributed, overall condition of houses is mainly average.
+fig, ax = plt.subplots(1, 2, figsize = (12, 5))
+sns.countplot(x = 'OverallCond', data = data, ax = ax[0])
+sns.countplot(x = 'OverallQual', data = data, ax = ax[1])
+fig, ax = plt.subplots(2, 3, figsize = (16, 12))
+ax[0,0].set_title('Gable')
+ax[0,1].set_title('Hip')
+ax[0,2].set_title('Gambrel')
+ax[1,0].set_title('Mansard')
+ax[1,1].set_title('Flat')
+ax[1,2].set_title('Shed')
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Gable'], jitter=True, ax = ax[0,0])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Hip'], jitter=True, ax = ax[0,1])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Gambrel'], jitter=True, ax = ax[0,2])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Mansard'], jitter=True, ax = ax[1,0])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Flat'], jitter=True, ax = ax[1,1])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Shed'], jitter=True, ax = ax[1,2])
+sns.stripplot(x="GarageQual", y="SalePrice", data=data, hue='GarageFinish', jitter=True)
+sns.pointplot(x="PoolArea", y="SalePrice", hue="PoolQC", data=data)
+#There is only one such pool and sale condition for it is 'Abnorml'.
+data.loc[data.PoolArea == 555]
+fig, ax = plt.subplots(1, 2, figsize = (12, 5))
+sns.stripplot(x="SaleType", y="SalePrice", data=data, jitter=True, ax = ax[0])
+sns.stripplot(x="SaleCondition", y="SalePrice", data=data, jitter=True, ax = ax[1])
+#MSSubClass shows codes for the type of dwelling, it is clearly a categorical variable.
+data['MSSubClass'].unique()
+data['MSSubClass'] = data['MSSubClass'].astype(str)
+test['MSSubClass'] = test['MSSubClass'].astype(str)
+#Transforming skewered data and dummifying categorical.
+for col in data.columns:
+    if data[col].dtype != 'object':
+        if skew(data[col]) > 0.75:
+            data[col] = np.log1p(data[col])
+        pass
+    else:
+        dummies = pd.get_dummies(data[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        data.drop(col, axis=1, inplace=True)
+        data = data.join(dummies)
+for col in test.columns:
+    if test[col].dtype != 'object':
+        pass
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+    else:
+        dummies = pd.get_dummies(test[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        test.drop(col, axis=1, inplace=True)
+        test = test.join(dummies)
+#This is how the data looks like now.
+data.head()
+#These variables will be used for learning
+X_train = data.drop('SalePrice',axis=1)
+Y_train = data['SalePrice']
+X_test  = test
+#Function to measure accuracy.
+def rmlse(val, target):
+    return np.sqrt(np.sum(((np.log1p(val)-np.log1p(np.expm1(target)))**2)/len(target)))
+#Splitting data for validation.
+Xtrain, Xtest, ytrain, ytest = train_test_split(X_train, Y_train, test_size=0.33)
+ridge = Ridge(alpha=10, solver='auto').fit(Xtrain, ytrain)
+val_ridge = np.expm1(ridge.predict(Xtest))
+rmlse(val_ridge, ytest)
+ridge_cv = RidgeCV(alphas=(0.01, 0.05, 0.1, 0.3, 1, 3, 5, 10))
+ridge_cv.fit(Xtrain, ytrain)
+val_ridge_cv = np.expm1(ridge_cv.predict(Xtest))
+rmlse(val_ridge_cv, ytest)
+las = linear_model.Lasso(alpha=0.0005).fit(Xtrain, ytrain)
+las_ridge = np.expm1(las.predict(Xtest))
+rmlse(las_ridge, ytest)
+las_cv = LassoCV(alphas=(0.0001, 0.0005, 0.001, 0.01, 0.05, 0.1, 0.3, 1, 3, 5, 10))
+las_cv.fit(Xtrain, ytrain)
+val_las_cv = np.expm1(las_cv.predict(Xtest))
+rmlse(val_las_cv, ytest)
+model_xgb = xgb.XGBRegressor(n_estimators=340, max_depth=2, learning_rate=0.2) #the params were tuned using xgb.cv
+model_xgb.fit(Xtrain, ytrain)
+xgb_preds = np.expm1(model_xgb.predict(Xtest))
+rmlse(xgb_preds, ytest)
+forest = RandomForestRegressor(min_samples_split =5,
+                                min_weight_fraction_leaf = 0.0,
+                                max_leaf_nodes = None,
+                                max_depth = None,
+                                n_estimators = 300,
+                                max_features = 'auto')
+
+forest.fit(Xtrain, ytrain)
+Y_pred_RF = np.expm1(forest.predict(Xtest))
+rmlse(Y_pred_RF, ytest)
+coef = pd.Series(las_cv.coef_, index = X_train.columns)
+v = coef.loc[las_cv.coef_ != 0].count() 
+print('So we have ' + str(v) + ' variables')
+#Basically I sort features by weights and take variables with max weights.
+indices = np.argsort(abs(las_cv.coef_))[::-1][0:v]
+#Features to be used. I do this because I wasnt to see how good will other models perform with these features.
+features=X_train.columns[indices]
+for i in features:
+    if i not in X_test.columns:
+        print(i)
+X_test['RoofMatl_ClyTile'] = 0
+X = X_train[features]
+Xt = X_test[features]
+Xtrain1, Xtest1, ytrain1, ytest1 = train_test_split(X, Y_train, test_size=0.33)
+ridge = Ridge(alpha=5, solver='svd').fit(Xtrain1, ytrain1)
+val_ridge = np.expm1(ridge.predict(Xtest1))
+rmlse(val_ridge, ytest1)
+las_cv = LassoCV(alphas=(0.0001, 0.0005, 0.001, 0.01, 0.05, 0.1, 0.3, 1, 3, 5, 10)).fit(Xtrain1, ytrain1)
+val_las = np.expm1(las_cv.predict(Xtest1))
+rmlse(val_las, ytest1)
+model_xgb = xgb.XGBRegressor(n_estimators=340, max_depth=2, learning_rate=0.2) #the params were tuned using xgb.cv
+model_xgb.fit(Xtrain1, ytrain1)
+xgb_preds = np.expm1(model_xgb.predict(Xtest1))
+rmlse(xgb_preds, ytest1)
+forest = RandomForestRegressor(min_samples_split =5,
+                                min_weight_fraction_leaf = 0.0,
+                                max_leaf_nodes = None,
+                                max_depth = 100,
+                                n_estimators = 300,
+                                max_features = None)
+
+forest.fit(Xtrain1, ytrain1)
+Y_pred_RF = np.expm1(forest.predict(Xtest1))
+rmlse(Y_pred_RF, ytest1)
+las_cv1 = LassoCV(alphas=(0.0001, 0.0005, 0.001, 0.01, 0.05, 0.1, 0.3, 1, 3, 5, 10))
+las_cv1.fit(X, Y_train)
+lasso_preds = np.expm1(las_cv1.predict(Xt))
+#I added XGBoost as it usually improves the predictions.
+model_xgb = xgb.XGBRegressor(n_estimators=340, max_depth=2, learning_rate=0.1) #the params were tuned using xgb.cv
+model_xgb.fit(X, Y_train)
+xgb_preds = np.expm1(model_xgb.predict(Xt))
+preds = 0.7 * lasso_preds + 0.3 * xgb_preds
+submission = pd.DataFrame({
+        'Id': test['Id'].astype(int),
+        'SalePrice': preds
+    })
+submission.to_csv('home.csv', index=False)
+model_lasso = LassoCV(alphas=(0.0001, 0.0005, 0.001, 0.01, 0.05, 0.1, 0.3, 1, 3, 5, 10, 100))
+model_lasso.fit(X_train, Y_train)
+coef = pd.Series(model_lasso.coef_, index = X_train.columns)
+v1 = coef.loc[model_lasso.coef_ != 0].count()
+print('So we have ' + str(v1) + ' variables')
+indices = np.argsort(abs(model_lasso.coef_))[::-1][0:v1]
+features_f=X_train.columns[indices]
+print('Features in full, but not in val:')
+for i in features_f:
+    if i not in features:
+        print(i)
+print('\n' + 'Features in val, but not in full:')
+for i in features:
+    if i not in features_f:
+        print(i)
+for i in features_f:
+    if i not in X_test.columns:
+        print(i)
+model_lasso = LassoCV(alphas=(0.0001, 0.0005, 0.001, 0.01, 0.05, 0.1, 0.3, 1, 3, 5, 10))
+model_lasso.fit(X, Y_train)
+lasso_preds = np.expm1(model_lasso.predict(Xt))
+model_xgb = xgb.XGBRegressor(n_estimators=340, max_depth=2, learning_rate=0.1) #the params were tuned using xgb.cv
+model_xgb.fit(X, Y_train)
+xgb_preds = np.expm1(model_xgb.predict(Xt))
+solution = pd.DataFrame({"id":test.Id, "SalePrice":0.7*lasso_preds + 0.3*xgb_preds})
+solution.to_csv("House_price.csv", index = False)

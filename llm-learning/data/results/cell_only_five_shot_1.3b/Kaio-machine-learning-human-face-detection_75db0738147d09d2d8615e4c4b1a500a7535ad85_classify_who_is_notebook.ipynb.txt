@@ -1,0 +1,44 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adicionado código para acessar a internet"
+    Original Code Cells:
+    '''
+    from urllib.request import urlopen
+    response = urlopen("http://www.google.com")
+    print(response.read())
+    '''
+    ]
+
+    ### Response:
+    O código acima é um exemplo de como usar a biblioteca urllib para acessar a internet. Ele abre uma conexão com o site www.google.com e lê o conte�do da página.
+
+    Se você quiser acessar a internet em um projeto Android, você precisa adicionar a permissão necessária no manifesto do seu projeto. No Android, você pode usar a permissão INTERNET para acessar a internet. Aqui está um exemplo de como fazer isso:
+
+    ```xml
+    <uses-permission android:name="android.permission.INTERNET" />
+    ```
+
+    Se você quiser usar a internet em um aplicativo web, você pode usar a biblioteca JavaScript `fetch` ou `XMLHttpRequest`. Aqui está um exemplo de como fazer isso:
+
+    ```javascript
+    fetch('http://www.google.com')
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.log('Error:', error));
+    ```
+
+    No Android, você também pode usar a biblioteca JavaScript `fetch` para acessar a internet. Aqui está um exemplo de como fazer isso:
+
+    ```java
+    try {
+        String url = "http://www.google.com";
+        URL myurl = new URL(url);
+        URLConnection yc = myurl.openConnection();
+        BufferedReader br = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null) {
+            sb.append(line);
+        }
+        br.close

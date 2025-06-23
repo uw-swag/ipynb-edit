@@ -1,0 +1,29 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+
+    # Defining the number of cells and layers
+    n_cells = 128
+    n_layers = 2
+
+    # Defining the input sequence
+    X = tf.constant([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype=tf.float32)
+
+    # Creating the RNN cell
+    cells = tf.nn.rnn_cell.BasicLSTMCell(num_units=n_cells, state_is_tuple=True)
+    if n_layers > 1:
+        cells = tf.nn.rnn_cell.MultiRNNCell(
+            [cells] * n_layers, state_is_tuple=True)
+    initial_state = cells.zero_state(tf.shape(X)[0], tf.float32)
+
+    # This will return us a list of outputs of every element in our sequence.
+    # Each output is `batch_size` x `n_cells` of output.
+    # It will also return the state as a tuple of the n_cells's memory and
+    # their output to connect to the time we use the recurrent layer.
+    outputs, state = tf.nn.rnn(cells, Xs, initial_state=initial_state)
+
+    # We'll now stack all our outputs for every cell
+    outputs_flat = tf.reshape(tf.concat(1, outputs), [-1, n_cells])
+    ```
+
+    This code is a TensorFlow implementation of a Recurrent Neural Network (RNN) using the LSTM cell. The RNN is trained to predict the next element in the sequence. The code is also formatted to follow PEP8 style guide.

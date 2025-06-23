@@ -1,0 +1,307 @@
+<Cell_0>
+#!pip install evidently[llm]
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+import requests
+from datetime import datetime, timedelta
+from io import BytesIO
+<\Cell_1>
+<Cell_2>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+from evidently.metric_preset import TextEvals
+from evidently.descriptors import *
+from evidently.metrics import *
+from evidently.tests import *
+<\Cell_2>
+<Cell_3>
+from evidently.ui.workspace.cloud import CloudWorkspace
+<\Cell_3>
+<Cell_4>
+from evidently.ui.dashboards import DashboardPanelTestSuite
+from evidently.ui.dashboards import PanelValue
+from evidently.ui.dashboards import ReportFilter
+from evidently.ui.dashboards import TestFilter
+from evidently.ui.dashboards import TestSuitePanelType
+from evidently.renderers.html_widgets import WidgetSize
+<\Cell_4>
+<Cell_5>
+response = requests.get("https://raw.githubusercontent.com/evidentlyai/evidently/main/examples/how_to_questions/chat_df.csv")
+csv_content = BytesIO(response.content)
+<\Cell_5>
+<Cell_6>
+assistant_logs = pd.read_csv(csv_content, index_col=0, parse_dates=['start_time', 'end_time'])
+assistant_logs.index = assistant_logs.start_time
+assistant_logs.index.rename('index', inplace=True)
+<\Cell_6>
+<Cell_7>
+pd.set_option('display.max_colwidth', None)
+<\Cell_7>
+<Cell_8>
+assistant_logs.head(3)
+<\Cell_8>
+<Cell_9>
+ws = CloudWorkspace(token="YOUR_TOKEN", 
+                    url="https://app.evidently.cloud")
+<\Cell_9>
+<Cell_10>
+project = ws.create_project("My project title", team_id="YOUR_TEAM_ID")
+project.description = "My project description"
+project.save()
+<\Cell_10>
+<Cell_11>
+column_mapping = ColumnMapping(
+    datetime='start_time',
+    datetime_features=['end_time'],
+    text_features=['question', 'response'],
+    categorical_features=['organization', 'model_ID', 'region', 'environment', 'feedback'],
+)
+<\Cell_11>
+<Cell_12>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response",
+              descriptors=[
+                  TextLength(),
+                  ]
+              )
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+<\Cell_12>
+<Cell_13>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response",
+              descriptors=[
+                  TextLength(),
+                  ]
+              )
+])
+
+text_evals_report.run(reference_data=assistant_logs[:50],
+                      current_data=assistant_logs[50:100],
+                      column_mapping=column_mapping)
+text_evals_report
+<\Cell_13>
+<Cell_14>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response",
+              descriptors=[
+                  IncludesWords(
+                      words_list=['salary', 'benefits', 'payroll'],
+                      display_name="Mention Compensation")
+            ]
+        ),
+        ]
+)
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+<\Cell_14>
+<Cell_15>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+            Sentiment(),
+        ]
+    ),
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+<\Cell_15>
+<Cell_16>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+            HuggingFaceToxicityModel(),
+            HuggingFaceModel(
+                model="SamLowe/roberta-base-go_emotions",
+                params={"label": "neutral"},
+                display_name="Response Neutrality"),
+        ]
+    ),
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+<\Cell_16>
+<Cell_17>
+text_evals_report.save_html("weird_signs_for_Dima.html")
+<\Cell_17>
+<Cell_18>
+## import os
+
+## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
+<\Cell_18>
+<Cell_19>
+conciseness_prompt = """
+Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+
+A concise response should:
+- Provide the necessary information without unnecessary details or repetition.
+- Be brief yet comprehensive enough to address the query.
+- Use simple and direct language to convey the message effectively.
+
+Please evaluate the following chatbot response for conciseness.
+
+response: REPLACE
+
+Use the following categories for conciseness evaluation:
+CONCISE if the response is concise and to the point
+VERBOSE if the response is overly detailed or contains unnecessary information
+UNKNOWN if the information provided is not sufficient to make a clear determination
+
+Return a category only
+"""
+<\Cell_19>
+<Cell_20>
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        OpenAIPrompting(prompt=conciseness_prompt,
+                        prompt_replace_string="REPLACE",
+                        model="gpt-3.5-turbo-instruct",
+                        feature_type="cat",
+                        display_name="Response Conciseness"),
+    ])
+])
+
+report.run(reference_data= None,
+           current_data= assistant_logs[:10],
+           column_mapping=column_mapping)
+
+report
+<\Cell_20>
+<Cell_21>
+data_report = Report(metrics=[
+   ColumnSummaryMetric(column_name="feedback"),
+   ]
+)
+
+data_report.run(reference_data=None, current_data=assistant_logs[:100], column_mapping=column_mapping)
+data_report
+<\Cell_21>
+<Cell_22>
+text_evals_report = Report(metrics=[
+    ColumnSummaryMetric(
+        column_name=SemanticSimilarity(
+            display_name="Response-Question Similarity"
+        )
+        .on(["response", "question"])
+    )
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+<\Cell_22>
+<Cell_23>
+text_evals_report.datasets()[1]
+<\Cell_23>
+<Cell_24>
+text_evals_report.as_dict()
+<\Cell_24>
+<Cell_25>
+text_evals_report.json()
+<\Cell_25>
+<Cell_26>
+text_evals_report.save_html("report.html")
+<\Cell_26>
+<Cell_27>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+            Sentiment(),
+            TextLength(),
+            IncludesWords(words_list=['salary', 'benefits', 'payroll'],
+                          display_name="Mention Compensation")
+
+        ],
+    ),
+    ColumnSummaryMetric(column_name="feedback"),
+    ColumnSummaryMetric(column_name="region"),
+    ColumnSummaryMetric(column_name="organization"),
+    ColumnSummaryMetric(column_name="model_ID"),
+    ColumnSummaryMetric(column_name="environment"),
+])
+<\Cell_27>
+<Cell_28>
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:50],
+                      column_mapping=column_mapping)
+<\Cell_28>
+<Cell_29>
+project.id
+<\Cell_29>
+<Cell_30>
+ws.add_report(project.id, text_evals_report, include_data=True)
+<\Cell_30>
+<Cell_31>
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[50:100],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+<\Cell_31>
+<Cell_32>
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[100:150],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+<\Cell_32>
+<Cell_33>
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[150:200],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+<\Cell_33>
+<Cell_34>
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[200:250],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+<\Cell_34>
+<Cell_35>
+test_suite = TestSuite(tests=[
+    TestColumnValueMean(column_name = Sentiment().on("response"), gte=0),
+    TestColumnValueMin(column_name = TextLength().on("response"), gt=0),
+    TestColumnValueMax(column_name = TextLength().on("response"), lte=2000),
+    TestColumnValueMean(column_name = TextLength().on("response"), gt=500),
+])
+<\Cell_35>
+<Cell_36>
+for i in range(5):
+    test_suite.run(
+        reference_data=None,
+        current_data=assistant_logs.iloc[50 * i : 50 * (i + 1), :],
+        column_mapping=column_mapping,
+        timestamp=datetime.now() + timedelta(hours=i)
+    )
+    ws.add_test_suite(project.id, test_suite)
+<\Cell_36>
+<Cell_37>
+#project = ws.get_project("YOUR_PROJECT_ID")
+<\Cell_37>
+<Cell_38>
+project.dashboard.add_panel(
+    DashboardPanelTestSuite(
+        title="Test results",
+        filter=ReportFilter(metadata_values={}, tag_values=[], include_test_suites=True),
+        size=WidgetSize.FULL,
+        panel_type=TestSuitePanelType.DETAILED,
+    ),
+    tab="Tests"
+)
+project.save()
+<\Cell_38>
+<Cell_39>
+
+<\Cell_39>

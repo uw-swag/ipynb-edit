@@ -1,0 +1,55 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Adjust figsize to 7, 7"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+folder = 'acne'
+file = 'urls_acne.txt'
+<\Cell_2>
+<Cell_3>
+folder = 'freckle'
+file = 'urls_freckle.txt'
+<\Cell_3>
+<Cell_4>
+folder = 'melasma'
+file = 'urls_melasma.txt'
+<\Cell_4>
+<Cell_5>
+path = Path('data/skin')
+download_path = path/'downloads'
+dest = download_path/folder
+dest.mkdir(parents=True, exist_ok=True)
+<\Cell_5>
+<Cell_6>
+download_images(path/file, dest, max_pics=500, max_workers=8)
+<\Cell_6>
+<Cell_7>
+classes = ['acne', 'freckle', 'melasma']
+<\Cell_7>
+<Cell_8>
+for c in classes:
+    print(c)
+    verify_images(download_path/c, delete=True, max_size=480)
+<\Cell_8>
+<Cell_9>
+batchsize = 24
+np.random.seed(42)
+
+databunch = ImageDataBunch.from_folder(download_path, train='.', 
+                                       valid_pct=0.2, 
+                                       ds_tfms=get_transforms(), 
+                                       size=400, bs=batchsize).normalize(imagenet_stats)
+
+# ### อ่านให้จบ ข้อ

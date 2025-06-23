@@ -1,0 +1,33 @@
+```
+    """
+    import sys; sys.path.insert(0, '../input/learntools/learntools')
+    from learntools.python import binder; binder.bind(globals())
+    from learntools.python.ex4 import *
+    print('Setup complete.')
+    """
+    %maven ai.djl:api:0.7.0-SNAPSHOT
+    %maven ai.djl:model-zoo:0.7.0-SNAPSHOT
+    %maven ai.djl:basicdataset:0.7.0-SNAPSHOT
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    %maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-b
+    """
+    %loadFromPOM
+    %load ../utils/plot-utils.ipynb
+    %load ../utils/DataPoints.java
+    %load ../utils/Training.java
+    """
+    %maven ai.djl.SoftmaxCrossEntropyLoss
+    %maven ai.djl.Accuracy
+    %maven ai.djl.DefaultTrainingConfig
+    %maven ai.djl.Trainer
+    %maven ai.djl.Model
+    %maven ai.djl.engine.Engine
+    %maven ai.djl.metric.Metrics
+    %maven ai.djl.training.listener.TrainingListener
+    %maven ai.djl.training.optimizer.learningrate.LearningRateTracker
+    %maven ai.djl.training.optimizer.sgd.SGD
+    %maven ai.djl.training.loss.Loss
+    %maven ai.djl.training.initializer.NormalInitializer
+    %maven ai.d

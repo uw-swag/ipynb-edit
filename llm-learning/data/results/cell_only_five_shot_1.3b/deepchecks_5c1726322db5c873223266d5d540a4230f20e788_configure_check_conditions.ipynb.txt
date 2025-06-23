@@ -1,0 +1,22 @@
+```
+    from deepchecks import ConditionResult
+
+# Our parameters for the condition
+low_threshold = 0.4
+high_threshold = 0.6
+
+# Create the condition function
+def custom_condition(value: dict, low=low_threshold, high=high_threshold): 
+    ratio = value['Test'] / value['Train']
+    if low <= ratio <= high:
+        return ConditionResult(True)
+    else:
+        # Note: if you doesn't care about the extra info, you can return directly a boolean
+        return ConditionResult(False, f'Test-Train ratio is {ratio:.2}')
+
+# Create the condition name
+condition_name = f'Test-Train ratio is between {low_threshold} to {high_threshold}'
+
+# Create check instance with the condition 
+check = DatasetsSizeComparison().add_condition(condition_name, custom_condition)
+    ```

@@ -1,0 +1,54 @@
+```python
+    import pandas as pd
+    import json as jn
+    from pprint import pprint
+
+    # Load JSON data
+    with open('data/recipes.json') as f:
+        recipes = jn.load(f)
+    pprint(recipes[:2])
+
+    # Load JSON data into a DataFrame
+    df = pd.read_json('data/recipes.json')
+    df
+
+    # Explode ingredients and get unique ingredients
+    ingredients_ = df['ingredients'].explode()
+    unique_ingredients = set(ingredients_)
+
+    # Create a new column for each unique ingredient
+    for y in unique_ingredients:
+        y = str(y)
+        df[y] = 0
+        df.loc[df['ingredients'].apply(lambda x: y in x), y] = 1
+
+    # Count the number of ingredients
+    df['ingredients'] = df['ingredients'].apply(len)
+
+    # Get the first 3 rows of the DataFrame
+    df[:3]
+
+    # Save the DataFrame to a CSV file
+    df.to_csv('data/recipes.csv', index=False)
+
+    # Get the ids and ingredients
+    ids = list(df['id'])
+    ingredients = list(df.columns[3:])
+
+    # Define a function to get the list of ingredients
+    def make_list(row):
+        result_list = []
+        count = 0
+        for x in row[3:]:
+            if x == 1:
+                result_list.append(row.index[count+3])
+            count += 1
+        return result_list
+
+    # Create a new list of recipes
+    new_recipes = []
+    for current_id in ids:
+        cuisine = df[df['id'] == current_id]['cuisine'].iloc[0]
+        current_ingredients = make_list(df[df['id'] == current_id])
+        current_recipe = {'cuisine': cuisine, 'id': int(current_id), 'ingredients': current_ingredients}
+        new_recipes.

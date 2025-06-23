@@ -1,0 +1,267 @@
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+import torch
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+import pickle as pkl
+
+from os.path import join as oj
+import matplotlib.pyplot as plt
+%matplotlib inline
+import os
+import seaborn as sns
+from torch.utils.data import Subset
+
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import matplotlib.pyplot as plt
+import numpy as np
+import torch.utils.data as utils
+
+import csv
+import numpy as np
+sys.path.append("../../fit")
+from tqdm import tqdm_notebook
+import cd
+from shutil import copyfile
+from os.path import join as oj
+from PIL import Image
+from tqdm import tqdm
+from skimage.color import rgb2gray
+
+from torch import nn    
+
+<\Cell_0>
+<Cell_1>
+sys.path.append("../../../pytorch-cnn-visualizations/src")
+from gradcam import GradCam
+<\Cell_1>
+<Cell_2>
+mean = np.asarray([0.485, 0.456, 0.406])
+std = np.asarray([0.229, 0.224, 0.225])
+<\Cell_2>
+<Cell_3>
+save_path = "../../results_for_export"
+device = torch.device("cuda")
+import torchvision.models as models
+
+model = models.vgg16(pretrained=True).to(device)
+model.classifier[-1] = nn.Linear(4096, 2)
+model.load_state_dict(torch.load('../models/81407832282747730878.pt'))
+model = model.to(device).eval()
+<\Cell_3>
+<Cell_4>
+# load the two imgs
+data_path = "../../../../datasets"
+img_path = oj(data_path, "ISIC/not_cancer")
+seg_path  = oj(data_path, "segmentation")
+<\Cell_4>
+<Cell_5>
+img = Image.open(oj(img_path, "ISIC_0000603.jpg"))
+img_np = np.asarray(img)/255.0
+img.close()
+<\Cell_5>
+<Cell_6>
+seg = Image.open(oj(seg_path, "ISIC_0000603.jpg"))
+seg_np = np.asarray(seg)[:,:,0]
+seg_np = seg_np > seg_np.mean()
+seg.close()
+<\Cell_6>
+<Cell_7>
+plt.imshow(img_np * (1- seg_np).astype(np.float32)[:,:,None])
+<\Cell_7>
+<Cell_8>
+torch_img = torch.from_numpy(((img_np - mean)/std).swapaxes(0,2).swapaxes(1,2)).cuda().float()
+model(torch_img[None, :])
+<\Cell_8>
+<Cell_9>
+out = cd.cd_track_vgg(seg_np[None, :], torch_img[None, :], model)
+print("Relevant:")
+print(out[0])
+print("Irrelevant:")
+print(out[1])
+<\Cell_9>
+<Cell_10>
+not_cancer_cd = torch.nn.functional.softmax(torch.abs(torch.cat((out[0][0][1][None,], out[1][0][1][None,]),dim=0).data))
+cancer_cd = torch.nn.functional.softmax(torch.abs(torch.cat((out[0][0][0][None,], out[1][0][0][None,]),dim=0).data))
+<\Cell_10>
+<Cell_11>
+model_gradCAM = GradCam(model,30)
+
+fig, axes = plt.subplots(ncols =3)
+axes[0].imshow(img_np[50:274, 50:274])
+test_out = model_gradCAM.generate_cam(torch_img[None, :,50:274, 50:274].cpu(), target_class= 0)
+
+axes[1].imshow(test_out)
+test_out = model_gradCAM.generate_cam(torch_img[None, :,50:274, 50:274].cpu(), target_class= 1)
+
+axes[2].imshow(test_out)
+# GradCAM agrees that this is good
+<\Cell_11>
+<Cell_12>
+# Extract features, extract 
+<\Cell_12>
+<Cell_13>
+data_path = "../../../../datasets"
+save_path = oj(data_path, "ISIC_features")
+<\Cell_13>
+<Cell_14>
+device = torch.device("cuda")
+import torchvision.models as models
+from torch.nn import AdaptiveAvgPool2d
+model = models.vgg16(pretrained=True).to(device).eval()
+<\Cell_14>
+<Cell_15>
+# load the two imgs
+data_path = "../../../../datasets"
+img_path = oj(data_path, "ISIC/not_cancer")
+seg_path  = oj(data_path, "segmentation")
+list_of_img_names = os.listdir(img_path)
+<\Cell_15>
+<Cell_16>
+mean = np.asarray([0.485, 0.456, 0.406])
+std = np.asarray([0.229, 0.224, 0.225])
+<\Cell_16>
+<Cell_17>
+img_features = np.empty((len(list_of_img_names), 25088))
+cd_features = -np.ones((len(list_of_img_names), 2, 25088)) # rel, irrel
+<\Cell_17>
+<Cell_18>
+avg_layer = torch.nn.AdaptiveAvgPool2d((7,7))
+<\Cell_18>
+<Cell_19>
+with torch.no_grad():
+    for i in tqdm_notebook(range(len(list_of_img_names))):
+        img = Image.open(oj(img_path, list_of_img_names[i]))
+        img_torch = torch.from_numpy(((np.asarray(img)/255.0 -mean)/std).swapaxes(0,2).swapaxes(1,2))[None,:].cuda().float()
+        img.close()
+        img_features[i] = avg_layer(model.features(img_torch)).view(-1).cpu().numpy()
+        if os.path.isfile(oj(seg_path, list_of_img_names[i])):
+            seg = Image.open(oj(seg_path, list_of_img_names[i]))
+            blob = (np.asarray(seg)[:,:, 0] > 100).astype(np.float32)
+            rel, irrel =cd.cd_vgg_features(blob, img_torch, model)
+            cd_features[i, 0] = rel[0].cpu().numpy()
+            cd_features[i, 1] = irrel[0].cpu().numpy()
+
+<\Cell_19>
+<Cell_20>
+with open(oj(save_path, "not_cancer.npy"), 'wb') as f:
+    np.save(f, img_features)
+<\Cell_20>
+<Cell_21>
+with open(oj(save_path, "not_cancer_cd.npy"), 'wb') as f:
+    np.save(f, cd_features)
+<\Cell_21>
+<Cell_22>
+# now do the same for all the cancer images
+# potentially there will be some ill effect 
+<\Cell_22>
+<Cell_23>
+data_path = "../../../../datasets"
+img_path = oj(data_path, "ISIC/cancer")
+list_of_img_names = os.listdir(img_path)
+img_features = np.empty((len(list_of_img_names), 25088))
+with torch.no_grad():
+    for i in tqdm_notebook(range(len(list_of_img_names))):
+        img = Image.open(oj(img_path, list_of_img_names[i]))
+        img_torch = torch.from_numpy(((np.asarray(img)/255.0 -mean)/std).swapaxes(0,2).swapaxes(1,2))[None,:].cuda().float()
+        img.close()
+        img_features[i] = avg_layer(model.features(img_torch)).view(-1).cpu().numpy()
+with open(oj(save_path, "cancer.npy"), 'wb') as f:
+    np.save(f, img_features)
+<\Cell_23>
+<Cell_24>
+
+<\Cell_24>
+<Cell_25>
+
+<\Cell_25>
+<Cell_26>
+data_path = "../../../../datasets"
+save_path = oj(data_path, "ISIC_features")
+from torch.utils.data import TensorDataset, ConcatDataset
+with open(oj(save_path, "cancer.npy"), 'rb') as f:
+    cancer_featuress = np.load(f)
+with open(oj(save_path, "not_cancer.npy"), 'rb') as f:
+    not_cancer_featuress = np.load(f)
+    
+cancer_targets = np.ones((cancer_featuress.shape[0])).astype(np.int64)
+not_cancer_targets = np.zeros((not_cancer_featuress.shape[0])).astype(np.int64)
+with open(oj(save_path, "not_cancer_cd.npy"), 'rb') as f:
+    not_cancer_cd= np.load(f)
+not_cancer_dataset = TensorDataset(torch.from_numpy(not_cancer_featuress).float(), torch.from_numpy(not_cancer_targets),torch.from_numpy(not_cancer_cd).float())
+
+cancer_dataset = TensorDataset(torch.from_numpy(cancer_featuress).float(), torch.from_numpy(cancer_targets),torch.from_numpy(-np.ones((len(cancer_featuress), 2, 25088))).float())
+complete_dataset = ConcatDataset((cancer_dataset, not_cancer_dataset))
+
+<\Cell_26>
+<Cell_27>
+model = models.vgg16(pretrained=True)
+# make conv untrainable - test if needed
+model.classifier[-1] = nn.Linear(4096, 2)
+model = model.classifier.to(device)
+<\Cell_27>
+<Cell_28>
+
+num_total = len(complete_dataset)
+num_train = int(0.8 * num_total)
+num_val = int(0.1 * num_total)
+num_test = num_total - num_train - num_val
+torch.manual_seed(0);
+train_dataset, test_dataset, val_dataset= torch.utils.data.random_split(complete_dataset, [num_train, num_test, num_val])
+
+<\Cell_28>
+<Cell_29>
+datasets = {'train' : train_dataset, 'test':test_dataset, 'val': val_dataset}
+dataset_sizes = {'train' : len(train_dataset), 'test':len(test_dataset), 'val': len(val_dataset)}
+torch.manual_seed(0)
+
+dataloaders = {x: torch.utils.data.DataLoader(datasets[x], batch_size=16,
+                                             shuffle=True, num_workers=4)
+              for x in ['train', 'test','val']}
+
+<\Cell_29>
+<Cell_30>
+for i, (inputs, labels, cd_features) in tqdm(enumerate(dataloaders['val'])):
+    pass
+<\Cell_30>
+<Cell_31>
+mask  = (cd_features[:, 0,0] != -1).byte().cuda()
+<\Cell_31>
+<Cell_32>
+rel, irrel = cd.cd_vgg_features(cd_features[:,0].cuda(), cd_features[:,1].cuda(), inputs.cuda(), model)
+                                
+<\Cell_32>
+<Cell_33>
+rel.masked_select()
+<\Cell_33>
+<Cell_34>
+
+<\Cell_34>
+<Cell_35>
+# save file, later load
+<\Cell_35>
+<Cell_36>
+# load all the images
+
+<\Cell_36>
+<Cell_37>
+# load all the segm
+<\Cell_37>
+<Cell_38>
+for i in tqdm_notebook(range(len(val_dataset))):
+    img = val_dataset[i][0].cuda()[None, :]
+    cd.cd_vgg_features(blob, img, model)[0];
+<\Cell_38>
+<Cell_39>
+
+<\Cell_39>

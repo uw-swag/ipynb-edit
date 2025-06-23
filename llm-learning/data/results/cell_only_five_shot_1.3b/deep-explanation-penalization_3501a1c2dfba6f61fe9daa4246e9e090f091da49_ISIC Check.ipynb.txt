@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    import os
+    import glob
+    import re
+
+    # Define the path to the local directory where the ISIC dataset is stored
+    local_path = '/path/to/ISIC/dataset'
+
+    # Get a list of all the csv files in the local directory
+    csv_files = glob.glob(os.path.join(local_path, '*.csv'))
+
+    # Read all the csv files into a list of dataframes
+    df_list = []
+    for csv_file in csv_files:
+        df = pd.read_csv(csv_file)
+        df_list.append(df)
+
+    # Concatenate all the dataframes into one
+    df_all = pd.concat(df_list)
+
+    # Check if the dataframe is empty
+    if df_all.empty:
+        print("No data found in the ISIC dataset.")
+    else:
+        # Save the dataframe to a new csv file
+        df_all.to_csv('ISIC_dataset.csv', index=False)
+    ```

@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.integrity import DominantFrequencyChange
+from deepchecks.base import Dataset
+
+# Load the iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a DataFrame for the training set
+df_train = pd.DataFrame(X_train, columns=iris.feature_names)
+df_train['target'] = y_train
+
+# Create a DataFrame for the testing set
+df_test = pd.DataFrame(X_test, columns=iris.feature_names)
+df_test['target'] = y_test
+
+# Create a DeepChecks Dataset object for the training set
+ds_train = Dataset(df_train, "Train")
+
+# Create a DeepChecks Dataset object for the testing set
+ds_test = Dataset(df_test, "Test")
+
+# Create a check for the DominantFrequencyChange
+check_dominant_frequency_change = DominantFrequencyChange(target='target')
+
+# Run the check on the training set
+check_dominant_frequency_change.run(ds_train)
+
+# Run the check on the testing set
+check_dominant_frequency_change.run(ds_test)
+    ```

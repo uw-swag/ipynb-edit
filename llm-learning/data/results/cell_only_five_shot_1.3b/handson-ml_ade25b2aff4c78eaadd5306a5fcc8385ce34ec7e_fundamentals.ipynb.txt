@@ -1,0 +1,37 @@
+
+    from __future__ import division, print_function, unicode_literals
+
+import os
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+plt.rcParams['axes.labelsize'] = 14
+plt.rcParams['xtick.labelsize'] = 12
+plt.rcParams['ytick.labelsize'] = 12
+
+PROJECT_ROOT_DIR = "."
+CHAPTER_ID = "fundamentals"
+
+def save_fig(fig_id):
+    path = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID, fig_id + ".png")
+    print("Saving figure", fig_id)
+    plt.tight_layout()
+    plt.savefig(path, format='png', dpi=300)
+sample_data.plot(kind='scatter', x="GDP per capita", y='Life satisfaction', figsize=(5,3))
+plt.axis([0, 60000, 0, 10])
+position_text = {
+    "Hungary": (5000, 1),
+    "Korea": (18000, 1.7),
+    "France": (29000, 2.4),
+    "Australia": (40000, 3.1),
+    "United States": (52000, 3.8),
+}
+for country, pos_text in position_text.items():
+    pos_data_x, pos_data_y = sample_data.loc[country]
+    country = "U.S." if country == "United States" else country
+    plt.annotate(country, xy=(pos_data_x, pos_data_y), xytext=pos_text,
+            arrowprops=dict(facecolor='black', width=0.5, shrink=0.1, headwidth=5))
+    plt.plot(pos_data_x, pos_data_y, "ro")
+save_fig('money_happy_scatterplot')
+plt.show()

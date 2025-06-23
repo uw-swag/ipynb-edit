@@ -1,0 +1,59 @@
+```
+    # Merging data processing into one notebook and updating the existing notebooks accordingly
+
+    ### Instruction:
+    [
+    Commit Message: "Adding data processing and model training code into one notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+
+train, valid, test = load_scar()
+<\Cell_1>
+<Cell_2>
+train_x, _, train_s = train
+
+class_weight = {
+    0: (train_s == 1).sum() / len(train_s),
+    1: (train_s == 0).sum() / len(train_s),
+}
+<\Cell_2>
+<Cell_3>
+from sklearn.linear_model import LogisticRegression
+
+clf = LogisticRegression(class_weight=class_weight, random_state=0).fit(train_x, train_s)
+<\Cell_3>
+<Cell_4>
+test_x, test_y, _ = test
+
+test_y_hat = clf.predict(test_x)
+test_y_prob_hat = clf.predict_proba(test_x)[:, 1]
+<\Cell_4>
+<Cell_5>
+from sklearn.metrics import f1_score
+
+f1_score(test_y, test_y_hat)
+<\Cell_5>
+<Cell_6>
+from utils import plot_x_y, plot_x_y_proba
+<\Cell_6>
+<Cell_7>
+plot_x_y(test_x, test_y)
+<\Cell_7>
+<Cell_8>
+plot_x_y(test_x, test_y_hat)
+<\Cell_8>
+<Cell_9>
+plot_x_y_proba(test_x, test_y_prob_hat)
+<\Cell_9>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already structured in a way

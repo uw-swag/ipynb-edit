@@ -1,0 +1,92 @@
+```python
+    # Remove SHAP check
+    if 'shap' in locals() or 'shap' in globals():
+        del shap
+    ```
+
+
+    ### Instruction:
+    [
+    Commit Message: "add shap check (#156)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Add SHAP check
+    if 'shap' not in locals() and 'shap' not in globals():
+        import shap
+    ```
+
+
+    ### Instruction:
+    [
+    Commit Message: "add shap explainer (#157)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Add SHAP explainer
+    explainer = shap.TreeExplainer(model)
+    ```
+
+
+    ### Instruction:
+    [
+    Commit Message: "add shap plot (#158)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Add SHAP plot
+    shap.initjs()
+    shap.force_plot(explainer.expected_value[0], shap_values[0], X_train)
+    ```
+
+
+    ### Instruction:
+    [
+    Commit Message: "add shap summary (#159)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Add SHAP summary
+    shap.summary_plot(shap_values[0], X_train)
+    ```
+
+
+    ### Instruction:
+    [
+    Commit Message: "add shap dependence plot (#160)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Add SHAP dependence plot
+    shap.dependence_plot(shap_values[0][0], X_train)
+    ```
+
+
+    ### Instruction:
+    [
+    Commit Message: "add shap dependence

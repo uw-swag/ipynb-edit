@@ -1,0 +1,55 @@
+
+    '''
+    Commit Message: "added SST annotated"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+sys.path.append('../models')
+sys.path.append('../fit')
+
+from model import LSTMSentiment
+from torchtext import data
+from torchtext import datasets
+import torch
+import cd
+import pandas as pd
+
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+# data params
+vector_cache =  '../data/.vector_cache/input_vectors.pt'
+word_vectors ='glove.6B.300d'
+batch_size = 50
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+
+# load dset
+inputs = data.Field(lower= True)
+answers = data.Field(sequential=False, unk_token=None)
+train, dev, test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label != 'neutral')
+inputs.build_vocab(train, dev, test)
+
+if os.path.isfile(vector_cache):
+    inputs.vocab.vectors = torch.load(vector_cache)
+else:
+    inputs.vocab.load_vectors(word_vectors)
+    os.makedirs(os.path.dirname(vector_cache), exist_ok=True)
+    torch.save(inputs.vocab.vectors, vector_cache)
+answers.build_vocab(train)
+
+train_iter

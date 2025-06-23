@@ -1,0 +1,43 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.ml.feature import StopWordsRemover
+    from pyspark.ml.feature import CountVectorizer
+    from pyspark.ml.feature import IDF
+    from pyspark.ml.classification import LogisticRegressionModel
+    from pyspark.ml.classification import LogisticRegression
+    from pyspark.ml.evaluation import BinaryClassificationEvaluator
+    from pyspark.ml.feature import HashingTF
+    from pyspark.ml.feature import TfidfModel
+    from pyspark.ml import Pipeline
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("SST_Annotated").getOrCreate()
+
+    # Load the data
+    data = spark.read.text("sst-5.txt")
+
+    # Split the data into training and test sets
+    (trainingData, testData) = data.randomSplit([0.7, 0.3])
+
+    # Remove common English stop words
+    remover = StopWordsRemover(inputCol="words", outputCol="filteredWords")
+    data = remover.transform(data)
+
+    # Convert words into TF-IDF
+    hasher = HashingTF(inputCol="filteredWords", outputCol="features", numFeatures=100)
+    data = hasher.transform(data)
+
+    # Train a Logistic Regression model
+    lr = LogisticRegression(labelCol="indexedLabel", featuresCol="features")
+    lrModel = lr.fit(data)
+
+    # Make predictions on the test data
+    predictions = lrModel.transform(testData)
+
+    # Select example rows to display.
+    predictions.select("prediction", "indexedLabel", "features").show()
+
+    # Evaluate the model
+    evaluator = BinaryClassificationEvaluator(rawPredictionCol="rawPrediction")
+    print("Area under ROC = " + str(evaluator.evaluate(predictions, {evalu

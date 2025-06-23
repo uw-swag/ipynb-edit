@@ -1,0 +1,42 @@
+```python
+    # Module 02: Code files added
+
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import fetch_california_housing
+    from sklearn.model_selection import train_test_split
+    from sentence_transformers import SentenceTransformer
+    from sklearn.cluster import AgglomerativeClustering
+    from sentence_transformers import util
+    import os
+    import csv
+    import time
+
+    # Corpus with example sentences
+    corpus = ['A man is eating food.',
+              'A man is eating a piece of bread.',
+              'A man is eating pasta.',
+              'The girl is carrying a baby.',
+              'The baby is carried by the woman',
+              'A man is riding a horse.',
+              'A man is riding a white horse on an enclosed ground.',
+              'A monkey is playing drums.',
+              'Someone in a gorilla costume is playing a set of drums.',
+              'A cheetah is running behind its prey.',
+              'A cheetah chases prey on across a field.'
+              ]
+
+    # https://huggingface.co/microsoft/MiniLM-L12-H384-uncased
+    # MiniLM: Small and Fast Pre-trained Models for Language Understanding and Generation
+    # MiniLMv1-L12-H384-uncased: 12-layer, 384-hidden, 12-heads, 33M parameters, 2.7x faster than BERT-Base
+
+    embedder = SentenceTransformer('all-MiniLM-L12-v2')
+
+    corpus_embeddings = embedder.encode(corpus)
+
+    # Normalize the embeddings to unit length
+    corpus_embeddings = corpus_embeddings /  np.linalg.norm(corpus_embeddings, axis=1, keepdims=True)
+
+    clustering_model = AgglomerativeClustering(n_clust

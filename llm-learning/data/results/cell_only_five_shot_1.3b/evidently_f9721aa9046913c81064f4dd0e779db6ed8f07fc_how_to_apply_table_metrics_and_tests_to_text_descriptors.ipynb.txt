@@ -1,0 +1,36 @@
+```
+    class ColumnSummaryMetric:
+        def __init__(self, column_name: str, display_name: str = None):
+            self.column_name = column_name
+            self.display_name = display_name if display_name else column_name
+
+        def for_column(self, column_name: str):
+            return ColumnSummaryMetric(column_name=column_name, display_name=self.display_name)
+
+    class ColumnDriftMetric:
+        def __init__(self, column_name: str, display_name: str = None):
+            self.column_name = column_name
+            self.display_name = display_name if display_name else column_name
+
+        def for_column(self, column_name: str):
+            return ColumnDriftMetric(column_name=column_name, display_name=self.display_name)
+
+    # ... continue for other metrics ...
+
+    table_column_metrics_report = Report(metrics=[
+        ColumnSummaryMetric(column_name="Review_Text").for_column("Review_Text"),
+        ColumnDriftMetric(column_name="Review_Text").for_column("Review_Text"),
+        # ... continue for other metrics ...
+    ])
+
+    table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+
+    table_column_test_suite = TestSuite(tests=[
+        TestColumnDrift(column_name="Review_Text").for_column("Review_Text"),
+        # ... continue for other tests ...
+    ])
+
+    table_column_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+    ```
+
+    The `display_name` parameter is added to the `ColumnSummaryMetric` and `ColumnDriftMetric` classes to provide a more user-friendly name for the metrics.

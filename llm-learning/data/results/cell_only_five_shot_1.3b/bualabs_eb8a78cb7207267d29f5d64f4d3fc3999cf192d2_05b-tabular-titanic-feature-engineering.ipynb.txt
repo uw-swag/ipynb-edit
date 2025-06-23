@@ -1,0 +1,30 @@
+
+    The code you provided is a part of a larger process and it seems to be related to the process of data preprocessing and model training.
+
+    The issue you're facing is that the 'FareBin' and 'AgeBin' columns are being created, but the 'Fare' and 'Age' columns are not being filled with the median of their respective groups. This is because the 'Fare' and 'Age' columns are not being filled with the median of their respective groups before the 'FareBin' and 'AgeBin' columns are being created.
+
+    To fix this, you need to ensure that the 'Fare' and 'Age' columns are filled with the median of their respective groups before the 'FareBin' and 'AgeBin' columns are being created.
+
+    Here's the corrected code:
+
+    ```python
+    for dataframe in dataframe_bundle:    
+        dataframe['FareBin'] = pd.qcut(dataframe['Fare'].astype(int), 6)
+        dataframe['AgeBin'] = pd.cut(dataframe['Age'].astype(int), 5)
+
+    databunch = (TabularList.from_df(dataframe_train, path=path, 
+                                     cat_names=category_column_names, 
+                                     cont_names=continuous_column_names, 
+                                     procs=preprocesses)
+                           .split_by_idx(val_idx)
+                           .label_from_df(cols=dependent_variable)
+                           .add_test(tabularlist_test)
+                           .databunch())
+
+    learner = tabular_learner(databunch, layers=[256, 128],                                 
+                              metrics=accuracy, wd=1e-1, 
+                              callback_fns=ShowGraph)
+
+    for dataframe in dataframe_bundle:    
+        dataframe['Fare'] = dataframe.groupby("Pclass")['Fare'].transform(lambda x: x.fillna(x.median()))
+        dataframe['Age'] = dataframe.groupby("Pclass")['Age'].transform(lambda x:

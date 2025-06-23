@@ -1,0 +1,57 @@
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https: // github.com / evidentlyai / evidently.git @ test_suite_alpha
+from evidently import ColumnMapping
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+suite = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    # TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite_with_reference = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite_with_reference.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite_with_reference
+suite_with_reference.show(mode="inline")
+suite_with_reference.save_html("example_with_reference.html")
+suite_with_reference.json()

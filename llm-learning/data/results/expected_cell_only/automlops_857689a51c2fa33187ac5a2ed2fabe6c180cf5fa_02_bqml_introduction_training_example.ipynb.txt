@@ -1,0 +1,227 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+!pip3 install google-cloud-automlops --user
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+! gcloud config set project $PROJECT_ID
+!pip3 install kfp google-cloud-aiplatform
+from kfp.v2 import dsl
+from kfp.v2.dsl import Artifact, Metrics, Model, Output
+from AutoMLOps import AutoMLOps
+AutoMLOps.clear_cache()
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-bigquery'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/create_dataset.yaml'
+)
+def create_dataset(
+    bq_table: str,
+    project_id: str
+):
+    """Custom component that creates an empty dataset resource.
+
+    Args:
+        bq_table: The source biquery table.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+    bq_data_name = bq_table.split('.')[-1]
+
+    dataset_query = f'''CREATE SCHEMA {bq_data_name}'''
+    job = bq_client.query(dataset_query)
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-bigquery'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/train_model.yaml'
+)
+def train_model(
+    bq_table: str,
+    labels: str,
+    model_name: str,
+    model_type: str,
+    project_id: str
+):
+    """Custom component that trains a DNN classifier on the training data.
+
+    Args:
+        bq_table: Full uri of the BQ training data.
+        labels: The type and archictecture of tabular model to train, e.g., DNN classification.
+        model_name: Name for the model.
+        model_type: The column which are the labels.
+        project_id: Project id.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+    bq_data_name = bq_table.split('.')[-1]
+
+    model_query = f'''
+    CREATE OR REPLACE MODEL `{bq_data_name}.{model_name}`
+    OPTIONS(
+        model_type='{model_type}',
+        labels = ['{labels}'],
+        model_registry='vertex_ai'
+        )
+    AS
+    SELECT *
+    FROM `{bq_table}`
+    '''
+
+    job = bq_client.query(model_query)
+    print(job.errors, job.state)
+
+    while job.running():
+        from time import sleep
+
+        sleep(30)
+        print('Running ...')
+    print(job.errors, job.state)
+
+    tblname = job.ddl_target_table
+    tblname = f'{tblname.dataset_id}.{tblname.table_id}'
+    print(f'{tblname} created in {job.ended - job.started}')
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-bigquery', 
+        'pandas',
+        'pyarrow',
+        'db_dtypes'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/evaluate_model.yaml',
+)
+def evaluate_model(
+    bq_table: str,
+    metrics: Output[Metrics],
+    model_name: str,
+    project_id: str
+):
+    """Custom component that evaluates the model.
+
+    Args:
+        model_name: Name for the model.
+        project_id: Project id.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+    bq_data_name = bq_table.split('.')[-1]
+
+    eval_query = f'''
+    SELECT *
+    FROM
+      ML.EVALUATE(MODEL {bq_data_name}.{model_name})
+    ORDER BY  roc_auc desc
+    LIMIT 1'''
+
+    job = bq_client.query(eval_query)
+    results = job.result().to_dataframe()
+
+    for column in results:
+        metrics.log_metric(column, results[column].values[0])
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/deploy_model.yaml',
+)
+def deploy_model(
+    machine_type: str,
+    model_name: str,
+    project_id: str,
+    region: str,
+    vertex_endpoint: Output[Artifact],
+    vertex_model: Output[Model]
+):
+    """Custom component that deploys the model.
+
+    Args:
+        model_name: Name for the model.
+        project_id: Project id.
+        region: Resource region.
+    """
+    from google.cloud import aiplatform
+    aiplatform.init(project=project_id, location=region)
+    model = aiplatform.Model(model_name=model_name)
+
+    endpoint = model.deploy(
+        machine_type=machine_type,
+        deployed_model_display_name=f'deployed-{model_name}')
+    vertex_endpoint.uri = endpoint.resource_name
+    vertex_model.uri = endpoint.resource_name
+@AutoMLOps.pipeline(name='bqml-automlops-pipeline', description='This is an example demo for BQML.')
+def pipeline(bq_table: str,
+             labels: str,
+             machine_type: str,
+             model_name: str,
+             model_type: str,
+             project_id: str,
+             region: str
+            ):
+
+    create_dataset_task = create_dataset(
+        bq_table=bq_table,
+        project_id=project_id)
+
+    train_model_task = train_model(
+        bq_table=bq_table,
+        labels=labels,
+        model_name=model_name,
+        model_type=model_type,
+        project_id=project_id).after(create_dataset_task)
+
+    evaluate_model_task = evaluate_model(
+        bq_table=bq_table,
+        model_name=model_name,
+        project_id=project_id).after(train_model_task)
+
+    deploy_model_task = deploy_model(
+        machine_type=machine_type,
+        model_name=model_name,
+        project_id=project_id,
+        region=region).after(evaluate_model_task)
+pipeline_params = {
+    'bq_table': 'bigquery-public-data.ml_datasets.penguins',
+    'labels': 'species',
+    'machine_type': 'n1-standard-4',
+    'model_name': 'penguins_dnn',
+    'model_type': 'DNN_CLASSIFIER',
+    'project_id': PROJECT_ID,
+    'region': 'us-central1'
+}
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=False,
+                   schedule_pattern='0 */12 * * *'
+)
+AutoMLOps.go(project_id=PROJECT_ID, 
+             pipeline_params=pipeline_params, 
+             run_local=False, 
+             schedule_pattern='0 */12 * * *'
+)
+

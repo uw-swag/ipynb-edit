@@ -1,0 +1,38 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import Ridge
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+
+    class Regularization:
+        def __init__(self, alpha):
+            self.alpha = alpha
+
+        def fit(self, X, y):
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            self.model = Ridge(alpha=self.alpha)
+            self.model.fit(X_train, y_train)
+            self.score = self.model.score(X_test, y_test)
+
+        def predict(self, X):
+            return self.model.predict(X)
+
+        def plot_coefficients(self, feature_names):
+            plt.figure(figsize=(10, 5))
+            plt.bar(range(len(feature_names)), self.model.coef_, alpha=0.5, color='black')
+            plt.xticks(range(len(feature_names)), feature_names, rotation=90)
+            plt.xlabel('Feature')
+            plt.ylabel('Coefficient magnitude')
+            plt.title('Coefficient magnitudes for different features')
+            plt.show()
+
+    diabetes = load_diabetes()
+    X, y = diabetes.data, diabetes.target
+
+    reg = Regularization(alpha=1.0)
+    reg.fit(X, y)
+    reg.plot_coefficients(diabetes.feature_names)
+    </Cell_0>
+    ```

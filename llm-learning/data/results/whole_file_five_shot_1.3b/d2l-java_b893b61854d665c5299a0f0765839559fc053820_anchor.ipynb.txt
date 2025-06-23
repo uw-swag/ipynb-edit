@@ -1,0 +1,13 @@
+
+    The commit message "fix: Update Image duplicate call to empty (#194)" is a fix for an issue where the code is trying to duplicate an empty image. The issue arises when the image is not found or is empty, and the duplicate call is made. This is causing an error. The fix is to check if the image is empty before trying to duplicate it. If the image is empty, the duplicate call should return null, and the code should handle this case appropriately.
+
+    Here is the updated code:
+
+    ```java
+    if (img.isEmpty()) {
+        return null;
+    }
+    Image img2 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    ```
+
+    This code checks if the image is empty before trying to duplicate it. If the image is empty, it returns null, and the code handles this case appropriately.

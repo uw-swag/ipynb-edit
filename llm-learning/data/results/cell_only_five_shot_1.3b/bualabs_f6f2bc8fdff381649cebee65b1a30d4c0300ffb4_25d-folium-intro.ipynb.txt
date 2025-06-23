@@ -1,0 +1,50 @@
+```python
+    import folium
+
+    # Create a map
+    m = folium.Map(location=[45.5236, -122.6750], zoom_start=13)
+
+    # Add a circle marker to the map
+    folium.Circle(
+        location=[45.5236, -122.6750],
+        radius=3000,
+        color='red',
+        fill=True,
+        fill_color='red',
+    ).add_to(m)
+
+    # Add a polygon marker to the map
+    folium.PolyLine(
+        locations=[[45.5236, -122.6750], [45.5236, -122.6750]],
+        color='blue',
+        weight=2,
+        opacity=0.5
+    ).add_to(m)
+
+    # Add a polygon to the map
+    folium.Polygon(
+        locations=[[45.5236, -122.6750], [45.5236, -122.6750]],
+        color='green',
+        fill=True,
+        fill_color='green'
+    ).add_to(m)
+
+    # Add a marker to the map
+    folium.Marker(
+        location=[45.5236, -122.6750],
+        icon=folium.Icon(icon="cloud"),
+        popup="A marker is placed at this location."
+    ).add_to(m)
+
+    # Add a circle marker to the map
+    folium.Circle(
+        location=[45.5236, -122.6750],
+        radius=1000,
+        color='yellow',
+        fill=True,
+        fill_color='yellow'
+    ).add_to(m)
+
+    # Add a polygon to the map
+    folium.Polygon(
+        locations=[[45.5236, -122.

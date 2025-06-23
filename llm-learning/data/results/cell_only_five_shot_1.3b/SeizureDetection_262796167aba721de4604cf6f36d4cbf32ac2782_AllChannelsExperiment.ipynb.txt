@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+import pandas as pd
+import configparser
+import tensorflow as tf
+from sklearn import model_selection, utils
+from ipynb.fs.full.ImportExportData import exportDataframeToCSV,importCsvToDataframe
+from ipynb.fs.full.EdfManipulation import read_and_store_data
+from ipynb.fs.full.ClassificationPerformanceIndexes import classificationPerformanceIndexes
+from ipynb.fs.full.FeatureClassificationMethods import *
+from ipynb.fs.full.FeatureComputation import featureExtractionFull
+from ipynb.fs.full.FeatureNormalization import featureNormalization
+from ipynb.fs.full.FeatureSelection import dimentionalityReduction
+from ipynb.fs.full.DatasetBalancing import oversamplingSMOTE
+from ipynb.fs.full.SplitDataset import createTrainingAndTestDatasets
+
+def AllChannelsFeatures(df, readEdf, sample_rate, step, pca_tolerance, smote_neighbors, csvExportFile):
+    if readEdf:
+        ndf = df.copy()
+        features = pd.DataFrame(featureExtractionFull (ndf, sample_rate, step))
+        del ndf
+        features = featureNormalization(features)
+        reduced_features = dimentionalityReduction(features, pca_tolerance)
+        del features
+        smote_features = utils.shuffle(oversamplingSMOTE(reduced_features.drop('seizure', axis = 1), reduced_features['seizure'], smote_neighbors))
+        smote_features.reset_index(drop = True, inplace = True)
+        del reduced_features
+        exportDataframeToCSV(smote_features, csvExportFile)
+    else:
+        smote_features = df
+    return smote_features
+    ```
+
+    The code is now properly handling NaN values. The function `AllChannelsFeatures` now uses the `featureExtractionFull` function to extract features from the dataframe `df`. If `readEdf` is `True`

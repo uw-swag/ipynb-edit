@@ -1,0 +1,39 @@
+```
+    // %mavenRepo releases https://oss.sonatype.org/content/repositories/releases/
+
+    %maven ai.djl:api:0.11.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+
+    %maven ai.djl.mxnet:mxnet-engine:0.11.0
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-backport
+    %load ../utils/plot-utils
+    import ai.djl.ndarray.*;
+
+    import java.lang.Math;
+    import org.apache.commons.lang3.ArrayUtils;
+    import java.util.function.Function;
+
+    // Saved in Functions class for later use
+    public float[] callFunc(float[] x, Function<Float, Float> func) {
+        float[] y = new float[x.length];
+        for (int i = 0; i < x.length; i++) {
+            y[i] = func.apply(x[i]);
+        }
+        return y;
+    }
+
+    Function<Float, Float> f = x -> x * (float)Math.cos(Math.PI * x);
+
+    Function<Float, Float> g = x -> f.apply(x) + 0.2f * (float)Math.cos(5 * Math.PI * x);
+
+    NDManager manager = NDManager.newBaseManager();
+
+    NDArray X = manager.arange(0.5f, 1.5f, 0.01f);
+    float[] x = X.toFloatArray();
+    float[] fx = callFunc(x, f);
+    float[] gx = callFunc(x, g);
+
+    String[] grouping = new String[x.length * 2];
+    for (int i = 0; i < x.length; i++) {
+        grouping[i] = "Expected Risk

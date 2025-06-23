@@ -1,0 +1,27 @@
+```
+    ## This is a demonstration of how to modify a suite in DeepChecks.
+    ## The suite is a collection of checks that are run together.
+    ## The checks are applied in the order they are added.
+    ## The conditions of each check are applied when the check is run.
+    ## The results of each check are stored in the suite.
+    ## The suite can be run to see the results of the checks.
+
+    ## Let's see the suite:
+    customized_suite
+
+    ## and modify it by removing a check by index:
+    customized_suite.remove(1)
+
+    ## and add a new check with a condition:
+    customized_suite.add(
+        UnusedFeatures().add_condition_number_of_high_variance_unused_features_not_greater_than())
+
+    ## lets remove all condition for the SingleFeatureContributionTrainTest:
+    customized_suite[3].clean_conditions()
+
+    ## and update the suite's name:
+    customized_suite.name = 'New Data Leakage Suite'
+
+    ## and now we can run our modified suite:
+    customized_suite.run(ds_train, ds_test, rf_clf)
+    ```

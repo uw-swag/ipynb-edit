@@ -1,0 +1,51 @@
+```python
+    # Perceptron is a type of Supervised Learning algorithm used for binary classification problems.
+    # It is a simple yet powerful algorithm that is used for binary classification problems.
+    # The perceptron algorithm is a type of linear classifier.
+
+    # Importing the necessary libraries
+    from sklearn.linear_model import Perceptron
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # Load the dataset
+    # The dataset is a simple binary classification problem, where we have two classes: 'setosa' and 'versicolor'
+    # The features are sepal length and sepal width, and the target is the species
+    iris = datasets.load_iris()
+    X = iris.data[:, [2, 3]]
+    y = iris.target
+
+    # Split the dataset into a training set and a test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1, stratify=y)
+
+    # Create a Perceptron classifier
+    perceptron = Perceptron(random_state=1)
+
+    # Train the classifier
+    perceptron.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = perceptron.predict(X_test)
+
+    # Calculate the accuracy of the classifier
+    print('Accuracy: %.2f' % accuracy_score(y_test, y_pred))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "update intro decision tree"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Decision Tree is a type of Supervised Learning algorithm used for classification and regression problems.
+    # It is a tree-based model that uses a criterion to partition the dataset into two or more groups.
+    # The decision tree algorithm is a type of tree-based model.
+
+    # Importing the necessary libraries
+    from sklearn.tree import DecisionTreeClassifier
+   

@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    import pandas as pd
+
+    # Create a simple dataframe
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500]
+    })
+
+    # Create a numpy array from the dataframe
+    np_array = df.values
+
+    # Print the numpy array
+    print(np_array)
+
+    # Now, if we leak some data from the numpy array to another variable, it will be different
+    leak_data = np_array[:, 1:]
+    print(leak_data)
+
+    # But the original data remains the same
+    print(df.values)
+
+    # This is a common practice in machine learning to avoid data leakage
+    # The goal is to ensure that the original data is not used to make predictions
+    # The leakage is a way to make the model's predictions depend on the original data
+    # This is a form of data leakage
+    ```

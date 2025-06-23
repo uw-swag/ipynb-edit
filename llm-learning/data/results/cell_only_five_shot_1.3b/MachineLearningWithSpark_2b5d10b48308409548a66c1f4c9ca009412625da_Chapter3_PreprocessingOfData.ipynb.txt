@@ -1,0 +1,22 @@
+```python
+    import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Preprocessing
+    # Fill missing values
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Standardize the data
+    scaler = StandardScaler()
+    df = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    # Save the preprocessed data
+    df.to_csv('preprocessed_data.csv', index=False)
+    ```
+
+    This script loads a dataset, fills missing values with the mean of the column, and standardizes the data. The preprocessed data is then saved to a new csv file.

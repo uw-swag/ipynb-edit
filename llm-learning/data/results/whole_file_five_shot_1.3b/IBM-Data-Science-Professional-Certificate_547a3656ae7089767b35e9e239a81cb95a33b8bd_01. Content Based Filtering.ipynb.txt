@@ -1,0 +1,37 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Load the data
+    data = pd.read_csv('movie_data.csv')
+
+    # Preprocess the data
+    data['combined_features'] = data['genres'] + ' ' + data['keywords']
+
+    # Convert the text into vectors
+    vectorizer = CountVectorizer()
+    count_matrix = vectorizer.fit_transform(data['combined_features'])
+
+    # Compute the cosine similarity matrix
+    cosine_sim = cosine_similarity(count_matrix, count_matrix)
+
+    # Function to get movie recommendations
+    def get_movie_recommendations(title, cosine_sim=cosine_sim):
+        idx = data[data['title'] == title].index[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:11]
+        movie_indices = [i[0] for i in sim_scores]
+        return data['title'].iloc[movie_indices]
+
+    # Get movie recommendations
+    print(get_movie_recommendations('The Dark Knight'))
+    ```
+    This script uses content-based filtering to recommend movies based on the genres and keywords of the movies. The `get_movie_recommendations` function takes a movie title as input and returns the titles of the 10 most similar movies.
+
+    Please note that you need to have a 'movie_data.csv' file in the same directory as your Jupyter notebook for this script to work. The 'movie_data.csv' file should have at least the following columns: 'title', 'genres', and 'keywords'.
+
+    Also, the 'genres' and 'keywords' columns should contain the genres and keywords of the movies, respectively, as strings.
+
+    The 'cosine_similarity

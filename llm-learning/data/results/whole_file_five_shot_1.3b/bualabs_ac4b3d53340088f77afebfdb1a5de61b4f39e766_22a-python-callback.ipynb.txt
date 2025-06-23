@@ -1,0 +1,23 @@
+```python
+    # Move notebook file to nbs folder
+    import os
+    import shutil
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Get the list of all files in the current directory
+    files = os.listdir(cwd)
+
+    # Loop through each file
+    for file in files:
+        # If the file is a notebook file
+        if file.endswith(".ipynb"):
+            # Get the full path of the file
+            file_path = os.path.join(cwd, file)
+            # Get the name of the file without the extension
+            file_name = os.path.splitext(file)[0]
+            # Move the file to the nbs folder
+            shutil.move(file_path, os.path.join(cwd, "nbs", file_name + ".ipynb"))
+    ```
+    This script will move all notebook files in the current directory to a new "nbs" folder.

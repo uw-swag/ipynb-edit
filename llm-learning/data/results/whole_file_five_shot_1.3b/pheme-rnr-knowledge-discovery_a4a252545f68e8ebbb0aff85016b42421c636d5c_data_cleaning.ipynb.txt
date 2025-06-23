@@ -1,0 +1,56 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Add mean, var to agg features"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Load dependencies for this Jupyter Notebook
+import pandas as pd
+import numpy as np
+import networkx as nx
+from functools import reduce
+from lib.util import fetch_tweets
+<\Cell_0>
+<Cell_1>
+gw = fetch_tweets("germanwings-crash")
+<\Cell_1>
+<Cell_2>
+gw.info()
+<\Cell_2>
+<Cell_3>
+gw.head()
+<\Cell_3>
+<Cell_4>
+bool_columns = ["is_rumor", "is_source_tweet", "is_truncated", 
+                "has_smile_emoji", "user.verified", "user.has_bg_img", 
+                "user.default_pic", "sensitive", "has_place", "has_coords", "user.notifications"]
+
+gw[bool_columns].astype(bool).describe(include="bool")
+<\Cell_4>
+<Cell_5>
+for col in gw.columns:
+    if len(gw[col].unique()) == 1:
+        gw.drop(col, inplace=True, axis = 1)
+<\Cell_5>
+<Cell_6>
+gw.describe()
+<\Cell_6>
+<Cell_7>
+
+def agg_tweets_by_thread(df):
+
+    # Returns the proportion of True/1 values in col
+    agg_props = {
+        "favorite_count": sum,
+        "user_mentions": sum,
+        "media_count": sum,
+        "sensitive": sum,
+        "has_place": sum,
+        "has_coords": sum,
+        "retweet_count": sum,
+        "hashtags_count": sum,
+        "urls_count": sum,
+        "user.tweets_count": sum,
+       

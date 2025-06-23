@@ -1,0 +1,33 @@
+```
+    #Drop unnecessary columns
+    to_drop = ['Ticket', 'Name', 'SibSp', 'Parch']
+    for i in to_drop:
+        df_train = df_train.drop([i], axis=1)
+        df_test = df_test.drop([i], axis=1)
+
+    #Here I take categorical columns and dummify them. I create a column with binary values for each unique value in the column.
+    for col in df_train.columns:
+        if df_train[col].dtype == 'object' or col == 'Pclass':
+            dummies = pd.get_dummies(df_train[col], drop_first=False)
+            dummies = dummies.add_prefix('{}_'.format(col))
+            df_train.drop(col, axis=1, inplace=True)
+            df_train = df_train.join(dummies)
+
+    for col in df_test.columns:
+        if df_test[col].dtype == 'object' or col == 'Pclass':
+            dummies = pd.get_dummies(df_test[col], drop_first=False)
+            dummies = dummies.add_prefix('{}_'.format(col))
+            df_test.drop(col, axis=1, inplace=True)
+            df_test = df_test.join(dummies)
+
+    #Here I fill NA with 'Unknown'
+    df_train.Cabin.fillna('Unknown',inplace=True)
+    df_test.Cabin.fillna('Unknown',inplace=True)
+
+    #Here I fill NA with most common value.
+    MedEmbarked = df_train.groupby('Embarked').count()['PassengerId']
+    df_train.Embarked.fillna(MedEmbarked,inplace=True)
+
+    #Here I drop the columns that have more than 50% missing values.
+    df_train.dropna(thresh=len(df_train)/2, inplace=True)
+    df_test.dropna(thresh=

@@ -1,0 +1,22 @@
+
+    The code you provided is a function that reads a dataset, processes it, and writes it to a CSV file. Here's a brief explanation of what it does:
+
+    1. It first imports necessary modules and defines a function `write_dataset`.
+    2. It then defines a function `write_dataset` that takes a string `name` as input.
+    3. Inside `write_dataset`, it first sets up the data path and creates a file with the given name.
+    4. It then reads the file and splits the content into lines.
+    5. For each line, it parses the line into a tree and extracts the text, label, and segment labels.
+    6. It then checks if the label is not 2 (which is the case for the test set).
+    7. If the label is not 2, it calculates the difference between the first and second segment labels.
+    8. It then normalizes the segment labels and checks if they sum to 0 or if the difference is less than 2.
+    9. If the segment labels do not sum to 0 or the difference is less than 2, it sets the segment labels to [0.5, 0.5].
+    10. It then calculates the stop position and appends the text, label, segment labels, and stop position to the `parsed_dataset` list.
+    11. It then writes the `parsed_dataset` list to a CSV file.
+    12. Finally, it calls `write_dataset` with the names "train", "dev", and "test" to write the datasets to the CSV files.
+    13. The code also includes a random testing part at the end.
+
+    Please note that the code you provided is incomplete and may not work as expected. It is missing the part where the model is trained and the RMSE is calculated.
+
+    Also, the code you provided is not using the `RLRMCdataset` class, which is not a standard PyTorch Lightning dataset class. The code assumes that the dataset is a list of tuples, where each tuple is a sentence and its corresponding label.
+
+    If you want to use this code, you should replace the `RLRMCdataset` class with a PyTorch Lightning dataset class that can

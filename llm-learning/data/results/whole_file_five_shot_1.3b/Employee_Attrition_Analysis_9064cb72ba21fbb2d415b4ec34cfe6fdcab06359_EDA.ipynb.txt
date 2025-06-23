@@ -1,0 +1,31 @@
+```
+    ## Code: added_images.py
+    import matplotlib.pyplot as plt
+
+    def save_plot(fig, filename):
+        fig.savefig(filename)
+
+    def plot_and_save(df, column, hue=None, palette='hsv', **kwargs):
+        plt.clf()
+        df[column].plot(kind='hist', color=hue, palette=palette, **kwargs)
+        save_plot(plt.gcf(), f'images/{column}.png')
+        plt.clf()
+
+    def plot_correlation(df, column):
+        plt.figure(figsize=(10, 8))
+        df[column].plot(kind='hist', color='c', alpha=0.7, rwidth=0.85)
+        plt.grid(axis='y', alpha=0.75)
+        plt.xlabel(column)
+        plt.ylabel('Frequency')
+        save_plot(plt.gcf(), f'images/{column}_hist.png')
+
+    def plot_correlation_matrix(df, columns):
+        corr_matrix = df[columns].corr()
+        fig, ax = plt.subplots(len(columns), len(columns))
+        for i in range(len(columns)):
+            for j in range(len(columns)):
+                ax[i, j].set_title(f'{columns[i]} vs {columns[j]}')
+                corr_matrix[columns[i]].plot(kind='bar', ax=ax[i, j], color='c', alpha=0.7, rot=45)
+        save_plot(plt.gcf(), 'images/correlation_matrix.png')
+    ```
+    '''

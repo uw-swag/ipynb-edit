@@ -1,0 +1,52 @@
+```
+    ## Updating Readme(s) and Iris example notebook (#181)
+
+    This is a markdown cell.
+
+    ## Updating Readme(s)
+
+    This section is about updating the README.md file.
+
+    ### Iris Example Notebook
+
+    This section is about the Iris example notebook.
+
+    ## Steps
+
+    1. First, we will import the necessary libraries.
+    2. Then, we will load the Iris dataset from sklearn.datasets.
+    3. We will split the dataset into training and testing sets.
+    4. We will train a model on the training set and evaluate it on the testing set.
+    5. We will then update the README.md file with the results of the model evaluation.
+
+    ## Code
+
+    ```python
+    # Import necessary libraries
+    from sklearn import datasets
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load Iris dataset
+    iris = datasets.load_iris()
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=1) 
+
+    # Train a model on the training set
+    clf = RandomForestClassifier(n_estimators=100)
+    clf.fit(X_train, y_train)
+
+    # Evaluate the model on the testing set
+    y_pred = clf.predict(X_test)
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+
+    # Update the README.md file with the results of the model evaluation
+    with open('README.md', 'r') as file:
+        lines = file.readlines()
+
+    with open('README.md', 'w') as file:
+        for line in lines:
+            if "Accuracy:" in line:
+                file.write

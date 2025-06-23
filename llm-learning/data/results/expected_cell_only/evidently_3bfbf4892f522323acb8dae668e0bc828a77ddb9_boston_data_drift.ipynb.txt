@@ -1,0 +1,14 @@
+boston_data_drift_report = Dashboard(boston_frame[:200], boston_frame[200:], tabs=[DriftTab])
+boston_data_drift_report.save('reports/boston_data_drift_no_mapping.html')
+column_mapping = {}
+
+column_mapping['target'] = None
+column_mapping['prediction'] = None
+column_mapping['datetime'] = None
+
+column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping['categorical_features'] = ['CHAS', 'RAD']
+boston_data_drift_report = Dashboard(boston_frame[:200], boston_frame[200:], column_mapping = column_mapping, 
+                                     tabs=[DriftTab])
+boston_data_drift_report.save('reports/boston_data_drift_with_mapping.html')

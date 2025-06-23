@@ -1,0 +1,13 @@
+
+    # Increase the max_depth and n_estimators to improve the model's performance
+    rg = RandomForestRegressor(n_estimators=100, max_depth=10, min_samples_split=3)
+    rg.fit(X_train, y_train)
+
+    # Predict on the test set
+    preds = np.expm1(rg.predict(X_test))
+
+    # Create a dataframe with the ids and the predicted prices
+    solution = pd.DataFrame({"id":test_DF.Id, "SalePrice":preds})
+
+    # Save the solution to a csv file
+    solution.to_csv("submis.csv", index = False)

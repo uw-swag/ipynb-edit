@@ -1,0 +1,47 @@
+```python
+    # Importing necessary libraries
+    import fastbook
+    from fastbook import *
+    from pydicom import dcmread
+    import kornia
+    import torch
+    from torchvision import transforms
+    from torch.utils.data import DataLoader
+    from keras.applications.xception import Xception
+    from keras.layers import Dense, GlobalAveragePooling2D
+    from keras.models import Model
+    from keras.optimizers import Adam
+    from keras.applications.xception import preprocess_input
+    from keras.preprocessing.image import ImageDataGenerator
+    from keras.callbacks import ModelCheckpoint
+    from keras.applications.xception import decode_predictions
+
+    # Loading the dataset
+    dataset = '{dataset}'
+    path = '{path}'
+    dls = pneumothorax.dataloaders(path/'dicom-images-train')
+
+    # Showing the first batch of the dataset
+    dls.show_batch(max_n=16)
+
+    # Fine-tuning the model with Xception
+    model = Xception(weights='imagenet', include_top=False)
+    model.trainable = False
+    x = model.output
+    x = GlobalAveragePooling2D()(x)
+    x = Dense(1024, activation='relu')(x)
+    predictions = Dense(1, activation='sigmoid')(x)
+    model = Model(inputs=model.input, outputs=predictions)
+
+    # Compiling the model
+    model.compile(optimizer=Adam(lr=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
+
+    # Preprocessing the data
+    datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
+    datagen.fit(dls.train_ds)
+
+    # Training the model
+    history = model.fit(dls.train_ds, validation_data=dls.val_ds, epochs=10)
+
+    # Saving the model
+    model.save('pne

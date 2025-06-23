@@ -1,0 +1,111 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, CatTargetDriftTab, ProbClassificationPerformanceTab
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+<\Cell_1>
+<Cell_2>
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+<\Cell_2>
+<Cell_3>
+bcancer_frame.head()
+<\Cell_3>
+<Cell_4>
+bcancer_data_drift = Dashboard(tabs=[DataDriftTab])
+bcancer_data_drift.calculate(bcancer_frame[:280], bcancer_frame[280:])
+<\Cell_4>
+<Cell_5>
+bcancer_data_drift.show()
+<\Cell_5>
+<Cell_6>
+#bcancer_data_drift.save('bcancer_data_drift_no_dates.html')
+<\Cell_6>
+<Cell_7>
+date_list = pd.date_range(datetime.today(), periods = bcancer_frame.shape[0]).tolist()
+<\Cell_7>
+<Cell_8>
+bcancer_frame['date'] = date_list
+<\Cell_8>
+<Cell_9>
+column_mapping = {}
+
+column_mapping['datetime'] = 'date'
+
+numerical_features = list(bcancer_frame.columns)
+numerical_features.remove('date')
+column_mapping['numerical_features'] = numerical_features
+<\Cell_9>
+<Cell_10>
+bcancer_data_drift.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping)
+<\Cell_10>
+<Cell_11>
+bcancer_data_drift.show()
+<\Cell_11>
+<Cell_12>
+#bcancer_data_drift.save('bcancer_data_drift_with_dates.html')
+<\Cell_12>
+<Cell_13>
+bcancer_frame['target'] = bcancer.target
+column_mapping['target'] = 'target'
+<\Cell_13>
+<Cell_14>
+bcancer_data_and_target_drift = Dashboard(tabs=[DataDriftTab, CatTargetDriftTab])
+bcancer_data_and_target_drift.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping)
+<\Cell_14>
+<Cell_15>
+bcancer_data_and_target_drift.show()
+<\Cell_15>
+<Cell_16>
+#bcancer_data_and_target_drift.save('bcancer_data_and_target_drift.html')
+<\Cell_16>
+<Cell_17>
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+<\Cell_17>
+<Cell_18>
+reference, production, y_train, y_test = model_selection.train_test_split(bcancer_frame, 
+                                                                          bcancer.target, 
+                                                                          random_state = 0)
+<\Cell_18>
+<Cell_19>
+model = ensemble.RandomForestClassifier(random_state = 11)
+<\Cell_19>
+<Cell_20>
+model.fit(reference, y_train)
+<\Cell_20>
+<Cell_21>
+train_probas = pd.DataFrame(model.predict_proba(reference))
+train_probas.columns = bcancer.target_names
+test_probas = pd.DataFrame(model.predict_proba(production))
+test_probas.columns = bcancer.target_names
+<\Cell_21>
+<Cell_22>
+reference.reset_index(inplace=True, drop=True)
+reference['target'] = [bcancer.target_names[x] for x in y_train]
+merged_reference = pd.concat([reference, train_probas], axis = 1)
+
+production.reset_index(inplace=True, drop=True)
+production['target'] = [bcancer.target_names[x] for x in y_test]
+merged_production = pd.concat([production, test_probas], axis = 1)
+<\Cell_22>
+<Cell_23>
+column_mapping = {}
+
+column_mapping['target'] = 'target'
+column_mapping['prediction'] = bcancer.target_names.tolist()
+column_mapping['numerical_features'] = bcancer.feature_names
+<\Cell_23>
+<Cell_24>
+model_performance = Dashboard(tabs=[ProbClassificationPerformanceTab])
+model_performance.calculate(merged_reference, merged_production, column_mapping = column_mapping)
+model_performance.show()
+<\Cell_24>
+<Cell_25>
+#model_performance.save('bcancer_prob_classification_performance.html')
+<\Cell_25>

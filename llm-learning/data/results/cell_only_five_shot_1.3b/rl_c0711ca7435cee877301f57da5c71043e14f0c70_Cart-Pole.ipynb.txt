@@ -1,0 +1,67 @@
+```python
+    import matplotlib.pyplot as plt
+
+    # Assuming you have a DataFrame 'df' with 'feature' and 'target' columns
+    plt.figure(figsize=(10, 6))
+    plt.scatter(df['feature'], df['target'])
+    plt.title('Training Chart')
+    plt.xlabel('Feature')
+    plt.ylabel('Target')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add validation chart"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import matplotlib.pyplot as plt
+
+    # Assuming you have a DataFrame 'df_val' with 'feature' and 'target' columns
+    plt.figure(figsize=(10, 6))
+    plt.scatter(df_val['feature'], df_val['target'])
+    plt.title('Validation Chart')
+    plt.xlabel('Feature')
+    plt.ylabel('Target')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add confusion matrix"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+
+    # Assuming you have a DataFrame 'y_val' with 'target' column
+    y_pred = model.predict(X_val)
+    cm = confusion_matrix(y_val, y_pred)
+
+    plt.figure(figsize=(10, 6))
+    sns.heatmap(cm, annot=True, fmt='d')
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add ROC curve"
+    Original Code Cells:
+    '''
+    
+   

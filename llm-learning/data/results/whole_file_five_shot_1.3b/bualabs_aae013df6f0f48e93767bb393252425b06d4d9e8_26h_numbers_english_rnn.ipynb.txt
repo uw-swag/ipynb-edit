@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to predict on unseen data"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    <Cell_19>
+    unseen_data = pd.read_csv('../input/unseen-data/unseen_data.csv')
+    unseen_data.head()
+    <\Cell_19>
+    <Cell_20>
+    unseen_data.info()
+    <\Cell_20>
+    <Cell_21>
+    unseen_data.drop(columns=['id']).describe()
+    <\Cell_21>
+    <Cell_22>
+    # Rounding off Age
+    unseen_data['age'] = unseen_data['age'].apply(lambda x : round(x))
+
+    # BMI to NaN
+    unseen_data['bmi'] = unseen_data['bmi'].apply(lambda bmi_value: bmi_value if 12 < bmi_value < 60 else np.nan)
+
+    # Sorting DataFrame based on Gender then on Age and using Forward Fill-ffill() to fill NaN value for BMI
+    unseen_data.sort_values(['gender', 'age'], inplace=True) 
+    unseen_data.reset_index(drop=True, inplace=True)
+    unseen_data['bmi'].ffill(inplace=True)
+    <\Cell_22>
+    <Cell_23>
+    unseen_data.info()
+    <\Cell_23>
+    <Cell_24>
+    # Checking if Data is balanced
+    xs = unseen_data['stroke'].value_counts().index
+    ys = unseen_data['stroke'].value_counts().values
+
+    ax = sns.barplot(xs, ys)
+    ax.set_xlabel("Stroke")
+    plt.show()
+    <\Cell_24>
+    <Cell_25>
+    # Age vs BMI with hue = stroke
+    plt.figure(figsize=(12

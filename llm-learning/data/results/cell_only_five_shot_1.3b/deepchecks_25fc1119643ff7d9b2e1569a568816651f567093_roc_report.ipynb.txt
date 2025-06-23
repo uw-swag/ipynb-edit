@@ -1,0 +1,33 @@
+```python
+    import nbformat as nbf
+    from nbconvert.preprocessors import ExecutePreprocessor
+
+    # Load the notebook
+    nb = nbf.read('notebook.ipynb', as_version=4)
+
+    # Execute the notebook
+    ep = ExecutePreprocessor(timeout=-1, kernel_name='python3')
+    nbf.write(nb, 'notebook.ipynb')
+
+    # Add a new cell at the end
+    nb['cells'].append({
+        'cell_type': 'code',
+        'metadata': {},
+        'source': [
+            'nblinks.add_link("link_text", "url")'
+        ],
+        'outputs': []
+    })
+
+    # Write the notebook back to disk
+    nbf.write(nb, 'notebook.ipynb')
+    ```
+    This code will add a new cell at the end of the notebook that includes a call to the `nblinks.add_link` function. The new cell will add a link to the notebook.
+
+    Please note that you need to have the `nblinks` package installed in your Python environment. If it's not installed, you can install it using pip:
+
+    ```bash
+    pip install nblinks
+    ```
+
+    Also, this code assumes that the notebook is in the same directory as the script. If it's in a different location, you'll need to specify the full path to the notebook file.

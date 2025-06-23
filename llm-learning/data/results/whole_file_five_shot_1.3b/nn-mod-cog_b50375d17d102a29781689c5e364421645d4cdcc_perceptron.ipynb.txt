@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add example and refactor perceptron"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+
+def random_weights(X, random_state: int):
+    '''create vector of random weights'''
+    rand = np.random.RandomState(random_state)
+    w = rand.normal(loc=0.0, scale=0.01, size=1 + X.shape[1])
+    return w
+<\Cell_0>
+<Cell_1>
+
+<\Cell_1>
+
+<\Cell_2>
+# create matrix of features
+X = np.array([[11, 21, 33],
+              [1, 2, 3],
+              [12, 24, 37],
+              [1, 2, 3]])
+
+# create targets
+y = np.array([1, -1, 1, -1])
+
+# fit and predict values
+w, errors = fit(X, y)
+y_pred = predict(X, w)
+print(f'vector of weights: {w}')
+print(f'errors at each time step: {errors}')
+print(f'predicted value for each case: {y_pred}')
+<\Cell_2>
+<Cell_3>
+# create matrix of features
+X = np.array([[11, 21, 33],
+              [1, 2, 3],
+              [12, 24, 37],
+              [1, 2, 3]])
+
+# create targets
+y = np.array([1, -1, 1, -1])
+
+# fit and predict values
+w, errors = fit(X, y)
+y_pred = predict(X, w)
+print(f'vector of weights: {w}')
+print(f'errors at each time step: {errors}')
+print(f'predicted value for each case: {y_pred}')
+<\Cell_3>
+<Cell_4>
+# create matrix of features
+X = np.array

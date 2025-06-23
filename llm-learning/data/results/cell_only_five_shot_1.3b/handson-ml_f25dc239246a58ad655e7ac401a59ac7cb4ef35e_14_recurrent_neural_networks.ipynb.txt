@@ -1,0 +1,41 @@
+```python
+    # Exercise 7:
+    # In the previous chapter, we learned about the concept of a binary search tree.
+    # Now, we will implement a solution for the problem of finding the kth largest element in a binary search tree.
+
+    # The Binary Search Tree (BST) is a node-based binary tree data structure which has the following properties:
+    # 1. The left subtree of a node contains only nodes with keys less than the node’s key.
+    # 2. The right subtree of a node contains only nodes with keys greater than the node’s key.
+    # 3. The left and right subtree each must also be a binary search tree.
+
+    # The kth largest element is the key of the node in the BST that would be returned if we were performing a right rotation on the tree.
+
+    # Here is a Python solution for the problem:
+
+    class TreeNode:
+        def __init__(self, x):
+            self.val = x
+            self.left = None
+            self.right = None
+
+    class Solution:
+        def kthLargestValue(self, root: TreeNode, k: int) -> int:
+            self.values = []
+            self.k = k
+            self.findValues(root)
+            self.values.sort(reverse=True)
+            return self.values[k - 1]
+
+        def findValues(self, node):
+            if node is None:
+                return []
+            left_values = self.findValues(node.left)
+            right_values = self.findValues(node.right)
+            current_value = left_values + right_values + [node.val]
+            current_value.sort(reverse=True)
+            self.values = current_value
+
+    # This solution works by first finding all the values in the BST in reverse order (since we want the kth largest element),
+    # then sorting the list in reverse order to get the kth largest element.
+    # The time complexity of this solution is O(n log n) due to the sorting operation, where n is the number of nodes in the BST.
+    # The space complexity is O(n) due to the

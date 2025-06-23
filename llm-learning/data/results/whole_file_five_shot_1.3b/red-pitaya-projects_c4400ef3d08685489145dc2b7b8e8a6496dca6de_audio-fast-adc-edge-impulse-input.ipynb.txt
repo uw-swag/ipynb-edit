@@ -1,0 +1,52 @@
+```python
+    # Add the images to the Edge Impulse Notebooks
+    import IPython.display as ipd
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from redpitaya.overlay.mercury import mercury as overlay
+
+    #Audio processing requirements
+    import scipy.io.wavfile as wav
+    import IPython.display as ipd
+
+    #Edge Impulse requirements
+    import json
+    import time, hmac, hashlib
+    import requests
+    import re, socket
+    import math
+
+    fpga = overlay()
+
+    in2 = fpga.osc(1, 1.0)
+    in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+    in2.trigger_pre  = 0
+    in2.trigger_post = in2.buffer_size
+    in2.trig_src = 0
+
+    def record_audio():
+        in2.reset()
+        in2.start()
+        in2.trigger()
+        print ('Recording started')
+        while (in2.status_run()): pass
+        print ('Recording complete')
+        data = in2.data(in2.buffer_size)
+        return data[1:] #Remove first sample as it maybe zero
+
+    audio_data_returned = record_audio()
+
+    def display_audio(audio_data,sr = 3000): #default sample rate 3 Ksps
+        return ipd.Audio(audio_data, rate=sr) # load a NumPy array
+
+    python_display_audio = display_audio(audio_data_returned, sr = 3000)
+    python_display_audio
+
+    def plot_audio(audio_data):
+        plt.plot(audio_data)
+        plt.show()
+
+    plot_audio(audio_data_returned)
+
+    def save_audio(audio_data, file, sr = 3000): #default sample rate 3 Ksps
+        wav.write("float_wave_test_raw.wav", sr

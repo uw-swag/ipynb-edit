@@ -1,0 +1,37 @@
+```python
+    # Add check context
+    if not isinstance(sample_size, int) or sample_size < 0:
+        raise ValueError("sample_size must be a non-negative integer")
+
+    if not isinstance(random_seed, int) or random_seed < 0:
+        raise ValueError("random_seed must be a non-negative integer")
+
+    if not isinstance(cat_features, list) or not all(isinstance(feature, str) for feature in cat_features):
+        raise ValueError("cat_features must be a list of string")
+
+    if not isinstance(label_name, str):
+        raise ValueError("label_name must be a string")
+
+    if not isinstance(train_ds, Dataset) or not isinstance(test_ds, Dataset):
+        raise ValueError("train_ds and test_ds must be instances of Dataset")
+
+    if not hasattr(train_ds, 'data') or not hasattr(train_ds, 'features_columns'):
+        raise ValueError("train_ds must have attributes 'data' and 'features_columns'")
+
+    if not hasattr(test_ds, 'data') or not hasattr(test_ds, 'features_columns'):
+        raise ValueError("test_ds must have attributes 'data' and 'features_columns'")
+
+    if not hasattr(train_ds, 'n_samples') or not hasattr(test_ds, 'n_samples'):
+        raise ValueError("train_ds and test_ds must have attributes 'n_samples'")
+
+    if not hasattr(train_ds, 'data') or not hasattr(test_ds, 'data'):
+        raise ValueError("train_ds and test_ds must have attributes 'data'")
+
+    if not hasattr(train_ds, 'label'):
+        raise ValueError("train_ds must have attribute 'label'")
+
+    if not hasattr(test_ds, 'label'):
+        raise ValueError("test_ds must have attribute 'label'")
+
+    if not hasattr(train_ds, 'cat_features'):
+        raise ValueError("train_ds must have attribute 'cat_

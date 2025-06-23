@@ -1,0 +1,21 @@
+```
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    df = load_iris(return_X_y=False, as_frame=True)
+    df = pd.concat([df.data, df.target], axis=1)
+
+    from mlchecks.checks.overview import DatasetInfo, dataset_info
+    from mlchecks.base import Dataset
+
+    dataset_info(Dataset(df))
+    ```
+
+    ### Explanation:
+    The code is valid and should run without any issues. The `load_iris` function from sklearn is used to load the iris dataset, which is a built-in dataset in sklearn.datasets. The dataset is loaded as a pandas DataFrame, and then the `dataset_info` function from mlchecks is used to check the information about the dataset.
+
+    The `DatasetInfo` and `dataset_info` functions are used to check the information about the dataset. The `DatasetInfo` function checks the number of rows and columns in the dataset, the data type of each column, and the summary statistics of the dataset. The `dataset_info` function is a wrapper around the `DatasetInfo` function, and it checks the dataset information in a more user-friendly format.
+
+    The `Dataset` class is used to create a dataset object from a pandas DataFrame. This is a common pattern in machine learning where the dataset is often loaded as a pandas DataFrame.
+
+    The final code should be valid and should not produce any errors or warnings.

@@ -1,0 +1,58 @@
+```
+    ## Crop long outputs to make it easier to visualize the notebooks on github.com
+
+    ### Instruction:
+    [
+    Commit Message: "Crop long outputs to make it easier to visualize the notebooks on github.com"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from __future__ import division, print_function, unicode_literals
+
+    import numpy as np
+    import tensorflow as tf
+    from tensorflow import keras
+    <\Cell_0>
+    <Cell_1>
+    import os
+    os.environ["CUDA_VISIBLE_DEVICES"]=""
+    <\Cell_1>
+    <Cell_2>
+    2. * 5. / 7.
+    <\Cell_2>
+    <Cell_3>
+    2. / 7. * 5.
+    <\Cell_3>
+    <Cell_4>
+    config = tf.ConfigProto(intra_op_parallelism_threads=1,
+                            inter_op_parallelism_threads=1)
+
+    with tf.Session(config=config) as sess:
+        #... this will run single threaded
+        pass
+    <\Cell_4>
+    <Cell_5>
+    with tf.Session() as sess:
+        #... also single-threaded!
+        pass
+    <\Cell_5>
+    <Cell_6>
+    print(set("Try restarting the kernel and running this again"))
+    print(set("Try restarting the kernel and running this again"))
+    <\Cell_6>
+    <Cell_7>
+    if os.environ.get("PYTHONHASHSEED") != "0":
+        raise Exception("You must set PYTHONHASHSEED=0 when starting the Jupyter server to get reproducible results.")
+    <\Cell_7>
+    <Cell_8>
+    import random
+
+    random.seed(42)
+    print(random.random())
+    print(random.random())
+
+    print()
+
+    random.seed(42)
+    print(random.random())
+    print(random

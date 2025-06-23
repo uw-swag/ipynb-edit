@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    from sklearn.decomposition import TruncatedSVD
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.decomposition import NMF
+
+    # Assuming you have a list of text documents
+    text_documents = ['Document 1', 'Document 2', 'Document 3', 'Document 4', 'Document 5']
+
+    # Convert the text documents into a matrix of token counts
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(text_documents)
+
+    # Use TruncatedSVD to reduce the dimensionality of the matrix
+    svd = TruncatedSVD(n_components=2)
+    X_reduced = svd.fit_transform(X)
+
+    # Use NMF to decompose the matrix
+    nmf = NMF(n_components=2)
+    X_nmf = nmf.fit_transform(X)
+
+    # Print the reduced and decomposed matrices
+    print("Reduced matrix:")
+    print(X_reduced)
+    print("Decomposed matrix:")
+    print(X_nmf)
+    ```
+
+    Please note that the above code is a simple example and may not work as expected for your specific use case. The `CountVectorizer` is used to convert the text documents into a matrix of token counts, which is then reduced using `TruncatedSVD` and decomposed using `NMF`. The number of components in the SVD and NMF models is set to 2, but you may need to adjust this depending on your specific use case.

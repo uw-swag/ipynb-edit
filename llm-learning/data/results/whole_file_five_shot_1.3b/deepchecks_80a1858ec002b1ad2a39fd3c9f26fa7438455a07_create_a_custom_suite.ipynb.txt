@@ -1,0 +1,35 @@
+```
+    # Importing necessary libraries
+    from deepchecks.checks import *
+    from deepchecks import Suite
+    from sklearn.metrics import precision_score, recall_score
+
+    # Creating a suite with custom checks
+    new_custom_suite = Suite('Simple Suite For Model Performance',
+        ModelInfo(),
+        PerformanceReport(),
+        TrainTestDifferenceOverfit().add_condition_degradation_ratio_not_greater_than(threshold=0.15).add_condition_difference_not_greater_than(0.3),
+        ConfusionMatrixReport(),
+        SimpleModelComparison(simple_model_type='constant').add_condition_ratio_not_less_than(0.9)
+    )
+
+    # Running the suite
+    new_custom_suite.run(model=rf_clf, train_dataset=ds_train, test_dataset=ds_test, check_datasets_policy='test')
+
+    # Creating a suite for data leakage
+    data_leakage_suite = Suite('Data Leakage Suite',
+        ModelInfo(),
+        UnusedFeatures().add_condition_number_of_high_variance_unused_features_not_greater_than(),
+        SingleFeatureContributionTrainTest().add_condition_feature_contribution_not_greater_than()
+    )
+
+    # Running the data leakage suite
+    data_leakage_suite.run(ds_train, ds_test, rf_clf)
+
+    # Modifying the data leakage suite
+    data_leakage_suite.remove(1)
+    data_leakage_suite.name = 'New Data Methodology Suite'
+
+    # Running the modified data leakage suite
+    data_leakage_suite.run(ds_train, ds_test, rf_clf)
+    ```

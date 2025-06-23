@@ -1,0 +1,15 @@
+```
+    # Add target variable
+    df['TMAX'] = df['TMAX'].to_i
+    df['TMIN'] = df['TMIN'].to_i
+    df['TAVG'] = (df['TMAX'] + df['TMIN']) / 2
+
+    # Plotting the data
+    plot = Daru::Plot.new(df, x: 'DATE', y: ['TMAX', 'TMIN', 'TAVG'])
+    plot.line(color: 'blue')
+    plot.show
+
+    # Correlation matrix
+    df.corr
+    ```
+    The target variable 'TMAX' and 'TMIN' are converted to integer type and then calculated as the average of 'TMAX' and 'TMIN'. The data is then plotted in a line graph. The correlation matrix is also calculated.

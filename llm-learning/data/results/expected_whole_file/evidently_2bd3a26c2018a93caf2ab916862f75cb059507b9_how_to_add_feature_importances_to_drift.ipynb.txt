@@ -1,0 +1,107 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+
+from datetime import datetime, time
+from sklearn import datasets, ensemble
+
+from evidently import ColumnMapping
+from evidently.test_suite import TestSuite
+from evidently.report import Report
+from evidently.metrics import DataDriftTable
+from evidently.tests import TestShareOfDriftedColumns
+<\Cell_1>
+<Cell_2>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_2>
+<Cell_3>
+content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip", verify=False).content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+<\Cell_3>
+<Cell_4>
+raw_data.index = raw_data.apply(
+    lambda row: datetime.combine(row.name, time(hour=int(row['hr']))), axis = 1)
+<\Cell_4>
+<Cell_5>
+target = 'cnt'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday']
+<\Cell_5>
+<Cell_6>
+reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+<\Cell_6>
+<Cell_7>
+regressor = ensemble.RandomForestRegressor(random_state = 42, n_estimators = 50)
+<\Cell_7>
+<Cell_8>
+regressor.fit(reference[numerical_features + categorical_features], reference[target])
+<\Cell_8>
+<Cell_9>
+ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+current_prediction = regressor.predict(current[numerical_features + categorical_features])
+<\Cell_9>
+<Cell_10>
+reference['prediction'] = ref_prediction
+current['prediction'] = current_prediction
+<\Cell_10>
+<Cell_11>
+regressor.feature_importances_
+<\Cell_11>
+<Cell_12>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+<\Cell_12>
+<Cell_13>
+report = Report(metrics = [
+    DataDriftTable(feature_importance=True)
+])
+report.run(reference_data=reference,
+           current_data=current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'],
+           column_mapping=column_mapping
+           )
+<\Cell_13>
+<Cell_14>
+report.show(mode='inline')
+<\Cell_14>
+<Cell_15>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+<\Cell_15>
+<Cell_16>
+report = Report(metrics = [
+    DataDriftTable(feature_importance=True)
+])
+report.run(reference_data=reference,
+           current_data=current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'],
+           column_mapping=column_mapping,
+           additional_data = {'current_feature_importance':
+              dict(map(lambda i,j : (i,j), numerical_features + categorical_features, regressor.feature_importances_))
+            }
+           )
+<\Cell_16>
+<Cell_17>
+report.show(mode='inline')
+<\Cell_17>

@@ -1,0 +1,30 @@
+```
+    import pandas as pd
+
+    movie_url = 'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/u.item'
+    movie_cols = ['movie_id', 'title']
+    movies = pd.read_table(movie_url, sep='|', header=None, names=movie_cols, usecols=[0, 1])
+    movies.head()
+
+    rating_url = 'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/u.data'
+    rating_cols = ['user_id', 'movie_id', 'rating', 'timestamp']
+    ratings = pd.read_table(rating_url, sep='\t', header=None, names=rating_cols)
+    ratings.head()
+
+    movie_ratings = pd.merge(movies, ratings)
+    movie_ratings.head()
+
+    print(movies.shape)
+    print(ratings.shape)
+    print(movie_ratings.shape)
+
+    A = pd.DataFrame({'color': ['green', 'yellow', 'red'], 'num':[1, 2, 3]})
+    A
+    B = pd.DataFrame({'color': ['green', 'yellow', 'pink'], 'size':['S', 'M', 'L']})
+    B
+    pd.merge(A, B, how='inner')
+    pd.merge(A, B, how='outer')
+    pd.merge(A, B, how='left')
+    pd.merge(A, B, how='right')
+
+    ```

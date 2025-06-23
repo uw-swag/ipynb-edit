@@ -1,0 +1,47 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Chapter 12 - Section 12.3, 12.4 and 12.7 (#19)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+    from sklearn.metrics import silhouette_score
+    from matplotlib import pyplot as plt
+    import seaborn as sns
+    import matplotlib.cm as cm
+    from learntools.core import binder; binder.bind(globals())
+    from learntools.embeddings.ex12_pca import *
+
+    RUNNING_ON_KERNELS = 'KAGGLE_WORKING_DIR' in os.environ
+    input_dir = '../input/12-section-123-124-127' if RUNNING_ON_KERNELS else '.'
+    csv_path = os.path.join(input_dir, 'movies.csv')
+    df = pd.read_csv(csv_path)
+    <\Cell_0>
+    <Cell_1>
+    df.head()
+    <\Cell_1>
+    <Cell_2>
+    df.describe()
+    <\Cell_2>
+    <Cell_3>
+    df.info()
+    <\Cell_3>
+    <Cell_4>
+    df.drop(['Unnamed: 0'], axis=1, inplace=True)
+    <\Cell_4>
+    <Cell_5>
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+    <\Cell_5>
+    <Cell_6>
+    pca = PCA(n_components=2)
+    df_pca = pca.fit_transform(df_scaled)
+    <\Cell_6>
+    <Cell_7>
+    kmeans = KMeans(n_clusters=5)
+   

@@ -1,0 +1,86 @@
+```python
+    from google.cloud import storage
+
+    def upload_blob(bucket_name, source_file_name, destination_blob_name):
+        """Uploads a file to the bucket."""
+        # bucket_name = "your-bucket-name"
+        # source_file_name = "local/path/to/file"
+        # destination_blob_name = "storage-object-name"
+
+        storage_client = storage.Client()
+
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+
+        blob.upload_from_filename(source_file_name)
+
+        print(
+            "File {} uploaded to {}.".format(
+                source_file_name, destination_blob_name
+            )
+        )
+
+    # Upload the file
+    upload_blob('my-bucket', '/path/to/my/file', 'destination-name')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add new feature"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Adding a new feature
+    def new_feature(data):
+        # Your code here
+        pass
+
+    # Example usage:
+    new_feature(data)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "fix bug"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Fixing a bug
+    def fix_bug(data):
+        # Your code here
+        pass
+
+    # Example usage:
+    fix_bug(data)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "optimize code"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Optimizing code
+    def optimize_code(data):
+        # Your code here
+        pass
+
+    # Example usage:
+    optimize_code(data)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message:

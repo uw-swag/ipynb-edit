@@ -1,0 +1,31 @@
+```python
+    import pandas as pd
+
+    class DataDuplicates:
+        def __init__(self, n_to_show=None, columns=None, ignore_columns=None):
+            self.n_to_show = n_to_show
+            self.columns = columns
+            self.ignore_columns = ignore_columns
+
+        def run(self, df):
+            if self.n_to_show is not None:
+                df = df.drop_duplicates(subset=self.columns, keep='first')
+            if self.ignore_columns is not None:
+                df = df.drop(self.ignore_columns, axis=1)
+            df = df.drop_duplicates()
+            if self.n_to_show is not None:
+                df = df.head(self.n_to_show)
+            return df
+
+    # Example usage:
+    ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2], "col3":[2,3,4,4,4,3,4,5,6,4]})
+    DataDuplicates().run(ds)
+    DataDuplicates(n_to_show=2).run(ds)
+    DataDuplicates(columns=["col1"]).run(ds)
+    DataDuplicates(ignore_columns=["col3"]).run(ds)
+    ds_no_dups = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2], "col3":[1,2,3,4,5,6,7,8,9,0]})
+    DataDuplicates().run(ds_no_dups)
+    DataDuplicates(ignore_columns=["col3"]).run(ds_no_dups)
+    ```
+
+    This code defines a class `DataDuplicates` that

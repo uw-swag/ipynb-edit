@@ -1,0 +1,36 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Atualizado o arquivo de exploração de dados e anális. Atualizado também a predição com o melhor algoritmo de reconhecimento"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from data import get_full_data, get_who_is
+from matplotlib import pyplot as plt
+from sklearn import linear_model
+from predicting_who_is import accuracy_score, performance_metric
+import pandas as pd
+import numpy as np
+
+from IPython.display import display # Allows the use of display() for DataFrames
+
+# Import supplementary visualizations code visuals.py
+import visuals as vs
+
+X, Y, df = get_full_data()
+
+# Print the first few entries of the RMS Titanic data
+display(X.head(100))
+<\Cell_0>
+<Cell_1>
+# Exemplos de representação
+
+# Boa referencia sobre analise de dados
+#http://felipegalvao.com.br/blog/2016/03/08/visualizacao-de-dados-com-python-matplotlib/
+
+# http://www.dummies.com/programming/big-data/data-science/how-to-visualize-the-classifier-in-an-svm-supervised-learning-model/
+# http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html#sphx-glr-auto-examples-svm-plot-iris-py
+# http://scikit-learn.org/stable/auto_examples/plot_multilabel.html#sphx-glr-auto-examples-plot-multilabel-py
+#http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#sphx-glr-auto-examples-classification-plot-classifier-comparison-py
+def display_features(X, Y):
+   

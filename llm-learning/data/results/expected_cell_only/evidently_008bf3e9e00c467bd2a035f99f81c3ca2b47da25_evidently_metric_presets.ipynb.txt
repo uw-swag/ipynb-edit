@@ -1,0 +1,35 @@
+#Dataset for binary probabilistic classifcation
+bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+bcancer_ref['benign'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 0]
+bcancer_ref['malignant'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+
+bcancer_cur['benign'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 0]
+bcancer_cur['malignant'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+classification_performance_report = Report(metrics=[
+    ClassificationPreset(),
+])
+
+classification_performance_report.run(
+    reference_data=bcancer_ref,
+    current_data=bcancer_cur,
+    column_mapping=ColumnMapping(prediction='malignant')
+)
+classification_performance_report
+classification_target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+classification_target_drift_report.run(
+    reference_data=bcancer_ref,
+    current_data=bcancer_cur,
+    column_mapping=ColumnMapping(prediction='malignant', task='classification')
+)
+classification_target_drift_report

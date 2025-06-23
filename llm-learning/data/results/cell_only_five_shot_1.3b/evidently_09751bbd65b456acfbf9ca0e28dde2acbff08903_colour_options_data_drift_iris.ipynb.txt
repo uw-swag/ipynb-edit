@@ -1,0 +1,58 @@
+```python
+    from bokeh.plotting import figure, show
+    from bokeh.models import Circle, HoverTool, BoxZoomTool, ResetTool
+    from bokeh.palettes import viridis
+
+    # Define the data
+    data = dict(
+        x=[1, 2, 3, 4, 5],
+        y=[6, 7, 2, 4, 5],
+        colors=[
+            'rgb(255, 255, 255)'  # white
+            'rgb(255, 255, 0)'  # yellow
+            'rgb(0, 255, 0)'  # green
+            'rgb(0, 0, 255)'  # blue
+            'rgb(255, 0, 0)'  # red
+        ]
+    )
+
+    # Create the figure
+    p = figure(
+        tools=[BoxZoomTool(), ResetTool()],
+        active_scroll="wheel_zoom",
+        x_range=(0, 6),
+        y_range=(0, 8),
+        width=800,
+        height=600,
+        tools="pan,wheel_zoom,box_zoom,reset"
+    )
+
+    # Add the circles
+    for i, j, color in zip(data['x'], data['y'], data['colors']):
+        p.circle(i, j, fill_color=color, size=10)
+
+    # Add a hover tool
+    p.add_tools(HoverTool(
+        tooltips=[
+            ("x", "@x"),
+            ("y", "@y"),
+            ("color", "@colors"),
+        ]
+    ))
+
+    # Show the figure
+    show(p)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Updated the examples for ColourSchema and Stattest customisation"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from boke

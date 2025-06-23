@@ -1,0 +1,51 @@
+
+    '''
+    from sklearn.manifold import TSNE
+    import numpy as np
+
+    X = player_attr.drop(['id_','player_fifa_api_id','date','attacking_work_rate','defensive_work_rate'], axis=1)
+    Y = player_attr['id_']
+
+    model = TSNE(n_components=2, random_state=0)
+    X_2D = model.fit_transform(X)
+
+    df = pd.DataFrame(X_2D, columns=['First Dimension', 'Second Dimension'])
+    df['Player ID'] = Y
+
+    plt.figure(figsize=(10,8))
+    sns.scatterplot(x='First Dimension', y='Second Dimension', hue='Player ID', data=df)
+    plt.show()
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Finished t-SNE"
+    Original Code Cells:
+    '''
+    from sklearn.manifold import TSNE
+    import numpy as np
+
+    X = player_attr.drop(['id_','player_fifa_api_id','date','attacking_work_rate','defensive_work_rate'], axis=1)
+    Y = player_attr['id_']
+
+    model = TSNE(n_components=2, random_state=0)
+    X_2D = model.fit_transform(X)
+
+    df = pd.DataFrame(X_2D, columns=['First Dimension', 'Second Dimension'])
+    df['Player ID'] = Y
+
+    plt.figure(figsize=(10,8))
+    sns.scatterplot(x='First Dimension', y='Second Dimension', hue='Player ID', data=df)
+    plt.show()
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Added labels to t-SNE plot"
+    Original Code Cells:
+    '''
+    from sklearn.manifold import TSNE
+    import numpy as np
+
+    X = player_attr

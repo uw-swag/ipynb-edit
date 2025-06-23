@@ -1,0 +1,57 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding more details to the notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+import IPython.display as ipyd
+from libs import gif, nb_utils
+<\Cell_0>
+<Cell_1>
+# Bit of formatting because I don't like the default inline code style:
+from IPython.core.display import HTML
+HTML("""<style> .rendered_html code { 
+    padding: 2px 4px;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+} </style>""")
+<\Cell_1>
+<Cell_2>
+sess = tf.InteractiveSession()
+<\Cell_2>
+<Cell_3>
+from libs import inception
+net = inception.get_inception_model()
+<\Cell_3>
+<Cell_4>
+nb_utils.show_graph(net['graph_def'])
+<\Cell_4>
+<Cell_5>
+tf.import_graph_def(net['graph_def'], name='inception')
+<\Cell_5>
+<Cell_6>
+net['labels']
+<\Cell_6>
+<Cell_7>
+g = tf.get_default_graph()
+names = [op.name for op in g.get_operations()]
+print(names)
+<\Cell_7>
+<Cell_8>
+x = g.get_tensor_by_name(names[0] + ':0')
+softmax = g.get_tensor_by_name(names[-2] + ':0')
+<\Cell_8>
+<Cell_9>
+from skimage.data import coffee
+og = coffee()
+plt.imshow(og)
+print(og.min(), og.max())
+<\Cell_9>
+<Cell_10>
+img = inception.

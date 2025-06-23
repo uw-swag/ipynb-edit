@@ -1,0 +1,29 @@
+```python
+    from pyspark.ml.classification import LogisticRegression
+    from pyspark.ml.feature import IndexToString, StringIndexer, VectorIndexer
+    from pyspark.ml import Pipeline
+
+    # Load training data
+    df = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+
+    # Index labels
+    labelIndexer = StringIndexer(inputCol="label", outputCol="indexedLabel").fit(df)
+
+    # Assemble the features into a single vector
+    vectorIndexer = VectorIndexer(inputCol="features", outputCol="indexedFeatures", maxCategories=4)
+
+    # Create a Logistic Regression object
+    lr = LogisticRegression(maxIter=10)
+
+    # Create a pipeline
+    pipeline = Pipeline(stages=[labelIndexer, vectorIndexer, lr])
+
+    # Train model
+    model = pipeline.fit(df)
+
+    # Make predictions
+    predictions = model.transform(df)
+
+    # Select example rows to display
+    predictions.select("prediction", "label", "indexedLabel", "indexedFeatures").show()
+    ```

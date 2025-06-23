@@ -1,0 +1,46 @@
+```
+    ## SQLiteTracker
+
+    The `SQLiteTracker` is a class that is used to track the performance of machine learning models. It is designed to store and retrieve the performance of models in a SQLite database.
+
+    ## Parameters
+
+    - `db_path`: The path to the SQLite database file.
+
+    ## Methods
+
+    - `new()`: Create a new entry in the tracker.
+    - `update(uuid, metrics)`: Update the metrics of a model with the given UUID.
+    - `comment(uuid, comment)`: Add a comment to a model with the given UUID.
+    - `get(uuid)`: Get the metrics of a model with the given UUID.
+    ```
+    ## Example
+
+    ```python
+    tracker = SQLiteTracker(':memory:')
+    uuid = tracker.new()
+    tracker.update(uuid, {'accuracy': 0.85})
+    tracker.comment(uuid, 'My experiment')
+    tracker.get(uuid)
+    ```
+    ```
+    ## Note
+
+    The `SQLiteTracker` is a simple implementation and may not cover all use cases. For more complex use cases, consider using a dedicated performance tracking library.
+    ```
+    ## Warning
+
+    The `SQLiteTracker` is not thread-safe. If multiple threads are used to access the tracker simultaneously, ensure that the tracker is accessed in a thread-safe manner.
+    ```
+    ## See Also
+
+    - [sklearn_evaluation.manage.SQLiteTracker](https://github.com/scikit-learn-evaluation/sklearn-evaluation/blob/main/sklearn_evaluation/manage/SQLiteTracker.ipynb)
+    ```
+    ## Note
+
+    The `SQLiteTracker` is a simple implementation and may not cover all use cases. For more complex use cases, consider using a dedicated performance tracking library.
+    ```
+    ## Warning
+
+    The `SQLiteTracker` is not thread-safe. If multiple threads are used to access the tracker simultaneously, ensure that the tracker is accessed in a thread-safe manner.
+    

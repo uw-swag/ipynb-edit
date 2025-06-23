@@ -1,0 +1,24 @@
+```
+    # Import necessary libraries
+    import tensorflow as tf
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Load the data
+    data = tf.keras.preprocessing.image_dataset_from_directory(
+        directory='path_to_your_directory',
+        labels='inferred',
+        image_size=(180, 180),
+        batch_size=32)
+
+    # Visualize the data
+    class_names = np.array(data.class_names)
+    plt.figure(figsize=(10,10))
+    for i, (img, label) in enumerate(data.take(10)):
+        ax = plt.subplot(10, 10, i + 1)
+        plt.imshow(img[0]), plt.title(class_names[label[0]])
+        plt.axis('off')
+    plt.show()
+    ```
+
+    This code will load a dataset from a directory, and then visualize the first 10 images in the dataset. The images are resized to 180x180 pixels, and the labels are inferred from the filenames.

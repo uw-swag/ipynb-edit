@@ -1,0 +1,34 @@
+
+    The majority class undersampling is a technique used to reduce the number of samples in the majority class of a dataset. This is done by randomly removing samples from the majority class until the class distribution is balanced.
+
+    Here is a Python implementation of the majority class undersampling:
+
+    ```python
+    from sklearn.utils import resample
+
+    def createTrainingAndTestDatasets(dataset, test_ratio):
+        X = dataset.drop('seizure', axis = 1)
+        y = dataset['seizure']
+
+        # Separate majority and minority classes
+        not_seizure = dataset[dataset['seizure']==0]
+        seizure = dataset[dataset['seizure']==1]
+
+        # Upsample minority class
+        seizure_upsampled = resample(seizure, 
+                                    replace=True,     # sample without replacement
+                                    n_samples=len(not_seizure),    # to match majority class
+                                    random_state=123) # reproducible results
+        
+        # Combine majority class with upsampled minority class
+        dataset_upsampled = pd.concat([not_seizure, seizure_upsampled])
+
+        # Now, let's split the data into training and test sets
+        train_dat, test_dat, train_ind, test_ind = model_selection.train_test_split(dataset_upsampled.drop('seizure', axis = 1), dataset_upsampled['seizure'], test_size = test_ratio, shuffle = True)
+
+        return train_dat, test_dat, train_ind, test_ind
+    ```
+
+    This function first separates the majority and minority classes, then upsamples the minority class to match the size of the majority class. It then combines the majority class with the upsampled minority class to create a balanced dataset. Finally, it splits the dataset into a training set and a test set.
+
+    Please note that the `resample` function from `sklearn.utils` is used to perform the majority class undersampling.

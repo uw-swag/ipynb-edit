@@ -1,0 +1,28 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from scipy.stats import mannwhitneyu
+
+    # Define the MMD test
+    def _mmd_loss(x, y):
+        dim = x.shape[0]
+        return torch.mean((x - y).pow(2)) + torch.mean((x - y).pow(2))
+
+    # Define the StatTest
+    class MMDTest(StatTest):
+        def __init__(self, name, display_name, func, allowed_feature_types):
+            super().__init__(name, display_name, func, allowed_feature_types)
+
+        def run(self, reference_data, current_data):
+            mmd_loss = _mmd_loss(reference_data, current_data)
+            return mmd_loss
+
+    mmd_test = MMDTest(
+        name="mmd",
+        display_name="Maximum Mean Discrepancy",
+        func=_mmd_loss,
+        allowed_feature_types=["num"]
+    )
+
+    mmd_test.run(reference_data=adult_ref, current_data=adult_cur)
+    ```

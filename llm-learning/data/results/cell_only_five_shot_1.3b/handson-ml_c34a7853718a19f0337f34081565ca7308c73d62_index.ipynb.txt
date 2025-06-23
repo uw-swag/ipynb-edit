@@ -1,0 +1,41 @@
+
+    ## Adding equations to the book
+
+    ## Step 1: Import necessary libraries
+    import nbformat as nbf
+
+    ## Step 2: Load the notebook
+    with open("./Data/my_notebook.ipynb", "r") as f:
+        nb = nbf.read(f, as_version=4)
+
+    ## Step 3: Add equations
+    ## Let's assume we have the following equation:
+    ## f(x) = x^2
+    ## We can add it to the notebook as follows:
+
+    ## Step 3.1: Create a new cell
+    cell = nbf.v4.new_markdown_cell('<p>This is a new equation:</p>')
+    nb['cells'].append(cell)
+
+    ## Step 3.2: Add the equation
+    equation = """
+    f(x) = x^2
+    """
+    nb['cells'][-1]['source'] = equation
+
+    ## Step 3.3: Save the notebook
+    with open("./Data/my_notebook.ipynb", "w") as f:
+        nbf.write(nb, f)
+
+    ## Step 4: Display the notebook
+    nbf.display(nb)
+
+    ## Note: This is a very basic example. In a real-world scenario, you would likely need to handle more complex notebook structures, such as equations in different cells, equations in different languages, etc.
+
+    ## Note: The above code assumes that the notebook is saved in the same directory as the Python script. If the notebook is saved elsewhere, you would need to adjust the file path accordingly.
+
+    ## Note: The above code also assumes that the notebook is saved in a version that supports the 'markdown_cell' data type. If your notebook is saved in a different version, you may need to adjust the code accordingly.
+
+    ## Note: The above code also assumes that the notebook is saved in a Jupyter notebook format. If your notebook is saved in a different format, you may need to adjust the code accordingly.
+
+    ## Note

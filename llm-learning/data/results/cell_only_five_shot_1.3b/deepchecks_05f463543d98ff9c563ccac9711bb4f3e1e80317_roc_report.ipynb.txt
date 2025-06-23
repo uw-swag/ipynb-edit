@@ -1,0 +1,52 @@
+```python
+    # Example 1
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load iris dataset
+    iris = load_iris()
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3,random_state=1) 
+
+    # Create KNN classifier
+    knn = KNeighborsClassifier(n_neighbors=3)
+
+    # Fit the classifier to the data
+    knn.fit(X_train,y_train)
+
+    # Predict the response for test dataset
+    y_pred = knn.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+
+    # Example 2
+    import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocessing
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(df_scaled, df['target'], test_size=0.3,random_state=1) 
+
+    # Create Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100)
+
+    # Train the classifier
+    rfc.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = rfc.predict(X_test)
+
+   

@@ -1,0 +1,46 @@
+
+    '''
+    Commit Message: "Update 04. Density-based Clustering.ipynb"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Notice: For visualization of map, you need basemap package.
+# if you dont have basemap install on your machine, you can use the following line to install it
+!pip install basemap==1.2.0 matplotlib==3.1
+# Notice: you maight have to refresh your page and re-run the notebook after installation
+<\Cell_0>
+<Cell_1>
+import numpy as np 
+from sklearn.cluster import DBSCAN 
+from sklearn.datasets.samples_generator import make_blobs 
+from sklearn.preprocessing import StandardScaler 
+import matplotlib.pyplot as plt 
+%matplotlib inline
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+<\Cell_1>
+<Cell_2>
+def createDataPoints(centroidLocation, numSamples, clusterDeviation):
+    # Create random data and store in feature matrix X and response vector y.
+    X, y = make_blobs(n_samples=numSamples, centers=centroidLocation, 
+                                cluster_std=clusterDeviation)
+    
+    # Standardize features by removing the mean and scaling to unit variance
+    X = StandardScaler().fit_transform(X)
+    return X, y
+<\Cell_2>
+<Cell_3>
+X, y = createDataPoints([[4,3], [2,-1], [-1,4]] , 1500, 0.5)
+<\Cell_3>
+<Cell_4>
+epsilon = 0.3
+minimumSamples = 7
+db = DBSCAN(eps=epsilon, min_samples=minimumSamples).fit(X)
+labels = db.labels_
+labels
+<\Cell_4>
+<Cell_5>
+# Firts, create an array of booleans using the labels from db.
+core_samples_mask = np.zeros_like(db.labels_, dtype=bool)
+core_s

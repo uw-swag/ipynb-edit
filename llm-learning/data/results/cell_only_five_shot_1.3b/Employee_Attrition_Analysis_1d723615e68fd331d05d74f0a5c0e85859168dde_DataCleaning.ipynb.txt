@@ -1,0 +1,54 @@
+```python
+    #prepare for RDS connection
+    import pandas as pd
+    import sqlalchemy
+    from sqlalchemy.ext.automap import automap_base
+    from sqlalchemy.orm import Session
+    from sqlalchemy import create_engine
+    from sqlalchemy.exc import SQLAlchemyError
+    from getpass import getpass
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    engine = create_engine(
+        host="ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        port='5432',
+        database="ogdataset",
+        user="attritionProject",
+        password=secret
+    )
+
+    engine.connect()
+
+    # # reflect existing database into a new model
+    # Base = automap_base()
+    # # reflect the tables
+    # Base.prepare(engine, reflect=True)
+
+    # Define your classes here
+    class YourClass:
+        pass
+
+    # Create a session
+    session = Session(engine)
+
+    # Query your database here
+    # For example, to get the first 10 rows from a table named 'employees':
+    # employees = session.query(YourClass).limit(10).all()
+
+    # Close the session
+    session.close()
+
+    # Organize your files
+    # Create a directory for your project
+    import os
+    os.makedirs('your_project_directory', exist_ok=True)
+
+    # Move your files to the new directory
+    # For example, to move a file named 'data.csv' to 'your_project_directory':
+    # os.rename('data.csv', 'your_project_directory/data.csv')
+
+    # Close the engine
+    engine.dispose()
+    ```

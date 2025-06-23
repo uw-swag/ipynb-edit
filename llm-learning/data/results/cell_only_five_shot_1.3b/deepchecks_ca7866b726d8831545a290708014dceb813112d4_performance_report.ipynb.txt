@@ -1,0 +1,51 @@
+
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import colors
+
+    np.random.seed(1234)
+
+
+    def random_board(n):
+        """Creates a random board of size n x n. Note that only a single queen is placed in each column!"""
+    
+        return(np.random.randint(0,n, size = n))
+
+    def comb2(n): return n*(n-1)//2 # this is n choose 2 equivalent to math.comb(n, 2); // is int division
+
+    def conflicts(board):
+        """Calculate the number of conflicts, i.e., the objective function."""
+
+        n = len(board)
+    
+        horizontal_cnt = [0] * n
+        diagonal1_cnt = [0] * 2 * n
+        diagonal2_cnt = [0] * 2 * n
+    
+        for i in range(n):
+            horizontal_cnt[board[i]] += 1
+            diagonal1_cnt[i + board[i]] += 1
+            diagonal2_cnt[i - board[i] + n] += 1
+    
+        return sum(map(comb2, horizontal_cnt + diagonal1_cnt + diagonal2_cnt))
+
+
+    def show_board(board, cols = ['white', 'gray'], fontsize = 48):  
+        """display the board"""
+    
+        n = len(board)
+    
+        # create chess board display
+        display = np.zeros([n,n])
+        for i in range(n):
+            for j in range(n):
+                if (((i+j) % 2) != 0): 
+                    display[i,j] = 1
+    
+        cmap = colors.ListedColormap(cols)
+        fig, ax = plt.subplots()
+        ax.imshow(display, cmap = cmap, 
+                  norm = colors.BoundaryNorm(range(len(cols)+1), cmap.N))
+        ax.set_xticks([])
+        ax.

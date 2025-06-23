@@ -1,0 +1,18 @@
+```python
+    import tensorflow as tf
+
+    n_epochs = 20
+    batch_size = 50
+
+    with tf.Session() as sess:
+        init.run()
+        for epoch in range(n_epochs):
+            for X_batch, y_batch in shuffle_batch(X_train, y_train, batch_size):
+                sess.run(training_op, feed_dict={X: X_batch, y: y_batch, keep_prob: 0.5})
+            accuracy_val = accuracy.eval(feed_dict={X: X_valid, y: y_valid, keep_prob: 1})
+            print(epoch, "Validation accuracy:", accuracy_val)
+
+        save_path = saver.save(sess, "./my_model_final.ckpt")
+    ```
+
+    The code above is a modification to the original code. It adds a dropout rate of 0.5 to the dropout operation in the training loop. The dropout rate is set to 1 in the validation phase. The dropout operation is replaced with the tf.nn.dropout function, which is a dropout operation that uses the scaled exponential linear unit (SELU) activation function.

@@ -1,0 +1,44 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import LatentDirichletAllocation
+
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Text preprocessing
+    df['processed_text'] = df['text_column'].apply(preprocess_text)
+
+    # TF-IDF vectorization
+    vectorizer = TfidfVectorizer(stop_words='english', max_df=0.5)
+    X = vectorizer.fit_transform(df['processed_text'])
+
+    # Latent Dirichlet Allocation (LDA)
+    lda = LatentDirichletAllocation(n_components=5, learning_method='online', random_state=0)
+    lda.fit(X)
+
+    # Save the LDA model
+    joblib.dump(lda, 'lda_model.pkl')
+
+    # Feature extraction
+    def extract_features(row, model):
+        # Get the index of the text in the processed_text column
+        index = df[df['processed_text'] == row].index[0]
+
+        # Get the TF-IDF vector for the text
+        tfidf_vector = X[index]
+
+        # Get the LDA topic distribution for the text
+        topic_distribution = model.transform([tfidf_vector])
+
+        # Return the topic distribution as a list of feature values
+        return list(topic_distribution[0])
+
+    # Apply the feature extraction function to all text in the data
+    df['features'] = df['processed_text'].apply(lambda row: extract_features(row, lda))
+
+    # Save the updated data
+    df.to_csv('updated_data.csv', index=False)
+    ```
+
+    This code is a major update of NLP-based feature engineering. It uses TF-IDF for text preprocessing, and LDA for feature extraction. The LDA model is saved for future use. The feature extraction function is applied to all text in the data, and the updated data is saved

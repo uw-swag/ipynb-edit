@@ -1,0 +1,29 @@
+```python
+    from sklearn.linear_model import AdalineGD
+
+    class AdalineGD(object):
+
+        def __init__(self, eta=0.01, n_iter=10):
+            self.eta = eta
+            self.n_iter = n_iter
+
+        def fit(self, X, y):
+            self.w = np.zeros(1 + X.shape[1])
+            self.errors = []
+
+            for i in range(self.n_iter):
+                output = self.net_input(X)
+                errors = (y - output).reshape(y.shape[0], 1)
+                self.w[1:] += self.eta * X.T.dot(errors)
+                self.w[0] += self.eta * errors.sum()
+                self.errors.append(errors.sum())
+
+            return self
+
+        def net_input(self, X):
+            return np.dot(X, self.w[1:]) + self.w[0]
+
+        def predict(self, X):
+            return np.where(self.net_input(X) >= 0.0, 1, -1)
+    ```
+    This is a simple implementation of the Adaline algorithm. The `fit` method implements the standard gradient descent learning algorithm. The `net_input` method computes the net input, and the `predict` method applies the step function to the net input.

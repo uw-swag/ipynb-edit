@@ -1,0 +1,35 @@
+```python
+    # Removing redundant code from the function
+    def readEdfFile(pathToFile, channels):
+        f = pyedflib.EdfReader(pathToFile)
+        n = f.signals_in_file
+        signal_labels = f.getSignalLabels()
+        signal_labels.append('seizure')
+        sigbufs = np.zeros((f.getNSamples()[0],n+1))
+        for i in np.arange(n): sigbufs[:,i] = f.readSignal(i)
+        sigbufs[:, n]= 0.0
+        df =  pd.DataFrame(data = sigbufs, columns = signal_labels)
+        df = df.loc[:, channels]
+        df = df.loc[:, ~df.columns.duplicated()]
+        f._close()
+        return df.values
+
+    def get_seizure_period(file_location):
+        bytes_array = []
+        for b in pathlib.Path(file_location).read_bytes(): bytes_array.append(b)
+        return int(str(bin(bytes_array[38]))[2:] + str(bin(bytes_array[41]))[2:],2), bytes_array[49]
+
+    def create_per_patient_csv (dataset_folder, sample_rate, channels) :
+        initial_path = os.getcwd()
+        os.chdir(dataset_folder)
+        
+        patients = [d for d in os.listdir() if os.path.isdir(d) and d.startswith('chb')]
+        patients.sort()
+        for p in patients:
+            os.chdir(p)
+            print('Reading data of patient', p)
+            edf = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('edf')]
+            edf.sort()
+            seizures = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('seizures')]
+            seizures.sort()
+            arr

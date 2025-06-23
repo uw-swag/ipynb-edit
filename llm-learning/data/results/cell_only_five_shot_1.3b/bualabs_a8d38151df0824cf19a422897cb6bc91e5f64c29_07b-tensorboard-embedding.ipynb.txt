@@ -1,0 +1,21 @@
+```python
+    from torch.utils.data import Dataset
+    from collab.data import CollabDataBunch
+    from torch import nn
+
+    class MovieDataset(Dataset):
+        def __init__(self, dataframe):
+            self.dataframe = dataframe
+
+        def __len__(self):
+            return len(self.dataframe)
+
+        def __getitem__(self, idx):
+            return self.dataframe.iloc[idx]
+
+    databunch = CollabDataBunch.from_df(MovieDataset(dataframe_rating_movie), 
+                                    seed=42, valid_pct=0.1,                                     
+                                    item_name='title')
+
+    dataframe_movies.to_csv('movie_master.tsv', sep = '\t')
+    ```

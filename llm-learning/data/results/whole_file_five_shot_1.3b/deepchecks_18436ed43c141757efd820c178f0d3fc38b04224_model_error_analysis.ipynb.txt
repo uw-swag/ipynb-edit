@@ -1,0 +1,61 @@
+```
+    ## Examples
+
+    ### Code
+
+    #### Python
+
+    ```python
+    from autogluon.tabular import TabularDataset, TabularDataSplit
+
+    # Load a tabular dataset from a CSV file
+    train_data, test_data = TabularDataset.read_csv('path/to/your/data.csv')
+
+    # Split the data into training and testing sets
+    train_data, test_data = TabularDataSplit.split(train_data, test_data, 'label_column_name')
+
+    # Train a model on the training set
+    model = TabularModel('model_type').fit(train_data)
+
+    # Make predictions on the testing set
+    predictions = model.predict(test_data)
+
+    # Evaluate the model
+    evaluator = TabularModelEvaluator(test_data, predictions)
+    print(evaluator.evaluate())
+    ```
+
+    #### Jupyter Notebook
+
+    ```jupyter
+    from autogluon.tabular import TabularDataset, TabularDataSplit
+
+    # Load a tabular dataset from a CSV file
+    train_data, test_data = TabularDataset.read_csv('path/to/your/data.csv')
+
+    # Split the data into training and testing sets
+    train_data, test_data = TabularDataSplit.split(train_data, test_data, 'label_column_name')
+
+    # Train a model on the training set
+    model = TabularModel('model_type').fit(train_data)
+
+    # Make predictions on the testing set
+    predictions = model.predict(test_data)
+
+    # Evaluate the model
+    evaluator = TabularModelEvaluator(test_data, predictions)
+    print(evaluator.evaluate())
+    ```
+
+    ### Output
+
+    The output of the code will provide you with a detailed evaluation of the model's performance.
+    ```
+    ## Results
+
+    The results will include precision, recall, F1-score, and accuracy metrics.
+    ```
+    ```
+    ## Notes
+
+    Please replace 'path

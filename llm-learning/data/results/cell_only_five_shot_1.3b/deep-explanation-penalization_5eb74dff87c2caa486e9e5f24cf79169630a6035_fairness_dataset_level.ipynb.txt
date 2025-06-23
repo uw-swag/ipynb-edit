@@ -1,0 +1,52 @@
+
+    The code you provided is a part of a Jupyter notebook and it seems to be a part of a sentiment analysis task. However, it doesn't seem to contain any markdown formatting or error correction. 
+
+    Here's a basic example of how you might format your code in a markdown cell:
+
+    ```markdown
+    ## Code Refinement
+
+    The code you provided is a part of a Jupyter notebook and it seems to be a part of a sentiment analysis task. However, it doesn't seem to contain any markdown formatting or error correction. 
+
+    Here's a basic example of how you might format your code in a markdown cell:
+
+    ```markdown
+    ## Code Refinement
+
+    The code you provided is a part of a Jupyter notebook and it seems to be a part of a sentiment analysis task. However, it doesn't seem to contain any markdown formatting or error correction. 
+
+    Here's a basic example of how you might format your code in a markdown cell:
+
+    ```markdown
+    ### Instruction:
+    [
+    Commit Message: "fairness results are meh"
+    Original Code Cells:
+    '''
+    import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+sys.path.append('../models')
+sys.path.append('../fit')
+
+from model import LSTMSentiment
+from torchtext import data
+from torchtext import datasets
+import torch
+import cd
+
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+# data params
+vector_cache =  '../data/.vector_cache/input_vectors.pt'
+word_vectors ='glove.6B.300d'
+batch_size = 50
+device = 'cuda' if torch.cuda.is_available()

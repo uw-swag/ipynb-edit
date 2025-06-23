@@ -1,0 +1,52 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Criando um vetor de exemplo
+    x = np.linspace(0, 20, 1000)
+
+    # Criando um gráfico de linha
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, np.sin(x))
+
+    # Mostrando o gráfico
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Animacao do Kaio, adicionar animacao de piscada"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Aqui está um exemplo de como adicionar uma animação de piscada ao gráfico de linha criado anteriormente. Este código criará uma animação que aumenta a amplitude da linha a cada piscada.
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Criando um vetor de exemplo
+    x = np.linspace(0, 20, 1000)
+
+    # Criando um gráfico de linha
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, np.sin(x))
+
+    # Criando uma lista para armazenar as linhas
+    lines = []
+
+    # Adicionando uma função de callback para a animação
+    def animate(i):
+        lines[0].set_ydata(np.sin(x + i / 50))  # Atualiza a linha
+        return lines[0],
+
+    # Criando a animação
+    ani = animation.FuncAnimation(plt.gcf(), animate, interval=20, blit=True, save_count=50)
+
+    # Mostrando a animação
+    plt.show()
+    ```

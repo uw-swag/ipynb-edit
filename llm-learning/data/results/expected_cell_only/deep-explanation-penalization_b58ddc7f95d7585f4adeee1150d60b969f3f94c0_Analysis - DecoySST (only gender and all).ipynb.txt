@@ -1,0 +1,15 @@
+use_biased= False
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+results = results[results.which_adversarial != "bias_gender"]
+
+
+results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]] # currently on test data - since not used for early stopping 
+results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+results["final_test_loss"] = [min(x) for x in results["losses_test"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+results.use_individual =results.use_individual.fillna(False)
+results = results[results.signal_strength < 1000]
+concise_out = results[['signal_strength', 'Test Accuracy','final_test_loss']].sort_values(["signal_strength"])#.groupby(by = ['signal_strength']).mean()
+print(concise_out.to_latex(index  = False))

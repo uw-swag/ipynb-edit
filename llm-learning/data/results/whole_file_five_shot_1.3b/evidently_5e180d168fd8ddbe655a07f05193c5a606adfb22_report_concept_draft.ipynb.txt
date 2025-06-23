@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add new metrics (#430)"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataQualityPreset
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import RegressionPerformancePreset
+from evidently.metric_preset import ClassificationPerformancePreset
+<\Cell_0>
+<Cell_1>
+#Dataset for regression
+housing_data = datasets.fetch_california_housing(as_frame='auto')
+housing = housing_data.frame
+
+housing.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+housing_ref = housing.sample(n=5000, replace=False)
+housing_cur = housing.sample(n=5000, replace=False)
+<\Cell_1>
+<Cell_2>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+
+data_drift_report.run(reference_data=housing_ref, current_data=housing_cur)
+data_drift_report
+<\Cell_2>
+<Cell_3>
+data_quality_report = Report(metrics=[
+    DataQualityPreset(),
+])
+
+data_quality_report.run(reference_data=housing_ref, current_data=housing_cur)
+data_quality_report
+<\Cell_3>
+<Cell_4>
+classification_performance_report = Report(metrics=[
+    ClassificationPerformancePreset(),
+])
+
+classification_performance_report.run(reference_data=housing_ref, current_data=housing_cur)
+classification_performance_report
+<\Cell_4>
+<Cell_5>
+<Cell_6>
+data_quality_report.save_html('data_quality_report.html')
+<

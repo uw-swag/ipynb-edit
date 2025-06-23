@@ -1,0 +1,9 @@
+```python
+    # learn.summary()
+    bs = 128
+    e = 1
+    bs = 32
+    e = 2
+    learn = cnn_learner(get_dls(bs, e), resnet34, metrics=error_rate, cbs=[ShowGraphCallback]).to_fp16()
+    learn.fit_one_cycle(4)
+    ```

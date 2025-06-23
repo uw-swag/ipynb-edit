@@ -1,0 +1,22 @@
+```python
+    # Adjust batch size and learning rate
+    SZ = 128
+    path = data_path3/(f'data{SZ}/data{SZ}')
+
+    # Adjust batch size
+    data = (SegmentationItemList.from_folder(path=path/'train')#[:100]
+            .split_by_rand_pct(0.2)
+            .label_from_func(lambda x : str(x).replace('train', 'masks'), classes=[0, 1])
+            .add_test((path/'test').ls(), label=None)
+            .transform(get_transforms(), size=SZ, tfm_y=True)
+            .databunch(path=Path('.'), bs=32)
+            .normalize(imagenet_stats))
+
+    # Adjust learning rate
+    lr = slice(3e-3)
+    learn.fit_one_cycle(6, max_lr=lr, wd=1e-1, pct_start=0.8)
+
+    # Adjust learning rate to a lower value
+    lr = slice(1e-6, 3e-5)
+    learn.fit_one_cycle(6, max_lr=lr, wd=1e-1, pct_start=0.8)
+    ```

@@ -1,0 +1,27 @@
+```
+    def variational_bayes(h, n_code):
+        # Model mu and log(sigma)
+        z_mu = tf.nn.tanh(utils.linear(h, n_code, name='mu')[0])
+        z_log_sigma = 0.5 * tf.nn.tanh(utils.linear(h, n_code, name='log_sigma')[0])
+
+        # Sample from noise distribution p(eps) ~ N(0, 1)
+        epsilon = tf.random_normal(tf.pack([tf.shape(h)[0], n_code]))
+
+        # Sample from posterior
+        z = z_mu + tf.mul(epsilon, tf.exp(z_log_sigma))
+
+        # Measure loss
+        loss_z = -0.5 * tf.reduce_sum(
+            1.0 + 2.0 * z_log_sigma - tf.square(z_mu) - tf.exp(2.0 * z_log_sigma),
+            1)
+
+        return z, z_mu, z_log_sigma, loss_z
+    ```
+
+    The function `variational_bayes` is a function for the variational Bayes classifier, which is a type of generative model used in machine learning. It's used to estimate the parameters of a Gaussian distribution given a set of data.
+
+    The function takes as input a hidden layer `h` and the number of code `n_code`. It first calculates the parameters `mu` and `log(sigma)` of the variational distribution, then samples from this distribution and measures the loss.
+
+    The loss is calculated as the negative mean of the sum of the squares of the differences between the sampled values and the true values. This loss is used to update the parameters of the variational distribution.
+
+    The function returns the sampled values `z`, the mean `mu`, the log of the standard deviation `log(sigma)`, and the calculated loss.

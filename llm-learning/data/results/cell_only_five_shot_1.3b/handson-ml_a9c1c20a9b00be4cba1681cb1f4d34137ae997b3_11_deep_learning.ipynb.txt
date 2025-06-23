@@ -1,0 +1,35 @@
+```python
+    tf.reset_default_graph()
+
+    X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
+    y = tf.placeholder(tf.int64, shape=(None), name="y")
+    is_training = tf.placeholder(tf.bool, shape=(), name='is_training')
+
+    with tf.name_scope("dnn"):
+        he_init = tf.contrib.layers.variance_scaling_initializer()
+        batch_norm_params = {
+            'is_training': is_training,
+            'decay': 0.9,
+            'updates_collections': None,
+            'scale': True,
+        }
+
+        with arg_scope(
+                [fully_connected],
+                activation_fn=tf.nn.elu,
+                weights_initializer=he_init,
+                normalizer_fn=batch_norm,
+                normalizer_params=batch_norm_params,
+                weights_regularizer=tf.contrib.layers.l1_regularizer(0.01)):
+            hidden1 = fully_connected(X, n_hidden1, scope="hidden1")
+            hidden2 = fully_connected(hidden1, n_hidden2, scope="hidden2")
+            logits = fully_connected(hidden2, n_outputs, activation_fn=None, scope="outputs")
+
+    with tf.name_scope("loss"):
+        xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
+        reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+        base_loss = tf.reduce_mean(xentropy, name="base_loss")
+        loss = tf.add(base_loss, reg_losses, name="loss")
+
+    with tf.name_scope("train"):
+        optimizer = tf.train.MomentumOptimizer(learning_rate, momentum

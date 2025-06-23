@@ -1,0 +1,21 @@
+```python
+    import numpy as np
+from scipy.stats import anderson_ksamp
+from evidently.options import DataDriftOptions
+
+def anderson_stat_test(reference_data: pd.DataFrame, current_data: pd.DataFrame):
+    return anderson_ksamp(np.array([reference_data, current_data]))[2]
+
+def data_drift_report(reference_data: pd.DataFrame, current_data: pd.DataFrame):
+    options = DataDriftOptions(report_expected=True)
+    report = DataDrift(options=options)(reference_data, current_data)
+    return report
+
+    def data_drift_report_with_stat_test(reference_data: pd.DataFrame, current_data: pd.DataFrame):
+        stat_test_result = anderson_stat_test(reference_data, current_data)
+        report = data_drift_report(reference_data, current_data)
+        return report, stat_test_result
+    ```
+
+    ### Explanation:
+    The function `anderson_stat_test` is used to perform the Anderson-Darling K-sample test, which is a non-parametric test for the equality of two samples. The test returns a statistic that measures the difference between the two samples. The function `data_drift_report` is used to generate a report of the data drift between two datasets. The function `data_drift_report_with_stat_test` is a wrapper function that also returns the result of the Anderson-Darling K-sample test.

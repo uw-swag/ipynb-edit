@@ -1,0 +1,20 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Create a label encoder object
+    le = LabelEncoder()
+
+    # Iterate over all the categorical columns in the dataframe
+    for column in df.columns:
+        if df[column].dtype == 'object':
+            # Apply the label encoder to the column
+            df[column] = le.fit_transform(df[column])
+
+    # Print the updated dataframe
+    print(df.head())
+    ```

@@ -1,0 +1,21 @@
+
+The commit message "fixing docs (#898)" is a fix for a specific issue in the documentation. The issue is related to the DeepChecks library, specifically the MixedDataTypes check. The MixedDataTypes check is used to detect data types that are not consistent with the expected data types.
+
+The original code cells are used to demonstrate the usage of the MixedDataTypes check in a DataFrame. The first cell uses the MixedDataTypes check to detect if there are any columns in the DataFrame that have inconsistent data types. The second cell demonstrates how to use the MixedDataTypes check to detect if there are any columns in the DataFrame that have a rare type ratio that is not within a certain range.
+
+The issue with the MixedDataTypes check is that it does not provide a way to specify a range for the rare type ratio. The current implementation of the check only checks if the ratio of rare types is greater than the specified threshold. This means that it will only return True if there are columns with a ratio of rare types that is greater than the specified threshold, which is not the intended behavior.
+
+The fix for this issue is to add a new method to the MixedDataTypes class, add_condition_rare_type_ratio_not_in_range(), which will allow the user to specify a range for the rare type ratio. This will allow the check to return True if there are columns with a rare type ratio that is not within the specified range.
+
+Here is the updated code:
+
+```python
+from deepchecks.tabular.checks import MixedDataTypes
+import pandas as pd
+
+data = {'col1': ['foo', 'bar', 'cat']}
+dataframe = pd.DataFrame(data=data)
+MixedDataTypes().add_condition_rare_type_ratio_not_in_range(min_ratio=0.1, max_ratio=0.9).run(dataframe)
+
+data = {'col1': ['str', '1.0', 1, 2 , 2.61 , 't', 1, 1, 1,1,1], 'col2':['', '', '1.0', 'a', 'b', 'c', 'a', 'a', 'a', 'a','a'],
+        'col3':

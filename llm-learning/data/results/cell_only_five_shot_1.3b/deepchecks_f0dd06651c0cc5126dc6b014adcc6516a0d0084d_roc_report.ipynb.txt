@@ -1,0 +1,47 @@
+```python
+    from deepchecks.tabular.base import Dataset
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.tabular.checks.performance import RocReport
+import pandas as pd
+import warnings
+
+def custom_formatwarning(msg, *args, **kwargs):
+    # ignore everything except the message
+    return str(msg) + '\n'
+
+warnings.formatwarning = custom_formatwarning
+
+    # Split many files in core and base
+    # Load iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Dataset object for the training data
+    train_dataset = Dataset(X_train, y_train, features=iris.feature_names)
+
+    # Create a Dataset object for the test data
+    test_dataset = Dataset(X_test, y_test, features=iris.feature_names)
+
+    # Train a Logistic Regression model
+    model = LogisticRegression()
+    model.fit(train_dataset.X, train_dataset.y)
+
+    # Evaluate the model
+    RocReport().compute(model, test_dataset)
+
+    # Split the data into training and validation sets
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
+
+    # Create a Dataset object for the training data
+    train_dataset = Dataset(X_train, y_train, features=iris.feature_names)
+
+    # Create a Dataset object for the validation data
+    val_dataset = Dataset(X_val, y_val, features=iris.feature_names)
+
+    # Train a Logistic

@@ -1,0 +1,23 @@
+```
+    # Update to use a red-pitaya audio file
+    in2.audio_in = 'red_pitaya_audio_file.wav'
+    in2.start()
+    in2.trigger()
+    print ('Recording started')
+    while (in2.status_run()): pass
+    print ('Recording complete')
+    data = in2.data(N)
+    return data[1:] #Remove first sample as it maybe 
+
+    #Classify Audio
+    features = np.array([], dtype=np.int16) #Reset features
+    features = np.concatenate((features, generator), axis=0)
+
+    #Show the classification key that has the highest confidence index
+    best_label = max(res['result']['classification'], key=lambda key: res['result']['classification'][key])
+    confidence = res['result']['classification'][best_label]
+
+    #Print time to infer and the best label and confidence
+    print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
+    print(best_label,"{:.2%}".format(confidence))
+    ```

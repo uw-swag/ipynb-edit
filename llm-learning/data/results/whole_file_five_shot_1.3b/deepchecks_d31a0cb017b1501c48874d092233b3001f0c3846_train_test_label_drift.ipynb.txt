@@ -1,0 +1,25 @@
+```python
+    # Refactoring the vision suite
+
+    # Import necessary libraries
+    from deepchecks.vision.dataset import VisionData
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    # Load dataset
+    from deepchecks.vision.datasets.classification.mnist import load_dataset
+
+    mnist_dataloader_train = load_dataset(train=True, batch_size=64)
+    mnist_dataloader_test = load_dataset(train=False, batch_size=1000)
+
+    # Create VisionData objects
+    from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter
+
+    train_ds = VisionData(mnist_dataloader_train, label_transformer=ClassificationLabelFormatter())
+    test_ds = VisionData(mnist_dataloader_test, label_transformer=ClassificationLabelFormatter())
+
+    # Run the TrainTestLabelDrift check
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    check = TrainTestLabelDrift()
+    check.run(train_ds, test_ds)
+    ```

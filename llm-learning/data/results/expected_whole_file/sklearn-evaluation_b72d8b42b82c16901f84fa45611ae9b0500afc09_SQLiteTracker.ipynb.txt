@@ -1,0 +1,77 @@
+<Cell_0>
+from sklearn_evaluation import SQLiteTracker
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.svm import SVR
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+<\Cell_0>
+<Cell_1>
+tracker = SQLiteTracker('my_experiments.db')
+<\Cell_1>
+<Cell_2>
+iris = load_iris(as_frame=True)
+X, y = iris['data'], iris['target']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+models = [RandomForestRegressor(), LinearRegression(), Lasso()]
+<\Cell_2>
+<Cell_3>
+for m in models:
+    model = type(m).__name__
+    print(f'Fitting {model}')
+
+    # .new() returns a uuid and creates an entry in the db
+    uuid = tracker.new()
+    m.fit(X_train, y_train)
+    y_pred = m.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+
+    # add data with the .update(uuid, {'param': 'value'}) method
+    tracker.update(uuid, {'mse': mse, 'model': model, **m.get_params()})
+<\Cell_3>
+<Cell_4>
+svr = SVR()
+svr.fit(X_train, y_train)
+y_pred = svr.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+
+tracker.insert('my_uuid', {'mse': mse, 'model': type(svr).__name__, **svr.get_params()})
+<\Cell_4>
+<Cell_5>
+tracker
+<\Cell_5>
+<Cell_6>
+ordered = tracker.query("""
+SELECT uuid,
+       json_extract(parameters, '$.model') AS model,
+       json_extract(parameters, '$.mse') AS mse
+FROM experiments
+ORDER BY json_extract(parameters, '$.mse') ASC
+""")
+ordered
+<\Cell_6>
+<Cell_7>
+type(ordered)
+<\Cell_7>
+<Cell_8>
+tracker.comment(ordered.index[0], 'Best performing experiment')
+<\Cell_8>
+<Cell_9>
+tracker[ordered.index[0]]
+<\Cell_9>
+<Cell_10>
+df = tracker.recent()
+df
+<\Cell_10>
+<Cell_11>
+df = tracker.recent(normalize=True)
+df
+<\Cell_11>
+<Cell_12>
+# delete our example database
+from pathlib import Path
+Path('my_experiments.db').unlink()
+<\Cell_12>

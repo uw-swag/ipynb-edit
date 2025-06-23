@@ -1,0 +1,26 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+
+    # Example 1: DataFrame creation
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['label'] = df['x2'] + 0.1 * df['x1']
+    df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+    # Example 2: Dataset creation
+    ds = Dataset(df, label_name='label')
+
+    # Example 3: SingleFeatureContribution check
+    SingleFeatureContribution().run(ds)
+
+    # Example 4: SingleFeatureContribution check with parameters
+    my_check = SingleFeatureContribution(ppscore_params={'sample': 10})
+    my_check.run(dataset=ds)
+    ```
+
+    The code above is a demonstration of how to use the `SingleFeatureContribution` check in the `deepchecks` library. The `SingleFeatureContribution` check is used to visualize the contribution of a single feature to the model's prediction. The `ppscore_params` parameter is used to specify the parameters for the `ppscore` function, which is a method used to calculate the prediction score of a model.

@@ -1,0 +1,37 @@
+```python
+    #Libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import scipy.stats as stats
+    import seaborn as sns
+    from matplotlib import rcParams
+    import xgboost as xgb
+    %matplotlib inline 
+    sns.set_style('whitegrid')
+
+    from scipy import stats
+    from scipy.stats import pointbiserialr, spearmanr, skew, pearsonr
+
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.feature_selection import SelectFromModel
+    from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import train_test_split
+    from sklearn.model_selection import GridSearchCV
+    import xgboost as xgb
+    from sklearn.linear_model import Ridge, RidgeCV, LassoCV
+    from sklearn import linear_model
+    #It seems that SalePrice is skewered, so it needs to be transformed.
+    sns.distplot(data['SalePrice'], kde = False, color = 'c', hist_kws={'alpha': 0.9})
+    #As expected price rises with the quality.
+    sns.regplot(x = 'OverallQual', y = 'SalePrice', data = data, color = 'Orange')
+    #Price also varies depending on neighborhood.
+    plt.figure(figsize = (12, 6))
+    sns.boxplot(x = 'Neighborhood', y = 'SalePrice',  data = data)
+    xt = plt.xticks(rotation=30)
+    #There are many little houses.
+    plt.figure(figsize = (12, 6))
+    sns.countplot(x = 'HouseStyle', data = data)
+    xt = plt.xticks(rotation=30)
+    sns.factorplot('HeatingQC', 'SalePrice', hue = 'CentralAir', data = data)
+    sns.factorplot('Heating', '

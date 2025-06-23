@@ -1,0 +1,36 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from sklearn.datasets import make_blobs
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.neural_network import MLPClassifier
+
+    # Generate a random dataset
+    X, y = make_blobs(n_samples=1000, centers=3, n_features=2, random_state=42)
+
+    # Standardize the features to have mean=0 and variance=1
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a MLP classifier with ReLU activation function
+    mlp = MLPClassifier(hidden_layer_sizes=(10, 10, 10), activation='relu', solver='adam', random_state=42)
+
+    # Train the classifier
+    mlp.fit(X_train, y_train)
+
+    # Predict the labels of the test set
+    y_pred = mlp.predict(X_test)
+
+    # Print the accuracy of the classifier
+    print("Accuracy:", mlp.score(X_test, y_test))
+
+    # Plot the decision boundary
+    h = .02  # step size in the mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z = mlp.predict(np.c_[xx.

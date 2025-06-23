@@ -1,0 +1,9 @@
+```
+    batchsize = 32
+    np.random.seed(0)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+    databunch = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=299, bs=batchsize).normalize(imagenet_stats)
+    ```

@@ -1,0 +1,48 @@
+
+    ## Chapter 9: Hyperparameter Optimization
+
+    ### 9.1: Introduction to Hyperparameter Optimization
+
+    Hyperparameter optimization is a critical step in the machine learning process. It involves tuning the model's parameters to achieve the best performance. This process is often referred to as "hyperparameter tuning".
+
+    In this chapter, we will explore different methods for hyperparameter tuning, including grid search, random search, and Bayesian optimization. We will also learn how to use Azure Machine Learning's HyperDrive service for more efficient hyperparameter tuning.
+
+    ### 9.2: Grid Search
+
+    Grid search is a simple yet powerful method for hyperparameter tuning. It involves manually setting the values of the hyperparameters and observing how the model's performance changes.
+
+    Here's a simple example of how to use grid search:
+
+    ```python
+    from sklearn.model_selection import GridSearchCV
+
+    # Define the hyperparameter space
+    hyperparameters = {
+        'alpha': [0.01, 0.1, 1, 10, 100],
+        'max_iter': [100, 200, 300, 400, 500]
+    }
+
+    # Instantiate the grid search
+    grid_search = GridSearchCV(estimator=model, param_grid=hyperparameters, cv=5)
+
+    # Fit the grid search
+    grid_search.fit(X_train, y_train)
+
+    # Get the best parameters
+    best_params = grid_search.best_params_
+    ```
+
+    ### 9.3: Random Search
+
+    Random search is another method for hyperparameter tuning. It involves randomly selecting different combinations of hyperparameters and observing how the model's performance changes.
+
+    Here's a simple example of how to use random search:
+
+    ```python
+    from sklearn.model_selection import RandomizedSearchCV
+
+    # Define the hyperparameter space
+    hyperparameters = {
+        'alpha': np.logspace(-4, 4, 20),
+        'max_iter': list(range(100, 501, 100))
+   

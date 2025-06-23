@@ -1,0 +1,55 @@
+
+    '''
+    Commit Message: "Added model prediction is_gum not for comment but for user"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import pickle
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from datetime import datetime
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    pd.set_option("display.max_columns", 100)
+    <\Cell_1>
+    <Cell_2>
+    comments_path = 'data/comments_-33041211.pkl'
+    users_path = 'data/users_-33041211.pkl'
+    <\Cell_2>
+    <Cell_3>
+    with open(comments_path, 'rb') as f:
+        comments = pickle.load(f)
+    with open(users_path, 'rb') as f:
+        users = pickle.load(f)
+    <\Cell_3>
+    <Cell_4>
+    comments_df = pd.DataFrame(comments)
+    <\Cell_4>
+    <Cell_5>
+    comments_df.head()
+    <\Cell_5>
+    <Cell_6>
+    comments_df.shape
+    <\Cell_6>
+    <Cell_7>
+    def university_cond(user):
+        return len(user.get('universities', [])) == 1
+    <\Cell_7>
+    <Cell_8>
+    users_with_univ = list(filter(university_cond, users))
+    users_with_univ
+    <\Cell_8>
+    <Cell_9>
+    users_df = pd.DataFrame(users_with_univ)
+    users_df
+    <\Cell_9>
+    <Cell_10>
+    users_df.is_gum = users_df.faculty_name.apply(get_is_gum)
+    users_df
+    <\Cell_10>
+    <Cell_11>
+    users_df.dropna(subset=['is_

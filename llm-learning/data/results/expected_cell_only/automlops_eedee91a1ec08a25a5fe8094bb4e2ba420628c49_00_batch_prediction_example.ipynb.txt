@@ -1,0 +1,27 @@
+MODEL_ID = 'dry-beans-dt-inferencing'
+from google_cloud_automlops import AutoMLOps
+pipeline_params = {
+    'bq_table': f'{PROJECT_ID}.test_dataset.dry-beans-inferencing',
+    'data_path': f'gs://{PROJECT_ID}-bucket/data.csv',
+    'project_id': PROJECT_ID,
+    'bigquery_destination': f'bq://{PROJECT_ID}.test_dataset.dry-beans-inferencing-results',
+    'bq_dataset_path': f'bq://{PROJECT_ID}.test_dataset.dry-beans-inferencing',
+    'instances_format': 'bigquery',
+    'predictions_format': 'bigquery',
+    'model_resource_name': '',
+    'endpoint_resource_name': 'projects/45373616427/locations/us-central1/endpoints/2255296260661575680',
+    'machine_type': 'n1-standard-8',
+    'accelerator_count': 0,
+    'accelerator_type': 'ACCELERATOR_TYPE_UNSPECIFIED',
+    'max_replica_count': 2,
+    'starting_replica_count': 1
+}
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_ci=True,
+                   naming_prefix=MODEL_ID,
+                   schedule_pattern='59 11 * * 0' # rerun every Sunday at Midnight
+)
+AutoMLOps.provision(hide_warnings=False)            # hide_warnings is optional, defaults to True
+AutoMLOps.deploy(precheck=True,                     # precheck is optional, defaults to True
+                 hide_warnings=False)               # hide_warnings is optional, defaults to True

@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Examples reorganisation and moving GitBook docs to repo (#116)"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+
+from datetime import datetime
+from sklearn import datasets, ensemble
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+
+# Ensure edits to the GitBook docs to repo (#116)
+<\Cell_0>
+<Cell_1>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+data_drift_dashboard.calculate(reference, production.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                   column_mapping=column_mapping)
+<\Cell_1>
+<Cell_2>
+data_drift_dashboard.show()
+<\Cell_2>
+<Cell_3>
+data_drift_dashboard.save('data_drift_dashboard_after_week1.html')
+<\Cell_3>
+<Cell_4>
+data_drift_dashboard.calculate(reference, production.loc['2011-02-14 23:00:00':'2011-02-21 23:00:00'], 
+                                   column_mapping=column_mapping)
+<\Cell_4>
+<Cell_5>
+data_drift_dashboard.show()
+<\Cell_5>
+<Cell_6>
+data_drift_dashboard.save('data_drift_dashboard_after_week2.html')
+<\Cell_6>
+<Cell_7>
+data_drift_dashboard.json()
+<\Cell_7>
+<Cell_8>
+data_drift_dashboard.save('data_drift_dashboard_after_week3.html')
+<\Cell_8

@@ -1,0 +1,11 @@
+```python
+    from deepchecks.checks.leakage import DateTrainValidationLeakageDuplicates
+    from deepchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, date_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, date=date_name)
+
+    ```

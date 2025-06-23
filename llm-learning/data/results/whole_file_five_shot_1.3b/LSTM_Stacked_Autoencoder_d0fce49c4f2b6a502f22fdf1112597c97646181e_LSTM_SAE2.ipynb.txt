@@ -1,0 +1,48 @@
+
+    '''
+    Commit Message: "Add RawData Folder"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import tensorflow as tf
+    from tensorflow import keras
+    from keras.optimizers import Adam
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D
+    from matplotlib import cm
+    import pandas as pd
+    import numpy as np
+    from tensorflow.keras.utils import plot_model
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.model_selection import train_test_split
+    <\Cell_0>
+    <Cell_1>
+    df = pd.read_excel('D:/Denoising/Autoencoder/LSTM_SAE/Gold.xlsx')
+    df = df[-250:]
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(df[['종가']])
+    df["Close"] = scaled
+    <\Cell_1>
+    <Cell_2>
+    # Data Load
+    path = 'D:/Denoising/Autoencoder/LSTM_SAE/Samsung.txt'
+    def Data_Load(path):
+        global df
+        df = pd.read_csv(path, sep = ',')
+        scaler = MinMaxScaler()
+        scaled = scaler.fit_transform(df[['CLOSE']])
+        df["Close"] = scaled
+        return df
+    <\Cell_2>
+    <Cell_3>
+    def Slice_Window(size):
+        global window_list, x_train, x_test, y_train, y_test
+        window_list = np.zeros((len(df)-size+1,size,1))
+        count = 0
+        for i in range(len(df)-size+1):
+            end_idx = i+size
+            dff = df[i:end_idx]
+            dff.reset_index(inplace = True)
+            if len(dff)>=size:
+                for j in range(size):
+                    window

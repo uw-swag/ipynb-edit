@@ -1,0 +1,13 @@
+```
+    # Removing Jupyter notebook files
+    import os
+    import shutil
+
+    for file in os.listdir():
+        if file.endswith('.ipynb'):
+            os.remove(file)
+
+    # Removing temporary files
+    import tempfile
+    shutil.rmtree(tempfile.gettempdir() + '/jupyter')
+    ```

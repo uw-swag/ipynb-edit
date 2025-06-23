@@ -1,0 +1,439 @@
+<Cell_0>
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+<\Cell_0>
+<Cell_1>
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+<\Cell_1>
+<Cell_2>
+!pip3 install google-cloud-automlops --user
+<\Cell_2>
+<Cell_3>
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+<\Cell_3>
+<Cell_4>
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+<\Cell_4>
+<Cell_5>
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+<\Cell_5>
+<Cell_6>
+! gcloud config set project $PROJECT_ID
+<\Cell_6>
+<Cell_7>
+from AutoMLOps import AutoMLOps
+<\Cell_7>
+<Cell_8>
+!pip3 install kfp
+<\Cell_8>
+<Cell_9>
+from kfp.v2 import dsl
+from kfp.v2.dsl import Artifact, Dataset, Metrics, Output
+<\Cell_9>
+<Cell_10>
+AutoMLOps.clear_cache()
+<\Cell_10>
+<Cell_11>
+@AutoMLOps.component
+def create_datasets(
+    lookback_date: str,
+    project_id: str,
+    test_data_path: str,
+    train_data_path: str
+):
+    """Custom component that prepares the stackoverflow Questions and Answers.
+
+    Args:
+        lookback_date: The start date for posts.
+        project_id: The project ID.
+        test_data_path: The gcs location to write the jsonl for evaluation.
+        train_data_path: The gcs location to write the jsonl for training.
+    """    
+    import pandas as pd
+    from google.cloud import bigquery
+    from sklearn.model_selection import train_test_split
+
+    bq_client = bigquery.Client(project=project_id)
+
+    def get_query() -> str:
+        """Generates BQ Query to read data."""
+        
+        return f'''SELECT
+        CONCAT(q.title, q.body) as input_text,
+        a.body AS output_text
+        FROM
+            `bigquery-public-data.stackoverflow.posts_questions` q
+        JOIN
+            `bigquery-public-data.stackoverflow.posts_answers` a
+        ON
+            q.accepted_answer_id = a.id
+        WHERE
+            q.accepted_answer_id IS NOT NULL AND
+            REGEXP_CONTAINS(q.tags, "python") AND
+            a.creation_date >= "{lookback_date}"
+        LIMIT
+            10000
+        '''
+
+    def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+        """Loads data from bq into a Pandas Dataframe for EDA.
+        Args:
+            query: BQ Query to generate data.
+            client: BQ Client used to execute query.
+        Returns:
+            pd.DataFrame: A dataframe with the requested data.
+        """
+        df = client.query(query).to_dataframe()
+        return df
+
+    dataframe = load_bq_data(get_query(), bq_client)
+    train, test = train_test_split(dataframe, test_size=0.2)
+    train.to_json(train_data_path, orient='records', lines=True)
+    test.to_json(test_data_path, orient='records', lines=True)
+<\Cell_11>
+<Cell_12>
+lookback_date = '2020-01-01'
+project_id = PROJECT_ID
+test_data_path = f'gs://{PROJECT_ID}-bucket/llmops/test_data.jsonl'
+train_data_path = f'gs://{PROJECT_ID}-bucket/llmops/train_data.jsonl'
+
+
+import pandas as pd
+from google.cloud import bigquery
+from sklearn.model_selection import train_test_split
+bq_client = bigquery.Client(project=project_id)
+
+def get_query() -> str:
+    """Generates BQ Query to read data."""
+
+    return f'''SELECT
+    CONCAT(q.title, q.body) as input_text,
+    a.body AS output_text
+    FROM
+        `bigquery-public-data.stackoverflow.posts_questions` q
+    JOIN
+        `bigquery-public-data.stackoverflow.posts_answers` a
+    ON
+        q.accepted_answer_id = a.id
+    WHERE
+        q.accepted_answer_id IS NOT NULL AND
+        REGEXP_CONTAINS(q.tags, "python") AND
+        a.creation_date >= "{lookback_date}"
+    LIMIT
+        10000
+    '''
+
+def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+    """Loads data from bq into a Pandas Dataframe for EDA.
+    Args:
+        query: BQ Query to generate data.
+        client: BQ Client used to execute query.
+    Returns:
+        pd.DataFrame: A dataframe with the requested data.
+    """
+    df = client.query(query).to_dataframe()
+    return df
+
+dataframe = load_bq_data(get_query(), bq_client)
+train, test = train_test_split(dataframe, test_size=0.2)
+train.to_json(train_data_path, orient='records', lines=True)
+test.to_json(test_data_path, orient='records', lines=True)
+<\Cell_12>
+<Cell_13>
+@AutoMLOps.component
+def tune_model(
+    project_id: str,
+    model_display_name: str,
+    region: str,
+    train_data_path: str
+):
+    """Custom component that prompt-tunes a foundation model.
+
+    Args:
+        project_id: The project ID.
+        model_display_name: Name of the model.
+        region: Region.
+        train_data_path: The gcs location to write the jsonl for training.
+        
+    """ 
+    from google.cloud import aiplatform
+    from vertexai.preview.language_models import TextGenerationModel
+
+    aiplatform.init(project=project_id, location=region)
+    model = TextGenerationModel.from_pretrained('text-bison@001')
+
+    model.tune_model(
+        training_data=train_data_path,
+        model_display_name=model_display_name,
+        train_steps=100,
+        # Tuning can only happen in the "europe-west4" location
+        tuning_job_location='europe-west4',
+        # Model can only be deployed in the "us-central1" location
+        tuned_model_location='us-central1')
+<\Cell_13>
+<Cell_14>
+project_id = PROJECT_ID
+model_display_name = 'llmops-tuned-model'
+region = 'us-central1'
+train_data_path = f'gs://{PROJECT_ID}-bucket/llmops/train_data.jsonl'
+
+from google.cloud import aiplatform
+from vertexai.preview.language_models import TextGenerationModel
+
+aiplatform.init(project=project_id, location=region)
+model = TextGenerationModel.from_pretrained('text-bison@001')
+
+model.tune_model(
+    training_data=train_data_path,
+    model_display_name=model_display_name,
+    train_steps=100,
+    # Tuning can only happen in the "europe-west4" location
+    tuning_job_location='europe-west4',
+    # Model can only be deployed in the "us-central1" location
+    tuned_model_location='us-central1')
+<\Cell_14>
+<Cell_15>
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-aiplatform', 
+        'pandas',
+        'rouge',
+        'sequence-evaluate',
+        'sentence-transformers'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/evaluate_model.yaml',
+)
+def evaluate_model(
+    metrics: Output[Metrics],
+    model_display_name: str,
+    test_data_path: str,
+    test_dataset_size: int
+):
+    """Custom component that evaluates the tuned model 
+       and compares its performance to the foundation model.
+
+    Args:
+        model_display_name: Name of the model.
+        test_data_path: The gcs location to write the jsonl for evaluation.
+        test_dataset_size: The size of the data slice from the test dataset.
+        
+    """
+    import pandas as pd
+    from seq_eval import SeqEval
+    from vertexai.preview.language_models import TextGenerationModel
+
+    foundation_model = TextGenerationModel.from_pretrained('text-bison@001')
+    list_tuned_models = model.list_tuned_model_names()
+    tuned_model = TextGenerationModel.get_tuned_model(list_tuned_models[-1])
+    
+    evaluator = SeqEval()
+    
+    test_data = pd.read_json(test_data_path, lines=True)
+    
+    test_data = test_data.head(test_dataset_size)
+    test_questions = test_data['input_text']
+    test_answers = test_data['output_text']
+
+    foundation_candidates = []
+    tuned_candidates = []
+    for q in test_questions:
+        response = foundation_model.predict(q)
+        foundation_candidates.append(response.text)
+
+        response = tuned_model.predict(q)
+        tuned_candidates.append(response.text)
+    
+    references = test_answers.tolist()
+    
+    foundation_scores = evaluator.evaluate(foundation_candidates, references, verbose=False)
+    tuned_scores = evaluator.evaluate(tuned_candidates, references, verbose=False)
+    print(foundation_scores)
+    print(tuned_scores)
+    
+    # ADD IN METRICS PART
+    
+    # ADD IN PREDICTION PART
+<\Cell_15>
+<Cell_16>
+
+<\Cell_16>
+<Cell_17>
+model = TextGenerationModel.from_pretrained("text-bison@001")
+list_tuned_models = model.list_tuned_model_names()
+list_tuned_models[-1]
+<\Cell_17>
+<Cell_18>
+test_data_path = f'gs://{PROJECT_ID}-bucket/llmops/test_data.jsonl'
+test_dataset_size = 200
+
+import re
+
+import pandas as pd
+from seq_eval import SeqEval
+from vertexai.preview.language_models import TextGenerationModel
+
+foundation_model = TextGenerationModel.from_pretrained('text-bison@001')
+list_tuned_models = model.list_tuned_model_names()
+tuned_model = TextGenerationModel.get_tuned_model(list_tuned_models[-1])
+
+evaluator = SeqEval()
+
+test_data = pd.read_json(test_data_path, lines=True)
+
+test_data = test_data.head(test_dataset_size)
+test_questions = test_data['input_text']
+test_answers = test_data['output_text']
+
+foundation_candidates = []
+tuned_candidates = []
+references = []
+for i in range(len(test_questions)):
+    response_a = foundation_model.predict(re.sub(r'\<.*?\>', '', test_questions[i]))
+    response_b = tuned_model.predict(test_questions[i])
+    if response_a.text != '' and response_b.text != '':
+        references.append(re.sub(r'\<.*?\>', '', test_answers[i]))
+        foundation_candidates.append(response_a.text)
+        tuned_candidates.append(response_b.text)
+
+foundation_scores = evaluator.evaluate(foundation_candidates, references, verbose=False)
+tuned_scores = evaluator.evaluate(tuned_candidates, references, verbose=False)
+
+print(foundation_scores)
+print(tuned_scores)
+<\Cell_18>
+<Cell_19>
+foundation_scores = evaluator.evaluate(foundation_candidates, references, verbose=True)
+print(foundation_scores)
+<\Cell_19>
+<Cell_20>
+tuned_scores = evaluator.evaluate(tuned_candidates, references, verbose=True)
+print(tuned_scores)
+<\Cell_20>
+<Cell_21>
+print(re.sub(r'\<.*?\>', '', test_questions[1]))
+print('-')
+print(foundation_candidates[1])
+print('-')
+print(tuned_candidates[1])
+print('-')
+print(references[1])
+<\Cell_21>
+<Cell_22>
+
+<\Cell_22>
+<Cell_23>
+a = nltk.word_tokenize(references[1])
+<\Cell_23>
+<Cell_24>
+ b = nltk.word_tokenize(tuned_candidates[1])
+<\Cell_24>
+<Cell_25>
+import nltk
+
+hypothesis = ['It', 'is', 'a', 'cat', 'at', 'room']
+reference = ['It', 'is', 'a', 'cat', 'inside', 'the', 'room']
+#there may be several references
+BLEUscore = nltk.translate.bleu_score.sentence_bleu(a, b)
+print(BLEUscore)
+<\Cell_25>
+<Cell_26>
+
+<\Cell_26>
+<Cell_27>
+
+<\Cell_27>
+<Cell_28>
+@AutoMLOps.pipeline(
+    name='bqml-automlops-retail-forecasting',
+    description='This is an example of retail demand forecasting using AutoMLOps and BQML.')
+def pipeline(confidence_lvl: float,
+             dataset_id: str,
+             forecast_horizon: int,
+             machine_type: str,
+             model_name: str,
+             model_type: str,
+             project_id: str,
+             sales_table: str,
+             year_range: int):
+    
+    prepare_sales_table_task = prepare_sales_table(
+        dataset_id=dataset_id,
+        project_id=project_id,
+        sales_table=sales_table)        
+
+    create_training_dataset_task = create_training_dataset(
+        dataset_id=dataset_id,
+        project_id=project_id,
+        sales_table=sales_table,
+        year_range=year_range).after(prepare_sales_table_task)
+
+    train_model_task = train_model(
+        dataset_id=dataset_id,
+        model_name=model_name,
+        model_type=model_type,
+        project_id=project_id).after(create_training_dataset_task)
+
+    evaluate_model_task = evaluate_model(
+        dataset_id=dataset_id,
+        model_name=model_name,
+        project_id=project_id).after(train_model_task)
+    
+    forecast_task = forecast(
+        confidence_lvl=confidence_lvl,
+        dataset_id=dataset_id,
+        forecast_horizon=forecast_horizon,
+        project_id=project_id).after(evaluate_model_task)
+<\Cell_28>
+<Cell_29>
+pipeline_params = {
+    'confidence_lvl': 0.90,
+    'dataset_id': dataset_id,
+    'forecast_horizon': 90,
+    'machine_type': 'n1-standard-4',
+    'model_name': 'arima_model',
+    'model_type': 'ARIMA_PLUS',
+    'project_id': PROJECT_ID,
+    'sales_table': SALES_TABLE,
+    'year_range': 1
+}
+<\Cell_29>
+<Cell_30>
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=False,
+                   schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)
+<\Cell_30>
+<Cell_31>
+AutoMLOps.go(project_id=PROJECT_ID,
+             pipeline_params=pipeline_params,
+             run_local=False,
+             schedule_pattern='59 11 * * 0'
+)
+<\Cell_31>
+<Cell_32>
+
+<\Cell_32>

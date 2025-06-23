@@ -1,0 +1,161 @@
+<Cell_0>
+from pathlib import Path
+
+# to train models in parallel
+from ploomber import DAG
+from ploomber.tasks import NotebookRunner
+from ploomber.products import File
+from ploomber.executors import Parallel, Serial
+
+# to produce parameter grid
+from sklearn.model_selection import ParameterGrid
+
+# to create SQLite database
+from sklearn_evaluation import NotebookDatabase
+<\Cell_0>
+<Cell_1>
+# data loading script
+data = """
+# %% tags=["parameters"]
+upstream = None
+product = None
+
+# %%
+from sklearn import datasets
+
+# %%
+ca_housing = datasets.fetch_california_housing(as_frame=True)
+df = ca_housing['frame']
+df.to_csv(product['data'], index=False)
+"""
+Path('data.py').write_text(data)
+
+# model fitting script
+model = """
+# %% tags=["parameters"]
+model = None
+params = None
+upstream = None
+product = None
+
+# %%
+import importlib
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+# %%
+df = pd.read_csv(upstream['data']['data'])
+
+# %%
+X = df.drop('MedHouseVal', axis='columns')
+y = df.MedHouseVal
+
+# %%
+X_train, X_test, y_train, y_test = train_test_split(X,
+                                                    y,
+                                                    test_size=0.33,
+                                                    random_state=0)
+
+# %% tags=["model"]
+mod, _, attr = model.rpartition('.')
+reg = getattr(importlib.import_module(mod), attr)(**params)
+reg.fit(X_train, y_train)
+print(model)
+
+# %% tags=["params"]
+print(reg.get_params())
+
+# %% tags=["mse"]
+y_pred = reg.predict(X_test)
+mean_squared_error(y_test, y_pred)
+"""
+Path('model.py').write_text(model)
+<\Cell_1>
+<Cell_2>
+parallel = True
+
+if parallel:
+    executor = Parallel()
+else:
+    executor = Serial(build_in_subprocess=False)
+
+
+dag = DAG(executor=executor)
+
+
+experiments = {
+    'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
+    'sklearn.linear_model.Lasso': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])),
+    'sklearn.linear_model.Ridge':ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
+    'sklearn.linear_model.ElasticNet': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
+}
+
+papermill_params=dict(engine_name='embedded', progress_bar=False)
+
+# the embedded engine is more reliable
+task_data = NotebookRunner(Path('data.py'), {'nb': File('output/data.html'), 'data': File('output/data.csv')},
+               dag=dag, papermill_params=papermill_params)
+
+# generate one task per set of parameter
+for model, grid in experiments.items():
+    for i, params in enumerate(grid):
+        name = f'{model}-{i}'
+        task = NotebookRunner(Path('model.py'), File(f'output/models/{name}.ipynb'), dag=dag, name=name,
+                       papermill_params=papermill_params,
+                       params=dict(model=model, params=params))
+        task_data >> task
+<\Cell_2>
+<Cell_3>
+# total experiments to run
+len(dag)
+<\Cell_3>
+<Cell_4>
+# run experiments
+dag.build(force=True)
+<\Cell_4>
+<Cell_5>
+# initialize db with notebooks in the outputs directory
+db = NotebookDatabase('nb.db', 'output/models/*.ipynb')
+
+# Note: pass update=True if you want to update the database if
+# the output notebook changes
+db.index(verbose=True, update=False)
+<\Cell_5>
+<Cell_6>
+# load jupysql magic
+%load_ext sql
+<\Cell_6>
+<Cell_7>
+%%sql sqlite:///nb.db
+SELECT
+    path,
+    json_extract(c, '$.model') AS model,
+    json_extract(c, '$.mse') AS mse
+FROM nbs
+ORDER BY 3 ASC
+LIMIT 3
+<\Cell_7>
+<Cell_8>
+%%sql
+SELECT
+    json_extract(c, '$.model') AS model,
+    AVG(json_extract(c, '$.mse')) AS avg_mse
+FROM nbs
+GROUP BY 1
+ORDER BY 2 ASC
+<\Cell_8>
+<Cell_9>
+%%sql
+SELECT
+    json_extract(c, '$.model') AS model,
+    json_extract(c, '$.mse') AS mse,
+    json_extract(c, '$.params.max_depth') AS max_depth,
+    json_extract(c, '$.params.criterion') AS criterion,
+    json_extract(c, '$.params.splitter') AS splitter
+FROM nbs
+WHERE json_extract(c, '$.model') = 'sklearn.tree.DecisionTreeRegressor'
+ORDER BY mse ASC
+LIMIT 5
+<\Cell_9>

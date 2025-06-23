@@ -1,0 +1,10 @@
+```python
+    nh, bs = 256, 256
+    n, m = x_train.shape
+    c = (y_train.max()+1).numpy()
+    loss_func = F.cross_entropy
+    lr = 0.001
+    epoch = 10
+    nh = 50
+    sched = combine_scheds([0.3, 0.7], [sched_cos(0.02, 0.1), sched_cos(0.1, 0.03)])
+    ```

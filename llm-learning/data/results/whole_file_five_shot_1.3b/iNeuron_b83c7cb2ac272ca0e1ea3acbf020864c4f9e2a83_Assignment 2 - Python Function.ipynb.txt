@@ -1,0 +1,60 @@
+
+    '''
+    Commit Message: "assignment 1 code completed"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import operator 
+
+    def myReduce(function, iterable, initializer=None):
+        it = iter(iterable)
+        if initializer is None:
+            value = next(it)
+        else:
+            value = initializer
+        for element in it:
+            value = function(value, element)
+        return value
+
+    print(myReduce(operator.add, [1, 4, 3, 7, 2]))
+<\Cell_0>
+<Cell_1>
+    def myfilter(fun, sequence):
+        result = []
+        for i in range(len(sequence)):
+            if fun(sequence[i]) == True:
+                result.append(sequence[i])
+        return result
+        
+    def myFun(a):
+        if len(a) > 5:
+            return True
+        return False
+    
+    print(myfilter(myFun, ["paras", "test", "amazing", "elephant", "is", "cool", "iNeuron"]))
+<\Cell_1>
+<Cell_2>
+    def longestWord(lst):
+        m = ""
+        for i in range(len(lst)):
+            if len(lst[i]) >= len(m):
+                m = lst[i]
+        return m
+    
+    print(longestWord(["paras", "test", "amazing", "elephant", "is", "cool", "iNeuron"]))
+<\Cell_2>
+<Cell_3>
+    def find_length(lst):
+        return list(map(len, lst))
+
+    print(find_length(["ab","cde","erty"]))
+<\Cell_3>
+<Cell_4>
+    def vowel_checker(c):
+        vowels = ["a", "e", "i", "o", "u"]
+
+        for i in range(len(vowels)):
+            if c == vowels[i]:
+                return True
+        return False

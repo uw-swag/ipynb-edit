@@ -1,0 +1,51 @@
+```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding missing imports"
+
+    Original Code Cells:
+    '''
+<\Cell_156>
+<Cell_157>
+from sklearn.metrics import f1_score
+
+f1 = f1_score(y_test, y_pred)
+print("F1 Score: {:.2f}%".format(100 * f1))
+<\Cell_157>
+<Cell_158>
+from sklearn.metrics import classification_report
+
+print(classification_report(y_test, y_pred))
+<\Cell_158>
+<Cell_159>
+from sklearn.metrics import roc_auc_score
+
+roc_auc = roc_auc_score(y_test, y_pred)
+print("AUC Score: {:.2f}%".format(100 * roc_auc))
+<\Cell_159>
+<Cell_160>
+from sklearn.metrics import confusion_matrix
+
+conf_mat = confusion_matrix(y_test, y_pred)
+print(conf_mat)
+<\Cell_160>
+<Cell_161>
+from sklearn.metrics import precision_recall_curve
+
+precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
+<\Cell_161>
+<Cell_162>
+import matplotlib.pyplot as plt
+
+plt.step(recall, precision, color='b', alpha=0.2, where='post')
+plt.fill_between(recall, precision, alpha=0.2, color='b')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.title('Precision vs Recall Curve')
+plt.show()
+<\Cell_162>
+<Cell_163>
+from sklearn.metrics import plot_roc_curve
+
+plot_roc_curve(log_clf, X_test_transform

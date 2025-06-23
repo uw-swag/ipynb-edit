@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Update 08. Plotly Basics.ipynb"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # Import required libraries
+    import pandas as pd
+    import plotly.express as px
+    import plotly.graph_objects as go
+<\Cell_0>
+<Cell_1>
+# Read the airline data into pandas dataframe
+airline_data =  pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/airline_data.csv', 
+                            encoding = "ISO-8859-1",
+                            dtype={'Div1Airport': str, 'Div2Airport': str})
+<\Cell_1>
+# Preview the first 5 lines of the loaded data
+airline_data.head()
+<\Cell_1>
+# Display the data
+line_data = airline_data.head(5)
+<\Cell_1>
+# Create line plot here
+fig = px.line(line_data, x="Month", y="Flights", title='Monthly Flights')
+fig.show()
+<\Cell_2>
+<Cell_3>
+# Group the data by reporting airline. Compute total number of flights in each combination
+bub_data = data.groupby('Reporting_Airline')['Flights'].sum().reset_index()
+<\Cell_3>
+# Display the data
+bub_data
+<\Cell_3>
+# Create scatter chart here
+fig = px.scatter(bub_data, x="Reporting_Airline", y="Flights", title='Reporting Airline vs Number of Flights')
+fig.show()
+<\Cell_4>
+<Cell_5>
+# Set missing values to 0
+data['ArrDelay'] = data['ArrDelay'].fillna(0)
+<\Cell_5>
+<Cell_6>
+# Create hist

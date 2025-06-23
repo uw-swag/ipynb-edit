@@ -1,0 +1,50 @@
+```python
+    # Description
+    This script is used to train a FastText model for text classification.
+
+    # Conclusion
+    The FastText model has been trained on the training data and is ready for use.
+
+    # Plot_Loss
+    The loss plot shows the training process. The loss decreases as the epochs go on.
+
+    ```python
+    # Code
+    ```python
+    import fasttext
+    import os
+    from tokenizers import ByteLevelBPETokenizer
+
+    # lr = learning rate
+    # lrUpdateRate similar to batch size
+    fasttext_params = {
+        'input': input_path_train,
+        'lr': 0.1,
+        'lrUpdateRate': 1000,
+        'thread': 8,
+        'epoch': 10,
+        'wordNgrams': 1,
+        'dim': 100,
+        'loss': 'ova'
+    }
+    model = fasttext.train_supervised(**fasttext_params)
+
+    print('vocab size: ', len(model.words))
+    print('label size: ', len(model.labels))
+    print('example vocab: ', model.words[:5])
+    print('example label: ', model.labels[:5])
+    directory = 'cooking_model'
+    if not os.path.isdir(directory):
+        os.makedirs(directory, exist_ok=True)
+
+    tokenizer_checkpoint = os.path.join(directory, 'tokenizer.json')
+    tokenizer.save(tokenizer_checkpoint)
+    from tokenizers import Tokenizer
+
+    loaded_tokenizer = Tokenizer.from_file(tokenizer_checkpoint)
+    loaded_model = fasttext.load_model(tokenized_model_checkpoint)
+
+    encoded_text = loaded_tokenizer.encode(text)
+    encoded_text.tokens
+
+    ```

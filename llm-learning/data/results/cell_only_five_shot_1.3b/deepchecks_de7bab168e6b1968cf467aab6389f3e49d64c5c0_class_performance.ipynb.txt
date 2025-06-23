@@ -1,0 +1,31 @@
+```
+    from deepchecks.vision.datasets.classification import mnist
+
+    mnist_model = mnist.load_model()
+    train_ds = mnist.load_dataset(train=True, object_type='Dataset')
+    test_ds = mnist.load_dataset(train=False, object_type='Dataset')
+    yolo = coco.load_model(pretrained=True)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    train_ds = VisionData(coco_train_loader, label_transformer=DetectionLabelFormatter(lambda x: x), num_classes=80)
+    test_ds = VisionData(coco_test_loader, label_transformer=DetectionLabelFormatter(lambda x: x), num_classes=80)
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+    det_formatter = DetectionPredictionFormatter(coco.yolo_wrapper)
+
+    # Robustness Report
+    report = deepchecks.vision.datasets.classification.robustness.report(train_ds, test_ds, det_formatter)
+    print(report)
+    ```
+
+    The robustness report provides a comprehensive analysis of the model's performance on the dataset. It includes metrics like accuracy, precision, recall, and F1-score, as well as a box plot of the distribution of the labels.
+
+    The report can be further customized to include more specific metrics or to compare the model's performance with other models or datasets.
+
+    The report can be saved to a file or displayed in a Jupyter notebook.
+
+    The robustness report can be used to identify potential issues with the model's performance, such as overfitting or underfitting, and to make necessary adjustments to the model's architecture or training process.
+
+    The robustness report can be used to identify potential issues with the model's performance, such as overfitting or underfitting, and to make necessary adjustments to

@@ -1,0 +1,38 @@
+```python
+    # Fixes to dataset creation logic (#279)
+    '''
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+
+    from deepchecks import Dataset
+    ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use_default_index=False)
+    ds_test =  Dataset(df_test,  label_name=label_col, cat_features=[])
+
+    new_custom_suite.run(model=rf_clf, train_dataset=ds_train, test_dataset=ds_test)
+    ```
+    '''
+    }
+
+    ### Response:
+    ```python
+    # Fixes to dataset creation logic (#279)
+    '''
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+
+    from deepchecks import Dataset
+    ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use

@@ -1,0 +1,33 @@
+
+    Here are some additional examples to add to your notebook:
+
+    ### Instruction:
+    [
+    Commit Message: "Add more examples to notebook"
+    Original Code Cells:
+    '''
+    !pip install atomai
+download_link = 'https://drive.google.com/uc?id=1-0fXGXGY8jW11q2GdPZ2hmOhQ7-WNlnK'
+!gdown -q $download_link -O 'training_data.npy'
+dataset_1 = np.load('training_data.npy')
+images_all_1 = dataset_1['X_train']
+labels_all_1 = dataset_1['y_train']
+images_test_all_1 = dataset_1['X_test']
+labels_test_all_1 = dataset_1['y_test']
+print(images_all_1.shape, labels_all_1.shape)
+trained_model_1 = aoi.atomnet.trainer(
+    images_all_1, labels_all_1, 
+    images_test_all_1, labels_test_all_1,
+    training_cycles=1000).run()
+download_link = 'https://drive.google.com/uc?id=1-4-IQ71m--OelQb1891GnbG1Ako1-DKh'
+!gdown -q $download_link -O 'training_data-m.npy'
+dataset_2 = np.load('training_data-m.npy')
+images_all_2 = dataset_2['X_train']
+labels_all_2 = dataset_2['y_train']
+images_test_all_2 = dataset_2['X_test']
+labels_test_all_2 = dataset_2['y_test']
+print(images_all_2.shape, labels_all_2.shape)
+trained_model_2 = aoi.atomnet.trainer(
+    images_all_2, labels_all_2, 
+    images_test_all_2, labels_test_all_2,
+    training_

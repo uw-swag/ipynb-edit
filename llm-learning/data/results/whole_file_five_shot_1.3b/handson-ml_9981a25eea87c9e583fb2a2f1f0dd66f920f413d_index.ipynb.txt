@@ -1,0 +1,12 @@
+```python
+    <Cell_0>
+    # Remove nbextensions from installation instructions
+    # fixes #401
+    import os
+    import sys
+    if os.path.exists(os.path.join(sys.prefix, 'share', 'jupyter', 'nbextensions')):
+        shutil.rmtree(os.path.join(sys.prefix, 'share', 'jupyter', 'nbextensions'))
+    else:
+        print("nbextensions not found")
+    <\Cell_0>
+    ```

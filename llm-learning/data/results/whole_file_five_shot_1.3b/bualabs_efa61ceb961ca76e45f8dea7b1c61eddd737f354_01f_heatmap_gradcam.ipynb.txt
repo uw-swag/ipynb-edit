@@ -1,0 +1,51 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.svm import LinearSVC
+    from sklearn.metrics import accuracy_score
+    from mlxtend.evaluate import confusion_matrix
+    from mlxtend.plotting import plot_confusion_matrix
+    from mlxtend.plotting import heatmap as heatmap_interactive
+
+    %matplotlib inline
+
+    <Cell_1>
+    # Load the data
+    data = load_iris()
+
+    <Cell_2>
+    # Split the data into labels (targets) and features
+    label_names = data['target_names']
+    labels = data['target']
+    feature_names = data['feature_names']
+    features = data['data']
+
+    <Cell_3>
+    # Create test and training sets
+    X_train, X_test, Y_train, Y_test = train_test_split(features,
+                                                        labels,
+                                                        test_size=0.33,
+                                                        random_state=42)
+
+    <Cell_4>
+    # Create an instance of the GaussianNB classifier
+    model = LinearSVC(C=1.0, random_state=42)
+
+    # Train the model
+    model.fit(X_train, Y_train)
+
+    <Cell_5>
+    # Create predictions
+    predictions = model.predict(X_test)
+
+    <Cell_6>
+    # Create a plot to compare actual labels (Y_test) and the predicted labels (predictions)
+    fig = plt.figure(figsize=(20,10))
+    plt.scatter(Y_test, predictions)
+    plt.xlabel("Actual Label: $Y_i$")
+    plt.ylabel("Predicted Label: $\hat{Y}_i$")
+    plt.title("Actual vs. Predicted Label: $Y_i$ vs. $\hat{Y}_i$")
+    pl

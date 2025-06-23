@@ -1,0 +1,17 @@
+```python
+    # Import necessary libraries
+    import geopandas as gpd
+    import pandas as pd
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Load the geocode data
+    geo_df = gpd.read_file('geocode.geojson')
+
+    # Perform spatial join
+    joined_df = gpd.sjoin(df, geo_df, how='inner', op='intersects')
+
+    # Save the joined data
+    joined_df.to_csv('joined_data.csv', index=False)
+    ```

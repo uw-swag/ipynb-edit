@@ -1,0 +1,54 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added custom GRUCell code."
+    Original Code Cells:
+    '''
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    # import fastai.utils.collect_env
+    # fastai.utils.collect_env.show_install()
+    <\Cell_0>
+    <Cell_1>
+    from fastai import *
+    from fastai.text import *
+    from fastai.callbacks import *
+    from fastai.callbacks.mem import *
+    <\Cell_1>
+    <Cell_2>
+    class GRUModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.gru = nn.GRU(10, 10, 2, batch_first=True)
+            self.fc = nn.Linear(10, 1)
+
+        def forward(self, x):
+            out, _ = self.gru(x)
+            out = self.fc(out[:, -1, :])
+            return out
+    <\Cell_2>
+    <Cell_3>
+    learn = Learner(data, GRUModel(), loss_func=nn.MSELoss(), metrics=[accuracy], callback_fns=[ShowGraph])
+    <\Cell_3>
+    <Cell_4>
+    # learn.lr_find()
+    # learn.recorder.plot(suggestion=True)
+    <\Cell_4>
+    <Cell_5>
+    learn.fit_one_cycle(10, max_lr=3e-3)
+    <\Cell_5>
+    <Cell_6>
+    data = labeled_splitted.databunch(bs=bs, bptt=20)
+    data
+    <\Cell_6>
+    <Cell_7>
+    x, y = data.one_batch()
+    x.shape, y.shape
+    <\Cell_7>
+    <Cell_8>
+    y[0], x[0]
+    <\Cell_8>
+    <Cell_9>
+    class

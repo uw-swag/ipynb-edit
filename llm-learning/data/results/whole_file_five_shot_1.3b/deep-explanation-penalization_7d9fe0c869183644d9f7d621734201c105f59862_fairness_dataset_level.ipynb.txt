@@ -1,0 +1,46 @@
+```
+    ## Notebook to compare network versions
+
+    This notebook compares the versions of the network. It compares the performance of two different versions of a network, namely, version 1 and version 2. The performance is measured by the accuracy and loss of the model on the test set.
+
+    ## Step 1: Import necessary libraries
+
+    ```python
+    import os
+    import sys
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from tqdm import tqdm
+    from copy import deepcopy
+    import pickle as pkl
+    import pandas as pd
+    import torch
+    import torch.nn as nn
+    import torch.optim as O
+    from torchtext import data
+    from torchtext import datasets
+    import cd
+    ```
+
+    ## Step 2: Load the data
+
+    ```python
+    vector_cache = '../data/.vector_cache/input_vectors.pt'
+    word_vectors = 'glove.6B.300d'
+    batch_size = 50
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    inputs = data.Field(lower=True)
+    answers = data.Field(sequential=False, unk_token=None)
+    train, dev, test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True, filter_pred=lambda ex: ex.label != 'neutral')
+    inputs.build_vocab(train, dev, test)
+
+    if os.path.isfile(vector_cache):
+        inputs.vocab.vectors = torch.load(vector_cache)
+    else:
+        inputs.vocab.load_vectors(word_vectors)
+        os.makedirs(os.path.dirname(vector_cache), exist_ok=True)
+        torch.save(inputs.vocab.vectors, vector_cache)
+    answers.build_vocab(train)
+
+    train_iter, dev_iter, test_iter = data.BucketIterator

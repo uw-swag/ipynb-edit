@@ -1,0 +1,30 @@
+```python
+    # Load the dataset
+    data = load_breast_cancer()
+
+    # Convert the data into a pandas dataframe
+    df = pd.DataFrame(np.c_[data['data'], data['target']], columns=np.append(data['feature_names'], ['target']))
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df.iloc[:, :-1], df.iloc[:, -1], test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the Decision Tree Classifier
+    from sklearn.tree import DecisionTreeClassifier
+    classifier = DecisionTreeClassifier(random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
+    print("Classification Report: \n", classification_report(y_test, y_pred))
+    print("Accuracy Score: \n", accuracy_score(y_test, y_pred))
+    ```
+    '''

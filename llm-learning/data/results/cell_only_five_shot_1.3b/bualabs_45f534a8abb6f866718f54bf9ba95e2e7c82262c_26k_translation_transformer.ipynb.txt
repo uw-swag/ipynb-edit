@@ -1,0 +1,45 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+
+    model = Sequential([
+        Conv2D(filters=32, kernel_size=3, padding='same', activation='relu', input_shape=(IMG_HEIGHT,IMG_WIDTH, 3)),
+        MaxPooling2D(pool_size=2),
+
+        Conv2D(filters=64, kernel_size=3, padding='same', activation='relu'),
+        MaxPooling2D(pool_size=2),
+    
+        Conv2D(filters=32, kernel_size=3, padding='same', activation='relu'),
+        MaxPooling2D(pool_size=2),
+    
+        Conv2D(filters=32, kernel_size=3, padding='same', activation='relu'),
+        MaxPooling2D(pool_size=2),
+
+        Flatten(),
+
+        Dense(6, activation='softmax')
+    ])
+
+    model.compile(optimizer='adam',
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    model.summary()
+
+    history = model.fit(
+        train_data_gen,
+        validation_data = train_data_gen,
+        steps_per_epoch= total_train // batch_size,
+        epochs = epochs,
+        validation_steps= total_test // batch_size,
+        callbacks = [tf.keras.callbacks.EarlyStopping(
+            monitor='val_loss',
+            min_delta=0.01,
+            patience=7)]
+    )
+
+    # Label Smoothing
+    label_smoothing_factor = 0.2
+    y_train_smoothed = tf.image.smooth_labels(y_train, label_smoothing_factor)
+    y_test_smoothed = tf.image.smooth

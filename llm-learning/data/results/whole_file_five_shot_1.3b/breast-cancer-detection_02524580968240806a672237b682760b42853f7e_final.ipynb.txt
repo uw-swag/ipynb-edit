@@ -1,0 +1,18 @@
+```python
+    import os
+    import glob
+
+    # Get the list of all .ipynb files
+    notebook_files = glob.glob('*.ipynb')
+
+    # Loop through each file and update the file size
+    for file in notebook_files:
+        # Get the file size in bytes
+        file_size_bytes = os.path.getsize(file)
+
+        # Convert the file size to MB
+        file_size_mb = file_size_bytes / (1024 * 1024)
+
+        # Print the file size
+        print(f'{file}: {file_size_mb:.2f} MB')
+    ```

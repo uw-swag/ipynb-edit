@@ -1,0 +1,25 @@
+```python
+    import tensorflow as tf
+
+    # Create a simple TensorFlow graph
+    x = tf.constant(1.0)
+    y = tf.constant(2.0)
+    z = tf.add(x, y)
+
+    # Create a TensorFlow session
+    sess = tf.Session()
+
+    # Run the TensorFlow graph
+    result = sess.run(z)
+
+    print(f"The result of the TensorFlow operation is: {result}")
+
+    # Demonstrate the use of TensorFlow's tools
+    tf.summary.scalar('z', result)
+    tf.summary.file('output.txt', sess.graph)
+
+    # Close the TensorFlow session
+    sess.close()
+    ```
+
+    This code creates a simple TensorFlow graph with two constants and a sum operation. It then runs the graph and prints the result. The last part of the code demonstrates the use of TensorFlow's tools to log the graph and its operations to a file.

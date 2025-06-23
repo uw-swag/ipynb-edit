@@ -1,0 +1,15 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67*len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    from deepchecks.suites import IntegrityCheckSuite
+
+    IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    The code above is a validation of the DeepChecks library's IntegrityCheckSuite. The suite is used to validate the integrity of the datasets. The function `IntegrityCheckSuite.run()` is used to run the suite on the training and testing datasets. The `check_datasets_policy` parameter is set to 'both' to ensure that the suite checks both the training and testing datasets.

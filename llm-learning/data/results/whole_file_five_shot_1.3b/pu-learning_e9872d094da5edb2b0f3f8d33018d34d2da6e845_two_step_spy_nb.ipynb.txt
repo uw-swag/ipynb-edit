@@ -1,0 +1,51 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "update the notebook to learn a classifier by a two-step technique"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+x, y, s = load_scar()
+<\Cell_1>
+<Cell_2>
+np.random.seed(0)
+
+spy_ratio = 0.1
+
+labeled_data_idx = np.where(s == 1)[0]
+
+n_spy = round(len(labeled_data_idx) * 0.1)
+
+spy_data_idx = np.random.choice(labeled_data_idx, n_spy, replace=False)
+spy = np.zeros_like(s)
+spy[spy_data_idx] = 1
+<\Cell_2>
+<Cell_3>
+# s_ (s'): a new label indicator after regarding spy data as unlabeled
+neg_data_idx = np.where(s__prob_hat < s__prob_hat_spy_min)[0]
+x_neg = x[neg_data_idx]
+t_neg = np.zeros(len(x_neg), dtype=np.int32)
+
+pos_data_idx = labeled_data_idx
+x_pos = x[pos_data_idx]
+t_pos = np.ones(len(x_pos), dtype=np.int32)
+
+x_ = np.concatenate([x_neg, x_pos])
+t = np.concatenate([t_neg, t_pos])
+<\Cell_3>
+<Cell_4>
+visualize_pu_data(x, s)
+<\Cell_4>
+<Cell_5>
+visualize_pu_data(x, spy)
+<\Cell_5>
+<Cell_6>
+visualize_pn_data(x_, t)
+<\Cell_6>
+<Cell_7>
+visualize_pn_data(

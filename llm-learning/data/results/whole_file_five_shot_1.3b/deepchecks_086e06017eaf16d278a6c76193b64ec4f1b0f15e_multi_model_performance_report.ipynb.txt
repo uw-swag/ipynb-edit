@@ -1,0 +1,38 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#535)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.base import Dataset
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import MultiModelPerformanceReport
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label="target")
+test_ds = Dataset(test, label="target")
+
+clf1 = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+clf2 = RandomForestClassifier().fit(train_ds.features_columns, train_ds.label_col)
+clf3 = DecisionTreeClassifier().fit(train_ds.features_columns, train_ds.label_col)
+<\Cell_1>
+<Cell_2>
+MultiModelPerformanceReport().run(train_ds, test_ds, [clf1, clf2, clf3])
+<\Cell_2>
+<Cell_3>
+from sklearn.datasets import load_diabetes
+from sklearn.ensemble import AdaBoostRegressor, RandomForestRegressor
+from sklearn.tree import DecisionTreeRegressor
+<\Cell_3>
+<Cell_4>
+diabetes = load_diabetes(as_frame=True)
+train, test = train_test_split(diabetes.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label="target", cat_features=['sex'])
+test_ds = Dataset(test, label="target", cat_features

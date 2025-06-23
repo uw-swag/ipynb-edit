@@ -1,0 +1,42 @@
+```
+    # Importing the required libraries
+    from sklearn.cluster import KMeans
+    from sklearn.datasets import load_digits
+    from sklearn.preprocessing import scale
+    from matplotlib.offsetbox import AnnotationBbox, OffsetImage
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Load the digits dataset
+    digits = load_digits()
+    data = scale(digits.data)
+
+    # Create a KMeans object with 10 clusters
+    kmeans = KMeans(n_clusters=10, random_state=0)
+
+    # Fit the model to the data
+    kmeans.fit(data)
+
+    # Create a figure with 10 subplots
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.add_subplot(111)
+
+    # Create a list to hold the image boxes
+    image_boxes = []
+
+    # Loop through the digits and add them to the figure
+    for i in range(10):
+        # Create a list of the images for the current cluster
+        images = [digit for digit in digits.data if kmeans.labels_[i] == digit]
+
+        # Create a random color for the current cluster
+        color = np.random.rand(3,)
+
+        # Add the images to the figure and the list of image boxes
+        for image in images:
+            ax.add_artist(AnnotationBbox(OffsetImage(image.reshape(8, 8), cmap=plt.cm.gray_r), (0, 0)))
+
+    # Show the figure
+    plt.show()
+    ```
+    '''

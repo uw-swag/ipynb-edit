@@ -1,0 +1,29 @@
+```python
+    import streamlit as st
+
+    # Reset button
+    def reset_button():
+        st.session_state.pms5003_data = air_data.pms5003.read()
+        st.session_state.pms_ref_0_3 = st.session_state.pms5003_data.pm_per_1l_air(0.3)
+        st.session_state.pms_ref_0_5 = st.session_state.pms5003_data.pm_per_1l_air(0.5)
+        st.session_state.pms_ref_1_0 = st.session_state.pms5003_data.pm_per_1l_air(1.0)
+
+    # Main page
+    def main_page():
+        st.title("PM2.5 Data Analysis")
+
+        # Button to reset data
+        if st.button("Reset Data"):
+            reset_button()
+
+        # Display the data
+        st.subheader("PM2.5 Data")
+        st.line_chart(pms5003_data.pm_per_1l_air(0.3))
+        st.line_chart(pms5003_data.pm_per_1l_air(0.5))
+        st.line_chart(pms5003_data.pm_per_1l_air(1.0))
+
+    # Run the main page
+    main_page()
+    ```
+
+    This code will add a "Reset Data" button to the Streamlit app. When the button is clicked, the data will be reset to the current values.

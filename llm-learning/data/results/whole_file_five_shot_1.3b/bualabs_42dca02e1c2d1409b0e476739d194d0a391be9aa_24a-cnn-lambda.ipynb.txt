@@ -1,0 +1,57 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added links to several blogs."
+    Original Code Cells:
+    '''
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+import torch
+from torch import tensor
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import *
+import fastai
+from fastai import datasets
+from fastai.metrics import accuracy
+from fastai.basic_data import *
+from fastai.basic_train import *
+import pickle, gzip, math, torch, re
+from IPython.core.debugger import set_trace
+import matplotlib.pyplot as plt
+from functools import partial
+<\Cell_1>
+<Cell_2>
+class Dataset(Dataset):
+    def __init__(self, x, y, c):
+        self.x, self.y, self.c = x, y, c
+    def __len__(self):
+        return len(self.x)
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+<\Cell_2>
+<Cell_3>
+train_mean, train_std = x_train.mean(), x_train.std()
+x_train = (x_train - train_mean) / train_std
+<\Cell_3>
+<Cell_4>
+x_train.head()
+<\Cell_4>
+<Cell_5>
+x_train.describe()
+<\Cell_5>
+<Cell_6>
+x_train.groupby('year').mean()
+<\Cell_6>
+<Cell_7>
+x_train.groupby('year').mean().plot(title="Average values by year")
+<\Cell_7>
+<Cell_8>
+x_train.groupby('year').mean().plot(title="Average values by year")
+<\Cell_8>
+<Cell_9>
+x_train.groupby('year').mean().plot(title="

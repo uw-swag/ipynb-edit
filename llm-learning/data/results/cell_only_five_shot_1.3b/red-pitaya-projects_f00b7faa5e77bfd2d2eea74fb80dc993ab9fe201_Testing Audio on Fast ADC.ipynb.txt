@@ -1,0 +1,49 @@
+
+    The original code is a Python script that uses the Pyboard and Librosa library to perform audio processing. Here's a breakdown of what the code does:
+
+    1. It sets the sample rate to 18050 Hz.
+    2. It loads an audio file and decimates the sample rate to 8000 Hz.
+    3. It sets the trigger source to the audio file.
+    4. It plays the audio file using the IPython.display library.
+    5. It uses the librosa library to display the spectrogram of the audio file.
+    6. It reads from the ADC (Analog to Digital Converter) of the Pyboard.
+    7. It measures the time it takes to read 20000 ADC samples.
+
+    The code is not complete and there are a few issues that need to be fixed:
+
+    1. The ADC reading is not being stored in the buffer.
+    2. The code is not taking 20000 samples at once.
+    3. The code is not calculating the mean time for each ADC reading.
+    4. The code is not printing the ADC reading rate.
+
+    Here's a revised version of the code:
+
+    ```python
+    import pyb
+    import array
+    import time
+    import numpy as np
+    import librosa
+    import librosa.display
+    import IPython.display as ipd
+
+    # set sample rate
+    sr = 18050
+
+    # load audio file
+    data = ipd.Audio('audio_file.wav', rate=sr)
+
+    # decimate audio
+    data = data.set_frame_rate(8000)
+
+    # set trigger source
+    data.trigger_pre = 0
+    data.trigger_post = data.buffer_size
+
+    # play audio
+    IPython.display.display(data)
+
+    # get spectrogram
+    X = librosa.stft(data.get_array_of_samples())
+    Xdb = librosa.amplitude_to_db(abs(X))
+    librosa.display.specshow(Xdb, sr=sr, x_axis='time', y

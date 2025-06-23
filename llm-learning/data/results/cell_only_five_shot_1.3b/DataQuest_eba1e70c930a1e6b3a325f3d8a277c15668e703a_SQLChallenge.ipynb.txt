@@ -1,0 +1,24 @@
+```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+
+    # Assuming you have a DataFrame 'employee_performance' with columns 'total_sales' and 'employee'
+    fig, ax = plt.subplots()
+
+    ax.barh(employee_performance['employee'], employee_performance['total_sales'], color='skyblue')
+
+    ax.set_xlabel('Total Sales')
+    ax.set_ylabel('Employee')
+    ax.legend_.remove()
+
+    # Annotate the sales data
+    for i, total_sales in enumerate(employee_performance['total_sales']):
+        ax.annotate(str(total_sales), (total_sales + 10, i - 0.15))
+
+    # Annotate hire dates
+    ax.annotate('Hire Date: Oct 2017', xy=(0.25, 0.15), xycoords='axes fraction')
+    ax.annotate('Hire Date: May 2017', xy=(0.25, 0.49), xycoords='axes fraction')
+    ax.annotate('Hire Date: Apr 2017', xy=(0.25, 0.83), xycoords='axes fraction')
+
+    plt.show()
+    ```

@@ -1,0 +1,29 @@
+```python
+    # refactoring the code
+    # refactoring is the process of restructuring the code to improve its readability, maintainability, and efficiency.
+
+    # First, let's refactor the code to improve its readability.
+    # We can use list comprehensions instead of for loops.
+    # Also, we can use the built-in functions min and sum to simplify the code.
+
+    # Refactoring the code
+    results['final_acc'] = [min(x) for x in results['accs_test']]
+    results['final_acc_train'] = [min(x) for x in results['accs_train']]
+    results['final_cd'] = [sum(x) for x in results['cd']]
+    results['final_test_loss'] = [min(x) for x in results['losses_test']]
+    results['final_train_loss'] = [min(x) for x in results['losses_train']]
+
+    # Resetting the index
+    results.reset_index(drop=True, inplace=True)
+
+    # Creating a new dataframe with the desired columns
+    results_save = results[['regularizer_rate','final_acc','final_acc_train','final_test_loss', 'final_cd', 'method', 'dataset','seed' ]].sort_values(by = ['regularizer_rate'])
+
+    # Grouping the data by the desired columns
+    concise_results = results_save.groupby(by = ['dataset', 'method','regularizer_rate']).mean()
+    concise_results.columns = ['Test accuracy', 'Train accuracy', 'Test loss' , 'CD','seed']
+
+    # Plotting the data
+    plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results_save[results_save.method == 'CDEP'],label="CDEP",legend = "brief"  );
+    plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results_save[results_save.method == 'Grad'], label="RRR" );
+   

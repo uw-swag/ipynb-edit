@@ -1,0 +1,75 @@
+```python
+    import os
+    import shutil
+
+    # List all files in the current directory
+    files = os.listdir()
+
+    # Loop through each file
+    for file in files:
+        # If the file is a temporary file, delete it
+        if file.startswith('temp'):
+            os.remove(file)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Improved code readability"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_average_age(people):
+        total_age = 0
+        for person in people:
+            total_age += person['age']
+        return total_age / len(people)
+
+    def find_youngest_person(people):
+        youngest_age = float('inf')
+        youngest_person = None
+        for person in people:
+            if person['age'] < youngest_age:
+                youngest_age = person['age']
+                youngest_person = person
+        return youngest_person
+
+    def find_oldest_person(people):
+        oldest_age = float('-inf')
+        oldest_person = None
+        for person in people:
+            if person['age'] > oldest_age:
+                oldest_age = person['age']
+                oldest_person = person
+        return oldest_person
+
+    def find_person_by_name(people, name):
+        for person in people:
+            if person['name'] == name:
+                return person
+        return None
+
+    def find_people_by_age_range(people, min_age, max_age):
+        matching_people = []
+        for person in people:
+            if min_age <= person['age'] <= max_age:
+                matching_people.append(person)
+        return matching_people
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added function to find people by age range"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def find_people_by_age

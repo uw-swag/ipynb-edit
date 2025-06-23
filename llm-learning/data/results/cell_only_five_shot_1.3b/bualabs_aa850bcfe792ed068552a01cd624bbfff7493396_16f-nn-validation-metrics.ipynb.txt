@@ -1,0 +1,38 @@
+
+    # Shuffle the training set
+    train_ds = train_ds.shuffle(buffer_size=1000)
+    valid_ds = valid_ds.shuffle(buffer_size=1000)
+
+    # batch size
+    bs = 64
+    train_dl, valid_dl = data.DataLoader(train_ds, bs), data.DataLoader(valid_ds, bs)
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new column to the dataframe"
+    Original Code Cells:
+    '''
+    # Adding a new column to the dataframe
+    df['new_column'] = df['existing_column'] + 1
+
+    '''
+    ]
+
+    ### Response:
+    # Adding a new column to the dataframe
+    df['new_column'] = df['existing_column'] + 1
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new column to the dataframe with a condition"
+    Original Code Cells:
+    '''
+    # Adding a new column to the dataframe with a condition
+    df['new_column'] = df['existing_column'].apply(lambda x: x+1 if x < 5 else x)
+
+    '''
+    ]
+
+    ### Response:
+    # Adding a new column to the dataframe with a condition
+    df['new_column'] = df['existing_column'].apply(lambda x: x+1 if x < 5 else x)

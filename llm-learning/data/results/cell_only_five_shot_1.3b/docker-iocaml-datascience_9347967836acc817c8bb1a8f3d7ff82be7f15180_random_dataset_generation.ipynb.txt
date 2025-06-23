@@ -1,0 +1,51 @@
+```python
+    # Adding some examples
+    import pandas as pd
+
+    # Create a DataFrame
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': [1, 2, 3, 4, 5, 6, 7, 8],
+        'D': [10, 20, 30, 40, 50, 60, 70, 80]
+    })
+
+    print(df)
+
+    # Add a new column
+    df['E'] = df['A'].map({'foo': 0, 'bar': 1})
+
+    print(df)
+
+    # Add a new row
+    df = df.append({'A': 'foo', 'B': 'four', 'C': 9, 'D': 90}, ignore_index=True)
+
+    print(df)
+
+    # Add a new row with a new index
+    df = df.append(df.loc[0])
+
+    print(df)
+
+    # Add a new row with a new index and a new column
+    df = df.append(df.loc[0, ['B', 'C']])
+
+    print(df)
+
+    # Add a new row with a new index and a new column
+    df = df.append(df.loc[0, ['B', 'C']], ignore_index=True)
+
+    print(df)
+
+    # Add a new row with a new index and a new column
+    df = df.append(df.loc[0, ['B', 'C']], ignore_index=True)
+
+    print(df)
+
+    # Add a new row with a new index and a new column
+    df = df.append(df.loc[0, ['B', 'C']], ignore_index=True)
+
+    print(df)
+
+    # Add a new row with a new index and a new column
+    df = df.

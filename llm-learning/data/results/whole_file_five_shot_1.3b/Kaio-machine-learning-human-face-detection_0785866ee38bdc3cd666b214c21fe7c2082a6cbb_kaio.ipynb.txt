@@ -1,0 +1,40 @@
+```python
+    import pdfplumber
+    import matplotlib.pyplot as plt
+
+    with pdfplumber.open("path_to_your_file.pdf") as pdf:
+        first_page = pdf.pages[0]
+        text = first_page.extract_text()
+
+    # Now you can use text for further processing
+
+    # For example, you can count the number of occurrences of a specific word
+    word_count = text.count("word_to_count")
+
+    # You can also plot the frequency of words
+    word_list = text.split()
+    word_freq = {word: word_list.count(word) for word in word_list}
+    plt.bar(word_freq.keys(), word_freq.values())
+    plt.show()
+
+    # You can also save the text to a file
+    with open("text_file.txt", "w") as file:
+        file.write(text)
+    ```
+    This code will open a PDF file, extract the text from the first page, count the number of occurrences of a specific word, plot the frequency of words, and save the text to a file.
+
+    Please replace "path_to_your_file.pdf" and "word_to_count" with your actual file path and the word you want to count.
+
+    Also, please note that the code above is a simple example and may not work for all PDF files. It assumes that the text in the PDF is in the same language as the PDF itself. If the PDF contains multiple languages, you may need to use a more advanced method to extract the text.
+
+    Also, the code above uses the `pdfplumber` library to open and extract text from the PDF. If you don't have this library installed, you can install it using pip:
+
+    ```bash
+    pip install pdfplumber
+    ```
+
+    And for plotting the frequency of words, the `matplotlib` library. If you don't have this library installed, you can install it using pip:
+
+    ```bash
+    pip install matplotlib
+    ```

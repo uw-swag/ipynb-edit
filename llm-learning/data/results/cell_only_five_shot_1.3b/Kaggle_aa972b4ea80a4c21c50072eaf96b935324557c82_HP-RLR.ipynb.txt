@@ -1,0 +1,13 @@
+```python
+    # Define function for determining Tuning Parameter
+    def cv_error(model):
+        cve = np.sqrt(-cross_val_score(model, X, Y, scoring="neg_mean_squared_error", cv = 5))
+        return(cve)
+
+    X_test.head(3)
+    ```
+
+    ### Explanation:
+    The function `cv_error` is used to calculate the cross-validation error of a given model. The `cross_val_score` function is used to perform cross-validation, and the `scoring` parameter is set to "neg_mean_squared_error" to use the negative mean squared error as the scoring metric. The `cv` parameter is set to 5, which means that 5 folds of cross-validation will be used. The function then returns the cross-validation error for each fold.
+
+    The `X_test.head(3)` line is a placeholder for the code that will be executed in the context of the original code. It's not part of the original code, but it's used to demonstrate how the function `cv_error` can be used.

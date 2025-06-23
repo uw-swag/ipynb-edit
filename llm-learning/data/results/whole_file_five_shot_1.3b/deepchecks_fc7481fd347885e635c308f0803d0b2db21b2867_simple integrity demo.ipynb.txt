@@ -1,0 +1,27 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    from deepchecks.suites import IntegrityCheckSuite
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67*len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    # Run the integrity check suite
+    IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    The code above is a Python script that uses the DeepChecks library to check the integrity of a dataset. The DeepChecks library is a collection of data integrity checks that can be used to ensure the quality of data. The `IntegrityCheckSuite.run()` function is used to run the integrity check suite on the training and testing datasets.
+
+    The `check_datasets_policy` parameter is set to 'both' to ensure that the integrity check suite is run on both the training and testing datasets. If you want to run the integrity check suite only on the testing dataset, you can set this parameter to 'test'. If you want to run the integrity check suite only on the training dataset, you can set this parameter to 'train'.
+
+    The `IntegrityCheckSuite` class provides a variety of checks for data integrity, including checking for missing values, checking for duplicate rows, and more. The `run()` function is used to execute these checks and provide a report of the results.
+
+    Please note that you need to have the DeepChecks library installed in your Python environment. You can install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    Also, please note that the code above is a basic example and might not work as expected in a real-world scenario. The code assumes that the dataset is loaded correctly and that the integrity check suite is properly configured.

@@ -1,0 +1,43 @@
+
+To add renderers for `TestValueMAE` and `TestValueMeanError`, you need to create a custom renderer. Here is an example of how you can do it:
+
+```python
+from evidently.renderer import TableRenderer
+from evidently.metrics.base_metric import MetricValue
+
+class CustomTableRenderer(TableRenderer):
+    def __init__(self):
+        super().__init__()
+
+    def render(self, metrics: dict) -> str:
+        table_data = []
+        for metric_name, metric_value in metrics.items():
+            if isinstance(metric_value, MetricValue):
+                table_data.append({
+                    'Metric': metric_name,
+                    'Value': metric_value.value,
+                })
+        return self.render_as_table(table_data)
+
+# Now, you can use this custom renderer in your test suite
+suite = TestSuite(tests=[
+    TestNumberOfColumns(
+        NumberRange(left_side_threshold=1),
+        data_integrity_metric=DataIntegrityMetrics(),
+    ),
+    TestNumberOfDriftedFeatures(),
+], renderers=[CustomTableRenderer()])
+
+# And run your test suite
+suite.run(reference_data=pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}]), 
+         current_data=pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}]), 
+         column_mapping=ColumnMapping(datetime="c"))
+```
+
+This code creates a custom renderer that renders the results of the `TestValueMAE` and `TestValueMeanError` tests in a table. The `CustomTableRenderer` class inherits from `TableRenderer` and overrides the `render` method to customize the rendering of the metrics.
+
+Please note that you need to install the `evidently` library to use this code. You can install it using pip:
+
+```bash
+pip install evidently
+```

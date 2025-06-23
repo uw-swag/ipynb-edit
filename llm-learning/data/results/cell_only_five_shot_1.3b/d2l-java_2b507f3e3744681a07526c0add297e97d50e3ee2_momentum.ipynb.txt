@@ -1,0 +1,45 @@
+```python
+    import ai.djl.ndarray as nd
+    import ai.djl.ndarray.types as jt
+    import ai.djl.training.opt as opt
+    import ai.djl.training.optimizer as optim
+    import ai.djl.training.optimizer.learningrate as lr
+
+    from ai.djl.training import Trainer
+    from ai.djl.training.loss import Loss
+
+    class MyTrainer(Trainer):
+        def __init__(self, optimizer, loss_fn, device):
+            super(MyTrainer, self).__init__(optimizer, loss_fn, device)
+
+        def train_batch(self, batch):
+            inputs, targets = batch
+            with nd.default_context(self.device):
+                outputs = self.model(inputs)
+                loss = self.loss_fn(outputs, targets)
+                self.optimizer.zero_grad()
+                loss.backward()
+                self.optimizer.step()
+            return loss.item()
+
+    # Create a model
+    model = nn.Sequential(nn.Linear(10, 10))
+
+    # Define the loss function
+    loss_fn = Loss(jt.Float32).loss(jt.Float32)
+
+    # Define the optimizer
+    optimizer = optim.sgd(lr=0.01)
+
+    # Create a trainer
+    trainer = MyTrainer(optimizer, loss_fn, jt.cpu())
+
+    # Train the model
+    for i in range(100):
+        inputs = nd.random_normal(shape=(10,))
+        targets = nd.random_normal(shape=(10,))
+        loss = trainer.train_batch((inputs, targets))
+        print(f"Epoch {i}, Loss {loss}")
+    ```
+
+    The above code snippet is a simple example of how to handle exceptions in a Python notebook. In this case, we're using a custom `Trainer` class that includes

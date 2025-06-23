@@ -1,0 +1,24 @@
+```python
+    import h2o
+    from deepchecks import Dataset
+    from deepchecks.vision import H2OImageDataset
+
+    # Initialize H2O
+    h2o.init()
+
+    # Create a H2O DataFrame
+    df = h2o.create_frame([
+        {"x": [1, 2, 3, 4, 5], "y": [10, 20, 30, 40, 50]},
+        {"x": [1, 2, 3, 4, 5], "y": [10, 20, 30, 40, 50]},
+    ])
+
+    # Create a DeepChecks Dataset from the H2O DataFrame
+    ds = Dataset(df)
+
+    # Create a H2OImageDataset from the DeepChecks Dataset
+    h2o_ds = H2OImageDataset(ds)
+
+    # Now you can use h2o_ds in your deep learning model
+    # For example, you can use it to train a model:
+    model = h2o_ds.train_model(type="deeplearning", image_size="32x32")
+    ```

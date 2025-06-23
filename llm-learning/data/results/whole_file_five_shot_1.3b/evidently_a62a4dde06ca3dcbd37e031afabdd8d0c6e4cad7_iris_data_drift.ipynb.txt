@@ -1,0 +1,47 @@
+
+    The code you provided is mostly correct, but there are a few changes that can be made:
+
+    1. The import statements are not correct. The correct import statements are:
+
+       ```python
+       import pandas as pd
+       import numpy as np
+       from sklearn import datasets, model_selection, neighbors
+       from evidently.dashboard import Dashboard
+       from evidently.tabs import DriftTab, CatTargetDriftTab, ClassificationPerformanceTab
+       ```
+
+    2. The `iris_data_drift_report.show()` and `iris_data_and_target_drift_report.show()` methods are not being called correctly. The correct methods are:
+
+       ```python
+       iris_data_drift_report.show()
+       iris_data_and_target_drift_report.show()
+       ```
+
+    3. The `iris_drift.show()` method is not being called correctly. The correct method is:
+
+       ```python
+       iris_drift.show()
+       ```
+
+    4. The `iris_column_mapping` dictionary is not being used correctly. The correct keys are:
+
+       ```python
+       iris_column_mapping = {}
+
+       iris_column_mapping['target'] = 'target'
+       iris_column_mapping['prediction'] = 'prediction'
+       iris_column_mapping['numerical_features'] = iris.feature_names
+       ```
+
+    5. The `iris_drift.save()` method is not being called correctly. The correct method is:
+
+       ```python
+       iris_drift.save('reports/iris_classification_performance.html')
+       ```
+
+    6. The `iris_data_drift_report.save()`, `iris_data_and_target_drift_report.save()`, and `iris_drift.save()` methods are not being called correctly. The correct methods are:
+
+       ```python
+       iris_data_drift_report.save('reports/iris_data_drift.html')
+       iris_data_and_target_drift_report.

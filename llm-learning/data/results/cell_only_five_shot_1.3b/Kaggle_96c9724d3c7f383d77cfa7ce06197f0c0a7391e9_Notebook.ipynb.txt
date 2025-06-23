@@ -1,0 +1,18 @@
+```python
+    import pandas as pd
+
+    # Assuming you have a DataFrame df with columns 'employee_id', 'salary', and 'group'
+    df = pd.DataFrame({
+        'employee_id': ['e01', 'e02', 'e03', 'e04', 'e05', 'e06', 'e07', 'e08', 'e09', 'e10'],
+        'salary': [50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000],
+        'group': [1, 1, 2, 2, 3, 3, 3, 4, 4, 4]
+    })
+
+    # Group the DataFrame by 'group' and 'salary' columns, and calculate the mean salary for each group
+    grouped = df.groupby(['group', 'salary']).mean().reset_index()
+
+    print(grouped)
+    ```
+
+    ### Explanation:
+    This code groups the DataFrame `df` by the 'group' and 'salary' columns, and then calculates the mean salary for each group. The result is a new DataFrame that groups the original DataFrame by both 'group' and 'salary', and calculates the mean salary for each group.

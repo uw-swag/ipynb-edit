@@ -1,0 +1,31 @@
+```python
+    # Compute Statistics
+    ## Age
+    train_DF['Age'].fillna(train_DF['Age'].median(), inplace=True)
+    test_DF['Age'].fillna(test_DF['Age'].median(), inplace=True)
+
+    ## Embarked
+    train_DF['Embarked'].fillna(train_DF['Embarked'].mode()[0], inplace=True)
+    test_DF['Embarked'].fillna(test_DF['Embarked'].mode()[0], inplace=True)
+
+    ## Fare
+    train_DF['Fare'].fillna(train_DF['Fare'].median(), inplace=True)
+    test_DF['Fare'].fillna(test_DF['Fare'].median(), inplace=True)
+
+    ## Family
+    train_DF['Family'] = train_DF['SibSp'] + train_DF['Parch'] + 1
+    test_DF['Family'] = test_DF['SibSp'] + test_DF['Parch'] + 1
+
+    ## Sex
+    train_DF['Sex'] = train_DF['Sex'].map({'male': 0, 'female': 1})
+    test_DF['Sex'] = test_DF['Sex'].map({'male': 0, 'female': 1})
+
+    ## Pclass
+    train_DF['Pclass'] = train_DF['Pclass'].map({1: 0, 2: 1, 3: 2})
+    test_DF['Pclass'] = test_DF['Pclass'].map({1: 0, 2: 1, 3: 2})
+
+    ## PassengerId
+    train_DF.drop(['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked', 'PassengerId'], axis=1, inplace=True)
+    test_DF.drop(['Name', 'Sex', 'Ticket', 'Cabin', 'Embarked', 'PassengerId'], axis=1, inplace=True)
+
+    #

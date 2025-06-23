@@ -1,0 +1,55 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Mlc 124 segment performance (#88)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    import pandas as pd
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split
+
+    # Load the data
+    data = pd.read_csv('https://raw.githubusercontent.com/saschaschworm/big-data-and-data-science/master/datasets/exercises/exam-performance.csv')
+
+    # Split the data into features and target variable
+    X = data[['hours_studied', 'hours_slept']]
+    y = data['passed']
+
+    # Normalize the features
+    scaler = MinMaxScaler()
+    X = scaler.fit_transform(X)
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Logistic Regression model
+    model = LogisticRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    accuracy = model.score(X_test, y_test)
+    print(f'Accuracy: {accuracy * 100:.2f}%')
+
+    # Export the model
+    import joblib
+    joblib.dump(model, 'model.pkl')
+
+    # Load the model
+    loaded_model = joblib.load('model.pkl')
+
+    # Make predictions on new data
+    new_data = [[4, 10]]
+    new_data = scaler.transform(new_data)
+    prediction = loaded_model.predict(new_data)
+    print

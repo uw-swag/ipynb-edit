@@ -1,0 +1,34 @@
+```
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+    import ai.djl.training.opt.Optimization;
+
+    AirfoilRandomAccess airfoil = TrainingChapter11.getDataCh11(10, 1500);
+
+    public TrainingChapter11.LossTime trainAdam(float lr, float time, int numEpochs) {
+        int featureDimension = airfoil.getFeatureArraySize();
+        Map<String, Float> hyperparams = new HashMap<>();
+        hyperparams.put("lr", lr);
+        hyperparams.put("time", time);
+        return TrainingChapter11.trainCh11(Optimization::adam, 
+                                           initAdamStates(featureDimension), 
+                                           hyperparams, airfoil, 
+                                           featureDimension, numEpochs);
+    }
+
+    trainAdam(0.01f, 1, 2);
+    LearningRateTracker lrt = LearningRateTracker.fixedLearningRate(0.01f);
+    Optimizer adam = Optimizer.adam().optLearningRateTracker(lrt).build();
+
+    TrainingChapter11.trainConciseCh11(adam, airfoil, 2);
+    AirfoilRandomAccess airfoil = TrainingChapter11.getDataCh11(10, 1500);
+
+    public TrainingChapter11.LossTime trainYogi(float lr, float time, int numEpochs) {
+        int featureDimension = airfoil.getFeatureArraySize();
+        Map<String, Float> hyperparams = new HashMap<>();
+        hyperparams.put("lr", lr);
+        hyperparams.put("time", time);
+        return TrainingChapter11.trainCh11(Optimization::yogi, 
+                                           initAdamStates(featureDimension), 
+                                           hyperparams, airfoil, 
+                                           featureDimension, numE

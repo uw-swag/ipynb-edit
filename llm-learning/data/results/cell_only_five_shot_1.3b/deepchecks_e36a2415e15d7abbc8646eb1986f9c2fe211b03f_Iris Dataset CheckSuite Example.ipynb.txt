@@ -1,0 +1,18 @@
+```python
+    # We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+    ds_train = Dataset(df_train, cat_features=[], label = label_col)
+    ds_val =  Dataset(df_val, cat_features=[], label = label_col)
+    from mlchecks.suites import IntegrityCheckSuite
+    IntegrityCheckSuite.run(train_dataset=ds_train, validation_dataset=ds_val, check_datasets_policy='both')
+
+    # Split the dataset into training and validation sets
+    train_len = round(0.67*df_train.shape[0])
+    alternative_train_df = df_train[:train_len]
+    alternative_val_df = df_train[train_len:]
+
+    # Run the integrity check
+    IntegrityCheckSuite.run(train_dataset=alternative_train_df, validation_dataset=alternative_val_df,
+                            check_datasets_policy='both')
+    ```
+
+    This code is an example of how to update a Jupyter notebook. It's important to note that the specifics of the code may vary depending on the specifics of the dataset and the requirements of the task.

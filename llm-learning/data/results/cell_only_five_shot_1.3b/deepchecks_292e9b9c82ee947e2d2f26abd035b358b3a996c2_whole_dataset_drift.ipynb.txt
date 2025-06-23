@@ -1,0 +1,20 @@
+```python
+    import plotly.graph_objects as go
+
+    fig = go.Figure(go.Candlestick(x=df['Date'],
+                open=df['Open'],
+                high=df['High'],
+                low=df['Low'],
+                close=df['Close']))
+
+    fig.update_layout(
+        title='MLC 410 Drift to Plotly',
+        xaxis_title='Date',
+        yaxis_title='Price',
+        autosize=False,
+        width=1000,
+        height=600,
+    )
+
+    fig.show()
+    ```

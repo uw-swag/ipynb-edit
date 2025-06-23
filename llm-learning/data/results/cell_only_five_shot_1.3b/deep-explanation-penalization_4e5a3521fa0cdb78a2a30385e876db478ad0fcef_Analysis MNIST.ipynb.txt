@@ -1,0 +1,37 @@
+
+    Here is the refactored version of the code:
+
+```python
+import os
+import pickle as pkl
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load the data
+def load_data(folder_path):
+    fnames = [oj(folder_path, fname) for fname in os.listdir(folder_path)]
+    results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in fnames] 
+    results = pd.concat(results_list, axis=1).T.infer_objects() 
+    return results
+
+# Group the results by dataset, method, and regularizer_rate
+def group_by_columns(df, columns):
+    return df.groupby(by = columns).mean()
+
+# Save the results
+def save_results(df, save_path):
+    df.to_csv(oj(save_path, 'results.csv'))
+
+# Load the data
+data = load_data('../models/ColorMNIST')
+
+# Group the results by dataset, method, and regularizer_rate
+results_save = group_by_columns(data, ['dataset', 'method','regularizer_rate'])
+
+# Save the results
+save_results(results_save, '../results_for_export')
+```
+
+This refactored version of the code is more readable and maintainable. It separates the data loading, grouping, and saving functions into their own separate functions, which makes the code easier to understand and maintain. It also makes the code more reusable, as the functions can be used in other parts of the code where the same operations can be performed.

@@ -1,0 +1,40 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+    # Initialize the model
+    model = Sequential()
+
+    # Add convolutional layer
+    model.add(Conv2D(32, (3, 3), activation='relu', input_shape=(64, 64, 3)))
+
+    # Add max pooling layer
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Add another convolutional layer
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+
+    # Add another max pooling layer
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Add flatten layer
+    model.add(Flatten())
+
+    # Add fully connected layer
+    model.add(Dense(128, activation='relu'))
+
+    # Add output layer
+    model.add(Dense(1, activation='sigmoid'))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=10, batch_size=32, validation_data=(X_test, y_test))
+
+    # Evaluate the model
+    loss, accuracy = model.evaluate(X_test, y_test)
+
+    print('Test accuracy:', accuracy)
+    ```

@@ -1,0 +1,14 @@
+```
+    # Code to show how many instances of 'deep' are in the 'col1' column of the first dataframe
+
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+
+    # Output:
+    # The number of instances of 'deep' in the 'col1' column of the first dataframe is 3.
+    ```

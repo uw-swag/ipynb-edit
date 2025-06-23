@@ -1,0 +1,27 @@
+```
+    # LDA & Logistic Regression Implementation
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+    from sklearn.linear_model import LogisticRegression
+
+    # LDA
+    lda = LDA()
+    lda.fit(train_dat, train_ind)
+    pred_lda = lda.predict(test_dat)
+
+    # Logistic Regression
+    logreg = LogisticRegression()
+    logreg.fit(train_dat, train_ind)
+    pred_logreg = logreg.predict(test_dat)
+
+    # Performance Indexes
+    lda_perf = classificationPerformanceIndexes(test_ind, pred_lda)
+    logreg_perf = classificationPerformanceIndexes(test_ind, pred_logreg)
+
+    # Adding to results
+    results = results.append(pd.Series(lda_perf, index=['LDA_Accuracy', 'LDA_Sensitivity', 'LDA_Specificity', 'LDA_Precision', 'LDA_F1 Score', 'LDA_MCC', 'LDA_Kappa']), ignore_index=True)
+    results = results.append(pd.Series(logreg_perf, index=['LogReg_Accuracy', 'LogReg_Sensitivity', 'LogReg_Specificity', 'LogReg_Precision', 'LogReg_F1 Score', 'LogReg_MCC', 'LogReg_Kappa']), ignore_index=True)
+
+    # Print results
+    print(results)
+    ```
+    '''

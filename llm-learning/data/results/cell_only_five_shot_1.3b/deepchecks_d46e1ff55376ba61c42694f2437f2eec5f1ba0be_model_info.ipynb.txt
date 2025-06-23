@@ -1,0 +1,12 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+
+    classifier = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=0)
+    iris = load_iris()
+    X = iris.data
+    Y = iris.target
+    classifier.fit(X, Y)
+    ```
+
+    In the above code, the `n_estimators` parameter is set to 50, which means that AdaBoost will train 50 decision stumps. The `learning_rate` parameter is set to 1, which means that the weights of the decision stumps will be updated based on the predictions. The `random_state` parameter is set to 0, which means that the random number generator will have a seed of 0.

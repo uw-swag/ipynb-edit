@@ -1,0 +1,46 @@
+```
+    # ! pip install geopandas
+    # ! pip install git+https://github.com/python-visualization/folium
+    # ! pip install kaggle --upgrade
+
+    import math
+    import pandas as pd
+    import geopandas as gpd
+    from shapely.geometry import MultiPolygon
+
+    import folium
+    from folium import Choropleth, Marker
+    from folium.plugins import HeatMap, MarkerCluster
+
+    import os
+    from pathlib import Path
+
+    def embed_map(m, file_name):    
+        m.save(file_name)
+
+        return m
+
+    dataset = 'alexisbcook/geospatial-learn-course-data'
+
+    config_path = Path('/content/drive')
+    data_path = Path('/content/datasets/')/dataset
+    from google.colab import drive
+    drive.mount(str(config_path))
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+    !kaggle datasets download {dataset} -p "{data_path}" --unzip
+
+    collisions = gpd.read_file(data_path/"NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions/NYPD_Motor_Vehicle_Collisions.shp")
+    collisions.head()
+
+    collisions.shape
+
+    collisions = collisions.sample(40000)
+
+    m_1 = folium.Map(location=[40.7, -74], zoom_start=11)
+
+    HeatMap(data=collisions[['LATITUDE', 'LONGITUDE']], radius=12).add_to(m_1)
+
+    embed_map(m_1, '25h-m_1.html')
+
+    hospitals = gpd.read_file(data_path/"nyu_2451_34494/nyu_2451_34494/nyu_2451_34

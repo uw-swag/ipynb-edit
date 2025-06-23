@@ -1,0 +1,48 @@
+```python
+    # Drafted 20c datablock API notebook
+
+    # Import necessary libraries
+    import pandas as pd
+    from datablock import Datablock
+
+    # Create a new Datablock
+    db = Datablock()
+
+    # Define a new dataframe
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': ['a', 'b', 'c', 'd', 'e']
+    })
+
+    # Add the dataframe to the Datablock
+    db.add_dataframe('df', df)
+
+    # Access the dataframe from the Datablock
+    df_from_db = db.get_dataframe('df')
+
+    # Print the dataframe
+    print(df_from_db)
+
+    # Add a new column to the dataframe
+    df['D'] = [100, 200, 300, 400, 500]
+
+    # Update the dataframe in the Datablock
+    db.update_dataframe('df', df)
+
+    # Get the updated dataframe from the Datablock
+    df_from_db_updated = db.get_dataframe('df')
+
+    # Print the updated dataframe
+    print(df_from_db_updated)
+
+    # Remove the dataframe from the Datablock
+    db.remove_dataframe('df')
+
+    # Try to get the dataframe from the Datablock after removal
+    df_from_db_removed = db.get_dataframe('df')
+
+    # This should return None
+    print(df_from_db_removed)
+    ```
+    This notebook demonstrates the use of the Datablock API to manage and manipulate dataframes. It shows how to add, get, update, and remove dataframes from a Datablock.

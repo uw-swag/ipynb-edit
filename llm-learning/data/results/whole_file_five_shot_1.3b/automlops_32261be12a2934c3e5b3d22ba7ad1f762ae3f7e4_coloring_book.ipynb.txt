@@ -1,0 +1,65 @@
+```
+    ## Code: AutoMLOps.py
+    class AutoMLOps:
+        OUTPUT_DIR = "outputs"
+
+        @staticmethod
+        def makeComponent(name, description, params):
+            return {
+                "name": name,
+                "description": description,
+                "params": params,
+                "outputs": []
+            }
+
+        @staticmethod
+        def makePipeline(name, description, params, pipeline):
+            return {
+                "name": name,
+                "description": description,
+                "params": params,
+                "pipeline": pipeline
+            }
+
+        @staticmethod
+        def go(project_id, pipeline_params, use_kfp_spec, run_local, schedule):
+            if use_kfp_spec:
+                pipeline_spec = pipeline(**pipeline_params)
+                pipeline_spec.run(project_id=project_id, local=run_local, schedule=schedule)
+            else:
+                print("AutoMLOps.go is not compatible with KFP.")
+    ```
+
+    ## Code: AutoMLOps.py
+    class AutoMLOps:
+        OUTPUT_DIR = "outputs"
+
+        @staticmethod
+        def makeComponent(name, description, params):
+            return {
+                "name": name,
+                "description": description,
+                "params": params,
+                "outputs": []
+            }
+
+        @staticmethod
+        def makePipeline(name, description, params, pipeline):
+            return {
+                "name": name,
+                "description": description,
+                "params": params,
+                "pipeline": pipeline
+            }
+
+        @staticmethod
+        def go(project_id, pipeline_params, use_kfp_spec, run_local, schedule):
+            if use_kfp_spec:
+                pipeline_spec = pipeline(**pipeline_params)
+                pipeline_spec.run(project_id=project_id, local=run_local, schedule=schedule)
+            else:
+                print("AutoMLOps.go is not compatible with KFP.")
+    ```
+
+    ## Code: AutoMLOps.py
+    class

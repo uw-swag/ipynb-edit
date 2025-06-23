@@ -1,0 +1,25 @@
+```
+    from deepchecks.vision.checks.performance.robustness_report import RobustnessReport
+    from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+    import torch.nn as nn
+
+    prediction_formatter = ClassificationPredictionFormatter(mnist_prediction_formatter)
+    result = RobustnessReport().run(mnist_dataloader_test, model, prediction_formatter=prediction_formatter)
+    result
+    ```
+
+    The code above is an example of how to update a robustness report display in a DeepChecks pipeline. The `RobustnessReport` is a class that generates a robustness report for a given model and dataset. The `run` method of this class is used to generate the report. The `prediction_formatter` is an instance of the `ClassificationPredictionFormatter` class, which is used to format the predictions returned by the model. The `result` variable is the result of the robustness report, which is a dictionary containing various metrics and plots.
+
+    Please note that you need to replace `mnist_dataloader_test`, `model`, and `mnist_prediction_formatter` with your actual data loader, model, and prediction formatter.
+
+    Also, please ensure that the DeepChecks library is installed and imported in your environment. If not, you can install it using pip:
+
+    ```
+    pip install deepchecks
+    ```
+
+    And then import it in your Python script:
+
+    ```python
+    import deepchecks
+    ```

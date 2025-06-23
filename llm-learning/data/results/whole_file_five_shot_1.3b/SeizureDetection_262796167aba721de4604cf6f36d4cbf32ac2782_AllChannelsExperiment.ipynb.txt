@@ -1,0 +1,23 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import configparser
+    import tensorflow as tf
+    from sklearn import model_selection, utils
+
+    def AllChannelsFeatures(df, readEdf, sample_rate, step, pca_tolerance, smote_neighbors, csvExportFile):
+        if readEdf:
+            ndf = df.copy()
+            features = pd.DataFrame(featureExtractionFull (ndf, sample_rate, step))
+            del ndf
+            features = featureNormalization(features)
+            reduced_features = dimentionalityReduction(features, pca_tolerance)
+            del features
+            smote_features = utils.shuffle(oversamplingSMOTE(reduced_features.drop('seizure', axis = 1), reduced_features['seizure'], smote_neighbors))
+            smote_features.reset_index(drop = True, inplace = True)
+            del reduced_features
+            exportDataframeToCSV(smote_features, csvExportFile)
+        else:
+            smote_features = df
+        return smote_features
+    ```

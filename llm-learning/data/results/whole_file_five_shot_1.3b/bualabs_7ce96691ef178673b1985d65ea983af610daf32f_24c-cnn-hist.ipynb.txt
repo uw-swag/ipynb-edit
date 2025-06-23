@@ -1,0 +1,62 @@
+
+    '''
+    [
+    Commit Message: "Added Hook ListContainer."
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+import torch
+from torch import tensor
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import *
+import fastai
+from fastai import datasets
+from fastai.metrics import accuracy
+from fastai.basic_data import *
+from IPython.core.debugger import set_trace
+import matplotlib.pyplot as plt
+from functools import partial
+
+class Dataset(Dataset):
+    def __init__(self, x, y, c):
+        self.x, self.y, self.c = x, y, c
+    def __len__(self):
+        return len(self.x)
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} ({self.n_samples} samples)"
+
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+
+    def __len__(self):
+        return len(self.x)
+
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} ({self.n_samples} samples)"
+
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+
+    def __len__(self):
+        return len(self.x)
+
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} ({self.n_samples

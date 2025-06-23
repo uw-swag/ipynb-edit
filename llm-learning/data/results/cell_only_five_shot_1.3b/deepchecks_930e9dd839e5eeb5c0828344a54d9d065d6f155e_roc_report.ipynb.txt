@@ -1,0 +1,65 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding Iris example notebook (#182)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ## Iris Example Notebook
+
+The Iris dataset is a classic dataset in the machine learning literature. It consists of 50 samples from each of three species of Iris flowers (Iris setosa, Iris virginica, and Iris versicolor). Four features were measured from each sample: the lengths and the widths of the sepals and petals, in centimeters.
+
+The notebook will walk you through the process of loading the Iris dataset, visualizing it, and applying some basic machine learning algorithms to it.
+
+## Step 1: Load the Iris dataset
+
+First, we will load the Iris dataset using the `sklearn.datasets` module.
+
+```python
+from sklearn.datasets import load_iris
+
+iris = load_iris()
+```
+
+## Step 2: Explore the Iris dataset
+
+Let's explore the Iris dataset.
+
+```python
+print(iris.DESCR)
+```
+
+## Step 3: Split the Iris dataset
+
+We will split the Iris dataset into a training set and a test set.
+
+```python
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+```
+
+## Step 4: Train a basic classifier
+
+We will train a basic classifier on the Iris dataset.
+
+```python
+from sklearn.ensemble import RandomForestClassifier
+
+clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf.fit(X_train, y_train)
+```
+
+## Step 5: Make predictions
+
+Now, we will make predictions on the test set.
+
+```python
+y_pred = clf.predict(X_test)
+```
+
+## Step 6:

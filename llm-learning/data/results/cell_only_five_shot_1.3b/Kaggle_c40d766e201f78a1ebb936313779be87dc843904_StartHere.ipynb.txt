@@ -1,0 +1,33 @@
+```python
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('your_file.csv')
+
+    # Define the features and the target
+    X = df.drop('target_column', axis=1)
+    y = df['target_column']
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Fit the model to the training data
+    model.fit(X_train, y_train)
+
+    # Make predictions on the testing data
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+    # Save the model
+    joblib.dump(model, 'model.pkl')
+    ```

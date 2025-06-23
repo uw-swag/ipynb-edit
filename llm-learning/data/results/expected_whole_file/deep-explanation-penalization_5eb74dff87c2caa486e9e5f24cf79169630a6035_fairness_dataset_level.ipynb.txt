@@ -1,0 +1,128 @@
+<Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+sys.path.append('../models')
+sys.path.append('../fit')
+
+from model import LSTMSentiment
+from torchtext import data
+from torchtext import datasets
+import torch
+import cd
+import pandas as pd
+
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+# data params
+vector_cache =  '../data/.vector_cache/input_vectors.pt'
+word_vectors ='glove.6B.300d'
+batch_size = 50
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+
+# load dset
+inputs = data.Field(lower= True)
+answers = data.Field(sequential=False, unk_token=None)
+train, dev, test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label != 'neutral')
+inputs.build_vocab(train, dev, test)
+
+if os.path.isfile(vector_cache):
+    inputs.vocab.vectors = torch.load(vector_cache)
+else:
+    inputs.vocab.load_vectors(word_vectors)
+    os.makedirs(os.path.dirname(vector_cache), exist_ok=True)
+    torch.save(inputs.vocab.vectors, vector_cache)
+answers.build_vocab(train)
+
+train_iter, dev_iter, test_iter = data.BucketIterator.splits(
+    (train, dev, test), batch_size=batch_size, device=torch.device(0))
+
+# load model
+model_path = "../models/init_models"
+model_list = os.listdir(model_path)
+model1 = torch.load(os.path.join(model_path, model_list[0]), map_location=torch.device(0)).eval()
+
+model2 = torch.load(os.path.join(model_path, model_list[1]), map_location=torch.device(0)).eval()
+<\Cell_1>
+<Cell_2>
+inputs.vocab.words
+<\Cell_2>
+<Cell_3>
+# choose hyperparams
+it = test_iter
+m = model1
+
+# what to store
+words = {}
+
+it.init_epoch()
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+criterion = nn.CrossEntropyLoss()
+n_dev_correct, dev_loss = 0, 0
+
+# remember batches are num_words x batch_size
+for batch in tqdm(it):
+    answer1 = m(batch)
+    num_words = batch.text.shape[0]
+    batch_size = batch.text.shape[1]
+    
+    for word_num in range(num_words):
+        word_per_batch = batch.text[word_num] # gets word at same place for all batches
+        
+        # get cd scores for each word
+        rel, _ = cd.cd_batch_text(batch, m, start=word_num, stop=word_num + 1)
+        rel = rel.softmax(dim=0) # 2 x batch_size
+        rel = rel[0] # only get positive class
+        
+        # actually get the words
+        for batch_num in range(word_per_batch.shape[0]):
+            word = inputs.vocab.itos[word_per_batch[batch_num]]
+            score = rel[batch_num].item()
+            
+            # add to store
+            if not word in words:
+                words[word] = (1, score) # count, sum
+            else:
+                (count, running_sum) = words[word]
+                words[word] = (count + 1, running_sum + score)
+#     n_dev_correct += (((torch.max(answer2, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data))).sum()
+#     dev_loss = criterion(answer2, dev_batch.label)
+# dev_acc = 100. * n_dev_correct / len(dev)
+# print(dev_acc.item(), dev_loss.item())
+<\Cell_3>
+<Cell_4>
+results = pd.DataFrame()
+results['word'] = words.keys()
+results['count'] = [words[word][0] for word in results['word']]
+results['sent'] = [words[word][1] / words[word][0] for word in results['word']]
+results = results.sort_values(by=['sent'], ascending=False)
+results.to_pickle('results/word_fairness_test.pkl')
+<\Cell_4>
+<Cell_5>
+r = pd.read_pickle('results/word_fairness_test.pkl')
+r[r['count'] >= 5]
+<\Cell_5>
+<Cell_6>
+comparisons = [('actor', 'actress'), ('black', 'white'), 
+               ('him', 'her'), ('young', 'old'), ('latino', 'asian'),
+               ('romance', 'comedy')]
+for (x, y) in comparisons:
+    print(r[r.word == x], '\n', r[r.word == y], '\n')
+<\Cell_6>
+<Cell_7>
+
+<\Cell_7>

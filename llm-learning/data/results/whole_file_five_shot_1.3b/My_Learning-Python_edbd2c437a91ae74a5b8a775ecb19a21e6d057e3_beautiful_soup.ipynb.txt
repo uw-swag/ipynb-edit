@@ -1,0 +1,23 @@
+```python
+    import matplotlib.pyplot as plt
+
+    # Read the data from the CSV file
+    with open('text.csv', 'r') as f:
+        data = f.read().split('\n')
+
+    # Remove the first line which is just the column headers
+    data = data[1:]
+
+    # Split each line into the columns
+    data = [line.split(',') for line in data]
+
+    # Convert the data to integers
+    data = [[int(num) for num in line] for line in data]
+
+    # Create a pie chart
+    fig, ax = plt.subplots()
+    ax.pie(data, labels=['Date', 'HS Code', 'Description', 'Origin Country', 'Port of Discharge', 'Unit', 'Quantity', 'Value (INR)', 'Per Unit (INR)'], autopct='%1.1f%%')
+
+    # Show the plot
+    plt.show()
+    ```

@@ -1,0 +1,151 @@
+<Cell_0>
+try:
+    import evidently
+    print(evidently.__version__)
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.metric_preset import DataDriftPreset, TargetDriftPreset, DataQualityPreset, RegressionPreset
+from evidently.metrics import *
+
+from evidently.test_suite import TestSuite
+from evidently.tests.base_test import generate_column_tests
+from evidently.test_preset import DataStabilityTestPreset, NoTargetPerformanceTestPreset, RegressionTestPreset
+from evidently.tests import *
+<\Cell_1>
+<Cell_2>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_2>
+<Cell_3>
+data = fetch_california_housing(as_frame=True)
+housing_data = data.frame
+<\Cell_3>
+<Cell_4>
+housing_data.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+housing_data['prediction'] = housing_data['target'].values + np.random.normal(0, 5, housing_data.shape[0])
+<\Cell_4>
+<Cell_5>
+reference = housing_data.sample(n=5000, replace=False)
+current = housing_data.sample(n=5000, replace=False)
+<\Cell_5>
+<Cell_6>
+report = Report(metrics=[
+    DataDriftPreset(), 
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+<\Cell_6>
+<Cell_7>
+report = Report(metrics=[
+    ColumnSummaryMetric(column_name='AveRooms'),
+    ColumnQuantileMetric(column_name='AveRooms', quantile=0.25),
+    ColumnDriftMetric(column_name='AveRooms'),
+    
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+<\Cell_7>
+<Cell_8>
+report = Report(metrics=[
+    generate_column_metrics(ColumnQuantileMetric, parameters={'quantile':0.25}, columns=['AveRooms', 'AveBedrms']),
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+<\Cell_8>
+<Cell_9>
+report = Report(metrics=[
+    ColumnSummaryMetric(column_name='AveRooms'),
+    generate_column_metrics(ColumnQuantileMetric, parameters={'quantile':0.25}, columns='num'),
+    DataDriftPreset()
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+<\Cell_9>
+<Cell_10>
+report.as_dict()
+<\Cell_10>
+<Cell_11>
+report.json()
+<\Cell_11>
+<Cell_12>
+#report.save_json('report.json')
+<\Cell_12>
+<Cell_13>
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithMissingValues(),
+    TestNumberOfRowsWithMissingValues(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedColumns(),
+])
+
+tests.run(reference_data=reference, current_data=current)
+tests
+<\Cell_13>
+<Cell_14>
+suite = TestSuite(tests=[
+    NoTargetPerformanceTestPreset(),
+])
+
+suite.run(reference_data=reference, current_data=current)
+suite
+<\Cell_14>
+<Cell_15>
+suite = TestSuite(tests=[
+    TestColumnDrift('Population'),
+    TestMeanInNSigmas('HouseAge'),
+    NoTargetPerformanceTestPreset(columns=['AveRooms', 'AveBedrms', 'AveOccup'])
+])
+
+suite.run(reference_data=reference, current_data=current)
+suite
+<\Cell_15>
+<Cell_16>
+suite = TestSuite(tests=[
+    TestNumberOfColumnsWithMissingValues(),
+    TestNumberOfRowsWithMissingValues(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedColumns(),
+    TestColumnDrift('Population'),
+    TestShareOfOutRangeValues('Population'),
+    DataStabilityTestPreset(),
+    RegressionTestPreset()
+    
+])
+
+suite.run(reference_data=reference, current_data=current)
+suite
+<\Cell_16>
+<Cell_17>
+suite.as_dict()
+<\Cell_17>
+<Cell_18>
+suite.json()
+<\Cell_18>
+<Cell_19>
+#suite.save_html('test_suite.html')
+<\Cell_19>
+<Cell_20>
+#suite.save_json('test_suite.json')
+<\Cell_20>

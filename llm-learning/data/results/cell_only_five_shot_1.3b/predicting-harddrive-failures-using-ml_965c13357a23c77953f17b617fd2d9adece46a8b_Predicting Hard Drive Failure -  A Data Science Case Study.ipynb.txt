@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, accuracy_score
+
+    # Load the dataset
+    df = pd.read_csv('hard_drive_failures.csv')
+
+    # Check for any missing values
+    print(df.isnull().sum())
+
+    # Drop the rows with missing values
+    df = df.dropna()
+
+    # Split the dataset into features and target variable
+    X = df.drop('hard_drive_failure', axis=1)
+    y = df['hard_drive_failure']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train a Random Forest Classifier
+    classifier = RandomForestClassifier(n_estimators=200, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print('Accuracy:', accuracy_score(y_test, y_pred))
+
+    # Save the model
+    import joblib
+    joblib.dump(classifier, 'hard_drive_failure_model.pkl')
+    ```

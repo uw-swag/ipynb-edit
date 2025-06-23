@@ -1,0 +1,48 @@
+
+The code you provided is used to create a scatter map with Plotly, and it uses the Mapbox access token to display the data. The Mapbox access token is a string that you can get by creating an account on the Mapbox website.
+
+If you want to change the Mapbox access token, you can simply replace the existing token in the code with your new token. Here's how you can do it:
+
+```python
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+# Your new Mapbox access token
+new_mapbox_access_token = 'your_new_token'
+
+# Rest of the code remains the same
+data = [
+    go.Scattermapbox(
+        lat= lat_list,
+        lon= lon_list,
+        mode='markers',
+        marker=dict(
+            size=9,
+            color='rgb(255, 0, 0)',
+            opacity=0.7
+        ),
+        text=names,
+    )
+]
+
+layout = go.Layout(
+    title = "Bicycle Sharing Stations in Chicago",
+    autosize=True,
+    hovermode='closest',
+    mapbox=dict(
+        accesstoken=new_mapbox_access_token,
+        bearing=0,
+        center=dict(
+            lat=41.88,
+            lon=-87.62
+        ),
+        pitch=0,
+        zoom=11
+    ),
+)
+
+fig = dict(data=data, layout=layout)
+py.iplot(fig, filename='Chicago Cycle Sharing Stations')
+```
+
+Just replace `'your_new_token'` with your actual new Mapbox access token.

@@ -1,0 +1,20 @@
+```python
+    from sklearn.metrics import classification_report
+
+    # Assuming y_pred is the predicted class labels and y_true is the true class labels
+    y_pred = model.predict(X_test)
+
+    # Convert predicted class labels to one-hot encoding
+    y_pred_one_hot = np.zeros((len(y_pred), 10))
+    y_pred_one_hot[np.arange(len(y_pred)), y_pred] = 1
+
+    # Convert true class labels to one-hot encoding
+    y_true_one_hot = np.zeros((len(y_true), 10))
+    y_true_one_hot[np.arange(len(y_true)), y_true] = 1
+
+    # Compute classification report
+    report = classification_report(y_true_one_hot, y_pred_one_hot)
+
+    print(report)
+    ```
+    This code will print a detailed performance report for the model's predictions. The report includes precision, recall, f1-score, and support for each class.

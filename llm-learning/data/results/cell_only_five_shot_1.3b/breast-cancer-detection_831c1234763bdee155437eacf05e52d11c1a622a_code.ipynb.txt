@@ -1,0 +1,30 @@
+```python
+    # Feature Scaling
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    X_train_sc = scaler.fit_transform(X_train)
+    X_test_sc = scaler.transform(X_test)
+
+    # SVC with feature scaling
+    svc_classifier2 = SVC()
+    svc_classifier2.fit(X_train_sc, y_train)
+    y_pred_svc_sc = svc_classifier2.predict(X_test_sc)
+
+    # Logistic Regression with feature scaling
+    lr_classifier = LogisticRegression()
+    lr_classifier.fit(X_train_sc, y_train)
+    y_pred_lr_sc = lr_classifier.predict(X_test_sc)
+
+    # Model Performance
+    from sklearn.metrics import classification_report, confusion_matrix
+    print("Classification Report SVC with feature scaling: \n", classification_report(y_test, y_pred_svc_sc))
+    print("Confusion Matrix SVC with feature scaling: \n", confusion_matrix(y_test, y_pred_svc_sc))
+    print("Classification Report Logistic Regression with feature scaling: \n", classification_report(y_test, y_pred_lr_sc))
+    print("Confusion Matrix Logistic Regression with feature scaling: \n", confusion_matrix(y_test, y_pred_lr_sc))
+
+    # Model Performance without feature scaling
+    print("Classification Report SVC without feature scaling: \n", classification_report(y_test, y_pred_svc))
+    print("Confusion Matrix SVC without feature scaling: \n", confusion_matrix(y_test, y_pred_svc))
+    print("Classification Report Logistic Regression without feature scaling: \n", classification_report(y_test, y_pred_lr))
+    print("Confusion Matrix Logistic Regression without feature scaling: \n", confusion_matrix(y_test, y_pred_lr))
+    ```

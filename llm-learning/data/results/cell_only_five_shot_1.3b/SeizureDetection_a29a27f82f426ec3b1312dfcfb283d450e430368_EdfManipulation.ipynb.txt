@@ -1,0 +1,42 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense, Dropout
+
+    # Assuming that 'data' is your dataset
+    data = ...
+
+    # Split the data into training and testing sets
+    train, test = data.train_test_split(test_size=0.2, random_state=42)
+
+    # Define the LSTM model
+    model = Sequential()
+    model.add(LSTM(128, input_shape=(train.shape[1], 1), activation='relu', return_sequences=True))
+    model.add(Dropout(0.2))
+
+    model.add(LSTM(128, activation='relu'))
+    model.add(Dropout(0.1))
+
+    model.add(Dense(32, activation='relu'))
+    model.add(Dropout(0.2))
+
+    model.add(Dense(1))
+
+    # Compile the model
+    model.compile(loss='mean_squared_error', optimizer='adam')
+
+    # Train the model
+    history = model.fit(train, epochs=100, validation_data=test, verbose=1, shuffle=False)
+
+    # Predict on the test set
+    predictions = model.predict(test)
+
+    # Reshape the predictions to match the original shape
+    predictions = np.reshape(predictions, (predictions.shape[0],))
+
+    # Print the predictions
+    print(predictions)
+    ```
+    This code will create a simple LSTM model for time series prediction. The model is trained on the training set, and then it is used to predict the values in the testing set. The predictions are then printed.
+
+    Please replace `'data'` with your actual dataset.

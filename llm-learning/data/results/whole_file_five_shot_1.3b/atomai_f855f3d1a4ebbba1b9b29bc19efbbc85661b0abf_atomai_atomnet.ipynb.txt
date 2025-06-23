@@ -1,0 +1,40 @@
+
+    Bumping the version of the package to v0.4.0.
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install atomai==0.4.0
+<\Cell_0>
+<Cell_1>
+import atomai as aoi
+import numpy as np
+<\Cell_1>
+<Cell_2>
+download_link = 'https://drive.google.com/uc?id=1-0fXGXGY8jW11q2GdPZ2hmOhQ7-WNlnK'
+!gdown -q $download_link -O 'training_data.npy'
+dataset_1 = np.load('training_data.npy')
+images_all_1 = dataset_1['X_train']
+labels_all_1 = dataset_1['y_train']
+images_test_all_1 = dataset_1['X_test']
+labels_test_all_1 = dataset_1['y_test']
+print(images_all_1.shape, labels_all_1.shape)
+<\Cell_2>
+<Cell_3>
+trained_model_1 = aoi.atomnet.trainer(
+    images_all_1, labels_all_1, 
+    images_test_all_1, labels_test_all_1,
+    training_cycles=1000).run()
+<\Cell_3>
+<Cell_4>
+# Load "validation" data
+expdata = dataset_1['validation_img']
+# Get NN output with atomic coordinates
+predictive = aoi.atomnet.predictor(trained_model_1, refine=False, use_gpu=True)
+nn_input, (nn_output, coordinates_1) = predictive.run(expdata)
+<\Cell_4>
+<Cell_5>
+aoi.utils.plot_coord(expdata, coordinates_1[0], fsize=12)
+<\Cell_5>
+<Cell_6>
+download_link = 'https://drive.google.com/uc?id=1-4-IQ71m--OelQb18

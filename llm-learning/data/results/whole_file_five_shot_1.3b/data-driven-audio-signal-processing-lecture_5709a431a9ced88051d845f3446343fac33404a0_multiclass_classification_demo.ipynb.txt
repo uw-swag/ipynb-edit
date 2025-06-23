@@ -1,0 +1,44 @@
+
+    '''
+    Commit Message: "Notebook on function approximation capabilities of DNNs, tensorflow update"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib.colors import ListedColormap
+
+    from sklearn.datasets import make_classification
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
+
+    from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.layers import Input, Dense
+    from tensorflow.keras.models import Model
+<\Cell_10>
+<Cell_11>
+model = dnn_model()
+model.summary()
+<\Cell_11>
+<Cell_12>
+model.compile(loss="categorical_crossentropy",
+              optimizer="adam", metrics=["accuracy"])
+
+history = model.fit(X_train, Y_train, validation_data=(
+    X_test, Y_test), epochs=100, batch_size=32)
+<\Cell_12>
+<Cell_3>
+plot_history(history, 'loss')
+plot_history(history, 'accuracy')
+<\Cell_3>
+<Cell_4>
+print(classification_report(np.argmax(Y_test, axis=1), np.argmax(Y_pred, axis=1)))
+<\Cell_4>
+<Cell_5>
+print(classification_report(np.argmax(Y_test, axis=1), np.argmax(Y_pred, axis=1)))
+<\Cell_5>
+<Cell_6>
+print(classification_report(np.argmax(Y_test, axis=1), np.argmax(Y_pred, axis=1)))
+<\Cell_6>
+<Cell_7>
+print(classification_report(np.argmax(Y_test, axis=1), np.argmax(Y_pred, axis=1)))
+<\Cell_7

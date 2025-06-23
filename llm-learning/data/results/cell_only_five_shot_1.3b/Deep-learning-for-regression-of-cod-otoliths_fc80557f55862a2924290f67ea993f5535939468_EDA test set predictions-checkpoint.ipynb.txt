@@ -1,0 +1,40 @@
+```python
+    # Creating a pickle file
+    import pickle
+    with open('parkinson_model.pkl','wb') as f:
+        pickle.dump(classifier,f)
+
+    # Loading the pickle file
+    with open('parkinson_model.pkl','rb') as f:
+        loaded_classifier = pickle.load(f)
+
+    # Making predictions
+    y_pred = loaded_classifier.predict(X_test)
+
+    # Calculating the accuracy and MSE
+    accuracy = accuracy_score(y_test, y_pred)
+    mse = mean_squared_error(y_test, y_pred)
+
+    print("Accuracy:", accuracy)
+    print("Mean Squared Error:", mse)
+
+    # Plotting the results
+    plt.scatter(y_test, y_pred)
+    plt.xlabel("True Values")
+    plt.ylabel("Predictions")
+    plt.show()
+
+    # Calculating the mean squared error for different values of the threshold
+    thresholds = np.linspace(0, 1, 100)
+    mses = []
+    for threshold in thresholds:
+        y_pred_thresholded = (y_pred > threshold).astype(int)
+        mse = mean_squared_error(y_test, y_pred_thresholded)
+        mses.append(mse)
+
+    # Plotting the mean squared error for different thresholds
+    plt.plot(thresholds, mses)
+    plt.xlabel("Threshold")
+    plt.ylabel("Mean Squared Error")
+    plt.show()
+    ```

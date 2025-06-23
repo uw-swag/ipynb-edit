@@ -1,0 +1,35 @@
+
+    The code you provided is for an example of how to use the DeepChecks library to analyze the performance of a model. However, it seems like there is a mistake in the code. The code is not complete and there are some missing parts.
+
+    Here is the complete code:
+
+    ```python
+    import pandas as pd
+    from urllib.request import urlopen
+    from sklearn.preprocessing import LabelEncoder
+
+    name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+    lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+    features = [l.split(':')[0] for l in lines]
+    label_name = 'income'
+
+    cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
+
+    train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
+                           names=features + [label_name])
+    test_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
+                          names=features + [label_name], skiprows=1)
+
+    test_df[label_name] = test_df [label_name].str[:-1]
+
+    encoder = LabelEncoder()
+    encoder.fit(train_df[label_name])
+    train_df[label_name] = encoder.transform(train_df[label_name])
+    test_df[label_name] = encoder.transform(test_df[label_name])
+
+    from sklearn.pipeline import Pipeline
+    from sklearn.impute import SimpleImputer
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import OrdinalEncoder
+    from sklearn.ensemble import RandomForestClassifier

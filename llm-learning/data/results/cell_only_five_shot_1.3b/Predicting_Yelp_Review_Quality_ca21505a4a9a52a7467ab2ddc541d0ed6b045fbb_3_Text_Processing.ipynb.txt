@@ -1,0 +1,45 @@
+
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    # Loading the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Extracting text features
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(df['your_text_column'])
+
+    # Creating a dataframe from the features
+    features_df = pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names_out())
+
+    # Saving the features dataframe
+    features_df.to_csv('text_features.csv')
+
+    # Printing the number of unique words in the text column
+    print(f'Number of unique words: {len(vectorizer.get_feature_names_out())}')
+
+    # Printing the number of unique documents
+    print(f'Number of unique documents: {len(df)}')
+
+    # Printing the number of non-zero features
+    print(f'Number of non-zero features: {np.sum(X.toarray() != 0)}')
+
+    # Printing the number of zero features
+    print(f'Number of zero features: {np.sum(X.toarray() == 0)}')
+
+    # Printing the number of unique words in the vocabulary
+    print(f'Number of unique words in the vocabulary: {len(vectorizer.vocabulary_)}')
+
+    # Printing the number of unique documents in the dataset
+    print(f'Number of unique documents in the dataset: {len(df.index)}')
+
+    # Printing the number of unique words in the text column
+    print(f'Number of unique words in the text column: {len(set(df["your_text_column"]))}')
+
+    # Printing the number of unique words in the text column
+    print(f'Number of unique words in the text column: {len(set(df["your_text_column"]))}')
+
+    # Printing the number of unique words in the text column
+    print(f'Number of unique words in the text

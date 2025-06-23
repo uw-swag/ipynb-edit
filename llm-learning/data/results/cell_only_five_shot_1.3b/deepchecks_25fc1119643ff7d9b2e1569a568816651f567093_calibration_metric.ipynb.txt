@@ -1,0 +1,43 @@
+```python
+    from deepchecks.checks.performance.calibration_metric import CalibrationMetric
+    from deepchecks.base import Dataset
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    import warnings
+
+    def custom_formatwarning(msg, *args, **kwargs):
+        # ignore everything except the message
+        return str(msg) + '\n'
+
+    warnings.formatwarning = custom_formatwarning
+    iris = load_iris(as_frame=True)
+    clf = LogisticRegression(max_iter=20)
+    frame = iris.frame
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=55)
+    clf.fit(X_train, y_train)
+    ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+                features=iris.feature_names,
+                label='target')
+    check = CalibrationMetric()
+    check.run(ds, clf)
+
+    # Adding nblinks instead of copy
+    # nblinks is a function in the deepchecks library, not a built-in function
+    # You can add it to the code as follows:
+    from deepchecks.base.utils.nb_utils import nblinks
+
+    # Assuming nblinks is a function that takes a string and returns a string with nblinks
+    # You can replace it with any function that you want
+    nblinks_function = nblinks
+
+    # Replace the original code with the new code
+    # The new code will be added after the original code
+    # The original code is:
+    # '''
+    # from deepchecks.checks.performance.calibration_metric import CalibrationMetric
+    # from deepchecks.base import Dataset
+    # from sklearn.linear

@@ -1,0 +1,65 @@
+```python
+    import pandas as pd
+
+    # Load the Hamplet data
+    hamplet_data = pd.read_csv('Hamplet.csv')
+
+    # Transform the data into a DataFrame
+    df = pd.DataFrame(hamplet_data)
+
+    # Check the first few rows of the DataFrame
+    print(df.head())
+
+    # Check the summary statistics of the DataFrame
+    print(df.describe())
+
+    # Check the data types of each column
+    print(df.dtypes)
+
+    # Check the number of missing values in each column
+    print(df.isnull().sum())
+
+    # Check the unique values in each column
+    print(df.nunique())
+
+    # Check the distribution of each column
+    print(df.hist(bins=50, figsize=(20,15)))
+
+    # Check the correlation between each pair of columns
+    print(df.corr())
+
+    # Check the skewness and kurtosis of each column
+    print(df.skew())
+    print(df.kurt())
+
+    # Check the distribution of the target variable
+    print(df['target'].value_counts())
+
+    # Check the distribution of the categorical variables
+    for column in df.select_dtypes(include=['object']):
+        print(df[column].value_counts())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Transforming Hamplet into a Data Set, 3/4 Done"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Continue from the previous code
+
+    # Check the distribution of the numerical variables
+    for column in df.select_dtypes(include=['int64', 'float64']):
+        print(df[column].value_counts())
+
+    # Check the distribution of the target variable
+    print(df['target'].value_counts())
+
+    # Check the distribution of the categorical variables
+    for column in df.select_dtypes(include=['object']):
+        print

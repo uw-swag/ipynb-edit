@@ -1,0 +1,8 @@
+```python
+    proj_id = '07a-mnist-tensorboard'
+    tboard_path = Path('data/tensorboard/' + proj_id)
+    learner.callback_fns.append(partial(LearnerTensorboardWriter, 
+                                        base_dir=tboard_path, 
+                                        name='LearnerTensorboardWriter'))
+    print(f"tensorboard --logdir={tboard_path}")
+    ```

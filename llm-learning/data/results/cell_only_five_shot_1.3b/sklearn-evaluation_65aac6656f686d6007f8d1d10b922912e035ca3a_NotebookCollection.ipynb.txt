@@ -1,0 +1,37 @@
+```python
+    import papermill as pm
+
+    # models with their corresponding parameters
+    params = [{
+        'model': 'sklearn.ensemble.RandomForestRegressor',
+        'params': {
+            'n_estimators': 50
+        }
+    }, {
+        'model': 'sklearn.ensemble.RandomForestRegressor',
+        'params': {
+            'n_estimators': 100
+        }
+    }, {
+        'model': 'sklearn.linear_model.LinearRegression',
+        'params': {
+            'normalize': True
+        }
+    }, {
+        'model': 'sklearn.svm.LinearSVR',
+        'params': {}
+    }]
+
+    # ids to identify each experiment
+    ids = [
+        'random_forest_1', 'random_forest_2', 'linear_regression',
+        'support_vector_regression'
+    ]
+
+    # output files
+    files = [f'{i}.ipynb' for i in ids]
+
+    # execute notebooks using papermill
+    for f, p in zip(files, params):
+        pm.execute_notebook('train.ipynb', output_path=f, parameters=p)
+    ```

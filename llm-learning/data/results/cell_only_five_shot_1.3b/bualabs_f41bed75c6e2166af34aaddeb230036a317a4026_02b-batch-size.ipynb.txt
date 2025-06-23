@@ -1,0 +1,51 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Create 02b 4 learning rate test cases and run all cells"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score
+
+    #loading the csv data to a Pandas DataFrame
+    heart_data= pd.read_csv('/content/heart.csv')
+
+    # number of rows and columns in the dataset
+    heart_data.shape
+
+    # getting some info about the data
+    heart_data.info()
+
+    #checking for missing values
+    heart_data.isnull().sum()
+
+    # statistical measures about the data
+    z=heart_data.describe()
+
+    # checking the distribution of Target Variable
+    heart_data['Heart Attack Risk'].value_counts()
+
+    heart_data_num = heart_data.select_dtypes(include=[np.float32,np.float64,np.int64])
+
+    x=heart_data_num.drop(columns='Heart Attack Risk', axis=1)
+
+    y=heart_data_num['Heart Attack Risk']
+
+    print(x)
+    print(y)
+
+    x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,stratify=y,random_state=3)
+
+    # Check the number of samples in x and y
+    print(f"Number of samples in x: {len(x)}")
+    print(f"Number of samples in y: {len(y)}")
+
+    # If the number of samples is different, raise an error
+    if len(x) != len(y):
+        raise ValueError("Input arrays have different number of samples.")
+
+    # Proceed with train_test_split
+    x_train, x_test, y_train, y_test = train_test_split(x

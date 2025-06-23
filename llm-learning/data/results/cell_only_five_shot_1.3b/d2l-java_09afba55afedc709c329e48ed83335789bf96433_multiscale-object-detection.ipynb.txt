@@ -1,0 +1,18 @@
+
+    It seems like you're using the Deep Java Library (DJL) to perform object detection and image classification tasks. The version you're using is 0.8.0.
+
+    Here's a brief overview of the changes you've made:
+
+    1. Upgraded to DJL version 0.11.0. This includes several new features and improvements.
+
+    2. Added the `ai.djl.mxnet:mxnet-engine:0.8.0` and `ai.djl.mxnet:mxnet-native-auto:1.7.0-backport` dependencies. These are used for the MXNet engine and native auto-differentiation respectively.
+
+    3. Imported the `ImageUtils` class from the `ai.djl` package. This class is used to perform various image-related operations.
+
+    4. Created a `displayAnchors` method that takes an `Image`, a `fmapWidth`, a `fmapHeight`, and a `size` list as parameters. This method generates anchor boxes for a given feature map and then draws these boxes on the image.
+
+    5. The `ImageUtils.drawBBoxes` and `ImageUtils.showImage` methods are used to display the image with bounding boxes.
+
+    Please note that the `size` list is not used in the `displayAnchors` method. If you're using a different size for the anchor boxes, you should adjust the `MultiBoxPrior` builder accordingly.
+
+    Also, please note that the `ImageUtils.drawBBoxes` and `ImageUtils.showImage` methods are not part of the DJL library and are not available in the current version of the library. You might need to use a different library or method to display the image with bounding boxes.

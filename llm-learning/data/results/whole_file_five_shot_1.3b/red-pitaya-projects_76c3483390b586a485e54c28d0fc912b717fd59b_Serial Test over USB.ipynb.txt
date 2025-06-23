@@ -1,0 +1,55 @@
+```python
+    # Update the read_serial_data function to read from the serial port until a certain number of readings is reached
+    def read_serial_data(serial, max_num_readings):
+        """
+        Given a pyserial object (serial) and a maximum number of readings (max_num_readings).
+        Outputs a list of lines read in from the serial port until the maximum number of readings is reached.
+        """
+        serial_data = []
+        readings_left = True
+        timeout_reached = False
+        
+        #Send data to start the transfer
+        serial.write(1)
+        #Wait for the data to be ready
+        time.sleep(2)
+        
+        while readings_left and not timeout_reached:
+            serial_line = serial.readline()
+            if serial_line == b'':
+                timeout_reached = True
+            else:
+                serial_data.append(serial_line)
+                if len(serial_data) == max_num_readings:
+                    readings_left = False
+        
+        return serial_data
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a function to convert a string to a list of integers"
+    Original Code Cells:
+    '''
+    <Cell_0>
+def string_to_list_of_integers(string):
+    """
+    Given a string, converts it to a list of integers.
+    """
+    # Split the string into a list of substrings
+    string_list = string.split(",")
+    
+    # Convert each substring to an integer and add it to a list
+    integer_list = [int(item) for item in string_list]
+    
+    return integer_list
+<\Cell_0>
+<Cell_1>
+print(string_to_list_of_integers("1,2,3,4,5"))
+<\Cell_1>
+<Cell_2>
+# Testing with a non-integer string
+try:
+    print(string_to_list_of_integers("1,2,three,4,5"))
+except ValueError as e:
+    print(e)

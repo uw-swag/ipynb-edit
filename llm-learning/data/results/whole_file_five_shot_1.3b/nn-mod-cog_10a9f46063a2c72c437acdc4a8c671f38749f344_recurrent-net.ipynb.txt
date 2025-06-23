@@ -1,0 +1,28 @@
+```
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # Load data
+    data = pd.read_csv('headbrain.csv')
+    print(data.shape)
+    data.head()
+
+    # Calculate mean and standard deviation
+    mean_x = np.mean(X)
+    std_x = np.std(X)
+
+    # Calculate the weights
+    W_l = np.array([[2, 2],
+                   [2, 2]])
+
+    # Calculate the output
+    h1 = np.tanh(W_l @ x)
+    h2 = np.tanh(W_l @ h1)
+    h3 = np.tanh(W_l @ h2)
+    h4 = np.tanh(W_l @ h3)
+    h5 = np.tanh(W_l @ h4)
+    y_hat = (W_l @ h5)
+    y_hat
+    ```
+    '''

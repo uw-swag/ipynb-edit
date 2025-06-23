@@ -1,0 +1,25 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import MinMaxScaler
+
+    # Load the data
+    df = pd.read_excel('D:/Denoising/Autoencoder/LSTM_SAE/Gold.xlsx')
+
+    # Rename the column
+    df = df.rename(columns = {'종가' : 'Close'})
+
+    # Normalize the data
+    scaler = MinMaxScaler()
+    df_scaled = scaler.fit_transform(df)
+    df_scaled = pd.DataFrame(df_scaled, columns=df.columns)
+
+    # Denoising the data
+    df_denoised = df_scaled.copy()
+    for column in df_denoised.columns:
+        df_denoised[column] = df_denoised[column].rolling(window=10).mean()
+
+    # Save the denoised data
+    df_denoised.to_excel('D:/Denoising/Autoencoder/LSTM_SAE/Gold_denoised.xlsx')
+    ```

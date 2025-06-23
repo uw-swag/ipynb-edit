@@ -1,0 +1,12 @@
+```
+    from deepchecks.tabular.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    r = StringMismatch().run(df)
+    c  = StringMismatch().add_condition_no_variants()
+    c.conditions_decision(r)
+    ```
+
+    The code above is a simple example of using the `StringMismatch` check from the DeepChecks library. The `StringMismatch` check is used to detect and report string mismatches in a DataFrame. The `run` method is used to apply the check to the DataFrame, and the `add_condition_no_variants` method is used to add a condition that will not report variants. The `conditions_decision` method is used to decide which conditions to report based on the result of the check.

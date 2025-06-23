@@ -1,0 +1,27 @@
+
+    '''
+    <Cell_0>
+import pandas as pd
+movies = pd.read_csv('fandango_score_comparison.csv')
+print('fandango_score_comparison columns')
+for c in movies.columns:
+    print('\t-', c)
+<\Cell_0>
+<Cell_1>
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+fig = plt.figure(figsize=(10,5))
+ax1 = fig.add_subplot(1,2,1)
+ax2 = fig.add_subplot(1,2,2)
+
+ax1.hist(movies['Metacritic_norm_round'])
+ax2.hist(movies['Fandango_Stars'])
+
+ax1.set_title('Metacritic_norm_round')
+ax2.set_title('Fandango_Stars')
+<\Cell_1>
+
+    '''
+    '''
+

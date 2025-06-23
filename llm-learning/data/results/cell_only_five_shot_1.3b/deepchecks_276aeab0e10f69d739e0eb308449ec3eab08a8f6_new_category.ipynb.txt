@@ -1,0 +1,47 @@
+
+    '''
+    import pandas as pd
+    import nannyml as nml
+    from IPython.display import display
+
+    reference_df = nml.load_synthetic_car_price_dataset()[0]
+    analysis_df = nml.load_synthetic_car_price_dataset()[1]
+    analysis_target_df = nml.load_synthetic_car_price_dataset()[2]
+    analysis_df = analysis_df.join(analysis_target_df)
+
+    display(reference_df.head(3))
+
+    calc = nml.TargetDistributionCalculator(
+        y_true='y_true',
+        timestamp_column_name='timestamp',
+        problem_type='regression',
+    )
+
+    calc.fit(reference_df)
+    results = calc.calculate(analysis_df)
+    display(results.data)
+    display(results.calculator.previous_reference_results)
+
+
+    target_drift_fig = results.plot(kind='target_drift', plot_reference=True)
+    target_drift_fig.show()
+
+    target_distribution_fig = results.plot(kind='target_distribution', plot_reference=True)
+    target_distribution_fig.show()
+
+    ## ML Code
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+
+    X = analysis_df.drop('y_true', axis=1)
+    y = analysis_df['y_true']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf.fit(X_train, y_train)
+
+    y_pred = clf.predict(X_test)
+
+    print("Accuracy:", accuracy_score(y_test, y_pred

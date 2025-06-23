@@ -1,0 +1,20 @@
+```
+    gw_thrds_rumortags=gw_thrds["is_rumor"]
+    gw_thrds_without_rumor_tag=gw_thrds.drop(['is_rumor'],axis=1)
+
+    gw_thrds_without_rumor_tag["created"]=to_unix_tmsp(gw_thrds["created"])
+    gw_thrds_without_rumor_tag["src.created_at"]=to_unix_tmsp(gw_thrds["src.created_at"])
+    gw_thrds_without_rumor_tag["first_resp"]=to_unix_tmsp(gw_thrds["first_resp"])
+    gw_thrds_without_rumor_tag["src_age"]=to_unix_tmsp(gw_thrds["src_age"])
+    gw_thrds_without_rumor_tag["last_resp"]=to_unix_tmsp(gw_thrds["last_resp"])
+    gw_thrds_without_rumor_tag["time_to_first_resp"]=to_unix_tmsp(gw_thrds["time_to_first_resp"])
+    gw_thrds_without_rumor_tag["time_to_last_resp"]=to_unix_tmsp(gw_thrds["time_to_last_resp"])
+
+    gw_thrds_values=gw_thrds_without_rumor_tag.values
+    n,d=gw_thrds_values.shape
+    gw_thrds_values=convertTrueFalseTo01(gw_thrds_values[:,1:d])
+    n,d=gw_thrds_values.shape
+
+    gw_thrds_rumortags_values=convertTrueFalseTo01(gw_thrds_rumortags.values)
+    print(gw_thrds_values)
+    gw_thrds

@@ -1,0 +1,58 @@
+
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+plt.rcParams['figure.figsize'] = (12.0, 9.0)
+<\Cell_0>
+<Cell_1>
+def readfile(filename):
+    data = pd.read_csv(filename)
+    X = data.iloc[:, 0]
+    Y = data.iloc[:, 1]
+    plt.scatter(X, Y)
+    plt.show()
+    return X, Y
+
+
+# Building the model with least square root method
+def buildModel(X,Y):
+    X_mean = np.mean(X)
+    Y_mean = np.mean(Y)
+    num = 0
+    den = 0
+    for i in range(len(X)):
+        num += (X[i] - X_mean)*(Y[i] - Y_mean)
+        den += (X[i] - X_mean)**2
+    m = num / den
+    c = Y_mean - m*X_mean
+    print (m, c)
+    return m,c
+   
+    
+# Making predictions
+
+def bestFitLine(X,m,c):
+    Y_pred = m*X + c
+    return Y_pred
+    
+#Plot graph
+def plotGraph(X,Y,Y_pred):
+    plt.scatter(X, Y) # actual
+    plt.plot([min(X), max(X)], [min(Y_pred), max(Y_pred)], color='red') # predicted
+    plt.show()
+    
+
+def predict(x, m,c):
+    y_pred = c + m*x
+    return y_pred
+
+if __name__ == "__main__":
+    # load the dataset
+    X, Y = readfile('salary_data.csv')
+    m,c = buildModel(X,Y)
+    
+    Y_pred=bestFitLine(X,m,c)
+    print(Y_pred, Y)
+    plotGraph(X,

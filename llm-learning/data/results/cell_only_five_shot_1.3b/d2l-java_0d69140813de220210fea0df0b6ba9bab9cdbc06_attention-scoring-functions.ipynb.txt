@@ -1,0 +1,40 @@
+```java
+    /* Scaled dot product attention. */
+    public static class DotProductAttention extends AbstractBlock {
+
+        private Dropout dropout;
+        public NDArray attentionWeights;
+
+        public DotProductAttention(float dropout) {
+            this.dropout = Dropout.builder().optRate(dropout).build();
+            this.addChildBlock("dropout", this.dropout);
+            this.dropout.setInitializer(new UniformInitializer(0.07f), Parameter.Type.WEIGHT);
+        }
+
+        @Override
+        protected NDList forwardInternal(
+                ParameterStore ps,
+                NDList inputs,
+                boolean training,
+                PairList<String, Object> params) {
+            // Shape of `queries`: (`batchSize`, no. of queries, `d`)
+            // Shape of `keys`: (`batchSize`, no. of key-value pairs, `d`)
+            // Shape of `values`: (`batchSize`, no. of key-value pairs, value
+            // dimension)
+            // Shape of `valid_lens`: (`batchSize`,) or (`batchSize`, no. of queries)
+            NDArray queries = inputs.get(0);
+            NDArray keys = inputs.get(1);
+            NDArray values = inputs.get(2);
+            NDArray validLens = inputs.get(3);
+
+            Long d = queries.getShape().get(queries.getShape().dimension() - 1);
+            // Swap the last two dimensions of `keys` and perform batchDot
+            NDArray scores = queries.batchDot(keys.swapAxes(1, 2)).div(Math.sqrt(d));
+            attentionWeights = maskedSoftmax(scores, validLens);
+            NDList list = dropout.forward(ps, new NDList(attentionWeights), training, params);
+            return new NDList(list.head().batchDot(values));
+        }
+
+        @Override
+        public Shape[] getOutputShapes(Shape[] inputShapes) {
+           

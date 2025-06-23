@@ -1,0 +1,36 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import log_loss
+
+    # Defining the loss function
+    def custom_loss(y_true, y_pred):
+        # y_true is the true labels
+        # y_pred is the predicted probabilities
+        # In this case, we're using binary cross-entropy as the loss function
+        return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+
+    # Generating some dummy data
+    y_true = np.array([0, 1, 1, 0, 1, 1, 0, 1, 1, 0])
+    y_pred = np.array([0.05, 0.15, 0.20, 0.10, 0.25, 0.25, 0.10, 0.20, 0.25, 0.15])
+
+    # Computing the loss
+    loss = custom_loss(y_true, y_pred)
+    print(f'Custom loss: {loss}')
+
+    # Computing the log loss
+    log_loss_value = log_loss(y_true, y_pred)
+    print(f'Log loss: {log_loss_value}')
+
+    # Plotting the loss
+    plt.figure(figsize=(10, 5))
+    plt.plot(y_true, label='True')
+    plt.plot(y_pred, label='Predicted')
+    plt.legend()
+    plt.show()
+    ```
+
+    This code will compute the custom loss and the log loss for a binary classification problem. The custom loss is a simple binary cross-entropy loss, and the log loss is the log of the custom loss. The loss is plotted in a scatter plot.
+
+    Please note that this is a simple example and real-world problems may require more complex loss functions.

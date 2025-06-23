@@ -1,0 +1,51 @@
+```
+    ## Debugged Random Forest Metrics
+
+    ## Loading necessary libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas_profiling
+    from dataprep.eda import plot, plot_correlation, plot_missing
+    from sqlalchemy import create_engine
+
+    ## Setting options
+    pd.set_option("display.max_columns", 100)
+    pd.set_option('display.width', 100)
+    pd.set_option("display.precision", 5)
+    plt.style.use('fivethirtyeight')
+    plt.rcParams.update({'font.size': 4, 'font.family': 'sans'})
+
+    ## Connecting to yelp_2 database
+    connect = 'postgresql+psycopg2://postgres:password@localhost:5432/yelp_2'
+    engine = create_engine(connect)
+
+    ## Loading data
+    query = '''
+            SELECT *
+            FROM test4
+            LIMIT 10000
+            ;
+            '''
+    df = pd.read_sql(query, con=engine)
+
+    ## Dropping duplicates
+    df = df.drop_duplicates(subset=['review_id']).iloc[:10000, :]
+
+    ## Getting info
+    df.info()
+
+    ## Converting dataset_release_date
+    df['business_categories'] = df['business_categories'].apply(lambda x: x.split(', '))
+
+    ## Splitting data
+    full_df = df.copy()
+    useful_reviews = df[df['T2_CLS_ufc_>0'] == True]
+    non_useful_reviews = df[df['T2_CLS_ufc_>0'] == False]
+
+    ## Getting info
+    non_useful_reviews.info()
+
+    ## Plotting
+    plot(df,

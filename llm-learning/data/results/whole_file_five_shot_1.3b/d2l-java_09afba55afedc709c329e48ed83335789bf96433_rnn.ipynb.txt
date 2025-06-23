@@ -1,0 +1,21 @@
+```
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+
+    NDManager manager = NDManager.newBaseManager();
+
+    NDArray X = manager.randomNormal(0, 1, new Shape(3, 1), DataType.FLOAT32);
+    NDArray W_xh = manager.randomNormal(0, 1, new Shape(1, 4), DataType.FLOAT32);
+    NDArray H = manager.randomNormal(0, 1, new Shape(3, 4), DataType.FLOAT32);
+    NDArray W_hh = manager.randomNormal(0, 1, new Shape(4, 4), DataType.FLOAT32);
+
+    X.dot(W_xh).add(H.dot(W_hh))
+
+    X.concat(H, 1).dot(W_xh.concat(W_hh, 0))
+    ```
+
+    The code above is a simple example of using the Deep Java Library (DJL) to perform matrix operations on NDArrays. The NDArrays are used to represent and manipulate multi-dimensional arrays of data. The operations performed are addition, dot product, and concatenation.
+
+    The code also demonstrates how to use the `NDManager` to create and manage NDArrays.
+
+    Please note that the version of the DJL library you are using (0.10.0) is quite old and may not be compatible with the version of MXNet (1.7.0-backport) you are using. If you encounter any issues, you may need to update the DJL library or the MXNet version.

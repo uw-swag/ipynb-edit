@@ -1,0 +1,11 @@
+!python -m data.load_data_to_bq --project automlops-sandbox --file test_data/Dry_Beans_Dataset.csv
+PROJECT_ID = "automlops-sandbox"
+pipeline_params = {
+    "bq_table": f"{PROJECT_ID}.test_dataset.dry-beans",
+    "model_directory": f"gs://{PROJECT_ID}-bucket/trained_models/{datetime.datetime.now()}",
+    "data_path": "gs://{PROJECT_ID}-bucket/data",
+    "project_id": f"{PROJECT_ID}",
+    "region": "us-central1"
+}
+AutoMLOps.generate(project_id=f'{PROJECT_ID}', pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule='0 */12 * * *')
+AutoMLOps.go(project_id=f'{PROJECT_ID}', pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule='0 */12 * * *')

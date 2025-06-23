@@ -1,0 +1,44 @@
+import json
+from typing import Optional
+ 
+from evidently.model.widget import BaseWidgetInfo 
+from evidently.dashboard.widgets.widget import Widget
+from evidently.options import ColorOptions
+class TSRangesliderWidget(Widget):
+    
+    def __init__(self, title: str, column: str, use_current=False, fig_size=1):
+        self.title = title
+        self.column = column
+        self.use_current = use_current
+        self.fig_size = fig_size
+
+    def calculate(self,
+                  reference_data: pd.DataFrame,
+                  current_data: pd.DataFrame,
+                  column_mapping,
+                  analyzers_results) -> Optional[BaseWidgetInfo]:
+        color_options = self.options_provider.get(ColorOptions)
+
+        if self.use_current == True:
+            frame = current_data
+        else: frame = reference_data
+
+        figure = px.line(
+            frame,
+            x=frame.index,
+            y=self.column,
+            color_discrete_sequence=[color_options.current_data_color, color_options.reference_data_color]
+        )
+        figure.update_xaxes(rangeslider_visible=True)
+
+        figure_json = json.loads(figure.to_json())
+
+        return BaseWidgetInfo(
+            title=self.title,
+            type="big_graph",
+            size=self.fig_size,
+            params={
+                "data": figure_json['data'],
+                "layout": figure_json['layout']
+            },
+        )

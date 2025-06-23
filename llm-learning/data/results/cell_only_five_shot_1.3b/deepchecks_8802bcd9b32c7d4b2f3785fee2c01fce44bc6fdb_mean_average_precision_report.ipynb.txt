@@ -1,0 +1,35 @@
+```
+    # Deleting notebooks
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding notebook step3"
+    Original Code Cells:
+    '''
+    import numpy as np
+
+    from deepchecks.vision.checks.performance import MeanAveragePrecisionReport
+    from deepchecks.vision.datasets.detection import coco
+
+    yolo = coco.load_model(pretrained=True)
+
+    test_ds = coco.load_dataset(train=False, object_type='VisionData')
+    check = MeanAveragePrecisionReport()
+    result = check.run(test_ds, yolo)
+    result
+    result.value
+    check = MeanAveragePrecisionReport().add_condition_test_average_precision_not_less_than(0.4)
+    result = check.run(test_ds, yolo)
+    result.show(show_additional_outputs=False)
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    # Adding notebook step3
+    # ...
+    # ...
+    # ...
+    ```

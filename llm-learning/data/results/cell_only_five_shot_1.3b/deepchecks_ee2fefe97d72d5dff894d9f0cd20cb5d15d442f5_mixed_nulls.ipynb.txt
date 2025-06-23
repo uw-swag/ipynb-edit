@@ -1,0 +1,26 @@
+```python
+    def prioritize_columns(df, column_order):
+        """
+        Prioritize columns according to FI in a multi-column check.
+
+        Parameters:
+        df (pandas.DataFrame): The DataFrame to prioritize.
+        column_order (list): The order of the columns to prioritize.
+
+        Returns:
+        pandas.DataFrame: The prioritized DataFrame.
+        """
+        return df[column_order]
+
+    # Example usage:
+    df = pd.DataFrame({
+        'A': [1, 2, 3],
+        'B': [4, 5, 6],
+        'C': [7, 8, 9]
+    })
+
+    column_order = ['B', 'A', 'C']
+    prioritized_df = prioritize_columns(df, column_order)
+
+    print(prioritized_df)
+    ```

@@ -1,0 +1,36 @@
+```python
+    # Create a base map with plate boundaries
+    m_5 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    # Your code here: create a choropleth map to visualize population density
+    Choropleth(geo_data=prefectures.__geo_interface__, data=stats.density, key_on='feature.id', 
+               fill_color='YlGnBu', 
+               legend_name='population density').add_to(m_5)
+
+    m_5
+
+    # Create a base map
+    m_6 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    # Your code here: create a map
+    Choropleth(geo_data=prefectures.geometry.__geo_interface__, data=stats.density, key_on='feature.id', 
+               fill_color='BuPu', 
+               legend_name='population density and earthquake magnitude').add_to(m_6)
+
+    earthquakes['marker_color'] = pd.cut(earthquakes['Magnitude'], bins=4, 
+                                         labels=['yellow', 'orange', 'red', 'purple'])
+
+    # Your code here: Add a map to visualize earthquake depth
+    for idx, e in earthquakes.iterrows():    
+        Circle(location=[e['Latitude'], e['Longitude']], 
+               popup=("{} ({})").format(e['Magnitude'],e['DateTime'].year),
+               radius=e['Magnitude']**5.5,           
+               color=e['marker_color']).add_to(m_6)
+
+    m_6
+
+    # Create a base map
+    m_7 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    # Your code here: create a choropleth map to visualize population density
+    Choropleth(geo_data=pref

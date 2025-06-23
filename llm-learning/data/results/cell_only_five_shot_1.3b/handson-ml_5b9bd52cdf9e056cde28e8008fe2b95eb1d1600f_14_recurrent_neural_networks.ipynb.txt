@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    import tensorflow as tf
+
+    def string_to_one_hot_vectors(s, n_steps):
+        # Convert string to one-hot vectors
+        one_hot_vectors = np.zeros((n_steps, 26))
+        for i, char in enumerate(s):
+            one_hot_vectors[i, :] = one_hot_vectors[i, :] ^ (char == 'X')
+        return one_hot_vectors
+
+    test_strings = [
+        "BPBTSSSSSSSSSSSSXXTTTTTVPXTTVPXTTTTTTTVPXVPXVPXTTTVVETE",
+        "BPBTSSSSSSSSSSSSXXTTTTTVPXTTVPXTTTTTTTVPXVPXVPXTTTVVEPE"
+    ]
+    l_test = np.array([len(s) for s in test_strings])
+    max_length = l_test.max()
+    X_test = [string_to_one_hot_vectors(s, n_steps=max_length)
+              for s in test_strings]
+
+    with tf.Session() as sess:
+        saver.restore(sess, "my_reber_classifier")
+        y_proba_val = y_proba.eval(feed_dict={X: X_test, seq_length: l_test})
+
+    print()
+    print("Estimated probability that these are Reber strings:")
+    for index, string in enumerate(test_strings):
+        print("{}: {:.2f}%".format(string, y_proba_val[index][0]*100))
+    ```

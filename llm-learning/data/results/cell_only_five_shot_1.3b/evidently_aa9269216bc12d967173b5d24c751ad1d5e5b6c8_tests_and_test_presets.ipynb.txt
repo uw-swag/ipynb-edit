@@ -1,0 +1,30 @@
+```
+    dataset_tests = TestSuite(tests=[
+    TestNumberOfColumns(),
+    TestNumberOfRows(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestColumnsType(),
+    TestTargetFeaturesCorrelations(),
+    TestHighlyCorrelatedFeatures(),
+    TestShareOfDriftedFeatures() ,
+    TestNumberOfDriftedFeatures(),
+])
+
+dataset_tests.run(reference_data=ref, current_data=curr)
+dataset_tests
+dataset_tests.json()
+dataset_tests.as_dict()
+feature_level_tests = TestSuite(tests=[
+    TestMeanInNSigmas(column_name='hours-per-week'),
+    TestShareOfOutRangeValues(column_name='hours-per-week'),
+    TestColumnNANShare(column_name='education'),
+    TestFeatureValueDrift(column_name='education')
+])
+
+feature_level_tests.run(reference_data=ref, current_data=curr)
+feature_level_tests
+    ```
+
+    The above code is a Jupyter notebook commit that updates the tests and presets example with the data quality and data integrity tests. The tests are run on the reference and current datasets, and the results are displayed in a formatted JSON format.

@@ -1,0 +1,13 @@
+```python
+    try:
+        import evidently
+    except:
+        !pip install git+https://github.com/evidentlyai/evidently.git
+    # Install sentence transformers
+    !pip install sentence-transformers
+    # Run this to experiment with the dataset with various ways of embedding (average over records / sum of records etc ...)
+    !wget http://nlp.stanford.edu/data/glove.6B.zip -P /content/test/
+    !unzip  /content/test/glove.6B.zip -d /content/test/
+    # We load 50 dimension vector here
+    glove_vec = load_glove_model("/content/test/glove.6B.50d.txt")
+    ```

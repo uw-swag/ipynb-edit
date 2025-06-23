@@ -1,0 +1,43 @@
+
+    # Primeiro, precisamos obter os dados dos movimentos dos olhos e boca dos usuários. Esses dados podem ser obtidos de um arquivo de video ou uma webcam.
+
+    # Em seguida, podemos usar um modelo de reconhecimento de voz ou de fala para predizer o usuário baseado nos movimentos dos olhos e boca.
+
+    # Aqui está um exemplo de como podemos fazer isso usando o pacote `moviepy` para capturar os frames de um vídeo e o pacote `speech_recognition` para reconhecer a fala.
+
+    # Primeiro, vamos importar as bibliotecas necessárias:
+
+    ```python
+    import cv2
+    import speech_recognition as sr
+    from moviepy.editor import VideoFileClip
+    ```
+
+    # Em seguida, podemos capturar os frames de um vídeo e reconhecer a fala:
+
+    ```python
+    # Capturar os frames de um vídeo
+    video = cv2.VideoCapture('path_to_your_video_file')
+    frames = []
+
+    while True:
+        ret, frame = video.read()
+        if not ret:
+            break
+        frames.append(frame)
+
+    # Reconhecer a fala
+    r = sr.Recognizer()
+    for i, frame in enumerate(frames):
+        with sr.Microphone() as source:
+            print(f"Escutando em microfone {i+1}...")
+            audio = r.listen(source)
+        try:
+            print(f"Reconhecido: {r.recognize_google(audio, language='pt-BR')}")
+        except sr.UnknownValueError:
+            print("Não consegui reconhecer o audio")
+        except sr.RequestError as e:
+            print(f"Erro de requisição: {e}")
+    ```
+
+    # Por fim, podemos usar o reconhecimento de fala para predizer o usuário.

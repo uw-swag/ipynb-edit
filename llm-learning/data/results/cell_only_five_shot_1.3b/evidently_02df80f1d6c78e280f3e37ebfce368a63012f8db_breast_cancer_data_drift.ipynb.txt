@@ -1,0 +1,45 @@
+```python
+    ## README.md
+    ## Evidently is a Python library for creating and analyzing dashboards for data drift and quality.
+
+    ## Installation
+    ```bash
+    pip install evidently
+    ```
+
+    ## Examples
+    ### Data Drift Dashboard
+    ```python
+    from evidently import DataDrift
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DataDriftTab
+
+    # Load your data
+    df1 = pd.read_csv('data1.csv')
+    df2 = pd.read_csv('data2.csv')
+
+    # Create a data drift object
+    data_drift = DataDrift(
+        feature_set='all',
+        target_set='all',
+        period_length=10,
+        time_period_for_reliability_change=7,
+        drift_threshold=0.05,
+        confidence_level=0.95,
+        max_periods=10,
+        max_reliability_change=0.05,
+        min_samples=5,
+        min_samples_for_reliability_change=3,
+        max_features=10,
+        max_features_for_reliability_change=3,
+        max_samples=1000,
+        max_samples_for_reliability_change=500,
+        max_features_for_drift=10,
+        max_samples_for_drift=500,
+        max_features_for_reliability_change_for_drift=3,
+        max_samples_for_reliability_change_for_drift=500,
+        max_features_for_reliability_change_for_reliability_change=3,
+        max_samples_for_reliability_change_for_reliability_change=500,
+        max_features_for_drift_for_drift=10,
+        max_samples_for_drift_for_drift=500,
+        max_features_for_reliability

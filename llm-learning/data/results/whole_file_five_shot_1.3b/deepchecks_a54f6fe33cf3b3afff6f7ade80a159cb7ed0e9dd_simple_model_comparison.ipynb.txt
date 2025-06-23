@@ -1,0 +1,30 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import SimpleModelComparison
+    from deepchecks.base import Dataset
+
+    np.random.seed(42)
+
+    iris = load_iris(as_frame=True)
+    x = iris.data
+    y = iris.target
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                       features=iris.feature_names,
+                       label='target')
+    test_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                     features=iris.feature_names,
+                     label='target')
+    clf = AdaBoostClassifier()
+    clf.fit(x_train, y_train)
+
+    check = SimpleModelComparison(simple_model_type='gain')
+    check.run(train_ds, test_ds, clf)
+    ```
+
+    위 코드는 AdaBoostClassifier 모델의 조건을 변경하여 사용할 수 있는 gain 기반의 모델 조건을 사용하도록 변경한 것입니다. 이는 모델의 성능을 평가하는 �

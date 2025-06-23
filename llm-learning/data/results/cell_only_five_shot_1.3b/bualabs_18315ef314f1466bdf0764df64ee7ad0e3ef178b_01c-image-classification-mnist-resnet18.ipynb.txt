@@ -1,0 +1,17 @@
+```python
+    # Adding links to several articles on bualabs.com website
+    import bs4 as bs
+    import urllib.request
+
+    source = urllib.request.urlopen('https://bualabs.com').read()
+    soup = bs.BeautifulSoup(source,'lxml')
+
+    for paragraph in soup.find_all('p'):
+        for link in paragraph.find_all('a', href=True):
+            print(link['href'])
+    ```
+    This code will print out the URLs of all the links in the HTML content of the bualabs.com website.
+
+    Please note that this code will only work if the website's structure is consistent and the links are in the 'a' tags. If the website's structure is different, this code may not work.
+
+    Also, this code is a simple example and may not work for all websites. It's always a good idea to check the website's structure and adjust the code accordingly.

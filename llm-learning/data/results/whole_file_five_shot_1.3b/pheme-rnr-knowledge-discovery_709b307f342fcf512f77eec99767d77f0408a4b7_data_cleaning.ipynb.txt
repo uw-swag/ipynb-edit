@@ -1,0 +1,46 @@
+```python
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import numpy as np
+    import networkx as nx
+    from functools import reduce
+    from lib.util import fetch_tweets
+
+    # Returns the proportion of True/1 values in col
+    def agg_tweets_by_thread(df):
+
+        # Returns the proportion of True/1 values in col
+        agg_props = {
+            "favorite_count": sum,
+            "retweet_count": sum,
+            "hashtags_count": sum,
+            "urls_count": sum,
+            "user.tweets_count": sum,
+            "is_rumor": max,
+            "tweet_id": len,
+            "user.has_bg_img": sum,
+            "user.default_pic": sum,
+            "has_smile_emoji": sum,
+            "user.verified": sum,
+        }
+        rename = {
+            "tweet_id": "thread_length",
+            "has_url":"url_proportion",
+        }
+
+        def g(x):
+            # Add size of largest user-to-user conversation component in each thread        
+            d = []
+            thread_tweets = list(x["tweet_id"])
+            G = nx.from_pandas_edgelist(df[df.tweet_id.isin(thread_tweets)], "user_id", "in_reply_user")
+            Gc = max(nx.connected_component_subgraphs(G), key=len)
+            d.append(nx.number_connected_components(G))
+            d.append(nx.diameter(Gc))
+            return pd.Series(d, index=["component_count", "largest_cc_diameter"])
+    
+        # Step 0: Build graph-based features
+        graph = df.groupby("thread").apply(g)
+    
+        # Step 1: Build simple aggregate features
+        agg = df.groupby("thread")\
+            .agg(

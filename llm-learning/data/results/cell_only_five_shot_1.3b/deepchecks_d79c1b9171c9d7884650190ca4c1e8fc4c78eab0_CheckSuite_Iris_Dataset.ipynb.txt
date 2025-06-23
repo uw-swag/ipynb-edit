@@ -1,0 +1,17 @@
+```python
+    MyModelSuite = CheckSuite('Simple Suite For Model Performance',
+    ModelInfo(),
+    PerformanceReport(),
+    TrainTestDifferenceOverfit(),
+    ConfusionMatrixReport(),
+    NaiveModelComparison(naive_model_type='statistical').add_condition_ratio_not_less_than(0.9)
+)
+
+    # Add tree option to simple model comparison
+    MyModelSuite.add_condition_tree_not_less_than(0.9)
+
+    # Run the suite
+    MyModelSuite.run()
+    ```
+
+    The `add_condition_tree_not_less_than` method is used to add a condition to the model comparison. This condition checks the tree depth of the model. If the tree depth is not less than the specified value, the model is considered good.

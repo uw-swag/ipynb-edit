@@ -1,0 +1,38 @@
+```
+    ## Extra Cell
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    ## Gradient Descent
+    def gradient_descent(x_start, learning_rate, num_iterations):
+        x = x_start
+        for i in range(num_iterations):
+            gradient = compute_gradient(x)
+            x = x - learning_rate * gradient
+        return x
+
+    def compute_gradient(x):
+        ## Your implementation of compute_gradient function goes here
+        pass
+
+    ## Plotting
+    def plot_gradient_descent(x_start, learning_rate, num_iterations):
+        x = np.linspace(x_start, x_start + num_iterations*learning_rate, num_iterations)
+        y = compute_gradient(x)
+        plt.plot(x, y)
+        plt.xlabel('Iteration')
+        plt.ylabel('Gradient')
+        plt.title('Gradient Descent')
+        plt.grid(True)
+        plt.show()
+
+    ## Testing
+    x_start = 0
+    learning_rate = 0.01
+    num_iterations = 1000
+    gradient_descent(x_start, learning_rate, num_iterations)
+    plot_gradient_descent(x_start, learning_rate, num_iterations)
+    ```
+    '''
+    '''
+

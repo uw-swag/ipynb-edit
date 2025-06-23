@@ -1,0 +1,15 @@
+```python
+    from deepchecks.vision.datasets.classification.mnist import load_dataset, load_model
+
+mnist_dataloader_test = load_dataset(train=False, batch_size=1000, object_type='VisionData')
+model = load_model()
+from deepchecks.vision.checks.performance.robustness_report import RobustnessReport
+from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+import torch.nn as nn
+
+prediction_formatter = ClassificationPredictionFormatter(nn.Softmax(dim=1))
+result = RobustnessReport().run(mnist_dataloader_test, model, prediction_formatter=prediction_formatter)
+result
+    ```
+
+    The code is validating the formatters in the RobustnessReport. The formatters are used to transform the model's predictions into a more readable format. The ClassificationPredictionFormatter is used to format the predictions into a more readable format. The formatting is done by applying a softmax function to the model's predictions.

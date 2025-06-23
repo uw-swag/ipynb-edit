@@ -1,0 +1,61 @@
+```python
+    import mlflow
+    import mlflow.sklearn
+
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Set up MLflow tracking server
+    mlflow.start_run()
+
+    # Set up the model
+    model = RandomForestClassifier(n_estimators=100)
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Log the model
+    mlflow.sklearn.log_model(model, "model")
+
+    # Log parameters
+    mlflow.log_param("n_estimators", 100)
+
+    # Log metrics
+    mlflow.log_metric("accuracy", model.score(X_test, y_test))
+
+    # End the run
+    mlflow.end_run()
+
+    # Load the model from the run
+    loaded_model = mlflow.sklearn.load_model("runs:/<run_id>/model")
+    ```
+
+    Replace `<run_id>` with the ID of the run you want to load.
+
+    This script will log the model, parameters, and metrics to MLflow, which you can view in the MLflow UI.
+
+    Note: You need to have MLflow installed and running in your environment. You can install it using pip:
+
+    ```bash
+    pip install mlflow
+    ```
+
+    And start the MLflow tracking server with:
+
+    ```bash
+    mlflow server --host 0.0.0.0 --port 5000
+    ```
+
+    And then start your script with:
+
+    ```bash
+    mlflow run http://localhost:50

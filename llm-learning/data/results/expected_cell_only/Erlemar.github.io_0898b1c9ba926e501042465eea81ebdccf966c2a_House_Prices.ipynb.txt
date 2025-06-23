@@ -1,0 +1,89 @@
+#Libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from matplotlib import rcParams
+import xgboost as xgb
+%matplotlib inline 
+sns.set_style('whitegrid')
+
+import scipy.stats as stats
+from scipy import stats
+from scipy.stats import pointbiserialr, spearmanr, skew, pearsonr
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.feature_selection import SelectFromModel
+from sklearn.model_selection import cross_val_score, train_test_split, GridSearchCV
+from sklearn.linear_model import Ridge, RidgeCV, LassoCV
+from sklearn import linear_model
+#It seems that SalePrice is skewered, so it needs to be transformed.
+sns.distplot(data['SalePrice'], kde=False, color='c', hist_kws={'alpha': 0.9})
+#As expected price rises with the quality.
+sns.regplot(x='OverallQual', y='SalePrice', data=data, color='Orange')
+#Price also varies depending on neighborhood.
+plt.figure(figsize = (12, 6))
+sns.boxplot(x='Neighborhood', y='SalePrice',  data=data)
+xt = plt.xticks(rotation=30)
+#There are many little houses.
+plt.figure(figsize = (12, 6))
+sns.countplot(x='HouseStyle', data=data)
+xt = plt.xticks(rotation=30)
+#And most of the houses are single-family, so it isn't surprising that most of the them aren't large.
+sns.countplot(x='BldgType', data=data)
+xt = plt.xticks(rotation=30)
+sns.factorplot('HeatingQC', 'SalePrice', hue='CentralAir', data=data)
+sns.factorplot('Heating', 'SalePrice', hue='CentralAir', data=data)
+#One more interesting point is that while pavement road access is valued more, for alley they quality isn't that important.
+fig, ax = plt.subplots(1, 2, figsize = (12, 5))
+sns.boxplot(x='Street', y='SalePrice', data=data, ax=ax[0])
+sns.boxplot(x='Alley', y='SalePrice', data=data, ax=ax[1])
+#We can say that while quality is normally distributed, overall condition of houses is mainly average.
+fig, ax = plt.subplots(1, 2, figsize = (12, 5))
+sns.countplot(x='OverallCond', data=data, ax=ax[0])
+sns.countplot(x='OverallQual', data=data, ax=ax[1])
+fig, ax = plt.subplots(2, 3, figsize = (16, 12))
+ax[0,0].set_title('Gable')
+ax[0,1].set_title('Hip')
+ax[0,2].set_title('Gambrel')
+ax[1,0].set_title('Mansard')
+ax[1,1].set_title('Flat')
+ax[1,2].set_title('Shed')
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Gable'], jitter=True, ax=ax[0,0])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Hip'], jitter=True, ax=ax[0,1])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Gambrel'], jitter=True, ax=ax[0,2])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Mansard'], jitter=True, ax=ax[1,0])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Flat'], jitter=True, ax=ax[1,1])
+sns.stripplot(x="RoofMatl", y="SalePrice", data=data[data.RoofStyle == 'Shed'], jitter=True, ax=ax[1,2])
+fig, ax = plt.subplots(1, 2, figsize = (12, 5))
+sns.stripplot(x="SaleType", y="SalePrice", data=data, jitter=True, ax=ax[0])
+sns.stripplot(x="SaleCondition", y="SalePrice", data=data, jitter=True, ax=ax[1])
+#Transforming skewered data and dummifying categorical.
+for col in data.columns:
+    if data[col].dtype != 'object':
+        if skew(data[col]) > 0.75:
+            data[col] = np.log1p(data[col])
+        pass
+    else:
+        dummies = pd.get_dummies(data[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        data.drop(col, axis=1, inplace=True)
+        data = data.join(dummies)
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+        pass
+    else:
+        dummies = pd.get_dummies(test[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        test.drop(col, axis=1, inplace=True)
+        test = test.join(dummies)
+#Function to measure accuracy.
+def rmlse(val, target):
+    return np.sqrt(np.sum(((np.log1p(val) - np.log1p(np.expm1(target)))**2) / len(target)))
+#Features to be used. I do this because I wasnt to see how good will other models perform with these features.
+features = X_train.columns[indices]
+for i in features:
+    if i not in X_test.columns:
+        print(i)

@@ -1,0 +1,37 @@
+
+    The SELU (Scaled Exponential Linear Unit) activation function is a scaled exponential linear unit activation function. It was introduced by G�zsu Yalçın in 2017. The function is defined as follows:
+
+    f(x) = scale * elu(x, alpha)
+
+    where:
+    - scale is a hyperparameter that controls the range of the activation function.
+    - alpha is a hyperparameter that controls the shape of the function.
+
+    The SELU function is defined as follows:
+
+    f(x) = scale * elu(x, alpha)
+
+    where:
+    - elu(x) is the scaled exponential linear unit function.
+    - x is the input to the function.
+    - scale and alpha are hyperparameters that control the function's behavior.
+
+    The SELU function is used in many deep learning models, such as the Residual Networks (ResNets) and the Sequential Exponential Linear Units (SELUs).
+
+    Here is the improved version of the SELU function:
+
+    ```python
+    def selu(z,
+             scale=1.0507009873554804934193349852946,
+             alpha=1.6732632423543772848170429916717):
+        return scale * tf.where(z >= 0.0, z, alpha * tf.nn.elu(z))
+    ```
+
+    This function uses the tf.where function to scale the output of the elu function, and the tf.nn.elu function to apply the elu function. The function is also defined with the correct scale and alpha values.
+
+    The function is used in the code you provided, but it seems like there is a typo in the function definition. The function definition should be:
+
+    ```python
+    def selu(z,
+             scale=1.0507009873554804934193349852946,
+             alpha=1.673

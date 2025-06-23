@@ -1,0 +1,27 @@
+```
+    # Adding voting to the model
+    # First, we need to ensure that the voting is done correctly. Let's say we have 3 different models, and we want to vote for the class that is most common among the three models.
+
+    # Let's assume that the three models are logistic regression, random forest, and svm
+    models = [log_reg, rf, svm]
+    names = ['Logistic Regression', 'Random Forest', 'SVM']
+
+    # We can use the `predict` method of each model to make predictions
+    predictions = [model.predict(X) for model in models]
+
+    # We can use the `argmax` function to find the index of the most common class among the predictions
+    most_common_index = np.argmax(predictions)
+
+    # We can use the `predict_proba` method of each model to get the probabilities of the most common class
+    most_common_probs = [model.predict_proba(X) for model in models]
+
+    # The most common class is the class with the highest probability
+    most_common_class = np.argmax(most_common_probs[most_common_index])
+
+    # Now, we can create a new submission dataframe with the most common class
+    submission = pd.DataFrame({'id': test_id, 'type': le.classes_[most_common_class]})
+
+    # And save the submission to a csv file
+    submission.to_csv('GGG_submission2.csv', index=False)
+    ```
+    This code adds voting to the model. It first creates a list of the three models, and a list of their names. It then makes predictions using the `predict` method of each model. The most common class among the predictions is the class with the highest probability. Finally, a new submission dataframe is created with the most common class, and the submission is saved to a csv file.

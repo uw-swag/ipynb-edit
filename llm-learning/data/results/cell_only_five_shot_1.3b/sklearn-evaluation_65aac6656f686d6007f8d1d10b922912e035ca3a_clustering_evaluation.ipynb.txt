@@ -1,0 +1,31 @@
+```python
+    # get data for clustering
+    X, y = datasets.make_blobs(
+        n_samples=500,
+        n_features=2,
+        centers=4,
+        cluster_std=1,
+        center_box=(-10.0, 10.0),
+        shuffle=True,
+        random_state=1,
+    )
+
+    # Fit kMeans on the data
+    kmeans = KMeans(n_clusters=4, random_state=1)
+    cluster_labels = kmeans.fit_predict(X)
+
+    # print cluster labels
+    print(cluster_labels)
+
+    # print cluster centers
+    print(kmeans.cluster_centers_)
+
+    # print inertia
+    print(kmeans.inertia_)
+
+    # print silhouette score
+    print(silhouette_score(X, kmeans.labels_))
+
+    # save the model
+    pickle.dump(kmeans, open('kmeans_model.pkl', 'wb'))
+    ```

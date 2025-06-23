@@ -1,0 +1,32 @@
+```python
+    from keras.models import Sequential
+    from keras.layers import Dense, Embedding, SimpleRNN
+    import numpy as np
+    from keras.utils import to_categorical
+
+    # Seed for reproducibility
+    np.random.seed(12345)
+
+    # Define the model
+    model = Sequential()
+    model.add(Embedding(input_dim=10000, output_dim=64, input_length=100))
+    model.add(SimpleRNN(units=32))
+    model.add(Dense(1, activation='sigmoid'))
+
+    # Compile the model
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Generate dummy data
+    X = np.random.randint(low=0, high=100, size=(1000, 100))
+    y = np.random.randint(low=0, high=2, size=(1000, 1))
+
+    # Fit the model
+    model.fit(X, y, epochs=10, batch_size=32)
+
+    # Predict
+    X_test = np.random.randint(low=0, high=100, size=(200, 100))
+    y_pred = model.predict(X_test)
+
+    # Convert predictions to binary
+    y_pred = [1 if p > 0.5 else 0 for p in y_pred]
+    ```

@@ -1,0 +1,23 @@
+```python
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Assuming 'train_ds' is your DataFrame and 'person' is the class column
+    class_names = train_ds['person'].unique()
+
+    # Create a mask to hide the diagonal elements
+    mask = np.eye(len(class_names), dtype=bool)
+
+    # Generate a custom diverging colormap
+    cmap = sns.diverging_palette(230, 20, as_cmap=True)
+
+    # Create a heatmap
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(train_ds.corr(), mask=mask, cmap=cmap, vmin=-1, vmax=1, center=0,
+                square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+    plt.title('Heatmap of Correlation Matrix')
+    plt.show()
+    ```
+
+    This code will create a heatmap of the correlation matrix of the 'person' class in your DataFrame. The heatmap will be masked to hide the diagonal elements, and a custom diverging colormap will be used. The heatmap will be centered at 0, with the darker the value, the more correlated it is.

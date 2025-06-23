@@ -1,0 +1,38 @@
+```python
+    # Section 7.6 (#134)
+    # ResNet Implementation
+
+    # 7.6.1 Residual Networks
+
+    # 7.6.1.1 Shortcut Connection
+    def shortcut(x, downsample):
+        if downsample:
+            return downsample(x)
+        else:
+            return x
+
+    # 7.6.1.2 Residual Block
+    def residual_block(x, filters, downsample=None):
+        y = Conv2D(filters, (3, 3), padding='same')(x)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters, (3, 3), padding='same')(y)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters, (3, 3), padding='same')(y)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters*4, (1, 1), padding='same')(y)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters, (1, 1), padding='same')(y)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters*4, (3, 3), padding='same')(y)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters, (1, 1), padding='same')(y)
+        y = BatchNormalization()(y)
+        y = Activation('relu')(y)
+        y = Conv2D(filters*4, (3, 3), padding='same')(y)
+        y = BatchNormalization()

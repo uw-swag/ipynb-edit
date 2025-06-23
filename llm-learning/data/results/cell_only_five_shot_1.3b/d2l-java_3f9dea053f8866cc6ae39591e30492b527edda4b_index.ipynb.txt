@@ -1,0 +1,50 @@
+```python
+    import boto3
+    import sagemaker
+    from sagemaker.algo import PyTorch
+
+    # Set up the SageMaker session
+    sagemaker_session = sagemaker.Session()
+
+    # Set up the S3 bucket
+    bucket = '<your-s3-bucket-name>'
+
+    # Set up the S3 prefix
+    prefix = 'sagemaker/DEMO-hpo-pytorch'
+
+    # Set up the S3 key
+    key = 'hpo-pytorch-demo.tar.gz'
+
+    # Set up the S3 object
+    s3_object = sagemaker_session.s3_object(bucket=bucket, key=key, prefix=prefix)
+
+    # Download the S3 object
+    s3_object.download_file(key)
+
+    # Create a PyTorch estimator
+    estimator = PyTorch(entry_point='hpo-pytorch-demo.tar.gz',
+                        role=role,
+                        base_job_name='hpo-pytorch-demo',
+                        framework_version='1.0',
+                        train_instance_count=1,
+                        train_instance_type='ml.p2.xlarge',
+                        hyperparameters={
+                            'epochs': 10,
+                            'num_layers': 2,
+                            'hidden_dim': 100,
+                            'dropout': 0.5,
+                            'lr': 0.01
+                        })
+
+    # Fit the estimator
+    fit_result = estimator.fit({'train': 's3://{}/{}/'.format(bucket, key)})
+
+    # Print the fit result
+    print(fit_result)
+    ```
+
+    Please replace `<your-s3-bucket-name>` with your actual S3 bucket name.
+
+    This script will download the `hpo-pytorch-demo.tar.gz` file from the S3 bucket, create a PyTorch estimator, and fit the estimator with the downloaded file.
+
+    The `fit_result` object will contain the results of the fit operation,

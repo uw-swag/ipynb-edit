@@ -1,0 +1,10 @@
+
+    The issue with the code is that the `tf.concat` function is concatenating along the first dimension (axis=1), not the second. The correct way to concatenate along the second dimension is to use `axis=0`.
+
+    Here is the corrected code:
+
+    ```python
+    outputs_flat = tf.reshape(tf.concat(0, outputs), [-1, n_cells])
+    ```
+
+    In this code, `tf.concat(0, outputs)` concatenates the tensors along the second dimension (axis=0), which is the correct way to concatenate along the second dimension.

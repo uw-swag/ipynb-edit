@@ -1,0 +1,51 @@
+
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error
+    from lab_utils_multi import load_house_data
+    plt.style.use('./deeplearning.mplstyle')
+    np.set_printoptions(precision=2)
+
+    X_train, y_train = load_house_data()
+
+    X_train = X_train.reshape(-1, 1)
+
+    linear_model = LinearRegression()
+    linear_model.fit(X_train, y_train)
+
+    b = linear_model.intercept_
+    w = linear_model.coef_
+
+    print(f"w = {w}, b = {b}")
+
+    X_test = np.array([[1200]])
+    print(f"Prediction for 1200 sqft house: ${linear_model.predict(X_test)[0]:0.2f}")
+
+    ## Utilities
+    def predict(X_test):
+        return linear_model.predict(X_test.reshape(-1, 1))
+
+    def evaluate(y_test, y_pred):
+        mse = mean_squared_error(y_test, y_pred)
+        rmse = np.sqrt(mse)
+        return rmse
+
+    ## Testing
+    X_test, y_test = load_house_data(test=True)
+    y_pred = predict(X_test)
+    rmse = evaluate(y_test, y_pred)
+    print(f"RMSE on test set: {rmse}")
+
+    '''
+    ]
+
+    ### Response:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error

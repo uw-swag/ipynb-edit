@@ -1,0 +1,43 @@
+```python
+    # Migrate github organization to deepjavalibrary
+    # This is a simple script to move all repositories from a specific organization to another
+
+    import os
+    import requests
+
+    # Define the source and destination organizations
+    source_org = 'source-org'
+    dest_org = 'deepjava-library'
+
+    # Define the API endpoint
+    api_url = f'https://api.github.com/orgs/{source_org}/repos'
+
+    # Fetch all repositories from the source organization
+    response = requests.get(api_url)
+    repos = response.json()
+
+    # Iterate over each repository
+    for repo in repos:
+        # Define the destination repository URL
+        dest_repo_url = f'https://api.github.com/repos/{dest_org}/{repo["name"]}'
+
+        # Clone the repository to the destination organization
+        clone_url = f'https://github.com/{source_org}/{repo["name"]}.git'
+        os.system(f'git clone {clone_url}')
+
+        # Change the remote URL of the cloned repository
+        os.system(f'cd {repo["name"]} && git remote set-url origin {dest_repo_url}')
+
+        # Push the cloned repository to the destination organization
+        os.system(f'cd {repo["name"]} && git push -u origin master')
+    ```
+
+    This script fetches all repositories from a source organization, clones each repository to a destination organization, and then changes the remote URL of the cloned repository to point to the destination repository. It then pushes the cloned repository to the destination organization.
+
+    Please replace 'source-org' and 'deepjava-library' with your actual source and destination organizations.
+
+    Also, this script assumes that you have the necessary permissions to clone and push repositories to the destination organization.
+
+    Please note that this script is a simple example and may not work for all repositories. It may not work if the repositories are private or if the source organization has disabled push access.
+
+    Also, this script does not handle any potential issues that may arise when cloning or pushing repositories, such as network

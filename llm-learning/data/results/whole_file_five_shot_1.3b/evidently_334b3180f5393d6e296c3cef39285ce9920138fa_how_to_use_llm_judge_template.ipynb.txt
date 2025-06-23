@@ -1,0 +1,44 @@
+
+    The typo in the code is in the line where the `LLMJudgeDescriptor` is defined. The typo is "LLMJudge" instead of "LLMJudgeDescriptor". The corrected code is as follows:
+
+    ```python
+    custom_judge = LLMJudgeDescriptor(
+        subcolumn="score",
+        template = BinaryClassificationPromptTemplate(      
+            criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+                A concise response should:
+                - Provide the necessary information without unnecessary details or repetition.
+                - Be brief yet comprehensive enough to address the query.
+                - Use simple and direct language to convey the message effectively.
+            """,
+            target_category="Conciseness",
+            non_target_category="Ok",
+            uncertainty="unknown",
+            include_reasoning=True,
+            include_score=True,
+            pre_messages=[("system", "You are a judge which evaluates text.")],
+            ),
+        provider = "openai",
+        model = "gpt-4o-mini"
+    )
+    ```
+
+    The typo in the code is in the line where the `LLMJudgeDescriptor` is defined. The typo is "LLMJudge" instead of "LLMJudgeDescriptor". The corrected code is as follows:
+
+    ```python
+    custom_judge = LLMJudgeDescriptor(
+        subcolumn="score",
+        template = BinaryClassificationPromptTemplate(      
+            criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+                A concise response should:
+                - Provide the necessary information without unnecessary details or repetition.
+                - Be brief yet comprehensive enough to address the query.
+                - Use simple and direct language to convey the message effectively.
+            """,
+            target_category="Conciseness",
+            non_target_category="Ok",
+            uncertainty="unknown",
+            include_reasoning=True,
+            include_score=True,
+            pre_messages=[("system", "You are a judge which evaluates text.")],
+           

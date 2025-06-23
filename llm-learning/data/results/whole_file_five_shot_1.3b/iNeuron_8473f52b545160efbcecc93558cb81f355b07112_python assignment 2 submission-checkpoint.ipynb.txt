@@ -1,0 +1,44 @@
+```
+    # This code cell will not be shown in the HTML version of this notebook
+    # completed assignment 2
+    # import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import precision_score
+    from sklearn.metrics import recall_score
+    from sklearn.metrics import f1_score
+
+    # load dataset
+    data = pd.read_csv('data.csv')
+
+    # preprocess data
+    X = data.drop('target', axis=1)
+    y = data['target']
+
+    # split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # standardize features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # train a random forest classifier
+    classifier = RandomForestClassifier(n_estimators=200, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # make predictions
+    y_pred = classifier.predict(X_test)
+
+    # evaluate model
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
+    print("Classification Report: \n", classification_report(y_test, y_pred))
+    print("Accuracy: \n", accuracy_score(y_test, y_pred))
+    print("Precision: \n", precision_score(y_test, y_pred))
+    print("Recall: \n", recall_score(y_test, y_pred))
+    print("F1 Score: \n", f1_score(y

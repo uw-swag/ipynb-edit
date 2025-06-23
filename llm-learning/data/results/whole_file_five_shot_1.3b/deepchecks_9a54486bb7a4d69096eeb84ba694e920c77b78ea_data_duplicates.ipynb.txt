@@ -1,0 +1,15 @@
+```python
+    import pandas as pd
+    from deepchecks.datasets.classification.phishing import load_data
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+
+    # Load the phishing dataset
+    phishing_dataset = load_data(as_train_test=False, data_format='DataFrame')
+
+    # Run the DataDuplicates check
+    check = DataDuplicates()
+    result = check.run(phishing_dataset)
+
+    # Show the results
+    result.show(show_additional_outputs=False)
+    ```

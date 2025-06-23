@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    from db2eventstore.client import EventStoreClient
+    from db2eventstore.query import Query
+
+    # Create an EventStoreClient instance
+    client = EventStoreClient(host='localhost', port=2113, username='admin', password='admin')
+
+    # Define a query
+    query = Query(
+        event_type='com.ibm.iot.analytics.event.sample.SampleEvent',
+        event_source='com.ibm.iot.analytics.event.source.sample.SampleSource',
+        page_size=100
+    )
+
+    # Execute the query
+    result = client.read_events(query)
+
+    # Convert the result to a pandas DataFrame
+    df = pd.DataFrame(result)
+
+    # Print the DataFrame
+    print(df)
+    ```

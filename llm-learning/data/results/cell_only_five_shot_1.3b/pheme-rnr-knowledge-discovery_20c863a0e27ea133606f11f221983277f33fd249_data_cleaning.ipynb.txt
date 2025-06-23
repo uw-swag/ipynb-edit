@@ -1,0 +1,26 @@
+```python
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import numpy as np
+    import networkx as nx
+    from functools import reduce
+    from lib.util import fetch_tweets
+
+    event = "germanwings-crash"  # Change this value to clear different PHEME datasets
+
+    # Fetch tweets for the event
+    tweets = fetch_tweets(event)
+
+    # Create a dataframe from the tweets
+    df = pd.DataFrame(tweets)
+
+    # Add thread-level data for all PHEME events
+    df['thread_id'] = df['id'].apply(lambda x: x.in_reply_to_status_id if x.in_reply_to_status_id else x.in_reply_to_user_id)
+    df['thread_timestamp'] = df['created_at']
+
+    # Save the dataframe to a csv file
+    df.to_csv(f'{event}_thread_data.csv', index=False)
+
+    # Print the dataframe
+    print(df.head())
+    ```

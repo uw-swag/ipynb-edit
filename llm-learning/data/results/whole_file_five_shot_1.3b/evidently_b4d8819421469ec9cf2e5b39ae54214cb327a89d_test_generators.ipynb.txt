@@ -1,0 +1,30 @@
+```python
+    # Importing the required libraries
+    import numpy as np
+    from sklearn.model_selection import TestCase
+
+    # Define a test generator
+    def test_generator():
+        # Generate random data
+        data = np.random.rand(10, 10)
+        # Generate labels
+        labels = np.random.randint(0, 2, 10)
+        # Return the data and labels
+        return data, labels
+
+    # Define a test preset
+    class TestPreset(TestCase):
+        def test_generator(self):
+            # Use the test generator
+            data, labels = test_generator()
+            # Check if the data and labels are as expected
+            self.assertEqual(data.shape, (10, 10))
+            self.assertEqual(labels.shape, (10,))
+            # Check if the data and labels are the same as the test generator
+            self.assertTrue(np.array_equal(data, test_generator()[0]))
+            self.assertTrue(np.array_equal(labels, test_generator()[1]))
+
+    # Run the test preset
+    TestPreset.test_generator()
+    ```
+    This code will test the `test_generator` function and the `TestPreset` class. The `test_generator` function generates random data and labels, and the `TestPreset` class uses the `test_generator` function to test the data and labels.

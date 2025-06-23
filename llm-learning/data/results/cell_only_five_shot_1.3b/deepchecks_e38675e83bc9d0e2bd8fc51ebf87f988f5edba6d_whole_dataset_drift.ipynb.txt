@@ -1,0 +1,52 @@
+```python
+    from sklearn.ensemble import RandomForestRegressor
+
+    # Assume you have a trained model
+    model = RandomForestRegressor()
+
+    # Get feature importances
+    feature_importances = model.feature_importances_
+
+    # Convert feature importances to a dataframe
+    feature_importances_df = pd.DataFrame(
+        {"feature": list(data.columns), "importance": feature_importances}
+    )
+
+    # Sort the dataframe by importance
+    feature_importances_df.sort_values("importance", ascending=False, inplace=True)
+
+    # Get the top 10 features
+    top_10_features = feature_importances_df["feature"].head(10)
+
+    # Return the top 10 features
+    return top_10_features
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature (#640)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is an example of how you can add a new feature to your model. Let's say you want to add a new feature that is the ratio of the number of votes to the number of votes the movie has received.
+
+    ```python
+    # Assume you have a dataframe with votes for each movie
+    votes_df = pd.DataFrame({
+        'movie_id': [1, 2, 3, 4, 5],
+        'votes': [100, 200, 300, 400, 500]
+    })
+
+    # Merge the votes_df with the original dataframe
+    data = pd.merge(data, votes_df, on='movie_id')
+
+    # Add a new feature
+    data['vote_to_popularity_ratio'] = data['votes'] / data['popularity']
+
+    # Now you can use the new feature in your model
+    model = RandomForestRegressor()
+    model.fit(data[['vote_to_popularity_ratio']],

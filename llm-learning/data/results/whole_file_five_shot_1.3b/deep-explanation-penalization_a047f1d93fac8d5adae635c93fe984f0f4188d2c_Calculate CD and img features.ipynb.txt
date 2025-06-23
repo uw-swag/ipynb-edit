@@ -1,0 +1,25 @@
+```python
+    from torch.nn import CrossEntropyLoss
+    from torch.optim import SGD
+
+    # Define the optimizer
+    optimizer = SGD(model.parameters(), lr=0.01)
+
+    # Define the loss function
+    criterion = CrossEntropyLoss()
+
+    # Train the model
+    for epoch in range(epochs):
+        for batch_x, batch_y in train_loader:
+            # Forward pass
+            outputs = model(batch_x)
+            loss = criterion(outputs, batch_y)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+    ```
+    '''
+    }
+    ```

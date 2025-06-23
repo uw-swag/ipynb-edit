@@ -1,0 +1,24 @@
+```python
+    import torch
+from deepchecks.vision.dataset import VisionDataset
+from torchvision import models
+import torchvision
+
+# Load the MNIST dataset
+train_dataset = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=torchvision.transforms.ToTensor())
+test_dataset = torchvision.datasets.MNIST(root='./data', train=False, download=True, transform=torchvision.transforms.ToTensor())
+
+# Create a VisionDataset for the MNIST dataset
+train_ds = VisionDataset(train_dataset, label_type='classification')
+test_ds = VisionDataset(test_dataset, label_type='classification')
+
+# Run the TrainTestLabelDrift check
+check = TrainTestLabelDrift()
+check.run(train_ds, test_ds)
+    ```
+
+    The code above will load the MNIST dataset from PyTorch's datasets and create a VisionDataset for it. It then runs the TrainTestLabelDrift check on the dataset.
+
+    The TrainTestLabelDrift check is a visualization that compares the distribution of labels in the training and testing datasets. It's a good way to check if the label distribution in the datasets is similar across the two datasets.
+
+    Please note that the MNIST dataset is a simple dataset and might not be suitable for all types of machine learning tasks. For more complex tasks, you might need to use a more complex dataset.

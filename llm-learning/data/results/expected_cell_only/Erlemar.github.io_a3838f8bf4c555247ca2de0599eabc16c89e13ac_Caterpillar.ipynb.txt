@@ -1,0 +1,303 @@
+#Import libraries.
+import numpy as np
+import pandas as pd
+import xgboost as xgb
+from sklearn import preprocessing
+from sklearn.preprocessing import LabelEncoder
+from scipy.stats import skew
+import glob
+#Get list of all files
+glob.glob('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/*.csv')
+#Read each file in a separate data frame.
+bill_of_materials = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/bill_of_materials.csv')
+components = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/components.csv')
+comp_adaptor = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_adaptor.csv')
+comp_boss = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_boss.csv')
+comp_elbow = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_elbow.csv')
+comp_float = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_float.csv')
+comp_hfl = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_hfl.csv')
+comp_nut = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_nut.csv')
+comp_other = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_other.csv')
+comp_sleeve = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_sleeve.csv')
+comp_straight = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_straight.csv')
+comp_tee = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_tee.csv')
+comp_threaded = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_threaded.csv')
+specs = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/specs.csv')
+tube = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/tube.csv')
+tube_end_form = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/tube_end_form.csv')
+type_component = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/type_component.csv')
+type_connection = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/type_connection.csv')
+type_end_form = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/type_end_form.csv')
+train = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/train_set.csv', parse_dates=[2,])
+test = pd.read_csv('d:/_python/Python projects/Kaggle/Data_Kaggle/Caterpillar Tube Pricing/test_set.csv', parse_dates=[3,])
+#File info. The file contains information about components of tube assemblies. All information is necessary.
+#Missing values could be filled only with 0, but it isn't necessary.
+bill_of_materials.info()
+#Simply to see the line with all 8 components.
+bill_of_materials.loc[bill_of_materials.quantity_8.notnull() == True]
+#File info. There are columns with too few non-null values. But it is necessary to see more.
+comp_adaptor.info()
+comp_adaptor
+comp_adaptor.drop(['adaptor_angle', 'component_type_id', 'end_form_id_1', 'connection_type_id_1', 'length_1', 'length_2',
+                   'unique_feature', 'orientation', 'end_form_id_2', 'connection_type_id_2'], axis=1, inplace=True)
+comp_adaptor.loc[comp_adaptor['overall_length'].isnull(), 'overall_length'] = 93.5 #Could input a formula, but it single value.
+comp_adaptor.drop(comp_adaptor.index[[8, 21]], inplace=True)
+comp_adaptor
+#File info. Descriptive and categorical information will be dropped.
+comp_boss.info()
+#Use only important information
+comp_boss = comp_boss[['component_id', 'height_over_tube', 'weight']]
+comp_boss.info()
+for i in comp_boss.columns:
+    if comp_boss[i].dtype != object:
+        if comp_boss[i][comp_boss[i] > 4 * comp_boss[i].mean()].any() == True: # Arbitrary threshold.
+            print(i) #Print column name
+            print(comp_boss.loc[comp_boss[i] == comp_boss[i].max()]) #Print row
+#Drop row with too big value. I don't drop weight, because it could be reasonable
+comp_boss.drop(comp_boss.index[31], inplace=True)
+comp_boss.head()
+comp_hfl.info()
+comp_hfl
+#It seems that only three columns are necessary.
+comp_hfl = comp_hfl[['component_id', 'hose_diameter', 'weight']]
+comp_hfl
+comp_elbow.info()
+comp_elbow.head()
+#Most of the columns aren't necessary
+comp_elbow.drop(['component_type_id', 'mj_class_code', 'mj_plug_class_code', 'plug_diameter', 'groove', 'unique_feature',
+                 'orientation',], axis=1, inplace=True)
+for i in comp_elbow.columns:
+    if comp_elbow[i].dtype != object:
+        if comp_elbow[i][comp_elbow[i] > 4 * comp_elbow[i].mean()].any() == True:
+            print(i)
+            print(comp_elbow.loc[comp_elbow[i] == comp_elbow[i].max()])
+comp_elbow.drop(comp_elbow.index[52], inplace=True)
+comp_float.info()
+#Drop description.
+comp_float.drop(['component_type_id', 'orientation'], axis=1, inplace=True)
+comp_float
+comp_nut.info()
+comp_nut.drop(['component_type_id', 'seat_angle', 'diameter', 'blind_hole', 'orientation'], axis=1, inplace=True)
+comp_nut.head()
+for i in comp_nut.columns:
+    if comp_nut[i].dtype != object:
+        if comp_nut[i][comp_nut[i] > 4 * comp_nut[i].mean()].any() == True:
+            print(i)
+            print(comp_nut.loc[comp_nut[i] == comp_nut[i].max()])
+comp_other.info()
+#Dtop description.
+comp_other.drop(['part_name'], axis=1, inplace=True)
+comp_other.head()
+comp_sleeve.info()
+comp_sleeve.drop(['component_type_id', 'connection_type_id', 'unique_feature', 'plating', 'orientation'], axis=1, inplace=True)
+comp_sleeve.head()
+for i in comp_sleeve.columns:
+    if comp_sleeve[i].dtype != object:
+        if comp_sleeve[i][comp_sleeve[i] > 4 * comp_sleeve[i].mean()].any() == True:
+            print(i)
+            print(comp_sleeve.loc[comp_sleeve[i] == comp_sleeve[i].max()])
+comp_sleeve.drop(comp_sleeve.index[[28, 29, 30, 31, 32, 33, 34, 48]], inplace=True)
+comp_straight.info()
+comp_straight.drop(['component_type_id', 'overall_length', 'mj_class_code', 'head_diameter', 'unique_feature', 'groove',
+                    'orientation'], axis=1, inplace=True)
+comp_straight.head()
+for i in comp_straight.columns:
+    if comp_straight[i].dtype != object:
+        if comp_straight[i][comp_straight[i] > 4 * comp_straight[i].mean()].any() == True:
+            print(i)
+            print(comp_straight.loc[comp_straight[i] == comp_straight[i].max()])
+comp_tee.info()
+comp_tee.drop(['component_type_id', 'mj_class_code', 'mj_plug_class_code', 'groove', 'unique_feature', 'orientation'],
+              axis=1, inplace=True)
+comp_tee
+for i in comp_tee.columns:
+    if comp_tee[i].dtype != object:
+        if comp_tee[i][comp_tee[i] > 4 * comp_tee[i].mean()].any() == True:
+            print(i)
+            print(comp_tee.loc[comp_tee[i] == comp_tee[i].max()])
+comp_threaded.info()
+comp_threaded.drop(['component_type_id', 'adaptor_angle', 'end_form_id_1', 'connection_type_id_1', 'end_form_id_2',
+                    'connection_type_id_2', 'end_form_id_3', 'connection_type_id_3', 'end_form_id_4', 'connection_type_id_4',
+                    'nominal_size_4', 'unique_feature', 'orientation'], axis=1, inplace=True)
+comp_threaded.head()
+#There are five columns with length. So I fill NA with 0, summarize length and drop excessive columns.
+comp_threaded['length_1'] = comp_threaded['length_1'].fillna(0)
+comp_threaded['length_2'] = comp_threaded['length_2'].fillna(0)
+comp_threaded['length_3'] = comp_threaded['length_3'].fillna(0)
+comp_threaded['length_4'] = comp_threaded['length_4'].fillna(0)
+comp_threaded['overall_length'] = comp_threaded['overall_length'].fillna(0)
+comp_threaded['overall_length'] = comp_threaded['overall_length'] + comp_threaded['length_1'] + comp_threaded['length_2'] \
++ comp_threaded['length_3'] + comp_threaded['length_4']
+
+comp_threaded.drop(['length_1', 'length_2', 'length_3', 'length_4'], axis=1, inplace=True)
+for i in comp_threaded.columns:
+    if comp_threaded[i].dtype != object:
+        if comp_threaded[i][comp_threaded[i] > 4 * comp_threaded[i].mean()].any() == True:
+            print(i)
+            print(comp_threaded.loc[comp_threaded[i] == comp_threaded[i].max()])
+comp_threaded.drop(comp_threaded.index[[40, 90]], inplace=True)
+tube.info()
+tube.drop(['material_id', 'end_a_1x', 'end_a_2x', 'end_x_1x', 'end_x_2x', 'end_a', 'end_x', 'num_boss', 'num_bracket', 'other'],
+          axis=1, inplace=True)
+tube.head()
+for i in tube.columns:
+    if tube[i].dtype != object:
+        if tube[i][tube[i] > 4 * tube[i].mean()].any() == True:
+            print(i)
+            print(tube.loc[tube[i] == tube[i].max()])
+tube.drop(tube.index[[15132, 15174, 15175, 17688, 17689, 18002, 18003, 19320]], inplace=True)
+#Create several features from dates for additional information.
+train['year'] = train.quote_date.dt.year
+train['month'] = train.quote_date.dt.month
+train['dayofyear'] = train.quote_date.dt.dayofyear
+train['dayofweek'] = train.quote_date.dt.dayofweek
+train['day'] = train.quote_date.dt.day
+
+test['year'] = test.quote_date.dt.year
+test['month'] = test.quote_date.dt.month
+test['dayofyear'] = test.quote_date.dt.dayofyear
+test['dayofweek'] = test.quote_date.dt.dayofweek
+test['day'] = test.quote_date.dt.day
+
+train = train.drop('quote_date',axis=1)
+test = test.drop('quote_date',axis=1)
+#I combine all files with info on components in one file.
+all_comp = pd.concat([comp_adaptor, comp_boss, comp_elbow, comp_float, comp_hfl, comp_nut, comp_other,
+                      comp_sleeve, comp_straight, comp_tee, comp_threaded])
+all_comp.info()
+#Some columns have little values, some have strings and integers, so I use only general parameters
+all_comp = all_comp[['component_id', 'weight', 'length', 'overall_length', 'thickness']]
+all_comp.info()
+#Combine two length columns.
+all_comp['overall_length'] = all_comp['overall_length'].fillna(0)
+all_comp['length'] = all_comp['length'].fillna(0)
+all_comp['length'] = all_comp['length'] + all_comp['overall_length']
+all_comp = all_comp.drop(['overall_length'], axis=1)
+#Fill NA with 0
+all_comp['weight'] = all_comp['weight'].fillna(0)
+all_comp['thickness'] = all_comp['thickness'].fillna(0)
+#This is how file with components looks like
+all_comp.head()
+#Add information about tube itself and the list of components to main files.
+train = pd.merge(train, tube, on='tube_assembly_id', how='left')
+train = pd.merge(train, bill_of_materials, on ='tube_assembly_id', how='left')
+test = pd.merge(test, tube, on='tube_assembly_id', how='left')
+test = pd.merge(test, bill_of_materials, on ='tube_assembly_id', how='left')
+#Rename columns so that they will be different from length of components.
+train.rename(columns={'length': 'length_t'}, inplace = True)
+test.rename(columns={'length': 'length_t'}, inplace = True)
+#Add information about components. Maybe not the best way, but it works.
+train = pd.merge(train, all_comp, left_on = 'component_id_1', right_on = 'component_id', how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_2', right_on = 'component_id', suffixes=('_1', '_2'), how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_3', right_on = 'component_id', how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_4', right_on = 'component_id', suffixes=('_3', '_4'), how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_5', right_on = 'component_id', how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_6', right_on = 'component_id', suffixes=('_5', '_6'), how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_7', right_on = 'component_id', how='left')
+train = pd.merge(train, all_comp, left_on = 'component_id_8', right_on = 'component_id', suffixes=('_7', '_8'), how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_1', right_on = 'component_id', how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_2', right_on = 'component_id', suffixes=('_1', '_2'), how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_3', right_on = 'component_id', how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_4', right_on = 'component_id', suffixes=('_3', '_4'), how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_5', right_on = 'component_id', how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_6', right_on = 'component_id', suffixes=('_5', '_6'), how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_7', right_on = 'component_id', how='left')
+test = pd.merge(test, all_comp, left_on = 'component_id_8', right_on = 'component_id', suffixes=('_7', '_8'), how='left')
+#Drop unnecessary columns
+train.drop(['component_id_1', 'component_id_2', 'component_id_3', 'component_id_4', 'component_id_5', 'component_id_6',
+            'component_id_7', 'component_id_8'], axis=1, inplace=True)
+test.drop(['component_id_1', 'component_id_2', 'component_id_3', 'component_id_4', 'component_id_5', 'component_id_6',
+            'component_id_7', 'component_id_8'], axis=1, inplace=True)
+train.head()
+#Add descriptive information about specs.
+train = pd.merge(train, specs, on = 'tube_assembly_id', how='left')
+test = pd.merge(test, specs, on = 'tube_assembly_id', how='left')
+#Maybe it is strange, but it turned out that tube id is quite a good feature. It seems to be data leak
+train['ta_id'] = train['tube_assembly_id'].apply(lambda x: int(x.split('-')[1]))
+test['ta_id'] = test['tube_assembly_id'].apply(lambda x: int(x.split('-')[1]))
+train.drop(['tube_assembly_id'], axis=1, inplace=True)
+test.drop(['tube_assembly_id'], axis=1, inplace=True)
+#Calculate various additional features on physical parameters. They turned out to be useful.
+train['avg_w'] = train[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].mean(axis=1)
+train['avg_l'] = train[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].mean(axis=1)
+train['avg_th'] = train[['thickness_1', 'thickness_2', 'thickness_3', 'thickness_4', 'thickness_5', 'thickness_6', 'thickness_7', 'thickness_8']].mean(axis=1)
+train['min_w'] = train[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].min(axis=1)
+train['min_l'] = train[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].min(axis=1)
+train['min_th'] = train[['thickness_1', 'thickness_2', 'thickness_3', 'thickness_4', 'thickness_5', 'thickness_6', 'thickness_7', 'thickness_8']].min(axis=1)
+train['max_w'] = train[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].max(axis=1)
+train['max_l'] = train[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].max(axis=1)
+train['max_th'] = train[['thickness_1', 'thickness_2', 'thickness_3', 'thickness_4', 'thickness_5', 'thickness_6', 'thickness_7', 'thickness_8']].max(axis=1)
+test['avg_w'] = test[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].mean(axis=1)
+test['avg_l'] = test[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].mean(axis=1)
+test['avg_th'] = test[['thickness_1', 'thickness_2', 'thickness_3', 'thickness_4', 'thickness_5', 'thickness_6', 'thickness_7', 'thickness_8']].mean(axis=1)
+test['min_w'] = test[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].min(axis=1)
+test['min_l'] = test[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].min(axis=1)
+test['min_th'] = test[['thickness_1', 'thickness_2', 'thickness_3', 'thickness_4', 'thickness_5', 'thickness_6', 'thickness_7', 'thickness_8']].min(axis=1)
+test['max_w'] = test[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].max(axis=1)
+test['max_l'] = test[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].max(axis=1)
+test['max_th'] = test[['thickness_1', 'thickness_2', 'thickness_3', 'thickness_4', 'thickness_5', 'thickness_6', 'thickness_7', 'thickness_8']].max(axis=1)
+train['tot_w'] = train[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].sum(axis=1)
+train['tot_l'] = train[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].sum(axis=1)
+test['tot_w'] = test[['weight_1', 'weight_2', 'weight_3', 'weight_4', 'weight_5', 'weight_6', 'weight_7', 'weight_8']].sum(axis=1)
+test['tot_l'] = test[['length_1', 'length_2', 'length_3', 'length_4', 'length_5', 'length_6', 'length_7', 'length_8', 'length_t']].sum(axis=1)
+#Take log of skewered columns
+for col in train.columns:
+    if train[col].dtype != 'object':
+        if skew(train[col]) > 0.75:
+            train[col] = np.log1p(train[col])
+            train[col] = train[col].apply(lambda x: 0 if x == -np.inf else x)
+        #And fill NA with 0
+        train[col] = train[col].fillna(0)
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+            test[col] = test[col].apply(lambda x: 0 if x == -np.inf else x)
+
+        test[col] = test[col].fillna(0)
+#Replacing Nan with empty values
+for col in train.columns:
+    if train[col].dtype == 'object':
+        train[col].replace(np.nan,' ', regex=True, inplace= True)
+for col in test.columns:
+    if test[col].dtype == 'object':
+        test[col].replace(np.nan,' ', regex=True, inplace= True)
+#Data for modelling
+X_train = train.drop('cost',axis=1)
+Y_train = train['cost']
+X_test  = test.drop('id', axis=1)
+#Check that the columns are the same
+(X_test.columns == X_train.columns).all()
+#Convert to arrays for easier transformation
+X_train = np.array(X_train)
+X_test = np.array(X_test)
+#Label encode the categorical variables
+for i in range(X_train.shape[1]):
+    if i in [0, 3, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56]:
+        lbl = preprocessing.LabelEncoder()
+        lbl.fit(list(X_train[:,i]) + list(X_test[:,i]))
+        X_train[:,i] = lbl.transform(X_train[:,i])
+        X_test[:,i] = lbl.transform(X_test[:,i])
+#Convert to float for xgb
+X_train = X_train.astype(float)
+X_test = X_test.astype(float)
+#Model parameters
+params = {}
+params['objective'] = 'reg:linear'
+params['eta'] = 0.1
+params['min_child_weight'] = 5
+params['subsample'] = 1.0
+params['scale_pos_weight'] = 1.0
+params['silent'] = 1
+params['max_depth'] = 7
+
+param = list(params.items())
+xgtrain = xgb.DMatrix(X_train, label=Y_train)
+xgtest = xgb.DMatrix(X_test)
+num_rounds = 1200
+model = xgb.train(param, xgtrain, num_rounds)
+preds = np.expm1(model.predict(xgtest))
+#Writing predictions to dataframe and then to csv.
+preds_df = pd.DataFrame({'id': test['id'], 'cost': preds})
+preds_df.to_csv('Caterpillar.csv', index=False)
+#0.229153 from ~0.19

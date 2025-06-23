@@ -1,0 +1,30 @@
+reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+current_prediction = regressor.predict(current[numerical_features + categorical_features])
+reference['prediction'] = ref_prediction
+current['prediction'] = current_prediction
+#regression_perfomance_dashboard.save('reports/regression_performance_at_training.html')
+regression_perfomance_dashboard.calculate(reference, current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                                            column_mapping=column_mapping)
+#regression_perfomance_dashboard.save('reports/regression_performance_after_week1.html')
+target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab])
+target_drift_dashboard.calculate(reference, current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                                   column_mapping=column_mapping)
+#target_drift_dashboard.save('reports/target_drift_after_week1.html')
+regression_perfomance_dashboard.calculate(reference, current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                            column_mapping=column_mapping)
+#regression_perfomance_dashboard.save('reports/regression_performance_after_week2.html')
+target_drift_dashboard.calculate(reference, current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                   column_mapping=column_mapping)
+#target_drift_dashboard.save('reports/target_drift_after_week2.html')
+regression_perfomance_dashboard.calculate(reference, current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                            column_mapping=column_mapping)
+#regression_perfomance_dashboard.save('reports/regression_performance_after_week3.html')
+target_drift_dashboard.calculate(reference, current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                   column_mapping=column_mapping)
+#target_drift_dashboard.save('reports/target_drift_after_week3.html')
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+data_drift_dashboard.calculate(reference, current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                                   column_mapping=column_mapping)
+#data_drift_dashboard.save("reports/data_drift_dashboard_after_week1.html")

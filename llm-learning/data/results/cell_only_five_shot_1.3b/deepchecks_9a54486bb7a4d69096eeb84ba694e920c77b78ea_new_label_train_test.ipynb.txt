@@ -1,0 +1,20 @@
+```python
+    from deepchecks.checks.integrity.new_label import NewLabelTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    # Assuming you have a DataFrame df
+    df = pd.DataFrame({'A': [1, 2, 3, 4, 5], 'B': [1, 2, 3, 4, 5]})
+
+    # Create a Dataset
+    ds = Dataset(df)
+
+    # Create a NewLabelTrainTest check
+    check = NewLabelTrainTest(label='A', train_test_split_ratio=0.8)
+
+    # Run the check
+    result = check.run(ds)
+
+    # Print the result
+    print(result)
+    ```

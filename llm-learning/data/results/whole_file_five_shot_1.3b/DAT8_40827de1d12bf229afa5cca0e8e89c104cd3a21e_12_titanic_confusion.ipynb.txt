@@ -1,0 +1,25 @@
+```python
+    class Material:
+        def __init__(self, name, color, texture, roughness, specular_exponent):
+            self.name = name
+            self.color = color
+            self.texture = texture
+            self.roughness = roughness
+            self.specular_exponent = specular_exponent
+
+    class Class12Material(Material):
+        def __init__(self, name, color, texture, roughness, specular_exponent, displacement_map, displacement_scale, displacement_bias):
+            super().__init__(name, color, texture, roughness, specular_exponent)
+            self.displacement_map = displacement_map
+            self.displacement_scale = displacement_scale
+            self.displacement_bias = displacement_bias
+
+    class Class13Material(Material):
+        def __init__(self, name, color, texture, roughness, specular_exponent, metallic_map, roughness_map, opacity_map):
+            super().__init__(name, color, texture, roughness, specular_exponent)
+            self.metallic_map = metallic_map
+            self.roughness_map = roughness_map
+            self.opacity_map = opacity_map
+    ```
+
+    The above code defines a `Material` class and two subclasses `Class12Material` and `Class13Material`. The `Class12Material` class has additional attributes for displacement maps, displacement scale, and displacement bias, while the `Class13Material` class adds maps for metallic, roughness, and opacity.

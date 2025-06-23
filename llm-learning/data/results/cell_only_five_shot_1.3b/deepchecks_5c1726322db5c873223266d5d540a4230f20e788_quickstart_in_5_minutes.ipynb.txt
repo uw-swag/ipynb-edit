@@ -1,0 +1,13 @@
+```python
+    from deepchecks import Dataset
+
+    # We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+    # If the dataset has categorical features, the best practice is to pass a list with their names
+
+    ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use_default_index=False)
+    ds_test =  Dataset(df_test,  label_name=label_col, cat_features=[])
+    # note that we set check_datasets_policy to 'both' so that for single dataset checks (e.g. some of the integrity checks),
+    # both the test and the train data will be checked.
+
+    suite.run(train_dataset=ds_train, test_dataset=ds_test, model=rf_clf)
+    ```

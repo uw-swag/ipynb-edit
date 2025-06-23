@@ -1,0 +1,45 @@
+```python
+    # session4-solutions.py
+    def session4_solutions():
+        return """
+        ## Session 4 Solutions
+
+        ### Solution 1:
+        The solution to this problem can be achieved by using the `numpy` library in Python. The `numpy.polyfit` function can be used to fit a polynomial to the data.
+
+        Here is a simple example:
+
+        ```python
+        import numpy as np
+
+        x = np.array([1, 2, 3, 4, 5])
+        y = np.array([2, 4, 6, 8, 10])
+
+        coeff = np.polyfit(x, y, 1)
+        print(coeff)
+        ```
+
+        This will output the coefficients of the polynomial that best fits the data.
+
+        ### Solution 2:
+        Another way to solve this problem is by using the `scipy` library in Python. The `scipy.optimize.curve_fit` function can be used to fit a function to the data.
+
+        Here is a simple example:
+
+        ```python
+        from scipy.optimize import curve_fit
+        import numpy as np
+
+        def func(x, a, b):
+            return a * np.sin(b * x)
+
+        x = np.array([1, 2, 3, 4, 5])
+        y = np.array([2, 4, 6, 8, 10])
+
+        popt, pcov = curve_fit(func, x, y)
+        print(popt)
+        ```
+
+        This will output the parameters of the function that best fits the data.
+        """
+    ```

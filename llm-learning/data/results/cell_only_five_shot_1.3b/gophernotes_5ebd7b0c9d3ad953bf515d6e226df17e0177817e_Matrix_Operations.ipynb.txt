@@ -1,0 +1,35 @@
+```python
+    # New example
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.neighbors import KNeighborsClassifier
+
+    # Load iris dataset
+    iris = load_iris()
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3,random_state=1) 
+
+    # Create KNN classifier
+    knn = KNeighborsClassifier(n_neighbors=3)
+
+    # Train the model using the training sets
+    knn.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = knn.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+    # New install docs
+    # Installation instructions for the package can be found in the documentation.
+    # For example, to install the latest version of the package, you can use pip:
+    # pip install scikit-learn
+
+    # If you're using a Jupyter notebook, you can also use the following command to install the package:
+    # !pip install scikit-learn
+    ```
+    '''
+    '''
+    ]

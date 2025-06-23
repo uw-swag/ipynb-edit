@@ -1,0 +1,37 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    # Load the data
+    df = pd.read_csv('PHEME_data.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Drop rows with missing values
+    df = df.dropna()
+
+    # Check for duplicates
+    print(df.duplicated().sum())
+
+    # Drop duplicates
+    df = df.drop_duplicates()
+
+    # Check for outliers
+    for column in df.columns:
+        if pd.api.types.is_numeric_dtype(df[column]):
+            df = df[np.abs(df[column] - df[column].mean()) <= (3 * df[column].std())]
+
+    # Save the cleaned data
+    df.to_csv('PHEME_data_cleaned.csv', index=False)
+    ```
+
+    This script will load a CSV file, check for missing values, drop rows with missing values, check for duplicates, drop duplicates, and check for outliers in the data. It will then save the cleaned data to a new CSV file.
+
+    Please replace 'PHEME_data.csv' with the path to your actual data file.
+
+    Also, this script assumes that the data is numeric. If your data is not numeric, you may need to modify the script to handle that data type.
+
+    Finally, this script will drop all outliers. If you want to keep only the outliers that are 3 standard deviations away from the mean, you can modify the script to set a different threshold.
+
+    Please note that this script will modify the original dataframe. If you want to keep the original data, you should create a copy of the dataframe before running the script.

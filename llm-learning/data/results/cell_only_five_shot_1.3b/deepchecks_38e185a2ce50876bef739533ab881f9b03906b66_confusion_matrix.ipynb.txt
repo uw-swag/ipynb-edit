@@ -1,0 +1,17 @@
+```python
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Assuming y_true and y_pred are your true and predicted classes
+    cm = confusion_matrix(y_true, y_pred)
+
+    # Visualize the confusion matrix
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm, annot=True, fmt='d')
+    plt.title('Confusion matrix')
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+    plt.show()
+    ```
+    This code will generate a heatmap of the confusion matrix, where the x-axis represents the predicted labels and the y-axis represents the true labels. The color of each cell represents the number of times that label was predicted correctly or incorrectly.

@@ -1,0 +1,38 @@
+```python
+    from pyspark.sql import SparkSession
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Text Processing").getOrCreate()
+
+    # Read the text file
+    text_file = spark.read.text("hdfs://localhost:9000/user/hadoop/textfile.txt")
+
+    # Show the content of the text file
+    text_file.show()
+
+    # Count the number of words in the text file
+    word_counts = text_file.selectExpr("explode(split(value, ' ')) as word").groupBy("word").count()
+    word_counts.show()
+
+    # Count the number of lines in the text file
+    line_counts = text_file.count()
+    line_counts.show()
+
+    # Count the number of unique words in the text file
+    unique_word_counts = text_file.selectExpr("explode(split(value, ' ')) as word").groupBy("word").count().select(F.col("count").alias("unique_word_count"))
+    unique_word_counts.show()
+
+    # Count the number of unique lines in the text file
+    unique_line_counts = text_file.select(F.col("value").alias("line")).distinct().count()
+    unique_line_counts.show()
+
+    # Count the number of characters in the text file
+    char_counts = text_file.select(F.size(F.col("value")).alias("char_count")).first()
+    char_counts.show()
+
+    # Count the number of non-whitespace characters in the text file
+    non_whitespace_counts = text_file.select(F.size(F.expr("REPLACE(value, ' ', '')")).alias("non_whitespace_count")).first()
+    non_whitespace_counts.show()
+
+    # Count the number of sentences in the text file
+    sentence_counts = text_file.select(F.expr("REGEXP_COUNT(value, '[.!?]') + 1").alias

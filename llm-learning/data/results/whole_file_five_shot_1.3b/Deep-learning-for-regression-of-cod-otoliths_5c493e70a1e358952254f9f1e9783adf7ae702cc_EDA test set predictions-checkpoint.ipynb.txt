@@ -1,0 +1,43 @@
+
+    '''
+    [
+    Commit Message: "EDA on simple averaging ensembles"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import mean_squared_error
+
+import matplotlib.pyplot as plt
+<\Cell_0>
+<Cell_1>
+fold_preds = pd.read_csv("preds.csv")
+y_true = pd.read_csv("test_set_files.csv")
+  
+print("Accuracy score pr fold")    
+for i in range(0,10):
+  if i == 5: print("")
+  print(accuracy_score(fold_preds[str(i)].round().astype('int'), y_true.age) , end = ', ')
+print("")
+
+print("MSE pr fold")    
+for i in range(0,10):
+  if i == 5: print("")
+  print(mean_squared_error(fold_preds[str(i)], y_true.age), end = ', ') 
+print("")
+  
+aggregate_pred = fold_preds['0']
+for i in range(1,10):
+  aggregate_pred += fold_preds[str(i)]
+
+aggregate_pred = aggregate_pred/10.0
+print("aggregate accuracy, mse")
+print(str( accuracy_score(aggregate_pred.round().astype("int"), y_true.age) )+ " " + 
+      str( mean_squared_error(aggregate_pred, y_true.age) ))
+
+<\Cell_1>
+<Cell_2>
+Accuracy score pr fold
+0.7165048543689321, 0.7067961165048544, 0.6932038834951456, 0.7126213592233009, 0

@@ -1,0 +1,535 @@
+!pip freeze > Text_ML_Classification_UMN/requirements.txt
+!pip install Markdown2
+#@title Install packages { output-height: 100, form-width: "45%" }
+!pip install -r $repo_name/requirements.txt
+
+#@title get_documents() { vertical-output: true }
+number_of_docs = 100 #@param {type:"integer"}
+
+def get_documents(NUMBER_OF_DOCS):
+    doclist = []
+    names = []
+    # %cd "
+    pathlist = Path(
+        "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+
+    for path in tqdm(pathlist):
+        path_in_str = str(path)
+    #     print(path_in_str)
+        name = path_in_str.split(".")[0].split("/")[3]
+        names.append(name.replace("_", " "))
+        # TODO SPLIT PATH TO COMPANY NAME, make Index
+        file = open(path, "r", encoding= 'Windows-1252')
+        # print "Output of Readlines after appending"
+        text = file.readlines()
+    #     print(text[:10])
+        doclist.append(text[0])
+      
+      
+            
+    df_to_split = pd.DataFrame(list(zip(names, doclist)),
+                               columns=['Company', 'Text'])
+    split_df = df_to_split.sample(n=NUMBER_OF_DOCS, random_state=42)
+    doclist, names =  split_df["Text"].tolist(), split_df["Company"].tolist()
+    print(split_df.head())
+    print(str(len(doclist)) + " Documents Loaded!")
+    
+    
+    
+    return doclist, names
+doclist, names = get_documents(number_of_docs)
+#@title Grid Search { run: "auto", vertical-output: true, display-mode: "form" }
+from sklearn.metrics import silhouette_score as sc
+
+max_iter = 10,11 #@param {type:"raw"}
+n_clusters = 25, 26, 27, 28, 29, 30, 31,  32, 33, 34, 35 #@param {type:"raw"}
+
+cross_validation_folds = 2 #@param {type:"integer"}
+if cross_validation_folds == 0:
+  cross_validation_folds=[(slice(None), slice(None))]
+
+def cv_silhouette_scorer(estimator, X):
+    estimator.fit(X)
+    cluster_labels = estimator.labels_
+    num_labels = len(set(cluster_labels))
+    num_samples = len(X.index)
+    if num_labels == 1 or num_labels == num_samples:
+        return -1
+    else:
+        return sc(X, cluster_labels)
+
+n_jobs = 2 #@param {type:"slider", min:1, max:1000, step:1}
+verbose = 3 #@param {type:"slider", min:1, max:10, step:1}
+run_gridsearch = False #@param {type:"boolean"}
+from sklearn.model_selection import GridSearchCV
+if run_gridsearch:
+    model = KMeans(init='k-means++', random_state=42, n_init=15
+                       )
+    param_grid = {'max_iter': list(max_iter),
+                 'n_clusters': list(n_clusters),
+                  
+                 }
+    grid = GridSearchCV(model, param_grid, verbose=10, n_jobs=n_jobs,
+                        cv=cross_validation_folds, scoring=cv_silhouette_scorer)
+    grid.fit(sparseMatrix)
+
+    # lids = model.cluster_centers_
+
+    score = model.score(sparseMatrix)
+    silhouette_score = metrics.silhouette_score(sparseMatrix, labels, metric='euclidean')
+
+    # # List the best parameters for this dataset
+    print(grid.best_params_)
+    # # List the best score
+    print(grid.best_score_)
+#@markdown ##Kmeans
+#@markdown <img src='https://upload.wikimedia.org/wikipedia/commons/d/d5/Kmeans_animation.gif'>
+#@markdown An example of how cluster centroids move over time, see <a href="dimension_reduction"> Dimension Reduction</a> for actual visualizations of our clusters
+def estimator_cluster(sparseMatrix, vectorizer, params):
+    model = KMeans(n_clusters=params['n_clusters'], init=params['init'],
+                   max_iter=params['max_iter'], n_init=n_init,
+                   random_state=params['random_state'],
+                   precompute_distances = params['precompute_distances'],
+                   verbose=params['verbose'], 
+#                    n_jobs=params['n_jobs']
+)
+    model.fit(sparseMatrix)
+
+    
+    model_time = get_time()
+    model_path = f'Text_ML_Classification_UMN/Model/model{model_time}.pkl'
+    joblib.dump(model,  model_path)
+    joblib.dump(vectorizer,  f'Text_ML_Classification_UMN/Model/vec{model_time}.pkl')
+    order_centroids = model.cluster_centers_.argsort()[:, ::-1]
+#     order_centroids = False
+    terms = vectorizer.get_feature_names()
+    print('Model Saved to %s' % model_path)
+    return terms, order_centroids, model, n_clusters, model_time
+#@markdown ### estimator_load_model()
+def estimator_load_model(selection, stemmed):
+      print(selection)
+      model_time = selection
+      vectorizer = joblib.load(
+          f'Text_ML_Classification_UMN/Model/vec{model_time}.pkl')
+      print("vectorizer loaded")
+      model = joblib.load(
+          f'Text_ML_Classification_UMN/Model/model{model_time}.pkl')
+      print("model loaded")
+
+#       if stemmed:
+#           kmeans_score, silhouette_score, sparseMatrix = \
+#             print_score(model, vectorizer, stemmed)
+      n_clusters = model.n_clusters
+      
+      return model, vectorizer, n_clusters
+#@title Default title text
+docs_to_move = 0 #@param {type:"slider", min:0, max:3000, step:1}
+pathlist = Path(
+    "Text_ML_Classification_UMN/%s" % "Train/Text_Files_Trained").glob('**/*.txt')
+# try:
+counter = 1
+for path in tqdm(pathlist, desc="Reading Lines"):
+  counter += 1
+  if counter < docs_to_move:
+    path_in_str = str(path)
+    shutil.move(path_in_str, 'Text_ML_Classification_UMN/Analyze')
+
+#@title Stacked Bar { run: "auto", display-mode: "form" }
+folder = 'Master' #@param ["Analyze", "Master"]
+html = True #@param ["False", "True"] {type:"raw"}
+png= True #@param ["False", "True"] {type:"raw"}
+display_type = "Companies" #@param ["Companies", "Clusters"]
+
+sort_company_display = 'Bottom Companies' #@param ["False", "Top Companies", "Bottom Companies"]
+sort_cluster_id = 1 #@param {type:"slider", min:0, max:35, step:1}
+sort_cluster_id = str(sort_cluster_id)
+if display_type == 'Clusters':
+  sort_company_display = 'False'
+#@markdown You may want to disable this if visuzaling 15+ Comapnies
+display_company_names = True #@param {type:"boolean"}
+f = plt.figure()
+colors = colormap
+
+
+
+
+if folder == "Master":
+  master = load_master_data()
+  bar_clusters = master.T
+else:
+   bar_clusters = company_clusters
+    
+
+if sort_company_display != 'False':
+#     print(colors[sort_cluster_id])
+#     colors[sort_cluster_id] = colormap[sort_cluster_id]
+#     print(colors[sort_cluster_id])
+  bar_clusters.columns = bar_clusters.columns.map(str)
+  if sort_company_display == 'Top Companies':
+    ascending = False
+  if sort_company_display == 'Bottom Companies': 
+    ascending = True
+  try: 
+    bar_clusters = bar_clusters.sort_values(
+        kind='mergesort', by=[sort_cluster_id], axis=0, ascending=ascending).head(10)
+  except KeyError:
+    print("Cluser out of bounds, try a lower number")
+#     bar_clusters['int_index'] = range(len(bar_clusters))
+
+# df.plot(x='int_index', y='sorted_values')
+#   except KeyError:
+#     print(f"{sort_cluster_id} is an empty cluster, try another")
+
+if not display_company_names:
+  ax1 = plt.axes()
+  x_axis = ax1.axes.get_xaxis()
+  x_axis.set_visible(False)
+
+
+
+if display_type == "Companies":
+  bar_clusters = bar_clusters.astype(float).T
+#     bar_clusters.plot(kind='bar', stacked=True, figsize=(15,10), 
+#                       color=colors, use_index=True, ax=f.gca())
+# else:
+bar_clusters.T.plot(kind='bar', stacked=True, figsize=(15,10), 
+                      color=colors, use_index=True, ax=f.gca())
+plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+
+
+time = get_time()
+
+if png == True or html == True:
+  plt.savefig(f'Text_ML_Classification_UMN/Predicting/Images/stackedBar{time}.png')
+
+if html == True:
+  print("Make sure Png is located in Text_ML_Classification_UMN/Predicting/Images/ for html to work")
+  Html_file= open(f'Text_ML_Classification_UMN/Predicting/Images/stackedBar{time}.html',"w")
+  html_str = HTML(
+      f'<img src="Text_ML_Classification_UMN/Predicting/Images/stackedBar{time}.png" alt={company_clusters.T.columns.values}>')
+  Html_file.close()
+
+
+#@title Heatmap { run: "auto", display-mode: "form" }
+folder = 'Master CSV' #@param ["Analyze", "Master CSV"]
+#@markdown ## Save Image?
+html = True #@param ["False", "True"] {type:"raw"}
+png= True #@param ["False", "True"] {type:"raw"}
+#@markdown You may want to disable this if visuzaling 15+ Comapnies
+display_company_names = True #@param {type:"boolean"}
+
+
+def plot_heatmap(company_clusters, html, png):
+    map_time = get_time()
+
+    fig2, ax2 = plt.subplots(figsize=(20, 14))
+    cmap = sns.light_palette('red', as_cmap=True)
+    if folder == "Master CSV":
+      master = load_master_data()
+      company_clusters = master.reset_index(drop=True)
+
+    company_clusters.plot(kind='bar', stacked=True, figsize=(15,10),
+                          use_index=True, ax=f.gca())
+
+    sns.heatmap(company_clusters, ax=ax2, cmap=cmap)
+    
+
+    ax2.set_xlabel('Company', fontdict={'weight': 'bold', 'size': 14})
+    ax2.set_ylabel('Cluster Label', fontdict={'weight': 'bold', 'size': 10})
+    for label in ax2.get_xticklabels():
+        label.set_size(10)
+        label.set_weight("bold")
+    for label in ax2.get_yticklabels():
+        label.set_size(16)
+        label.set_weight("bold")
+
+    if not display_company_names:
+         for label in ax2.get_xticklabels():
+            label.set_size(10)
+    if png == True or html == True:
+        plt.savefig(
+        "Text_ML_Classification_UMN/Predicting/Images/Heatmap{map_time}.jpg",
+        dpi=None, facecolor='w', edgecolor='w',
+                orientation='portrait', papertype=None, format=None,
+                transparent=False, bbox_inches=None, pad_inches=0.1,
+                frameon=None, metadata=None)
+
+    if html == True:
+        Html_file= open('Text_ML_Classification_UMN/Predicting/Images/Heat'+
+                        f'map{time}.html',"w")
+        html_str = HTML(
+            '<img src="Text_ML_Classification_UMN/Predicting/Images/Heat' + 
+            f'map{time}.png" alt={company_clusters.T.columns.values}>')
+        Html_file.close()
+
+
+
+plot_heatmap(company_clusters.T, html, png)
+
+#@markdown ## Polar Plots per Cluster
+
+
+import matplotlib.pyplot as plt
+import pandas as pd
+from math import pi
+# ------- ref  https://python-graph-gallery.com/392-use-faceting-for-radar-chart/
+# ------- PART 1: Define a function that do a plot for one line of the dataset!
+spider_clusters = company_clusters
+spider_clusters['company'] = spider_clusters.index
+spider_clusters = spider_clusters.reset_index(drop=True)
+spider_clusters.columns = spider_clusters.columns.map(str)
+
+def make_spider( row, title, color):
+
+    # number of variable
+    categories=list(df)[1:]
+    print(categories)
+    N = len(categories)
+
+    # What will be the angle of each axis in the plot? (we divide the plot / number of variable)
+    angles = [n / float(N) * 2 * pi for n in range(N)]
+    angles += angles[:1]
+
+    # Initialise the spider plot
+    ax = plt.subplot(2,2,row+1, polar=True, )
+
+    # If you want the first axis to be on top:
+    ax.set_theta_offset(pi / 2)
+    ax.set_theta_direction(-1)
+
+    # Draw one axe per variable + add labels labels yet
+    plt.xticks(angles[:-1], categories, color='grey', size=8)
+
+    # Draw ylabels
+    ax.set_rlabel_position(0)
+    plt.yticks([.2,.4,.6], ["20%","40%","60%"], color="grey", size=7)
+    plt.ylim(0,.8)
+
+    # Ind1
+    values=df.iloc[:row].values.flatten().tolist()
+    values += values[:1]
+    ax.plot(angles, values, color=color, linewidth=2, linestyle='solid')
+    ax.fill(angles, values, color=color, alpha=0)
+
+    # Add a title
+    plt.title(title, size=11, color='black', y=1.1)
+
+    
+#@title  { run: "auto" }
+cluster_id = 15 #@param {type:"slider", min:1, max:35, step:1}
+cluster_id = str(cluster_id)
+sort = 'Top Companies' #@param ["Top Companies", "Bottom Companies"]
+
+#@markdown A Radar chart or Spider plot or Polar chart or Web chart allows to study the feature of one or several individuals for several numerical variables
+#@markdown #### When to use a spider chart:
+#@markdown  1. small-to-moderate-sized multivariate data sets
+#@markdown  2. to Identify Outliers
+#@markdown  3. to identify what observations are most similar
+#@markdown #### In this case:
+#@markdown Polar plots were not as effective as the heatmap due to the large number of observations 
+
+spider_clusters = company_clusters
+spider_clusters['company'] = spider_clusters.index
+spider_clusters = spider_clusters.reset_index(drop=True)
+spider_clusters.columns = spider_clusters.columns.map(str)
+try:
+  spider_clusters = spider_clusters[spider_clusters[cluster_id] != 0]
+except KeyError:
+  print(f"{cluster_id} is an empty cluster, try another")
+  cluster_id = str(company_clusters.columns[0])
+
+
+if sort == 'Top Companies':
+  ascending = False
+else: 
+  ascending = True
+# ------- PART 2: Apply to all individuals
+# initialize the figure
+my_dpi=100
+plt.figure(figsize=(1000/my_dpi, 1000/my_dpi), dpi=my_dpi)
+plt.subplots_adjust(left=None, bottom=0.1, right=None,
+                    top=0.6, wspace=.3, hspace=.5)
+
+# Create a color palette:
+my_palette = plt.cm.get_cmap("Set2", len(spider_clusters.index))
+
+spider_clusters = spider_clusters.sort_values(
+    kind='mergesort', by=[cluster_id], axis=0, ascending=ascending)
+
+
+df = spider_clusters.head(4)
+# Loop to plot
+for row in range(4):
+    try:
+      make_spider( row=str(row), title='Company '+df['company'][row], color=my_palette(row))
+    except KeyError:
+      print("Failed!")
+#@markdown <a id='dimension_reduction'></a>
+#@title t-distributed Stochastic Neighbor Embedding { vertical-output: true, output-height: 200, display-mode: "form" }
+#@markdown t-SNE  is a tool to visualize high-dimensional data. It converts similarities between data points to joint probabilities and tries to minimize the Kullback-Leibler divergence between the joint probabilities of the low-dimensional embedding and the high-dimensional data. t-SNE has a cost function that is not convex, i.e. with different initializations we can get different results.
+#@markdown It is highly recommended to use another dimensionality reduction method (e.g. PCA for dense data or TruncatedSVD for sparse data) to reduce the number of dimensions to a reasonable amount (e.g. 50) if the number of features is very high
+#@markdown ###  Kullback-Leibler divergence
+#@markdown For discrete probability distributions  P and Q is defined to be
+#@markdown <img src='https://wikimedia.org/api/rest_v1/media/math/render/svg/726edcd02293461b82768ea2fd299c3a3ef16112'>
+
+
+
+
+
+from sklearn.neighbors import NearestNeighbors
+from sklearn.manifold import TSNE
+from sklearn.decomposition import TruncatedSVD
+
+model_tf_idf_cosine = NearestNeighbors(metric='cosine', algorithm='auto')
+model_tf_idf_cosine.fit(sparseMatrix)
+tfs_reduced_cosine = TruncatedSVD(\
+    n_components=n_clusters, random_state=0).fit_transform(sparseMatrix)
+%time tfs_embedded_cosine = TSNE(\
+    n_components=2, perplexity=40, verbose=0).fit_transform(tfs_reduced_cosine)
+
+model_tf_idf_correlation = NearestNeighbors(
+    metric='cityblock', algorithm='auto')
+model_tf_idf_correlation.fit(sparseMatrix)
+tfs_reduced_correlation = TruncatedSVD(\
+    n_components=n_clusters, random_state=0).fit_transform(sparseMatrix)
+%time tfs_embedded_correlation = TSNE(\
+    n_components=2, perplexity=40, verbose=0).fit_transform(tfs_reduced_correlation)
+
+
+model_tf_idf_euclidean = NearestNeighbors(metric='euclidean', algorithm='auto')
+model_tf_idf_euclidean.fit(sparseMatrix)
+tfs_reduced_euclidean  = TruncatedSVD(\
+    n_components=n_clusters, random_state=0).fit_transform(sparseMatrix)
+%time tfs_embedded_euclidean = TSNE(\
+    n_components=2, perplexity=40, verbose=0).fit_transform(tfs_reduced_euclidean)
+
+#@title Uniform Manifold Approximation and Projection
+#@markdown Uniform Manifold Approximation and Projection (<a href="https://github.com/lmcinnes/umap/blob/master/README.rst" target=blank>UMAP</a>) is a dimension reduction technique that can be used for visualisation similarly to t-SNE, but also for general non-linear dimension reduction. The algorithm is founded on three assumptions about the data
+#@markdown The data is uniformly distributed on a <a href="https://en.wikipedia.org/wiki/Riemannian_manifold">Riemannian manifold</a>;
+#@markdown The Riemannian metric is locally constant (or can be approximated as such);
+#@markdown The manifold is locally connected.
+#@markdown  #### Benefits of UMAP
+#@markdown  UMAP has a few signficant wins in its current incarnation.
+#@markdown  1. UMAP is fast. It can handle large datasets and high dimensional data without too much difficulty, scaling beyond what most t-SNE packages can manage.
+#@markdown 2. UMAP scales well in embedding dimension -- it isn't just for visualisation! You can use UMAP as a general purpose dimension reduction technique as a preliminary step to other machine learning tasks. With a little care (documentation on how to be careful is coming) it partners well with the hdbscan clustering library.
+#@markdown 3. UMAP often performs better at preserving aspects of global structure of the data than t-SNE. This means that it can often provide a better "big picture" view of your data as well as preserving local neighbor relations.
+#@markdown 4. UMAP supports a wide variety of distance functions, including non-metric distance functions such as cosine distance and correlation distance. You can finally embed word vectors properly using cosine distance!
+#@markdown 5. UMAP supports adding new points to an existing embedding via the standard sklearn transform method. This means that UMAP can be used as a preprocessing transformer in sklearn pipelines.
+#@markdown 5. UMAP supports supervised and semi-supervised dimension reduction. This means that if you have label information that you wish to use as extra information for dimension reduction (even if it is just partial labelling) you can do that -- as simply as providing it as the y parameter in the fit method.
+#@markdown 7. UMAP has solid theoretical foundations in manifold learning (see our paper on ArXiv). This both justifies the approach and allows for further extensions that will soon be added to the library (embedding dataframes etc.).
+
+
+
+
+
+
+import umap
+print('umap_cosign_embedding ... ')
+%time umap_cosign_embedding = umap.UMAP(n_neighbors=n_clusters,\
+                                        min_dist=0.3, metric='cosine')\
+                                        .fit_transform(sparseMatrix)
+print('umap_euclidean_embedding ... ')
+%time umap_euclidean_embedding = umap.UMAP(n_neighbors=n_clusters,\
+                                        min_dist=0.3, metric='euclidean')\
+                                        .fit_transform(sparseMatrix)
+
+%print('umap_correlation_embedding ... ')
+time umap_correlation_embedding = umap.UMAP(n_neighbors=n_clusters,\
+                                      min_dist=0.3, metric='correlation')\
+                                        .fit_transform(sparseMatrix)
+#@title Visualizing Dimension-Reuced Clusters { display-mode: "code" }
+
+f, axs = plt.subplots(2,3,figsize=(15,5))
+
+ax1 = plt.subplot(2,3,1)
+plt.scatter(umap_cosign_embedding[:, 0], umap_cosign_embedding[:, 1],
+            marker = "x", c = model.labels_)
+ax1.title.set_text('UMap Cosine')
+
+ax2 =plt.subplot(2,3, 2)
+plt.scatter(umap_correlation_embedding[:, 0], umap_correlation_embedding[:, 1],
+            marker = "x", c = model.labels_)
+ax2.title.set_text('UMap Correlation')
+
+
+ax3 = plt.subplot(2,3,3)
+plt.scatter(umap_euclidean_embedding[:, 0], umap_euclidean_embedding[:, 1],
+            marker = "x", c = model.labels_)
+ax3.title.set_text('UMap Euclidean')
+
+
+ax4 = plt.subplot(2, 3, 4)
+plt.scatter(tfs_embedded_cosine[:, 0], tfs_embedded_cosine[:, 1],
+            marker = "o", c = model.labels_)
+ax4.title.set_text('TSNE Cosine')
+
+ax5 = plt.subplot(2, 3, 5)
+plt.scatter(tfs_embedded_correlation[:, 0], tfs_embedded_correlation[:, 1],
+            marker = "o", c = model.labels_)
+ax5.title.set_text('TSNE Correlation')
+
+ax6 = plt.subplot(2, 3, 6)
+plt.scatter(tfs_embedded_euclidean[:, 0], tfs_embedded_euclidean[:, 1],
+            marker = "o", c = model.labels_)
+ax6.title.set_text('TSNE Cosine')
+plt.subplots_adjust(left=None, bottom=0.1, right=None,
+                    top=0.6, wspace=.3, hspace=.5)
+plt.show()
+
+#@title Parsing A Folder For Docs { vertical-output: true }
+folder_choice =  'Analyze' #@param ["Analyze", "Sandbox"] {allow-input: true}
+doclist = []
+names = []
+# %cd "
+pathlist = Path(
+    "Text_ML_Classification_UMN/%s" % folder_choice).glob('**/*.txt')
+# try:
+for path in tqdm(pathlist, desc="Reading Lines"):
+    path_in_str = str(path)
+#     print(path_in_str)
+    name = path_in_str.split(".")[0].split("/")[2]
+    names.append(name.replace("_", " "))
+    # TODO SPLIT PATH TO COMPANY NAME, make Index
+    file = open(path, "r", encoding= 'Windows-1252')
+    # print "Output of Readlines after appending"
+    text = file.readlines()
+    doclist.append(text[0])
+    
+    
+    
+tfidf_vectorizer = TfidfVectorizer()
+tfidf_matrix_train = tfidf_vectorizer.fit_transform(doclist) 
+
+selection = widgets.Dropdown(
+        options=names,
+        description='Company',
+        disabled=False,
+    )
+display(selection)
+    
+#@title Display Cluster Similarity { run: "auto", vertical-output: true }
+number_of_companies = 26 #@param {type:"slider", min:5, max:100, step:1}
+position = names.index(selection.value)
+cosine_scores =  cosine_similarity(tfidf_matrix_train[position],
+                                   tfidf_matrix_train)
+data = {'names': names, "score": cosine_scores.tolist()[0]}
+score_df = pd.DataFrame(data=data)
+sorted_df = score_df.sort_values(by='score', ascending=False)
+most_common = sorted_df['names'][1:number_of_companies].tolist()
+least_common = sorted_df['names'][-number_of_companies:-1].tolist()
+most_common_clusters = company_clusters.T[most_common].drop('company')
+least_common_clusters = company_clusters.T[least_common].drop('company')
+display("Most Common Companies")
+
+sorted_df.head()
+
+plt = most_common_clusters.T.plot.bar(stacked=True, color=colormap, figsize=(15,8),
+                          title=f'Most Similiar Companies to {selection.value}')
+plt2 = least_common_clusters.T.plot.bar(stacked=True, color=colormap, figsize=(15,8),
+                          title=f'Least Similiar Companies to {selection.value}')
+
+
+plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+plt2.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+
+|

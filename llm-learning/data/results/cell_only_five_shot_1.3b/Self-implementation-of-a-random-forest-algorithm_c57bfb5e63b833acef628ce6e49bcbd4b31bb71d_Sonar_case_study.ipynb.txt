@@ -1,0 +1,57 @@
+```python
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = "/path/to/source/directory"
+    destination_dir = "/path/to/destination/directory"
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Iterate over each file
+    for file in files:
+        # Construct the full source and destination paths
+        source_path = os.path.join(source_dir, file)
+        destination_path = os.path.join(destination_dir, file)
+
+        # Check if the source file exists
+        if os.path.isfile(source_path):
+            # Check if the destination directory exists
+            if not os.path.exists(destination_dir):
+                os.makedirs(destination_dir)
+
+            # Copy the file to the destination directory
+            shutil.copy2(source_path, destination_path)
+        else:
+            print(f"Source file {source_path} does not exist.")
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding Jupyter notebook"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    To add a Jupyter notebook, you can use the following code:
+
+    ```python
+    from IPython.display import display, HTML
+    import os
+
+    # Define the path to the notebook file
+    notebook_path = "/path/to/your/notebook.ipynb"
+
+    # Check if the notebook file exists
+    if os.path.isfile(notebook_path):
+        # Display the notebook
+        display(HTML(open(notebook_path).read()))
+    else:
+        print(f"Notebook file {notebook_path} does not exist.")
+    ```
+
+    This code will display the notebook if it exists, otherwise it will print a message. Replace "/path/to/your/notebook.ipynb" with the actual path to your notebook.

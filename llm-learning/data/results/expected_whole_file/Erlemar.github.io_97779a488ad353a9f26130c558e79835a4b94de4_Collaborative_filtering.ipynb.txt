@@ -1,0 +1,346 @@
+<Cell_0>
+#Libraries
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+#Reading the data.
+data = pd.read_csv('UCI/RCdata/rating_final.csv')
+<\Cell_1>
+<Cell_2>
+data.head(10)
+<\Cell_2>
+<Cell_3>
+data['rating'] = data['rating'].apply(lambda x: 0.000001 if x == 0 else x)
+<\Cell_3>
+<Cell_4>
+#Sparse matrix.
+ratings = data.pivot_table(index='userID', columns='placeID', values='rating')
+<\Cell_4>
+<Cell_5>
+def pearson(user1, user2, df):
+    '''
+    Calculates similarity between two users. Takes user's ids and dataframe as inputs.
+    '''
+    
+    #Take only places, which both users rated.
+    df_short = df[df[user1].notnull() & df[user2].notnull()]
+    #If there is no intersection, return 0.
+    if len(df_short) == 0:
+        return 0
+    else:
+        rat1 = [row[user1] for i, row in df_short.iterrows()]
+        rat2 = [row[user2] for i, row in df_short.iterrows()]
+        #Calculate parts of formula separately, otherwise it will be a very long line.
+        numerator = sum([(rat1[i] - sum(rat1)/len(rat1)) * (rat2[i] - sum(rat2)/len(rat2)) for i in range(0,len(df_short))])
+        denominator1 = sum([(rat1[i] - sum(rat1)/len(rat1)) ** 2 for i in range(0,len(df_short))])
+        denominator2 = sum([(rat2[i] - sum(rat2)/len(rat2)) ** 2 for i in range(0,len(df_short))])
+        #Prevent dividing by 0.
+        if denominator1 * denominator2 == 0:
+            return 0
+        else:
+            return numerator / ((denominator1 * denominator2) ** 0.5)
+<\Cell_5>
+<Cell_6>
+#Dataframe is transposed, for easier processing.
+pearson('U1103', 'U1028', ratings.transpose())
+<\Cell_6>
+<Cell_7>
+def get_neighbours(user_id, df):
+    '''
+    Creates a sorted list of users, who are most similar to specified user. Calculate similarity between current user and
+    all other users and sort by similarity.
+    '''
+    distances = [(user, pearson(user_id, user, df)) for user in df.columns if user != user_id]
+
+    distances.sort(key=lambda x: x[1], reverse=True)
+    #Show only users with distance > 0.
+    distances = [i for i in distances if i[1] > 0]
+    return distances
+<\Cell_7>
+<Cell_8>
+get_neighbours('U1103', ratings.transpose())
+<\Cell_8>
+<Cell_9>
+def recommend(user, df, n_users=2, n_recommendations=2):
+    '''
+    Generate recommendations for the user. Take userID and Dataframe as input. Get neighbours and get weighted score for
+    each place they rated. Return sorted list of places and their scores.
+    '''
+    
+    recommendations = {}
+    nearest = get_neighbours(user, df)
+    #N_users can't be higher than the number of nearest users.
+    n_users = n_users if n_users <= len(nearest) else len(nearest)
+    #Get user ratings.
+    user_ratings = df[df[user].notnull()][user]
+    #List of places, ratings and similarities of users who gave the ratings.
+    place_ratings = []
+    #Calculate ratings for each neighbour.
+    for i in range(n_users):
+        #Get the ratings for this person
+        neighbour_ratings = df[df[nearest[i][0]].notnull()][nearest[i][0]]
+        #Find places, which were rated by this user and weren't rated by the target user. Get ratings and similarity (weight).
+        for place in neighbour_ratings.index:
+            if place not in user_ratings.index:
+                place_ratings.append([place,neighbour_ratings[place],nearest[i][1]])
+    
+    recommendations = get_ratings(place_ratings)
+    return recommendations[:n_recommendations]
+
+def get_ratings(place_ratings):
+    
+    '''
+    Creates Dataframe from list of lists. Calculates weighted rarings for each place. 
+    '''
+    
+    #Create DataFrame.
+    ratings_df = pd.DataFrame(place_ratings, columns=['placeID', 'rating', 'weight'])
+    #Total weight is a sum of similarities/weights for each place.
+    ratings_df['total_weight'] = ratings_df['weight'].groupby(ratings_df['placeID']).transform('sum')
+    recommendations = []
+    #Calculate rating for each place.
+    for i in ratings_df.placeID.unique():
+        place_ratings = 0
+        df_short = ratings_df.loc[ratings_df.placeID == i]
+        for j, row in df_short.iterrows():
+            place_ratings += row[1] * row[2] / row[3]
+        recommendations.append((i, place_ratings))
+    
+    #Show only places with recommended rating >=1.
+    recommendations = [i for i in recommendations if i[1] >= 1]
+    
+    recommendations.sort(key=lambda x: x[1], reverse=True)
+    return recommendations
+<\Cell_9>
+<Cell_10>
+recommend('U1068', ratings.transpose(),5,5)
+<\Cell_10>
+<Cell_11>
+def get_dev_fr(data):
+    
+    '''
+    Calculates average difference between each pair of places and frequency - number of ratings. Both values are calculated
+    for cases, where a user rated both places.
+    '''
+    
+    data_dev = pd.DataFrame(index=data.columns,columns=data.columns)
+    data_fr = pd.DataFrame(index=data.columns,columns=data.columns)
+    for i in data_dev.columns:
+        for j in data_dev.columns:
+            df_loc = data[data[i].notnull() & data[j].notnull()]
+            if len(df_loc) != 0:
+                #Deviation is an average difference.
+                data_dev.loc[i,j] = (sum(df_loc[i]) - sum(df_loc[j]))/len(df_loc) if i != j else 0
+                #Frequency is a number of ratings.
+                data_fr.loc[i,j] = len(df_loc) if i != j else 0
+    return data_dev, data_fr
+<\Cell_11>
+<Cell_12>
+data_dev, data_fr = get_dev_fr(ratings)
+<\Cell_12>
+<Cell_13>
+def slopeone(user, data):
+    
+    '''
+    Generate recommended ratings for each place which user didn't rate adding weighted differences between places.
+    '''
+    #Places, which user didn't rate. The condition finds nan values.
+    recommendation = [i for i in data.columns if data.loc[user,i] != data.loc[user,i]]
+    recommendation_dictionary = {}
+    
+    for j in recommendation:
+        score = 0
+        denominator = 0
+        for i in data.columns.drop(recommendation):
+            #If deviation and frequences aren't nan.
+            if data_dev.loc[j,i] == data_dev.loc[j,i] and data_fr.loc[j,i] == data_fr.loc[j,i]:
+                score += (data.loc[user,i] + data_dev.loc[j,i]) * data_fr.loc[j,i]
+                denominator += data_fr.loc[j,i]
+        if denominator == 0:
+            recommendation_dictionary[j] = 0
+        else:
+            score = score/denominator
+            recommendation_dictionary[j] = score
+            
+    recommendation_dictionary = {k:round(v,2) for k, v in recommendation_dictionary.items()}
+    return sorted(recommendation_dictionary.items(), key=lambda x: x[1], reverse=True)[:5]
+<\Cell_13>
+<Cell_14>
+slopeone('U1103', ratings)
+<\Cell_14>
+<Cell_15>
+#I'll use numpy arrays to speed computations, so need to get rid of nan values.
+ratings_filled = data.pivot_table(index='userID', columns='placeID', values='rating', fill_value=0)
+ratings_filled = ratings_filled.astype(float).values
+<\Cell_15>
+<Cell_16>
+def similarity(ratings, matrix_type='user', epsilon=1e-9):
+    #Epsilon is for handling dived-by-zero errors
+    if matrix_type == 'user':
+        sim = ratings.dot(ratings.T) + epsilon
+    elif matrix_type == 'place':
+        sim = ratings.T.dot(ratings) + epsilon
+    norms = np.array([np.sqrt(np.diagonal(sim))])
+    return (sim / norms / norms.T)
+<\Cell_16>
+<Cell_17>
+user_similarity = similarity(ratings_filled, matrix_type='user')
+item_similarity = similarity(ratings_filled, matrix_type='place')
+<\Cell_17>
+<Cell_18>
+def predict(ratings, similarity, matrix_type='user'):
+    
+    '''
+    Predict places based on similarity. 
+    '''
+    
+    if matrix_type == 'user':
+        #Bias as sum of non-zero values divided by the number of non-zerp values.
+        user_bias = np.true_divide(ratings.sum(axis=1),(ratings!=0).sum(axis=1))
+        ratings = (ratings - user_bias[:, np.newaxis]).copy()
+        pred = similarity.dot(ratings) / np.array([np.abs(similarity).sum(axis=1)]).T
+        pred += user_bias[:, np.newaxis]
+        
+    elif matrix_type == 'place':
+        item_bias = np.true_divide(ratings.sum(axis=0),(ratings!=0).sum(axis=0))
+        ratings = (ratings - item_bias[np.newaxis, :]).copy()
+        pred = ratings.dot(similarity) / np.array([np.abs(similarity).sum(axis=1)])
+        pred += item_bias[np.newaxis, :]
+            
+    return pred
+
+def recommend_cosine(rating, matrix, user):
+    
+    '''
+    If user has rated a place, replace predicted rating with 0. Return top-5 predictions.
+    '''
+    
+    predictions = [[0 if rating[j][i] > 0 else matrix[j][i] for i in range(len(matrix[j]))] for j in range(len(matrix))]
+    recommendations = pd.DataFrame(index=ratings.index,columns=ratings.columns,data=np.round(predictions,4)).transpose()
+    return recommendations[user].sort_values(ascending=False)[:5]
+<\Cell_18>
+<Cell_19>
+user_pred = predict(ratings_filled, user_similarity, matrix_type='user')
+item_pred = predict(ratings_filled, item_similarity, matrix_type='place')
+<\Cell_19>
+<Cell_20>
+recommend_cosine(ratings_filled, item_pred, 'U1103')
+<\Cell_20>
+<Cell_21>
+recommend_cosine(ratings_filled, user_pred, 'U1103')
+<\Cell_21>
+<Cell_22>
+def train_test_split(ratings):
+    test = np.zeros(ratings.shape)
+    train = ratings.copy()
+    non_zero = [i for i in range(ratings.shape[0]) if sum(ratings[i]) > 0]
+    for user in non_zero:
+        test_ratings = np.random.choice(ratings[user, :].nonzero()[0], 
+                                        size=3, 
+                                        replace=False)
+        train[user, test_ratings] = 0.
+        test[user, test_ratings] = ratings[user, test_ratings]
+ 
+    return train, test
+<\Cell_22>
+<Cell_23>
+#R - train, T - test.
+R, T = train_test_split(ratings_filled)
+<\Cell_23>
+<Cell_24>
+# Index matrix for training data
+I = R.copy()
+I[I > 0] = 1
+I[I == 0] = 0
+
+# Index matrix for test data
+I2 = T.copy()
+I2[I2 > 0] = 1
+I2[I2 == 0] = 0
+<\Cell_24>
+<Cell_25>
+#Error function.
+def rmse(I,R,Q,P):
+    return np.sqrt(np.sum((I * (R - np.dot(P.T,Q)))**2)/len(R[R > 0]))
+<\Cell_25>
+<Cell_26>
+def als(R=R, T=T, lmbda=0.1, k=40, n_epochs=30, I=I, I2=I2):
+    
+    '''
+    Function for ALS. Takes matrices and parameters as inputs.
+    Lmbda - learning rate;
+    k - dimensionality of latent feature space,
+    n_epochs - number of epochs for training.
+    '''
+    #Number of users and items.
+    m, n = R.shape
+    P = 1.5 * np.random.rand(k,m) # Latent user feature matrix.
+    Q = 1.5 * np.random.rand(k,n) # Latent places feature matrix.
+    Q[0,:] = R[R != 0].mean(axis=0) # Avg. rating for each movie for initial step.
+    E = np.eye(k) # (k x k)-dimensional idendity matrix.
+    
+    train_errors = []
+    test_errors = []
+
+    # Repeat until convergence
+    for epoch in range(n_epochs):
+        # Fix Q and estimate P
+        for i, Ii in enumerate(I):
+            nui = np.count_nonzero(Ii) # Number of items user i has rated
+            if (nui == 0): nui = 1 # No zero counts.
+
+            a = np.dot(np.diag(Ii), Q.T)
+            Ai = np.dot(Q, a) + lmbda * nui * E
+            v = np.dot(np.diag(Ii), R[i].T)
+            Vi = np.dot(Q, v)
+            P[:,i] = np.linalg.solve(Ai,Vi)
+
+        # Fix P and estimate Q
+        for j, Ij in enumerate(I.T):
+            nmj = np.count_nonzero(Ij) # Number of users that rated item j
+            if (nmj == 0): nmj = 1 # No zero counts.
+
+            a = np.dot(np.diag(Ij), P.T)
+            Aj = np.dot(P, a) + lmbda * nmj * E
+            v = np.dot(np.diag(Ij), R[:,j])
+            Vj = np.dot(P, v)
+            Q[:,j] = np.linalg.solve(Aj,Vj)
+
+        train_rmse = rmse(I,R,Q,P)
+        test_rmse = rmse(I2,T,Q,P)
+        train_errors.append(train_rmse)
+        test_errors.append(test_rmse)
+
+        print(f'[Epoch {epoch+1}/{n_epochs}] train error: {train_rmse:6.6}, test error: {test_rmse:6.6}')
+        
+        #If test error became worse, stop training.
+        if len(train_errors) > 1 and test_errors[-1:] > test_errors[-2:-1]:
+            break
+    print('Test error stopped improving, algorithm stopped')
+    
+    R = pd.DataFrame(R)
+    R.columns = ratings.columns
+    R.index = ratings.index
+    
+    R_pred = pd.DataFrame(np.dot(P.T,Q))
+    R_pred.columns = ratings.columns
+    R_pred.index = ratings.index
+    
+    return pd.DataFrame(R), R_pred
+<\Cell_26>
+<Cell_27>
+R, R_pred = als()
+<\Cell_27>
+<Cell_28>
+#Take user's rating >=1
+user_ratings = R.transpose()['U1123'][R.transpose()['U1123'].sort_values(ascending=False) >=1]
+predictions = pd.DataFrame(user_ratings)
+predictions.columns = ['Actual']
+predictions['Predicted'] = R_pred.loc['U1123',user_ratings.index]
+predictions
+<\Cell_28>
+<Cell_29>
+#Take only places, which user didn't rate.
+R_pred.loc['U1123',set(R_pred.transpose().index)-set(user_ratings.index)].sort_values(ascending=False)[:5]
+<\Cell_29>

@@ -1,0 +1,32 @@
+```python
+    import sys
+    import os
+    import numpy as np
+    import pandas as pd
+    import papermill as pm
+    import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set()
+import tensorflow as tf
+import keras
+
+from reco_utils.utils.timer import Timer
+from reco_utils.datasets import movielens
+from reco_utils.datasets.split_utils import min_rating_filter_pandas
+from reco_utils.datasets.python_splitters import numpy_stratified_split
+from reco_utils.evaluation.python_evaluation import map_at_k, ndcg_at_k, precision_at_k, recall_at_k
+from reco_utils.utils.constants import SEED as DEFAULT_SEED
+
+from reco_utils.datasets.sparse import AffinityMatrix
+from reco_utils.utils.python_utils import binarize
+from reco_utils.recommender.vae.standard_vae import StandardVAE
+
+print("System version: {}".format(sys.version))
+print("Pandas version: {}".format(pd.__version__))
+print("Tensorflow version: {}".format(tf.__version__))
+print("Keras version: {}".format(keras.__version__))
+
+# Update your code here
+
+```

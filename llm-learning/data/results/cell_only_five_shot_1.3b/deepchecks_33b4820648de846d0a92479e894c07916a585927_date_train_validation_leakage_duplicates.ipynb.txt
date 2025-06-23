@@ -1,0 +1,27 @@
+```python
+    from datetime import datetime
+
+    def format_datetime(dt):
+        return dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    train_ds = dataset_from_dict({'col1': [
+        format_datetime(datetime(2021, 10, 1, 0, 0)),
+        format_datetime(datetime(2021, 10, 1, 0, 0)),
+        format_datetime(datetime(2021, 10, 1, 0, 0)),
+        format_datetime(datetime(2021, 10, 2, 0, 0)),
+        format_datetime(datetime(2021, 10, 2, 0, 0)),
+        format_datetime(datetime(2021, 10, 2, 0, 0)),
+        format_datetime(datetime(2021, 10, 3, 0, 0)),
+        format_datetime(datetime(2021, 10, 3, 0, 0)),
+        format_datetime(datetime(2021, 10, 3, 0, 0)),
+        format_datetime(datetime(2021, 10, 4, 0, 0)),
+        format_datetime(datetime(2021, 10, 4, 0, 0)),
+        format_datetime(datetime(2021, 10, 4, 0, 0)),
+        format_datetime(datetime(2021, 10, 5, 0, 0)),
+        format_datetime(datetime(2021, 10, 5, 0, 0))
+    ]}, 'col1')
+
+    test_ds = dataset_from_dict({'col1': [
+        format_datetime(datetime(2021, 9, 4, 0, 0)),
+        format_datetime(datetime(2021, 10, 4, 0, 0)),
+        format_datetime(datetime(2

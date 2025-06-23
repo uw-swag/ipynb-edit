@@ -1,0 +1,39 @@
+```python
+    import torch
+import numpy as np
+from transformers import BertTokenizer, BertForSequenceClassification
+
+# Load pre-trained model and corresponding tokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+model = BertForSequenceClassification.from_pretrained('bert-base-uncased')
+
+# Function to generate fake movie reviews
+def generate_fake_movie_reviews(num_reviews):
+    # Generate random text
+    random_text = np.random.randint(1, 100, size=(num_reviews, 100))
+    random_text = [tokenizer.decode(i) for i in random_text]
+
+    # Generate labels for the fake reviews
+    random_labels = np.random.randint(0, 2, size=(num_reviews, 1))
+
+    # Convert to PyTorch tensors
+    input_ids = [tokenizer.encode(i, add_special_tokens=True) for i in random_text]
+    input_ids = torch.tensor(input_ids)
+    labels = torch.tensor(random_labels)
+
+    return input_ids, labels
+
+# Generate some fake movie reviews
+input_ids, labels = generate_fake_movie_reviews(10)
+
+# Forward pass through the model
+outputs = model(input_ids)
+
+# Get the predicted labels
+_, predicted_labels = torch.max(outputs, dim=1)
+
+# Print the predicted labels
+print(predicted_labels)
+    ```
+
+    This code uses the BERT language model from the Hugging Face transformers library to generate fake movie reviews. The `generate_fake_movie_reviews` function generates random text and labels for these reviews. The text is then encoded into input IDs for the BERT model, and the labels are converted to a tensor. The model is then used to predict the labels of the fake reviews.

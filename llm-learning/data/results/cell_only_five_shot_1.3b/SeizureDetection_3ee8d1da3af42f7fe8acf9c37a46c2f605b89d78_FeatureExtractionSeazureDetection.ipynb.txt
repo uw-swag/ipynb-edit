@@ -1,0 +1,25 @@
+```python
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Random Forest Implementation
+    rf = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=0)
+    rf.fit(train_dat, train_ind)
+
+    # Predicting on test data
+    pred_rf = rf.predict(test_dat)
+
+    # Calculating performance metrics
+    accuracy = accuracy_score(test_ind, pred_rf)
+    sensitivity = sensitivity_score(test_ind, pred_rf)
+    specificity = specificity_score(test_ind, pred_rf)
+    precision = precision_score(test_ind, pred_rf)
+    f1_score = f1_score(test_ind, pred_rf)
+    mcc = matthews_corrcoef(test_ind, pred_rf)
+    kappa = cohen_kappa_score(test_ind, pred_rf)
+
+    # Appending results to the dataframe
+    results = results.append(pd.Series([accuracy, sensitivity, specificity, precision, f1_score, mcc, kappa], index=perfInd), ignore_index=True)
+
+    # Printing the results
+    print(results)
+    ```

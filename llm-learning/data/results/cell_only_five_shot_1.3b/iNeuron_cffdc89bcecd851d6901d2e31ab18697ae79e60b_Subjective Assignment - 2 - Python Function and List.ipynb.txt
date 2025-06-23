@@ -1,0 +1,48 @@
+```python
+    # Assignment 1: Implementing a simple linear regression model
+
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Generating random data
+    np.random.seed(0)
+    X = 2 * np.random.rand(100, 1)
+    Y = 2 + 3 * X + np.random.randn(100, 1)
+
+    # Plotting the data
+    plt.scatter(X, Y)
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Scatter plot of X and Y')
+    plt.show()
+
+    # Implementing linear regression
+    def linear_regression(X, Y):
+        n = len(X)
+        m = 0
+        c = 0
+        iterations = 1000
+        learning_rate = 0.01
+
+        for i in range(iterations):
+            Y_pred = m * X + c
+            cost = (1/n) * sum((Y - Y_pred)**2)
+            m_derivative = -(2/n) * sum(X * (Y - Y_pred))
+            c_derivative = -2/n * sum(Y - Y_pred)
+            m = m - learning_rate * m_derivative
+            c = c - learning_rate * c_derivative
+
+        return m, c
+
+    m, c = linear_regression(X, Y)
+
+    # Plotting the regression line
+    plt.scatter(X, Y)
+    plt.plot(X, m * X + c)
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Scatter plot of X and Y with regression line')
+    plt.show()
+    ```
+    This code first generates random data and plots it. Then, it implements a simple linear regression model and plots the regression line.

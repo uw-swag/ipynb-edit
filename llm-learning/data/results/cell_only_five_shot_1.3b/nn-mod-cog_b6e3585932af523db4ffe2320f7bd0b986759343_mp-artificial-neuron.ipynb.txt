@@ -1,0 +1,59 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Multi-Perceptron Class
+    class MultiPerceptron:
+        def __init__(self, no_of_inputs, no_of_outputs, learning_rate):
+            self.no_of_inputs = no_of_inputs
+            self.no_of_outputs = no_of_outputs
+            self.learning_rate = learning_rate
+            self.weights = np.zeros(no_of_inputs + 1)
+
+        # Activation function
+        def activation_function(self, inputs):
+            if inputs >= 0:
+                return 1
+            else:
+                return 0
+
+        # Predict function
+        def predict(self, inputs):
+            summation = np.dot(inputs, self.weights[1:]) + self.weights[0]
+            return self.activation_function(summation)
+
+        # Train function
+        def train(self, inputs, expected_output):
+            prediction = self.predict(inputs)
+            self.weights[1:] += self.learning_rate * (expected_output - prediction) * inputs
+            self.weights[0] += self.learning_rate * (expected_output - prediction)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add annotated equations perceptron"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Perceptron Class
+    class Perceptron:
+        def __init__(self, no_of_inputs, learning_rate):
+            self.no_of_inputs = no_of_inputs
+            self.weights = np.zeros(no_of_inputs + 1)
+            self.learning_rate = learning_rate
+
+        # Activation function
+        def activation_function(self, inputs):
+            if inputs >= 0:
+                return 1
+            else:

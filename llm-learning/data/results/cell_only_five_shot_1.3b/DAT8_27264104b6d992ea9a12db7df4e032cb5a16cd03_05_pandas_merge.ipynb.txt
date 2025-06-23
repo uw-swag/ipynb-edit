@@ -1,0 +1,47 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "update class 3 and 5 notebooks to v4 format"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import nannyml as nml
+    from IPython.display import display
+    reference, analysis, analysis_gt = nml.datasets.load_synthetic_sample()
+    display(reference.head(3))
+
+    metadata = nml.extract_metadata(reference, model_type=nml.ModelType.CLASSIFICATION_BINARY, exclude_columns=['identifier'])
+    metadata.target_column_name = 'work_home_actual'
+    display(metadata.is_complete())
+
+    cbpe = nml.CBPE(
+        model_metadata=metadata,
+        chunk_size=5000,
+        metrics=['roc_auc', 'f1', 'precision', 'recall', 'specificity', 'accuracy']
+    ).fit(reference_data=reference)
+    est_perf = cbpe.estimate(pd.concat([reference, analysis], ignore_index=True))
+    display(est_perf.data.head(3))
+
+    for metric in cbpe.metrics:
+        figure = est_perf.plot(kind='performance', metric=metric)
+        figure.show()
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already in the v4 format. It uses the `nannyml` library, which is a Python library for automated machine learning. The code is well-structured and follows the v4 format.
+
+    However, if you want to update the notebooks to the v4 format, you can follow these steps:
+
+    1. Update the cell formatting to v4.
+    2. Update the cell comments to v4.
+    3. Update the cell outputs to v4.
+    4. Update the cell metadata to v4.
+
+    Here's an example of how you might update a cell to the v4 format:
+
+    ```python
+    ### Instruction:
+    [
+    Commit Message: "update class 3 and 5 notebooks

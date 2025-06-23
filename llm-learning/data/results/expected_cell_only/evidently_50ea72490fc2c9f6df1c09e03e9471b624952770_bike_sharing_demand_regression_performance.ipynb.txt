@@ -1,0 +1,17 @@
+import pandas as pd
+import requests
+import zipfile
+import io
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import RegressionPerformanceProfileSection
+column_mapping = ColumnMapping(target,
+                               'prediction',
+                               numerical_features=numerical_features,
+                               categorical_features=categorical_features)

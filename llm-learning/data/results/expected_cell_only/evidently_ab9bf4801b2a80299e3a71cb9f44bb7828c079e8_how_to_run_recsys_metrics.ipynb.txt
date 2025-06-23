@@ -1,0 +1,138 @@
+most_popular_top = list(train.movie_id.value_counts()[:30].index)
+rec_array = np.array([most_popular_top] * len(test.user_id.unique()))
+most_popular_df = prepare_prediction_df(30, test.user_id.unique(), rec_array, test)
+from evidently.metrics import PrecisionTopKMetric
+from evidently.metrics import RecallTopKMetric
+from evidently.metrics import FBetaTopKMetric
+from evidently.metrics import MAPKMetric
+from evidently.metrics import NDCGKMetric
+from evidently.metrics import DiversityMetric
+from evidently.metrics import ItemBiasMetric
+from evidently.metrics import NoveltyMetric
+from evidently.metrics import PersonalizationMetric
+from evidently.metrics import PopularityBias
+from evidently.metrics import SerendipityMetric
+from evidently.metrics import UserBiasMetric
+from evidently.metrics import HitRateKMetric
+from evidently.metrics import MRRKMetric
+from evidently.metrics import RecCasesTable
+
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+report = Report(metrics=[
+    PrecisionTopKMetric(k=5),
+    RecallTopKMetric(k=5),
+    FBetaTopKMetric(k=5),
+    MAPKMetric(k=5),
+    NDCGKMetric(k=5),
+    MRRKMetric(k=5),
+    HitRateKMetric(k=5),
+    DiversityMetric(k=5, item_features=item_features),
+    NoveltyMetric(k=5),
+    PersonalizationMetric(k=5),
+    SerendipityMetric(k=5, item_features=item_features),
+    PopularityBias(k=5),
+    ItemBiasMetric(k=5, column_name='moive_age'),
+    ItemBiasMetric(k=5, column_name='crime'),
+    UserBiasMetric(column_name='age'),
+    UserBiasMetric(column_name='gender'),
+    RecCasesTable(display_features=['action', 'adventure', 'animation'], item_num=10)
+
+
+])
+column_mapping = ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
+report.run(
+    reference_data=most_popular_df.dropna(subset=['title', 'user_id']).fillna(0),
+    current_data=als_df.dropna(subset=['title', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+    additional_data={'current_train_data': train.dropna(subset=['title', 'user_id'])}
+  )
+report
+from evidently.metric_preset import RecsysPreset
+report = Report(metrics=[
+    RecsysPreset(
+        k=5,
+        display_features=['action', 'adventure', 'animation'],
+        item_features=item_features,
+        user_bias_columns=['age', 'gender'],
+        item_bias_columns=['moive_age', 'crime'],
+    )
+])
+column_mapping = ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
+report.run(
+    reference_data=most_popular_df.dropna(subset=['title', 'user_id']).fillna(0),
+    current_data=als_df.dropna(subset=['title', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+    additional_data={'current_train_data': train.dropna(subset=['title', 'user_id'])}
+  )
+report
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+tests = TestSuite(tests=[
+    TestPrecisionTopK(k=5),
+    TestRecallTopK(k=5),
+    TestFBetaTopK(k=5),
+    TestHitRateK(k=5),
+    TestMAPK(k=5),
+    TestMRRK(k=5),
+    TestNDCGK(k=5),
+    TestNovelty(k=5),
+    TestPersonalization(k=5),
+    TestSerendipity(k=5, item_features=item_features),
+    TestDiversity(k=5, item_features=item_features),
+    TestARP(k=5),
+    TestGiniIndex(k=5),
+    TestCoverage(k=5),
+])
+
+column_mapping = ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
+tests.run(
+    reference_data=most_popular_df.dropna(subset=['title', 'user_id']).fillna(0),
+    current_data=als_df.dropna(subset=['title', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+    additional_data={'current_train_data': train.dropna(subset=['title', 'user_id'])}
+  )
+tests
+from evidently.test_preset import RecsysTestPreset
+tests = TestSuite(tests=[
+    RecsysTestPreset(k=5)
+])
+
+column_mapping = ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
+tests.run(
+    reference_data=most_popular_df.dropna(subset=['title', 'user_id']).fillna(0),
+    current_data=als_df.dropna(subset=['title', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+    additional_data={'current_train_data': train.dropna(subset=['title', 'user_id'])}
+  )
+tests
+# collect data with scores
+als_df_scores = pd.DataFrame(
+    {
+        'user_id': np.repeat(test.user_id.unique(), 30),
+        'movie_id': ids.flatten(),
+        'scores': scores.flatten()
+    }
+)
+als_df_scores = als_df_scores.merge(test, on=['user_id', 'movie_id'], how='outer')
+als_df_scores['scores'] = als_df_scores['scores'].fillna(0)
+from evidently.metrics import ScoreDistribution
+report = Report(metrics=[
+  ScoreDistribution(k=5)
+])
+column_mapping = ColumnMapping(recommendations_type='score', target='rating', prediction='scores', item_id='title', user_id='user_id')
+report.run(
+    reference_data=None,
+    current_data=als_df_scores.dropna(subset=['movie_id', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+)
+report
+tests = TestSuite(tests=[TestScoreEntropy(k=5, gt=3)])
+column_mapping = ColumnMapping(recommendations_type='score', target='rating', prediction='scores', item_id='title', user_id='user_id')
+tests.run(
+    reference_data=None,
+    current_data=als_df_scores.dropna(subset=['movie_id', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+)
+tests
+

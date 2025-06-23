@@ -1,0 +1,18 @@
+```python
+    # Removing deprecated files
+    import os
+    import shutil
+
+    deprecated_files = [
+        "old_file1.txt",
+        "old_file2.txt",
+        # add more files here
+    ]
+
+    for file in deprecated_files:
+        try:
+            os.remove(file)
+            print(f"File {file} removed successfully.")
+        except FileNotFoundError:
+            print(f"File {file} not found.")
+    ```

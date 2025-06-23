@@ -1,0 +1,41 @@
+```python
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+
+    # Split the data
+    msk = np.random.rand(len(train_df)) < 0.8
+    train = train_df[msk]
+    cv = train_df[~msk]
+
+    # Define the features and the target
+    X_train = train.drop('price_doc', axis=1)
+    Y_train = np.log1p(train['price_doc'])
+    X_cv = cv.drop('price_doc', axis=1)
+    Y_cv = np.log1p(cv['price_doc'])
+
+    # Scale the features
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_cv = scaler.transform(X_cv)
+
+    # Train the model
+    model = LogisticRegression()
+    model.fit(X_train, Y_train)
+
+    # Predict on the test set
+    X_test = scaler.transform(test_df.drop('id', axis=1))
+    y_pred = model.predict(X_test)
+
+    # Create a submission dataframe
+    df_sub = pd.DataFrame({'id': test_df['id'], 'price_doc': y_pred})
+
+    # Save the submission dataframe to a csv file
+    df_sub.to_csv('sub.csv', index=False)
+    ```
+
+    The code above uses the StandardScaler to scale the features before training the model. This is a common technique for scaling the input features of machine learning algorithms. It standardizes features by removing the mean and scaling to unit variance.
+
+    The model used is a logistic regression model, but you can replace it with any other model that suits your problem.
+
+    The code also includes the creation of a submission dataframe, which is a DataFrame that will be saved to a csv file. The 'id' column from the test_df DataFrame is used as the index of the DataFrame, and the 'price_

@@ -1,0 +1,38 @@
+```python
+    class NeuralNetwork:
+        def __init__(self, x, y):
+            self.input = x
+            self.weights1 = np.random.rand(self.input.shape[1],4) 
+            self.weights2 = np.random.rand(4,1) 
+            self.y = y
+            self.output = np.zeros(self.y.shape)
+
+        def forward(self):
+            self.layer1 = self.sigmoid(np.dot(self.input, self.weights1))
+            self.output = self.sigmoid(np.dot(self.layer1, self.weights2))
+
+        def sigmoid(self, x):
+            return 1/(1+ np.exp(-x))
+
+        def sigmoid_derivative(self, x):
+            return x * (1 - x)
+
+        def backprop(self):
+            self.weights2 -= self.learning_rate * np.dot(self.layer1.T, (2*(self.y - self.output) * self.sigmoid_derivative(self.output)))
+            self.weights1 -= self.learning_rate * np.dot(self.input.T,  (np.dot(2*(self.y - self.output) * self.sigmoid_derivative(self.output), self.weights2.T) * self.sigmoid_derivative(self.layer1)))
+
+        def train(self, epochs):
+            for _ in range(epochs):
+                self.forward()
+                self.backprop()
+
+    # Example usage:
+    X = np.array([[0,0,1],
+                  [0,1,1],
+                  [1,0,1],
+                  [1,1,1]])
+    y = np.array([[0],[1],[1],[0]])
+    nn = NeuralNetwork(X,y)
+    nn.train(1000)
+    print(nn.output)
+    ```

@@ -1,0 +1,25 @@
+```python
+    import json
+    import requests
+
+    def fetch_intents():
+        response = requests.get('https://online-json-storage.com/intents.json')
+        data = json.loads(response.text)
+        return data
+
+    def predict_class(message, model):
+        intents = fetch_intents()
+        # Assuming predict_class is a function that takes a message and a model and returns a prediction
+        prediction = model.predict(message)
+        # Assuming getResponse is a function that takes a prediction and a list of intents and returns a response
+        response = getResponse(prediction, intents)
+        return response
+
+    def getResponse(prediction, intents):
+        # Assuming getResponse is a function that takes a prediction and a list of intents and returns a response
+        for intent in intents:
+            if prediction in intent['responses']:
+                return intent['responses'][prediction]
+        return "I'm sorry, I didn't understand that."
+    ```
+    This code fetches the intents from an online JSON storage and uses them to predict the class of a message. It then uses the predicted class to return a response.

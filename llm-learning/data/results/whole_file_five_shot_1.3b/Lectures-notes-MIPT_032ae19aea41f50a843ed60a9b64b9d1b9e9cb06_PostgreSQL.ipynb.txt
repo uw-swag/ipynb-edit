@@ -1,0 +1,31 @@
+```python
+    import sqlalchemy as db
+    from sqlalchemy import create_engine, Column, Integer, String
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.ext.declarative import declarative_base
+
+    Base = declarative_base()
+
+    class Course(Base):
+        __tablename__ = 'courses'
+
+        id = Column(Integer, primary_key=True)
+        name = Column(String)
+        description = Column(String)
+        teacher = Column(String)
+
+    engine = create_engine('sqlite:///courses.db')
+    Base.metadata.create_all(engine)
+
+    Session = sessionmaker(bind=engine)
+
+    session = Session()
+
+    new_course = Course(name="DB", description="Database Management", teacher="Prof. Smith")
+    session.add(new_course)
+    session.commit()
+
+    courses = session.query(Course).all()
+    for course in courses:
+        print(course.id, course.name, course.description, course.teacher)
+    ```

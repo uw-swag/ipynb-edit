@@ -1,0 +1,57 @@
+```python
+    import openai
+
+    # Get API key from environment variable
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+
+    # List all models
+    models = openai.Model.list()
+
+    # Print the number of models
+    print(len(models.data))
+
+    # Print the details of the first model
+    print(models.data[0])
+
+    # Create a completion
+    completion = openai.Completion.create(model="ada", prompt="Hello world")
+
+    # Print the completion
+    print(completion.choices[0].text)
+
+    # Create a completion
+    completion2 = openai.Completion.create(model="ada", prompt="long long time ago in a galaxy far far")
+
+    # Print the completion
+    print(completion2.choices[0].text)
+
+    # Create a chat completion
+    messages = [{"role": "user", "content": "Hello World"}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=0, 
+        request_timeout=3.0,
+    )
+
+    # Print the chat completion
+    print(response.choices[0].message["content"])
+
+    # Create an image
+    image_resp = openai.Image.create(prompt="cute puppy in stripe ninja suit, super realistic", n=4, size="256x256")
+
+    # Display the image
+    for image in image_resp.data:
+        print(image.url)
+
+    # Define a function to get a completion
+    def get_completion(prompt, model="gpt-3.5-turbo"):
+        messages = [{"role": "user", "content": prompt}]
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            temperature=0, # this is the degree of randomness of the model's output
+        )
+        return response.choices[0].message["content"]
+
+   

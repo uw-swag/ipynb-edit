@@ -1,0 +1,65 @@
+```python
+    # Adding labels and detection encoder classes
+    class LabelsEncoder:
+        def __init__(self, classes):
+            self.classes = classes
+            self.encoder = {class_: idx for idx, class_ in enumerate(classes)}
+
+        def encode(self, label):
+            return self.encoder.get(label, None)
+
+        def decode(self, idx):
+            return self.classes[idx] if idx is not None else None
+
+    class DetectionEncoder:
+        def __init__(self, classes):
+            self.classes = classes
+            self.encoder = {class_: idx for idx, class_ in enumerate(classes)}
+
+        def encode(self, detection):
+            return [self.encoder.get(label, None) for label in detection]
+
+        def decode(self, idxs):
+            return [self.classes[idx] if idx is not None else None for idx in idxs]
+    ```
+    ### End of Code
+    '''
+    }
+    ### End of Code
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding Gaussian Naive Bayes Classifier"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+from deepchecks.vision.base import VisionDataset
+from torchvision import models
+import torchvision
+import torch
+from torch import nn
+import torch.nn.functional as F
+from torchvision.transforms import ToTensor
+import copy
+<\Cell_1>
+<Cell_2>
+from deepchecks.vision.checks.performance import PerformanceReport
+<\Cell_2>
+<Cell_3>
+from deepchecks.vision.datasets.classification.mnist import (
+    load_model, 
+    load_dataset, 
+    MNistNet, 
+)
+<\Cell_3>
+<Cell_4>
+def simple_nn():
+    torch.manual_seed(42)
+
+    # Define model
+    class NeuralNetwork(nn

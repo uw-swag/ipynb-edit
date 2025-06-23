@@ -1,0 +1,27 @@
+```python
+    # ! pip install openai
+    import openai
+
+    import os
+    from getpass import getpass
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    # print ('token is', token)
+
+    openai.api_key = token
+
+    # list models
+    models = openai.Model.list()
+
+    # print(models.data)    
+    # print the first model's id
+    print(len(models.data))
+    print(models.data[0].id)
+
+    # create a completion
+    completion = openai.Completion.create(model="ada", prompt="Hello world")
+
+    print(completion)
+    # print the completion
+    print(completion.choices[0].text)
+    ```

@@ -1,0 +1,45 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    class Classifier(nn.Module):
+        def __init__(self):
+            super(Classifier, self).__init__()
+            self.fc1 = nn.Linear(784, 256)
+            self.fc2 = nn.Linear(256, 128)
+            self.fc3 = nn.Linear(128, 64)
+            self.fc4 = nn.Linear(64, 10)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = F.relu(self.fc3(x))
+            x = self.fc4(x)
+            return x
+
+    classifier = Classifier()
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(classifier.parameters(), lr=0.01, momentum=0.9)
+
+    for epoch in range(2):
+        running_loss = 0.0
+        for i, data in enumerate(trainloader, 0):
+            inputs, labels = data
+            optimizer.zero_grad()
+            outputs = classifier(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
+            running_loss += loss.item()
+            if i % 2000 == 1999:
+                print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 2000))
+                running_loss = 0.0
+
+    print('Finished Training')
+    ```
+
+    This is a simple PyTorch implementation of a neural network for a classifier. The classifier is a simple feed-forward neural network with three hidden layers. The network is trained for 2 epochs.
+
+    Please note that you need to have a training dataset to train the classifier. The code above assumes that you have a training dataset

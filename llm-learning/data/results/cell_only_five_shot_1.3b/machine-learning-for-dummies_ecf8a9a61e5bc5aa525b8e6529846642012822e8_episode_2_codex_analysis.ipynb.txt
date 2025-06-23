@@ -1,0 +1,54 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from datetime import datetime
+
+    # Load the data
+    df = pd.read_csv('time_travel_data.csv')
+
+    # Convert the 'date' column to datetime format
+    df['date'] = pd.to_datetime(df['date'])
+
+    # Set the date as the index
+    df.set_index('date', inplace=True)
+
+    # Plot the data
+    plt.figure(figsize=(10,6))
+    sns.lineplot(data=df)
+    plt.title('Time Travel - History Changed')
+    plt.xlabel('Date')
+    plt.ylabel('Value')
+    plt.show()
+
+    # Save the plot
+    plt.savefig('time_travel_plot.png')
+
+    # Calculate the rolling mean
+    df_rolling = df.rolling(window=7).mean()
+
+    # Plot the rolling mean
+    plt.figure(figsize=(10,6))
+    sns.lineplot(data=df_rolling)
+    plt.title('Time Travel - History Changed - Rolling Mean')
+    plt.xlabel('Date')
+    plt.ylabel('Value')
+    plt.show()
+
+    # Save the rolling mean plot
+    plt.savefig('time_travel_rolling_mean.png')
+
+    # Calculate the rolling standard deviation
+    df_rolling_std = df.rolling(window=7).std()
+
+    # Plot the rolling standard deviation
+    plt.figure(figsize=(10,6))
+    sns.lineplot(data=df_rolling_std)
+    plt.title('Time Travel - History Changed - Rolling Standard Deviation')
+    plt.xlabel('Date')
+    plt.ylabel('Value')
+    plt.show()
+
+    # Save the rolling standard deviation plot
+    plt.savefig('time_travel_rolling_std.png')
+    ```

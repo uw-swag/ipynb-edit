@@ -1,0 +1,55 @@
+
+    ## Adding files via upload
+
+    ## Step 1: Upload your files
+    ## Step 2: Click on the "Upload" button
+    ## Step 3: Select your files and click "Upload"
+
+    ## Step 1: Upload your files
+
+    ## Step 2: Click on the "Upload" button
+
+    ## Step 3: Select your files and click "Upload"
+
+    ## Now, your files are ready to be used in your notebook.
+
+    ## For example, if you uploaded a CSV file named "data.csv", you can use it in your notebook like this:
+
+    ```python
+    df = pd.read_csv('data.csv')
+    ```
+
+    ## Remember to replace 'data.csv' with the name of your file.
+
+    ## If you want to use a file from a different location, you can use the `os` module to get the absolute path of the file:
+
+    ```python
+    import os
+    file_path = os.path.join(os.getcwd(), 'data', 'data.csv')
+    df = pd.read_csv(file_path)
+    ```
+
+    ## This will read the file from the 'data' directory in the current working directory.
+
+    ## If you have multiple files, you can use a loop to read them all:
+
+    ```python
+    for file in os.listdir(os.getcwd()):
+        if file.endswith('.csv'):
+            df = pd.read_csv(file)
+            # do something with df
+    ```
+
+    ## This will read all CSV files in the current working directory and its subdirectories.
+
+    ## Remember to replace 'data' with the name of your directory.
+
+    ## If you want to use a file from a different location, you can use the `os` module to get the absolute path of the file:
+
+    ```python
+    import os
+    file_path = os.path.join(os.getcwd(), 'data', 'data.csv')
+    df = pd.read_csv(file_path)
+    ```
+
+    #

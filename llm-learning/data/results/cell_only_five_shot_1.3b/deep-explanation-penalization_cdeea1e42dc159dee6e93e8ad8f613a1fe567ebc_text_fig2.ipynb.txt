@@ -1,0 +1,42 @@
+
+The code you provided is a PyTorch model for sentiment analysis on a sentence. It uses a pre-trained model from the SST-5 dataset, and then uses the agglomeration function to combine the results. The agglomeration function is used to combine the results of different words into a single word. The visualization function is used to display the results.
+
+The code is not complete and there are a few issues that need to be addressed:
+
+1. The `agg.agglomerate` function is not defined. This function is used to combine the results of different words into a single word.
+2. The `agg.collapse_tree` function is not defined. This function is used to combine the results of different words into a single word.
+3. The `viz.word_heatmap` function is not defined. This function is used to display the results.
+
+Here is a refactored version of the code:
+
+```python
+import numpy as np
+import torch
+import pickle
+import sys
+sys.path.append('..')
+sys.path.append('../visualization')
+sys.path.append('../acd/util')
+sys.path.append('../acd/scores')
+sys.path.append('../acd/agglomeration')
+import viz_1d as viz
+import tiling_1d as tiling
+import agg_1d as agg
+import cd
+import score_funcs
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+# form class to hold data
+class B:
+    text = torch.zeros(1).to(device)
+
+sys.path.append('../dsets/sst')
+from dsets.sst import dset
+from dsets.sst.model import LSTMSentiment
+sst_pkl = pickle.load(open('../dsets/sst/sst.pkl', 'rb'))
+model = torch.load('../dsets/sst/sst.model', map_location=device)
+model.device = device
+
+# base parameters
+sweep_dim = 1 # how large chunks of text should be considered (1 for words)
+method = 'cd

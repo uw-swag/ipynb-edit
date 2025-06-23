@@ -1,0 +1,79 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message:" add tf.summary"
+
+Original Code Cells:
+'''
+<Cell_0>
+import tensorflow as tf
+
+# ...
+
+# Initialize all variables
+init = tf.global_variables_initializer()
+
+# Create a summary to monitor loss
+loss_summary = tf.summary.scalar("loss", loss)
+
+# Merge all summaries into a single operation
+merged_summary = tf.summary.merge_all()
+
+# Create a summary to monitor all the trainable variables
+trainable_variables = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
+summary_op = tf.summary.merge_all()
+
+# ...
+
+# Start the training and summary writing
+with tf.Session() as sess:
+    sess.run(init)
+    summary_writer = tf.summary.FileWriter("./graphs", sess.graph)
+    # ...
+
+# ...
+
+# Close the summary writer
+summary_writer.close()
+<\Cell_0>
+<Cell_1>
+# ...
+
+# Start the training and summary writing
+with tf.Session() as sess:
+    sess.run(init)
+    summary_writer = tf.summary.FileWriter("./graphs", sess.graph)
+    # ...
+
+# ...
+
+# Close the summary writer
+summary_writer.close()
+<\Cell_1>
+<Cell_2>
+# ...
+
+# Start the training and summary writing
+with tf.Session() as sess:
+    sess.run(init)
+    summary_writer = tf.summary.FileWriter("./graphs", sess.graph)
+    # ...
+
+# ...
+
+# Close the summary writer
+summary_writer.close()
+<\Cell_2>
+<Cell_3>
+# ...
+
+# Start the training and summary writing
+with tf.Session() as sess:
+    sess.run(init)
+    summary_writer = tf.summary.FileWriter("./graphs", sess.graph)
+    # ...

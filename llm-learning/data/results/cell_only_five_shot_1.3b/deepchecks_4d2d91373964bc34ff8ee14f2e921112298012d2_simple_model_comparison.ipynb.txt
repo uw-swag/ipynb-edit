@@ -1,0 +1,58 @@
+```python
+    # Import necessary libraries to get started
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+    import seaborn as sns
+    sns.set()
+
+    # Import the dataset
+    data = pd.read_csv("eeg_data.csv")
+
+    # data exploration
+    data.head()
+
+    # define inputs as X and outputs as y
+    X = data.drop('63', axis=1)
+    y = data['63']
+
+    # verify that outputs are selected correctly
+    y.head()
+
+    #import sklearn's model selection and split the data set into %80 training and %20 test
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
+
+    #import SVC and perform Sogmoid SVM on the training dataset
+    from sklearn.svm import SVC
+    svclassifier = SVC(kernel='sigmoid', C=1, gamma=0.1)
+    svclassifier.fit(X_train, y_train)
+
+    #apply the trained SVM on the test dataset
+    mean_accuracy=svclassifier.score(X_test, y_test)
+    y_pred = svclassifier.predict(X_test)
+    print(mean_accuracy)
+
+    # output the predicted values
+    y_pred
+
+    # import relevant metrics and print the confusion matrix and classification report
+    from sklearn.metrics import classification_report, confusion_matrix
+    print(confusion_matrix(y_test,y_pred))
+    print(classification_report(y_test,y_pred))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "WIP: Fix sphinx errors (#970)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Import necessary libraries to get started
+    import pand

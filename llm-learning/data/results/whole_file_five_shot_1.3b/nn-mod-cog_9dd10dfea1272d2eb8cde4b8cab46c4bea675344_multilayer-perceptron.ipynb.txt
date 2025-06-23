@@ -1,0 +1,53 @@
+```python
+    ## ~~ Initialize parameters ~~##
+    def init_parameters(n_features, n_neurons, n_output):
+        """generate initial parameters sampled from normal distribution
+        
+        Args:
+            n_features (int): number of feature vectors 
+            n_neurons (int): number of neurons in hidden layer
+            n_output (int): number of output neurons
+        
+        Returns:
+            parameters dictionary:
+                W1: weight matrix, shape = [n_features, n_neurons]
+                b1: bias vector, shape = [n_neurons, 1]
+                W2: weight matrix, shape = [n_neurons, n_output]
+                b2: bias vector, shape = [n_output, 1]
+        """
+        np.random.seed(100) # for reproducibility
+        W1 = np.random.normal(size=(n_features,n_neurons))
+        b1 = np.random.normal(size=(1,n_neurons))
+        W2 = np.random.normal(size=(n_neurons,n_output))
+        b2 = np.random.normal(size=(1,n_output))
+        
+        parameters = {"W1": W1,
+                      "b1": b1,
+                      "W2": W2,
+                      "b2": b2}
+        
+        return parameters
+
+    ##~~ Forward-propagation ~~##
+    def linear_function(W, X, b):
+        """computes net input as dot product
+        
+        Args:
+            W (ndarray): weight matrix
+            X (ndarray): matrix of features
+            b (ndarray): vector of biases
+        
+        Returns:
+            Z (ndarray): weighted sum of features
+        """
+        return (X @ W)+ b
+
+    ##~~ Error computation ~~##
+    def cost_function(A, y):
+        """computes squared error
+        
+        Args:
+            A (ndarray): neuron activation
+            y (ndarray): vector of expected values
+        
+        Returns:

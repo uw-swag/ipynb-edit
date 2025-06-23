@@ -1,0 +1,10 @@
+```python
+    from sklearn import preprocessing
+
+    def featureNormalization(ft):
+        seizures = ft['seizure'].copy()
+        norm_ft = pd.DataFrame(preprocessing.scale(ft), columns = ft.columns)
+        norm_ft['seizure'] = seizures
+        del seizures
+        return norm_ft
+    ```

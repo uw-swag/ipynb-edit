@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    test_data = {"col1": ["somebody", "once", "told", "me"] * 10, "col2": ['a','b','b','q']*10}
+    val_data = {"col1": ["the","world","is", "gonna", "role", "me"] * 10, "col2": ['a', '2', '1']*10}
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1", "col2"])
+    val = Dataset(pd.DataFrame(data=val_data), cat_features=["col1", "col2"])
+
+    CategoryMismatchTrainTest().run(val, test)
+    ```
+
+    The code above is a modification to the original code to add a new category "col2" to the validation dataset. The "col2" category is added to the validation dataset and the "col1" and "col2" categories are also added to the test dataset. This is a demonstration of how to add a new category to the validation dataset.

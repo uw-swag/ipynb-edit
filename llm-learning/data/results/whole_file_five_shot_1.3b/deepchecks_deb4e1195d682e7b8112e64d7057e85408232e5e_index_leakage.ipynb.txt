@@ -1,0 +1,54 @@
+
+    '''
+<Cell_4>
+# Create a new/Retrieve an existing experiment
+experiment_name = 'image-classif-websvc'
+experiment = Experiment(workspace=ws, name=experiment_name)
+print(f"New/Existing experiment:\n \
+      --> Name: {experiment.name}\n \
+      --> Workspace name: {experiment.workspace.name}")
+<\Cell_4>
+<Cell_5>
+# Close the run
+run.complete()
+<\Cell_5>
+<Cell_6>
+# docker_image.delete()
+<\Cell_6>
+<Cell_7>
+# Retrieve the service status
+print(f"Service {service.name} is {service.state}_and available at {service.scoring_uri}")
+<\Cell_7>
+<Cell_8>
+# Plot the results
+result = service.run(test_samples)
+<\Cell_8>
+<Cell_9>
+# Send the same test data
+headers = {'Content-Type':'application/json'}
+
+resp = requests.post(service.scoring_uri, test_samples, headers=headers)
+
+print(f"POST to url: {service.scoring_uri}")
+print(f"Prediction: {resp.text}")
+<\Cell_9>
+<Cell_10>
+# service.delete()
+<\Cell_10>
+<Cell_11>
+# Create a deployment configuration with 1 CPU and 5 gigabytes of RAM
+aci_config = AciWebservice.deploy_configuration(
+    cpu_cores=1, 
+    memory_gb=5, 
+    tags={'webservice': 'image classification model (fastai 1.0.48)'},
+    description='This service classifies images into 1000 different groups.'
+)
+<\Cell_11>
+<Cell_12>
+# Close the run
+run.complete()
+<\Cell_12>
+<Cell_13>
+# docker_image.delete()
+<\Cell_13>
+<Cell_14>

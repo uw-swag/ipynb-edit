@@ -1,0 +1,86 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_openml
+<\Cell_0>
+<Cell_1>
+# load "adult" dataset
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+# prepare target and prediction
+df['target'] = df['education-num']
+df['prediction'] = df['education-num'].values + np.random.normal(0, 6, df.shape[0])
+
+# make reference and current datasets
+reference_data = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data.head()
+<\Cell_1>
+<Cell_2>
+from evidently.metrics import ColumnDriftMetric
+from evidently.report import Report
+
+report = Report(metrics=[ColumnDriftMetric(column_name="class")])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_2>
+<Cell_3>
+report.json()
+<\Cell_3>
+<Cell_4>
+report = Report(metrics=[ColumnDriftMetric(column_name="target")])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_4>
+<Cell_5>
+report.json()
+<\Cell_5>
+<Cell_6>
+from evidently.metrics import DataDriftTable
+
+
+report = Report(metrics=[DataDriftTable()])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_6>
+<Cell_7>
+report.json()
+<\Cell_7>
+<Cell_8>
+from evidently.metrics import DatasetDriftMetric
+
+report = Report(metrics=[DatasetDriftMetric()])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_8>
+<Cell_9>
+report = Report(metrics=[DatasetDriftMetric(threshold=0.4)])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_9>
+<Cell_10>
+from evidently.metrics import ColumnValuePlot
+
+report = Report(metrics=[ColumnValuePlot(column_name="age")])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_10>
+<Cell_11>
+from evidently.test_preset import NoTargetPerformanceTestPreset
+from evidently.test_suite import TestSuite
+
+
+data_quality_suite = TestSuite(
+    tests=[
+        NoTargetPerformanceTestPreset(columns=["education-num", "hours-per-week"]),
+    ]
+)
+
+data_quality_suite.run(current_data=current_data, reference_data=reference_data)
+data_quality_suite
+<\Cell_11>
+<Cell_12>
+
+<\Cell_12>

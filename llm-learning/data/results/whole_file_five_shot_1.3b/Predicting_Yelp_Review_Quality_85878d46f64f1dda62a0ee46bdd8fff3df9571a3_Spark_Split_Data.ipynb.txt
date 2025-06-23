@@ -1,0 +1,61 @@
+
+    '''
+    Commit Message: "Completed EDA outline"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pyspark as ps
+from pyspark.sql import functions as F
+from pyspark.sql.types import TimestampType, ArrayType
+<\Cell_0>
+<Cell_1>
+spark = (ps.sql.SparkSession.builder
+        .appName("Split_Data")
+        .master('local[4]')
+        .getOrCreate()
+        )
+
+sc = spark.sparkContext
+<\Cell_1>
+<Cell_2>
+spark
+<\Cell_2>
+<Cell_3>
+data_location = "/home/jovyan/work/Documents/Data_Science_Projects/Yelp_Reviews/data/full_data/analytics_ready/"
+<\Cell_3>
+<Cell_4>
+filename = "all_data.json"
+<\Cell_4>
+<Cell_5>
+all_data = spark.read.json(data_location + filename)
+<\Cell_5>
+<Cell_6>
+all_data.printSchema()
+<\Cell_6>
+<Cell_7>
+all_data.show(5)
+<\Cell_7>
+<Cell_8>
+all_data.count()
+<\Cell_8>
+<Cell_9>
+all_data.createOrReplaceTempView("all_data")
+<\Cell_9>
+<Cell_10>
+working_data, holdout_data = all_data.randomSplit([0.8, 0.2], seed=12345)
+<\Cell_10>
+<Cell_11>
+working_data.count()
+<\Cell_11>
+<Cell_12>
+holdout_data.count()
+<\Cell_12>
+<Cell_13>
+working_data.createOrReplaceTempView("working_data")
+<\Cell_13>
+<Cell_14>
+text_data = spark.sql('''
+                          SELECT review_id,
+                              review_stars,
+                              review

@@ -1,0 +1,22 @@
+```python
+    from sklearn.metrics import classification_report
+
+    # Train a simple model
+    simple_model = RandomForestClassifier(n_estimators=100, random_state=42)
+    simple_model.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred_simple = simple_model.predict(X_test)
+
+    # Compare the simple model to a more complex model with the "tree" option
+    tree_model = RandomForestClassifier(n_estimators=100, random_state=42, criterion='tree')
+    tree_model.fit(X_train, y_train)
+
+    y_pred_tree = tree_model.predict(X_test)
+
+    # Print the classification report for both models
+    print(classification_report(y_test, y_pred_simple))
+    print(classification_report(y_test, y_pred_tree))
+    ```
+
+    The `classification_report` function from the `sklearn.metrics` module is used to generate a text report showing the main classification metrics. The `criterion='tree'` parameter in the `RandomForestClassifier` is used to specify that we want to use the tree-based estimator.

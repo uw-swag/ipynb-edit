@@ -1,0 +1,27 @@
+```python
+    # Read 18 instead of 23 channels
+    dataset = config['DATASET'].get('dataset')
+    sample_rate = config['DATASET'].getint('sample_rate')
+    time_window = config['DATASET'].getint('time_window')
+    test_ratio = config['TRAINING'].getfloat('test_ratio')
+    pca_tolerance = config['PCA'].getfloat('pca_tolerance')
+    smote_neighbors = config['SMOTE'].getint('smote_neighbors')
+    k_fold = config['CLASSIFICATION'].getint('k_fold')
+    knn_neighbors = config['CLASSIFICATION'].getint('knn_neighbors')
+    rf_estimators = config['CLASSIFICATION'].getint('rf_estimators')
+    step = time_window*sample_rate
+    
+    df = read_and_store_data(dataset, sample_rate)
+    df = leftRightHemisphericChannels(df)
+    features = pd.DataFrame(featureExtraction (df, sample_rate, step))
+    del df
+    features = featureNormalization(features)
+    reduced_features = dimentionalityReduction(features, pca_tolerance)
+    del features
+    smote_features = utils.shuffle(oversamplingSMOTE(reduced_features.drop('seizure', axis = 1), reduced_features['seizure'], smote_neighbors))
+    smote_features.reset_index(drop = True, inplace = True)
+    del reduced_features
+    
+    fname = 'FeaturesTestData.csv'
+    smote_features = importCsvToDataframe(fname)
+    ```

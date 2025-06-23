@@ -1,0 +1,43 @@
+```python
+    # Adding a new column 'Type' to the Big Drift Data Table
+    df['Type'] = 'New Column'
+
+    # Updating the column_mapping dictionary to include the new column
+    column_mapping = {
+        'old_column_name': 'new_column_name',
+        'old_column_name_2': 'new_column_name_2',
+        'old_column_name_3': 'new_column_name_3',
+        # Add more columns as needed
+    }
+
+    # Updating the column_mapping default value
+    column_mapping.update({'new_column_name': 'old_column_name'})
+
+    # Updating the examples to include the new column
+    examples = {
+        'old_example': 'new_example',
+        'old_example_2': 'new_example_2',
+        'old_example_3': 'new_example_3',
+        # Add more examples as needed
+    }
+
+    # Updating the examples default value
+    examples.update({'new_example': 'old_example'})
+
+    # Updating the dataframe to include the new column
+    df['new_column_name'] = df['old_column_name']
+
+    # Updating the dataframe to include the new examples
+    df.loc[df['new_column_name'] == 'old_example', 'Type'] = 'New Type'
+
+    # Updating the dataframe to include the new column_mapping
+    df = df.rename(columns=column_mapping)
+
+    # Updating the dataframe to include the new examples
+    df.loc[df['Type'] == 'New Type', 'new_column_name'] = df.loc[df['Type'] == 'New Type', 'old_column_name'].apply(lambda x: examples.get(x, x))
+
+    # Updating the dataframe to include the new examples
+    df.loc[df['new_column_name'] == 'old_example_2', 'Type'] = 'New Type 2'
+
+    # Updating the dataframe to include the new column_mapping
+    df = df.rename

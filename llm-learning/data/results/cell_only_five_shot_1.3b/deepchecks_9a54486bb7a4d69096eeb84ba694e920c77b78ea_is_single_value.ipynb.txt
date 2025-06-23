@@ -1,0 +1,20 @@
+```python
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from deepchecks.checks.integrity.is_single_value import IsSingleValue
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Create a dataframe
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    df['target'] = iris.target
+
+    # Create a DeepChecks check
+    check = IsSingleValue()
+
+    # Run the check
+    check.run(df)
+    ```
+
+    The above code will run the DeepChecks check on the iris dataset. The check is designed to check if all the features in the dataset are single-value categorical features. If any of the features are not single-value, the check will return a failure.

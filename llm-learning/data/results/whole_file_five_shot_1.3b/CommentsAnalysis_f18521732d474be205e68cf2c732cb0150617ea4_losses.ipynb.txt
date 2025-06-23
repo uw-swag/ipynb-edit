@@ -1,0 +1,14 @@
+```python
+    # Model prediction
+    def predict(self, user_id):
+        # Get the user's data
+        user_data = self.data[self.data['userID'] == user_id]
+        
+        # Get the user's ratings
+        user_ratings = user_data['rating'].values
+        
+        # Get the user's predictions
+        user_predictions = self.model.predict(user_ratings)
+        
+        return user_predictions
+    ```

@@ -1,0 +1,37 @@
+```python
+    class Class10Homework:
+        def __init__(self, student_name, subject, assignment_name, assignment_due_date, marks_obtained):
+            self.student_name = student_name
+            self.subject = subject
+            self.assignment_name = assignment_name
+            self.assignment_due_date = assignment_due_date
+            self.marks_obtained = marks_obtained
+
+        def display_details(self):
+            print(f"Student Name: {self.student_name}")
+            print(f"Subject: {self.subject}")
+            print(f"Assignment Name: {self.assignment_name}")
+            print(f"Assignment Due Date: {self.assignment_due_date}")
+            print(f"Marks Obtained: {self.marks_obtained}")
+
+        def grade_assignment(self):
+            if self.marks_obtained >= 90:
+                return 'A'
+            elif self.marks_obtained >= 80:
+                return 'B'
+            elif self.marks_obtained >= 70:
+                return 'C'
+            elif self.marks_obtained >= 60:
+                return 'D'
+            else:
+                return 'F'
+
+    # Create an object of Class10Homework
+    homework1 = Class10Homework('John Doe', 'Math', 'Quiz 1', '2022-01-01', 95)
+
+    # Display the details of the homework
+    homework1.display_details()
+
+    # Grade the assignment
+    print(f"Grade: {homework1.grade_assignment()}")
+    ```

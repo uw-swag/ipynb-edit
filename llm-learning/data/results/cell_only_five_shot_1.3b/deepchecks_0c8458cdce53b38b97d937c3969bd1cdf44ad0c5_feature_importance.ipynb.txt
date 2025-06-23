@@ -1,0 +1,48 @@
+```
+    import pandas as pd
+from sklearn.datasets import load_iris
+import numpy as np
+
+from deepchecks import *
+from deepchecks.checks.overview.feature_importance import FeatureImportance
+iris = load_iris()
+iris.feature_names.append("label")
+
+df = pd.DataFrame(np.insert(iris.data, 4, iris.target, axis=1), columns=iris.feature_names)
+
+dataset = Dataset(df, label="label")
+from sklearn.ensemble import RandomForestClassifier
+
+multi_class_classifier = RandomForestClassifier()
+multi_class_classifier.fit(dataset.features_columns(), dataset.label_col())
+# ouptut can be save for later user
+x = FeatureImportance().run(dataset, multi_class_classifier)
+# and displayed at any point 
+x
+# Filter out target equal 2
+idx = iris.target != 2
+data = iris.data[idx]
+target = iris.target[idx]
+
+df = pd.DataFrame(np.insert(data, 4, target, axis=1), columns=iris.feature_names)
+
+binary_dataset = Dataset(df, label="label")
+from sklearn.ensemble import RandomForestClassifier
+from deepchecks.checks.overview.feature_importance import *
+
+clf = RandomForestClassifier()
+clf.fit(binary_dataset.features_columns(), binary_dataset.label_col())
+
+FeatureImportance().run(binary_dataset, clf)
+from sklearn.ensemble import AdaBoostClassifier
+
+# AdaBoostClassifier is not a tree, so it is not currently supported
+clf = AdaBoostClassifier()
+clf.fit(binary_dataset.features_columns(), binary_dataset.label_col())
+
+FeatureImportance().run(binary_dataset, clf)
+
+    ```
+
+    ### Explanation:
+    The commit message "remove shap check (#155)" is a suggestion to remove the SHAP (SHapley Additive

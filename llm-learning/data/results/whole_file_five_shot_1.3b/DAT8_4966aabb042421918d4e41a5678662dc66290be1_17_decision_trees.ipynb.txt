@@ -1,0 +1,40 @@
+```
+    # vehicle data
+    import pandas as pd
+    url = 'https://raw.githubusercontent.com/justmarkham/DAT8/master/data/vehicles_train.csv'
+    train = pd.read_csv(url)
+
+    # before splitting anything, just predict the mean of the entire dataset
+    train['prediction'] = train.price.mean()
+    train
+
+    # calculate RMSE for those predictions
+    from sklearn import metrics
+    import numpy as np
+    np.sqrt(metrics.mean_squared_error(train.price, train.prediction))
+
+    # define a function that calculates the RMSE for a given split of miles
+    def mileage_split(miles):
+        lower_mileage_price = train[train.miles < miles].price.mean()
+        higher_mileage_price = train[train.miles >= miles].price.mean()
+        train['prediction'] = np.where(train.miles < miles, lower_mileage_price, higher_mileage_price)
+        return np.sqrt(metrics.mean_squared_error(train.price, train.prediction))
+
+    # calculate RMSE for tree which splits on miles < 50000
+    print 'RMSE:', mileage_split(50000)
+    train
+
+    # calculate RMSE for tree which splits on miles < 100000
+    print 'RMSE:', mileage_split(100000)
+    train
+
+    # check all possible mileage splits
+    mileage_range = range(train.miles.min(), train.miles.max(), 1000)
+    RMSE = [mileage_split(miles) for miles in mileage_range]
+
+    # plot mileage cutpoint (x-axis) versus RMSE (y-axis)
+    plt.plot(mileage_range, RMSE)
+    plt.xlabel('Mileage cutpoint')
+    plt.ylabel('RMSE (lower is better)')
+
+    #

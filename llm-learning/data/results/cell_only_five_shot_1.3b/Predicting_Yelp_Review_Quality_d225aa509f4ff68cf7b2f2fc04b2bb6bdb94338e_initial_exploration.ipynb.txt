@@ -1,0 +1,25 @@
+```python
+    import pandas as pd
+import numpy as np
+import pymongo
+from pymongo import MongoClient
+
+# Create a MongoClient to the running mongod instance
+client = MongoClient('localhost', 27017)
+
+# Connect to the 'yelp' database
+db = client['yelp']
+
+# Create a collection in the 'reviews' database
+collection = db['reviews']
+
+# Convert the pandas dataframe to a JSON string
+json_data = data.T.to_json()
+
+# Insert the JSON string into the 'reviews' collection
+collection.insert_one(json_data)
+
+# Verify the data has been inserted
+for doc in collection.find():
+    print(doc)
+    ```

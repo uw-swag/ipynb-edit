@@ -1,0 +1,54 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('suite_data.csv')
+
+    # Split the dataset into features and target variable
+    X = df.drop('suite_id', axis=1)
+    y = df['suite_id']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a Logistic Regression model
+    logreg = LogisticRegression()
+
+    # Train the model
+    logreg.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = logreg.predict(X_test)
+
+    # Evaluate the model
+    print('Accuracy:', metrics.accuracy_score(y_test, y_pred))
+    print('Precision:', metrics.precision_score(y_test, y_pred))
+    print('Recall:', metrics.recall_score(y_test, y_pred))
+
+    # Display the model's performance
+    print('Confusion Matrix:')
+    print(metrics.confusion_matrix(y_test, y_pred))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding new feature: 'new_feature'"
+    Original Code Cells:
+    '''
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('suite_data.csv')
+
+    # Split the dataset into features and target variable
+    X = df.drop('suite_

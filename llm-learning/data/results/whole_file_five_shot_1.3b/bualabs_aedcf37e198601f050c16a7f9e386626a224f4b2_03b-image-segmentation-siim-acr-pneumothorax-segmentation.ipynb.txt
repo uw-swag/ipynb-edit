@@ -1,0 +1,45 @@
+
+    ###
+<\Cell_106>
+<Cell_107>
+# Create databunch
+data = (SegmentationItemList.from_folder(path=path/'train')#[:500]
+data.show_images(figsize=(10, 10))
+<\Cell_107>
+<Cell_108>
+# Predictions for test set
+preds, _ = learn.get_preds(ds_type=DatasetType.Test)
+preds = (preds>0.5).long()
+print(preds.sum())
+<\Cell_108>
+<Cell_109>
+# Plot some samples
+rows = 5
+plot_idx = ys.sum((1,2)).sort(descending=True).indices
+<\Cell_109>
+<Cell_100>
+# Predictions for test set
+preds, _ = learn.get_preds(ds_type=DatasetType.Test)
+preds = (preds>0.5).long()
+print(preds.sum())
+<\Cell_100>
+<Cell_101>
+# Generate rle encodings (images are first converted to the original size)
+rles = []
+for p in progress_bar(preds):
+    im = PIL.Image.fromarray((p.T*255).astype(np.uint8)).resize((1024,1024))
+    im = np.asarray(im)
+    rles.append(im.mean())
+rles = np.array(rles)
+rles = rles.mean()
+print(rles)
+<\Cell_101>
+<Cell_102>
+# Predictions for test set
+preds, _ = learn.get_preds(ds_type=DatasetType.Test)
+preds = (preds>0.5).long()
+print(preds.sum())
+<\Cell_102>
+<Cell_103>
+# Predictions for test set
+preds, _ = learn.get_preds(ds_type=DatasetType

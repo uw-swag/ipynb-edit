@@ -1,0 +1,14 @@
+```python
+    import boto3
+
+    # Create a boto3 session
+    session = boto3.Session(region_name='us-west-2')
+
+    # Create a boto3 client
+    client = session.client('ec2')
+
+    response = client.describe_spot_price_history(
+        InstanceTypes=list(names.values()),
+        ProductDescriptions=["Linux/UNIX"]
+    )
+    ```

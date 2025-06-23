@@ -1,0 +1,51 @@
+<Cell_0>
+%matplotlib inline
+import os
+from os.path import join as oj
+import sys, time
+import pickle as pkl
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+pd.set_option('precision', 3)
+<\Cell_0>
+<Cell_1>
+save_path = "../results_for_export"
+trained_model_folder = '../models/ColorMNIST'
+fnames = [oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+<\Cell_1>
+<Cell_2>
+results['acc_dev'] = [max(x) for x in results['accs_dev']] 
+results['acc_train'] = [max(x) for x in results['accs_train']]
+
+<\Cell_2>
+<Cell_3>
+results.reset_index(drop=True, inplace=True)
+results_save = results[['regularizer_rate', 'acc_train' ,'acc_dev','acc_test', 'method', 'dataset']].sort_values(by = ['regularizer_rate'])
+<\Cell_3>
+<Cell_4>
+concise_results = results_save.groupby(by = ['dataset', 'method','regularizer_rate']).mean()
+# concise_results.columns = ['Train accuracy','Dev accuracy', 'Test accuracy', ]
+concise_results
+<\Cell_4>
+<Cell_5>
+plot = sns.lineplot(x ='regularizer_rate' , y='acc_test', data = results_save[results_save.method == 'CDEP'],label="CDEP",legend = "brief"  );
+plot = sns.lineplot(x ='regularizer_rate' , y='acc_test', data = results_save[results_save.method == 'Grad'], label="RRR" );
+plot = sns.lineplot(x ='regularizer_rate' , y='acc_test', data = results_save[results_save.method == 'ExpectedGrad'], label="Expected Gradients");
+plot = sns.lineplot(x ='regularizer_rate' , y='acc_test', data = results_save[results_save.method == 'EGradients'], label="Expected Gradients");
+plot.set(xscale="log")
+plot.set_xlabel("Regularization strength")
+plot.set_ylabel("Test Accuracy")
+plot.set_title("");
+fig  = plot.get_figure()
+fig.tight_layout()
+# fig.savefig(oj(save_path,"ColorMNIST_results"))
+plt.show()
+<\Cell_5>
+<Cell_6>
+
+<\Cell_6>

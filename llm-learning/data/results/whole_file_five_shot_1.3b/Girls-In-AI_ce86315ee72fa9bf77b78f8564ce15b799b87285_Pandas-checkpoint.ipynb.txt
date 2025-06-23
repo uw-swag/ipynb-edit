@@ -1,0 +1,63 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update pic link"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+# Read from CSV to Pandas DataFrame
+df = pd.read_csv("titanic.csv", header=0)
+<\Cell_1>
+<Cell_2>
+# First five items
+df.head()
+<\Cell_2>
+<Cell_3>
+# Describe features
+df.describe()
+<\Cell_3>
+<Cell_4>
+# Histograms
+df["age"].hist()
+<\Cell_4>
+<Cell_5>
+# Unique values
+df["embarked"].unique()
+<\Cell_5>
+<Cell_6>
+# Selecting data by feature
+df["name"].head()
+<\Cell_6>
+<Cell_7>
+# Filtering
+df[df["sex"]=="female"].head() # only the female data appear
+<\Cell_7>
+<Cell_8>
+# Sorting
+df.sort_values("age", ascending=False).head()
+<\Cell_8>
+<Cell_9>
+# Grouping
+survived_group = df.groupby("survived")
+survived_group.mean()
+<\Cell_9>
+<Cell_10>
+# Selecting row
+df.iloc[0, :] # iloc gets rows (or columns) at particular positions in the index (so it only takes integers)
+<\Cell_10>
+<Cell_11>
+# Selecting specific value
+df.iloc[0, 1]
+<\Cell_11>
+<Cell_12>
+# Selecting by index
+df.loc[0] # loc gets rows (or columns) with particular labels from the index
+<\Cell_12>
+<Cell_13>
+# Rows with at least one NaN value
+df[pd.isnull(df).any(axis=1)].head()
+<\Cell_13>
+<Cell_14>

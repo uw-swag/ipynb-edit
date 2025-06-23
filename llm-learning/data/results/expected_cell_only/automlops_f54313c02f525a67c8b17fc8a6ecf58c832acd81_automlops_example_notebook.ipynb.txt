@@ -1,0 +1,37 @@
+!pip3 install ../dist/AutoMLOps-1.0.2-py2.py3-none-any.whl --user
+AutoMLOps.generate(project_id=PROJECT_ID, 
+                   pipeline_params=pipeline_params, 
+                   use_kfp_spec=True, 
+                   run_local=False, 
+                   schedule_pattern='0 */12 * * *',
+                   custom_training_job_specs = [{
+                       'component_spec': 'train_model',
+                       'display_name': 'train-model-accelerated',
+                       'machine_type': 'a2-highgpu-1g',
+                       'accelerator_type': 'NVIDIA_TESLA_A100',
+                       'accelerator_count': '1'
+                   }]
+)
+AutoMLOps.go(project_id=PROJECT_ID, # required
+             pipeline_params=pipeline_params, # required
+             af_registry_location='us-central1', # default
+             af_registry_name='vertex-mlops-af', # default
+             cb_trigger_location='us-central1', # default
+             cb_trigger_name='automlops-trigger', # default
+             cloud_run_location='us-central1', # default
+             cloud_run_name='run-pipeline', # default
+             cloud_tasks_queue_location='us-central1', # default
+             cloud_tasks_queue_name='queueing-svc', # default
+             csr_branch_name='automlops', # default
+             csr_name='AutoMLOps-repo', # default
+             custom_training_job_specs=None, # default
+             gs_bucket_location='us-central1', # default
+             gs_bucket_name=None, # default
+             pipeline_runner_sa=None, # default
+             run_local=True, # default
+             schedule_location='us-central1', # default
+             schedule_name='AutoMLOps-schedule', # default
+             schedule_pattern='No Schedule Specified', # default
+             use_kfp_spec=False, # default
+             vpc_connector='No VPC Specified' # default
+)

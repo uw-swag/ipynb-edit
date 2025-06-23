@@ -1,0 +1,56 @@
+```python
+    import pandas as pd
+
+    from sklearn import datasets
+
+    from plotly.graph_objects import histogram
+
+    from evidently.dashboard import Dashboard
+    from evidently.pipeline.column_mapping import ColumnMapping
+    from evidently.tabs import DataDriftTab
+
+    from evidently.model_profile import Profile
+    from evidently.profile_sections import DataDriftProfileSection
+    from evidently.analyzers.data_drift_analyzer import DataDriftOptions
+
+    boston = datasets.load_boston()
+
+    # Convert the dataset into a pandas DataFrame
+    df = pd.DataFrame(boston.data, columns=boston.feature_names)
+    df['TARGET'] = pd.Series(boston.target)
+
+    # Create a ColumnMapping object
+    mapping = ColumnMapping()
+    mapping.target = 'TARGET'
+    mapping.features = df.columns.tolist()
+
+    # Create a DataDriftOptions object
+    options = DataDriftOptions()
+    options.analyze_distribution = True
+    options.analyze_categorical_mapping = True
+
+    # Create a DataDriftAnalyzer object
+    analyzer = DataDriftAnalyzer(options=options)
+
+    # Perform data drift analysis
+    analyzer.fit(mapping, df)
+    analyzer.score(mapping, df)
+
+    # Create a DataDriftTab object
+    tab = DataDriftTab()
+
+    # Create a Profile object
+    profile = Profile(sections=[DataDriftProfileSection()])
+
+    # Perform profile section calculation
+    profile.calculate(mapping, df)
+
+    # Create a Dashboard object
+    dashboard = Dashboard(tabs=[tab])
+
+    # Perform dashboard calculation
+    dashboard.calculate(profile)
+
+    # Plot the dashboard
+    dashboard.plot()
+    ```

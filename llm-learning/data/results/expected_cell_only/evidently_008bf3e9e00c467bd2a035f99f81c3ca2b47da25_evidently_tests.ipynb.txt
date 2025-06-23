@@ -1,0 +1,15 @@
+#options
+stat_test_option = DataDriftOptions(all_features_stattest='psi')
+
+color_scheme = ColorOptions()
+color_scheme.primary_color = "#5a86ad"
+color_scheme.fill_color = "#fff4f2"
+color_scheme.zero_line_color = "#016795"
+color_scheme.current_data_color = "#c292a1" 
+color_scheme.reference_data_color = "#017b92"
+data_drift_column_tests = TestSuite(tests=[
+    TestColumnValueDrift(column_name='education-num',options=stat_test_option)
+], color_options=color_scheme)
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests

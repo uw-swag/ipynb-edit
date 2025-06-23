@@ -1,0 +1,154 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+
+from datetime import datetime
+from sklearn import datasets, ensemble
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, NumTargetDriftTab, RegressionPerformanceTab
+<\Cell_0>
+<Cell_1>
+content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+<\Cell_1>
+<Cell_2>
+#raw_data = pd.read_csv('~/Dev/evidently/train.csv', header=0, sep=',', parse_dates=['datetime'], index_col='datetime')
+<\Cell_2>
+<Cell_3>
+raw_data.head()
+<\Cell_3>
+<Cell_4>
+raw_data['month'] = raw_data.index.map(lambda x : x.month)
+raw_data['hour'] = raw_data.index.map(lambda x : x.hour)
+raw_data['weekday'] = raw_data.index.map(lambda x : x.weekday() + 1)
+<\Cell_4>
+<Cell_5>
+raw_data.head()
+<\Cell_5>
+<Cell_6>
+target = 'cnt'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'hour', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday']
+<\Cell_6>
+<Cell_7>
+reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+<\Cell_7>
+<Cell_8>
+reference.head()
+<\Cell_8>
+<Cell_9>
+regressor = ensemble.RandomForestRegressor(random_state = 0, n_estimators = 50)
+<\Cell_9>
+<Cell_10>
+regressor.fit(reference[numerical_features + categorical_features], reference[target])
+<\Cell_10>
+<Cell_11>
+ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+current_prediction = regressor.predict(current[numerical_features + categorical_features])
+<\Cell_11>
+<Cell_12>
+reference['prediction'] = ref_prediction
+current['prediction'] = current_prediction
+<\Cell_12>
+<Cell_13>
+column_mapping = {}
+
+column_mapping['target'] = target
+column_mapping['prediction'] = prediction
+column_mapping['numerical_features'] = numerical_features
+column_mapping['categorical_features'] = categorical_features
+<\Cell_13>
+<Cell_14>
+regression_perfomance_dashboard = Dashboard(tabs=[RegressionPerformanceTab])
+regression_perfomance_dashboard.calculate(reference, None, column_mapping=column_mapping)
+<\Cell_14>
+<Cell_15>
+regression_perfomance_dashboard.show()
+<\Cell_15>
+<Cell_16>
+#regression_perfomance_dashboard.save('reports/regression_performance_at_training.html')
+<\Cell_16>
+<Cell_17>
+regression_perfomance_dashboard.calculate(reference, current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                                            column_mapping=column_mapping)
+<\Cell_17>
+<Cell_18>
+regression_perfomance_dashboard.show()
+<\Cell_18>
+<Cell_19>
+#regression_perfomance_dashboard.save('reports/regression_performance_after_week1.html')
+<\Cell_19>
+<Cell_20>
+target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab])
+target_drift_dashboard.calculate(reference, current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                                   column_mapping=column_mapping)
+<\Cell_20>
+<Cell_21>
+target_drift_dashboard.show()
+<\Cell_21>
+<Cell_22>
+#target_drift_dashboard.save('reports/target_drift_after_week1.html')
+<\Cell_22>
+<Cell_23>
+regression_perfomance_dashboard.calculate(reference, current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                            column_mapping=column_mapping)
+<\Cell_23>
+<Cell_24>
+regression_perfomance_dashboard.show()
+<\Cell_24>
+<Cell_25>
+#regression_perfomance_dashboard.save('reports/regression_performance_after_week2.html')
+<\Cell_25>
+<Cell_26>
+target_drift_dashboard.calculate(reference, current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                   column_mapping=column_mapping)
+<\Cell_26>
+<Cell_27>
+target_drift_dashboard.show()
+<\Cell_27>
+<Cell_28>
+#target_drift_dashboard.save('reports/target_drift_after_week2.html')
+<\Cell_28>
+<Cell_29>
+regression_perfomance_dashboard.calculate(reference, current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                            column_mapping=column_mapping)
+<\Cell_29>
+<Cell_30>
+regression_perfomance_dashboard.show()
+<\Cell_30>
+<Cell_31>
+#regression_perfomance_dashboard.save('reports/regression_performance_after_week3.html')
+<\Cell_31>
+<Cell_32>
+target_drift_dashboard.calculate(reference, current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                   column_mapping=column_mapping)
+<\Cell_32>
+<Cell_33>
+target_drift_dashboard.show()
+<\Cell_33>
+<Cell_34>
+#target_drift_dashboard.save('reports/target_drift_after_week3.html')
+<\Cell_34>
+<Cell_35>
+column_mapping = {}
+
+column_mapping['numerical_features'] = numerical_features
+<\Cell_35>
+<Cell_36>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+data_drift_dashboard.calculate(reference, current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                                   column_mapping=column_mapping)
+<\Cell_36>
+<Cell_37>
+data_drift_dashboard.show()
+<\Cell_37>
+<Cell_38>
+#data_drift_dashboard.save("reports/data_drift_dashboard_after_week1.html")
+<\Cell_38>

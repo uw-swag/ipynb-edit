@@ -1,0 +1,81 @@
+
+    [Link to GPU Article](https://www.nvidia.com/en-us/data-center/gpu/)
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to read CSV file."
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    
+    ```python
+    import pandas as pd
+
+    DATA_FILE = "/home/students/data/sample_stocks.csv"
+    df = pd.read_csv(DATA_FILE)
+    print(df.head())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to plot data."
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    
+    ```python
+    import matplotlib.pyplot as plt
+
+    df.plot(x='Date', y='Close')
+    plt.title('Stock Prices Over Time')
+    plt.xlabel('Date')
+    plt.ylabel('Price')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to calculate mean and standard deviation."
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    
+    ```python
+    mean = df['Close'].mean()
+    std_dev = df['Close'].std()
+
+    print(f'Mean: {mean}')
+    print(f'Standard Deviation: {std_dev}')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to calculate moving average."
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    
+    ```python
+    window_size = 10
+    df['MA'] = df['Close'].rolling(window_size).mean()
+
+    plt.plot(df['Date'], df['MA'])
+    plt.title(f'Moving Average (Window Size: {window_size})')
+    plt.xlabel('Date')
+    pl

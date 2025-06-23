@@ -1,0 +1,47 @@
+```python
+    import torch
+from torch.utils.data import Dataset, DataLoader
+
+class CustomDataset(Dataset):
+    def __init__(self, data, transform=None):
+        self.data = data
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, index):
+        sample = self.data[index]
+
+        if self.transform:
+            sample = self.transform(sample)
+
+        return sample
+
+
+class CustomTransform:
+    def __init__(self, mean, std):
+        self.mean = mean
+        self.std = std
+
+    def __call__(self, sample):
+        sample = sample / 255.0
+        sample = (sample - self.mean) / self.std
+
+        return sample
+    
+
+# Load your data
+# data = torch.utils.data.DataLoader(...)
+
+# Create your dataset
+dataset = CustomDataset(data, transform=CustomTransform(0.5, 0.5))
+
+# Create your dataloader
+dataloader = DataLoader(dataset, batch_size=32)
+
+# Now you can use your dataloader in your training loop
+for batch in dataloader:
+    # Do something with your batch
+    pass
+    ```

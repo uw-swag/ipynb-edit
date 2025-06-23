@@ -1,0 +1,67 @@
+@default_renderer(wrap_type=MyMetric)
+class MyMetricRenderer(MetricRenderer):
+    def render_json(self, obj: MyMetric) -> dict:
+        result = dataclasses.asdict(obj.get_result())
+        return result
+
+    def render_html(self, obj: MyMetric) -> List[BaseWidgetInfo]:
+        metric_result = obj.get_result()
+        return [
+            # helper function for visualisation. More options here More options avaliable https://github.com/evidentlyai/evidently/blob/main/src/evidently/renderers/html_widgets.py
+            header_text(label=f"My metrics value is {metric_result.sum_value}"),
+        ]
+from plotly import graph_objs as go
+
+
+class MyMetricResult(MetricResult):
+    feature_name: str
+    current_sum_value: float
+    x_values_for_hist: list
+    y_values_for_hist: list
+    reference_sum_value: Optional[float] # reference data could absence so we will have None in that case
+
+
+class MyMetric(Metric[MyMetricResult]):
+  column_name: str
+
+  def __init__(self, column_name: str) -> None:
+    self.column_name = column_name
+    super().__init__()
+
+  def calculate(self, data: InputData) -> MyMetricResult:
+    reference_sum_value = None
+    if data.reference_data is not None:
+      reference_sum_value = data.reference_data[self.column_name].sum()
+    current_sum_value = data.current_data[self.column_name].sum()
+    # let's pretend we calculate some data for plot
+    x_values_for_hist = [1, 2]
+    y_values_for_hist = [2, 4]
+    return MyMetricResult(
+        feature_name = self.column_name,
+        current_sum_value = current_sum_value,
+        x_values_for_hist = x_values_for_hist,
+        y_values_for_hist = y_values_for_hist,
+        reference_sum_value = reference_sum_value
+    )
+
+
+@default_renderer(wrap_type=MyMetric)
+class MyMetricRenderer(MetricRenderer):
+    def render_json(self, obj: MyMetric, include_render: bool = False,
+        include: "IncludeOptions" = None, exclude: "IncludeOptions" = None,) -> dict:
+        result = obj.get_result().get_dict(include_render, include, exclude)
+        # we don't need plot data here
+        result.pop("x_values_for_hist", None)
+        result.pop("y_values_for_hist", None)
+        return result
+
+    def render_html(self, obj: MyMetric) -> List[BaseWidgetInfo]:
+        metric_result = obj.get_result()
+        figure = go.Figure(go.Bar(x=metric_result.x_values_for_hist, y=metric_result.y_values_for_hist))
+
+        return [
+            header_text(label=f"The sum of '{metric_result.feature_name}' column is {metric_result.current_sum_value} (current)"),
+            header_text(label=f"The sum of '{metric_result.feature_name}' column is {metric_result.reference_sum_value} (reference)"),
+            plotly_figure(title="Example plot", figure=figure)
+        ]
+data_drift_dataset_report.json()

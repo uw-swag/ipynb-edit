@@ -1,0 +1,62 @@
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection
+dataset = fetch_california_housing(as_frame=True)
+df = dataset.frame
+target = 'MedHouseVal'
+prediction = 'prediction'
+
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+ref_data = df[:15000]
+prod_data = df[15000:]
+data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()])
+
+data_and_target_drift_dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                                          prod_data.sample(1000, random_state=0),
+                                          column_mapping = column_mapping)
+
+data_and_target_drift_dashboard.show()
+import numpy as np
+from scipy.stats import anderson_ksamp
+from evidently.options import DataDriftOptions
+def anderson_stat_test(reference_data: pd.DataFrame, current_data: pd.DataFrame):
+    return anderson_ksamp(np.array([reference_data, current_data]))[2]
+options = DataDriftOptions(feature_stattest_func=anderson_stat_test, confidence=0.99, 
+                           nbinsx=20)
+data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()], options=[options])
+data_and_target_drift_dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                                          prod_data.sample(1000, random_state=0), 
+                                          column_mapping=column_mapping)
+data_and_target_drift_dashboard.show()
+options = DataDriftOptions(num_target_stattest_func=anderson_stat_test, 
+                           confidence={'MedInc':0.99, 'HouseAge': 0.99, 'AveRooms':0.99},
+                           nbinsx={'MedInc':15, 'HouseAge': 25, 'AveRooms':20}, 
+                           feature_stattest_func={'MedInc':anderson_stat_test, 'HouseAge':anderson_stat_test, 
+                                                  'AveRooms':anderson_stat_test}
+                          )
+data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()], options=[options])
+data_and_target_drift_dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                                          prod_data.sample(1000, random_state=0), 
+                                          column_mapping=column_mapping)
+data_and_target_drift_dashboard.show()
+data_drift_profile = Profile(sections=[DataDriftProfileSection()], options=[options])
+data_drift_profile.calculate(ref_data.sample(1000, random_state=0), 
+                                          prod_data.sample(1000, random_state=0), 
+                                          column_mapping=column_mapping)
+data_drift_profile.json()
+

@@ -1,0 +1,60 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added nvidia-smi to check gpu."
+    Original Code Cells:
+    '''
+    <Cell_0>
+# !nvidia-smi
+<\Cell_0>
+<Cell_1>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+!pip install fastai2 -q
+<\Cell_2>
+<Cell_3>
+from fastai2.basics import *
+from fastai2.vision.all import *
+from fastai2.callback.all import *
+<\Cell_3>
+<Cell_4>
+np.random.seed(1234)
+<\Cell_4>
+<Cell_5>
+URLs.PETS
+<\Cell_5>
+<Cell_6>
+path = untar_data(URLs.PETS)
+path
+<\Cell_6>
+<Cell_7>
+path.ls()
+<\Cell_7>
+<Cell_8>
+(path/"annotations").ls()
+<\Cell_8>
+<Cell_9>
+(path/"images").ls()
+<\Cell_9>
+<Cell_10>
+fnames = get_image_files(path/"images")
+fnames
+<\Cell_10>
+<Cell_11>
+pat = r"([^/]+)_\d+.*$"
+re.findall(pat, str(fnames[0]))
+<\Cell_11>
+<Cell_12>
+item_tfms = RandomResizedCrop(460, min_scale=0.75, ratio=(1., 1.))
+<\Cell_12>
+<Cell_13>
+batch_tfms = [*aug_transforms(size=224, max_warp=0.25), Normalize.from_stats(*imagenet_stats)]
+<\Cell_13>
+<Cell_14>
+# aug_transforms??
+# RandomResizedCrop??
+<\Cell_14>
+<

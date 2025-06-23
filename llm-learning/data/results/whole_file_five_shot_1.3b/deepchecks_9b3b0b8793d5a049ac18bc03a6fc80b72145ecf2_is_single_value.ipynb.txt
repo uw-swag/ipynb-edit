@@ -1,0 +1,38 @@
+```python
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from deepchecks.checks.integrity.is_single_value import IsSingleValue
+
+    iris = load_iris()
+    X = iris.data
+
+    df = pd.DataFrame({'a':[3,4,1], 'b':[2,2,2], 'c':[None, None, None], 'd':['a', 4, 6]})
+
+    IsSingleValue().run(pd.DataFrame(X))
+
+    IsSingleValue().run(pd.DataFrame({'a':[3,4], 'b':[2,2], 'c':[None, None], 'd':['a', 4]}))
+
+    sv = IsSingleValue()
+    sv.run(df)
+
+    sv_ignore = IsSingleValue(ignore_columns=['b','c'])
+    sv_ignore.run(df)
+    ```
+
+    The above code will run the integrity checks on the dataframe `df`. The `IsSingleValue` check will be applied to each column in the dataframe, and the results will be printed out.
+
+    The `ignore_columns` parameter can be used to specify which columns to ignore during the check.
+
+    The `run` method of the `IsSingleValue` class is used to execute the check on a dataframe.
+
+    The `IsSingleValue` class is a part of the `deepchecks.checks.integrity` module, which provides a set of integrity checks.
+
+    The `deepchecks` library is a Python library for data integrity and quality checks.
+
+    The `deepchecks.checks.integrity` module provides a set of integrity checks that can be used to check the integrity of a dataframe.
+
+    The `IsSingleValue` class is a part of the `deepchecks.checks.integrity` module, which provides a set of integrity checks.
+
+    The `deepchecks` library is a Python library for data integrity and quality checks.
+
+    The `deepchecks.checks.integrity` module provides a set of integrity checks that can be used to check the integrity of a dataframe.

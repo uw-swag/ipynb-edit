@@ -1,0 +1,32 @@
+```python
+    # import necessary libraries
+    from sklearn.metrics import silhouette_score
+    from sklearn.cluster import KMeans
+    import matplotlib.pyplot as plt
+
+    # define the number of clusters
+    num_clusters = 5
+
+    # create a KMeans instance
+    kmeans = KMeans(n_clusters=num_clusters)
+
+    # fit the model to the data
+    kmeans.fit(X)
+
+    # get the cluster labels
+    cluster_labels = kmeans.labels_
+
+    # calculate the silhouette score
+    silhouette_score = silhouette_score(X, cluster_labels)
+
+    # plot the silhouette plot
+    plt.figure(figsize=(10, 6))
+    plt.axvline(x=0.03, color="k", linestyle="--")
+    plt.axhline(y=0.03, color="k", linestyle="--")
+    plt.scatter(range(num_clusters), silhouette_scores, c=cluster_labels, cmap="Dark2")
+    plt.title("Silhouette plot")
+    plt.xlabel("Silhouette score")
+    plt.ylabel("Cluster index")
+    plt.show()
+    ```
+    The code above calculates the silhouette score and plots the silhouette plot. The silhouette score ranges from -1 to 1, where a high value indicates that the sample is well matched to its own cluster and poorly matched to neighboring clusters. The silhouette score ranges from -1 to 1, where a high value indicates that the sample is well matched to its own cluster and poorly matched to neighboring clusters.

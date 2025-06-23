@@ -1,0 +1,23 @@
+```python
+    import pandas as pd
+from mlchecks import Suite
+from mlchecks.checks import *
+
+suite = Suite('My Single Suite',
+    IsSingleValue(),
+    MixedNulls(),
+    MixedTypes(),
+    StringMismatch()
+)
+from sklearn.datasets import load_iris
+
+df = load_iris(return_X_y=False, as_frame=True)
+df = pd.concat([df.data, df.target], axis=1)
+
+train = df[:100]
+val = df[100:]
+
+suite.run(train_dataset=train, validation_dataset=val, check_datasets_policy='both')
+    ```
+
+    The above code is a demonstration of how to run a suite of checks on a dataset. The suite includes checks for single value, mixed nulls, mixed types, and string mismatches. The `suite.run()` function is used to execute the checks on the training and validation datasets. The `check_datasets_policy` parameter is set to 'both' to ensure that the checks are run on both the training and validation datasets.

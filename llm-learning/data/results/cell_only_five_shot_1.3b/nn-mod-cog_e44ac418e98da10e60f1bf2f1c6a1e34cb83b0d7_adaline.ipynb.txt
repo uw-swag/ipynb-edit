@@ -1,0 +1,47 @@
+```python
+    def fit(X, y, eta=0.001, n_iter=1):
+        '''loop over exemplars and update weights'''
+        mse_iteration = []
+        w = random_weights(X, random_state=1)
+        for pair in range(n_iter):
+            output = net_input(X, w)
+            gradient = 2*(y - output)
+            w[1:] += eta*(X.T @ gradient)
+            w[0] += eta*gradient.sum()
+            mse = (((y - output)**2).sum())/len(y)
+            mse_iteration.append(mse)
+        return w, mse_iteration
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "flip error in adaline; intro multilayer perceptron"
+    Original Code Cells:
+    '''
+    def fit(X, y, eta=0.001, n_iter=1):
+    '''loop over exemplars and update weights'''
+    mse_iteration = []
+    w = random_weights(X, random_state=1)
+    for pair in range(n_iter):
+        output = net_input(X, w)
+        gradient = 2*(y - output)
+        w[1:] += eta*(X.T @ gradient)
+        w[0] += eta*gradient.sum()
+        mse = (((y - output)**2).sum())/len(y)
+        mse_iteration.append(mse)
+    return w, mse_iteration
+alt.Chart(df2).mark_image(
+    width=20,
+    height=20
+).encode(
+    alt.X("weight-(gm)", scale=alt.Scale(domain=(6000, 16000))),
+    alt.Y("wingspan-(cm)", scale=alt.Scale(domain=(220, 360))),
+    url="url"
+).properties(
+title="Chart 3"
+)
+
+    '''
+    ]
+
+    ### Response

@@ -1,0 +1,22 @@
+```python
+    import requests
+    from bs4 import BeautifulSoup
+
+    def get_friends_comments(username):
+        url = f"https://www.facebook.com/{username}"
+        response = requests.get(url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        comments = []
+        for comment in soup.find_all('div', {'class': 'd386993193431539'}):
+            comment_text = comment.find('p').text
+            comments.append(comment_text)
+
+        return comments
+
+    # Test the function
+    print(get_friends_comments('your_username'))
+    ```
+    This script will download the comments of a Facebook user. You need to replace 'your_username' with the actual username.
+
+    Please note that this script is a simple example and may not work for all Facebook pages. Facebook's terms of service may prevent scraping or scraping in certain situations. Always respect the website's robots.txt file and terms of service.

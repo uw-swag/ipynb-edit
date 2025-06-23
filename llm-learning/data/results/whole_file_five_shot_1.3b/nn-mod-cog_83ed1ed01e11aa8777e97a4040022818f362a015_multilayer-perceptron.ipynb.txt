@@ -1,0 +1,36 @@
+```
+    # Multilayer Perceptron (MLP)
+    # ----------------------------
+    # This is a simple example of a multilayer perceptron model.
+    # The model is a feed-forward neural network with two hidden layers.
+    # The model is trained to classify the XOR problem.
+
+    # Import necessary libraries
+    from keras.models import Sequential
+    from keras.layers import Dense, Activation
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(2, input_dim=2, kernel_initializer='random_uniform'))
+    model.add(Dense(2, kernel_initializer='random_uniform'))
+    model.add(Activation('relu'))
+
+    # Compile the model
+    model.compile(optimizer='rmsprop',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=10, batch_size=10)
+
+    # Evaluate the model
+    scores = model.evaluate(X_test, y_test)
+    print('\n%s: %.2f%%' % (model.metrics_names[1], scores[1]*100))
+    ```
+    This code creates a simple multilayer perceptron model for the XOR problem. The model is trained on the training data, and then evaluated on the test data. The accuracy of the model is printed to the console.
+
+    The model is defined as a sequential model with two hidden layers. The first hidden layer has 2 neurons, and the second hidden layer also has 2 neurons. The output layer has 1 neuron, and the activation function used is the ReLU (Rectified Linear Unit) function. The optimizer used is the RMSprop optimizer, and the loss function is the binary cross-entropy loss function.
+
+    The model is trained for 10 epochs, with a batch size of 10. The model's performance is evaluated on the test data. The accuracy of the model is printed to the console.
+
+    The XOR problem is a binary

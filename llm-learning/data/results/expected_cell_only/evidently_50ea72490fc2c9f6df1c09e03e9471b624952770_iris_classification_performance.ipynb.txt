@@ -1,0 +1,6 @@
+from evidently.tabs.base_tab import Verbose
+
+iris = datasets.load_iris()
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=Verbose.FULL)])
+iris_model_performance_dashboard.calculate(reference, production, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()

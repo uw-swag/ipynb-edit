@@ -1,0 +1,14 @@
+```
+    # Links checks GitHub action fix (#775)
+    name: Links checks
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Run links checks
+      run: |
+        pip install -r requirements.txt
+        python -m links_checks
+```

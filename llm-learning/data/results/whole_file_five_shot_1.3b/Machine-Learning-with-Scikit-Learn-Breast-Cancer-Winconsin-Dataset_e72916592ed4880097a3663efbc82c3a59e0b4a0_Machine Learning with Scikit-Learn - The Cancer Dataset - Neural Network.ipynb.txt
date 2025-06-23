@@ -1,0 +1,47 @@
+```python
+    <Cell_0>
+    import IPython.display as ipd
+
+    # Hide code by default when the notebook is exported as HTML.
+    ipd.display_html('''
+    <script>
+    $(function() {
+        if ($("body.notebook_app").length == 0) {
+            $(".input").hide(); 
+        }
+    });
+    </script>
+    ''', raw=True)
+
+    # Create HTML buttons to show or hide IPython input cells.
+    ipd.display_html('''
+    <button onclick="$('.input').show();">Show input</button>
+    <button onclick="$('.input').hide();">Hide input</button>
+    ''', raw=True)
+    <\Cell_0>
+
+    <Cell_1>
+    # Import necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D
+    from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+    # Define the model
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), input_shape=(64, 64, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(32, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Conv2D(64, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    model.add(Flatten())
+    model.add(Dense(64))

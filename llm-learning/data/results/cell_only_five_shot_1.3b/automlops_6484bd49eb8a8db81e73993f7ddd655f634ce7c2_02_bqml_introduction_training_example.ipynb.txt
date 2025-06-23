@@ -1,0 +1,37 @@
+```python
+    import kfp
+    from google.cloud import aiplatform
+
+    # Initialize the KFP client
+    client = kfp.Client()
+
+    # Define a pipeline
+    @client.create_experiment
+    def my_experiment(project_id, location, display_name):
+        # Define a task
+        @client.create_task(task_path='my_task')
+        def my_task(input_path, output_path):
+            # Your task code here
+            pass
+
+        # Run the task
+        my_task.run(inputs={'input_path': 'gs://my_bucket/input.txt', 'output_path': 'gs://my_bucket/output.txt'},
+                    environment='my_environment')
+
+    # Submit the experiment
+    experiment_id = my_experiment.submit(project_id='my_project', location='us-central1', display_name='my_experiment')
+    ```
+
+    This is a simple example of a KFP pipeline using the KFP client library. The pipeline is defined as a function that creates a task and then runs that task. The task is defined as a function that does nothing. The pipeline is then submitted to the AI Platform.
+
+    Please replace the `my_task` function with your actual task code.
+
+    Also, replace the `my_environment` with your actual environment.
+
+    The `input_path` and `output_path` in the `my_task.run` function should be replaced with the actual paths where your input and output data are stored.
+
+    The `project_id`, `location`, and `display_name` in the `my_experiment.submit` function should be replaced with your actual project ID, location, and display name.
+
+    The `my_project` in the `experiment_id = my_experiment.submit(project_id='my_project', location='us-central1', display_name='my_experiment')` line should be replaced with your actual project ID.
+
+    The `gs://my_bucket/input.txt` and `gs://my_bucket/output.txt` in the `my_task.run

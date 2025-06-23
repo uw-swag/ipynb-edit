@@ -1,0 +1,30 @@
+```
+    from __future__ import division, print_function, unicode_literals
+    import matplotlib
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    x = np.linspace(-2, 2, 200)
+    plt.plot(x, x**2)
+    plt.show()
+
+    # Adding a colab link
+    from IPython.display import HTML
+    HTML('<iframe src="https://colab.research.google.com/notebooks/embedded_full_notebook.html?cell_id=1" width="100%" height="620"></iframe>')
+
+    # Serving the model with Flask
+    from flask import Flask, request, jsonify
+    app = Flask(__name__)
+
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        data = request.get_json()
+        result = model.predict([np.array(data['features'])])
+        return jsonify({'churn': int(result[0])})
+
+    if __name__ == '__main__':
+        # Load your trained model here
+        # model = ...
+        app.run(port=9696)
+    ```

@@ -1,0 +1,33 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "update Dockerfile"
+    Original Code Cells:
+    '''
+    <Cell_0>
+FROM golang:1.16
+<\Cell_0>
+<Cell_1>
+WORKDIR /app
+<\Cell_1>
+<Cell_2>
+COPY go.mod go.sum ./
+<\Cell_2>
+<Cell_3>
+RUN go mod download
+<\Cell_3>
+<Cell_4>
+COPY . .
+<\Cell_4>
+<Cell_5>
+RUN go build -o main .
+<\Cell_5>
+<Cell_6>
+EXPOSE 8080
+<\Cell_6>
+<Cell_7>
+ENTRYPOINT ["/app/main"]
+<\Cell_7>
+    '''
+    ]
+    ```

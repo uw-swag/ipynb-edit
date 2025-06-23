@@ -1,0 +1,46 @@
+```python
+    # Importing Handson Machine Learning libraries
+    import h2o
+    from h2o.automl import H2OAutoML
+
+    # Connect to the H2O cluster
+    h2o.init()
+
+    # Importing the dataset
+    train = h2o.import_file("path_to_your_train_file")
+    test = h2o.import_file("path_to_your_test_file")
+
+    # Ensuring that the target column is a factor
+    train["target"] = train["target"].asfactor()
+    test["target"] = test["target"].asfactor()
+
+    # Setting up the H2O AutoML
+    aml = H2OAutoML(
+        project_name="iris_flowers",
+        balance_classes=True,
+        max_models=5,
+        seed=12345,
+        max_runtime_secs=3600
+    )
+
+    # Training the AutoML model
+    aml.train(x=["_id"] + iris.feature_names, y="target", training_frame=train)
+
+    # Generating recommendations
+    recommendations = aml.predict(test)
+
+    # Saving the model
+    aml.save_model("iris_flowers")
+
+    # Importing the model
+    lr = h2o.load_model("iris_flowers")
+
+    # Generating predictions
+    predictions = lr.predict(test)
+
+    # Saving the figure
+    save_fig("iris_flowers")
+
+    # Closing the connection
+    h2o.cluster().shutdown()
+    ```

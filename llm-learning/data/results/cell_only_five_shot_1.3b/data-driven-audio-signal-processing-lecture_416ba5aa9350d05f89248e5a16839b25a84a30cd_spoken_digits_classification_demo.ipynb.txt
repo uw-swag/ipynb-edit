@@ -1,0 +1,48 @@
+```python
+    import glob
+import soundfile as sf
+import matplotlib.pyplot as plt
+import numpy as np
+from librosa.feature import mfcc
+
+import os
+def load_examples(path):
+    
+    X = list()
+    Y = list()
+    
+    audiofiles = glob.glob(path, recursive=True)
+    for filepath in audiofiles:
+        x, fs = sf.read(filepath)
+        x = x / np.max(np.abs(x))
+        X.append(x)
+        Y.append(int(os.path.basename(filepath)[0]))
+    
+    return X, Y, fs
+
+# load examples
+X, Y, fs = load_examples(path + '*.wav')
+
+# determine maximum length of the examples
+lengths = [len(x) for x in X]
+N = np.max(lengths)
+
+# append zeros to examples to equalize lengths
+X = [np.concatenate((sample, np.zeros(N - len(sample)))) for sample in X]
+X = np.array(X)
+Y = np.array(Y)
+print('Total number of examples: {}'.format(len(X)))
+print('Number of samples per example: {}'.format(N))
+MFCC = [mfcc(y=sample, sr=fs, htk=True) for sample in X]
+MFCC = np.array(MFCC)
+MFCC = MFCC.reshape((-1, np.prod(MFCC.shape[1:])))
+
+print('Total number of examples: {}'.format(MFCC.shape[0]))
+print('Dimension of feature vectors: {}'.format(MFCC.shape[1]))
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.utils import to_categorical
+
+Y = to_categorical(Y, 10)
+
+X_train, X_test, y_train, y_test = train_test_split(MFCC, Y, test_size=0.2)
+from tensorflow.keras.layers import Input, Dense

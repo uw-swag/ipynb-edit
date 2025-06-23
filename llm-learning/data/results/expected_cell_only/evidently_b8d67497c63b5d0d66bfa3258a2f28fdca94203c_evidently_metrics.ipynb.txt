@@ -1,0 +1,9 @@
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnDriftMetric('age', options=stat_test_option),
+],
+                                  options=[color_scheme]
+)
+
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_report

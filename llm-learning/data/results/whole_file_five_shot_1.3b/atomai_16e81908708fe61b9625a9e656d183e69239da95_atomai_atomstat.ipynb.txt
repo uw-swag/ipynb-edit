@@ -1,0 +1,26 @@
+```
+    The code you provided is a part of a Jupyter notebook. It's using several libraries and functions from the atomai library, which is a deep learning library for atomistic simulations. Here's a brief explanation of what each part of the code does:
+
+    1. `!pip install -q git+https://github.com/ziatdinovmax/atomai.git`: This command installs the atomai library.
+
+    2. `import atomai as aoi`: This imports the atomai library.
+
+    3. `import numpy as np`: This imports the numpy library.
+
+    4. `download_link = 'https://drive.google.com/uc?id=1o8JM9vckfrd9bpq-LkY2R06yzzbCdg6S'`: This is a Google Drive link to a zip file containing some test data.
+
+    5. `!gdown -q $download_link -O 'test_data.zip'`: This command downloads the zip file from the Google Drive link.
+
+    6. `!unzip -qq -j 'test_data.zip'`: This command unzips the downloaded zip file.
+
+    7. `model_dict_path = '/content/bfo_model_dict.tar'`: This is the path to a file containing the trained weights of a model.
+
+    8. `model = aoi.load_model(model_dict_path)`: This loads the trained weights of the model from the file.
+
+    9. `expdata = np.load('bfo_test_img.npy')`: This loads experimental data.
+
+    10. `nn_input, (nn_output, coordinates) = aoi.atomnet.predictor(expdata, model, use_gpu=False).run()`: This runs the atomnet predictor on the experimental data.
+
+    11. `imstack = aoi.atomstat.imlocal(nn_output, coordinates, crop_size=16, coord_class=1)`: This creates an instance of the imlocal class from the atomstat module.
+
+    12. `imstack.pca_sc

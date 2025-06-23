@@ -1,0 +1,49 @@
+```python
+    # Module 03: Code files added
+
+    # Importing necessary libraries
+    import pandas as pd
+    import os
+    import numpy as np
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.neighbors import KNeighborsRegressor
+    from copy import deepcopy
+
+    # Function to scale features between 0 and 1
+    def scale_0_1(ser, minimum=None, maximum=None):
+        if minimum is not None:
+            pass
+        else:
+            minimum = ser.min()
+            maximum = ser.max()
+        return (ser-minimum).div(maximum-minimum)
+
+    # Function to compute FFT of a signal
+    def compute_fft_aggregate(sig):
+        scaled = scale_0_1(sig)
+        ac_component = scaled - scaled.mean()
+        return np.fft.fft(ac_component)
+
+    # Function to decompose time series data
+    def decompose(df, freq=96):
+        res = sm.tsa.seasonal_decompose(df.fillna(method='ffill').values, freq=freq)
+        return pd.DataFrame({"seasonal":res.seasonal, "trend":res.trend, "obs":res.observed}, index=df.index)
+
+    # Function to find the best feature for a given appliance
+    def _find_accuracy(home, appliance, feature="Monthly"):
+        # Your code here
+
+    # Function to find the best feature for a given appliance
+    def _find_accuracy(home, appliance, feature="Monthly"):
+        # Your code here
+
+    # Function to find the best feature for a given appliance
+    def _find_accuracy(home, appliance, feature="Monthly"):
+        # Your code here
+
+    # Function to find the best feature for a given appliance
+    def _find_accuracy(home, appliance, feature="Monthly"):
+        # Your code here
+
+    # Function to find the best feature for a given appliance
+    def

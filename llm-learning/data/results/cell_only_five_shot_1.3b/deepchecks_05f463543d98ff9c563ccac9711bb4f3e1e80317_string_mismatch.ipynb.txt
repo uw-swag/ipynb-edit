@@ -1,0 +1,40 @@
+```python
+    import nannyml as nml
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.impute import SimpleImputer
+
+    # Load synthetic data
+    reference, analysis, _ = nml.load_synthetic_car_loan_dataset()
+
+    # Define feature columns
+    feature_column_names = [
+        col for col in reference.columns
+        if col not in ['timestamp', 'y_pred_proba', 'y_pred', 'repaid']
+    ]
+
+    # Initialize the object that will perform the Univariate Drift calculations
+    univariate_calculator = nml.UnivariateStatisticalDriftCalculator(
+        model_metadata=nml.extract_metadata(data=reference, model_name='car_loan_predictor'),
+        chunk_size=5000
+    )
+
+    # Fit the calculator to the reference data
+    univariate_calculator.fit(reference_data=reference)
+
+    # Calculate the univariate results
+    data = pd.concat([reference, analysis], ignore_index=True)
+    univariate_results = univariate_calculator.calculate(data=data)
+
+    # Plot the univariate results
+    for feature in feature_column_names:
+        figure = univariate_results.plot(kind='feature_drift', metric='statistic', feature_label=feature)
+        figure.show()
+        figure.write_image(f'drift-guide-{feature}.svg')
+
+    # Replace 'wfh' with 'car_loan' in the commit message
+    commit_message = "[Automatic] Examples Update (#299)"
+
+    # Print the updated commit message
+    print(commit_message)
+    ```

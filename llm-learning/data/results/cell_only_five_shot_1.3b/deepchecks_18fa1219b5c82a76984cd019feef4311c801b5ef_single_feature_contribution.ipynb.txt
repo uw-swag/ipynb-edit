@@ -1,0 +1,46 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#332)"
+    Original Code Cells:
+    '''
+    %load_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import torch
+    import pickle
+    from torch.autograd import Variable
+
+    sys.path.append('..')
+    sys.path.append('../visualization')
+    sys.path.append('../acd/util')
+    sys.path.append('../acd/scores')
+    sys.path.append('../acd/agglomeration')
+    import viz_1d as viz
+    import tiling_1d as tiling
+    import agg_1d as agg
+    import cd
+    import score_funcs
+
+    sys.path.append('../dsets/sst')
+    from dsets.sst import dset
+    sst_pkl = pickle.load(open('../dsets/sst/sst.pkl', 'rb'))
+
+    # base parameters
+    sweep_dim = 1 # how large chunks of text should be considered (1 for words)
+    method = 'cd' # build_up, break_down, cd
+    percentile_include = 90
+    num_iters = 25 # maximum number of iterations
+
+    # any text with words from this dataset can be interpreted
+    sentence = ['a', 'great', 'ensemble', 'cast', 'ca', 'n\'t', 'lift', 'this', 'heartfelt', 'enterprise', 'out', 'of', 'the', 'familiar', '.'] # note this is a real example from the dataset
+
+    # Pick a random starting position on the surface of our Paraboloid
+    start_pos: Vector
+
+    # Ensure that we don't start at a minimum (0, 0 in our case)
+    while True:
+        start_x: float = randint(xs_start, xs_stop)
+        start_y: float = randint(ys_start, y

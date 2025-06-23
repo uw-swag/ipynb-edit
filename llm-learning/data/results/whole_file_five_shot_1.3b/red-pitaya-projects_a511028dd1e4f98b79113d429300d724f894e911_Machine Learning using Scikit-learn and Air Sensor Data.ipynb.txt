@@ -1,0 +1,47 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added sensor data"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import svm
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.model_selection import train_test_split
+from datetime import datetime, date
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+filename = str(date.today()) + " data.csv"
+
+<\Cell_1>
+<Cell_2>
+headers = ["PM 0.3","PM 0.5","PM 1.0","PM 2.5","PM 5.0","PM 10.0","Temp","Pressure","Humidity","CO2",
+           "BME680 VOC","QM9 VOC","MiCS5524 VOC","CCS811 VOC","Date"]
+try:
+    dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+    df = pd.read_csv(filename, parse_dates=['Date'], date_parser=dateparse,index_col=0)
+    df
+except:
+    print("Reading Data Failed.")
+<\Cell_2>
+<Cell_3>
+df.head()
+<\Cell_3>
+<Cell_4>
+df.info()
+<\Cell_4>
+<Cell_5>
+#Preprocess data
+bins = (2, 6.5, 8)
+group_names = ['air','alcohol']
+df['smell'] = pd.cut(wine['smell'],bins = bins, labels = group_names)
+df['smell'].unique()
+<\Cell_5>

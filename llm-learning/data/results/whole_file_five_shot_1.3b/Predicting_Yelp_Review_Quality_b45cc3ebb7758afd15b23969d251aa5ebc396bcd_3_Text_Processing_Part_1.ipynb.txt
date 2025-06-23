@@ -1,0 +1,50 @@
+
+    '''
+    [
+    Commit Message: "Major update of NLP based feature engineering."
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Common Libraries
+import re
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+# Main NLP libraries
+import nltk
+import gensim
+# Wordclouds
+from wordcloud import WordCloud, STOPWORDS
+# Reading Level and Basic Stats
+import textstat
+from nltk.corpus import stopwords as nltk_stopwords
+# Sentiment Analysis
+from textblob import TextBlob
+# Classification
+from sklearn.model_selection import cross_validate, GridSearchCV, train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer, TfidfVectorizer
+from sklearn.metrics import make_scorer, recall_score, precision_score
+from sklearn.naive_bayes import MultinomialNB
+# Word2Vec
+from gensim.models import Word2Vec
+import gensim.downloader as api
+
+
+pd.set_option('display.float_format', lambda x: '%.5f' % x)
+<\Cell_0>
+<Cell_1>
+file_location = "../data/full_data/analytics_ready/"
+filename = "text_data_train.json"
+<\Cell_1>
+<Cell_2>
+df = pd.read_json(file_location + filename, nrows=num_records_to_load, orient="records", lines=True)
+<\Cell_2>
+<Cell_3>
+text["word_count"] = text["review_text"].apply(lambda x: len(str(x).split(" ")))
+text["character_count"] = text["review_text"].str.len()
+text["avg_word_length"] = text["review_text"].apply(lambda x: avg_word(x))
+text.info()
+text.head(5)
+<\Cell_

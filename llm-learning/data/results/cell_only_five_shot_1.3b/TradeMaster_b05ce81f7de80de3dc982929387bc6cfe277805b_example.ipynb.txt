@@ -1,0 +1,29 @@
+```python
+    # Importing necessary libraries
+    from sklearn.cluster import KMeans
+    import matplotlib.pyplot as plt
+
+    # Assuming you have a DataFrame 'df' with stock prices
+    df = pd.read_csv('stock_prices.csv')
+
+    # Preprocessing the data
+    df = df.dropna()
+
+    # Selecting features
+    features = df[['Open', 'High', 'Low', 'Volume']]
+
+    # Creating a KMeans model
+    kmeans = KMeans(n_clusters=3)
+
+    # Fitting the model
+    kmeans.fit(features)
+
+    # Adding a new column 'Cluster' to the DataFrame
+    df['Cluster'] = kmeans.labels_
+
+    # Plotting the clusters
+    plt.scatter(df['Open'], df['Volume'], c=df['Cluster'])
+    plt.show()
+    ```
+
+    This code will create a scatter plot of the stock prices, with the different clusters represented by different colors. The KMeans algorithm is used to group the stock prices into three clusters.

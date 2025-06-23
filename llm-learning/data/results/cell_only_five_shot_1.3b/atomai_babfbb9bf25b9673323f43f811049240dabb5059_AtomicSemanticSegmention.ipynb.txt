@@ -1,0 +1,18 @@
+```
+    download_link1 =  'https://www.dropbox.com/s/lk0mnwqz5ak6sf7/ferroics-exp-small-m.npz?dl=0'
+    download_link2 =  'https://www.dropbox.com/s/j5ua39fufwg0f06/expdata_val.npy?dl=0'
+
+    !wget -q $download_link1 -O 'training_data.npy'
+    !wget -q $download_link2 -O 'validation_data.npy'
+
+    # Load train/test data (this is a simple dataset generated just from a single image)
+    dataset = np.load('training_data.npy')
+    images = dataset['X_train']
+    labels = dataset['y_train']
+    images_test = dataset['X_test']
+    labels_test = dataset['y_test']
+    # Load validation data (data from different experiment)
+    expdata = np.load("validation_data.npy")
+    ```
+
+    ###

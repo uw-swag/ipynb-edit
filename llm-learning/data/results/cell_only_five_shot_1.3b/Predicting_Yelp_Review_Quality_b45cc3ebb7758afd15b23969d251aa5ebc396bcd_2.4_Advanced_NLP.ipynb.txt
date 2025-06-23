@@ -1,0 +1,31 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Feature engineering
+    # TF-IDF vectorizer
+    vectorizer = TfidfVectorizer(max_features=2000, min_df=5, max_df=0.7, stop_words=stopwords.words('english'))
+    X = vectorizer.fit_transform(df['your_text_column']).toarray()
+
+    # Save the vectorizer
+    with open('vectorizer.pkl', 'wb') as f:
+        pickle.dump(vectorizer, f)
+
+    # Save the TF-IDF matrix
+    with open('tfidf_matrix.pkl', 'wb') as f:
+        pickle.dump(X, f)
+    ```
+
+    This code will perform the following:
+    1. Load a dataset.
+    2. Perform TF-IDF vectorization on the text data.
+    3. Save the vectorizer and TF-IDF matrix for future use.
+
+    Please replace 'your_dataset.csv' and 'your_text_column' with your actual dataset and text column names.
+
+    Also, make sure to install the necessary libraries (`pandas`, `sklearn`, `nltk`) if they are not installed.
+
+    Please note that this is a basic example. Depending on your specific use case, you may need to adjust the feature engineering process.

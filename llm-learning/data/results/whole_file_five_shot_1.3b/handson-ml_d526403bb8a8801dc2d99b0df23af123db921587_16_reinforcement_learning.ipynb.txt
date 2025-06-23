@@ -1,0 +1,39 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Adding a simple reinforcement learning agent"
+    Original Code Cells:
+    '''
+    import tensorflow as tf
+    from tensorflow.contrib.layers import fully_connected
+
+    tf.reset_default_graph()
+
+    n_inputs = 4
+    n_hidden = 4
+    n_outputs = 1
+
+    learning_rate = 0.01
+
+    initializer = tf.contrib.layers.variance_scaling_initializer()
+
+    def q_network(X_state, scope):
+        with tf.variable_scope(scope) as scope:
+            hidden = fully_connected(X_state, n_hidden, activation_fn=tf.nn.elu, weights_initializer=initializer)
+            outputs = fully_connected(hidden, n_outputs, activation_fn=None)
+        trainable_vars = {var.name[len(scope.name):]: var for var in tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope.name)}
+        return outputs, trainable_vars    
+
+    X_state = tf.placeholder(tf.float32, shape=[None, n_inputs])
+    X_action = tf.placeholder(tf.int32, shape=[None])
+    y = tf.placeholder(tf.float32, shape=[None, 1])
+
+    actor_q_values, actor_vars = q_network(X_state, scope="q_networks/actor")    # acts
+    critic_q_values, critic_vars = q_network(X_state, scope="q_networks/critic") # learns
+
+    copy_ops = [actor_var.assign(critic_vars[var_name])
+                for var_name, actor_var in actor_vars.items()]
+    copy_critic_to_actor = tf.group(*copy_ops)
+
+    with tf.variable_scope("train"):
+        cost = tf.reduce_mean(tf.square(y - actor_q_

@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented a simple RNN model"
+    Original Code Cells:
+    '''
+    '''
+<\Cell_69>
+<Cell_70>
+n_iterations = 1000
+batch_size = 64
+
+with tf.Session() as sess:
+    init.run()
+    for iteration in range(n_iterations):
+        X_batch, y_batch = next_batch(batch_size, n_steps)
+        sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
+        if iteration % 100 == 0:
+            print("Iteration:", iteration, "Loss:", loss_val)
+    print("Optimization Finished. Loss:", loss_val)
+<\Cell_70>
+<Cell_71>
+tf.reset_default_graph()
+
+n_steps = 20
+n_inputs = 4
+n_neurons = 100
+n_layers = 3
+
+X = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
+Y = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
+
+lstm_cells = [tf.contrib.rnn.BasicLSTMCell(num_units=n_neurons) for _ in range(n_layers)]
+multi_cell = tf.contrib.rnn.MultiRNNCell(lstm_cells)
+initial_state = multi_cell.zero_state(dtype=tf.float32, batch_size=batch_size)
+outputs, final_state = tf.nn.dynamic_rnn(multi_cell, X, initial_state=initial_state)
+loss = tf.reduce_mean(tf.square(outputs - Y))
+optimizer = tf.train.AdamOptimizer(learning_rate=0.01)
+training_op = optimizer.minimize(loss)
+
+init = tf.global_variables_initializer()

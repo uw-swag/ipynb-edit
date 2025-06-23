@@ -1,0 +1,50 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding more dimensionality reduction techniques"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.decomposition import PCA
+from sklearn.manifold import LocallyLinearEmbedding
+from sklearn.manifold import MDS
+from sklearn.manifold import Isomap
+from sklearn.decomposition import NMF
+
+# Create a list of tuples, each containing a different dimensionality reduction technique and its name
+dim_reduction_methods = [
+    (PCA(n_components=2), "PCA"),
+    (LocallyLinearEmbedding(n_components=2), "LLE"),
+    (MDS(n_components=2), "MDS"),
+    (Isomap(n_components=2), "Isomap"),
+    (NMF(n_components=2), "NMF")
+]
+<\Cell_0>
+<Cell_1>
+for pca, name in dim_reduction_methods:
+    t0 = time.time()
+    X_reduced = pca.fit_transform(X)
+    t1 = time.time()
+    print("{} took {:.1f}s.".format(name, t1 - t0))
+    plot_digits(X_reduced, y)
+    plt.show()
+<\Cell_1>
+<Cell_2>
+from sklearn.decomposition import IncrementalPCA
+
+n_batches = 100
+inc_pca = IncrementalPCA(n_components=2, batch_size=500)
+inc_pca.fit(X)
+<\Cell_2>
+<Cell_3>
+X_reduced = inc_pca.transform(X)
+<\Cell_3>
+<Cell_4>
+plot_digits(X_reduced, y)
+plt.show()
+<\Cell_4>
+<Cell_5>
+from sklearn.manifold import TSNE
+
+tsne = TSNE(n_components=2, random_state=42)
+X_reduced = tsne.fit_transform(

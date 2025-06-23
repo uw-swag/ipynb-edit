@@ -1,0 +1,57 @@
+```python
+    # How to make a custom metric and test
+
+    # In this notebook, we will create a custom metric and a test for it.
+
+    # Let's start with a simple example. We will create a custom metric that measures the number of positive values in a list.
+
+    # First, we need to define the custom metric.
+
+    def count_positive_values(y_true, y_pred):
+        # This function takes two arguments: y_true and y_pred.
+        # y_true is the true values, and y_pred is the predicted values.
+        # The function returns the number of positive values.
+
+        # We convert y_true and y_pred to numpy arrays, because sklearn's metrics expect them to be.
+
+        y_true = np.array(y_true)
+        y_pred = np.array(y_pred)
+
+        # We count the number of positive values.
+
+        count = np.sum(y_pred > 0)
+
+        # We return the count.
+
+        return count
+
+    # Now, we can use this custom metric in a sklearn model.
+
+    from sklearn.metrics import make_scorer
+
+    # We create a scorer using our custom metric.
+
+    scorer = make_scorer(count_positive_values, greater_is_better=False)
+
+    # We can now use this scorer in a sklearn model.
+
+    model = SomeModel()
+    model.fit(X_train, y_train, scoring=scorer)
+
+    # Now, we can use this model to make predictions.
+
+    y_pred = model.predict(X_test)
+
+    # We can also use this model to evaluate the performance of our custom metric.
+
+    score = scorer(model, X_test, y_test)
+
+    # This will give us the number of positive values predicted by our model.
+
+    print(f"Number of positive values predicted: {score}")
+
+    # This is a simple example. In practice, you would want to create a more complex custom metric.
+
+    # You could also create a test for this custom metric.
+
+    from sklearn.metrics import mean_

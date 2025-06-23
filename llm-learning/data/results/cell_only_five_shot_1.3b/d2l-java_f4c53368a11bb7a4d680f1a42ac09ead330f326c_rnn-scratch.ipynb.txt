@@ -1,0 +1,27 @@
+```java
+    public static NDList getParams(int vocabSize, int numHiddens, Device device) {
+        int numOutputs = vocabSize;
+        int numInputs = vocabSize;
+
+        // Hidden layer parameters
+        NDArray W_xh = normal(new Shape(numInputs, numHiddens), device);
+        NDArray W_hh = normal(new Shape(numHiddens, numHiddens), device);
+        NDArray b_h = manager.zeros(new Shape(numHiddens), DataType.FLOAT32, device);
+        // Output layer parameters
+        NDArray W_hq = normal(new Shape(numHiddens, numOutputs), device);
+        NDArray b_q = manager.zeros(new Shape(numOutputs), DataType.FLOAT32, device);
+
+        // Attach gradients
+        NDList params = new NDList(W_xh, W_hh, b_h, W_hq, b_q);
+        for (NDArray param : params) {
+            param.setRequiresGradient(true);
+        }
+        return params;
+    }
+
+    public static NDArray normal(Shape shape, Device device) {
+        return manager.randomNormal(0f, 0.01f, shape, DataType.FLOAT32, device);
+    }
+    ```
+
+    The `attachGradient()` method is used to attach gradients to the parameters, but in the new version of the code, the `setRequiresGradient(true)` method is used to set the gradients to be required. This is because the gradients are now being set to be required, not just attached.

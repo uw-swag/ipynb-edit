@@ -1,0 +1,36 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Update 02. k-Means.ipynb"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.cluster import KMeans
+    from sklearn.datasets import make_blobs
+
+    # Generate random data
+    X, y = make_blobs(n_samples=500, centers=3, n_features=2, cluster_std=1.0, random_state=42)
+
+    # Create a KMeans instance with 3 clusters
+    kmeans = KMeans(n_clusters=3, random_state=42)
+
+    # Fit the model to the data
+    kmeans.fit(X)
+
+    # Get the cluster centers
+    centers = kmeans.cluster_centers_
+
+    # Plot the data and the cluster centers
+    plt.scatter(X[:, 0], X[:, 1], c=kmeans.labels_.astype(float), s=50, alpha=0.5)
+    plt.scatter(centers[:, 0], centers[:, 1], c='red', s=200, alpha=0.5);
+    plt.show()
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a simple implementation of the k-Means clustering algorithm in Python using the scikit-learn library. The code first generates random data using the `make_blobs` function from the sklearn.datasets module. Then, it creates an instance of the KMeans class and fits the model to the data. The cluster centers are then plotted on the graph.
+
+    The code is a good example of how to use the k-Means algorithm in Python, but it's important to note that the k-Means algorithm is a simple and intuitive method, but it's not the most efficient for large datasets. For large datasets, other algorithms like DBSCAN (Density-Based Spatial Clustering of Applications with Noise) or hierarchical clustering (like agglomerative) might be more suitable.
+
+    Also

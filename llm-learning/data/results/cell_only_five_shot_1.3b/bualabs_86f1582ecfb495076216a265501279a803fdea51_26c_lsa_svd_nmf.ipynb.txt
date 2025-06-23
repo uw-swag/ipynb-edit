@@ -1,0 +1,44 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added fbpca, NMF, Randomized SVD, TF-IDF."
+    Original Code Cells:
+    '''
+    from sklearn.decomposition import FactorPCA
+    from sklearn.decomposition import NMF
+    from sklearn.decomposition import RandomizedSVD
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    '''
+    ]
+
+    ### Response:
+    Here is the updated code with the new features added:
+
+    ```python
+    from sklearn.decomposition import FactorPCA
+    from sklearn.decomposition import NMF
+    from sklearn.decomposition import RandomizedSVD
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Create a TfidfVectorizer object
+    vectorizer = TfidfVectorizer(stop_words='english', max_features=1000)
+
+    # Transform the data into TF-IDF matrix
+    X = vectorizer.fit_transform(corpus)
+
+    # Apply FactorPCA
+    fpca = FactorPCA(n_components=5)
+    X_fpca = fpca.fit_transform(X)
+
+    # Apply NMF
+    nmf = NMF(n_components=5)
+    X_nmf = nmf.fit_transform(X)
+
+    # Apply RandomizedSVD
+    svd = RandomizedSVD(n_components=5)
+    X_svd = svd.fit_transform(X)
+    ```
+
+    This code will create a TF-IDF vectorizer, transform the corpus into a TF-IDF matrix, and then apply FactorPCA, NMF, and RandomizedSVD to the TF-IDF matrix. The number of components in each decomposition is set to 5.
+
+    Please note that you need to replace `corpus` with your actual corpus of text.

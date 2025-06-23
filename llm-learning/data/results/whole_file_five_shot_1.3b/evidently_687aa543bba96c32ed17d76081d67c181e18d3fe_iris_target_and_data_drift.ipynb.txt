@@ -1,0 +1,29 @@
+```
+    # Refactoring the column_mapping
+    # The original code was using None as the default value for the column_mapping parameter.
+    # We can refactor this to use a dictionary where the keys are the old column names and the values are the new column names.
+
+    # Refactoring the column_mapping
+    column_mapping = {
+        'sepal length (cm)': 'sepal_length',
+        'sepal width (cm)': 'sepal_width',
+        'petal length (cm)': 'petal_length',
+        'petal width (cm)': 'petal_width',
+    }
+
+    iris_frame.rename(columns=column_mapping, inplace=True)
+
+    # Calculate the new column mapping
+    new_column_mapping = {v: k for k, v in column_mapping.items()}
+
+    # Refactor the code
+    iris_data_and_target_drift_dashboard.calculate(iris_frame[:75], iris_frame[75:], column_mapping=new_column_mapping)
+
+    # Refactor the code
+    iris_target_and_data_drift_profile.calculate(iris_frame[:75], iris_frame[75:], column_mapping=new_column_mapping)
+
+    # Refactor the code
+    iris_target_and_data_drift_profile.json()
+    ```
+
+    The refactored code uses a dictionary to map the old column names to the new column names. The `rename` function is used to rename the columns in the DataFrame, and the `new_column_mapping` dictionary is used to map the new column names to the old ones. The `column_mapping` dictionary is then used to map the new column names to the old ones in the `calculate` methods.

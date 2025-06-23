@@ -1,0 +1,29 @@
+```python
+    # Load the dataset
+    data = load_breast_cancer()
+    X = data.data
+    y = data.target
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the XGBoost classifier
+    xgb = XGBClassifier()
+    xgb.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = xgb.predict(X_test)
+
+    # Evaluate the model
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred))
+    print("Classification Report: \n", classification_report(y_test, y_pred))
+    print("Accuracy Score: \n", accuracy_score(y_test, y_pred))
+
+    ```
+
+    This code will load the breast cancer dataset, split it into a training set and a testing set, standardize the features, train an XGBoost classifier, make predictions, and evaluate the model.

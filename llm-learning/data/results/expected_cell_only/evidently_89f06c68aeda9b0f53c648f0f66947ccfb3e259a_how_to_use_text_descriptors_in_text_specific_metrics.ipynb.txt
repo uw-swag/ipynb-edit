@@ -1,0 +1,60 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset, TextEvals
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric, ColumnSummaryMetric
+
+from evidently.descriptors import TextLength, IncludesWords, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment, RegExp, SemanticSimilarity
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(columns=["Review_Text", "Title"], descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+        #SemanticSimilarity(columns=["Review_Text", "Title"])
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+drift_report = Report(metrics=[
+    ColumnDriftMetric(column_name=TextLength(display_name="TextLength").for_column("Review_Text")),
+    ColumnDriftMetric(column_name=IncludesWords(words_list=['blouse', 'shirt'], display_name="Review about Blouses").for_column("Review_Text")),
+
+])
+
+drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+drift_report
+summary_report = Report(metrics=[
+    ColumnSummaryMetric(column_name=SemanticSimilarity(columns=["Review_Text", "Title"]).as_column())
+])
+
+summary_report.run(reference_data=reviews_ref[:10], current_data=reviews_cur[:10], column_mapping=column_mapping)
+summary_report

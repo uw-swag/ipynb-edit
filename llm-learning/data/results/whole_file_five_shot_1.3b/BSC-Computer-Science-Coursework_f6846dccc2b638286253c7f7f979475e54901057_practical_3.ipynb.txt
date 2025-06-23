@@ -1,0 +1,24 @@
+```python
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'source_directory'
+    destination_dir = 'destination_directory'
+
+    # Create the destination directory if it doesn't exist
+    if not os.path.exists(destination_dir):
+        os.makedirs(destination_dir)
+
+    # Copy all files from the source directory to the destination directory
+    for filename in os.listdir(source_dir):
+        file_path = os.path.join(source_dir, filename)
+        if os.path.isfile(file_path):
+            shutil.copy2(file_path, destination_dir)
+        else:
+            shutil.copytree(file_path, os.path.join(destination_dir, filename))
+    ```
+
+    This script will copy all files and directories from the source directory to the destination directory. If the destination directory already exists, it will overwrite the existing files and directories.
+
+    Please replace 'source_directory' and 'destination_directory' with your actual source and destination directories.

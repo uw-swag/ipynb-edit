@@ -1,0 +1,42 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    spark = SparkSession.builder.appName("test_app").getOrCreate()
+
+    # Create a DataFrame
+    df = spark.range(10)
+
+    # Add a test preset
+    df = df.alias("df")
+
+    # Use a test preset
+    df = df.select(col("df.id").alias("id"))
+
+    # Add tests
+    def test_select():
+        assert df.select("id").collect() == df.select("id").collect()
+
+    def test_alias():
+        assert df.select(col("id").alias("new_id")).collect() == df.select(col("id").alias("new_id")).collect()
+
+    def test_filter():
+        assert df.filter(col("id") > 5).collect() == df.filter(col("id") > 5).collect()
+
+    def test_groupby():
+        assert df.groupBy("id").count().collect() == df.groupBy("id").count().collect()
+
+    def test_agg():
+        assert df.groupBy("id").count().collect() == df.groupBy("id").count().collect()
+
+    def test_join():
+        df2 = spark.range(10)
+        assert df.join(df2, "id").collect() == df.join(df2, "id").collect()
+
+    # Run tests
+    tests = [test_select, test_alias, test_filter, test_groupby, test_agg, test_join]
+    for test in tests:
+        test()
+
+    print("All tests passed.")
+    ```

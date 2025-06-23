@@ -1,0 +1,44 @@
+```python
+    # SETUP
+    import sys; sys.path.insert(0, '../input/learntools/pseudo_learntools')
+    from learntools.python import binder; binder.bind(globals())
+    from learntools.python.ex7 import *
+    print('Setup complete.')
+
+    # IMPORTS
+    from learntools.python import jimmy_slots
+    from learntools.python import roulette
+    import random
+
+    # FUNCTIONS
+    def prettify_graph(graph):
+        """Modify the given graph according to Jimmy's requests: add a title, make the y-axis
+        start at 0, label the y-axis. (And, if you're feeling ambitious, format the tick marks
+        as dollar amounts using the "$" symbol.)
+        """
+        graph.set_title("Results of 500 slot machine pulls")
+
+    def best_items(racers):
+        """Given a list of racer dictionaries, return a dictionary mapping items to the number
+        of times those items were picked up by racers who finished in first place.
+        """
+        winner_item_counts = {}
+        for i in range(len(racers)):
+            # The i'th racer dictionary
+            racer = racers[i]
+            # We're only interested in racers who finished in first
+            if racer['finish'] == 1:
+                for i in racer['items']:
+                    # Add one to the count for this item (adding it to the dict if necessary)
+                    if i not in winner_item_counts:
+                        winner_item_counts[i] = 0
+                    winner_item_counts[i] += 1
+
+        # Data quality issues :/ Print a warning about racers with no name set. We'll take care of it later.
+        if racer['name'] is None:
+            print("WARNING: Encountered racer with unknown name on iteration {}/{} (racer = {})".format(
+                i+1, len(racers), racer['name'])
+                 )
+        return winner_item_counts
+
+    def random_and_

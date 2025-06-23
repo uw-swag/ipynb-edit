@@ -1,0 +1,56 @@
+
+    '''
+    Commit Message: "Removed ppscore from dependencies and inserted into project (#108)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    import numpy as np
+
+    from mlchecks import *
+    from mlchecks.checks.overview.feature_importance import FeatureImportance
+
+    <\Cell_0>
+    <Cell_1>
+    iris = load_iris()
+    iris.feature_names.append("label")
+
+    df = pd.DataFrame(np.insert(iris.data, 4, iris.target, axis=1), columns=iris.feature_names)
+
+    dataset = Dataset(df, label="label")
+
+    <\Cell_1>
+    <Cell_2>
+    from sklearn.ensemble import RandomForestClassifier
+
+    multi_class_classifier = RandomForestClassifier()
+    X = iris.data
+    Y = iris.target
+    multi_class_classifier.fit(X, Y)
+    <\Cell_2>
+    <Cell_3>
+    # ouptut can be save for later user
+    x = FeatureImportance().run(dataset, multi_class_classifier)
+    <\Cell_3>
+    <Cell_4>
+    # and displayed at any point 
+    x
+    <\Cell_4>
+    <Cell_5>
+    iris = load_iris()
+
+    idx = iris.target != 2
+    data = iris.data[idx]
+    target = iris.target[idx]
+    iris.feature_names.append("label")
+
+    df = pd.DataFrame(np.insert(data, 4, target, axis=1), columns=iris.feature_names)
+
+    binary_dataset = Dataset(df, label="label")
+    <\Cell_5>
+    <Cell_6>
+    from sklearn.ensemble import RandomForestClassifier
+    from mlchecks.checks.overview.feature_importance import *
+
+    cl

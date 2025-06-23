@@ -1,0 +1,28 @@
+
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    from matplotlib import pyplot as plt
+    
+    np.__version__
+    pd.__version__
+    
+    # Upload the file from your local machine
+    # You can use the following code to upload the file
+    from google.colab import files
+    uploaded = files.upload()
+    
+    # Load the data from the uploaded file
+    df = pd.read_csv(list(uploaded.keys())[0])
+    print(df.head())
+    
+    # Perform some data analysis
+    print(df.describe())
+    print(df.info())
+    
+    # Plot some graphs
+    sns.pairplot(df)
+    plt.show()
+    
+    # Add more code here...
+

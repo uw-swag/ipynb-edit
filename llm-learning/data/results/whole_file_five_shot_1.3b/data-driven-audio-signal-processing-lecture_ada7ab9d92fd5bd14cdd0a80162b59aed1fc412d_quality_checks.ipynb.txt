@@ -1,0 +1,50 @@
+
+    '''
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import glob
+from scipy.io import wavfile
+import matplotlib.pyplot as plt
+import numpy as np
+<\Cell_0>
+<Cell_1>
+path = '../mnt/data/INT/free-spoken-digit-dataset/recordings/'  # path to dataset
+<\Cell_1>
+<Cell_2>
+audiofiles = glob.glob(path + '0_*.wav', recursive=True)
+
+X = []
+for filepath in audiofiles:
+    fs, x = wavfile.read(filepath)
+    x = x/2**15
+    X.append(x)
+<\Cell_2>
+<Cell_3>
+print('Total number of examples: {}'.format(len(X)))
+print('Sampling rate fs = {} Hz'.format(fs))
+<\Cell_3>
+<Cell_4>
+fig, axs = plt.subplots(2, 3, figsize=(10,5))
+
+for idx, ax in enumerate(axs.flat):
+    ax.plot(X[idx])
+    ax.set_xlabel(r'$k$')
+    ax.set_ylabel(r'$x_{}[k]$'.format(idx))
+    ax.grid()
+
+plt.tight_layout()
+<\Cell_4>
+<Cell_5>
+fig, axs = plt.subplots(2, 3, figsize=(10,5))
+
+for idx, ax in enumerate(axs.flat):
+    ax.magnitude_spectrum(X[idx], Fs=fs, window=None, scale='dB')
+    ax.set_title(r'$X_{}(f)$'.format(idx))
+    ax.grid()
+    
+plt.tight_layout()
+<\Cell_5>
+<Cell_6>
+plt.specgram(X

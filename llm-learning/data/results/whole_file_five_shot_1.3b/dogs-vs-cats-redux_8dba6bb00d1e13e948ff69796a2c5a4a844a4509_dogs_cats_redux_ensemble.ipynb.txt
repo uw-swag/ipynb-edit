@@ -1,0 +1,61 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[ADD] Resnet architecture"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#Create references to important directories we will use over and over
+import os, sys
+from importlib import reload
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import log_loss
+from scipy.optimize import minimize_scalar
+import time
+import seaborn as sns
+import keras
+#from utils import *
+from keras import backend as K
+K.set_image_dim_ordering('tf')
+%matplotlib inline
+sns.set()
+
+from PIL import Image
+from keras.preprocessing import image
+from keras.layers import Dense, Conv2D, Input, Dropout
+from keras.applications import xception
+from keras.optimizers import SGD, Adam
+
+import bcolz
+def save_array(fname, arr):
+    c=bcolz.carray(arr, rootdir=fname, mode='w')
+    c.flush()
+
+def load_array(fname):
+    return bcolz.open(fname)[:]
+<\Cell_0>
+<Cell_1>
+current_dir = os.getcwd()
+DATA_HOME_DIR = current_dir+'/data/dogscats'
+
+path = DATA_HOME_DIR + '/'
+test_path = DATA_HOME_DIR + '/test/' #We use all the test data
+results_path = DATA_HOME_DIR + '/results/'
+predictions_path = DATA_HOME_DIR + '/results/predictions/'
+train_path = path + '/train/'
+valid_path = path + '/valid/'
+model_path = path + '/models/'
+<\Cell_1>
+<Cell_2>
+# Resnet architecture
+<\Cell_2>
+<Cell_3>
+# new model
+<\Cell_3>
+<Cell_4>
+# Resnet architecture
+<\Cell_4>
+<Cell_5>
+# Resnet architecture
+<\Cell_5>

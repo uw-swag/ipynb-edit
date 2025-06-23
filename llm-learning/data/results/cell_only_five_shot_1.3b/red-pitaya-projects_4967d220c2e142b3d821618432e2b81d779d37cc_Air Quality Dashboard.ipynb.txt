@@ -1,0 +1,39 @@
+```python
+    df['Date'] = pd.to_datetime(df['Date'])
+    df.set_index('Date', inplace=True)
+    df.index = df.index.map(dt.datetime.toordinal)
+    df.index.name = 'timestamp'
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new column 'timestamp' to the dataframe"
+    Original Code Cells:
+    '''
+    df = pd.DataFrame() #Create an empty data frame to append to later
+#timestamp = df.size
+    def animate(i):
+        global df
+        clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+        latest_temp=temp()[0]
+        voc_volt = voc_air_pin.read()
+        voc_gas = voc_volt/(5.0)
+        #Scale the result to be between 2.0 and 30.0 to keep on a similar scale to temperature
+        voc_ratio = (voc_gas/voc_air)*28
+        Alcohol_volt = ANALOG_Alcohol_pin.read()
+        Alcohol_gas = Alcohol_volt/(5.0-Alcohol_volt)
+        #Scale the result to be between 2.0 and 30.0 to keep on a similar scale to temperature
+        Alcohol_ratio = (1/(Alcohol_gas/2.32))*1.5
+#    timestamp = df.size
+        clear_output(wait=True)
+        clean_data_table['Temperature (oC)'] = [latest_temp]
+        clean_data_table['VOC in Air'] = [voc_ratio]
+        clean_data_table['Alcohol in Air'] = [Alcohol_ratio]
+        clean_data_table['Date'] = [datetime.now()]
+#    clean_data_table['timestamp'] = timestamp
+        timestamp = df.size
+        timestamp = 2
+        df = df.append(clean_data_table, ignore_index = True)
+        df.index.name = 'timestamp'
+    
+        x = df

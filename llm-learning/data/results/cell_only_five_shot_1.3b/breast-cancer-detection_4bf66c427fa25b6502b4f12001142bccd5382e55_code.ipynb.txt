@@ -1,0 +1,48 @@
+```
+    # INecessary libraries for data manipulation and visualization
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Dataset for the project
+    from sklearn.datasets import load_breast_cancer
+
+    # Tools for splitting data and preprocessing
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+
+    # Metrics for evaluating model performance
+    from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+    # Machine learning models for classification
+    from sklearn.svm import SVC
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.ensemble import AdaBoostClassifier
+
+    from xgboost import XGBClassifier
+
+    # RandomizedSearchCV for hyperparameter tuning to optimize model performance
+    from sklearn.model_selection import GridSearchCV, cross_val_score
+    cancer_dataset = load_breast_cancer()
+    print(type(cancer_dataset))
+    print(len(cancer_dataset["feature_names"]))
+    print(cancer_dataset["feature_names"])
+    print(cancer_dataset["data"])
+    print(cancer_dataset["target_names"])
+    # 0 - malignant
+    # 1 - benign
+    print(cancer_dataset["target"])
+    # describe the dataset
+    print(cancer_dataset["DESCR"])
+    cancer_df = pd.DataFrame(
+        np.c_[cancer_dataset["data"], cancer_dataset["target"]],
+        columns=np.append(cancer_dataset["feature_names"], ["target"]),
+    )
+    cancer_df.head()
+    cancer_df.info()
+    cancer_df.describe

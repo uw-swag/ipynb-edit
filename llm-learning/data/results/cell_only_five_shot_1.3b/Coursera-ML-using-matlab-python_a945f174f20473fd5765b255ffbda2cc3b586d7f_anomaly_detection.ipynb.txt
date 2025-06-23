@@ -1,0 +1,42 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add VAE section"
+    Original Code Cells:
+    '''
+    #visualization:Draw a red circle around those outliers
+outliters = np.where(p_train < epsilon)
+
+plt.plot(X[:,0],X[:,1],'bx')
+plt.plot(X[outliters,0],X[outliters,1],'ro',lw=2, markersize=10,\
+         fillstyle='none', markeredgewidth=1)
+plt.xlim(0, 30)
+plt.ylim(0, 30)
+plt.xlabel('Latency (ms)')
+plt.ylabel('Throughput (mb/s)')
+plt.show()
+# multivariate_normal 多元高斯分布
+from scipy import stats
+def get_mean_cov(x):
+    m,n = x.shape
+    mu = np.mean(x,axis=0)#平均值
+    Sigma = np.var(x, axis=0) #方差
+    #Sigma = np.diagflat(Sigma) #对角矩阵,[[1,0,0],[0,1,0],[0,0,1]]
+    Sigma = np.diag(Sigma)
+    detSigma = np.linalg.det(Sigma) #行列式
+    
+    return mu,Sigma,detSigma
+
+    
+def mul_P(x,mu,sigma,detSigma):
+    #x is vector =[n*1]
+    n = x.shape[0]
+    xx = x - mu #[n*1]
+    #dot点乘
+    p = np.exp(-0.5 * np.dot(xx.T.dot(np.linalg.pinv(sigma)), xx)) * \
+            ((2*np.pi)**(-n/2) * (detSigma**(-0.5)))
+    return p
+    
+        
+mu1,Sigma,detSigma=get_mean_cov(X1)
+print mu1.shape,Sigma.shape,Sigma[

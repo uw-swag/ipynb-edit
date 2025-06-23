@@ -1,0 +1,23 @@
+from smbus2 import SMBus, i2c_msg
+i2cbus = SMBus(0)
+i2c_addr = 0x08
+_i2c = i2cbus
+
+WARMING_UP = 0xFE
+WARMING_DOWN = 0xFF
+GMXXX_CMD_REG = 0x00
+CHANGE_I2C_ADDR = 0x55
+
+GM_102B = 0x01
+GM_302B = 0x03
+GM_502B = 0x05
+GM_702B = 0x07
+import gas_gmxxxb
+test_device = gas_gmxxxb.GAS_GMXXX()
+msg = i2c_msg.write(i2c_addr, [WARMING_UP])
+i2cbus.i2c_rdwr(msg)
+print("GM_102B ", int.from_bytes(_i2c.read_i2c_block_data(i2c_addr, GM_102B,2), byteorder='little'))
+print("GM_302B ", int.from_bytes(_i2c.read_i2c_block_data(i2c_addr, GM_302B,2), byteorder='little'))
+print("GM_502B ", int.from_bytes(_i2c.read_i2c_block_data(i2c_addr, GM_502B,2), byteorder='little'))
+print("GM_702B ", int.from_bytes(_i2c.read_i2c_block_data(i2c_addr, GM_702B,2), byteorder='little'))
+_i2c.write_byte_data(i2c_addr, CHANGE_I2C_ADDR, 0x08)

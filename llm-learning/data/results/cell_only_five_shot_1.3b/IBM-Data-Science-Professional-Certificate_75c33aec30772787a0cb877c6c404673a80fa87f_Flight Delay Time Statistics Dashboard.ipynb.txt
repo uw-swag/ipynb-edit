@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing Flight Delay Time Statistics Dashboard"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sqlalchemy import create_engine
+    from dash import Dash
+    from dash.dependencies import Input, Output
+    from dash import html
+    from dash import dcc
+
+    app = Dash(__name__)
+
+    # Load data
+    engine = create_engine('postgresql://username:password@localhost:5432/flight_data')
+    df = pd.read_sql_query("SELECT * FROM flight_data", engine)
+
+    # Preprocess data
+    df['dep_delay'] = pd.to_numeric(df['dep_delay'], errors='coerce')
+    df = df.dropna()
+
+    # Create Dash layout
+    app.layout = html.Div([
+        html.H1('Flight Delay Time Statistics Dashboard'),
+        dcc.Dropdown(
+            id='airline-dropdown',
+            options=[
+                {'label': i, 'value': i} for i in df['airline'].unique()
+            ],
+            value='All Airlines'
+        ),
+        dcc.Graph(id='delay-time-graph'),
+    ])
+
+    # Define callbacks
+    @app.callback(
+        Output('delay-time-graph', 'figure'),
+        [Input('airline-dropdown', 'value')]
+    )
+    def update_graph(airline):
+        if airline == 'All Airlines':
+            df_filtered = df
+        else:
+            df_filtered = df[df['airline'] == airline]
+
+        fig = go.Figure()
+        fig.add_trace(
+            go.Scatter(
+                x=df_filtered['dep_delay'],
+                y=df_filtered['arr_delay'],
+                mode='markers',
+                name='Arrival Delay'
+            )
+        )
+       

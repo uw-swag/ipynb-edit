@@ -1,0 +1,47 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    class DataAnalysis:
+        def __init__(self, data):
+            self.data = pd.read_csv(data)
+
+        def plot_titanic(self):
+            # Plotting survival rate by gender
+            sns.countplot(x='Sex', hue='Survived', data=self.data)
+            plt.title('Survival Rate by Gender')
+            plt.show()
+
+            # Plotting survival rate by class
+            sns.countplot(x='Pclass', hue='Survived', data=self.data)
+            plt.title('Survival Rate by Class')
+            plt.show()
+
+            # Plotting survival rate by age
+            sns.violinplot(x='Survived', y='Age', hue='Sex', data=self.data)
+            plt.title('Survival Rate by Age')
+            plt.show()
+
+            # Plotting survival rate by siblings/spouses
+            sns.countplot(x='SibSp', hue='Survived', data=self.data)
+            plt.title('Survival Rate by Siblings/Spouses')
+            plt.show()
+
+            # Plotting survival rate by parents/children
+            sns.countplot(x='Parch', hue='Survived', data=self.data)
+            plt.title('Survival Rate by Parents/Children')
+            plt.show()
+
+            # Plotting fare distribution
+            sns.violinplot(x='Fare', data=self.data)
+            plt.title('Fare Distribution')
+            plt.show()
+
+            # Plotting passenger class distribution
+            sns.countplot(x='Pclass', data=self.data)
+            plt.title('Passenger Class Distribution')
+            plt.show()
+    ```
+
+    This class `DataAnalysis` is used

@@ -1,0 +1,31 @@
+```python
+    import numpy as np
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras import layers
+
+    # Define the model
+    model = keras.Sequential([
+        layers.Dense(64, activation='relu'),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(1)
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam',
+                  loss='mse',
+                  metrics=['mae', 'mse'])
+
+    # Generate random data
+    x_train = np.random.random((1000, 10))
+    y_train = np.random.random((1000, 1))
+
+    # Set batch_size to 1
+    model.fit(x_train, y_train, batch_size=1, epochs=5)
+
+    # Predict
+    x_new = np.random.random((1, 10))
+    print(model.predict(x_new))
+    ```
+
+    This code will train the model with a batch size of 1, and then use the model to predict a new random input. The result will be a single prediction, not a batch of predictions.

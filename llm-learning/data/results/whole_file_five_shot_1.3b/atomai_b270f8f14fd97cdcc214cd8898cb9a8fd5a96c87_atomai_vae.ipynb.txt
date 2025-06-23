@@ -1,0 +1,21 @@
+```
+    # Remove example notebooks from root
+    import os
+    import shutil
+
+    # List of notebook files to be removed
+    notebook_files = ['notebook1.ipynb', 'notebook2.ipynb', 'notebook3.ipynb']
+
+    # Iterate over the notebook files
+    for file in notebook_files:
+        # Construct the file path
+        file_path = os.path.join('..', 'TargetNotebooks', file)
+
+        # Check if the file exists
+        if os.path.exists(file_path):
+            # Remove the file
+            os.remove(file_path)
+            print(f'Notebook {file} has been removed.')
+        else:
+            print(f'Notebook {file} does not exist.')
+    ```

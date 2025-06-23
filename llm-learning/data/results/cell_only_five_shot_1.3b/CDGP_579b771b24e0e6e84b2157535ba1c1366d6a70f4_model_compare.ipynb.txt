@@ -1,0 +1,44 @@
+```python
+    import pandas as pd
+    from sklearn.metrics import classification_report
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
+
+    # Load data
+    df = pd.read_csv('data.csv')
+
+    # Define features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Define models
+    models = {
+        'Logistic Regression': LogisticRegression(),
+        'Random Forest': RandomForestClassifier(),
+        'SVC': SVC()
+    }
+
+    # Train and evaluate models
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        print(f'{name}:\n{classification_report(y_test, predictions)}')
+
+    # Compare models
+    df_compare = pd.DataFrame(columns=['Model', 'Accuracy', 'Precision', 'Recall', 'F1-Score'])
+
+    for name, model in models.items():
+        model.fit(X_train, y_train)
+        predictions = model.predict(X_test)
+        accuracy = model.score(X_test, y_test)
+        precision, recall, f1_score, _ = classification_report(y_test, predictions, output_dict=True)
+        df_compare = df_compare.append({'Model': name, 'Accuracy': accuracy, 'Precision': precision, 'Recall': recall, 'F1-Score': f1_score}, ignore_index=True)
+
+    print(df_compare)
+    ```
+

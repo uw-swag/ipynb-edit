@@ -1,0 +1,31 @@
+```python
+    # Import necessary libraries
+    from flaml import AutoML
+    from flaml import dataset
+
+    # Load the dataset
+    X_train, y_train, X_test, y_test = dataset.load_from_csv('your_dataset.csv')
+
+    # Initialize the AutoML system
+    automl = AutoML(time_budget=100, n_estimators=50)
+
+    # Train the model
+    model = automl.fit(X_train, y_train)
+
+    # Predict the labels of the test set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    accuracy = model.score(X_test, y_test)
+    print(f'Model accuracy: {accuracy}')
+
+    # Optimize the model
+    optimized_model = automl.optimize(X_train, y_train)
+
+    # Predict the labels of the test set
+    optimized_y_pred = optimized_model.predict(X_test)
+
+    # Evaluate the optimized model
+    optimized_accuracy = optimized_model.score(X_test, y_test)
+    print(f'Optimized model accuracy: {optimized_accuracy}')
+    ```

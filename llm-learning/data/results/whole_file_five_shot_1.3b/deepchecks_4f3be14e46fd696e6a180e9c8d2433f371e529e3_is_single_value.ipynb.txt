@@ -1,0 +1,46 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Mlc 54 (#35)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import nannyml as nml
+
+    from scipy.spatial.transform import Rotation
+    from sklearn.datasets import make_classification
+
+    # 10 reference periods
+    # 10 analysis periods
+    # Days/week * Hours/day * events/hour
+    DPP = 7*24*12
+
+    np.random.seed(23)
+    s1 = np.random.randn(DPP*20)
+    x1 = s1 + np.random.randn(DPP*20)/8
+    x2 = s1 + np.random.randn(DPP*20)/8
+    x3 = np.random.randn(DPP*20)/8
+    xdat = np.array([x1, x2, x3]).T
+    rot = Rotation.from_euler('z', 90, degrees=True)
+
+    # following matrix multiplication implementation, we need a 3xN data matrix hence we transpose
+    ydat = np.matmul(rot.as_matrix(), xdat.T).T
+
+    # create overall array that has drifted and not drifted subsets.
+    # drift is sudden and affects last 5 weeks
+    dataar = np.concatenate(
+        (xdat[:-5*DPP], ydat[-5*DPP:]),
+        axis=0
+    )
+
+    # convert data to dataframe
+    datadf = pd.DataFrame(dataar, columns=['f1', 'f2', 'f3'])
+
+    # add "timestamp" column
+    datadf = datadf.assign(ordered = pd.date_range(start='1/6/2020', freq='5min', periods=20*DPP))
+
+    # Adding helper

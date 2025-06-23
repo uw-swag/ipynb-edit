@@ -1,0 +1,33 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#314)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+
+    from deepchecks import Dataset
+    from deepchecks.checks import TrainTestFeatureDrift
+    import pprint
+    %load_ext autoreload
+    %autoreload 2
+    <\Cell_0>
+    <Cell_1>
+    np.random.seed(42)
+
+    train_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=['apple', 'orange', 'banana'], p=[0.5, 0.3, 0.2], size=(1000, 2))], axis=1)
+    test_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=['apple', 'orange', 'banana'], p=[0.5, 0.3, 0.2], size=(1000, 2))], axis=1)
+
+    df_train = pd.DataFrame(train_data, columns=['numeric_without_drift', 'numeric_with_drift', 'categorical_without_drift', 'categorical_with_drift'])
+    df_test = pd.DataFrame(test_data, columns=df_train.columns)
+
+    df_train = df_train.astype({'numeric_without_drift': 'float', 'numeric_with_drift': 'float'})
+    df_test = df_test.astype({'numeric_without_drift': 'float', 'numeric_with_drift': 'float'})
+
+    <\Cell_1>
+    <Cell_2>
+    df_train.head()
+    <\Cell_2>
+    <Cell_3>
+    df_test['numeric_with_drift'] = df_test['numeric_with_drift'].astype('float') + abs(np.random.randn(1

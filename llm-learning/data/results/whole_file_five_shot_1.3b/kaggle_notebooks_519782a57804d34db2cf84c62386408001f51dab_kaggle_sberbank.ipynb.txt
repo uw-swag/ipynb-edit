@@ -1,0 +1,27 @@
+```python
+    # Adding titanic.ipynb and kaggle_sberbank.ipynb
+    import os
+    from IPython.display import display, HTML
+    from google.colab import files
+
+    # Uploading titanic.ipynb
+    uploaded = files.upload()
+
+    # Checking if the file is uploaded
+    for fn in uploaded:
+        print('File name:', fn)
+
+    # Adding kaggle_sberbank.ipynb
+    import kaggle
+
+    # Authenticate to Kaggle
+    kaggle.api.authenticate()
+
+    # Download the dataset
+    kaggle.api.dataset_download_files('sberbank/russian-titanic', path='.', unzip=True)
+
+    # Checking the downloaded files
+    for fn in os.listdir('.'):
+        if fn.endswith('.ipynb'):
+            print('File name:', fn)
+    ```

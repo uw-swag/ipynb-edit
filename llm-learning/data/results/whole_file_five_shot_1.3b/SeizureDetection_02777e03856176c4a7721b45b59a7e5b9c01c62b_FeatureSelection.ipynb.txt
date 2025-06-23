@@ -1,0 +1,16 @@
+```
+    The code you provided seems to be correct for dimension reduction in PCA. However, there seems to be a small issue with the way you're passing the 'seizure' column to the PCA.
+
+    The 'seizure' column is not being used in the PCA transformation. The PCA is being used to reduce the dimensionality of the data, but the 'seizure' column is not being used in this process.
+
+    If you want to keep the 'seizure' column in the reduced data, you should include it in the PCA transformation. Here's how you can do it:
+
+    ```python
+    pca_ft = pca_ft.join(features[['seizure']])
+    red_ft = pd.DataFrame(pca.transform(pca_ft))
+    ```
+
+    This will add the 'seizure' column to the reduced data. If you don't want to keep the 'seizure' column, you can simply remove the line of code that adds it.
+
+    If you're still having issues, please provide more details about the bug you're experiencing.
+    '''

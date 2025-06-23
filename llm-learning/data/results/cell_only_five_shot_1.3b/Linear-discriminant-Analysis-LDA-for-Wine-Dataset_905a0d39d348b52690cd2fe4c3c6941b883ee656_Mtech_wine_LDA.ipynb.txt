@@ -1,0 +1,51 @@
+
+    # You can add files via the upload feature in the Jupyter notebook.
+    # Here is an example of how to do it:
+
+    # First, you need to upload the file. You can do this by clicking on the "Upload" button in the toolbar at the top of the notebook.
+    # Then, you can add the file to your notebook by using the following code:
+
+    from IPython.display import FileUploader
+
+    uploader = FileUploader()
+    uploader
+
+    # After the file is uploaded, you can use the following code to add the file to your notebook:
+
+    uploaded = uploader.files.values()
+    for file in uploaded:
+        display(file)
+        with open(file.name, 'wb') as f:
+            f.write(file.data.read())
+
+    # Now, the file is in your notebook and you can use it as you would any other file.
+    # For example, you can read the file and display its content:
+
+    with open('my_file.txt', 'r') as f:
+        print(f.read())
+
+    # You can also use the `display` function to display the content of the file:
+
+    display(FileLines(filename='my_file.txt'))
+
+    # You can also use the `display` function to display the content of the file as HTML:
+
+    display(HTML(filename='my_file.txt'))
+
+    # You can also use the `display` function to display the content of the file as a plot:
+
+    display(plot(filename='my_file.txt'))
+
+    # You can also use the `display` function to display the content of the file as a table:
+
+    display(Table(filename='my_file.txt'))
+
+    # You can also use the `display` function to display the content of the file as a markdown cell:
+
+    display(Markdown(filename='my_file.txt'))
+
+    # You can also use the `display` function to display the content of the file as a code cell:
+
+    display(Code(filename='my_file.txt'))
+
+    # You can also use the

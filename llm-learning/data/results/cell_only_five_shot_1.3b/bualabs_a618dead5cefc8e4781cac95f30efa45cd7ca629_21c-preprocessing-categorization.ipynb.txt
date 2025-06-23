@@ -1,0 +1,44 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.preprocessing import OneHotEncoder
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the dataset
+    df = pd.read_csv('21c.csv')
+
+    # Define the preprocessing steps
+    numeric_features = ['Age', 'Annual Income (k$)', 'Spending Score (1-100)']
+    categorical_features = ['Gender', 'Geography']
+
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())
+    ])
+
+    categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))
+    ])
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, numeric_features),
+            ('cat', categorical_transformer, categorical_features)
+        ])
+
+    # Apply the preprocessing to the data
+    df_processed = pd.DataFrame(preprocessor.fit_transform(df))
+
+    # Convert the target variable to binary
+    le = LabelEncoder()
+    df_processed['Exited'] = le.fit_transform(df_processed['Exited'])
+
+    # Save the processed data
+    df_processed.to_csv('21c_processed.csv', index=False)
+    ```
+    This notebook loads a dataset, preprocesses it, and saves it as a new CSV file. The preprocessing steps include filling missing values with the median of the respective column, scaling the numeric features, and one-hot encoding the categorical features. The target variable is converted to a

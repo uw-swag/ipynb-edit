@@ -1,0 +1,15 @@
+```python
+    # Remove the nbextension
+    try:
+        nbextensions_path = os.path.join(os.environ['HOME'], '.jupyter', 'nbextensions')
+        if os.path.exists(nbextensions_path):
+            shutil.rmtree(nbextensions_path)
+    except Exception as e:
+        print(f"Error removing nbextensions: {e}")
+
+    # Remove the notebook extension
+    try:
+        os.remove(os.path.join(os.environ['HOME'], '.jupyter', 'notebook.json'))
+    except Exception as e:
+        print(f"Error removing notebook extension: {e}")
+    ```

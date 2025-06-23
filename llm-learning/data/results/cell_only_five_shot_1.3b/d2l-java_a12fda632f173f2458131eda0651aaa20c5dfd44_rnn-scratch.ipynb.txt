@@ -1,0 +1,52 @@
+```java
+    // Section 8.6: Concise Implementation of Recurrent Neural Networks (#89)
+    // This section provides a concise implementation of a Recurrent Neural Network (RNN) using the TensorFlow library.
+
+    // Import necessary libraries
+    import org.tensorflow.Graph;
+    import org.tensorflow.Session;
+    import org.tensorflow.Tensor;
+    import org.tensorflow.TensorFlow;
+
+    // Define the batch size and number of steps
+    int batchSize = 32;
+    int numSteps = 35;
+
+    // Load the data and create the time machine
+    Pair<ArrayList<NDList>, Vocab> timeMachine = loadDataTimeMachine(batchSize, numSteps, false, 10000);
+    List<NDList> trainIter = timeMachine.getKey();
+    Vocab vocab = timeMachine.getValue();
+
+    // Define the RNN model
+    Graph graph = new Graph();
+
+    // Define the RNN cell
+    RNNCell cell = new RNNCellBuilder()
+        .layerSize(256)
+        .numLayers(2)
+        .activation(Activation.TANH)
+        .cellType(CellType.GRU)
+        .build();
+
+    // Define the RNN model
+    RNNModel model = new RNNModel(graph, cell);
+
+    // Define the input placeholders
+    Placeholder<Float> inputPlaceholder = new Placeholder<>("inputs");
+    Placeholder<Integer> seqLengthPlaceholder = new Placeholder<>("seq_lengths");
+
+    // Define the output placeholders
+    Placeholder<Float> outputPlaceholder = new Placeholder<>("outputs");
+
+    // Define the training operation
+    Operation trainOp = graph.operationBuilder()
+        .nodeName("train_op")
+        .op("RNN")
+        .input(inputPlaceholder)
+        .input(seqLengthPlaceholder)
+        .input(model.output(0))
+        .output(outputPlaceholder)
+        .build();
+
+    // Define the training parameters
+    RNNTrainingParameters trainingParams = new RNNTrainingParameters.

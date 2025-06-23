@@ -1,0 +1,74 @@
+```python
+    # -*- coding: utf-8 -*-
+    """
+    Serves as a template for a web application.
+    """
+    from flask import Flask, render_template
+
+    app = Flask(__name__)
+
+    @app.route('/')
+    def home():
+        """
+        Renders the home page.
+        """
+        return render_template('home.html')
+
+    @app.route('/about')
+    def about():
+        """
+        Renders the about page.
+        """
+        return render_template('about.html')
+
+    @app.route('/contact')
+    def contact():
+        """
+        Renders the contact page.
+        """
+        return render_template('contact.html')
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+
+    This is a simple Flask web application that serves three pages: the home page, the about page, and the contact page. The templates for these pages are stored in a 'templates' directory in the same directory as the script.
+
+    The 'home.html' and 'about.html' and 'contact.html' files should be created in the 'templates' directory. These files should contain the HTML for the pages. For example, the 'home.html' file could contain the following:
+
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Home</title>
+    </head>
+    <body>
+        <h1>Welcome to our website!</h1>
+    </body>
+    </html>
+    ```
+
+    The 'about.html' file could contain the following:
+
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>About</title>
+    </head>
+    <body>
+        <h1>About Us</h1>
+    </body>
+    </html>
+    ```
+
+    And the 'contact.html' file could contain the following:
+
+    ```html
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Contact</title>
+    </head>
+    <body>
+        <h1>Contact Us

@@ -1,0 +1,226 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import DataQualityPreset
+from evidently.metric_preset import RegressionPreset
+from evidently.metric_preset import ClassificationPreset
+from evidently.metric_preset import TargetDriftPreset
+from evidently.metric_preset import TextOverviewPreset
+
+from evidently.metrics import *
+
+from evidently.test_preset import NoTargetPerformanceTestPreset
+from evidently.test_preset import DataStabilityTestPreset
+from evidently.test_preset import DataQualityTestPreset
+from evidently.test_preset import DataDriftTestPreset
+
+from evidently.tests import *
+
+from evidently.tests.base_test import generate_column_tests
+from evidently.metrics.base_metric import generate_column_metrics
+import nltk
+nltk.download('words')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+#Dataset for Data Quality and Integrity
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame='auto')
+reviews = reviews_data.frame
+reviews['prediction'] = reviews['Rating']
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) #.dropna()
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) #.dropna()
+reviews.head()
+column_mapping = ColumnMapping(
+    target='Rating',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title']
+)
+data_drift_report = Report(metrics=[
+    DataDriftPreset(num_stattest='ks', cat_stattest='psi', num_stattest_threshold=0.2, cat_stattest_threshold=0.2),
+])
+
+data_drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+data_drift_report
+data_drift_report.json()
+data_quality_report = Report(metrics=[
+    DataQualityPreset()
+])
+
+data_quality_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+data_quality_report
+data_quality_report.as_dict()
+data_quality_report.json()
+target_drift_report = Report(metrics=[
+    TargetDriftPreset()
+])
+
+target_drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+target_drift_report
+target_drift_report.json()
+regression_report = Report(metrics=[
+    RegressionPreset()
+])
+
+regression_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='regression'
+  )
+)
+regression_report
+regression_report.json()
+classification_report = Report(metrics=[
+    ClassificationPreset()
+])
+classification_report.run(reference_data=reviews.sample(n=5000, replace=False), current_data=reviews.sample(n=5000, replace=False), column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='classification'
+  )
+)
+
+classification_report
+classification_report.json()
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text")
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+text_overview_report.json()
+dataset_metrics_with_text_report = Report(metrics=[
+    DatasetSummaryMetric(), 
+    DatasetMissingValuesMetric(),
+    DatasetCorrelationsMetric(), 
+    ConflictTargetMetric(),
+    ConflictPredictionMetric(),
+    DatasetDriftMetric(),
+    DataDriftTable(),
+    TargetByFeaturesTable(columns=['Review_Text', 'Title']),
+    ClassificationQualityByFeatureTable(), 
+])
+
+dataset_metrics_with_text_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+dataset_metrics_with_text_report
+dataset_metrics_with_text_report.json()
+column_metrics_with_text_report = Report(metrics=[
+    ColumnSummaryMetric(column_name="Review_Text"),
+    ColumnMissingValuesMetric(column_name="Review_Text"), 
+    ColumnRegExpMetric(column_name="Review_Text", reg_exp=r'.*love*.'),
+    ColumnDriftMetric(column_name="Review_Text"),
+    ColumnSummaryMetric(column_name="Title"),
+    ColumnMissingValuesMetric(column_name="Title"), 
+    ColumnRegExpMetric(column_name="Title", reg_exp=r".*love*."),
+    ColumnDriftMetric(column_name="Title"),
+])
+
+column_metrics_with_text_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+column_metrics_with_text_report
+column_metrics_with_text_report.json()
+text_specific_metrics_report = Report(metrics=[
+    TextDescriptorsDriftMetric(column_name="Review_Text"),
+    TextDescriptorsDistribution(column_name="Review_Text"),
+    TextDescriptorsCorrelationMetric(column_name="Review_Text"),
+])
+
+text_specific_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_specific_metrics_report
+text_specific_metrics_report.json()
+no_target_performance_suite = TestSuite(tests=[
+    NoTargetPerformanceTestPreset()
+])
+
+no_target_performance_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+no_target_performance_suite
+
+no_target_performance_suite.json()
+data_stability_suite = TestSuite(tests=[
+    DataStabilityTestPreset()
+])
+
+data_stability_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+data_stability_suite
+data_stability_suite.json()
+data_quality_suite = TestSuite(tests=[
+    DataQualityTestPreset()
+])
+
+data_quality_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+data_quality_suite
+data_quality_suite.json()
+data_drift_suite = TestSuite(tests=[
+    DataDriftTestPreset()
+])
+
+data_drift_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+data_drift_suite
+data_drift_suite.json()
+dataset_tests_with_text_columns_suite = TestSuite(tests=[
+    TestNumberOfRows(),
+    TestNumberOfColumns(),
+    TestNumberOfMissingValues(),
+    TestShareOfMissingValues(),
+    TestNumberOfColumnsWithMissingValues(),
+    TestShareOfColumnsWithMissingValues(),
+    TestNumberOfRowsWithMissingValues(),
+    TestShareOfRowsWithMissingValues(),
+    TestNumberOfDifferentMissingValues(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfEmptyRows(),
+    TestNumberOfEmptyColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestConflictTarget(),
+    TestConflictPrediction(),
+    TestHighlyCorrelatedColumns(),
+    TestTargetFeaturesCorrelations(),
+    TestPredictionFeaturesCorrelations(),
+    TestCorrelationChanges(),
+    TestNumberOfDriftedColumns(),
+    TestShareOfDriftedColumns(),
+])
+
+dataset_tests_with_text_columns_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+dataset_tests_with_text_columns_suite
+dataset_tests_with_text_columns_suite.json()
+text_column_test_suite = TestSuite(tests=[
+    TestColumnNumberOfMissingValues(column_name='Review_Text'),
+    TestColumnShareOfMissingValues(column_name='Review_Text'),
+    TestColumnNumberOfDifferentMissingValues(column_name='Review_Text'),
+    TestColumnRegExp(column_name='Review_Text', reg_exp='.*love*.'),
+    TestColumnDrift(column_name='Review_Text'),
+    # the following tests will be adopted to text data later:
+    TestColumnAllConstantValues(column_name='Review_Text'),
+    TestColumnAllUniqueValues(column_name='Review_Text'),
+    TestNumberOfUniqueValues(column_name='Review_Text'),
+    TestUniqueValuesShare(column_name='Review_Text'),
+    TestMostCommonValueShare(column_name='Review_Text'),
+    
+])
+
+text_column_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_column_test_suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues)]) 
+suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping) 
+suite.show()
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="text")]) 
+suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping) 
+suite.show()
+report = Report(
+    metrics=[generate_column_metrics(ColumnDriftMetric, columns="text")]
+)
+report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+report

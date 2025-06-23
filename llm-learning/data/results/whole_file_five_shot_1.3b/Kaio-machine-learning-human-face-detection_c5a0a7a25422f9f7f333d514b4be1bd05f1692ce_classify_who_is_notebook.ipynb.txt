@@ -1,0 +1,30 @@
+```python
+    from django.http import JsonResponse
+    from django.views.decorators.csrf import csrf_exempt
+    from kaio.api import Kaio
+
+    @csrf_exempt
+    def api_request(request):
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            kaio = Kaio(data)
+            result = kaio.execute()
+            return JsonResponse({'result': result})
+        else:
+            return JsonResponse({'error': 'Invalid request method'}, status=400)
+
+    from django.urls import path
+    from .views import api_request
+
+    urlpatterns = [
+        path('kaio/', api_request, name='kaio'),
+    ]
+    ```
+
+    O código acima cria um servidor Django que recebe requisiç�es POST em formato JSON e executa as operaç�es definidas no Kaio. O Kaio é um interpretador de linguagem de programação que permite a criação de scripts de automação e de aprendizado.
+
+    O código também cria um endpoint Django para acessar o servidor. A rota '/kaio/' é usada para receber as requisiç�es POST e processá-las.
+
+    O Kaio é otimizado para mostrar feedback sobre as operaç�es que ele está executando, permitindo que o usuário saia do aplicativo e veja o resultado da operação em tempo real.
+
+    Por favor, note que esse código é um exemplo e pode ser necessário ser adaptado para o seu projeto específico.

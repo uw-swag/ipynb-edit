@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+    import psycopg2
+    from sqlalchemy import create_engine
+
+    # Connect to your postgres DB
+    conn = psycopg2.connect(
+        dbname="your_dbname",
+        user="your_username",
+        password="your_password",
+        host="your_host"
+    )
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    # Define the list of files you want to upload
+    files_to_upload = ['file1.csv', 'file2.csv', 'file3.csv']
+
+    # Loop through each file in the list
+    for file in files_to_upload:
+        # Create an engine to connect to the database
+        engine = create_engine('postgresql://user:password@localhost/dbname')
+
+        # Read the file into a pandas DataFrame
+        df = pd.read_csv(file)
+
+        # Write the DataFrame to the database
+        df.to_sql('table_name', engine, if_exists='append', index=False)
+
+    # Close the cursor and connection
+    cur.close()
+    conn.close()
+    ```
+    This script will connect to a PostgreSQL database, read CSV files, and then upload the data into a specified table in the database. The files to upload are defined in the `files_to_upload` list. The `if_exists='append'` argument means that if the table already exists, the new data will be appended to it.

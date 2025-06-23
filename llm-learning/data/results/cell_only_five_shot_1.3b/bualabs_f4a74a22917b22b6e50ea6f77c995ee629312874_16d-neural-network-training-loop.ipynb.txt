@@ -1,0 +1,30 @@
+```python
+    import torch
+
+    # Assuming model, optimizer, and loss function are already defined
+
+    # Training loop
+    for epoch in range(num_epochs):
+        model.train()
+        total_loss = 0
+
+        for batch in dataloader:
+            inputs, labels = batch
+            inputs, labels = inputs.to(device), labels.to(device)
+
+            optimizer.zero_grad()  # zero the parameter gradients
+
+            outputs = model(inputs)
+            loss = loss_function(outputs, labels)
+
+            loss.backward()  # backward pass to compute gradients
+
+            # Using torch.no_grad() to prevent gradients from being tracked
+            with torch.no_grad():
+                optimizer.step()  # update the parameters
+
+            total_loss += loss.item()
+
+        print(f"Epoch {epoch+1}, Loss: {total_loss/len(dataloader)}")
+    ```
+    In the above code, `torch.no_grad()` is used to prevent the gradients from being tracked during the backward pass, which is necessary when we want to update the parameters. The `zero_grad()` method is then used to zero the gradients before the backward pass. After the backward pass, the `step()` method is used to update the parameters.

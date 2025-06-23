@@ -1,0 +1,42 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        html.H1('Dashboard'),
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Montreal'},
+                ],
+                'layout': {
+                    'title': 'Dashboard Example'
+                }
+            }
+        ),
+        dcc.Graph(
+            id='example-graph2',
+            figure={
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Montreal'},
+                ],
+                'layout': {
+                    'title': 'Dashboard Example 2'
+                }
+            }
+        )
+    ])
+
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    ```
+
+    This is a simple example of a Dashboard customization. The Dashboard has two graphs, each with its own layout. The layout of the first graph is set to 'Dashboard Example' and the layout of the second graph is set to 'Dashboard Example 2'.
+
+    Note: Dash is a Python framework for building analytical web applications. It's a user-friendly tool for building interactive web applications.

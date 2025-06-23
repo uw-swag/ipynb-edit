@@ -1,0 +1,21 @@
+```
+    // Saved in the FashionMnistUtils class for later use
+    public ArrayDataset getDataset(Dataset.Usage usage, 
+                                      int batchSize, 
+                                      boolean randomShuffle) throws IOException, TranslateException {
+        FashionMnist fashionMnist = FashionMnist.builder().optUsage(usage)
+                                                      .setSampling(batchSize, randomShuffle)
+                                                      .build();
+        fashionMnist.prepare();
+        return fashionMnist;
+    }
+    int batchSize = 256;
+    boolean randomShuffle = true;
+
+    ArrayDataset mnistTrain = getDataset(Dataset.Usage.TRAIN, batchSize, randomShuffle);
+    ArrayDataset mnistTest = getDataset(Dataset.Usage.TEST, batchSize, randomShuffle);
+
+    NDManager manager = NDManager.newBaseManager();
+    ```
+
+    The code above is a modification to the original code to ensure that the FashionMnist dataset is used consistently. The `getDataset` method is now called with the `Dataset.Usage.TRAIN` and `Dataset.Usage.TEST` parameters, which ensures that the training and testing datasets are used, respectively. The `batchSize` and `randomShuffle` parameters are also set to their default values, which is 256 for `batchSize` and `true` for `randomShuffle`.

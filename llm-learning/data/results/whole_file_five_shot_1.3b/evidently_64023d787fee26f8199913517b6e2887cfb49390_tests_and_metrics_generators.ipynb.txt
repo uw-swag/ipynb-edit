@@ -1,0 +1,49 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add data quality metrics (#381)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+from sklearn.datasets import fetch_openml
+
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+data.frame['target'] = data.frame['education-num']
+data.frame['preds'] = data.frame['education-num'].values + np.random.normal(0, 6, data.frame.shape[0])
+reference_data = data.frame[:20000]
+current_data = data.frame[20000:]
+<\Cell_0>
+<Cell_1>
+from evidently.tests import TestValueQuantile
+from evidently.test_suite import TestSuite
+
+
+suite = TestSuite(tests=[
+    TestValueQuantile(column_name="education-num", quantile=0.5),
+    TestValueQuantile(column_name="education-num", quantile=0.9),
+    TestValueQuantile(column_name="education-num", quantile=0.99)
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_1>
+<Cell_2>
+from evidently.tests import TestFeatureValueMin
+
+
+# test that values in specified columns are positive (greater than zero condition)
+suite = TestSuite(tests=[
+    TestFeatureValueMin(column_name=column_name, gt=0) for column_name in ["age", "fnlwgt", "education-num"]
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite.show()
+<\Cell_2>
+<Cell_3>
+from evidently.tests.base_test import generate_column_tests
+
+from evidently.tests import TestColumnShareOfNulls
+
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfNulls)

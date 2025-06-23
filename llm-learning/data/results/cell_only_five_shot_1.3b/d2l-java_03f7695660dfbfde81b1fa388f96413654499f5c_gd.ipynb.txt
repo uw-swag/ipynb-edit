@@ -1,0 +1,36 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Defining the gradient descent function
+    def gradient_descent(x_start, learning_rate, num_iterations):
+        x = x_start
+        history = [x]
+
+        for i in range(num_iterations):
+            gradient = compute_gradient(x)  # Compute the gradient of the loss function
+            x = x - learning_rate * gradient  # Update the parameter
+            history.append(x)
+
+        return history
+
+    # Defining the loss function
+    def compute_gradient(x):
+        return 2 * x + 3  # The gradient of the loss function
+
+    # Initial parameters
+    x_start = 0.5
+    learning_rate = 0.01
+    num_iterations = 1000
+
+    # Run the gradient descent
+    history = gradient_descent(x_start, learning_rate, num_iterations)
+
+    # Plot the history
+    plt.plot(history)
+    plt.xlabel('Iteration')
+    plt.ylabel('x')
+    plt.show()
+    ```
+    This code implements a simple gradient descent algorithm in Python. The function `gradient_descent` takes as input the initial parameter `x_start`, the learning rate `learning_rate`, and the number of iterations `num_iterations`. It returns the history of the parameters as a list. The function `compute_gradient` computes the gradient of the loss function, and the `gradient_descent` function updates the parameter in the direction of the negative gradient. The history of the parameters is then plotted.

@@ -1,0 +1,80 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from matplotlib import rcParams
+import xgboost as xgb
+%matplotlib inline 
+sns.set_style('whitegrid')
+
+import scipy.stats as stats
+from scipy import stats
+from scipy.stats import pointbiserialr, spearmanr, skew, pearsonr
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.feature_selection import SelectFromModel
+from sklearn.model_selection import cross_val_score, train_test_split, GridSearchCV
+from sklearn.linear_model import Ridge, RidgeCV, LassoCV
+from sklearn import linear_model
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+data[data.columns[data.isnull().sum() > 0].tolist()].info()
+#Create a list of column to fill NA with "None" or 0.
+to_null = ['Alley', 'MasVnrType', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'FireplaceQu',
+           'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'GarageYrBlt', 'BsmtFullBath', 'BsmtHalfBath',
+           'PoolQC', 'Fence', 'MiscFeature']
+for col in to_null:
+    if data[col].dtype == 'object':
+
+        data[col].fillna('None',inplace=True)
+        test[col].fillna('None',inplace=True)
+    else:
+
+        data[col].fillna(0,inplace=True)
+        test[col].fillna(0,inplace=True)
+threshold = 0.8 # Threshold value.
+def correlation():
+    for i in data.columns:
+        for j in data.columns[list(data.columns).index(i) + 1:]: #Ugly, but works. This way there won't be repetitions.
+            if data[i].dtype != 'object' and data[j].dtype != 'object':
+                #pearson is used by default for numerical.
+                if abs(pearsonr(data[i], data[j])[0]) >= threshold:
+                    yield (pearsonr(data[i], data[j])[0], i, j)
+            else:
+                #spearman works for categorical.
+                if abs(spearmanr(data[i], data[j])[0]) >= threshold:
+                    yield (spearmanr(data[i], data[j])[0], i, j)
+for col in data.columns:
+    if data[col].dtype != 'object':
+        if skew(data[col]) > 0.75:
+            data[col] = np.log1p(data[col])
+        pass
+    else:
+        dummies = pd.get_dummies(data[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        data.drop(col, axis=1, inplace=True)
+        data = data.join(dummies)
+        
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+        pass
+    else:
+        dummies = pd.get_dummies(test[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        test.drop(col, axis=1, inplace=True)
+        test = test.join(dummies)
+X_train = data.drop('SalePrice',axis=1)
+Y_train = data['SalePrice']
+X_test  = test
+Xtrain, Xtest, ytrain, ytest = train_test_split(X_train, Y_train, test_size=0.33)
+#Features to be used. I do this because I want to see how good will other models perform with these features.
+features = X_train.columns[indices]
+for i in features:
+    if i not in X_test.columns:
+        print(i)
+#I added XGBoost as it usually improves the predictions.
+model_xgb = xgb.XGBRegressor(n_estimators=340, max_depth=2, learning_rate=0.1)
+model_xgb.fit(X, Y_train)
+xgb_preds = np.expm1(model_xgb.predict(Xt))

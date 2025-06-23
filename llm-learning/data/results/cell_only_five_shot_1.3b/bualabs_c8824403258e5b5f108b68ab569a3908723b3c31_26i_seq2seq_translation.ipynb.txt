@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Moved datasets to google drive."
+    Original Code Cells:
+    '''
+    dataset = '26i-giga-fren'
+
+# Google Colab
+config_path = Path('/content/drive')
+data_path_base = Path('/content/datasets/')
+
+data_path = data_path_base/dataset
+
+from google.colab import drive
+drive.mount(str(config_path))
+# ! wget https://s3.amazonaws.com/fast-ai-nlp/giga-fren.tgz -P {data_path}
+# ! tar xf {data_path}/giga-fren.tgz -C {data_path}
+! head {path}/giga-fren.release2.fixed.en
+! wc -l {path}/giga-fren.release2.fixed.en
+! head {path}/giga-fren.release2.fixed.fr
+! wc -l {path}/giga-fren.release2.fixed.fr
+data.save()
+data = load_data(path)
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a part of a Jupyter notebook and it's trying to download a dataset from a URL and save it to a specific path on Google Colab. However, the code is not complete and it's missing some parts. Here's a complete version of the code:
+
+```python
+# Google Colab
+config_path = Path('/content/drive')
+data_path_base = Path('/content/datasets/')
+
+# Mount Google Drive
+from google.colab import drive
+drive.mount(str(config_path))
+
+# Specify the dataset
+dataset = '26i-giga-fren'
+
+# Create the data path
+data_path = data_path_base/dataset
+
+# Download the dataset
+import wget
+wget.download(f'https://s3.amazonaws.com/fast-ai-nlp/{dataset}.tgz', data_path)
+
+# Extract the dataset
+import tarfile
+with tarfile.open(

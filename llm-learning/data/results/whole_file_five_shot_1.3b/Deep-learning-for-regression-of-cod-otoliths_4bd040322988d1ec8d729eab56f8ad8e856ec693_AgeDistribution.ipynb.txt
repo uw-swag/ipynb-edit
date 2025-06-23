@@ -1,0 +1,28 @@
+```python
+    all = {1: 382, 2: 522, 3: 509, 4: 624, 5: 805, 6: 540, 7: 544, 8: 477, 9: 327, 10: 217, 11: 122, 12: 55, 13: 26}
+
+    test = {1: 41, 2: 59, 3: 52, 4: 60, 5: 90, 6: 52, 7: 55, 8: 47, 9: 23, 10: 19, 11: 13, 12: 2, 13: 2}
+
+    print(sum(all.values()))
+    print(sum(test.values()))
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    D=all
+
+    plt.rcParams['figure.dpi'] = 150
+
+    fig, ax = plt.subplots()
+    ax.bar(range(len(D)), list(D.values()), align='center')
+    plt.xticks(range(len(D)), list(D.keys()))
+    plt.xlabel("Labeled age")
+    plt.ylabel("Number of otoliths")
+
+    for rect in ax.patches:
+        height = rect.get_height()
+        ax.annotate(f'{int(height)}', xy=(rect.get_x()+rect.get_width()/2, height), 
+                    xytext=(0, 0), textcoords='offset points', ha='center', va='bottom') 
+    
+    plt.show()
+    ```

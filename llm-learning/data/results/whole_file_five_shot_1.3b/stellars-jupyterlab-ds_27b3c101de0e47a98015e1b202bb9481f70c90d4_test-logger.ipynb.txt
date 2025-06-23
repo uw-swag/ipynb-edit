@@ -1,0 +1,28 @@
+```
+    # Dockerfile
+    FROM python:3.7
+
+    WORKDIR /app
+
+    # Install dependencies
+    RUN pip install --no-cache-dir -r requirements.txt
+
+    # Copy the current directory contents into the container at /app
+    COPY . /app
+
+    # Make port 80 available to the world outside this container
+    EXPOSE 80
+
+    # Run app.py when the container launches
+    CMD ["python", "app.py"]
+    ```
+
+    This Dockerfile creates a Docker image based on the Python 3.7 environment. It installs the dependencies specified in the `requirements.txt` file and copies the current directory contents into the Docker image at `/app`. The `EXPOSE` instruction makes port 80 available to the outside world. The `CMD` instruction specifies the command to run when a container is started from this image.
+
+    The `app.py` file is the main script that will be run when the Docker container is started. It imports the logger and progress bar functions from the `logger` module, logs some example messages, runs a test function, and then creates a progress bar.
+
+    The `requirements.txt` file lists the Python dependencies for the application. It's included in the Docker image because it's a standard practice to include dependencies in the Docker image.
+
+    The Docker image is then built and run using the `docker build` and `docker run` commands, respectively.
+
+    Please note that this is a very basic setup and might not be suitable for a production environment. For a production environment, you would need to consider more factors such as security, scalability, and performance.

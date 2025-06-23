@@ -1,0 +1,19 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67*len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    from deepchecks.suites import IntegrityCheckSuite
+
+    # Add condition to check if the dataframe is single value
+    df_train['target'] = df_train['target'].apply(lambda x: x if pd.notnull(x) else 'single_value')
+    df_test['target'] = df_test['target'].apply(lambda x: x if pd.notnull(x) else 'single_value')
+
+    IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    This code adds a condition to check if the target value is not null. If it is, it assigns 'single_value' to the target. This condition is then applied to both the training and testing datasets.

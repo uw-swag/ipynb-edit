@@ -1,0 +1,55 @@
+
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense
+    from tensorflow.keras.optimizers import Adam
+
+    # Creating a simple neural network model
+    model = Sequential()
+    model.add(Dense(32, input_dim=30, activation='relu'))
+    model.add(Dense(16, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+
+    # Compiling the model
+    model.compile(loss='binary_crossentropy', optimizer=Adam(learning_rate=0.01), metrics=['accuracy'])
+
+    # Fitting the model
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+
+    # Evaluating the model
+    _, accuracy = model.evaluate(x_test, y_test)
+    print('Accuracy: %.2f' % (accuracy*100))
+
+    # Predicting the results
+    predictions = model.predict(x_test)
+    predictions = (predictions > 0.5)
+
+    # Printing the results
+    print(predictions)
+
+    # Saving the model
+    model.save('neural_network_model.h5')
+
+    # Importing the saved model
+    from keras.models import load_model
+    model = load_model('neural_network_model.h5')
+
+    # Predicting the results
+    predictions = model.predict(x_test)
+    predictions = (predictions > 0.5)
+
+    # Printing the results
+    print(predictions)
+
+    # Plotting the results
+    plt.plot(predictions)
+    plt.show()
+
+    # Plotting the actual results
+    plt.plot(y_test)
+    plt.show()
+
+    # Plotting the difference between the predicted and actual results
+    plt.plot(predictions - y_test)
+    plt.show()

@@ -1,0 +1,23 @@
+```python
+    import folium
+    import pandas as pd
+    from folium.plugins import HeatMap
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Create a map
+    m = folium.Map(location=[df['latitude'].mean(), df['longitude'].mean()], zoom_start=13)
+
+    # Add a heatmap layer
+    heat_data = [[point.xy[1][0][1], point.xy[0][0][1]] for point in df.geometry]
+    HeatMap(heat_data).add_to(m)
+
+    # Add a marker layer
+    for i in range(0, df.shape[0]):
+        folium.Marker([df.iloc[i]['latitude'], df.iloc[i]['longitude']],
+                      popup=df.iloc[i]['popup_content']).add_to(m)
+
+    # Display the map
+    m
+    ```

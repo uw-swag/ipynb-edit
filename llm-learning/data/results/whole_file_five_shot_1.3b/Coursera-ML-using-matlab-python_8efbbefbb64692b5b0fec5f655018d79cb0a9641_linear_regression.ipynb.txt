@@ -1,0 +1,62 @@
+
+    '''
+    Commit Message: "Add files via upload"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    #load data from file
+    def load_data(filename):
+        data = []
+        file = open(filename)
+        for line in file.readlines():
+            lineArr = line.strip().split(',')
+            col_num = len(lineArr)
+            temp = []
+            for i in xrange(col_num):
+                temp.append(float(lineArr[i]))
+            data.append(temp)
+        return np.array(data)
+
+    
+    data = load_data('ex1data1.txt')
+    print data.shape
+    print data[:5]
+
+    X = data[:,:-1]
+    y = data[:,-1:]
+    print X.shape
+    print y.shape
+    print X[:5]
+    print y[:5]
+
+
+
+<\Cell_0>
+<Cell_1>
+    #plot data
+    plt.scatter(X,y,color = 'r',marker= 'x')
+    plt.xlabel('X')
+    plt.ylabel('y')
+    plt.show()
+
+
+<\Cell_1>
+<Cell_2>
+    #compute the cost 
+    num_train = X.shape[0]
+    one = np.ones((num_train,1)) 
+    X = np.hstack((one,data[:,:-1])) #add ones
+    W = np.zeros((2,1)) #w0 ,w1
+    print X.shape
+    print W
+
+    def compute_cost(X_test,y_test,theta):
+        num_X = X_test.shape[0]
+        cost = 0.5 * np.sum(np.square(X_test.dot(theta) - y_test)) / num_X
+        return cost
+
+    cost_1 = compute_cost(X,y,W)
+    print 'cost =%f,with W =[0,0]

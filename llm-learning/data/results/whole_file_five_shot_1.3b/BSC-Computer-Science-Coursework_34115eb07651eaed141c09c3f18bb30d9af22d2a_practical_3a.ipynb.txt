@@ -1,0 +1,46 @@
+```python
+    <Cell_0>
+    %run ../common/import_all.py
+
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+    <\Cell_0>
+    <Cell_1>
+    ## Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    ## Loading the dataset
+    df = pd.read_csv('../../mlrefined_datasets/superlearn_datasets/handling_numerical_data.csv')
+
+    ## Data Preprocessing
+    df = df.select_dtypes(include=[np.number])
+    df = df.fillna(df.mean())
+
+    ## Feature Engineering
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    ## Splitting the dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    ## Model Training
+    regressor = LinearRegression()
+    regressor.fit(X_train, y_train)
+
+    ## Model Evaluation
+    y_pred = regressor.predict(X_test)
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+    ## Visualization
+    plt.scatter(y_test, y_pred)
+    plt.xlabel('True

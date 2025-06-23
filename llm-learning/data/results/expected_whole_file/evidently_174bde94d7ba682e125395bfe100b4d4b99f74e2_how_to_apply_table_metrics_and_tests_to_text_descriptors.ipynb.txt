@@ -1,0 +1,183 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+<\Cell_0>
+<Cell_1>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metrics import ColumnSummaryMetric
+from evidently.metrics import ColumnCorrelationsMetric
+from evidently.metrics import ColumnDistributionMetric
+from evidently.metrics import ColumnDriftMetric
+from evidently.metrics import ColumnValueRangeMetric
+
+from evidently.metrics import DatasetCorrelationsMetric
+from evidently.metrics import DatasetDriftMetric
+from evidently.metrics import DataDriftTable
+from evidently.metrics import ClassificationQualityByFeatureTable
+from evidently.metrics import RegressionErrorBiasTable
+
+from evidently.tests import TestColumnDrift
+from evidently.tests import TestValueRange
+from evidently.tests import TestNumberOfOutRangeValues
+from evidently.tests import TestShareOfOutRangeValues
+from evidently.tests import TestMeanInNSigmas
+from evidently.tests import TestColumnValueMin
+from evidently.tests import TestColumnValueMax
+from evidently.tests import TestColumnValueMean
+from evidently.tests import TestColumnValueMedian
+from evidently.tests import TestColumnValueStd
+from evidently.tests import TestColumnQuantile
+
+from evidently.tests import TestHighlyCorrelatedColumns
+from evidently.tests import TestTargetFeaturesCorrelations
+from evidently.tests import TestPredictionFeaturesCorrelations
+from evidently.tests import TestCorrelationChanges
+from evidently.tests import TestNumberOfDriftedColumns
+from evidently.tests import TestShareOfDriftedColumns
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment, RegExp
+<\Cell_1>
+<Cell_2>
+import nltk
+nltk.download('words')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('vader_lexicon')
+<\Cell_2>
+<Cell_3>
+#Data with Texts
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame='auto')
+reviews = reviews_data.frame
+<\Cell_3>
+<Cell_4>
+reviews['prediction'] = reviews['Rating']
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+<\Cell_4>
+<Cell_5>
+column_mapping = ColumnMapping(
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title']
+)
+<\Cell_5>
+<Cell_6>
+table_column_metrics_report = Report(metrics=[
+    ColumnSummaryMetric(column_name = RegExp(reg_exp=r'.*\?.*').for_column("Review_Text")),
+    ColumnDriftMetric(column_name = SentenceCount().for_column("Review_Text")),
+    ColumnCorrelationsMetric(column_name = WordCount().for_column("Review_Text")),
+    ColumnDistributionMetric(column_name = Sentiment().for_column("Review_Text")),
+    ColumnValueRangeMetric(column_name = TextLength().for_column("Review_Text"), left=0, right=20)
+])
+
+table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_metrics_report
+<\Cell_6>
+<Cell_7>
+table_column_test_suite = TestSuite(tests=[
+    TestColumnDrift(column_name = RegExp(reg_exp=r'.*\?.*').for_column("Review_Text")),
+    TestValueRange(column_name = TextLength().for_column("Review_Text")),
+    TestNumberOfOutRangeValues(column_name = TextLength().for_column("Review_Text")),
+    TestShareOfOutRangeValues(column_name = TextLength().for_column("Review_Text")),
+    TestMeanInNSigmas(column_name = TextLength().for_column("Review_Text")),
+    TestColumnValueMin(column_name = SentenceCount().for_column("Review_Text")),
+    TestColumnValueMax(column_name = WordCount().for_column("Review_Text")),
+    TestColumnValueMean(column_name = Sentiment().for_column("Review_Text")),
+    TestColumnValueMedian(column_name = TextLength().for_column("Review_Text")),
+    TestColumnValueStd(column_name = TextLength().for_column("Review_Text")),
+    TestColumnQuantile(column_name = TextLength().for_column("Review_Text"), quantile=0.25),
+])
+
+table_column_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_test_suite
+<\Cell_7>
+<Cell_8>
+#Dataset-level metrics which use raw text data
+
+table_column_metrics_report = Report(metrics=[
+    DatasetDriftMetric(columns=["Age", "Review_Text"]),
+    DataDriftTable(columns=["Age", "Review_Text"]),
+
+])
+
+table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_metrics_report
+<\Cell_8>
+<Cell_9>
+#Dataset-level metric which uses descriptors
+
+regression_report = Report(metrics=[
+    RegressionErrorBiasTable(columns=["Age", "Review_Text"], descriptors = {
+        "Review_Text":{
+        "Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt'])
+
+    }
+    }),
+
+], options={"render": {"raw_data": True}})
+
+regression_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='regression'
+  )
+)
+
+regression_report
+<\Cell_9>
+<Cell_10>
+#Dataset-level metric which uses descriptors
+
+classification_report = Report(metrics=[
+    ClassificationQualityByFeatureTable(columns=["Age", "Review_Text"], descriptors = {
+        "Review_Text":{
+        "Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        "SentenceCount": SentenceCount(),
+        "WordCount": WordCount(),
+        "Sentiment": Sentiment(),
+    }}),
+
+], options={"render": {"raw_data": True}})
+classification_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='classification'
+  )
+)
+
+classification_report
+<\Cell_10>
+<Cell_11>
+#Dataset-level tests which use raw text data
+
+table_dataset_test_suite = TestSuite(tests=[
+    TestNumberOfDriftedColumns(columns=["Age", "Review_Text"]),
+    TestShareOfDriftedColumns(columns=["Age", "Review_Text"]),
+
+])
+
+table_dataset_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='regression'
+  ))
+table_dataset_test_suite
+<\Cell_11>

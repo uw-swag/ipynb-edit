@@ -1,0 +1,17 @@
+```python
+    import IPython.display as ipd
+
+    def auto_play_audio(file_path):
+        """
+        This function will auto play an audio file.
+
+        :param file_path: str, path to the audio file
+        """
+        try:
+            audio = ipd.Audio(file_path)
+            display(audio)
+            audio.play()
+        except Exception as e:
+            print(f"An error occurred: {e}")
+    ```
+    This function uses the IPython.display module to play an audio file. The audio file is played automatically when the function is called. If an error occurs, it is caught and printed.

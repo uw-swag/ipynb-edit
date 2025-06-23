@@ -1,0 +1,59 @@
+```python
+    import java.util.concurrent.TimeUnit;
+    import java.util.concurrent.ScheduledThreadPoolExecutor;
+    import java.util.concurrent.TimeUnit;
+
+    public class Stopwatch {
+        private long startTime;
+        private long stopTime;
+        private boolean isRunning = false;
+
+        public void start() {
+            if(isRunning) throw new IllegalStateException("Stopwatch has already started");
+            isRunning = true;
+            startTime = System.nanoTime();
+        }
+
+        public void stop() {
+            if(!isRunning) throw new IllegalStateException("Stopwatch is not started");
+            isRunning = false;
+            stopTime = System.nanoTime();
+        }
+
+        public long getElapsedTime() {
+            long timeDifference = 0;
+            if(isRunning) timeDifference = (System.nanoTime() - startTime);
+            else timeDifference = (stopTime - startTime);
+            return TimeUnit.NANOSECONDS.toMillis(timeDifference);
+        }
+
+        public void reset() {
+            startTime = 0;
+            stopTime = 0;
+            isRunning = false;
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Stopwatch stopwatch = new Stopwatch();
+
+            // Start the stopwatch
+            stopwatch.start();
+
+            // Simulate some work
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Stop the stopwatch
+            stopwatch.stop();
+
+            // Get the elapsed time
+            long elapsedTime = stopwatch.getElapsedTime();
+            System.out.println("Elapsed time: " + elapsedTime + " milliseconds");
+        }
+    }
+    ```

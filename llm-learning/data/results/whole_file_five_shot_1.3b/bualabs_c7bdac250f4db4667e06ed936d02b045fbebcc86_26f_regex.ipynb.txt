@@ -1,0 +1,50 @@
+```
+    [
+    Commit Message: "Added real-world samples."
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import re
+    <\Cell_0>
+    <Cell_1>
+    # pat = Pattern
+    pat = "^The.*Thailand$"
+
+    # strs = Strings
+    strs = ["The list ranks completed buildings in Thailand", 
+            "The tallest building in Thailand.", 
+            "Weather in Thailand", 
+            "They recently visited Chiang Mai, Thailand"]
+    <\Cell_1>
+    <Cell_2>
+    [re.search(pat, s) for s in strs]
+    <\Cell_2>
+    <Cell_3>
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.search("\s", str)
+
+    print("The first white-space character is located in position:", x.start())
+    <\Cell_3>
+    <Cell_4>
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.search("Taiwan", str)
+    print(x)
+    <\Cell_4>
+    <Cell_5>
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.findall("la", str)
+    print(x)
+    <\Cell_5>
+    <Cell_6>
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.findall("Th.", str)
+    print(x)
+    <\Cell_6>
+    <Cell_7>
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.findall("Japan", str)
+    print(x)
+    <\Cell_7>
+    <Cell_8>
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.split("\s", str)

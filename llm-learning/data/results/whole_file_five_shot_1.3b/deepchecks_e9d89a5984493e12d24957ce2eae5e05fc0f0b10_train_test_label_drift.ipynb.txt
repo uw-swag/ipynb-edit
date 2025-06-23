@@ -1,0 +1,30 @@
+
+The code you provided is refactoring the label drift check. The refactoring process involves changing the way the label drift check is performed. In the current code, the label drift check is performed on the entire dataset, which is not efficient. 
+
+The refactored code is shown below:
+
+```python
+from deepchecks.vision.dataset import VisionData
+from deepchecks.vision.checks import TrainTestLabelDrift
+
+from deepchecks.vision.datasets.classification.mnist import load_dataset
+
+mnist_dataloader_train = load_dataset(train=True, batch_size=64)
+mnist_dataloader_test = load_dataset(train=False, batch_size=1000)
+
+train_ds = VisionData(mnist_dataloader_train, label_formatter=ClassificationLabelFormatter())
+test_ds = VisionData(mnist_dataloader_test, label_formatter=ClassificationLabelFormatter())
+
+check = TrainTestLabelDrift()
+check.run(train_ds, test_ds)
+```
+
+In the refactored code, the `TrainTestLabelDrift` check is run on a subset of the dataset, which is more efficient. The subset is determined by the `batch_size` parameter in the `load_dataset` function. The `batch_size` parameter determines the number of samples to load and process in each batch.
+
+The `batch_size` parameter is set to 64 in the refactored code, which means that only 64 samples are loaded and processed in each batch. This is a reasonable default value, but you can adjust it according to your specific needs.
+
+The `load_dataset` function is also updated to include the `batch_size` parameter. This means that the dataset is loaded in batches, which can be more memory-efficient.
+
+The `TrainTestLabelDrift` check is run on the entire dataset, which is the original code.
+
+Please note that the refactoring process can vary depending on the specifics of your dataset and the specifics of the `TrainTestLabelDrift` check.

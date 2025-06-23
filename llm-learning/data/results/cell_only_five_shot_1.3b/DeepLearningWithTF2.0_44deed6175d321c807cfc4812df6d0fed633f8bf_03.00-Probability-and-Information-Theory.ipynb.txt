@@ -1,0 +1,35 @@
+
+    """
+    At the moment of writing (05.20.2019) the only build that supports tensorflow probability is the tensorflow 
+    nightly build so we will use that to install tensorflow 2.0 and tensorflow probability.
+    """
+    # Install tensorflow 2.0 and tensorflow probability from the nightly build
+    !pip install --upgrade tf-nightly-2.0-preview tfp-nightly
+
+    """
+    In this example, we are rolling two dices, there are ways to simplify the code so it's not this lengthy but 
+    I wanted to show that we are rolling two dice 1000 times, and in the example we are calculating the probability 
+    of rolling x=4 and y=1, this can be easily calculated by multiplying the individual probabilities of x and y.
+    """
+    def multi_dice(x, y, sides, rolls, plot=True):
+        """Calculates the joint probability of two dice.
+        Arguments:
+            x (int)        : is the number you want to calculate the probability for.
+            y (int)        : is the number you want to calculate the probability for.
+            sides (int)    : Number of sides for the dice.
+            rolls (int)    : Number of rolls.
+            plot (bool)    : Whether you want to plot the data or not.
+        Returns:
+            probabilities (float).
+        """
+        
+        result1 = roll(sides, rolls)                         # first result from the rolls 
+        result2 = roll(sides, rolls)                         # second result from the rolls 
+        prob_x = tf.divide(result1[x], rolls)                # calculates the probability of x
+        prob_y = tf.divide(result2[y], rolls)                # calculates the probability of y
+        joint_prob = tf.multiply(prob_x, prob_y)             # calculates the joint probability of x&y by multiplying
+        
+        if plot:
+            for i in range(1, sides +1):
+                plt.title("Dice 1 {} Rolls".format(rolls))
+                plt.bar(i, result

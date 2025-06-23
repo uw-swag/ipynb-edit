@@ -1,0 +1,27 @@
+
+The scikit-learn 19.0 update on `.fit( )` arguments includes a new parameter `sample_weight`. This parameter is used to give more importance to some instances in the dataset during the training process.
+
+The `sample_weight` parameter is a dictionary where the keys are the indices of the instances to be weighted, and the values are the weights. The weights are used to give more importance to some instances during the training process.
+
+Here is the updated code:
+
+```python
+from sklearn.model_selection import RandomizedSearchCV
+
+def leaky_relu(alpha=0.01):
+    def parametrized_leaky_relu(z, name=None):
+        return tf.maximum(alpha * z, z, name=name)
+    return parametrized_leaky_relu
+
+param_distribs = {
+    "n_neurons": [10, 30, 50, 70, 90, 100, 120, 140, 160],
+    "batch_size": [10, 50, 100, 500],
+    "learning_rate": [0.01, 0.02, 0.05, 0.1],
+    "activation": [tf.nn.relu, tf.nn.elu, leaky_relu(alpha=0.01), leaky_relu(alpha=0.1)],
+    # you could also try exploring different numbers of hidden layers, different optimizers, etc.
+    #"n_hidden_layers": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    #"optimizer_class": [tf.train.AdamOptimizer, partial(tf.train.MomentumOptimizer, momentum=0.95)],
+}
+
+rnd_search = RandomizedSearchCV(DNNClassifier(random_state=42), param_distribs, n_iter=50,
+                                fit_params={"X_valid": X_valid1, "y

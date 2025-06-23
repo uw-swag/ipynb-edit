@@ -1,0 +1,46 @@
+```python
+    # Preprocess data
+    bins = (2, 6.5, 8)
+    group_names = ['bad','good']
+    wine['quality'] = pd.cut(wine['quality'],bins = bins, labels = group_names)
+
+    # Encode the quality variable
+    le = LabelEncoder()
+    wine['quality'] = le.fit_transform(wine['quality'])
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(wine.drop('quality', axis=1), wine['quality'], test_size=0.2, random_state=42)
+
+    # Standardize the data
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train a Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100)
+    rfc.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred_rfc = rfc.predict(X_test)
+
+    # Train an SVM
+    svc = SVC(kernel='linear')
+    svc.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred_svc = svc.predict(X_test)
+
+    # Train a MLP Classifier
+    mlp = MLPClassifier(hidden_layer_sizes=(100,), max_iter=100)
+    mlp.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred_mlp = mlp.predict(X_test)
+
+    # Print the confusion matrix
+    print(confusion_matrix(y_test, y_pred_rfc))
+    print(confusion_matrix(y_test, y_pred_svc))
+    print(confusion_matrix(y_test, y_pred_mlp))
+
+    # Print the classification report
+    print(classification_report

@@ -1,0 +1,44 @@
+```
+    from sklearn_evaluation import SQLiteTracker
+
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.linear_model import LinearRegression, Lasso
+    from sklearn.svm import SVR
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error
+
+    tracker = SQLiteTracker('my_experiments.db')
+
+    iris = load_iris(as_frame=True)
+    X, y = iris['data'], iris['target']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+    models = [RandomForestRegressor(), LinearRegression(), Lasso()]
+
+    for m in models:
+        model = type(m).__name__
+        print(f'Fitting {model}')
+
+        uuid = tracker.new()
+        m.fit(X_train, y_train)
+        y_pred = m.predict(X_test)
+        mse = mean_squared_error(y_test, y_pred)
+
+        tracker.update(uuid, {'mse': mse, 'model': model, **m.get_params()})
+
+    svm = SVR()
+    svm.fit(X_train, y_train)
+    y_pred = svm.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+
+    tracker.insert('my_uuid', {'mse': mse, 'model': type(svm).__name__, **svm.get_params()})
+
+    tracker
+
+    ordered = tracker.query("""
+    SELECT uuid,
+           json_extract(parameters, '$.model') AS model,
+           json_extract(parameters, '$.mse') AS mse
+    FROM experiments
+    ORDER BY json_extract(parameters, '

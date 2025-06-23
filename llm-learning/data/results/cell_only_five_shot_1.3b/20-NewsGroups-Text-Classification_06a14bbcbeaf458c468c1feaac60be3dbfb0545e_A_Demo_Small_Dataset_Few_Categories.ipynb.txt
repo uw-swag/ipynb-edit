@@ -1,0 +1,34 @@
+
+# Code you have previously used to load data
+import pandas as pd
+
+# Path of the file to read
+iowa_file_path = './train.csv'
+
+home_data = pd.read_csv(iowa_file_path)
+
+# Set up code checking
+from learntools.core import binder
+binder.bind(globals())
+from learntools.machine_learning.ex3 import *
+
+print("Setup Complete")
+
+# Your code goes here
+
+# Let’s perform the search on a smaller subset of the training data to speed up the computation:
+gs_clf = gs_clf.fit(twenty_train.data[:400], twenty_train.target[:400]) # The data is shuffled, so we are good
+
+# The object’s best_score_ and best_params_ attributes store the best mean score and 
+# the parameters setting corresponding to that score:
+print('Best Score : ', gs_clf.best_score_)
+for param_name in sorted(parameters.keys()):
+    print("%s: %r" % (param_name, gs_clf.best_params_[param_name]))
+preds = gs_clf.predict(twenty_test.data)
+acc = np.mean(preds == twenty_test.target)
+print('Accuracy = ', acc) # 0.859520639147803
+
+creport = classification_report(twenty_test.target, preds, target_names=twenty_test.target_names)
+print(creport)
+confusion_matrix(twenty_test.target, preds)
+

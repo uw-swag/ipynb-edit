@@ -1,0 +1,50 @@
+```python
+    from keras.preprocessing.image import ImageDataGenerator
+    from keras.callbacks import LearningRateScheduler
+    from keras.optimizers import SGD
+
+    # DenseNet model
+    model = DenseNet(n_classes=10, growth_rate=32, block_repeats=4,
+                     compression_factor=0.5, init_channels=32)
+
+    # Data augmentation
+    datagen = ImageDataGenerator(
+        rotation_range=15,
+        width_shift_range=0.1,
+        height_shift_range=0.1,
+        horizontal_flip=True,
+        zoom_range=0.2)
+
+    # Learning rate annealing
+    lr_scheduler = LearningRateScheduler(
+        lambda epoch: 1e-3 * (0.1 ** (epoch // 20)))
+
+    # Compile the model
+    model.compile(optimizer=SGD(lr=1e-3, momentum=0.9, nesterov=True),
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    # Train the model
+    history = model.fit(datagen.flow(X_train, y_train, batch_size=bs),
+                        steps_per_epoch=X_train.shape[0] // bs,
+                        epochs=SZ,
+                        validation_data=(X_val, y_val),
+                        callbacks=[lr_scheduler])
+
+    # Save the model
+    model.save('my_model.h5')
+
+    # Load the model
+    model = load_model('my_model.h5')
+
+    # Predict
+    y_pred = model.predict(X_test)
+
+    # Evaluate
+    score = model.evaluate(X_test, y_test, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+
+    # Save the submission
+    submission = pd.DataFrame({'Id': test_ids, 'Label': y_pred})
+    submission.

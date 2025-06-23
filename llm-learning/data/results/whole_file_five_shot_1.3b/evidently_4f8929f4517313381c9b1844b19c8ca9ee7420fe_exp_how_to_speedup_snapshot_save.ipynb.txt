@@ -1,0 +1,26 @@
+```python
+    import time
+    import numpy as np
+    from sklearn.datasets import load_iris
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Create a numpy array with random data
+    data = np.random.rand(1000, 10)
+
+    # Start timer
+    start_time = time.time()
+
+    # Save the data to a file
+    np.save('iris_data.npy', data)
+
+    # End timer
+    end_time = time.time()
+
+    # Calculate the save speed
+    save_speed = (data.size / (end_time - start_time)) / 1000  # Convert from seconds to kilobytes
+
+    print(f'Save speed: {save_speed} KB/s')
+    ```
+    This script measures the save speed of numpy's `np.save` function. The `np.save` function saves a numpy array to a file, and the time it takes to save the data is measured. The save speed is calculated by dividing the size of the data (in bytes) by the time taken to save the data (in seconds).

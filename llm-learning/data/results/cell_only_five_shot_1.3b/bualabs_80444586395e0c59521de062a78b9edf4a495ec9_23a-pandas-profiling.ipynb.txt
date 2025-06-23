@@ -1,0 +1,29 @@
+
+    ## Correcting the Census Adults Dataset Credit
+
+    The original credit for the census adults dataset is as follows:
+
+    "This dataset is a modified version of the UCI Machine Learning Repository's Adult Census Income dataset. The original dataset can be found at: https://archive.ics.uci.edu/ml/datasets/adult"
+
+    The original dataset was not provided with a credit. However, the dataset was modified to include a new column, "income", which represents whether the person makes over 50K a year. The original dataset was not provided with this column, so I have corrected it.
+
+    Here is the corrected code:
+
+    ```python
+    import pandas as pd
+
+    # Load the original dataset
+    original_dataset = pd.read_csv('adult.csv')
+
+    # Correct the 'income' column
+    original_dataset['income'] = original_dataset['income'].map({'>50K': '>50K', '<=50K': '<=50K'})
+
+    # Save the corrected dataset
+    original_dataset.to_csv('adult_corrected.csv', index=False)
+    ```
+
+    This code assumes that the 'income' column in the original dataset is a binary variable (i.e., it has two possible values: '>50K' and '<=50K'). If the 'income' column has different values, you may need to adjust the mapping accordingly.
+
+    Please note that this code will overwrite the original dataset. If you want to keep the original dataset, you should create a copy before applying this correction.
+
+    Also, please make sure to replace 'adult.csv' with the actual path to your original dataset file.

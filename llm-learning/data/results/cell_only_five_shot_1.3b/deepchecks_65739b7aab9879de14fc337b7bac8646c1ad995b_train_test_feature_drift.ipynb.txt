@@ -1,0 +1,47 @@
+```yaml
+    name: Links Check
+
+    on:
+      push:
+        branches:
+          - master
+
+    jobs:
+      links-check:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Setup Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+
+        - name: Install Dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Run Links Check
+          run: |
+            python -m links_check
+    ```
+    In the above GitHub action, we are setting up a job named "links-check" that runs on the latest version of Ubuntu. The job first checks out the code, then sets up Python 3.8, and then installs the dependencies. Finally, it runs the links_check script.
+
+    Please replace `links_check` with the actual script name that you have in your project.
+
+    Also, replace `requirements.txt` with the actual file name that contains the list of dependencies for your project.
+
+    The `links_check` script should be a Python script that checks the links in the code.
+
+    Please note that the `links_check` script should be written in a way that it can be run from the command line.
+
+    The `links_check` script should be able to handle different types of links (e.g., HTTP, HTTPS, FTP, etc.) and different types of URLs (e.g., relative, absolute, etc.).
+
+    The `links_check` script should be able to handle different types of errors (e.g., HTTP errors, URL not found, etc.) and different types of exceptions (e.g., HTTPError, URLError, etc.).
+
+    The `links_check` script should be able to handle different types of URLs (e.g., relative, absolute, etc.) and different types of parameters (e.g., query parameters, fragment identifier, etc.).
+
+    The `links_check` script should be able to handle different types of HTTP methods (e.g., GET,

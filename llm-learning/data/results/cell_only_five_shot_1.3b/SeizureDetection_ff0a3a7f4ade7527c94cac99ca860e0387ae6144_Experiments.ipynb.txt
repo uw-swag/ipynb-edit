@@ -1,0 +1,13 @@
+```python
+    from imblearn.under_sampling import MajorityClassUnderSampler
+
+    # Initialize the classifier
+    mcs = MajorityClassUnderSampler()
+
+    # Fit and transform the data
+    X_res, y_res = mcs.fit_resample(X, y)
+
+    # Check the new class distribution
+    print(y_res.value_counts())
+    ```
+    This code will undersample the majority class in the y-axis (the target variable) to balance the dataset. The `fit_resample` function is used to apply the undersampling operation to the data. The undersampled data is then returned.

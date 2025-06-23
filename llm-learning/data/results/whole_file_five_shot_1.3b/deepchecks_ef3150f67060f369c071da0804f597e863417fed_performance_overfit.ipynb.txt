@@ -1,0 +1,31 @@
+```
+    from deepchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from deepchecks.checks import TrainTestDifferenceOverfit
+    import pandas as pd
+
+    from sklearn.model_selection import train_test_split
+
+    iris = load_iris(as_frame=True)
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(
+                X, Y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([X_train, y_train], axis=1), 
+                features=iris.feature_names,
+                label_name='target')
+    test_ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+                features=iris.feature_names,
+                label_name='target')
+    clf.fit(X_train, y_train)
+
+    TrainTestDifferenceOverfit().run(train_ds, test_ds, clf)
+    TrainTestDifferenceOverfit(alternative_scorers={'Accuracy': 'accuracy', 'Always 0.5': lambda x,y,z: 0.5}).run(train_ds, test_ds, clf)
+    obj = TrainTestDifferenceOverfit(alternative_scorers={'Accuracy': 'accuracy', 'Always 0.5': lambda x,y,z: 0.5})
+    obj.run(train_ds, test_ds, clf)
+    TrainTestDifferenceOverfit().run(train_ds, train_ds, clf)
+    ```

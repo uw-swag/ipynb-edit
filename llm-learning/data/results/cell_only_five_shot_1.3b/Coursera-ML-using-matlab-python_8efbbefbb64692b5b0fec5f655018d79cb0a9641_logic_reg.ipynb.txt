@@ -1,0 +1,28 @@
+
+    The code you've provided is a complete implementation of a logistic regression model in Python using the scikit-learn library. It includes loading data, visualizing the data, implementing a regularized logistic regression, and making predictions.
+
+    The code also includes the creation of polynomial features, and the use of gradient descent to optimize the parameters of the logistic regression model.
+
+    The code also includes a function to plot the cost as a function of the number of iterations, and a function to plot the decision boundary.
+
+    Finally, the code includes a function to predict the class of a given set of features, and uses this function to calculate the accuracy of the model.
+
+    The code is well-structured and follows good practices for data preprocessing, model optimization, and model evaluation.
+
+    However, there is a small issue in the code. The `cost_reg` function is defined to calculate the cost of the logistic regression model, but it is not used in the `bgd` function. The `bgd` function is supposed to calculate the cost of the logistic regression model, but it is not defined in the code.
+
+    Here is the corrected version of the `bgd` function:
+
+    ```python
+    def bgd(X_train,y_train,theta,alpha = 0.1,iters = 5000,reg = 1):
+        J_history = []
+        for i in range(iters):
+            cost,grad = cost_reg(theta,X_train,y_train,reg)
+            theta = theta - alpha * grad
+            J_history.append(float(cost))
+            if i%200 == 0:
+                print('iter=%d,cost=%f '%(i,cost))
+        return theta,J_history
+    ```
+
+    This corrected version of the `bgd` function calculates the cost of the logistic regression model, and it is used in the main part of the code.

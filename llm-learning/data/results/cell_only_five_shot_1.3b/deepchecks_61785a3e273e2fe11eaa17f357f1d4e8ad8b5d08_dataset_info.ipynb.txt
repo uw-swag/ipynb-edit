@@ -1,0 +1,20 @@
+```python
+    from mlchecks.checks.overview import DatasetInfo, dataset_info
+    from mlchecks.base import Dataset
+
+    class MyDataset(Dataset):
+        def __init__(self, df):
+            self.df = df
+
+        def info(self):
+            return DatasetInfo(
+                num_rows=self.df.shape[0],
+                num_cols=self.df.shape[1],
+                column_names=list(self.df.columns),
+                data_types=self.df.dtypes.tolist()
+            )
+
+    dataset_info(MyDataset(df))
+    ```
+
+    In the above code, I have created a new class `MyDataset` that inherits from `Dataset`. The `info` method in `MyDataset` returns a `DatasetInfo` object with the same information as in the original `DatasetInfo` object.

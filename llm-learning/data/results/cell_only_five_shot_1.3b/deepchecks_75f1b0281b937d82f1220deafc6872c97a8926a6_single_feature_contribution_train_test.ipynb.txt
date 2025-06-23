@@ -1,0 +1,41 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # imports from custom libraries
+    from mlrefined_libraries import math_optimization_library as optlib
+    static_plotter = optlib.static_plotter.Visualizer();
+
+    # this is needed to compensate for matplotlib notebook's tendancy to blow up images when plotted inline
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+    %matplotlib notebook
+
+    # center all images in notebook and associated html
+    from IPython.display import HTML
+    display(HTML("""
+    <style>
+    .output {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        width="400";
+        height="400";
+    }
+    </style>
+    """))
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # define function
+    g = lambda w: np.dot(w.T,w) + 2
+
+    # run random search algorithm 
+    alpha_choice = 0.1; w = 4.5; num_samples = 1000; max_its = 10;
+    weight_history,cost_history = random_search(g,alpha_choice,max_its,w,num_samples)
+
+    # show run in both three-dimensions and just the input space via the contour plot
+    static_plotter.two_input_surface_contour_plot(g,weight_history,view = [10,30],xmin = -4.5, xmax = 4.5, ymin = -4.5, ymax = 4.5)
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # plot the cost function history for a given run
+    static_plotter.plot_cost_histories([cost_history],start = 0,points = True)
+    ```
+    '''

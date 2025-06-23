@@ -1,0 +1,28 @@
+<Cell_0>
+import time
+from redpitaya.overlay.mercury import mercury as FPGA
+
+overlay = FPGA()
+#The GPIO sub-class supports the slow digital I/O connections
+GPIO = FPGA.gpio
+<\Cell_0>
+<Cell_1>
+#The relay is attached to Grove connector CN8 this is connected to connector DIO0_N
+Relay = GPIO('n', 0, "out")
+Relay.write(True)
+time.sleep(1)
+Relay.write(False)
+<\Cell_1>
+<Cell_2>
+#The red LED module is attached to Grove connector CN9 this is connected to connector DIO6_P
+LED_Module = GPIO('p', 6, "out")
+LED_Module.write(True)
+time.sleep(1)
+LED_Module.write(False)
+<\Cell_2>
+<Cell_3>
+#The tilt sensor module is attached to Grove connector CN10 this is connected to connector DIO4_P
+tilt_GPIO = GPIO('p', 4, "in")
+tilt_value = tilt_GPIO.read()
+tilt_value
+<\Cell_3>

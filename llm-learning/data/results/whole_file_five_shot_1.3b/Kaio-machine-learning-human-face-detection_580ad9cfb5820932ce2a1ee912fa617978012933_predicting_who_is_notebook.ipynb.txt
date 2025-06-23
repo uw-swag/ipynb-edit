@@ -1,0 +1,58 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Análise exploratória dos dados"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# Carregar os dados
+df = pd.read_csv('data.csv')
+
+# Verificar se há dados faltantes
+df.isnull().sum()
+
+# Verificar a distribuição dos dados
+df.describe()
+
+# Verificar a correlação entre as variáveis
+corr = df.corr()
+sns.heatmap(corr, xticklabels=corr.columns, yticklabels=corr.columns, annot=True, cmap=sns.diverging_palette(220, 20, as_cmap=True))
+
+# Análise exploratória dos dados
+# Exemplos:
+# df['column_name'].value_counts()
+# df.groupby('column_name').size()
+# df.describe()
+# df.plot(kind='hist')
+# df.plot(kind='box')
+
+<\Cell_0>
+<Cell_1>
+
+<\Cell_1>
+<Cell_2>
+# Separar as variáveis de entrada e a saída
+X = df.drop('target_column', axis=1)
+Y = df['target_column']
+
+# Normalizar os dados
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Aplicar PCA
+pca = PCA(n_components=2)
+X = pca.fit_transform(X)
+
+# Aplicar KMeans para agrupar os dados
+kmeans = KMeans(n_clusters=3)
+kmeans.fit(X)
+
+# Verificar os clusters

@@ -1,0 +1,13 @@
+```python
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    r = StringMismatch().run(df)
+
+    c  = StringMismatch().add_condition_no_variants()
+    print(c.conditions_decision(r))
+    ```
+
+    The code above is a simple example of how to use the `StringMismatch` check in DeepChecks, a library for data quality checks. The `StringMismatch` check is used to find strings that are not in lowercase. The `add_condition_no_variants` method is used to add a condition that will exclude variants of the string. The `conditions_decision` method is used to get the decision on the conditions of the check.

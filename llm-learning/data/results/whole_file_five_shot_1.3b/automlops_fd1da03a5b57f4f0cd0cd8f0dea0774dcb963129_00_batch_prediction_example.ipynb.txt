@@ -1,0 +1,47 @@
+```
+    ## This code cell will not be shown in the HTML version of this notebook
+    ## It is a markdown cell and will not be executed by the notebook
+    ## It is used to provide a brief explanation of the code cell
+
+    ## Copyright 2023 Google LLC
+    ##
+    ## Licensed under the Apache License, Version 2.0 (the "License");
+    ## you may not use this file except in compliance with the License.
+    ## You may obtain a copy of the License at
+    ##
+    ##     https://www.apache.org/licenses/LICENSE-2.0
+    ##
+    ## Unless required by applicable law or agreed to in writing, software
+    ## distributed under the License is distributed on an "AS IS" BASIS,
+    ## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    ## See the License for the specific language governing permissions and
+    ## limitations under the License.
+
+    ## This code cell is used to configure git user details
+    !git config --global user.email 'you@example.com'
+    !git config --global user.name 'Your Name'
+
+    ## This code cell is used to install the google cloud automlops library
+    !pip3 install google-cloud-automlops --user
+
+    ## This code cell is used to import the AutoMLOps library
+    import os
+
+    if not os.getenv('IS_TESTING'):
+        # Automatically restart kernel after installs
+        import IPython
+
+        app = IPython.Application.instance()
+        app.kernel.do_shutdown(True)
+
+    ## This code cell is used to import the necessary libraries for the batch prediction function
+    import logging
+    
+    from google.cloud import aiplatform
+    from google.cloud.aiplatform.compat.types import job_state_v1
+    
+    def _get_endpoint(resource_name: str) -> aiplatform.Endpoint:
+        return aiplatform.Endpoint(resource_name)
+
+    def _get_model(resource_name: str) -> aiplatform.Model:
+       

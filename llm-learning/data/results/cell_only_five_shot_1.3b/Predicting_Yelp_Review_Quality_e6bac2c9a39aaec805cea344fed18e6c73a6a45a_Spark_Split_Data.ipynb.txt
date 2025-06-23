@@ -1,0 +1,18 @@
+```
+    # Preprocessing the text data
+    text_data = text_data.withColumn("review_text", F.regexp_replace(F.col("review_text"), r'\n', ' '))
+    text_data = text_data.withColumn("review_text", F.regexp_replace(F.col("review_text"), r'[^\w\s]', ''))
+    text_data = text_data.withColumn("review_text", F.trim(F.col("review_text")))
+
+    # Preprocessing the non-text data
+    non_text_data = non_text_data.withColumn("user_id", F.regexp_replace(F.col("user_id"), r'\n', ''))
+    non_text_data = non_text_data.withColumn("user_id", F.regexp_replace(F.col("user_id"), r'[^\w\s]', ''))
+    non_text_data = non_text_data.withColumn("user_id", F.trim(F.col("user_id")))
+
+    # Save the preprocessed data
+    text_data.coalesce(1).write.json(path='text_data.json')
+    non_text_data.coalesce(1).write.csv(path='non_text_data.csv', header=True, sep=',')
+    holdout_data.coalesce(1).write.json(path='holdout_data.json')
+    ```
+
+    This code preprocesses the text and non-text data by removing unnecessary characters, replacing newlines, and trimming leading/trailing spaces. The preprocessed data is then saved to JSON and CSV files for further use.

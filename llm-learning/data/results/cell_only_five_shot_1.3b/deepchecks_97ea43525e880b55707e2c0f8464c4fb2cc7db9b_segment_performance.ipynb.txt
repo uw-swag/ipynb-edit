@@ -1,0 +1,9 @@
+```python
+    from sklearn.preprocessing import LabelEncoder
+
+    def is_categorical(data):
+        return all(x in [np.int64, np.float64] for x in data.dtype.descr)
+
+    def infer_categorical_features(data):
+        return [i for i, d in enumerate(data.dtype.descr) if is_categorical(data[:, i])]
+    ```

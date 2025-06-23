@@ -1,0 +1,38 @@
+
+    ### Instruction:
+    [
+    Commit Message: "ADASYN, psd window, del code file, remove redundant arguments"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    from sklearn import model_selection, utils
+    <\Cell_0>
+    <Cell_1>
+    from ipynb.fs.full.EdfManipulation import read_and_store_data
+    from ipynb.fs.full.ClassificationPerformanceIndexes import classificationPerformanceIndexes
+    from ipynb.fs.full.FeatureClassificationMethods import *
+    from ipynb.fs.full.FeatureComputation import featureExtractionFull
+    from ipynb.fs.full.FeatureNormalization import featureNormalization
+    from ipynb.fs.full.FeatureSelection import dimentionalityReduction
+    from ipynb.fs.full.DatasetBalancing import oversamplingSMOTE
+    from ipynb.fs.full.SplitDataset import createTrainingAndTestDatasets
+    <\Cell_1>
+    <Cell_2>
+    def removeNonNumericValues(df):
+        df.replace([np.inf, -np.inf], np.nan, inplace = True)
+        df.dropna(inplace = True)
+    <\Cell_2>
+    <Cell_3>
+    def AllChannelsFeatures(df, readEdf, sample_rate, step, pca_tolerance, smote_neighbors, csvExportFile):
+        ndf = df.copy()
+        features = pd.DataFrame(featureExtractionFull (ndf, sample_rate, step))
+        del ndf
+        removeNonNumericValues(features)
+        features = featureNormalization(features)
+        removeNonNumericValues(features)
+        reduced_features = dimentionalityReduction(features, pca_tolerance)
+        removeNonNumericValues(reduced_features)
+        del features
+        smote_features = utils.shuffle(oversamplingSMOTE(reduced_features.drop('seizure', axis = 1), reduced_

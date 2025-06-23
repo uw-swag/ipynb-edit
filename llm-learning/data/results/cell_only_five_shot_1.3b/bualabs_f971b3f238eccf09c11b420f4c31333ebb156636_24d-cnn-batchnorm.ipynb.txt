@@ -1,0 +1,46 @@
+```python
+    ## Code: All cells added with description
+
+    ## Description: This is a Jupyter notebook Python code. It uses the numpy, pandas, matplotlib, and h2o libraries to perform various data analysis and machine learning tasks.
+
+    ## Importing necessary libraries
+    import os
+    import numpy as np
+    import pandas as pd
+    from IPython.display import Image, Markdown
+    import matplotlib.pyplot as plt
+    plt.style.use('seaborn')
+    %matplotlib inline  
+
+    import getml
+
+    ## Printing getML API version
+    print(f"getML API version: {getml.__version__}\n")
+
+    ## Setting project to 'loans'
+    getml.engine.set_project('loans')
+
+    ## Loading loans dataset with roles and units
+    data = getml.datasets.load_loans(roles=True, units=True)
+
+    ## Previewing data
+    Image("assets/loans-schema.png", width=500)
+    population_train, population_test, order, trans, meta = data.values()
+
+    ## Instantiate one placeholder per table
+    pl_population = getml.data.Placeholder("population")
+    pl_trans = getml.data.Placeholder("trans")
+    pl_order = getml.data.Placeholder("order")
+    pl_meta = getml.data.Placeholder("meta")
+
+    ## Join tables
+    pl_population.join(pl_trans, join_key="account_id", time_stamp="date_loan", other_time_stamp="date")
+    pl_population.join(pl_order, join_key="account_id")
+    pl_population.join(pl_meta, join_key="account_id")
+
+    ## The abstract data model is held in population placeholder 
+    pl_population
+
+    ## Feature learner and feature selector
+    feature_learner = getml.feature_learning.RelMTModel(
+        num_features=2

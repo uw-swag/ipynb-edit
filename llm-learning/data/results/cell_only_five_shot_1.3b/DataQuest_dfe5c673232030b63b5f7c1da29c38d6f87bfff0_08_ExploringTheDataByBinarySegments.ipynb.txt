@@ -1,0 +1,39 @@
+```sql
+    -- Create a table
+    CREATE TABLE Employees (
+        ID INT PRIMARY KEY,
+        FirstName VARCHAR(50),
+        LastName VARCHAR(50),
+        Age INT,
+        Salary DECIMAL(10, 2)
+    );
+
+    -- Insert data into the table
+    INSERT INTO Employees (ID, FirstName, LastName, Age, Salary)
+    VALUES (1, 'John', 'Doe', 30, 5000.00),
+           (2, 'Jane', 'Doe', 28, 6000.00),
+           (3, 'Bob', 'Smith', 35, 7000.00);
+
+    -- Select all data from the table
+    SELECT * FROM Employees;
+
+    -- Update data in the table
+    UPDATE Employees
+    SET Salary = Salary * 1.1
+    WHERE Age > 30;
+
+    -- Delete data from the table
+    DELETE FROM Employees
+    WHERE Age < 25;
+
+    -- Select data with a specific condition from the table
+    SELECT * FROM Employees
+    WHERE Salary > 6500.00;
+
+    -- Aggregate functions
+    SELECT AVG(Salary) FROM Employees;
+    SELECT SUM(Salary) FROM Employees;
+    SELECT MIN(Salary) FROM Employees;
+    SELECT MAX(Salary) FROM Employees;
+    SELECT COUNT(*) FROM Employees;
+    ```

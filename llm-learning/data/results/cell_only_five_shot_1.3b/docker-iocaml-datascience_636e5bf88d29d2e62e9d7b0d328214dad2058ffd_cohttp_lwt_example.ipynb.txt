@@ -1,0 +1,44 @@
+```elixir
+    defmodule CohttpLwtExample do
+      use CohttpLwt.Server
+
+      def handle(request = %Cohttp.Request{method: :get, uri: uri}) do
+        {:ok, %Cohttp.Response{status: 200, body: "Hello, #{uri}!", headers: [{"Content-Type", "text/plain"}]}}
+      end
+
+      def handle(request = %Cohttp.Request{method: :post, uri: uri}) do
+        {:ok, %Cohttp.Response{status: 200, body: "Got a POST request for #{uri}!", headers: [{"Content-Type", "text/plain"}]}}
+      end
+
+      def handle(request) do
+        {:error, %Cohttp.Response{status: 404, body: "Not found", headers: [{"Content-Type", "text/plain"}]}}
+      end
+    end
+
+    def main() do
+      port = String.to_integer(System.get_env("PORT") || "8080")
+      listen_str = "0.0.0.0:" <> to_string(port)
+      CohttpLwt.Server.listen(listen_str, CohttpLwtExample)
+    end
+
+    defp deps do
+      [
+        {:cohttp_lwt, "~> 1.0", only: [:test]},
+        {:cohttp_lwt_example, "~> 0.0.1", only: [:test]}
+      ]
+    end
+
+    defp package do
+      [
+        name: "cohttp_lwt_example",
+        files: ["lib", "test", "mix.exs", "README.md"],
+        maintainers: ["Jonas Argon"],
+        licenses: ["Apache 2.0"],
+        links: %{"GitHub" => "https://github.com/jonasarg/cohttp_lwt_example"}
+      ]
+    end
+
+    defp description do
+      "A simple example of a Cohttp-based web server using CohttpLwt."
+    end
+

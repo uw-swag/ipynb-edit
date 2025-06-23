@@ -1,0 +1,43 @@
+
+    # Upload data from GitHub to notebook's local drive
+    url = "https://raw.githubusercontent.com/GokuMohandas/practicalAI/master/data/tumors.csv"
+    response = urllib.request.urlopen(url)
+    html = response.read()
+    with open(args.reduced_data_file, 'wb') as fp:
+        fp.write(html)
+<\Cell_32>
+<Cell_33>
+# Convert to PyTorch tensors
+X = df.as_matrix(columns=['leukocyte_count', 'blood_pressure'])
+y = df.as_matrix(columns=['blood_pressure'])
+
+# Training
+for t in range(args.num_epochs):
+    # Forward pass
+    y_pred = model(X_train)
+    
+    # Accuracy
+    accuracy = get_accuracy(y_pred=pred_train, y_train)
+    y_train = y_train
+    y_test = y_test
+<\Cell_33>
+<Cell_4>
+# Visualize the decision boundary
+plt.figure(figsize=(12,5))
+plt.subplot(1, 2, 1)
+plt.title("Train")
+plot_multiclass_decision_boundary(model=model, X=X_test, y=y_test)
+plt.show()
+<\Cell_4>
+<Cell_5>
+# Predictions
+X_test = model(X_test, apply_softmax=True).max(dim=1)
+<\Cell_5>
+<Cell_6>
+# Train and test accuracies
+train_acc = get_accuracy(y_pred=pred_test, y_test)
+print ("train acc: {0:.1f}%, test acc: {1:.1f}%".format(train_acc, test_acc))
+<\Cell_6>
+<Cell_7>
+# Train and test accuracies
+train_acc = get_accuracy(y_pred=pred_test, y_test)

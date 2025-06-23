@@ -1,0 +1,57 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+
+    # Load the dataset
+    data = pd.read_csv('diabetes.csv')
+
+    # Split the dataset into features and target variable
+    X = data.drop('Outcome', axis=1)
+    y = data['Outcome']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Save the training set to a new csv file
+    X_train.to_csv('train.csv', index=False)
+
+    # Save the test set to a new csv file
+    X_test.to_csv('test.csv', index=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add : Model Training"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the dataset
+    data = pd.read_csv('diabetes.csv')
+
+    # Split the dataset into features and target variable
+    X = data.drop('Outcome', axis=1)
+    y = data['Outcome']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Save the training set to a new csv file
+    X_train.to_csv('train.csv', index=False)
+
+    # Save the test set to a new csv file
+    X_test.to_csv('test.csv', index=False)
+
+    # Train

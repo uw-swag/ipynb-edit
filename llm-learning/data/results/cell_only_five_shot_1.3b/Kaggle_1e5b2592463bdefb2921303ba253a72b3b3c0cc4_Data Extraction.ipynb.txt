@@ -1,0 +1,16 @@
+
+The code you provided is extracting NYC data using the Google Maps Distance Matrix API. It's a function that takes two addresses as input, calculates the distance and duration between them, and returns these as a pandas Series.
+
+The function `row_proc` is used to process each row of the dataframe. It uses the Google Maps Distance Matrix API to get the distance and duration between the pickup and dropoff addresses.
+
+The function `row_proc` returns a pandas Series with two elements: 'distance' and 'duration'. The 'distance' is the distance between the pickup and dropoff addresses, and the 'duration' is the duration of the trip in minutes.
+
+The main part of the code is extracting the 'distance' and 'duration' columns from the dataframes `train` and `test`, and applying the `row_proc` function to each row.
+
+Please note that you need to have the `googlemaps` library installed in your Python environment. You can install it using pip:
+
+```
+pip install googlemaps
+```
+
+Also, please replace `'AIzaSyDIN7pe-AheI0fOJQZVruapkv0gxBpt0R4'` with your actual API key.

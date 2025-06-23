@@ -1,0 +1,54 @@
+import papermill as pm
+import jupytext
+
+from sklearn_evaluation import NotebookCollection
+nb = jupytext.read('train.py')
+jupytext.write(nb, 'train.ipynb')
+# models with their corresponding parameters
+params = [{
+    'model': 'sklearn.ensemble.RandomForestRegressor',
+    'params': {
+        'n_estimators': 50
+    }
+}, {
+    'model': 'sklearn.ensemble.RandomForestRegressor',
+    'params': {
+        'n_estimators': 100
+    }
+}, {
+    'model': 'sklearn.linear_model.LinearRegression',
+    'params': {
+        'normalize': True
+    }
+}, {
+    'model': 'sklearn.svm.LinearSVR',
+    'params': {}
+}]
+
+# ids to identify each experiment
+ids = [
+    'random_forest_1', 'random_forest_2', 'linear_regression',
+    'support_vector_regression'
+]
+
+# output files
+files = [f'{i}.ipynb' for i in ids]
+
+# execute notebooks using papermill
+for f, p in zip(files, params):
+    pm.execute_notebook('train.ipynb', output_path=f, parameters=p)
+nbs = NotebookCollection(paths=files, ids=ids, scores=['r2'])
+list(nbs)
+# pro-tip: then typing the tag, press the "Tab" key for autocompletion!
+nbs['model_params']
+nbs['plot']
+nbs['metrics']
+nbs['river']
+# only compare two notebooks
+nbs_two = NotebookCollection(paths=files[:2], ids=ids[:2], scores=['r2'])
+nbs_two['metrics']
+nbs_two['river']
+nbs_two['model_params']
+nbs_two['feature_names']
+nbs['model_params']['random_forest_1']
+nbs['plot']['random_forest_2']

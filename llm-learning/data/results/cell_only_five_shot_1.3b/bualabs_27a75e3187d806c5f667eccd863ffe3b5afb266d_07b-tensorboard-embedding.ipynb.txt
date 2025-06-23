@@ -1,0 +1,27 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Embedding
+    from tensorflow.keras.optimizers import Adam
+    from tensorflow.keras.callbacks import TensorBoard
+
+    # Create a simple model
+    model = Sequential()
+    model.add(Embedding(input_dim=10000, output_dim=64, input_length=100))
+    model.add(Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+
+    # Create a TensorBoard callback
+    tensorboard = TensorBoard(log_dir='./logs')
+
+    # Train the model
+    model.fit(x_train, y_train, epochs=10, callbacks=[tensorboard])
+    ```
+
+    This code will create a simple model with an Embedding layer, a Dense layer, and compile it with a binary cross-entropy loss function and Adam optimizer. The model is then trained for 10 epochs using the TensorBoard callback.
+
+    The TensorBoard logs will be saved in the directory specified by the `log_dir` parameter. In this case, it will be saved in the current directory.
+
+    Please note that you need to replace `x_train` and `y_train` with your actual training data.
+
+    Also, this is a simple example. In a real-world scenario, you would need to preprocess your data, split it into training and testing sets, and possibly perform more complex data preprocessing.

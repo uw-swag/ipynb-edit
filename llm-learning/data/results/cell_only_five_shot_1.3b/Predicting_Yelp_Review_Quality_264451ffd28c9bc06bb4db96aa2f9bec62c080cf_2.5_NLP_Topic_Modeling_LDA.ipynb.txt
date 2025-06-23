@@ -1,0 +1,33 @@
+```python
+    import pandas as pd
+    from nltk.corpus import stopwords
+    from nltk.stem import WordNetLemmatizer
+    from nltk.tokenize import word_tokenize
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Tokenize the text
+    df['text'] = df['text'].apply(word_tokenize)
+
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    df['text'] = df['text'].apply(lambda x: [word for word in x if word not in stop_words])
+
+    # Lemmatize the words
+    lemmatizer = WordNetLemmatizer()
+    df['text'] = df['text'].apply(lambda x: [lemmatizer.lemmatize(word) for word in x])
+
+    # Join the words back into a string
+    df['text'] = df['text'].apply(lambda x: ' '.join(x))
+
+    # Vectorize the text
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(df['text'])
+
+    # Save the vectorized data
+    df_vectorized = pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names())
+    df_vectorized.to_csv('vectorized_data.csv', index=False)
+    ```
+    This script performs NLP feature engineering on the text data. It tokenizes the text, removes stopwords, lemmatizes the words, and then vectorizes the text using TF-IDF. The vectorized data is then saved to a CSV file.

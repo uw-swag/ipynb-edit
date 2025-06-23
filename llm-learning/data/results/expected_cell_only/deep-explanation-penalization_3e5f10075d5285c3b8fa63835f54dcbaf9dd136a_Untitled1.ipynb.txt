@@ -1,0 +1,55 @@
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+from colour import Color
+red = Color("red")
+colors = list(red.range_to(Color("green"),10))
+from os.path import join as oj
+mnist_trainset = datasets.MNIST(root='../data', train=True, download=True, transform=None)
+color_x = np.zeros((60000, 3, 28, 28))
+from colour import Color
+red = Color("red")
+colors = list(red.range_to(Color("green"),10))
+colors = [x.get_rgb() for x in colors]
+np.random
+
+
+prob.sum()
+np.argmax(prob)
+(435 -15*28)
+plt.imshow((mnist_trainset.data.numpy() ==0).mean(axis = (0))).sum()
+
+mnist_trainset = datasets.MNIST(root='../data', train=False, download=True, transform=None)
+color_x = np.zeros((10000, 3, 28, 28))
+for i in range(10):
+    color_x[np.where((mnist_trainset.train_labels ==i)) ] = (mnist_trainset.data[np.where((mnist_trainset.train_labels ==i))].numpy().astype(np.float32)[:, np.newaxis, :,:]*np.asarray(colors[9-i])[None, :, None, None])
+color_y = mnist_trainset.train_labels.numpy().copy()
+color_x /=color_x.max()
+color_x = color_x*2 -1
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+color_x[0].shape
+color_x[0].min()
+color_y[17]
+i
+test = np.arange(28*28)
+np.random.shuffle(test)
+train_x_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "train_x.npy")))
+train_y_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "train_y.npy"))).type(torch.int64)
+train_dataset = utils.TensorDataset(train_x_tensor,train_y_tensor) # create your datset
+train_x_tensor.shape
+(train_x_tensor).numpy().sum(axis =1)
+
+(color_y ==8).mean()
+i =0
+print(color_y[i])
+test = color_x[i].swapaxes(0,2).swapaxes(0,1)
+test+=1
+test/=2
+plt.imshow(test)
+model
+

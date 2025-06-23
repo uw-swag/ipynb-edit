@@ -1,0 +1,30 @@
+```python
+    from sklearn.datasets import fetch_openml
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    import numpy as np
+
+    # Fetch the dataset
+    data = fetch_openml('mnist_784', version=1)
+
+    # Convert the data to a pandas DataFrame
+    df = pd.DataFrame(data.data)
+    df['target'] = data.target
+
+    # Normalize the features
+    df = featureNormalization(df)
+
+    # Reduce the dimensionality of the features
+    df = dimentionalityReduction(df)
+
+    # Balance the dataset
+    df = datasetBalancing(df)
+
+    # Split the dataset into training and test sets
+    X_train, X_test, y_train, y_test = createTrainingAndTestDatasets(df)
+
+    # Compute the classification performance indexes
+    classificationPerformanceIndexes(X_train, y_train, X_test, y_test)
+    ```
+
+    The above code is a sample of how to download and preprocess the MNIST dataset. The dataset is fetched from the sklearn library, and then it is converted to a pandas DataFrame for further processing. The features are normalized, reduced dimensionality, and balanced. Finally, the dataset is split into training and test sets. The classification performance indexes are computed.

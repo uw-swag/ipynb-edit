@@ -1,0 +1,43 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Added a new example"
+    Original Code Cells:
+    '''
+    import tensorflow as tf
+    from tensorflow import keras
+    import numpy as np
+
+    def get_dataset(rank=0, size=1):
+        (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data('MNIST-data-%d' % rank)
+        x_train = x_train[rank::size]
+        y_train = y_train[rank::size]
+        x_test = x_test[rank::size]
+        y_test = y_test[rank::size]
+        x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
+        x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)
+        x_train = x_train.astype('float32')
+        x_test = x_test.astype('float32')
+        x_train /= 255
+        x_test /= 255
+        return (x_train, y_train), (x_test, y_test)
+
+    def train_input_generator(x_train, y_train, batch_size):
+        assert len(x_train) == len(y_train)
+        while True:
+            p = np.random.permutation(len(x_train))
+            x_train, y_train = x_train[p], y_train[p]
+            index = 0
+            while index <= len(x_train) - batch_size:
+                yield x_train[index:index + batch_size], \
+                      y_train[index:index + batch_size],
+                index += batch_size
+
+    def conv_model(feature, target, mode):
+        # ...
+
+    def train(learning_rate, batch_size):
+        # ...
+
+    def train_hvd(learning_rate, batch_size):
+        # ...

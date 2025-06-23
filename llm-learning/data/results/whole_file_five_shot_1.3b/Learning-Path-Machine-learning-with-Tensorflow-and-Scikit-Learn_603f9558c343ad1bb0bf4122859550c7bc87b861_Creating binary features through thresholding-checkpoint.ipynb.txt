@@ -1,0 +1,42 @@
+```python
+    # Module 03: Code files added
+
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import random
+
+    # Function to perform Lasso Regression
+    def lasso(X, y, l1, tol=1e-6):
+        m, n = np.shape(X)
+        q, r = np.linalg.qr(X)
+        w_s = np.linalg.solve(r, q.T.dot(y))
+        iter = 0
+        while True:
+            w_star = w_s.copy()
+            for j in range(n):
+                a_j = np.linalg.norm(X[:, j])**2
+                index = np.arange(n)
+                index_d = np.delete(index, j)
+                c_j = np.dot(X[:, j].T, y - np.dot(X[:, index_d], w_s[index_d]))
+                update = c_j / a_j
+                w_s[j] = np.sign(update) * max(abs(update) - l1 / a_j, 0)
+            iter += 1
+            if np.all(abs(w_s - w_star) < tol):
+                print('Number of iteration is ', iter)
+                break
+        return w_s
+
+    # Generating sample data
+    x = 7 * random.rand(150)  # between 0 and 7
+    e = 1 * random.randn(x.size)  # noise
+    y = 10 * np.cos(x + 1) + e
+
+    # Using fourth order polynomial
+    X4 = np.ones((x.size, 5))
+    X4[:, 1] = x  # partials wrt. w1
+    X4[:, 2] = x**2  # wrt. w2
+    X4[:, 3] = x**3  # wrt. w3
+    X4[:, 4] = x**4  # wrt. w4
+
+    # Lasso Regression

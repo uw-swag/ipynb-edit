@@ -1,0 +1,33 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.cluster import AgglomerativeClustering
+    from sklearn.preprocessing import StandardScaler
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+
+    # Loading the dataset
+    iris = load_iris()
+    data = pd.DataFrame(data=np.c_[iris['data'], iris['target']],
+                         columns=iris['feature_names'] + ['target'])
+
+    # Standardizing the features
+    scaler = StandardScaler()
+    data_scaled = scaler.fit_transform(data.iloc[:, :-1])
+
+    # Creating an instance of Agglomerative Clustering
+    clustering = AgglomerativeClustering(n_clusters=3, affinity='euclidean', linkage='ward')
+
+    # Fitting the model
+    clustering.fit_predict(data_scaled)
+
+    # Plotting the clusters
+    plt.figure(figsize=(10, 7))
+    plt.scatter(data_scaled[:, 0], data_scaled[:, 1], c=clustering.labels_)
+    plt.title('Agglomerative Clustering')
+    plt.show()
+    ```
+    This code will perform agglomerative clustering on the iris dataset. The iris dataset is a multivariate dataset introduced by the British statistician and biologist Ronald Fisher in his 1936 paper. The dataset contains 150 samples from each of three species of Iris flowers (Iris setosa, Iris virginica, and Iris versicolor). Four features were measured from each sample: the lengths and the widths of the sepals and petals. The dataset is divided into three clusters.
+
+    The AgglomerativeClustering function from sklearn.cluster is used to perform agglomerative clustering. The affinity parameter is set to 'euclidean' and the linkage parameter is set to 'ward'. The fit_predict function is then used to

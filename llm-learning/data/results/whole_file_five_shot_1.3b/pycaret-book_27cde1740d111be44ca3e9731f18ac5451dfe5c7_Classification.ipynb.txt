@@ -1,0 +1,52 @@
+```
+    # Update classification notebook
+    '''
+    Commit Message: "Update classification notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+    import seaborn as sns
+    from pycaret.datasets import get_data
+    from pycaret.classification import *
+    mpl.rcParams['figure.dpi'] = 300
+    <\Cell_0>
+    <Cell_1>
+    data = get_data('iris')
+    <\Cell_1>
+    <Cell_2>
+    data.info()
+    <\Cell_2>
+    <Cell_3>
+    data['species'].value_counts().plot(kind='pie')
+    plt.ylabel('')
+    plt.show()
+    <\Cell_3>
+    <Cell_4>
+    fig, axes = plt.subplots(2, 2, figsize = (12, 10))
+    for ax, col in zip(axes.flatten(), data.columns) :
+        sns.boxplot(data = data, x = 'species', y = col, ax = ax)
+        ax.set_xlabel('')
+    <\Cell_4>
+    <Cell_5>
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(data.corr().round(decimals=2), annot=True)
+    plt.show()
+    <\Cell_5>
+    <Cell_6>
+    sns.pairplot(data, hue='species')
+    plt.show()
+    <\Cell_6>
+    <Cell_7>
+    model = create_model('lda')
+    <\Cell_7>
+    <Cell_8>
+    model_xgb = create_model('xgboost')
+    <\Cell_8>
+    <Cell_9>
+    model.score(X_test, y_test)
+    <\Cell_9>
+    <Cell_10>
+    plot_model(model, 'confusion_

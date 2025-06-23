@@ -1,0 +1,89 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import ensemble, svm
+from sklearn import cross_validation
+from sklearn import preprocessing
+from sklearn import metrics
+
+#Plots config
+%matplotlib inline
+pd.set_option('display.mpl_style', 'default') # Make the graphs a bit prettier
+plt.rcParams['figure.figsize'] = (15, 5)
+#Add plots module to path
+import sys
+sys.path.append('/Users/Edu/Development/open-source/sklearn-model-evaluation')
+import plots as p
+import helpers as h
+#Read the data
+train = pd.read_csv("train_clean.csv", index_col='PassengerId')
+test = pd.read_csv('test_clean.csv', index_col='PassengerId')
+#RandomForest
+rf = ensemble.RandomForestClassifier(n_jobs = -1,
+                                     bootstrap = True,
+                                     criterion = 'entropy',
+                                     max_features = 'log2',
+                                     n_estimators = 100)
+#AdaBoost
+ab = ensemble.AdaBoostClassifier(n_estimators = 10)
+#SVC
+svc = svm.SVC(C = 100,
+              gamma = 0.01,
+              kernel = 'rbf')
+#Prepare train and test features
+train_x = train.drop(['Survived'], axis=1).values
+test_x = test.values
+#Prepare train and test scaled features (for SVC)
+scaler = preprocessing.StandardScaler().fit(train_x)
+train_x_scaled = scaler.transform(train_x)
+test_x_scaled  = scaler.transform(test_x)
+#Prepare train outcome
+train_y = train['Survived']
+
+#Create feature list
+feature_list = list(train.drop(['Survived'], axis=1))
+#Train random forest
+rf.fit(train_x, train_y)
+#Train svc
+svc.fit(train_x_scaled, train_y)
+#Train adaboost
+ab.fit(train_x, train_y)
+#Since we are using all data for training, generate predictions
+#for evaluation using cross-validation
+rf_pred  = cross_validation.cross_val_predict(rf,
+                                              train_x,
+                                              train_y,
+                                              cv=5)
+svc_pred = cross_validation.cross_val_predict(svc,
+                                              train_x_scaled,
+                                              train_y,
+                                              cv=5)
+ab_pred  = cross_validation.cross_val_predict(ab,
+                                              train_x,
+                                              train_y,
+                                              cv=5)
+print("RandomForest")
+print(metrics.classification_report(train_y, rf_pred))
+print("\n\n\n")
+
+print("SVC")
+print(metrics.classification_report(train_y, svc_pred))
+print("\n\n\n")
+
+print("AdaBoost")
+print(metrics.classification_report(train_y, ab_pred))
+#Compute accuracy (that's the evaluation metric 
+#for this competition)
+print("RandomForest accuracy:")
+print(metrics.accuracy_score(train_y, rf_pred))
+print("\nSVC accuracy:")
+print(metrics.accuracy_score(train_y, svc_pred))
+print("\nAdaBoost accuracy:")
+print(metrics.accuracy_score(train_y, ab_pred))
+imp = h.feature_importances_table(rf, feature_list)
+# Print the feature ranking
+print("Feature ranking:")    
+for i,t in enumerate(imp[0:5]):
+    print("%d. feature %d - %s (%f)" % (i+1, t['num'], t['name'], t['importance']))
+p.feature_importance_plot(rf, feature_list)
+

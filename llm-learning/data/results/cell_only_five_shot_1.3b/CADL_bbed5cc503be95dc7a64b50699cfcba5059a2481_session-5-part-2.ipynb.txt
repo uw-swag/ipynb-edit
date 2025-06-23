@@ -1,0 +1,40 @@
+```python
+    import tensorflow as tf
+
+    # Assuming `txt` is a TensorFlow placeholder for the text
+    vocab = list(set(txt))
+    vocab.sort()
+    len_vocab = len(vocab)
+    print(vocab)
+
+    # Create a RNN cell
+    cell = tf.nn.rnn_cell.BasicLSTMCell(num_units=128)
+
+    # Create an initial state for the RNN
+    initial_state = cell.zero_state(batch_size=1, dtype=tf.float32)
+
+    # Split the text into words
+    words = tf.string_split([txt], " ").values
+
+    # Create a sequence of tokens
+    tokens, _ = tf.compat.v1.nn.rnn_split(words, num_steps=1, axis=0)
+
+    # Create a lookup table from the vocabulary
+    lookup_table = tf.compat.v1.train.IndexLookupTable(
+        init_op=tf.compat.v1.global_variables_initializer(
+            [tf.compat.v1.train.limit_epochs(tf.compat.v1.global_variables(), tf.compat.v1.train.latest_checkpoint())]),
+        num_oov_buckets=1, num_oov_outputs=1)
+    lookup_table.populate(vocab)
+
+    # Convert the tokens to their indices
+    indices = lookup_table.lookup(tokens)
+
+    # Create a sequence of input for the RNN
+    inputs = tf.expand_dims(indices, axis=-1)
+
+    # Run the RNN
+    outputs, state = tf.nn.dynamic_rnn(cell=cell, inputs=inputs, initial_state=initial_state)
+
+    print(outputs)
+    print(state)
+    ```

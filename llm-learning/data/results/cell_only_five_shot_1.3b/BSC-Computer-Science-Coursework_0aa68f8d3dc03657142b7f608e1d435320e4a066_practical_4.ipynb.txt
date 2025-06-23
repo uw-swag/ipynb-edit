@@ -1,0 +1,62 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import scipy.stats as stats
+
+    # Assuming you have two samples, X and Y
+    X = np.random.normal(0, 1, 100)
+    Y = np.random.normal(0, 1, 100)
+
+    # Performing the t-test
+    t_statistic, p_value = stats.ttest_ind(X, Y)
+
+    print("T-Statistic: ", t_statistic)
+    print("P-Value: ", p_value)
+
+    if p_value < 0.05:
+        print("Reject the null hypothesis")
+    else:
+        print("Fail to reject the null hypothesis")
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added Data Science Practical 05 "Regression Analysis""
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+    # Generating some random data
+    X = np.random.normal(0, 1, 100)
+    Y = 3 * X + np.random.normal(0, 1, 100)
+
+    # Creating a linear regression model
+    model = LinearRegression()
+
+    # Fitting the model
+    model.fit(X.reshape(-1, 1), Y)
+
+    # Predicting the Y values
+    Y_pred = model.predict(X.reshape(-1, 1))
+
+    # Plotting the original data and the predicted data
+    plt.scatter(X, Y)
+    plt.plot(X, Y_pred, color='red')
+    plt.show()
+
+    # Printing the coefficients
+    print("Coefficients: ", model.coef_)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added Data Science Practical 06 "Cl

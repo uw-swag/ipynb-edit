@@ -1,0 +1,57 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Updated example to include streaming server"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from redpitaya.overlay.mercury import mercury as overlay
+fpga = overlay()
+<\Cell_0>
+<Cell_1>
+in2 = fpga.osc(1, 1.0)
+<\Cell_1>
+<Cell_2>
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+
+# trigger timing [sample periods]
+N = in2.buffer_size
+in2.trigger_pre  = 0
+in2.trigger_post = N
+
+# disable hardware trigger sources - the Jupyter notebook will trigger the start of audio recording
+in2.trig_src = 0
+<\Cell_2>
+<Cell_3>
+# synchronization and trigger sources are the default,
+# which is the module itself
+in2.reset()
+in2.start()
+in2.trigger()
+# wait for data
+while (in2.status_run()): pass
+print ('Recording complete')
+data = in2.data(N)
+<\Cell_3>
+<Cell_4>
+import IPython.display as ipd
+sr = 3000 # sample rate 30 Ksps
+ipd.Audio(data, rate=sr) # load a NumPy array
+<\Cell_4>
+<Cell_5>
+import matplotlib.pyplot as plt
+
+# show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+
+plt.plot(data)
+plt.show()
+<\Cell_5>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a simple example of how to use the Red Pitaya's Mercury module to record audio data from a Red Pitaya FPGA. The code includes setting up the audio input, triggering the recording, and displaying the recorded audio data.
+
+    However, the code you provided does not include a streaming server

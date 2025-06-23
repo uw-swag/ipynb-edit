@@ -1,0 +1,37 @@
+
+    '''
+    Commit Message: "Redo data cleaning"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Load dependencies for this Jupyter Notebook
+import pandas as pd
+import numpy as np
+from functools import reduce
+<\Cell_0>
+<Cell_1>
+ottawashooting = pd.read_csv("data/pheme-rnr-dataset/ottawashooting.csv",
+                             dtype={"user.verified": np.bool,
+                                    "user.default_profile": np.bool,
+                                    "user.geo_enabled": np.bool},
+                             engine="python")  # This engine helps when loading large datasets
+
+# Remove rows with boolean False values in the hashtags_count column
+ottawashooting = ottawashooting.drop(ottawashooting[ottawashooting.hashtags_count == "False"].index)
+ottawashooting.hashtags_count = ottawashooting.hashtags_count.astype(np.int32)
+
+# Remove the row with NoneType in the retweet_count column
+ottawashooting = ottawashooting.drop(ottawashooting[ottawashooting.retweet_count.isnull()].index)
+ottawashooting["retweet_count"] = ottawashooting["retweet_count"].astype(np.int32)
+
+# Convert datetime strings to timestamps
+for col in ["user.created_at", "created"]:
+    ottawashooting[col] = pd.to_datetime(ottawashooting[col]).astype(np.int64) / 1e6
+
+ottawashooting.head()
+<\Cell_1>
+<Cell_2>
+ottawa_threads = agg_event_data(ottawashooting)
+
+# Save CSV file in /data directory
+ottawa_threads.to_csv("data/pheme-rnr-dataset/ottawashooting_threads.csv

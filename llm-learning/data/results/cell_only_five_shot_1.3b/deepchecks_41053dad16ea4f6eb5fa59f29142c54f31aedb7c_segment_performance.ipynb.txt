@@ -1,0 +1,11 @@
+```
+    from deepchecks import Dataset
+
+    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                    'race', 'sex', 'native-country']
+    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
+    validation_ds = Dataset(val_df, label=label_name, cat_features=cat_features)
+
+    numeric_features = list(set(train_ds.features) - set(cat_features))
+    ```
+    The code above is updating the dataset properties. It first imports the necessary libraries and defines the categorical features. Then, it creates a dataset for the training and validation data with the defined categorical features. The numeric features are then extracted from the dataset.

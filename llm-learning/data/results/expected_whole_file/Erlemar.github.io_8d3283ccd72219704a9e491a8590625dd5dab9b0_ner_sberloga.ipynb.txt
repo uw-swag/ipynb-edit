@@ -1,0 +1,1091 @@
+<Cell_0>
+from IPython.display import Image
+from IPython.core.display import display, HTML
+import pandas as pd
+from collections import Counter
+import random
+from spacy import displacy
+import json
+
+from spacy.training import offsets_to_biluo_tags
+import spacy
+import eli5
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import numpy as np
+import sklearn
+import sklearn_crfsuite
+from sklearn_crfsuite import scorers
+from sklearn_crfsuite import metrics
+from sklearn.metrics import f1_score
+<\Cell_0>
+<Cell_1>
+with open('restauranttrain.bio', 'r') as f:
+    for line in f.readlines()[:30]:
+        print(line)
+<\Cell_1>
+<Cell_2>
+# switch column places
+with open('restauranttrain.bio', 'r') as f:
+    with open('restauranttrain_updated.bio', 'w') as w:
+        for line in f.readlines():
+            if line == '\n':
+                w.write(line)
+            else:
+                w.write('\t'.join(line.strip().split('\t')[::-1]) + '\n')
+<\Cell_2>
+<Cell_3>
+# split into train and validation
+count = 0
+with open('restauranttrain.bio', 'r') as f:
+    with open('restauranttrain_updated_train.bio', 'w') as w1:
+        with open('restauranttrain_updated_valid.bio', 'w') as w2:
+            for line in f.readlines():
+                if count < 6500:
+                    if line == '\n':
+                        w1.write(line)
+                        count += 1
+                    else:
+                        w1.write('\t'.join(line.strip().split('\t')[::-1]) + '\n')
+                else:
+                    if line == '\n':
+                        w2.write(line)
+                    else:
+                        w2.write('\t'.join(line.strip().split('\t')[::-1]) + '\n')
+<\Cell_3>
+<Cell_4>
+# load the data again
+
+data = []
+labels = []
+with open('trivia10k13train_updated.bio', 'r') as f:
+    cur_data = []
+    cur_label = []
+    for line in f.readlines():
+        if line == '\n':
+            data.append(cur_data)
+            labels.append(cur_label)
+            cur_data = []
+            cur_label = []
+        else:
+            cur_data.append(line.strip().split('\t')[0])
+            cur_label.append(line.strip().split('\t')[1])
+<\Cell_4>
+<Cell_5>
+for w, e in zip(data[0], labels[0]):
+    print(f'{w}\t{e}')
+
+<\Cell_5>
+<Cell_6>
+predictions = []
+for word in data[0]:
+    if word == 'steve':
+        predictions.append('B-Actor')
+    else:
+        predictions.append('O')
+<\Cell_6>
+<Cell_7>
+f1_score(labels[0], predictions, average='weighted')
+<\Cell_7>
+<Cell_8>
+df = pd.DataFrame({'sent_id': [i for j in [[i] * len(s) for i, s in enumerate(data)] for i in j],
+                   'data': [i for j in data for i in j],
+                   'entities': [i for j in labels for i in j]})
+df.head(10)
+<\Cell_8>
+<Cell_9>
+class SentenceGetter(object):
+    
+    def __init__(self, data):
+        self.n_sent = 1
+        self.data = data
+        self.empty = False
+        agg_func = lambda s: [(w, t) for w, t in zip(s['data'].values.tolist(), 
+                                                           s['entities'].values.tolist())]
+        self.grouped = self.data.groupby('sent_id').apply(agg_func)
+        self.sentences = [s for s in self.grouped]
+        
+    def get_next(self):
+        try: 
+            s = self.grouped['Sentence: {}'.format(self.n_sent)]
+            self.n_sent += 1
+            return s 
+        except:
+            return None
+
+getter = SentenceGetter(df)
+sentences = getter.sentences
+<\Cell_9>
+<Cell_10>
+def word2features(sent, i):
+    word = sent[i][0]
+    postag = sent[i][1]
+    
+    features = {
+        'bias': 1.0, 
+        'word.lower()': word.lower(), 
+        'word[-3:]': word[-3:],
+        'word[-2:]': word[-2:],
+        'word.isupper()': word.isupper(),
+        'word.istitle()': word.istitle(),
+        'word.isdigit()': word.isdigit()
+    }
+    if i > 0:
+        word1 = sent[i-1][0]
+        features.update({
+            '-1:word.lower()': word1.lower(),
+            '-1:word.istitle()': word1.istitle(),
+            '-1:word.isupper()': word1.isupper()
+        })
+    else:
+        features['BOS'] = True
+    if i < len(sent)-1:
+        word1 = sent[i+1][0]
+        features.update({
+            '+1:word.lower()': word1.lower(),
+            '+1:word.istitle()': word1.istitle(),
+            '+1:word.isupper()': word1.isupper()
+        })
+    else:
+        features['EOS'] = True
+
+    return features
+
+def sent2features(sent):
+    return [word2features(sent, i) for i in range(len(sent))]
+
+def sent2labels(sent):
+    return [label for token, label in sent]
+
+def sent2tokens(sent):
+    return [token for token, label in sent]
+<\Cell_10>
+<Cell_11>
+X = [sent2features(s) for s in sentences]
+y = [sent2labels(s) for s in sentences]
+<\Cell_11>
+<Cell_12>
+X[0][:2]
+<\Cell_12>
+<Cell_13>
+X_train = X[:6500]
+X_test = X[6500:]
+y_train = y[:6500]
+y_test = y[6500:]
+<\Cell_13>
+<Cell_14>
+%%time
+crf = sklearn_crfsuite.CRF(
+    algorithm='lbfgs',
+    c1=0.1,
+    c2=0.1,
+    max_iterations=100,
+    all_possible_transitions=True,
+    verbose=True
+)
+crf.fit(X_train, y_train)
+<\Cell_14>
+<Cell_15>
+all_entities = sorted(df.entities.unique().tolist())
+<\Cell_15>
+<Cell_16>
+y_pred = crf.predict(X_test)
+metrics.flat_f1_score(y_test, y_pred, average='weighted', labels=all_entities)
+<\Cell_16>
+<Cell_17>
+y_pred = crf.predict(X_test)
+metrics.flat_f1_score(y_test, y_pred, average='weighted', labels=[i for i in all_entities if i != 'O'])
+<\Cell_17>
+<Cell_18>
+print(metrics.flat_classification_report(y_test, y_pred, labels = all_entities))
+<\Cell_18>
+<Cell_19>
+def print_transitions(trans_features):
+    for (label_from, label_to), weight in trans_features:
+        print("%-6s -> %-7s %0.6f" % (label_from, label_to, weight))
+
+print("Top likely transitions:")
+print_transitions(Counter(crf.transition_features_).most_common(20))
+
+print("\nTop unlikely transitions:")
+print_transitions(Counter(crf.transition_features_).most_common()[-20:])
+<\Cell_19>
+<Cell_20>
+def print_state_features(state_features):
+    for (attr, label), weight in state_features:
+        print("%0.6f %-8s %s" % (weight, label, attr))
+
+print("Top positive:")
+print_state_features(Counter(crf.state_features_).most_common(30))
+
+print("\nTop negative:")
+print_state_features(Counter(crf.state_features_).most_common()[-30:])
+<\Cell_20>
+<Cell_21>
+eli5.show_weights(crf, top=10)
+<\Cell_21>
+<Cell_22>
+!python -m spacy init config base_config.cfg -p ner
+<\Cell_22>
+<Cell_23>
+!python -m spacy init fill-config base_config.cfg config.cfg
+<\Cell_23>
+<Cell_24>
+!python -m spacy convert restauranttrain_updated.bio . -t json -c ner
+<\Cell_24>
+<Cell_25>
+!python -m spacy convert restauranttrain_updated_train.bio . -t json -c ner
+<\Cell_25>
+<Cell_26>
+!python -m spacy convert restauranttrain_updated_valid.bio . -t json -c ner
+<\Cell_26>
+<Cell_27>
+#!python -m spacy train config.cfg --output ./output --paths.train spacy_data/restauranttrain_updated_train.spacy --paths.dev spacy_data/restauranttrain_updated_valid.spacy
+<\Cell_27>
+<Cell_28>
+!python -m spacy evaluate output/model-last spacy_data/restauranttrain_updated_valid.spacy
+<\Cell_28>
+<Cell_29>
+nlp1 = spacy.load("output/model-best")
+doc = nlp1(' '.join(data[2]))
+
+spacy.displacy.render(doc, style="ent", jupyter=True)
+<\Cell_29>
+<Cell_30>
+with open('restauranttrain_updated.json', 'r') as f:
+    d = json.load(f)
+<\Cell_30>
+<Cell_31>
+d[0]['paragraphs'][34]['sentences']
+<\Cell_31>
+<Cell_32>
+nlp = spacy.load("en_core_web_sm")
+<\Cell_32>
+<Cell_33>
+tokens_dict = d[0]['paragraphs'][34]['sentences'][0]['tokens']
+tokens = [i['orth'] for i in tokens_dict]
+<\Cell_33>
+<Cell_34>
+text = ' '.join(tokens)
+doc = nlp(text)
+entities = d[0]['paragraphs'][34]['entities']
+<\Cell_34>
+<Cell_35>
+text
+<\Cell_35>
+<Cell_36>
+entities
+<\Cell_36>
+<Cell_37>
+offsets_to_biluo_tags(doc, entities)
+<\Cell_37>
+<Cell_38>
+assert len(tokens) == len(offsets_to_biluo_tags(doc, entities)), 'Something went wrong'
+<\Cell_38>
+<Cell_39>
+for ent in entities:
+    t = text[ent[0]: ent[1]]
+    print(f'Entity: {ent[2]}: {t}')
+<\Cell_39>
+<Cell_40>
+for k, m in zip(tokens, offsets_to_biluo_tags(doc, entities)):
+    print(f'{k}\t{m}')
+<\Cell_40>
+<Cell_41>
+from typing import List, Tuple, Union
+def convert_to_biluo(text: str = '',
+                     entities: List[Tuple] = None,
+                     tokens: list = None,
+                     missing: str = 'O') -> Tuple[Union[List[str], list, None], List[str]]:
+    """
+    Tokenize text and return text tokens and ner labels.
+
+    Args:
+        text: text
+        entities: labels in spacy format
+        tokens: already tokenized text, if you want it
+        missing: lable for tokens without entities
+
+    Returns:
+        tokenized text and labels
+    """
+
+    # create dicts with start/end position of token and its index
+    starts = []
+    ends = []
+    cur_index = 0
+    tokens = text.split() if tokens is None else tokens
+
+    for token in tokens:
+        starts.append(cur_index)
+        ends.append(cur_index + len(token))
+        cur_index += len(token) + 1
+
+    starts = {k: v for v, k in enumerate(starts)}
+    ends = {k: v for v, k in enumerate(ends)}
+
+    # this will be a list with token labels
+    biluo = ["-" for _ in text.split()]
+
+    # check that there are no overlapping entities
+    entities_indexes = [list(range(i[0], i[1])) for i in entities]
+    if max(Counter([i for j in entities_indexes for i in j]).values()) > 1:
+        raise ValueError('You have overlapping entities')
+
+    tokens_in_ents = {}
+
+    # Handle entity cases
+    for start_char, end_char, label in entities:
+        for token_index in range(start_char, end_char):
+            tokens_in_ents[token_index] = (start_char, end_char, label)
+        start_token = starts.get(start_char)
+        end_token = ends.get(end_char)
+        # Only interested if the tokenization is correct
+        if start_token is not None and end_token is not None:
+            if start_token == end_token:
+                biluo[start_token] = f"U-{label}"
+            else:
+                biluo[start_token] = f"B-{label}"
+                for i in range(start_token + 1, end_token):
+                    biluo[i] = f"I-{label}"
+                biluo[end_token] = f"L-{label}"
+
+    # put missing value for tokens without labels
+    entity_chars = set()
+    for start_char, end_char, label in entities:
+        for i in range(start_char, end_char):
+            entity_chars.add(i)
+
+    for ind, token in enumerate(tokens):
+        for i in range(list(starts.keys())[ind], list(ends.keys())[ind]):
+            if i in entity_chars:
+                break
+        else:
+            biluo[ind] = missing
+
+    return tokens, biluo
+<\Cell_41>
+<Cell_42>
+# difference betwen my function and spacy's function
+new_data = []
+biluo_labels = []
+for i in range(len(d[0]['paragraphs'])):
+    tokens_dict = d[0]['paragraphs'][i]['sentences'][0]['tokens']
+    tokens = [i['orth'] for i in tokens_dict]
+    if len([i['orth'] for i in tokens_dict]) > 1:
+        
+        text = ' '.join(tokens)
+        doc = nlp(text)
+        entities = d[0]['paragraphs'][i]['entities']
+
+        new_ents = offsets_to_biluo_tags(doc, entities)
+        new_data.append(tokens)
+        biluo_labels.append(new_ents)
+        if len(tokens) != len(new_ents):
+            
+            ents2 = convert_to_biluo(text, entities)[1]
+            print(i, entities, text)
+            for ent in entities:
+                t = text[ent[0]: ent[1]]
+                print(f'Entity: {ent[2]}: {t}')
+            for k, m, l in zip(tokens, new_ents, ents2):
+                print(f'{k}\t{m}\t{l}')
+            print()
+        if i > 2000:
+            break
+<\Cell_42>
+<Cell_43>
+# convert the data
+%%time
+new_data = []
+biluo_labels = []
+for i in range(len(d[0]['paragraphs'])):
+    tokens_dict = d[0]['paragraphs'][i]['sentences'][0]['tokens']
+    tokens = [i['orth'] for i in tokens_dict]
+    if len([i['orth'] for i in tokens_dict]) > 1:
+        
+        text = ' '.join(tokens)
+        doc = nlp(text)
+        entities = d[0]['paragraphs'][i]['entities']
+
+        new_ents = offsets_to_biluo_tags(doc, entities)
+        if entities == []:
+            new_ents = ['O'] * len(tokens)
+        new_data.append(tokens)
+        
+        biluo_labels.append(new_ents)
+        if len(tokens) != len(new_ents):
+            
+            ents2 = convert_to_biluo(text, entities)[1]
+            biluo_labels[-1] = ents2
+
+<\Cell_43>
+<Cell_44>
+len(new_data)
+<\Cell_44>
+<Cell_45>
+df = pd.DataFrame({'sent_id': [i for j in [[i] * len(s) for i, s in enumerate(new_data)] for i in j],
+                   'data': [i for j in new_data for i in j],
+                   'entities': [i for j in biluo_labels for i in j]})
+df.head()
+<\Cell_45>
+<Cell_46>
+getter = SentenceGetter(df)
+sentences = getter.sentences
+X = [sent2features(s) for s in sentences]
+y = [sent2labels(s) for s in sentences]
+<\Cell_46>
+<Cell_47>
+X_train = X[:6500]
+X_test = X[6500:]
+y_train = y[:6500]
+y_test = y[6500:]
+<\Cell_47>
+<Cell_48>
+
+crf = sklearn_crfsuite.CRF(
+    algorithm='lbfgs',
+    c1=0.1,
+    c2=0.1,
+    max_iterations=100,
+    all_possible_transitions=True
+)
+crf.fit(X_train, y_train)
+<\Cell_48>
+<Cell_49>
+all_entities = sorted(df.entities.unique().tolist())
+<\Cell_49>
+<Cell_50>
+y_pred = crf.predict(X_test)
+metrics.flat_f1_score(y_test, y_pred, average='weighted', labels=all_entities)
+<\Cell_50>
+<Cell_51>
+y_pred = crf.predict(X_test)
+metrics.flat_f1_score(y_test, y_pred, average='weighted', labels=[i for i in all_entities if i != 'O'])
+<\Cell_51>
+<Cell_52>
+print(metrics.flat_classification_report(y_test, y_pred, labels = all_entities))
+<\Cell_52>
+<Cell_53>
+def print_transitions(trans_features):
+    for (label_from, label_to), weight in trans_features:
+        print("%-6s -> %-7s %0.6f" % (label_from, label_to, weight))
+
+print("Top likely transitions:")
+print_transitions(Counter(crf.transition_features_).most_common(20))
+
+print("\nTop unlikely transitions:")
+print_transitions(Counter(crf.transition_features_).most_common()[-20:])
+<\Cell_53>
+<Cell_54>
+def print_state_features(state_features):
+    for (attr, label), weight in state_features:
+        print("%0.6f %-8s %s" % (weight, label, attr))
+
+print("Top positive:")
+print_state_features(Counter(crf.state_features_).most_common(30))
+
+print("\nTop negative:")
+print_state_features(Counter(crf.state_features_).most_common()[-30:])
+<\Cell_54>
+<Cell_55>
+eli5.show_weights(crf, top=10)
+<\Cell_55>
+<Cell_56>
+import json
+from collections import Counter
+from tqdm.notebook import tqdm
+import joblib
+from typing import List, Tuple, Union, Dict
+<\Cell_56>
+<Cell_57>
+def get_word_to_idx(count: List[Tuple[str, int]],
+                   min_words: Union[int, float] = 0.0,
+                   max_words: Union[int, float] = 1.0) -> Dict[str, int]:
+    max_count = count[0][1]
+    if isinstance(min_words, float):
+        min_words = max_count * min_words
+    if isinstance(max_words, float):
+        max_words = max_count * max_words
+        
+    all_words = [w[0] for w in count if max_words >= w[1] >= min_words]
+    
+    all_words = ['<pad>', '<unk>'] + all_words
+    
+    word_to_idx = {k: v for k, v in zip(all_words, range(0, len(all_words)))}
+    return word_to_idx
+<\Cell_57>
+<Cell_58>
+count = Counter([i for j in new_data for i in j])
+word_to_idx = get_word_to_idx(count.most_common(), min_words=1)
+len(word_to_idx)
+<\Cell_58>
+<Cell_59>
+tags = sorted(list({i for j in biluo_labels for i in j}))
+tags.remove('O')
+
+tag_to_idx = {}
+for ind, entity in enumerate(tags):
+    tag_to_idx[f'{entity}'] = len(tag_to_idx)
+
+for special_tag in ['O', 'PAD']:
+    tag_to_idx[special_tag] = len(tag_to_idx)
+    
+tag_to_idx
+<\Cell_59>
+<Cell_60>
+from typing import Optional
+def pad_sequences(
+    sequences: List,
+    maxlen: Optional[int],
+    dtype: str = 'int32',
+    padding: str = 'post',
+    truncating: str = 'post',
+    value: int = 0,
+) -> np.array:
+    """Pad sequences to the same length.
+    from Keras
+
+    This function transforms a list of
+    `num_samples` sequences (lists of integers)
+    into a 2D Numpy array of shape `(num_samples, num_timesteps)`.
+    `num_timesteps` is either the `maxlen` argument if provided,
+    or the length of the longest sequence otherwise.
+
+    Sequences that are shorter than `num_timesteps`
+    are padded with `value` at the end.
+
+    Sequences longer than `num_timesteps` are truncated
+    so that they fit the desired length.
+    The position where padding or truncation happens is determined by
+    the arguments `padding` and `truncating`, respectively.
+
+    Pre-padding is the default.
+
+    # Arguments
+        sequences: List of lists, where each element is a sequence.
+        maxlen: Int, maximum length of all sequences.
+        dtype: Type of the output sequences.
+            To pad sequences with variable length strings, you can use `object`.
+        padding: String, 'pre' or 'post':
+            pad either before or after each sequence.
+        truncating: String, 'pre' or 'post':
+            remove values from sequences larger than
+            `maxlen`, either at the beginning or at the end of the sequences.
+        value: Float or String, padding value.
+
+    # Returns
+        x: Numpy array with shape `(len(sequences), maxlen)`
+
+    # Raises
+        ValueError: In case of invalid values for `truncating` or `padding`,
+            or in case of invalid shape for a `sequences` entry.
+    """
+    if not hasattr(sequences, '__len__'):
+        raise ValueError('`sequences` must be iterable.')
+    num_samples = len(sequences)
+
+    lengths = []
+    for x in sequences:
+        try:
+            lengths.append(len(x))
+        except TypeError:
+            raise ValueError('`sequences` must be a list of iterables. ' 'Found non-iterable: ' + str(x))
+
+    if maxlen is None:
+        maxlen = np.max(lengths)
+
+    # take the sample shape from the first non empty sequence
+    # checking for consistency in the main loop below.
+    sample_shape = ()
+    for s in sequences:
+        if len(s) > 0:
+            sample_shape = np.asarray(s).shape[1:]
+            break
+
+    x = np.full((num_samples, maxlen) + sample_shape, value, dtype=dtype)
+    for idx, s in enumerate(sequences):
+        if not len(s):
+            continue  # empty list/array was found
+        if truncating == 'pre':
+            trunc = s[-maxlen:]
+        elif truncating == 'post':
+            trunc = s[:maxlen]
+        else:
+            raise ValueError(f'Truncating type "{truncating}" ' 'not understood')
+
+        # check `trunc` has expected shape
+        trunc = np.asarray(trunc, dtype=dtype)
+        if trunc.shape[1:] != sample_shape:
+            raise ValueError(
+                f'Shape of sample {trunc.shape[1:]} of sequence at position {idx}'
+                f'is different from expected shape {sample_shape}'
+            )
+
+        if padding == 'post':
+            x[idx, : len(trunc)] = trunc
+        elif padding == 'pre':
+            x[idx, -len(trunc) :] = trunc
+        else:
+            raise ValueError(f'Padding type "{padding}" not understood')
+    return x
+
+<\Cell_60>
+<Cell_61>
+from torch.utils.data import Dataset
+class NerDataset(Dataset):
+    def __init__(self, ner_data: List, ner_tags: List, word_to_idx: Dict, tag_to_idx: Dict, **kwarg: Dict):
+        self.ner_data = ner_data
+        self.ner_tags = ner_tags
+        self.word_to_idx = word_to_idx
+        self.tag_to_idx = tag_to_idx
+        
+    def __len__(self) -> int:
+        return len(self.ner_data)
+    
+    def __getitem__(self, idx: int) -> Tuple[np.array, int, np.array]:
+        line = self.ner_data[idx]
+        
+        tokens = [self.word_to_idx[w] if w in self.word_to_idx else self.word_to_idx['<unk>'] for w in self.ner_data[idx]]
+        
+        labels = [self.tag_to_idx[w] for w in self.ner_tags[idx]]
+        
+        return np.array(tokens), len(tokens), np.array(labels)
+<\Cell_61>
+<Cell_62>
+X_train = new_data[:6500]
+X_test = new_data[6500:]
+y_train = biluo_labels[:6500]
+y_test = biluo_labels[6500:]
+
+train_dataset = NerDataset(X_train, y_train, word_to_idx, tag_to_idx)
+valid_dataset = NerDataset(X_test, y_test, word_to_idx, tag_to_idx)
+<\Cell_62>
+<Cell_63>
+train_dataset.__getitem__(5)
+<\Cell_63>
+<Cell_64>
+class Collator:
+    def __init__(self, test=False, percentile=100, pad_value=0):
+        self.test = test
+        self.percentile = percentile
+        self.pad_value = pad_value
+
+    def __call__(self, batch):
+        tokens, lens, labels = zip(*batch)
+        lens = np.array(lens)
+
+        max_len = min(int(np.percentile(lens, self.percentile)), 100)
+
+        tokens = torch.tensor(
+            pad_sequences(tokens, maxlen=max_len, padding='post', value=self.pad_value), dtype=torch.long
+        )
+        lens = torch.tensor([min(i, max_len) for i in lens], dtype=torch.long)
+        labels = torch.tensor(
+            pad_sequences(labels, maxlen=max_len, padding='post', value=self.pad_value), dtype=torch.long
+        )
+
+        return tokens, lens, labels
+<\Cell_64>
+<Cell_65>
+import torch
+collator = Collator(percentile=100, pad_value=tag_to_idx['PAD'])
+train_loader = torch.utils.data.DataLoader(
+            train_dataset,
+            batch_size=128,
+            num_workers=0,
+            collate_fn=collator,
+            shuffle=False,
+        )
+
+valid_loader = torch.utils.data.DataLoader(
+            valid_dataset,
+            batch_size=64,
+            num_workers=0,
+            collate_fn=collator,
+            shuffle=False,
+        )
+
+<\Cell_65>
+<Cell_66>
+for batch in train_loader:
+    break
+<\Cell_66>
+<Cell_67>
+batch
+<\Cell_67>
+<Cell_68>
+batch[0].shape, batch[1].shape, batch[2].shape
+<\Cell_68>
+<Cell_69>
+import fasttext.util
+# fasttext.util.download_model('en', if_exists='ignore')  # English
+ft = fasttext.load_model('cc.en.300.bin')
+<\Cell_69>
+<Cell_70>
+fasttext.util.reduce_model(ft, 100)
+<\Cell_70>
+<Cell_71>
+ft['Dog']
+<\Cell_71>
+<Cell_72>
+def build_matrix(
+    word_dict: Dict,
+    embedding_index,
+    max_features: int = 100000,
+    embed_size: int = 100,
+) -> Tuple[np.array, int, List]:
+    """
+    Create embedding matrix
+
+    Args:
+        word_dict: tokenizer
+        embedding_index: Fasttext embeddings
+        max_features: max features to use
+        embed_size: size of embeddings
+
+    Returns:
+        embedding matrix, number of of words and the list of not found words
+    """
+    embedding_index = ft
+    nb_words = min(max_features, len(word_dict))
+    embedding_matrix = np.zeros((nb_words, embed_size))
+
+    for word, i in word_dict.items():
+        embedding_matrix[i] = embedding_index[word]
+    return embedding_matrix, nb_words
+<\Cell_72>
+<Cell_73>
+embedding_matrix, nb_words = build_matrix(word_dict=word_to_idx, embedding_index=ft)
+<\Cell_73>
+<Cell_74>
+from torch import nn
+<\Cell_74>
+<Cell_75>
+embedding_matrix = torch.tensor(embedding_matrix, dtype=torch.float32)
+embedding = nn.Embedding.from_pretrained(embedding_matrix)
+embedding.weight.requires_grad = False
+<\Cell_75>
+<Cell_76>
+import torch.functional as F
+from torch.nn.parameter import Parameter
+from torch.nn.utils.rnn import pack_padded_sequence, pad_packed_sequence
+from typing import Any
+<\Cell_76>
+<Cell_77>
+class SpatialDropout(nn.Module):
+    """
+    Spatial Dropout drops a certain percentage of dimensions from each word vector in the training sample
+    implementation: https://discuss.pytorch.org/t/spatial-dropout-in-pytorch/21400
+    explanation: https://www.kaggle.com/c/quora-insincere-questions-classification/discussion/76883
+    """
+
+    def __init__(self, p: float):
+        super(SpatialDropout, self).__init__()
+        self.spatial_dropout = nn.Dropout2d(p=p)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = x.permute(0, 2, 1)  # convert to [batch, channels, time]
+        x = self.spatial_dropout(x)
+        x = x.permute(0, 2, 1)  # back to [batch, time, channels]
+        return x
+<\Cell_77>
+<Cell_78>
+class MultiHeadSelfAttention(nn.Module):
+    """
+    torch.nn.MultiHeadAttention wrapper to unify interface with other Attention classes
+    Implementation of Dot-product Attention
+    paper: https://arxiv.org/abs/1706.03762
+    Time complexity: O(n^2)
+    """
+
+    def __init__(self, embed_dim: int, num_heads: int, dropout: float, **kwargs: Dict[str, Any]):
+        super(MultiHeadSelfAttention, self).__init__()
+        self.attention = nn.MultiheadAttention(embed_dim=embed_dim, num_heads=num_heads, dropout=dropout, **kwargs)
+
+    def forward(self, x: torch.Tensor, key_padding_mask: torch.BoolTensor = None) -> torch.Tensor:
+        x = x.transpose(0, 1)
+        attn = self.attention(query=x, key=x, value=x, key_padding_mask=key_padding_mask)[0]
+        attn = attn.transpose(0, 1)
+        return attn
+<\Cell_78>
+<Cell_79>
+from torchcrf import CRF
+<\Cell_79>
+<Cell_80>
+class F1Score:
+    """
+    Class for f1 calculation in Pytorch.
+    """
+
+    def __init__(self, average: str = 'weighted'):
+        """
+        Init.
+
+        Args:
+            average: averaging method
+        """
+        self.average = average
+        if average not in [None, 'micro', 'macro', 'weighted']:
+            raise ValueError('Wrong value of average parameter')
+
+    @staticmethod
+    def calc_f1_micro(predictions: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+        """
+        Calculate f1 micro.
+
+        Args:
+            predictions: tensor with predictions
+            labels: tensor with original labels
+
+        Returns:
+            f1 score
+        """
+        true_positive = torch.eq(labels, predictions).sum().float()
+        f1_score = torch.div(true_positive, len(labels))
+        return f1_score
+
+    @staticmethod
+    def calc_f1_count_for_label(
+        predictions: torch.Tensor, labels: torch.Tensor, label_id: int
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Calculate f1 and true count for the label
+
+        Args:
+            predictions: tensor with predictions
+            labels: tensor with original labels
+            label_id: id of current label
+
+        Returns:
+            f1 score and true count for label
+        """
+        # label count
+        true_count = torch.eq(labels, label_id).sum()
+
+        # true positives: labels equal to prediction and to label_id
+        true_positive = torch.logical_and(torch.eq(labels, predictions), torch.eq(labels, label_id)).sum().float()
+        # precision for label
+        precision = torch.div(true_positive, torch.eq(predictions, label_id).sum().float())
+        # replace nan values with 0
+        precision = torch.where(torch.isnan(precision), torch.zeros_like(precision).type_as(true_positive), precision)
+
+        # recall for label
+        recall = torch.div(true_positive, true_count)
+        # f1
+        f1 = 2 * precision * recall / (precision + recall)
+        # replace nan values with 0
+        f1 = torch.where(torch.isnan(f1), torch.zeros_like(f1).type_as(true_positive), f1)
+        return f1, true_count
+
+    def __call__(self, predictions: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
+        """
+        Calculate f1 score based on averaging method defined in init.
+
+        Args:
+            predictions: tensor with predictions
+            labels: tensor with original labels
+
+        Returns:
+            f1 score
+        """
+
+        # simpler calculation for micro
+        if self.average == 'micro':
+            return self.calc_f1_micro(predictions, labels)
+
+        f1_score = torch.tensor(0.0).type_as(predictions).float()
+        for label_id in labels.unique():
+            f1, true_count = self.calc_f1_count_for_label(predictions, labels, label_id)
+
+            if self.average == 'weighted':
+                f1_score += f1 * true_count
+            elif self.average == 'macro':
+                f1_score += f1
+
+        if self.average == 'weighted':
+            f1_score = torch.div(f1_score, len(labels))
+        elif self.average == 'macro':
+            f1_score = torch.div(f1_score, len(labels.unique()))
+
+        return f1_score
+<\Cell_80>
+<Cell_81>
+class LayerNorm(nn.Module):
+    """
+    Layer Normalization
+    paper: https://arxiv.org/abs/1607.06450
+    """
+
+    def __init__(self, normalized_shape: int):
+        super(LayerNorm, self).__init__()
+        self.layer_norm = nn.LayerNorm(normalized_shape)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.layer_norm(x)
+<\Cell_81>
+<Cell_82>
+class BiLSTMCRFAtt(nn.Module):
+    """
+    New model without nn.Embedding layer
+    """
+
+    def __init__(self, tag_to_idx: Dict, embeddings_dim: int = 100, hidden_dim: int = 4, spatial_dropout: float = 0.2):
+        super().__init__()
+        self.embedding_dim = embeddings_dim
+        self.hidden_dim = hidden_dim
+        self.tag_to_idx = tag_to_idx
+        self.tagset_size = len(tag_to_idx.values())
+        self.crf = CRF(self.tagset_size, batch_first=True)
+        self.embedding_dropout = SpatialDropout(spatial_dropout)
+
+        self.lstm = nn.LSTM(
+            embeddings_dim, hidden_dim // 2, num_layers=2, bidirectional=True, batch_first=True, dropout=0.25
+        )
+        # Maps the output of the LSTM into tag space.
+        self.hidden2tag = nn.Linear(hidden_dim, hidden_dim // 2)
+        self.hidden2tag2 = nn.Linear(hidden_dim // 2, self.tagset_size)
+        self.rnn_layer_norm = LayerNorm(hidden_dim)
+        self.att = MultiHeadSelfAttention(embed_dim=hidden_dim, num_heads=2, dropout=0.25)
+
+    def _get_lstm_features(self, embeds: torch.Tensor, lens: torch.Tensor, mask: bool) -> torch.Tensor:
+        """
+        LSTM forward
+
+        Args:
+            embeds: batch with embeddings
+            lens: lengths of sequences
+        """
+        embeds = self.embedding_dropout(embeds)
+        packed_embeds = torch.nn.utils.rnn.pack_padded_sequence(
+            embeds, lens.cpu(), batch_first=True, enforce_sorted=False
+        )
+        lstm_out, self.hidden = self.lstm(packed_embeds)
+        lstm_out, _ = torch.nn.utils.rnn.pad_packed_sequence(lstm_out, batch_first=True)
+        lstm_out = self.rnn_layer_norm(lstm_out)
+        lstm_out = self.att(lstm_out, key_padding_mask=mask)
+        lstm_feats = self.hidden2tag2(self.hidden2tag(lstm_out.reshape(embeds.shape[0], -1, self.hidden_dim)))
+        return lstm_feats
+
+    def forward(
+        self, embeds: torch.Tensor, lens: torch.Tensor, tags: torch.Tensor = None
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Forward
+
+        Args:
+            embeds: batch with embeddings
+            lens: lengths of sequences
+            tags: list of tags (optional)
+        """
+        mask1 = tags == self.tag_to_idx['PAD']
+        lstm_feats = self._get_lstm_features(embeds, lens, mask1)
+
+        if tags is not None:
+            mask = tags != self.tag_to_idx['PAD']
+            loss: torch.Tensor = self.crf(lstm_feats, tags, mask=mask)
+            tag_seq = self.crf.decode(emissions=lstm_feats, mask=torch.tensor(mask))  # type: ignore
+
+        else:
+            loss = torch.tensor(0)
+            tag_seq = self.crf.decode(lstm_feats)
+
+        pred: torch.Tensor = torch.tensor([i for j in tag_seq for i in j]).type_as(embeds)
+        return pred, -loss
+<\Cell_82>
+<Cell_83>
+model = BiLSTMCRFAtt(tag_to_idx, 100, 32, 0.2)
+model
+<\Cell_83>
+<Cell_84>
+metric = F1Score(average='weighted')
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+<\Cell_84>
+<Cell_85>
+model.cuda();
+<\Cell_85>
+<Cell_86>
+embedding.cuda();
+<\Cell_86>
+<Cell_87>
+optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
+train_f1 = []
+valid_f1 = []
+for epoch in range(20):
+    model.train()
+    epoch_train_f1 = []
+    for i, batch in enumerate(train_loader):
+        tokens, lens, labels = batch
+        tokens, lens, labels = tokens.cuda(), lens.cuda(), labels.cuda()
+        optimizer.zero_grad()
+        
+        tag_seq, loss = model(embedding(tokens), lens, labels)
+        
+        loss.backward()
+        optimizer.step()
+        
+        labels = labels.flatten()
+        labels = labels[labels != tag_to_idx['PAD']]
+        f1_score = metric(tag_seq, labels).item()
+        epoch_train_f1.append(f1_score)
+        
+    model.eval()
+    epoch_valid_f1 = []
+    with torch.no_grad():
+        for i, batch in enumerate(valid_loader):
+            tokens, lens, labels = batch
+            tokens, lens, labels = tokens.cuda(), lens.cuda(), labels.cuda()
+
+            tag_seq, loss = model(embedding(tokens), lens, labels)
+            labels = labels.flatten()
+            labels = labels[labels != tag_to_idx['PAD']]
+            f1_score = metric(tag_seq, labels).item()
+            epoch_valid_f1.append(f1_score)
+    
+    mean_epoch_train_f1 = np.mean(epoch_train_f1)
+    mean_epoch_valid_f1 = np.mean(epoch_valid_f1)
+    train_f1.append(mean_epoch_train_f1)
+    valid_f1.append(mean_epoch_valid_f1)
+    print(f'{epoch=}. {mean_epoch_train_f1=:0.4f}. {mean_epoch_valid_f1=:0.4f}.')
+<\Cell_87>
+<Cell_88>
+idx_to_word = {v: k for k, v in word_to_idx.items()}
+idx_to_tag = {v: k for k, v in tag_to_idx.items()}
+<\Cell_88>
+<Cell_89>
+labels = labels.cpu().detach().numpy()
+tokens = tokens.cpu().detach().numpy()
+tag_seq = tag_seq.cpu().detach().numpy()
+<\Cell_89>
+<Cell_90>
+correct_labels = []
+correct_tag_seq = []
+correct_tokens = []
+for token in tokens:
+    token = token[token != tag_to_idx['PAD']]
+    correct_tokens.append(token)
+    correct_labels.append(labels[:len(token)])
+    labels = labels[len(token):]
+    correct_tag_seq.append(tag_seq[:len(token)])
+    tag_seq = tag_seq[len(token):]
+<\Cell_90>
+<Cell_91>
+for token, label, pred in zip(correct_tokens, correct_labels, correct_tag_seq):
+    if not all(label == pred):
+        label = label[token > 0]
+        pred = pred[token > 0]
+        token = token[token > 0]
+        for t_, l_, p_ in zip([idx_to_word[t] for t in token],
+                              [idx_to_tag[l] for l in label],
+                              [idx_to_tag[p] for p in pred]):
+            print(f'{t_}\t{l_}\t{p_}')
+        print('-' * 50)
+<\Cell_91>
+<Cell_92>
+print(f'{pd.__version__=}')
+print(f'{spacy.__version__=}')
+print(f'{eli5.__version__=}')
+print(f'{sklearn.__version__=}')
+print(f'{np.__version__=}')
+print(f'{torch.__version__=}')
+<\Cell_92>

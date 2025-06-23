@@ -1,0 +1,10 @@
+```python
+    from sklearn.metrics import accuracy_score
+
+    def score(r):
+        return accuracy_score(r.y_true, r.y_pred)
+
+    validation_ds.add_score_col("score", score)
+
+    validation_ds.show(show_additional_columns=['score'])
+    ```

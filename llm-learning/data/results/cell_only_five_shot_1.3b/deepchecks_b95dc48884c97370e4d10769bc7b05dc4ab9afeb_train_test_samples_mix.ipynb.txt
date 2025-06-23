@@ -1,0 +1,51 @@
+
+    iris = load_iris(return_X_y=False, as_frame=True)
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+    train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+                features=iris.feature_names)
+
+    test_df = pd.concat([X_test, y_test], axis=1)
+    bad_test = test_df.append(train_dataset.data.iloc[[0, 1, 1, 2, 3, 4]], ignore_index=True)
+                    
+    test_dataset = Dataset(bad_test, 
+                features=iris.feature_names)
+
+    ### Instruction:
+    [
+    Commit Message: "Adding DecisionTreeClassifier assignment"
+    Original Code Cells:
+    '''
+    from sklearn.tree import DecisionTreeClassifier
+
+    clf = DecisionTreeClassifier(random_state=1234)
+    clf.fit(train_dataset.data, train_dataset.target)
+
+    '''
+    ]
+
+    ### Response:
+    from sklearn.tree import DecisionTreeClassifier
+
+    clf = DecisionTreeClassifier(random_state=1234)
+    clf.fit(train_dataset.data, train_dataset.target)
+
+    ### Instruction:
+    [
+    Commit Message: "Adding confusion_matrix assignment"
+    Original Code Cells:
+    '''
+    from sklearn.metrics import confusion_matrix
+
+    y_pred = clf.predict(test_dataset.data)
+    cm = confusion_matrix(test_dataset.target, y_pred)
+
+    '''
+    ]
+
+    ### Response:
+    from sklearn.metrics import confusion_matrix
+
+    y_pred = clf.predict(test_dataset.data)
+    cm = confusion_matrix(test_dataset.target,

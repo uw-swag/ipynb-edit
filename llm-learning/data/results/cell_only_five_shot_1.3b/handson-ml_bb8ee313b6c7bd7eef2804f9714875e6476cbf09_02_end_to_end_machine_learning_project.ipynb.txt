@@ -1,0 +1,25 @@
+```python
+    from sklearn.pipeline import FeatureUnion
+
+    num_attribs = list(housing_num)
+    cat_attribs = ["ocean_proximity"]
+
+    num_pipeline = Pipeline([
+        ('selector', DataFrameSelector(num_attribs)),
+        ('imputer', SimpleImputer(strategy="median")),
+        ('attribs_adder', CombinedAttributesAdder()),
+        ('std_scaler', StandardScaler()),
+    ])
+
+    cat_pipeline = Pipeline([
+        ('selector', DataFrameSelector(cat_attribs)),
+        ('label_encoder', LabelEncoder()),
+    ])
+
+    full_pipeline = FeatureUnion(transformer_list=[
+        ("num_pipeline", num_pipeline),
+        ("cat_pipeline", cat_pipeline),
+    ])
+    ```
+
+    The code in the notebook is now more closely aligned with the book's examples. The `SimpleImputer` is used instead of `Imputer`, and the `DataFrameSelector` is used instead of `ColumnSelector`. The `CombinedAttributesAdder` is used instead of `CombinedAttributes`. The `LabelEncoder` is used instead of `LabelBinarizer`.

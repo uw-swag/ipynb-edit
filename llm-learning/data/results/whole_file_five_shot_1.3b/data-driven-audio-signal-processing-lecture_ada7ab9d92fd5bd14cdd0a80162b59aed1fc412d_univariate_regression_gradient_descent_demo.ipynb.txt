@@ -1,0 +1,41 @@
+
+    '''
+    '''
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(42)
+    <\Cell_0>
+    <Cell_1>
+    N = 500  # total number of examples
+    theta = [1.2, .1]  # true intercept/slope
+
+    x = np.random.uniform(low=-10, high=10, size=N)
+    X = np.concatenate((np.ones((len(x),1)), x[:,np.newaxis]), axis=1)
+    Y = X @ theta + .2 * np.random.normal(size=N)
+    <\Cell_1>
+    <Cell_2>
+    def plot_data(X, Y, ylabel=r'$y$', alpha=1):
+
+        plt.scatter(X, Y, s=15, label=r'examples $(x_n, y_n)$', alpha=alpha)
+        plt.xlabel(r'$x$')
+        plt.ylabel(ylabel)
+        plt.grid()
+
+    plot_data(x, Y, alpha=.5)
+    <\Cell_2>
+    <Cell_3>
+    theta_0 = np.random.normal(size=2)
+    lr = 5e-3
+    max_iter = 500
+    batch = 32
+
+    history = mini_batch_gradient_descent(X, Y, theta_0, gradient, lr=lr, max_iter=max_iter, batch=batch)
+
+    print('Estimated/true intercept: {0:.3f} / {1:.3f}'.format(history[-1,0], theta[0]))
+    print('Estimated/true slope: {0:.3f} / {1:.3f}'.format(history[-1,1], theta[1]))
+    <\Cell_3

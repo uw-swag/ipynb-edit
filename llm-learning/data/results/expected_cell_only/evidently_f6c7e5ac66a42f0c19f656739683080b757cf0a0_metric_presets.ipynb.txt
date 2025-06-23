@@ -1,0 +1,45 @@
+from evidently.metric_preset import classification_performance
+from evidently.metric_preset import regression_performance
+from evidently.metric_preset import data_quality
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics import DataIntegrityMetrics
+from evidently.metrics import ColumnRegExpMetric
+from evidently.metrics import DataIntegrityNullValuesMetrics
+from evidently.metrics import DataDriftTable
+from evidently.metrics import RegressionPerformanceMetrics
+from evidently.metrics import DataQualityMetrics
+from evidently.metrics import DataQualityStabilityMetrics
+from evidently.metrics import DataQualityValueListMetrics
+from evidently.metrics import DataQualityValueRangeMetrics
+from evidently.metrics import DataQualityValueQuantileMetrics
+from evidently.metrics import DataQualityCorrelationMetrics
+
+
+# make one feature drifted
+curr['education-num'] = 0
+data_mapping = ColumnMapping(target='target', prediction='preds')
+curr.head()
+report = Report(metrics=[
+    DataIntegrityMetrics(),
+    ColumnRegExpMetric(column_name="workclass", reg_exp=r".*-.*"),
+    DataIntegrityNullValuesMetrics(),
+])
+
+report.run(reference_data=ref, current_data=curr, column_mapping=data_mapping)
+report
+from evidently.report import Report
+from evidently.metrics import ClassificationPerformanceMetrics
+from evidently.metrics import ClassificationPerformanceMetricsTopK
+from evidently.metrics import ClassificationPerformanceMetricsThreshold
+from evidently.metrics import DataQualityMetrics
+from evidently.metrics import DataIntegrityMetrics
+
+
+report = Report(metrics=[
+    #ClassificationPerformanceMetrics(),
+    #ClassificationPerformanceMetricsTopK(k=2),
+    ClassificationPerformanceMetricsThreshold(classification_threshold=0.4),
+])
+report.run(current_data=merged_test_data, reference_data=merged_train_data, column_mapping=bcancer_column_mapping)
+report

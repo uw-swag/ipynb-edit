@@ -1,0 +1,437 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+import requests
+import zipfile
+import io
+import uuid
+
+from datetime import datetime, time
+
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_0>
+<Cell_1>
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+
+#you might need to install pillow library to use datasets.fetch_lfw_people() from sklearn
+try:
+    import PIL
+except ImportError:
+    !pip install pillow
+<\Cell_1>
+<Cell_2>
+from evidently import ColumnMapping
+from evidently.report import Report
+
+from evidently.metric_preset import DataDriftPreset,DataQualityPreset,TargetDriftPreset
+from evidently.test_preset import RegressionTestPreset
+from evidently.test_suite import TestSuite
+from evidently.metrics import *
+from evidently.tests import *
+
+<\Cell_2>
+<Cell_3>
+#Dataset for regression
+housing_data = datasets.fetch_california_housing(as_frame='auto')
+housing = housing_data.frame
+
+housing['pred'] = housing['MedHouseVal'].values + np.random.normal(0, 3, housing.shape[0])
+housing['number_of_rooms'] = np.random.randint(low=4, high=11, size=len(housing))
+housing['house_id'] = [uuid.uuid1().hex[:8] for _ in range(len(housing))]
+
+housing_ref = housing.sample(n=5000, replace=False)
+housing_cur = housing.sample(n=5000, replace=False)
+<\Cell_3>
+<Cell_4>
+#Timeseries dataset
+url = "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+with zipfile.ZipFile(io.BytesIO(requests.get(url).content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+raw_data.index = raw_data.index + pd.to_timedelta(raw_data['hr'], unit='h')
+raw_data['mnth'] = raw_data.index.to_period('M').astype('datetime64[M]')
+raw_data['hr'] = raw_data.index.floor('h')
+raw_data['weekday'] = raw_data.index.floor('d')
+raw_data['date'] = raw_data.index
+
+bike_reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+bike_current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+<\Cell_4>
+<Cell_5>
+#Dataset for Binary and Binary Probabilistic Classification
+bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+bcancer_label_ref = bcancer_ref.copy(deep=True)
+bcancer_label_cur = bcancer_cur.copy(deep=True)
+
+target_classes = ['Benign','Malignant']
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+#Reference and current data for Binary classification, option 1 and 2
+bcancer_label_ref['prediction'] = model.predict(bcancer_label_ref[bcancer_data.feature_names.tolist()])
+bcancer_label_cur['prediction'] = model.predict(bcancer_label_cur[bcancer_data.feature_names.tolist()])
+
+#Reference and current data for Binary probabilistic classification, option 3
+bcancer_ref['prediction'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_cur['prediction'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+
+#Reference and current data for Binary probabilistic classification, option 1 and 2
+bcancer_ref12 = bcancer_ref.copy()
+bcancer_cur12 = bcancer_cur.copy()
+
+bcancer_ref12 = bcancer_ref12.rename({'prediction': 'Malignant'}, axis=1)
+bcancer_cur12 = bcancer_cur12.rename({'prediction': 'Malignant'}, axis=1)
+
+bcancer_ref12['Benign'] = bcancer_ref12.Malignant.apply(lambda x: 1-x)
+bcancer_cur12['Benign'] = bcancer_cur12.Malignant.apply(lambda x: 1-x)
+
+bcancer_ref12['target'] = bcancer_ref12.target.apply(lambda x: target_classes[x])
+bcancer_cur12['target'] = bcancer_cur12.target.apply(lambda x: target_classes[x])
+
+<\Cell_5>
+<Cell_6>
+#Dataset for Multiclass Classification
+iris_data = datasets.load_iris(as_frame='auto')
+iris = iris_data.frame
+
+iris_ref = iris.sample(n=150, replace=False)
+iris_cur = iris.sample(n=150, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=3)
+model.fit(iris_ref[iris_data.feature_names], iris_ref.target)
+
+#Reference and current data for Multiclass classification, option 1
+iris_ref['pred'] = model.predict(iris_ref[iris_data.feature_names])
+iris_cur['pred'] = model.predict(iris_cur[iris_data.feature_names])
+
+#Reference and current data for Multiclass classification, option 2
+target_classes = ['Setosa', 'Versicolor', 'Virginica']
+
+iris_ref2 = iris_ref.copy()
+iris_cur2 = iris_cur.copy()
+
+iris_ref2['pred'] = iris_ref.pred.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_ref2['target'] = iris_ref.target.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_cur2['pred'] = iris_cur.pred.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_cur2['target'] = iris_cur.target.apply(lambda x: iris_data.target_names[x].capitalize())
+<\Cell_6>
+<Cell_7>
+#Multiclass Probabilistic Classification
+iris_ref_prob = model.predict_proba(iris_ref[iris_data.feature_names])
+iris_cur_prob = model.predict_proba(iris_cur[iris_data.feature_names])
+
+target_classes = ['Setosa', 'Versicolor', 'Virginica']
+
+iris_ref_prob_df = pd.DataFrame(iris_ref_prob, columns=target_classes)
+iris_cur_prob_df = pd.DataFrame(iris_cur_prob, columns=target_classes)
+
+iris_ref_prob_df['pred'] = model.predict(iris_ref[iris_data.feature_names])
+iris_ref_prob_df['target'] = iris_ref.target.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_cur_prob_df['pred'] = model.predict(iris_cur[iris_data.feature_names])
+iris_cur_prob_df['target'] = iris_cur.target.apply(lambda x: iris_data.target_names[x].capitalize())
+
+<\Cell_7>
+<Cell_8>
+#Dataset for Text Features
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame='auto')
+reviews = reviews_data.frame
+
+reviews['prediction'] = reviews['Rating']
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+<\Cell_8>
+<Cell_9>
+#Dataset for Embeddings
+embeddings_data = datasets.fetch_lfw_people()
+embeddings_data = pd.DataFrame(embeddings_data['data'])
+embeddings_data.columns = ['col_' + str(x) for x in embeddings_data.columns]
+
+embeddings_data = embeddings_data.iloc[:5100, :10]
+
+embeddings_data_shifted = embeddings_data.copy()
+embeddings_data_shifted.iloc[2500:5000, :5] = 0
+<\Cell_9>
+<Cell_10>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'MedHouseVal'
+column_mapping.prediction = 'pred'
+
+column_mapping.id = 'house_id'
+column_mapping.datetime = None
+<\Cell_10>
+<Cell_11>
+
+regression_performance = TestSuite(tests=[
+   RegressionTestPreset()
+])
+regression_performance.run(reference_data=housing_ref.sort_index(), current_data=housing_cur.sort_index(),column_mapping=column_mapping)
+regression_performance
+<\Cell_11>
+<Cell_12>
+column_mapping.numerical_features = ['MedInc','HouseAge','AveRooms','AveBedrms','Population','AveOccup','Latitude','Longitude'] 
+column_mapping.categorical_features = ['number_of_rooms']
+<\Cell_12>
+<Cell_13>
+data_quality_report = Report(metrics=[
+    DataQualityPreset()
+])
+
+data_quality_report.run(reference_data=housing_ref.sort_index(), current_data=housing_cur.sort_index(),column_mapping=column_mapping)
+data_quality_report
+<\Cell_13>
+<Cell_14>
+column_mapping = ColumnMapping()
+
+column_mapping.datetime_features = ['weekday','hr','mnth']
+column_mapping.datetime = 'date'
+column_mapping.numerical_features = ['temp', 'atemp']
+column_mapping.categorical_features = ['holiday']
+column_mapping.target = 'cnt'
+<\Cell_14>
+<Cell_15>
+data_drift = Report(metrics = [DataDriftPreset()])
+data_drift.run(current_data = bike_current,
+               reference_data = bike_reference,
+               column_mapping=column_mapping)
+
+data_drift
+<\Cell_15>
+<Cell_16>
+data_quality_report = Report(metrics=[DataQualityPreset()])
+data_quality_report.run(reference_data=bike_reference, 
+                        current_data= bike_current,
+                        column_mapping=column_mapping)
+
+data_quality_report
+<\Cell_16>
+<Cell_17>
+
+column_mapping = ColumnMapping()
+column_mapping.target = 'target'
+column_mapping.prediction = 'pred' 
+column_mapping.numerical_features = ['sepal length (cm)','sepal width (cm)','petal length (cm)','petal width (cm)']
+
+column_mapping.task = 'classification'
+<\Cell_17>
+<Cell_18>
+multiclass_cat_target_drift_report = Report(metrics=[
+    TargetDriftPreset(num_stattest='ks', cat_stattest='psi'),
+])
+
+multiclass_cat_target_drift_report.run(reference_data=iris_ref, current_data=iris_cur,column_mapping=column_mapping)
+multiclass_cat_target_drift_report
+<\Cell_18>
+<Cell_19>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'pred'
+column_mapping.target_names = ['Setosa', 'Versicolor', 'Virginica']
+column_mapping.task = 'classification'
+<\Cell_19>
+<Cell_20>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass(),
+])
+
+classification_report.run(reference_data=iris_ref, current_data=iris_cur,column_mapping=column_mapping)
+classification_report
+<\Cell_20>
+<Cell_21>
+iris_cur2[['target', 'pred']].sample(5)
+<\Cell_21>
+<Cell_22>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'pred'
+column_mapping.task = 'classification'
+<\Cell_22>
+<Cell_23>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass(),
+])
+
+classification_report.run(reference_data=iris_ref2, current_data=iris_cur2,column_mapping=column_mapping)
+classification_report
+<\Cell_23>
+<Cell_24>
+iris_cur_prob_df[['target', 'Setosa', 'Versicolor', 'Virginica']].sample(5)
+<\Cell_24>
+<Cell_25>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = ['Setosa', 'Versicolor', 'Virginica']
+<\Cell_25>
+<Cell_26>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass(),
+])
+
+classification_report.run(reference_data=iris_ref_prob_df, current_data=iris_cur_prob_df,column_mapping=column_mapping)
+classification_report
+<\Cell_26>
+<Cell_27>
+bcancer_label_cur[['target','prediction']].sample(5)
+<\Cell_27>
+<Cell_28>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'prediction'
+column_mapping.target_names = ['Malignant', 'Benign']
+column_mapping.pos_label = 'Malignant'
+<\Cell_28>
+<Cell_29>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass()
+])
+
+classification_report.run(reference_data=bcancer_label_ref, current_data=bcancer_label_cur,column_mapping=column_mapping)
+classification_report
+<\Cell_29>
+<Cell_30>
+prob_classification_performance_dataset_tests = TestSuite(tests=[
+    TestAccuracyScore(),
+    TestPrecisionScore(),
+    TestRecallScore(),
+    TestF1Score()
+
+])
+
+prob_classification_performance_dataset_tests.run(reference_data=bcancer_label_ref, current_data=bcancer_label_cur,column_mapping=column_mapping)
+prob_classification_performance_dataset_tests
+<\Cell_30>
+<Cell_31>
+bcancer_label_cur[['target','prediction']].sample(5)
+<\Cell_31>
+<Cell_32>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'prediction'
+column_mapping.pos_label = 1
+<\Cell_32>
+<Cell_33>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass()
+])
+
+classification_report.run(reference_data=bcancer_label_ref, current_data=bcancer_label_cur,column_mapping=column_mapping)
+classification_report
+<\Cell_33>
+<Cell_34>
+bcancer_cur12[['target','Malignant','Benign']].sample(5)
+<\Cell_34>
+<Cell_35>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = ['Benign','Malignant']
+column_mapping.pos_label = 'Malignant'
+<\Cell_35>
+<Cell_36>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass()
+])
+
+classification_report.run(reference_data=bcancer_ref12, current_data=bcancer_cur12, column_mapping=column_mapping)
+classification_report
+<\Cell_36>
+<Cell_37>
+bcancer_cur12[['target','Malignant','Benign']].sample(5)
+<\Cell_37>
+<Cell_38>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'Benign'
+column_mapping.pos_label = 'Malignant'
+<\Cell_38>
+<Cell_39>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass()
+])
+
+classification_report.run(reference_data=bcancer_ref12, current_data=bcancer_cur12, column_mapping=column_mapping)
+classification_report
+<\Cell_39>
+<Cell_40>
+bcancer_cur[['target','prediction']].sample(5)
+<\Cell_40>
+<Cell_41>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'prediction'
+column_mapping.pos_label = 1
+column_mapping.target_names = ['Malignant', 'Benign']
+
+<\Cell_41>
+<Cell_42>
+classification_report = Report(metrics=[
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass()
+])
+
+classification_report.run(reference_data=bcancer_ref, current_data=bcancer_cur,column_mapping=column_mapping)
+classification_report
+<\Cell_42>
+<Cell_43>
+reviews_cur.sample(2)
+<\Cell_43>
+<Cell_44>
+column_mapping = ColumnMapping()
+
+column_mapping.target='Rating'
+column_mapping.numerical_features=['Age', 'Positive_Feedback_Count']
+column_mapping.categorical_features=['Division_Name', 'Department_Name', 'Class_Name']
+
+column_mapping.text_features=['Review_Text', 'Title']
+<\Cell_44>
+<Cell_45>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(num_stattest='ks', cat_stattest='psi', num_stattest_threshold=0.2, cat_stattest_threshold=0.2),
+])
+
+data_drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+data_drift_report
+<\Cell_45>
+<Cell_46>
+embeddings_data.sample(5)
+<\Cell_46>
+<Cell_47>
+column_mapping = ColumnMapping()
+column_mapping.embeddings= {'small_subset': embeddings_data.columns[:10]}
+<\Cell_47>
+<Cell_48>
+report = Report(metrics=[
+    EmbeddingsDriftMetric('small_subset')
+])
+
+report.run(reference_data = embeddings_data[:2500], current_data = embeddings_data[2500:5000], 
+           column_mapping = column_mapping)
+report
+<\Cell_48>

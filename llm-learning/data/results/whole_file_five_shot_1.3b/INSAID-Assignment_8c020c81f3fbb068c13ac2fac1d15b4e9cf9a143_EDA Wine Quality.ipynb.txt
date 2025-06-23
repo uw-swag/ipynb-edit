@@ -1,0 +1,53 @@
+```
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error, r2_score
+
+    # Loading the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Checking for missing values
+    df.isnull().sum()
+
+    # Checking the summary statistics
+    df.describe()
+
+    # Checking the distribution of the target variable
+    sns.distplot(df['target_variable'])
+
+    # Checking the correlation matrix
+    df.corr()
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target_variable', axis=1), df['target_variable'], test_size=0.2, random_state=42)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Training the model
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print('Mean Squared Error:', mean_squared_error(y_test, y_pred))
+    print('R2 Score:', r2_score(y_test, y_pred))
+
+    # Visualizing the results
+    plt.scatter(y_test, y_pred)
+    plt.xlabel('True Values')
+    plt.ylabel('Predictions')
+    plt.show()
+
+    # Checking feature importance
+    feature_importance = pd.DataFrame({'Features': df.columns[:

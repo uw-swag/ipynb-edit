@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.signal import freqz
+
+    # Generate some sample data
+    t = np.linspace(0, 1, 1000, False)  # 1 second samples
+    x = np.sin(2 * np.pi * 10 * t) + np.sin(2 * np.pi * 20 * t)
+
+    # Compute the frequency response
+    y = np.fft.fft(x) / len(x)
+
+    # Plot the original data
+    plt.figure(figsize=(12, 6))
+    plt.plot(t, x, label='Original')
+    plt.plot(t, np.abs(y), label='Frequency response')
+    plt.legend()
+    plt.show()
+
+    # Compute the frequency response using scipy's freqz function
+    w, h = freqz(y)
+    plt.figure(figsize=(12, 6))
+    plt.plot(w, np.abs(h), label='Frequency response')
+    plt.plot([10, 20], [1, 1], 'r--', label='Frequency range')
+    plt.legend()
+    plt.show()
+    ```
+
+    This code generates a signal with two frequencies, 10 Hz and 20 Hz, and computes the frequency response of the signal using the Fast Fourier Transform (FFT) and the `freqz` function from `scipy.signal`. The frequency response is then plotted.

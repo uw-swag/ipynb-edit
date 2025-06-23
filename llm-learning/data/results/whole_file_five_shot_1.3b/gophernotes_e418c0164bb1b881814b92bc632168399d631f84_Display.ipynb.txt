@@ -1,0 +1,61 @@
+```python
+    # gonum/plot example
+    import (
+        "gonum/plot"
+        "gonum/plot/plotter"
+        "gonum/plot/vg"
+    )
+
+    p, err := plot.New()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Create a line graph.
+    line, err := plotter.NewLine(nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Add data to the line.
+    for i := 0; i < 100; i++ {
+        line.Set(i, math.Sin(float64(i)))
+    }
+
+    p.Add(line)
+
+    // Save the plot to a file.
+    if err := p.Save(10*vg.Inch, 4*vg.Inch, "line.png"); err != nil {
+        log.Fatal(err)
+    }
+    ```
+
+    ### Response:
+    ```python
+    // gonum/plot example
+    import (
+        "gonum/plot"
+        "gonum/plot/plotter"
+        "gonum/plot/vg"
+    )
+
+    p, err := plot.New()
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Create a scatter plot.
+    scatter, err := plotter.NewScatter(nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // Add data to the scatter.
+    for i := 0; i < 100; i++ {
+        scatter.Add(plotter.Tuple{X: float64(i), Y: math.Sin(float64(i))})
+    }
+
+    p.Add(scatter)
+
+    // Save the plot to a file.
+    if err := p.Save(10*vg.Inch, 4*vg.Inch, "scatter.png"); err != nil {

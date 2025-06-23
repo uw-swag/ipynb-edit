@@ -1,0 +1,20 @@
+```python
+    from kfp import components
+    from kfp.components import InputPath, OutputPath
+
+    AutoMLOps = components.create_component_from_func(
+        train_model,
+        input_component_name='input',
+        output_component_name='output'
+    )
+
+    AutoMLOps.clear_cache()
+    ```
+
+    The above code snippet is an example of how to use the Kubeflow Pipelines (KFP) component system to create a new component. The `train_model` function is a placeholder for your training function. The `AutoMLOps` component is then used to train the model.
+
+    Please replace the `train_model` function with your actual training function.
+
+    Also, make sure to install the Kubeflow Pipelines (KFP) and its components by running `pip install kfp[all]`.
+
+    Please note that the above code snippet is a basic example and may not work as expected without modifications.

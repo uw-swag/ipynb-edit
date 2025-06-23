@@ -1,0 +1,41 @@
+
+    '''
+    Commit Message: "remove ipynb files"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from IPython.display import display,HTML
+    c1,c2,f1,f2,fs1,fs2='#11ff66','#6611ff','Lobster','Orbitron',30,10
+    def dhtml(string,fontcolor=c1,font=f1,fontsize=fs1):
+        display(HTML("""<style>
+        @import 'https://fonts.googleapis.com/css?family="""\
+        +font+"""&effect=3d-float';</style>
+        <h1 class='font-effect-3d-float' 
+        style='font-family:"""+font+\
+        """; color:"""+fontcolor+\
+        """; font-size:"""+str(fontsize)+"""px;'>
+        %s</h1>"""%string))
+    <\Cell_0>
+    <Cell_1>
+    dhtml('Code Modules, Setting, & Functions')
+    <\Cell_1>
+    <Cell_2>
+    import warnings; warnings.filterwarnings('ignore')
+    import tensorflow as tf,pylab as pl
+    import pandas as pd,numpy as np
+    import scipy.signal as sps
+    import skimage.measure as sim
+    import tensorflow.keras.layers as tkl
+    import tensorflow.keras.utils as tku
+    from IPython.core.magic import register_line_magic
+    pd.set_option('precision',3)
+    <\Cell_2>
+    <Cell_3>
+    dhtml('Conv1d Exploration')
+    <\Cell_3>
+    <Cell_4>
+    num_w,num_x=4,7 #num_w>3!
+    w=np.random.random(num_w)
+    x=np.random.random(num_x)
+    w_rotated=np.array(w[::-1])
+    pd.DataFrame([w,w

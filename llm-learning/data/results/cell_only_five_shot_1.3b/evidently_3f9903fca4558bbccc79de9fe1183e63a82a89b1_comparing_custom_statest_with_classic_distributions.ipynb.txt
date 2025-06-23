@@ -1,0 +1,48 @@
+
+The original code was using seaborn, a Python data visualization library, to plot the histograms. However, the code has been modified to not use seaborn. The seaborn library is not a dependency in the original code, so it has been removed from the code.
+
+Here's the modified code:
+
+```python
+import pandas as pd
+import numpy as np
+
+from scipy import stats
+
+from sklearn import datasets, ensemble, model_selection
+
+import evidently
+from evidently import ColumnMapping
+from evidently.calculations.stattests import StatTest
+from evidently.options import DataDriftOptions
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+
+import matplotlib.pyplot as plt
+
+def give_me_smp_cntr_df(sample1,sample2):
+    """
+    It recieves two arrays of the produced sample distributions and
+    returns two dataframes that have he sample and control groups to test later the drift
+    """
+    sample_df = pd.DataFrame(np.array([sample1,sample2]).T,columns=['sample_group','control_group'])
+    #initial dataset
+    smp_df=sample_df['sample_group'].reset_index().rename(columns={'sample_group': "test_group"})
+    #control dataset
+    cntr_df=sample_df['control_group'].reset_index().rename(columns={'control_group': "test_group"})
+    return smp_df,cntr_df
+
+#Define function for checking p-values per population
+
+def create_test_result_dataset(data_drift_dataset_tests):
+    d=[]
+
+    for tests in data_drift_dataset_tests.as_dict()['tests']:
+        d2=[]
+        d2.append(tests['parameters']['features']['test_group']['stattest'])
+        d2.append(tests['parameters']['features']['test_group']['score'])
+
+        #added the test name and drift score(p-value or distance)
+        d.append(d2)
+
+    df = pd.DataFrame(d,columns=['test

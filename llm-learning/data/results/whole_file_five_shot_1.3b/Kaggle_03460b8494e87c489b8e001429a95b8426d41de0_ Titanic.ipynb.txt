@@ -1,0 +1,40 @@
+```python
+    <Cell_0>
+    #imports
+    import numpy as np
+    import pandas as pd
+    pd.options.display.max_columns = 50
+    from pandas import DataFrame, Series
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    sns.set_style('whitegrid')
+    %matplotlib inline 
+    <\Cell_0>
+    <Cell_1>
+    #Machine Learning imports 
+    from sklearn.ensemble import RandomForestClassifier
+    <\Cell_1>
+    <Cell_2>
+    #Load Test & Training Data Sets
+    train_DF = pd.read_csv("/Users/sominwadhwa/Desktop/Kaggle/Titanic/train.csv", dtype = {"Age": np.float64}, )
+    test_DF = pd.read_csv("/Users/sominwadhwa/Desktop/Kaggle/Titanic/test.csv", dtype = {"Age": np.float64}, )
+    <\Cell_2>
+    <Cell_3>
+    #Visualizing Data (First n-rows)
+    train_DF.head(n = 4)
+    <\Cell_3>
+    <Cell_4>
+    print("------Training Data Information-------\n")
+    train_DF.info()
+    print("\n\n------Test Data Information-------\n")
+    test_DF.info()
+    <\Cell_4>
+    <Cell_5>
+    #Dropping data irrelevant to analysis
+    train_DF = train_DF.drop(['PassengerId','Name','Ticket'], axis = 1, inplace = False)
+    test_DF = test_DF.drop(['Name','Ticket'], axis = 1, inplace = False)
+    <\Cell_5>
+    <Cell_6>
+    #Creating Dummy Plots based on 'Embarked'
+    train_DF['Embarked'] = train_DF['Embarked'].fillna('S')
+    sns.factorplot(x = 'Embarked', y = 'Survived', data=train_DF, size = 

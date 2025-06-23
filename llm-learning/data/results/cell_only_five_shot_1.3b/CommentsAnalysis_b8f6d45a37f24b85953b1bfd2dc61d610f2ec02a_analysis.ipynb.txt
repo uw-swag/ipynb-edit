@@ -1,0 +1,41 @@
+
+    ## Plotting the comments by time
+
+    # First, we need to convert the 'time' column into datetime format
+    comments_merged['time'] = pd.to_datetime(comments_merged['time'])
+
+    # Then, we can plot the comments by time
+    plt.figure(figsize=(15,10))
+    sns.countplot(x='time', data=comments_merged)
+    plt.title('Comments by Time')
+    plt.xlabel('Time')
+    plt.ylabel('Number of Comments')
+    plt.show()
+
+    # This plot shows the number of comments made each hour of the day.
+    # The x-axis represents the time of the day, and the y-axis represents the number of comments.
+    # The plot shows that there is a peak at 10 AM and a dip at 7 PM, indicating that most comments are made during these times.
+
+    ## Comments by time by gum
+
+    # We can also plot the number of comments made by 'gum'
+
+    plt.figure(figsize=(15,10))
+    sns.countplot(x='gum', data=comments_merged)
+    plt.title('Comments by Gum')
+    plt.xlabel('Gum')
+    plt.ylabel('Number of Comments')
+    plt.show()
+
+    # This plot shows the number of comments made by each type of 'gum'.
+    # The x-axis represents the type of 'gum', and the y-axis represents the number of comments.
+    # The plot shows that 'gum1' has the most comments, followed by 'gum2', and 'gum3' with the fewest comments.
+
+    ## Comments by time by gum and time
+
+    plt.figure(figsize=(15,10))
+    sns.countplot(x='gum', hue='time', data=comments_merged)
+    plt.title('Comments by Gum and Time')
+    plt.xlabel('Gum')
+    plt.ylabel('Number of Comments')
+   

@@ -1,0 +1,56 @@
+```python
+    # Importing Required Libraries
+    from google.cloud import bigtable
+    from google.cloud.bigtable import column_family
+    from google.cloud.bigtable import row_filters
+
+    # Instantiate a Bigtable client
+    client = bigtable.Client(project="my-project", admin=True)
+
+    # Get a handle to a specific instance and table
+    instance = client.instance("my-instance")
+    table = instance.table("my-table")
+
+    # Create a new column family
+    column_family_id = "cf1"
+    column_families = {column_family_id: column_family.MaxVersionsGCRule(2)}
+    table.create(column_families=column_families)
+
+    # Insert a row
+    row_key = "row1".encode("utf-8")
+    row = table.direct_row(row_key)
+    row.set_cell(column_family_id,
+                 "column1".encode("utf-8"),
+                 "some-value".encode("utf-8"))
+    row.commit()
+
+    # Read a row
+    row = table.read_row(row_key)
+    cell = row.cells[column_family_id]["column1".encode("utf-8")][0]
+    print(cell.value.decode("utf-8"))
+
+    # Delete a row
+    table.delete_row(row_key)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature (#21)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is a simple example of a feature in Python. This feature is a function that calculates the factorial of a number.
+
+    ```python
+    def factorial(n):
+        if n == 0:
+            return 1
+        else:
+            return n * factorial(n-1)
+    ```
+
+    This function uses a recursive approach to calculate the factorial of a number. If the number is 0, it returns 1. Otherwise, it returns the product of the

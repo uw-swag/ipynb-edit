@@ -1,0 +1,62 @@
+from evidently.descriptors import LLMEval, NegativityLLMEval, PIILLMEval, DeclineLLMEval, BiasLLMEval, ToxicityLLMEval, ContextQualityLLMEval
+from evidently.descriptors import SemanticSimilarity 
+from evidently.descriptors import CustomColumnEval, CustomPairColumnEval
+from evidently.ui.workspace.cloud import CloudWorkspace
+
+from evidently import ColumnMapping
+from evidently.report import Report
+
+from evidently.metrics import ColumnSummaryMetric
+
+from evidently.metric_preset import DataQualityPreset, TextEvals
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMEval(include_category=True),
+        SemanticSimilarity(with_column="response")
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMEval(include_reasoning=False), 
+        DeclineLLMEval(include_score=True)
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+def is_empty_string_callable(val1):
+    return pd.Series(["EMPTY" if val == "" else "NON EMPTY" for val in val1], index=val1.index)
+
+empty_string = CustomColumnEval(
+    func=is_empty_string_callable,
+    feature_type="cat",
+    display_name="Empty response"
+)
+
+report = Report(metrics=[
+    ColumnSummaryMetric(column_name=empty_string.on("response")),
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+def exact_match_callable(val1, val2):
+    return pd.Series(["MATCH" if val else "MISMATCH" for val in val1 == val2])
+
+exact_match =  CustomPairColumnEval(
+    func=exact_match_callable,
+    first_column="response",
+    second_column="question",
+    feature_type="cat",
+    display_name="Exact match between response and question"
+)
+
+report = Report(metrics=[
+    ColumnSummaryMetric(column_name=exact_match.as_column())
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 

@@ -1,0 +1,52 @@
+```python
+    import os
+    import glob
+    import psycopg2
+    from tqdm import tqdm
+
+    # Establish a connection to the database
+    conn = psycopg2.connect(
+        dbname="your_database",
+        user="your_username",
+        password="your_password",
+        host="your_host",
+        port="your_port"
+    )
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    # Define the directory where the files are located
+    directory = "/path/to/your/files"
+
+    # Get a list of all files in the directory
+    files = glob.glob(directory + "/*")
+
+    # Iterate over each file
+    for file in tqdm(files):
+        # Get the file name
+        file_name = os.path.basename(file)
+
+        # Create a table name from the file name
+        table_name = file_name.split(".")[0]
+
+        # Create a table if it doesn't exist
+        cur.execute(f"CREATE TABLE IF NOT EXISTS {table_name} (id serial PRIMARY KEY, data text);")
+
+        # Open the file and read its content
+        with open(file, "r") as f:
+            data = f.read()
+
+        # Insert the data into the table
+        cur.execute(f"INSERT INTO {table_name} (data) VALUES (%s);", (data,))
+
+    # Commit the changes and close the connection
+    conn.commit()
+    cur.close()
+    conn.close()
+    ```
+    This script will upload all files in a specified directory to a PostgreSQL database. The files are read and the content is inserted into a table in the database. The table name is derived from the file name, and if a table with the same name already exists, it will be skipped.
+
+    Please replace "your_database", "your_username", "your_password", "your_host", "your_port", and "/path/to/your/files" with your actual PostgreSQL database details and the path to the directory containing the files.
+
+    Also, please ensure that the psycopg2 and t

@@ -1,0 +1,13 @@
+```python
+    import os
+
+    # Get the list of all files in the current directory
+    files = os.listdir()
+
+    # Create a new directory with the same name as the current directory
+    os.mkdir(os.path.basename(__file__))
+
+    # Move all files to the new directory
+    for file in files:
+        os.rename(file, os.path.join(os.path.basename(__file__), file))
+    ```

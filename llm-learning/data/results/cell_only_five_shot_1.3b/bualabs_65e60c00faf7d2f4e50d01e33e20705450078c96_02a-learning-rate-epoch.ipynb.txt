@@ -1,0 +1,29 @@
+```python
+    path = untar_data(URLs.MNIST)
+    batchsize = 720
+    np.random.seed(0)
+    transform = get_transforms(do_flip=False)
+
+    databunch = ImageDataBunch.from_folder(path, train='training', 
+                                           valid_pct=0.2, size=28, 
+                                           ds_tfms=transform, bs=batchsize, 
+                                           num_workers=8).normalize()
+    learner = cnn_learner(databunch, models.resnet18, 
+                          pretrained=False, 
+                          metrics=accuracy, callback_fns=ShowGraph)
+    learner.fit(8, lr=0.9)
+    learner = cnn_learner(databunch, models.resnet18, 
+                          pretrained=False, 
+                          metrics=accuracy, callback_fns=ShowGraph)
+    learner.fit(8, lr=0.000001)
+    learner = cnn_learner(databunch, models.resnet18, 
+                          pretrained=False, 
+                          metrics=accuracy, callback_fns=ShowGraph)
+    learner.fit(1, lr=0.003)
+    learner = cnn_learner(databunch, models.resnet18, 
+                          pretrained=False, 
+                          metrics=accuracy, callback_fns=ShowGraph)
+    learner.fit(50, lr=0.003)
+    ```
+
+    The code above changes the architecture of the model to VGG16 and reduces the batch size to 720. The learning rate is also reduced to 0.003.

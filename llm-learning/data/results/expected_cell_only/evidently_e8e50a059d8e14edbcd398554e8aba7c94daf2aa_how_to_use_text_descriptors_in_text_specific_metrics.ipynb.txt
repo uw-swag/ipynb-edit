@@ -1,0 +1,67 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment
+import nltk
+nltk.download('words')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('vader_lexicon')
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+#WITH descriptors
+
+report = Report(metrics=[
+    TextDescriptorsDriftMetric("Review_Text", descriptors={
+        "Review Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        "Review Sentence Count" : SentenceCount(),
+        "Review Word Count" : WordCount(),
+        "Review Sentiment" : Sentiment(),
+    }),
+    TextDescriptorsCorrelationMetric(column_name="Title", descriptors={
+        "Title OOV" : OOV(),
+        "Title Non Letter %" : NonLetterCharacterPercentage(),
+        "Title Length" : TextLength(),
+        "Title Sentence Count" : SentenceCount(),
+        "Title Word Count" : WordCount(),
+        "Title Sentiment" : Sentiment(),
+    })
+])
+
+report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+report
+
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text", descriptors={
+        "Review Text OOV" : OOV(),
+        "Review Text Non Letter %" : NonLetterCharacterPercentage(),
+        "Review Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        "Review Sentence Count" : SentenceCount(),
+        "Review Word Count" : WordCount(),
+        "Review Sentiment" : Sentiment(),
+    })
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+drift_report = Report(metrics=[
+    ColumnDriftMetric(column_name=TextLength().for_column("Review_Text")),
+    ColumnDriftMetric(column_name=TriggerWordsPresence(words_list=['blouse', 'shirt']).for_column("Review_Text")),
+
+])
+
+drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+drift_report

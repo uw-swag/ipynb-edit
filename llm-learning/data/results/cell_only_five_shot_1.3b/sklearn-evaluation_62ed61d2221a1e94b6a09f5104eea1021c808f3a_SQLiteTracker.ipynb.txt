@@ -1,0 +1,44 @@
+```
+    # Goal for this code:
+    # This code is to update the SQLiteTracker tutorial to include missing licenses in the notebooks.
+    # The SQLiteTracker is a Python library that allows you to track experiments in a SQLite database.
+    # The code below is an example of how to use the SQLiteTracker to track experiments.
+    # The code also includes a section to delete the example database and log the results of the experiments.
+
+    # Import the necessary libraries
+    from sklearn_evaluation import SQLiteTracker
+    from sklearn import datasets
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.svm import SVC
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # Initialize the SQLiteTracker
+    tracker = SQLiteTracker('my_experiments.db')
+
+    # Define a function to fit a model and log the results
+    def fit(model):
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        acc = accuracy_score(y_test, y_pred)
+        experiment = tracker.new_experiment()
+        experiment.log_dict({'accuracy': acc, 'model': type(model).__name__, **model.get_params()})
+
+        # log plots
+        experiment.log_confusion_matrix(y_test, y_pred)
+        experiment.log_classification_report(y_test, y_pred)
+
+        # log generic figure
+
+    # Fit the models
+    fit(model=RandomForestClassifier(n_estimators=100))
+    fit(model=RandomForestClassifier(n_estimators=10))
+
+    # Query the experiments
+    results = tracker.query("""
+    SELECT uuid,
+           json_extract(parameters, '$.model') AS model,
+           json_extract(parameters, '$.accuracy') AS accuracy,
+           json_extract

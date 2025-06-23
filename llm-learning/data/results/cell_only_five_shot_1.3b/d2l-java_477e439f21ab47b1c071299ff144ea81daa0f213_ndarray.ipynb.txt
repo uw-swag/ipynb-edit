@@ -1,0 +1,23 @@
+```python
+    from dlw.common import Device, DataType
+    from dlw.nn import Module, Sequential
+    from dlw.nn.layers import Dense, RandomNormal
+
+    class MyModel(Module):
+        def __init__(self):
+            super(MyModel, self).__init__()
+            self.dense1 = Dense(3, 4)
+            self.dense2 = Dense(4, 4)
+            self.random_normal = RandomNormal(0.0, 1.0)
+
+        def forward(self, x):
+            x = self.dense1(x)
+            x = self.dense2(x)
+            x = self.random_normal(x)
+            return x
+
+    model = MyModel()
+    model.to(Device.defaultDevice())
+    ```
+
+    In this code, we have upgraded the Deep Learning Workbench (DLW) to version 0.13.0. The `randomNormal` function has been added to the `Dense` layer. The model is now a class-based model, and the `forward` function has been updated to use the new `randomNormal` function.

@@ -1,0 +1,52 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#582)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# If you don't have deepchecks installed yet:
+import sys
+!{sys.executable} -m pip install deepchecks -U --quiet #--user
+<\Cell_0>
+<Cell_1>
+# General imports
+import pandas as pd
+import numpy as np
+np.random.seed(22)
+
+from sklearn.datasets import load_breast_cancer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Load Data
+data = load_breast_cancer()
+df = pd.DataFrame(data.data, columns=data.feature_names)
+df['target'] = data.target
+
+# Split Data
+X = df.drop('target', axis=1)
+y = df['target']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train Model
+rf_clf = RandomForestClassifier()
+rf_clf.fit(X_train, y_train)
+<\Cell_1>
+<Cell_2>
+from deepchecks import Dataset
+
+# We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+# If the dataset has categorical features, the best practice is to pass a list with their names
+
+ds_train = Dataset(X_train, label='target', cat_features=[])
+ds_test =  Dataset(X_test,  label='target', cat_features=[])
+<\Cell_2>
+<Cell_3>
+from deepchecks.suites import full_suite
+
+suite = full_suite()
+<\Cell_3>
+<Cell_4>
+# note that we set check_datasets_policy to 'both' so that for single dataset checks (e.g. some of the integrity checks),
+#

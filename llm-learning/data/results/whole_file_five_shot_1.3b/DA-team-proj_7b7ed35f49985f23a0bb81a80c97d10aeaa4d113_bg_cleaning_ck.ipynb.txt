@@ -1,0 +1,53 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Check the data types
+    print(df.dtypes)
+
+    # Check the summary statistics
+    print(df.describe())
+
+    # Check the unique values
+    print(df.nunique())
+
+    # Check the value counts
+    print(df.value_counts())
+
+    # Check the correlation
+    print(df.corr())
+
+    # Data Cleaning
+    # Remove duplicates
+    df = df.drop_duplicates()
+
+    # Fill missing values
+    df = df.fillna(df.mean())
+
+    # Remove outliers
+    # Here, we'll use the IQR method to remove outliers
+    Q1 = df.quantile(0.25)
+    Q3 = df.quantile(0.75)
+    IQR = Q3 - Q1
+    df = df[~((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).any(axis=1)]
+
+    # Convert categorical variables to numerical variables
+    # Here, we'll use label encoding
+    from sklearn.preprocessing import LabelEncoder
+    le = LabelEncoder()
+    df['column_name'] = le.fit_transform(df['column_name'])
+
+    # Save the cleaned data
+    df.to_csv('cleaned_data.csv', index=False)
+    ```
+    This script will perform a series of data cleaning operations on a given dataset. The operations include checking for missing values, checking the data types, checking the summary statistics, checking the unique values, checking the value counts, and checking the correlation. After cleaning, the script will remove duplicates, fill missing values, remove outliers, and convert categorical variables to

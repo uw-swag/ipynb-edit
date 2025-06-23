@@ -1,0 +1,31 @@
+
+    '''
+    <Cell_0>
+    %matplotlib inline
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    <\Cell_0>
+    <Cell_1>
+    headers=['symboling','normalized_losses','make','fuel_type','aspiration','num_of_doors',
+         'body_style','drive_wheels','engine_location','wheel_base','length','width',
+        'height','curb_weight','engine_type','num_of_cylinders','engine_size','fuel_system',
+        'bore','stroke','compression_ratio','horsepower','peak_rpm','city_mpg','highway_mpg',
+        'price']
+    cars = pd.read_csv('imports-85.data.txt', names=headers)
+
+    # Select only the columns with continuous values from - https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.names
+    continuous_values_cols = ['normalized_losses', 'wheel_base', 'length', 'width', 'height', 'curb_weight', 'bore', 'stroke', 'compression_ratio', 'horsepower', 'peak_rpm', 'city_mpg', 'highway_mpg', 'price']
+    numeric_cars = cars[continuous_values_cols].copy()
+    print(numeric_cars.info())
+    numeric_cars.head(10)
+    <\Cell_1>
+    <Cell_2>
+    print('Convert missing values (?) with np.NaN then set the type to float')
+    numeric_cars.replace(to_replace='?', value=np.nan, inplace=True)
+    numeric_cars.astype('float', inplace=True)
+    numeric_cars.head(10)
+    <\Cell_2>
+    <Cell_3>
+    print("This shows the percentage of values in each column that are not numberic. Remove the rows with NaN's")
+    numeric_cars.drop

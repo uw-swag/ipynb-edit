@@ -1,0 +1,62 @@
+```
+    # Split many files in core and base (#987)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature to the base (#988)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.tabular.base import Dataset
+
+class NewFeature:
+    def __init__(self, name, data):
+        self.name = name
+        self.data = data
+
+    def add_to_dataset(self, dataset):
+        dataset.add_feature(self.name, self.data)
+<\Cell_0>
+<Cell_1>
+new_feature = NewFeature('new_feature', [1, 2, 3, 4, 5])
+new_feature.add_to_dataset(Dataset())
+<\Cell_1>
+<Cell_2>
+# Adding a new feature to the base (#988)
+```
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    # Adding a new feature to the base (#988)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature to the core (#989)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.tabular.checks import CalibrationScore
+from deepchecks.tabular.base import Dataset
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import warnings
+
+def custom_formatwarning(msg, *args, **kwargs):
+    # ignore everything except the message
+    return str(msg) + '\n'
+
+warnings.formatwarning = custom_formatwarning
+<\Cell_0>
+<Cell_1>
+new_feature = NewFeature('new_feature', [1, 2, 3, 4, 5])
+new_feature.add_to_dataset(Dataset())
+<\Cell_1>
+<Cell_2>
+# Adding a new feature to the core (#989)

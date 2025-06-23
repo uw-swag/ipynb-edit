@@ -1,0 +1,41 @@
+
+    The code you provided is already using the `tf.layers` API instead of the `tf.contrib.layers` API. The `tf.layers` API is a more modern and flexible approach to building neural networks in TensorFlow, and it provides more flexibility and control over the layers' parameters.
+
+    However, the code you provided is not complete and it seems to be missing some parts. For example, the `saver` object is not defined anywhere in the code, and the `tf.train.Saver()` function is not used to save the model.
+
+    Here is the complete code:
+
+    ```python
+    import tensorflow as tf
+    from tensorflow.contrib.layers import fully_connected, batch_norm, dropout
+    from tensorflow.contrib.framework import arg_scope
+
+    tf.reset_default_graph()
+
+    n_inputs = 28 * 28  # MNIST
+    n_hidden1 = 300
+    n_hidden2 = 100
+    n_outputs = 10
+    learning_rate = 0.01
+    momentum = 0.25
+
+    X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
+    y = tf.placeholder(tf.int64, shape=(None), name="y")
+    is_training = tf.placeholder(tf.bool, shape=(), name='is_training')
+
+    with tf.name_scope("dnn"):
+        he_init = tf.contrib.layers.variance_scaling_initializer()
+        batch_norm_params = {
+            'is_training': is_training,
+            'decay': 0.9,
+            'updates_collections': None,
+            'scale': True,
+        }
+
+        with arg_scope(
+                [fully_connected],
+                activation_fn=tf.nn.elu,
+                weights_initializer=he_init,
+                normalizer_fn=batch_norm,
+                normalizer_params=batch_norm_params,
+                weights_regularizer=tf.contrib.layers.l1_regularizer(0.0

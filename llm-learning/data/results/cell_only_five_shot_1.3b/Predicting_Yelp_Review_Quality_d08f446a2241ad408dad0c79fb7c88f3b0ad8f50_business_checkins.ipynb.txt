@@ -1,0 +1,51 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sqlalchemy import create_engine
+    from datetime import datetime
+
+    # Set options
+    pd.set_option("display.max_columns", 100)
+    pd.set_option("display.precision", 2)
+
+    # Load data
+    query = '''
+        SELECT *
+        FROM checkin
+        ;
+        '''
+    df = load_dataframe_from_yelp_2(query)
+
+    # Describe data
+    df.describe(include='all')
+
+    # Add new column
+    df['checkin_count'] = df.date.apply(counter)
+
+    # Convert date to datetime
+    df['date_list'] = [pd.to_datetime(x) for x in df.date.str.split(',')]
+
+    # Drop date column
+    df = df.drop('date', axis=1)
+
+    # Create new columns for time discounting adjustments
+    month_list = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+    date_column_list = []
+    date_comparison_list = []
+    for year in list(range(2010, 2021)):
+        for month in month_list:
+            date = f'{month} {year}'
+            date_column_list.append(f'checkins_before_{month}_{year}')
+            datetime = pd.to_datetime(date)
+            date_comparison_list.append(datetime)
+
+    for idx, val in enumerate(date_column_list):
+        df[val] = df.date_list.apply(lambda x: sum(1 if y < date_comparison_list[idx] else 0 for y in x))
+        df[f'percent_of_{val}'] = df[val] / df['checkin_count']
+
+    # Display dataframe
+    df.head()
+    

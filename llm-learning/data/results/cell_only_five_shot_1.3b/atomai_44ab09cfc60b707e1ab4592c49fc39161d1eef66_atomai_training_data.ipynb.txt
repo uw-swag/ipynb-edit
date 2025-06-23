@@ -1,0 +1,28 @@
+
+    # cleanup spark instance
+    spark.stop()
+
+    # Update notebook to reflect changes in augmentor
+    images_all, labels_all = extract_patches_(
+    lattice_im, lattice_mask, patch_size=256, num_patches=500)
+    # For a single class case, we still need to explicitly specify the single channel
+    labels_all = labels_all[..., None] if np.ndim(labels_all) == 3 else labels_all
+    # Specify size, dimensions
+    batch_size = len(labels_all) # here we will pass through the augmentor all data at once
+    dim1, dim2, ch = labels_all.shape[1:]
+    # Define image distortion/noise parameters
+    zoom = (256-128, 256+1, 8) # zoom (min, max, step)
+    noise_dict = {} # Noise parameters are defined as dictionary
+    noise_dict['poisson'] = (80, 130) # smaller values result in larger P noise
+    noise_dict['gauss'] = (1, 400) # smaller values result in smaller G noise
+    noise_dict['blur'] = (1, 40) # smaller values result in smaller blurring
+    noise_dict['contrast'] = (50, 400) # smaller values result in brighter contrast
+    noise_dict['salt and pepper'] = (1, 50) # smaller values result in less salted/peppered pixels
+    # Run the augmentor
+    imaug = augmentor(
+    batch_size=batch_size, width=dim1, height=dim2, n_channels=ch,
+    dim_order_in='channel_last', dim_order_out='channel_first', 
+    noise=noise_dict, zoom=zoom, flip=True, squeeze=True)
+    images_all, labels_all = imaug.run(images_all, labels_all)
+
+    print(images_all.shape, labels_all.shape)

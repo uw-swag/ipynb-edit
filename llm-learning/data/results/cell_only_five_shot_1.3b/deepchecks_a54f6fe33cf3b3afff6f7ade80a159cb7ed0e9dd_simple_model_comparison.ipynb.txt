@@ -1,0 +1,31 @@
+```python
+    from sklearn.model_selection import train_test_split
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(train_ds, y, test_size=0.2, random_state=42)
+
+    # Create a decision tree classifier
+    clf = DecisionTreeClassifier()
+
+    # Fit the model
+    clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test)
+
+    # Calculate the accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    # Check the condition
+    check = SimpleModelComparison(simple_model_type='tree').add_condition_ratio_not_less_than(1.2)
+
+    # Run the check
+    check.run(X_train, X_test, clf)
+
+    # Print the accuracy
+    print(f"Accuracy: {accuracy}")
+    ```
+
+    This code first splits the data into a training set and a test set. It then creates a decision tree classifier and fits the model to the training data. It makes predictions on the test data and calculates the accuracy of these predictions. Finally, it adds a condition to the check to ensure that the model's accuracy is not less than 1.2, and runs the check. The accuracy of the model is then printed.

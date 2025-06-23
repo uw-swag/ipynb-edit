@@ -1,0 +1,73 @@
+<Cell_0>
+import sys #Import from the folder above
+sys.path.append("..")
+
+import collect_air_data
+import time
+
+air_data = collect_air_data.collect_air_object()
+#Manage relative values of PMS here
+pms_ref_0_3 = air_data.pms_ref_0_3
+pms_ref_0_5 = air_data.pms_ref_0_5
+pms_ref_1_0 = air_data.pms_ref_1_0
+<\Cell_0>
+<Cell_1>
+#The pms5003 is a particle sensor
+pms5003_data = air_data.pms5003.read()
+print(pms5003_data.pm_per_1l_air(0.3),pms5003_data.pm_per_1l_air(0.3)/pms_ref_0_3)
+print(pms5003_data.pm_per_1l_air(0.5),pms5003_data.pm_per_1l_air(0.5)/pms_ref_0_5)
+print(pms5003_data.pm_per_1l_air(1.0),pms5003_data.pm_per_1l_air(1.0)/pms_ref_1_0)
+print(pms5003_data.pm_per_1l_air(2.5))
+print(pms5003_data.pm_per_1l_air(5.0))
+print(pms5003_data.pm_per_1l_air(10.0))
+<\Cell_1>
+<Cell_2>
+air_data.pms5003.read()
+<\Cell_2>
+<Cell_3>
+print(air_data.gas_gmxxxb.getGM102B_volts())
+print(air_data.gas_gmxxxb.getGM302B_volts())
+print(air_data.gas_gmxxxb.getGM502B_volts())
+print(air_data.gas_gmxxxb.getGM702B_volts())
+<\Cell_3>
+<Cell_4>
+while True:
+    if air_data.bme_680.get_sensor_data():
+        output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
+            air_data.bme_680.data.temperature,
+            air_data.bme_680.data.pressure,
+            air_data.bme_680.data.humidity)
+        #Only print gas data if the heater is stable
+        if air_data.bme_680.data.heat_stable:
+            print('{0},{1} Ohms'.format(
+                output,
+                air_data.bme_680.data.gas_resistance))
+            break
+        else:
+            print(output)
+    time.sleep(1)
+<\Cell_4>
+<Cell_5>
+print(air_data.bme_680.get_sensor_data().gas_resistance)
+print(air_data.bme_680.get_sensor_data().gas_volts)
+print(air_data.bme_680.get_sensor_data().gas_rel)
+<\Cell_5>
+<Cell_6>
+air_data.analog_temp()
+<\Cell_6>
+<Cell_7>
+print(air_data.analog_voc_ratio())
+print(air_data.analog_alcohol_ratio())
+print(air_data.GM102B_ratio())
+print(air_data.GM302B_ratio())
+print(air_data.GM502B_ratio())
+print(air_data.GM702B_ratio())
+<\Cell_7>
+<Cell_8>
+#Reset all the reference values to their current value
+pms5003_data = air_data.pms5003.read()
+pms_ref_0_3 = pms5003_data.pm_per_1l_air(0.3)
+pms_ref_0_5 = pms5003_data.pm_per_1l_air(0.5)
+pms_ref_1_0 = pms5003_data.pm_per_1l_air(1.0)
+air_data.reset_ref_values()
+<\Cell_8>

@@ -1,0 +1,30 @@
+```python
+    # importing all existing checks for demonstration simplicity
+    from deepchecks.checks import *
+    from deepchecks import Suite
+    from sklearn.metrics import precision_score, recall_score, make_scorer
+
+    # The Suite's first argument is its name, and then all of the check objects.
+    # Some checks can receive arguments when initialized (all check arguments have default values)
+    # Each check can have an optional condition(/s)
+    # Multiple conditions can be applied subsequentially
+    new_custom_suite = Suite('Simple Suite For Model Performance',
+        ModelInfo(),
+        # use custom scorers for performance report:
+        PerformanceReport().add_condition_train_test_relative_degradation_not_greater_than(threshold=0.15\
+                     ).add_condition_test_performance_not_less_than(0.8),
+        ConfusionMatrixReport(),
+        SimpleModelComparison(simple_model_type='constant', \
+                              alternative_scorers={'Recall (Multiclass)': make_scorer(recall_score, average=None), \
+                                                   'Precision (Multiclass)': make_scorer(precision_score, average=None)} \
+                             ).add_condition_gain_not_less_than(0.3)
+    )
+    # Let's see the suite:
+    new_custom_suite
+    ```
+
+    The above code is a demonstration of how to create a custom suite for model performance using DeepChecks. The suite includes checks for model information, performance report, confusion matrix report, and simple model comparison. The suite is then run on a random forest classifier model.
+
+    The suite can be modified by removing checks, adding new checks, or modifying existing ones. The suite can also be renamed and run on a different model.
+
+    Please note that the code provided is a demonstration and may not work as expected in a real-world scenario.

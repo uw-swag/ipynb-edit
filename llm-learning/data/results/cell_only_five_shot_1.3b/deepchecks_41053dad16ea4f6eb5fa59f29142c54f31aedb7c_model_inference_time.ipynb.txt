@@ -1,0 +1,23 @@
+```
+    # Update dataset properties
+
+    # Import necessary libraries
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import AdaBoostClassifier
+    from databricks_datasets import Dataset
+
+    # Load dataset
+    iris = load_iris(as_frame=True)
+
+    # Split dataset into training and testing sets
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    # Create dataset objects
+    train_ds = Dataset(train, features=iris.feature_names, label='target')
+    test_ds = Dataset(test, features=iris.feature_names, label='target')
+
+    # Train AdaBoost classifier
+    clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+    ```
+    This code updates the dataset properties by loading the iris dataset, splitting it into a training and testing set, and creating dataset objects. The AdaBoost classifier is then trained on these datasets.

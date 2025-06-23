@@ -1,0 +1,28 @@
+```
+    // For rendering plots in Jupyter Notebook
+    import io.github.spencerpark.ijava.IJava;
+
+    IJava.getKernelInstance().getRenderer()
+        .createRegistration(tech.tablesaw.plotly.components.Figure.class)
+        .preferring(io.github.spencerpark.jupyter.kernel.display.mime.MIMEType.TEXT_HTML)
+        .register((figure, ctx) -> {
+            ctx.renderIfRequested(io.github.spencerpark.jupyter.kernel.display.mime.MIMEType.TEXT_HTML, () -> {
+                String id = UUID.randomUUID().toString().replace("-", "");
+                boolean plotImage = System.getenv().containsKey("D2L_PLOT_IMAGE");
+
+                figure.asJavascript(id);
+                Map<String, Object> context = figure.getContext();
+                StringBuilder html = new StringBuilder();
+                html.append("<img id=\"").append(id).append("-img\"></img>\n");
+                html.append("<div id=\"").append(id).append("\"></div>\n");
+                html.append("<script>require(['https://cdn.plot.ly/plotly-1.57.0.min.js'], Plotly => {\n");
+                if (!plotImage) {
+                    // render javascript
+                    html.append("var ").append(context.get("targetName")).append(" = document.getElementById('").append(id).append("');\n");
+                } else {
+                    // render image
+                    html.append("var ").append(context.get("targetName")).append(" = document.createElement(\"div\");\n");
+                    html.append("var d3 = Plotly.d3;\n");
+                    html.append("var img_jpg= d3.select(\"#").append(id).append("-img\");\n");
+                    String plotFunction = (String) context.get("plotFunction");
+                    String imgExt = ".then(function(gd) { Plotly.toImage(g

@@ -1,0 +1,37 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#300)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+
+from deepchecks import Dataset
+from deepchecks.checks import TrainTestFeatureDrift
+import pprint
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+np.random.seed(42)
+
+train_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=['apple', 'orange', 'banana'], p=[0.5, 0.3, 0.2], size=(1000, 2))], axis=1)
+test_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=['apple', 'orange', 'banana'], p=[0.5, 0.3, 0.2], size=(1000, 2))], axis=1)
+
+df_train = pd.DataFrame(train_data, columns=['numeric_without_drift', 'numeric_with_drift', 'categorical_without_drift', 'categorical_with_drift'])
+df_test = pd.DataFrame(test_data, columns=df_train.columns)
+
+df_train = df_train.astype({'numeric_without_drift': 'float', 'numeric_with_drift': 'float'})
+df_test = df_test.astype({'numeric_without_drift': 'float', 'numeric_with_drift': 'float'})
+
+df_train['target'] = np.random.randint(0, 2, size=(df_train.shape[0],))
+df_test['target'] = np.random.randint(0, 2, size=(df_test.shape[0],))
+
+train_dataset = Dataset(df_train, label_name

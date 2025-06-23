@@ -1,0 +1,28 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Added Data Science Practical 03 "Data Wrangling""
+    Original Code Cells:
+    '''
+    import pandas as pd
+    from pyspark.sql import SparkSession
+
+    spark = SparkSession.builder.getOrCreate()
+
+    # Load data
+    data = spark.read.json('data.json')
+
+    # Data Wrangling
+    data = data.drop('unwanted_column')
+
+    # Write data back to disk
+    data.write.json('new_data.json')
+    '''
+    ]
+
+    ### Response:
+    The code you've provided is a simple example of data wrangling in Spark using PySpark. The code first loads data from a JSON file, then drops a column from the data, and finally writes the data back to a new JSON file.
+
+    Please note that the code assumes that the JSON file 'data.json' exists and contains a column named 'unwanted_column'. If these assumptions are not true, the code will throw an error.
+
+    Also, please note that the SparkSession is being created in the SparkSession builder, which is a common pattern in Spark. If you're not using Spark, you'll need to create a SparkSession object yourself.

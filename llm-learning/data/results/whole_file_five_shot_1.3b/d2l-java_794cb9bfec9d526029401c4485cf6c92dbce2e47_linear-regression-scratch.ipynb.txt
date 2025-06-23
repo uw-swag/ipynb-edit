@@ -1,0 +1,48 @@
+```
+    The code you provided has several typos and mistakes. Here's the corrected version:
+
+    ```python
+    %maven ai.djl:api:0.8.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+
+    %maven ai.djl.mxnet:mxnet-engine:0.8.0
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-backport
+
+    %loadFromPOM
+    <dependency>
+        <groupId>tech.tablesaw</groupId>
+        <artifactId>tablesaw-jsplot</artifactId>
+        <version>0.38.1</version>
+    </dependency>
+
+    import ai.djl.Device;
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.ndarray.index.*;
+    import ai.djl.ndarray.types.DataType;
+
+    import tech.tablesaw.api.*;
+    import tech.tablesaw.plotly.api.*;
+    import tech.tablesaw.plotly.components.*;
+
+    class DataPoints {
+        private NDArray X, y;
+        public DataPoints(NDArray X, NDArray y) {
+            this.X = X;
+            this.y = y;
+        }
+
+        public NDArray getX() {
+            return X;
+        }
+
+        public NDArray getY() {
+            return y;
+        }
+    }
+
+    public DataPoints syntheticData(NDManager manager, NDArray w, float b, int numExamples) {
+        NDArray X = manager.randomNormal(new Shape(numExamples, w.size()));
+        NDArray y = X.dot(w).add(b);
+        y = y.add(manager.randomNormal(0, 0.01f, y.getShape(), DataType.FLOAT32, Device.

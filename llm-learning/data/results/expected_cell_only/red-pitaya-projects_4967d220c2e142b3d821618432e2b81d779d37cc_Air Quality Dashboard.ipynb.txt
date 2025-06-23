@@ -1,0 +1,47 @@
+df = pd.DataFrame() #Create an empty data frame to append to later
+#timestamp = df.size
+def animate(i):
+    global df
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    latest_temp=temp()[0]
+    voc_volt = voc_air_pin.read()
+    voc_gas = voc_volt/(5.0)
+    #Scale the result to be between 2.0 and 30.0 to keep on a similar scale to temperature
+    voc_ratio = (voc_gas/voc_air)*28
+    Alcohol_volt = ANALOG_Alcohol_pin.read()
+    Alcohol_gas = Alcohol_volt/(5.0-Alcohol_volt)
+    #Scale the result to be between 2.0 and 30.0 to keep on a similar scale to temperature
+    Alcohol_ratio = (1/(Alcohol_gas/2.32))*1.5
+    clear_output(wait=True)
+    clean_data_table['Temperature (oC)'] = [latest_temp]
+    clean_data_table['VOC in Air'] = [voc_ratio]
+    clean_data_table['Alcohol in Air'] = [Alcohol_ratio]
+#    clean_data_table['Date'] = [datetime.now()]
+    timestamp = df.size
+    timestamp = 2
+    df = df.append(clean_data_table, ignore_index = True)
+    df.index.name = 'timestamp'
+    
+    #x = df['Date']
+    x = df.index
+    y1 = df['Temperature (oC)']
+    y2 = df['VOC in Air']
+    y3 = df['Alcohol in Air']
+    
+    plt.cla()
+    plt.plot(x,y1,label='Temperature (oC)')
+    plt.plot(x,y2,label='VOC in Air')
+    plt.plot(x,y3,label='Alcohol in Air')
+    plt.xlabel('Time')
+    plt.ylabel('Temprature (C)')
+    plt.title("Office Temperature")
+    plt.gcf().autofmt_xdate()
+    plt.ticklabel_format(useOffset=False,axis='y')
+#    plt.legend()
+    plt.show()
+    
+ani = FuncAnimation(plt.gcf(), animate,interval=2000,save_count=850)
+plt.show()
+df.index.name = 'timestamp'
+filename = "CSV-Data/Whiskey " + str(datetime.now()) + ".csv"
+df.to_csv(filename)

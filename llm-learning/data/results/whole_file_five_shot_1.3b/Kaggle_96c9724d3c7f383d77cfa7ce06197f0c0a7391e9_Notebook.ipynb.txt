@@ -1,0 +1,22 @@
+
+    The code you've provided is grouping salaries according to the 'Year' column. The 'Year' column is a categorical variable and it's grouped into 10 bins. The 'TotalPay' column is a numerical variable and it's grouped into 10 bins. The 'Status' column is a categorical variable and it's grouped into 'FT' and 'PT' categories.
+
+    The code also calculates the average, maximum, and minimum salary for each category of 'Status' and 'Year'. It also counts the total number of unique job titles and the top 10 most common job titles. The code also creates a bar chart showing the most common job titles.
+
+    However, the code you've provided is incomplete and there are no data frames or columns named 'Salaries.csv' or 'Status' in the data. Please make sure to replace these with the correct data source and column names.
+
+    Also, the code you've provided is using Bokeh for creating a bar chart, but it's not included in the provided code. If you want to create a bar chart, you can use the following code:
+
+    ```python
+    top10 = data['JobTitle'].value_counts()[:10]
+
+    hover = HoverTool(
+        tooltips = [
+            ('Job Title','$x'),
+        ]
+    )
+    bar = Bar(top10, title = "Most Common Jobs in the SF Area",legend=False,tools =[hover,'crosshair','resize'])
+    show(bar)
+    ```
+
+    This code will create a bar chart with the top 10 most common job titles.

@@ -1,0 +1,39 @@
+
+    '''
+<Cell_3>
+# Affiche le nombre de pays contenus dans chaque liste
+print(f'Nombre de pays :')
+print(f'- CAH : {len(pays_retenus_cah)}')
+print(f'- k-means : {len(pays_retenus_kmeans)}')
+<\Cell_3>
+<Cell_4>
+# Affiche les différences entre les liste
+pays_differents = ((pays_retenus_cah-pays_retenus_kmeans)
+                   .union(pays_retenus_kmeans-pays_retenus_cah))
+
+print(f'Les pays qui diffèrent sont : {pays_differents}')
+<\Cell_4>
+<Cell_5>
+# Affiche le nombre de pays à supprimer
+pays_a_supprimer = pd.DataFrame(
+    np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+df['label'] = df['x2'] + 0.1 * df['x1']
+
+check_instance = (
+    DatasetsSizeComparison()
+    .add_condition_train_dataset_not_smaller_than_test()
+    .add_condition_test_size_not_smaller_than(100)
+    .add_condition_test_train_size_ratio_not_smaller_than(0.2)
+)
+
+check_instance.run(train, test)
+<\Cell_5>
+<Cell_6>
+# Affiche les indicateurs pour les pays retenus
+df_pays_retenus.nlargest(
+    15, ['population_milliers_hab', 'tdi_pct', 'consommation_volaille_pct'])
+<\Cell_6>
+<Cell_7>
+# Affiche les différences entre les liste
+pays_differents = ((pays_retenus_cah-pays_retenus_kmeans)
+                   .union(pays_reten

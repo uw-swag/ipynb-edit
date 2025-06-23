@@ -1,0 +1,57 @@
+```python
+    import pandas as pd
+    from google.cloud import bigquery
+
+    def load_data_to_bq(file_path):
+        # Load data from CSV file
+        df = pd.read_csv(file_path)
+
+        # Create a BigQuery client
+        client = bigquery.Client()
+
+        # Get the table id from the file name
+        table_id = file_path.split('/')[-1].split('.')[0]
+
+        # Create a BigQuery table
+        table = client.create_table(df, f"`{table_id}`")
+
+        # Load data into the table
+        df.to_gbq(table_id, 'my_dataset', 'my_table', if_exists='replace')
+
+    if __name__ == "__main__":
+        load_data_to_bq('test_data/Dry_Beans_Dataset.csv')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "updated example notebook"
+    Original Code Cells:
+    '''
+    !python -m data.load_data_to_bq --project automlops-sandbox --file test_data/Dry_Beans_Dataset.csv
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import pandas as pd
+    from google.cloud import bigquery
+
+    def load_data_to_bq(file_path):
+        # Load data from CSV file
+        df = pd.read_csv(file_path)
+
+        # Create a BigQuery client
+        client = bigquery.Client()
+
+        # Get the table id from the file name
+        table_id = file_path.split('/')[-1].split('.')[0]
+
+        # Create a BigQuery table
+        table = client.create_table(df, f"`{table_id}`")
+
+        # Load data into the table
+        df.to_gbq(table_id, 'my_dataset', 'my_table', if_exists='replace')
+
+    if __name__ == "__main__":
+        load_

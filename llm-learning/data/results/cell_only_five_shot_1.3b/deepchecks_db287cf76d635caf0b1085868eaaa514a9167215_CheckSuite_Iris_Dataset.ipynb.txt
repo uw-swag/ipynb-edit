@@ -1,0 +1,36 @@
+```python
+    import pandas as pd
+import numpy as np
+np.random.seed(42)
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+# filter sklearn warning about all same label when playing with dataset structure
+from sklearn.exceptions import UndefinedMetricWarning
+import warnings
+warnings.filterwarnings('ignore', category=UndefinedMetricWarning) 
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+label_col = 'target'
+df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+rf_clf = RandomForestClassifier()
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+from deepchecks import Dataset
+# We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+
+ds_train = Dataset(df_train, label=label_col, cat_features=[])
+ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+from deepchecks.suites import overall_suite
+OverallSuite = overall_suite()
+# NBVAL_SKIP
+# set check_datasets_policy to 'both' so that for single dataset checks (e.g. some of the integrity checks),
+# both test and train will be checked
+
+# along with the training and test datasets we should supply a scikit-learn api model type
+# if we want many of the checks to be able to run
+
+OverallSuite.run(train_dataset=ds_train, test_dataset=ds_test, model=rf_clf, check_datasets_policy='both')
+# Lets have a look at all the checks and conditions so that we can edit them
+OverallSuite
+# Lets have a look at the conditions we want to change:
+OverallSuite

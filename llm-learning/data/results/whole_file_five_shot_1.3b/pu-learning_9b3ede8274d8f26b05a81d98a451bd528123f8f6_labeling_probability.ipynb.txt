@@ -1,0 +1,49 @@
+
+    Here's the updated code:
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from scar import load_scar
+
+train, valid, test = load_scar()
+
+train_x, _, train_s = train
+
+_clf = LogisticRegression(random_state=0).fit(train_x, train_s)
+
+from scar import C
+
+x_ = []
+y_ = []
+sample_weight = []
+
+train_x_l, train_x_u = [], []
+for train_x_i, train_s_i in zip(train_x, train_s):
+    if train_s_i == 1:
+        train_x_l.append(train_x_i)
+    else:
+        train_x_u.append(train_x_i)
+
+# use labeled data as positive
+for train_x_l_i in train_x_l:
+    x_.append(train_x_l_i)
+    y_.append(1)
+    w_p = 1
+    sample_weight.append(w_p)
+
+train_s_u_proba_hat = _clf.predict_proba(train_x_u)[:, 1]
+
+# use unlabeled data as positive
+for train_x_u_i, train_s_u_proba_hat_i in zip(train_x_u, train_s_u_proba_hat):
+    x_.append(train_x_u_i)
+    y_.append(1)
+    w_n = ((1 - C) / C) * (train_s_u_proba_hat_i / (1 - train_s_u_proba_hat_i))
+    sample_weight.append(w_n)
+
+# use unlabeled data as negative
+for train_x_u_i, train_s_u_proba_hat_i in zip(train_x_u, train_s_u_proba_hat):
+    x_.append(train_x_u_i)
+    y_.append(0)
+   

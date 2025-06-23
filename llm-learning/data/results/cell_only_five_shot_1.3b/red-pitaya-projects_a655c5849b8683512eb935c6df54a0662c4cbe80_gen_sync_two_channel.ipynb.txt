@@ -1,0 +1,34 @@
+```
+    from redpitaya.overlay.mercury import mercury as overlay
+
+    fpga = overlay()
+    gen0 = fpga.gen(0)
+    gen1 = fpga.gen(1)
+    gen0.amplitude = 1.0
+    gen0.offset = 0.0
+    gen0.waveform = gen0.sin()
+
+    gen1.amplitude = 1.0
+    gen1.offset = 0.0
+    gen1.waveform = gen1.sin()
+    gen0.waveform  # returns waveform normalized to range of [-1,1]
+    gen1.waveform  # returns waveform normalized to range of [-1,1]
+    gen0.mode = 'PERIODIC'
+    gen1.mode = 'PERIODIC'
+    gen0.frequency = 125000000/128
+    gen1.frequency = 125000000/128
+    print(gen0.frequency)
+    print(gen1.frequency)
+    gen1.sync_src = fpga.sync_src["gen0"]
+    gen1.phase = 90
+
+    gen0.start()
+    gen0.enable = True
+    gen1.enable = True
+    gen0.trigger()
+    gen0.enable = False
+    gen1.enable = False
+
+    ```
+
+    The code you provided is a simple example of using the Red Pitaya FPGA overlay library in Python. It creates two generators (`gen0` and `gen1`) and sets their waveforms, frequencies, and sync source. It then starts the generators and enables them. After a trigger, it disables the generators.

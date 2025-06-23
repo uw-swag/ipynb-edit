@@ -1,0 +1,42 @@
+```
+    ## Adding Fisher's Exact Test
+
+    ## Fisher's Exact Test
+    ## Fisher's Exact Test is a non-parametric test that is used to compare the proportions of successes in two independent groups.
+
+    ## Installing Fisher's Exact Test
+    !pip install scipy
+
+    ## Importing Fisher's Exact Test
+    from scipy.stats import fisher_exact
+
+    ## Creating a function to perform Fisher's Exact Test
+    def _fisher_exact(reference_data: pd.Series, current_data: pd.Series, _feature_type: str, threshold: float):
+        p_value = fisher_exact(np.array(reference_data), np.array(current_data))[1]
+        return p_value, p_value < threshold
+
+    ## Creating a StatTest object for Fisher's Exact Test
+    fisher_exact_stat_test = StatTest(
+        name="fisher_exact",
+        display_name="Fisher's Exact Test",
+        func=_fisher_exact,
+        allowed_feature_types=["num"]
+    )
+
+    ## Creating a DataDriftOptions object with Fisher's Exact Test
+    stat_test_option = DataDriftOptions(num_features_stattest=fisher_exact_stat_test)
+
+    ## Running the DataDriftTests with Fisher's Exact Test
+    data_drift_dataset_tests = TestSuite(tests=[
+        TestShareOfDriftedColumns(options=stat_test_option),
+    ])
+
+    data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+    data_drift_dataset_tests
+    ```
+    ## Adding Gamma Alumina File to Assets
+
+    ## Gamma Alumina is a type of alumina that is a compound of alumina and glycerol.
+
+    ## Adding Gamma Alumina File to Assets
+    ## You can add the Gamma Alum

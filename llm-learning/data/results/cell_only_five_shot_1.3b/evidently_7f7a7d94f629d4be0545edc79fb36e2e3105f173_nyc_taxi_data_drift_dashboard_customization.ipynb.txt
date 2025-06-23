@@ -1,0 +1,64 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+    import plotly.graph_objs as go
+    import numpy as np
+    import pandas as pd
+
+    # Sample Data
+    np.random.seed(0)
+    df = pd.DataFrame({
+        'x': np.random.randn(100).cumsum(),
+        'y': np.random.randn(100).cumsum()
+    })
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': [
+                    go.Scatter(
+                        x=df['x'],
+                        y=df['y'],
+                        mode='lines',
+                        marker={
+                            'size': 12,
+                            'color': 'rgba(54, 162, 235, 0.8)',  # color value should be in RGBA
+                            'line': {'width': 2}
+                        }
+                    )
+                ],
+                'layout': go.Layout(
+                    title='Data Drift Dashboard',
+                    colorway=["#FF0000", "#0000FF"],  # color scheme
+                    font=dict(
+                        color="black"
+                    )
+                )
+            }
+        ),
+        dcc.Markdown(
+            id='example-text',
+            children=[
+                "This is a text annotation."
+            ]
+        ),
+        dcc.Interval(
+            id='example-interval',
+            interval=1*1000,  # in milliseconds
+            n_intervals=0
+        )
+    ])
+
+    @app.callback(
+        Output('example-text', 'children'),
+        [Input('example-interval', 'n_intervals')]
+    )
+    def update_text(n):
+        return [
+            "The time interval has passed.",
+            dcc.Markdown(f"The time interval

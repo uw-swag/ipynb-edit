@@ -1,0 +1,32 @@
+```
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense
+    <\Cell_0>
+    <Cell_1>
+    df = pd.read_csv('your_data.csv')
+    df = df.dropna()
+    df = df.values
+    train = df[0:800]
+    test = df[800:1000]
+    training_set_x = train[:, 1:2]
+    training_set_y = train[:, 2:]
+    test_set_x = test[:, 1:2]
+    test_set_y = test[:, 2:]
+    training_set_x = np.reshape(training_set_x, (training_set_x.shape[0], 1, 1))
+    training_set_y = np.reshape(training_set_y, (training_set_y.shape[0], 1, 1))
+    test_set_x = np.reshape(test_set_x, (test_set_x.shape[0], 1, 1))
+    test_set_y = np.reshape(test_set_y, (test_set_y.shape[0], 1, 1))
+    <\Cell_1>
+    <Cell_2>
+    model = Sequential()
+    model.add(LSTM(units=50, return_sequences=True, input_shape=(1, 1)))
+    model.add(LSTM(units=50))
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.fit(training_set_x, training_set_y, epochs=100, batch_size=1, verbose=2)
+    <\Cell_2>
+    ```

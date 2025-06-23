@@ -1,0 +1,54 @@
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Adding comments to the code"
+    Original Code Cells:
+    '''
+    # This is a comment
+    with Hooks(learner.model, append_stats) as hooks: 
+
+    learner.fit_one_cycle(1, max_lr=max_lr, wd=wd)
+
+    # This is another comment
+    # Plot first 10 iterations.
+    fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 4))
+    for h in hooks[[0, 3, 6, 9]]:       # ConvLayer
+    # for h in hooks[[2, 5, 8, 11]]:    # BatchNorm Layer
+
+        # ms = means, ss = stds, _ = histogram
+        ms, ss, _ = h.stats
+        ax0.plot(ms[:10])
+        ax1.plot(ss[:10])
+        h.remove()
+    plt.legend(range(4))
+
+    # This is another comment
+    # Plot all
+    fig, (ax0, ax1) = plt.subplots(1, 2, figsize=(10, 4))
+    for h in hooks[[0, 3, 6, 9]]:       # ConvLayer
+    # for h in hooks[[2, 5, 8, 11]]:    # BatchNorm Layer
+        ms, ss, _ = h.stats
+        ax0.plot(ms)
+        ax1.plot(ss)
+    plt.legend(range(4))
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Adding docstrings to the code"
+    Original Code Cells:
+    '''
+    # This is a comment
+    with Hooks(learner.model, append_stats) as hooks: 
+
+    learner.fit_

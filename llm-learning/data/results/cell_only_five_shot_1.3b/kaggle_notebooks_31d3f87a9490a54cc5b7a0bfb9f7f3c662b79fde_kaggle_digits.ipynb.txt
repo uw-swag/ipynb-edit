@@ -1,0 +1,28 @@
+
+    '''
+    import keras as ks
+    from keras.models import Sequential, load_model, Model
+    from keras.optimizers import SGD, RMSprop
+    from keras.layers import Dense, Dropout, LSTM
+    from keras.layers import Activation, Flatten, Input, BatchNormalization
+    from keras.layers import Conv1D, MaxPooling1D, Conv2D, MaxPooling2D
+    from keras.layers.embeddings import Embedding
+    from keras.layers.advanced_activations import PReLU
+    from keras.callbacks import ModelCheckpoint
+    from keras.callbacks import EarlyStopping
+    df_train = pd.read_csv("kaggle_digits_train.csv")
+    df_test = pd.read_csv("kaggle_digits_test.csv")
+    df_train.shape
+    images = ["%s%s" %("pixel",pixel_no) for pixel_no in range(0,784)]
+    train_images = np.array(df_train[images])
+    train_images.shape
+    train_labels = df_train['label']
+    train_labels10 = np.array(ks.utils.to_categorical(train_labels, num_classes=10))
+    train_labels10.shape
+    test_images = np.array(df_test[images])
+    test_images.shape
+    test_images2 = test_images/255
+    train_images28 = np.array([np.reshape(x, (28, 28)) for x in train_images])
+    test_images28 = np.array([np.reshape(x, (28, 28)) for x in test_images])
+    train_images28n = train_images.reshape(train_images.shape[0], 28, 28, 1).astype('float32')
+    test_images28n = test_images.reshape(test_images.shape[0], 28, 28, 1).astype

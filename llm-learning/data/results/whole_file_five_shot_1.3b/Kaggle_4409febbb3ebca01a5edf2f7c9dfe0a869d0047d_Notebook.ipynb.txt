@@ -1,0 +1,52 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Visualized Total Pay"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+import seaborn as sns
+sns.set_style('darkgrid')
+matplotlib.rc('font', size=20)
+matplotlib.rc('axes', titlesize=20)
+matplotlib.rc('axes', labelsize=20)
+matplotlib.rc('xtick', labelsize=20)
+matplotlib.rc('ytick', labelsize=20)
+matplotlib.rc('legend', fontsize=20)
+matplotlib.rc('figure', titlesize=20)
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+data = pd.read_csv('Salaries.csv')
+data.head(2)
+<\Cell_1>
+<Cell_2>
+data.info()
+<\Cell_2>
+<Cell_3>
+data.drop(['Notes','Agency'],axis=1, inplace=True)
+data.head(2)
+<\Cell_3>
+<Cell_4>
+data['Total Pay'] = pd.to_numeric(data['Total Pay'], errors='coerce')
+data = data.dropna()
+<\Cell_4>
+<Cell_5>
+plt.figure(figsize=(15,8))
+sns.violinplot(x='Total Pay', data=data)
+plt.title('Distribution of Total Pay')
+plt.show()
+<\Cell_5>
+<Cell_6>
+plt.figure(figsize=(15,8))
+sns.boxplot(x='Total Pay', data=data)
+plt.title('Boxplot of Total Pay')
+plt.show()
+<\Cell_6>
+<Cell_7>
+plt.figure(figsize=(15,8))
+sns.histplot(x='Total Pay', data=data

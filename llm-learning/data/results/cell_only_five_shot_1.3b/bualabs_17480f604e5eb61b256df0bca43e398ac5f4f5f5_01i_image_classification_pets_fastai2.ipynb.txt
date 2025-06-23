@@ -1,0 +1,13 @@
+```python
+    item_tfms = RandomResizedCrop(480, min_scale=0.85, ratio=(1., 1.))
+    batch_tfms = [*aug_transforms(size=224, max_warp=0.15), Normalize.from_stats(*imagenet_stats)]
+    learn = cnn_learner(dls, resnet50, pretrained=True, metrics=error_rate).to_fp16()
+    learn.fit_one_cycle(4)
+    learn.save('01i-resnet50-stage1')
+    learn.unfreeze()
+    learn.lr_find()
+    learn.load('01i-resnet50-stage1')
+    learn.fit_one_cycle(4, lr_max=slice(3e-7, 3e-5))
+    learn.save('01i-resnet50-stage2')
+    learn.load('01i-resnet50-stage2')
+    ```

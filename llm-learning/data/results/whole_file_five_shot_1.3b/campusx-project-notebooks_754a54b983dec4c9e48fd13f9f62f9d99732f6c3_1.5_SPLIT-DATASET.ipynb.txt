@@ -1,0 +1,52 @@
+```
+    ## ♻️ Using `easy_analysis` package
+
+    # Importing the required libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from helpers.data import summary
+    from helpers import constants as C
+
+    # Setting pandas options to display all columns
+    pd.set_option("display.max_columns", None)
+
+    # Reading the csv file
+    main_df = pd.read_csv("data/processed/gurgaon_10k.csv").sort_values("PRICE", ignore_index=True)
+
+    # Printing the shape of the dataframe
+    print(main_df.shape)
+
+    # Printing the first 5 rows of the dataframe
+    main_df.head()
+
+    # Counting the number of duplicates in the 'PROP_ID' column
+    print(main_df["PROP_ID"].duplicated().sum())
+
+    # Printing the columns of the dataframe
+    print(main_df.columns)
+
+    # Counting the frequency of each property type
+    print(main_df["PROPERTY_TYPE"].value_counts())
+
+    # Defining a function to create a boxplot
+    def boxplot(df: pd.DataFrame) -> None:
+        _, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+        sns.boxplot(x=df["PRICE"], ax=ax1, color=C.LIGHT_GREEN)
+        sns.boxplot(x=df["AREA"], ax=ax2, color=C.SKY_BLUE)
+
+        plt.tight_layout()
+        plt.show()
+
+    # Dropping the columns
+    drop_cols = [
+        "SPID",
+        "TOTAL_LANDMARK_COUNT",
+        "LATITUDE",
+        "LONGITUDE",
+        "FACING",
+        "AGE",
+        "

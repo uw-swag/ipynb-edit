@@ -1,0 +1,42 @@
+```python
+    import math
+import numpy as np # linear algebra
+import pandas as pd
+
+import os
+import glob
+
+import pydicom
+
+from pathlib import Path
+from matplotlib import cm
+from matplotlib import pyplot as plt
+
+import fastai
+from fastai.vision import *
+start = 55   # Starting index of images
+num_img = 4 # Total number of images to show
+
+fig, ax = plt.subplots(nrows=1, ncols=num_img, sharey=True, figsize=(num_img*5,5))
+for q, file_path in enumerate(glob.glob(str(data_path2/'pneumothorax/dicom-images-train/*/*/*.dcm'))[start:start+num_img]):
+    dataset = pydicom.dcmread(file_path)
+    #show_dcm_info(dataset)
+    
+    ax[q].imshow(dataset.pixel_array, cmap=plt.cm.bone)
+
+start = 123   # Starting index of images
+num_img = 4 # Total number of images to show
+
+df = pd.DataFrame(data)
+print(df.shape)
+
+learn.lr_find()
+learn.recorder.plot()
+lr = 3e-2
+learn.fit_one_cycle(2, max_lr=lr, wd=1e-1, pct_start=0.8)
+learn.lr_find()
+learn.recorder.plot()
+lr = slice(1e-6, 3e-3)
+learn.fit_one_cycle(6, max_lr=lr, wd=1e-1, pct_start=0.7)
+
+    '''

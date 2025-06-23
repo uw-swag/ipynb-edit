@@ -1,0 +1,46 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    class ActorCritic(nn.Module):
+        def __init__(self, state_dim, action_dim, max_action):
+            super(ActorCritic, self).__init__()
+
+            self.fc1 = nn.Linear(state_dim, 400)
+            self.fc2_adv = nn.Linear(400, 200)
+            self.fc3_val = nn.Linear(400, 200)
+            self.fc_actor = nn.Linear(200, action_dim)
+
+            self.max_action = max_action
+
+        def forward(self, state):
+            a = torch.relu(self.fc1(state))
+            adv = torch.relu(self.fc2_adv(a))
+            val = torch.relu(self.fc3_val(a))
+            action = self.max_action * torch.tanh(self.fc_actor(a))
+
+            return action, adv, val
+
+    class ProximalPolicyOptimization(object):
+        def __init__(self, actor_critic, state_dim, action_dim, max_action, lr, gamma, iterations):
+            self.actor_critic = actor_critic
+            self.state_dim = state_dim
+            self.action_dim = action_dim
+            self.max_action = max_action
+            self.lr = lr
+            self.gamma = gamma
+            self.iterations = iterations
+
+            self.optimizer = optim.Adam(actor_critic.parameters(), lr=lr)
+
+        def select_action(self, state):
+            state = torch.Tensor(state.reshape(1, -1))
+            action, adv, val = self.actor_critic(state)
+            action = action.detach().numpy()
+
+            return action
+
+        def update(self, state, action, reward, next_state

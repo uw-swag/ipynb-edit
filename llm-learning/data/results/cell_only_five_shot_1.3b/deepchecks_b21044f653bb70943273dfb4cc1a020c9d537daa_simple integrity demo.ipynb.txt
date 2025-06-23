@@ -1,0 +1,27 @@
+```python
+    # Modifying categorical feature inference
+    # This is a placeholder for the actual code that modifies categorical feature inference
+
+    # Assuming that the original code is a function that takes a pandas DataFrame and a list of categorical features as input
+    # and returns a DataFrame with the categorical features modified
+
+    def modify_categorical_features(df, categorical_features):
+        for feature in categorical_features:
+            # Modify the feature here
+            df[feature] = df[feature].astype('category').cat.codes
+        return df
+
+    # Example usage:
+    df = pd.DataFrame({
+        'category_feature': ['a', 'b', 'c', 'a', 'b', 'c']
+    })
+
+    categorical_features = ['category_feature']
+
+    modified_df = modify_categorical_features(df, categorical_features)
+
+    print(modified_df)
+    ```
+
+    ### Explanation:
+    This function modifies a categorical feature in a pandas DataFrame. It converts the categorical feature to a numerical type using the `astype` function, and then converts it back to a categorical type using the `cat.codes` function. This is a simple example, but the actual modification of the categorical feature can be more complex depending on the specific requirements of the task.

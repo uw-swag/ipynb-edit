@@ -1,0 +1,47 @@
+```
+    import multiprocessing
+import json
+
+import numpy as np
+import pandas as pd
+
+import tensorflow as tf
+
+import ray
+from ray import tune
+
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+import gym
+
+n_cpus = multiprocessing.cpu_count()
+n_cpus
+n_gpus = len(tf.config.list_physical_devices('GPU'))
+n_gpus
+# initialize ray
+# https://ray.readthedocs.io/en/latest/package-ref.html#ray.init
+ray.init(ignore_reinit_error=True, log_to_driver=False, webui_host='0.0.0.0')
+
+# run one training iteration
+# https://github.com/ray-project/ray/blob/master/rllib/agents/ppo/ppo.py
+from ray.rllib.agents.ppo import PPOTrainer, DEFAULT_CONFIG
+
+env_name = 'CartPole-v1'
+
+ppo_config = DEFAULT_CONFIG.copy()
+if n_gpus:
+    ppo_config['num_gpus'] = n_gpus
+    ppo_config['tf_session_args']['device_count']['GPU'] = n_gpus
+
+ppo_config['num_workers'] = 1
+ppo_config['num_sgd_iter'] = 2
+ppo_config['sgd_minibatch_size'] = 128
+ppo_config['lr'] = 0.0003
+ppo_config['gamma'] = 0.99
+ppo_config['model']['fcnet_hiddens'] = [64, 64]
+ppo_config['timesteps_per_iteration'] = 2000
+ppo_config['train_batch_size'] = 8000
+ppo_config['num_cpus_per_worker'] = 0  # This avoids running out of resources in the notebook environment when this cell is re-executed
+
+agent = PPOTrainer(ppo_config, env_name)

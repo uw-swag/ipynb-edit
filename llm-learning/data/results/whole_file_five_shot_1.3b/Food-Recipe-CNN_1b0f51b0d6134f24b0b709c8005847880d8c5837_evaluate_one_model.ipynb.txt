@@ -1,0 +1,26 @@
+```python
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+    from sklearn.model_selection import cross_val_score
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.pipeline import make_pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    models = [
+        ("Logistic Regression", LogisticRegression()),
+        ("Random Forest", RandomForestClassifier()),
+        ("SVM", SVC(kernel='linear')),
+        ("KNN", KNeighborsClassifier()),
+        ("Naive Bayes", GaussianNB()),
+        ("Decision Tree", DecisionTreeClassifier())
+    ]
+
+    for name, model in models:
+        scores = cross_val_score(model, X, y, cv=5)
+        print(f"{name} Accuracy: {scores.mean()} ({scores.std()})")
+    ```
+    This script will compare the performance of different machine learning models on the same dataset. The `cross_val_score` function is used to perform 5-fold cross-validation on the dataset. The mean accuracy and standard deviation of the scores are then printed for each model.

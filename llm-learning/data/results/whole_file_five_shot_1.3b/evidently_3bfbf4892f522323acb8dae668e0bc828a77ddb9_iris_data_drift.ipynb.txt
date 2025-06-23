@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    from sklearn import datasets
+
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DriftTab
+
+    # Load Iris dataset
+    iris = datasets.load_iris()
+
+    # Create a DataFrame
+    iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+
+    # Create a Dashboard object with column_mapping set to None
+    iris_data_drift_report = Dashboard(iris_frame, iris_frame, column_mapping=None, tabs=[DriftTab])
+
+    # Show the Dashboard
+    iris_data_drift_report.show()
+
+    # Save the Dashboard to an HTML file
+    iris_data_drift_report.save('reports/iris_data_drift.html')
+    ```

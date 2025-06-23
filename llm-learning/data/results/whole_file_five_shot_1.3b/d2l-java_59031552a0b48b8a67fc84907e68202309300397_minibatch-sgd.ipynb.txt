@@ -1,0 +1,25 @@
+```python
+    from reco_utils.recommender.sgd.minibatch_sgd import MiniBatchSGD
+
+    class SARSingleNodeReference(SARSingleNode):
+        def __init__(self, **kwargs):
+            super(SARSingleNodeReference, self).__init__(**kwargs)
+            self.minibatch_sgd = MiniBatchSGD(
+                learning_rate=0.01,
+                minibatch_size=100,
+                shuffle=True,
+                **kwargs
+            )
+
+        def fit(self, data):
+            # Split the data into minibatches
+            minibatches = self.split_data(data, 100)
+
+            for epoch in range(self.epochs):
+                for minibatch in minibatches:
+                    # Update the model parameters
+                    self.minibatch_sgd.update(self, minibatch)
+
+            return self
+    ```
+    This code adds a new class `MiniBatchSGD` that inherits from the base class `SGD`. The `MiniBatchSGD` class implements the stochastic gradient descent algorithm with a mini-batch size. The `fit` method now uses the `minibatch_sgd.update` method to update the model parameters.

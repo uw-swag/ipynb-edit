@@ -1,0 +1,45 @@
+```python
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize
+    from nltk.stem import PorterStemmer
+    from nltk.stem import WordNetLemmatizer
+    from nltk.corpus import wordnet
+    import re
+    nltk.download('punkt')
+    nltk.download('wordnet')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('stopwords')
+
+    def get_wordnet_pos(treebank_tag):
+        if treebank_tag.startswith('J'):
+            return wordnet.ADJ
+        elif treebank_tag.startswith('V'):
+            return wordnet.VERB
+        elif treebank_tag.startswith('N'):
+            return wordnet.NOUN
+        elif treebank_tag.startswith('R'):
+            return wordnet.ADV
+        else:
+            return ''
+
+    def remove_stopwords(sentence):
+        stop_words = set(stopwords.words('english'))
+        word_tokens = word_tokenize(sentence)
+        filtered_sentence = [w for w in word_tokens if not w in stop_words]
+        return filtered_sentence
+
+    def stem_words(sentence):
+        ps = PorterStemmer()
+        word_tokens = word_tokenize(sentence)
+        stemmed_sentence = [ps.stem(w) for w in word_tokens]
+        return stemmed_sentence
+
+    def lemmatize_words(sentence):
+        lemmatizer = WordNetLemmatizer()
+        word_tokens = word_tokenize(sentence)
+        lemmatized_sentence = [lemmatizer.lemmatize(w, get_wordnet_pos(pos)) for w, pos in nltk.pos_tag(word_tokens)]
+        return lemmatized_sentence
+
+    # Example usage:
+    sentence = "This is a sample sentence for testing."

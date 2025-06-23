@@ -1,0 +1,58 @@
+```python
+    # Example 1: Simple Linear Regression
+    from sklearn.linear_model import LinearRegression
+    import numpy as np
+
+    # Generate some random data
+    X = np.random.rand(100, 1)
+    y = 2 + 3 * X + np.random.rand(100, 1)
+
+    # Create a Linear Regression model
+    model = LinearRegression()
+
+    # Fit the model to the data
+    model.fit(X, y)
+
+    # Predict the output for new data
+    X_new = np.array([[0.5]])
+    y_pred = model.predict(X_new)
+
+    print(f"Predicted output for X=0.5: {y_pred}")
+
+    # Example 2: Simple Logistic Regression
+    from sklearn.linear_model import LogisticRegression
+
+    # Generate some random data
+    X = np.random.rand(100, 1)
+    y = (X > 0.5).astype(int)
+
+    # Create a Logistic Regression model
+    model = LogisticRegression()
+
+    # Fit the model to the data
+    model.fit(X, y)
+
+    # Predict the output for new data
+    X_new = np.array([[0.5]])
+    y_pred = model.predict(X_new)
+
+    print(f"Predicted output for X=0.5: {y_pred}")
+
+    # Example 3: Simple Decision Tree
+    from sklearn.tree import DecisionTreeClassifier
+
+    # Generate some random data
+    X = np.random.rand(100, 1)
+    y = (X > 0.5).astype(int)
+
+    # Create a Decision Tree model
+    model = DecisionTreeClassifier()
+
+    # Fit the model to the data
+    model.fit(X, y)
+
+    # Predict the output for new data
+    X_new = np.array([[0.5]])
+    y_pred = model.predict(X_new)
+
+   

@@ -1,0 +1,31 @@
+
+    The import statement `import os` is used to import the `os` module, which is a built-in module in Python that provides a way to use operating system dependent functionality. In this case, it's used to access the current working directory.
+
+    Here's the full code:
+
+    ```python
+    from __future__ import division, print_function, unicode_literals
+
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+    plt.rcParams['axes.labelsize'] = 14
+    plt.rcParams['xtick.labelsize'] = 12
+    plt.rcParams['ytick.labelsize'] = 12
+
+    PROJECT_ROOT_DIR = "."
+    CHAPTER_ID = "end_to_end_project"
+
+    def save_fig(fig_id):
+        path = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID, fig_id + ".png")
+        print("Saving figure", fig_id)
+        plt.tight_layout()
+        plt.savefig(path, format='png', dpi=300)
+
+    # Import os module
+    import os
+
+    # Use os module to get the current working directory
+    print(os.getcwd())
+    ```
+
+    This code will print the current working directory to the console.

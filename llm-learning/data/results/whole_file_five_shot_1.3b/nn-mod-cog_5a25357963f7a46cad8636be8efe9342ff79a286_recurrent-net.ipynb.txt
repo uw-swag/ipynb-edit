@@ -1,0 +1,39 @@
+```
+    [
+    Commit Message: "LSTM; RNN and cognition"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import keras
+    from keras.models import Sequential
+    from keras.layers import LSTM, Dense
+    <\Cell_0>
+    <Cell_1>
+    s = pd.DataFrame({"MSE": [0.35, 0.15, 0.30, 0.27, 0.14, 0.40, 0.35, 0.12, 0.36, 0.31, 0.15, 0.32],
+                      "cycle": np.arange(1, 13)})
+    model = Sequential()
+    model.add(LSTM(50, activation='relu', input_shape=(1, 1)))
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mse')
+    model.fit(s.values, epochs=100, verbose=0)
+    <\Cell_1>
+    <Cell_2>
+    import numpy as np
+    x = np.array([[1],[1]])
+    W_l = np.array([[2, 2],
+                    [2, 2]])
+
+    h1 = np.tanh(W_l @ x)
+    h2 = np.tanh(W_l @ h1)
+    h3 = np.tanh(W_l @ h2)
+    h4 = np.tanh(W_l @ h3)
+    h5 = np.tanh(W_l @ h4)
+    y_hat = (W_l @ h5)
+    y_hat
+    <\Cell_2>
+    <Cell_3>
+    x = np.array([[1],[1]])
+    W_s = np.array([[0.02, 0.02],
+                    [0.02, 0.02]])

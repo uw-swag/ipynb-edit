@@ -1,0 +1,34 @@
+
+<Cell_25>
+# Fit model
+learn = create_unet_model(data)
+learn.fit_one_cycle(1, 1e-2)
+<\Cell_25>
+<Cell_26>
+# Dice loss
+dice_loss = DiceLoss()
+learn.loss_func = dice_loss
+<\Cell_26>
+<Cell_27>
+# Dice Metrics
+dice_metrics = DiceMetric()
+learn.metrics = dice_metrics
+<\Cell_27>
+<Cell_28>
+# Fit model
+learn.fit_one_cycle(1, 1e-2)
+<\Cell_28>
+<Cell_29>
+# Plotting the loss curve
+plt.plot(learn.recorder.loss_values)
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.show()
+<\Cell_29>
+<Cell_30>
+# Plotting the Dice Metrics
+plt.plot(learn.recorder.dice_values)
+plt.xlabel('Epoch')
+plt.ylabel('Dice')
+plt.show()
+<\Cell_30>

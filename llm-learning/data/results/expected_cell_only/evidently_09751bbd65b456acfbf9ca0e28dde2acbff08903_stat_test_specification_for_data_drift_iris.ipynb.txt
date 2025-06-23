@@ -1,0 +1,12 @@
+stat_test_option = DataDriftOptions(feature_stattest_func='wasserstein')
+stat_test_option = DataDriftOptions(feature_stattest_func=
+                                    {
+                                        'sepal length (cm)':'wasserstein',
+                                        'sepal width (cm)':'ks',
+                                        'petal length (cm)':'wasserstein',
+                                        'petal width (cm)':'ks',
+                                    }
+                                   )
+iris_data_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[stat_test_option])
+iris_data_drift_dashboard.calculate(iris_frame[:75], iris_frame[75:], column_mapping=None)
+iris_data_drift_dashboard.show()

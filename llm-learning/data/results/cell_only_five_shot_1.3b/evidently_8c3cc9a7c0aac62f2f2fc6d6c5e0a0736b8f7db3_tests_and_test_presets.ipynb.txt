@@ -1,0 +1,32 @@
+
+    Here is the modified code:
+
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    from datetime import datetime
+    from sklearn.datasets import fetch_openml
+
+    from evidently import ColumnMapping
+    from evidently.test_suite import TestSuite
+    from evidently.tests import *
+
+    from evidently.test_preset import NoTargetPerformanceTestPreset
+    from evidently.test_preset import DataQualityTestPreset
+    from evidently.test_preset import DataStabilityTestPreset
+    from evidently.test_preset import DataDriftTestPreset
+
+    feature_level_tests = TestSuite(tests=[
+        TestMeanInNSigmas(column_name='hours-per-week'),
+        TestShareOfOutRangeValues(column_name='hours-per-week'),
+        TestColumnShareOfMissingValues(column_name='education'),
+        TestColumnValueDrift(column_name='education'),
+        TestColumnValueRegExp(column_name='education', reg_exp=r"^\s+.*"),
+    ])
+
+    feature_level_tests.run(reference_data=ref, current_data=curr)
+    feature_level_tests
+    ```
+
+    The commit message "Rename some tests (#457)" was added to reflect the changes made to the test suite. The test suite was renamed to "feature_level_tests" to make it more descriptive.

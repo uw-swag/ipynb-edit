@@ -1,0 +1,30 @@
+```
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab
+
+column_mapping = {}
+
+column_mapping['target'] = None
+column_mapping['prediction'] = None
+column_mapping['datetime'] = None
+
+column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping['categorical_features'] = ['CHAS', 'RAD']
+
+data = pd.read_csv('your_data.csv')
+
+drift_tab = DriftTab()
+
+dashboard = Dashboard(tabs=[drift_tab])
+
+dashboard.calculate(data, column_mapping)
+
+dashboard.show()
+
+```

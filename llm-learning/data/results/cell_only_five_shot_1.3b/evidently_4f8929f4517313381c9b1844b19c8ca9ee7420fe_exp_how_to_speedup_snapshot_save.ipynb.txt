@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    from matplotlib import pyplot as plt
+    import matplotlib
+    %matplotlib inline
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    # Assuming you have a pandas DataFrame df
+    df = pd.DataFrame(np.random.rand(1000, 10), columns=list('ABCDEFGHIJ'))
+
+    # Save the DataFrame to a CSV file
+    df.to_csv('df_snapshot.csv', index=False)
+
+    # Now, let's load the DataFrame from the CSV file
+    df_snapshot = pd.read_csv('df_snapshot.csv')
+
+    # Now, the DataFrame df and df_snapshot are the same
+    print(df.equals(df_snapshot))  # Output: True
+
+    # The snapshot save speed up is that the DataFrame is saved to a CSV file,
+    # and the next time you load the DataFrame, it's loaded from the CSV file,
+    # not from the memory.
+    ```
+
+    This is a simple example of how to save a snapshot of a DataFrame to a CSV file and load it back. The snapshot save speed up is that the DataFrame is saved to a CSV file, and the next time you load the DataFrame, it's loaded from the CSV file, not from the memory.

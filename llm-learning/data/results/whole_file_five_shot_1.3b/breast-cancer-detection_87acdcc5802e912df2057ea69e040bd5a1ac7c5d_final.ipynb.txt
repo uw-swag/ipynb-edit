@@ -1,0 +1,15 @@
+```python
+    from xgboost import XGBClassifier
+
+    # Define the XGBoost classifier
+    xgb_clf = XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+
+    # Train the classifier
+    xgb_clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = xgb_clf.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    ```

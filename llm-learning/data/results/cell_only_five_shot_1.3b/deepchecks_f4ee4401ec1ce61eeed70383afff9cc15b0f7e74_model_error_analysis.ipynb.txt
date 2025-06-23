@@ -1,0 +1,29 @@
+```
+    %run ../common/import_all.py
+
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+    from pyspark import SparkConf, SparkContext                    
+    from mmtfPyspark.io import mmtfReader                                
+    from mmtfPyspark.webFilters import Pisces                        
+    from mmtfPyspark.datasets import groupInteractionExtractor
+    from mmtfPyspark.structureViewer import interaction_structure_viewer
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import py3Dmol
+    import time
+                                                               
+    # Create variables                                             
+    APP_NAME = "MMTF_Spark"                                        
+    path = "./resources/mmtf_full_sample/"                            
+                                                               
+    # Configure Spark                                              
+    conf = SparkConf().setAppName(APP_NAME).setMaster("local[*]")  
+    sc = SparkContext(conf=conf)                                   
+
+    df.plot(x='residue2', y='count', kind='bar')
+
+    ```

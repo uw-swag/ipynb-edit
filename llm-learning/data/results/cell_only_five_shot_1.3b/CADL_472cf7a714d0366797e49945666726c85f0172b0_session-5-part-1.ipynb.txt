@@ -1,0 +1,54 @@
+```python
+    while epoch_i < n_epochs:
+        if epoch_i % (n_files // batch_size) == 0:
+            batch_i = 0
+            epoch_i += 1
+            print('---------- EPOCH:', epoch_i)
+
+        batch_i += 1
+        batch_xs = sess.run(batch) / 255.0
+        real_cost, fake_cost, _ = sess.run([
+            loss_real, loss_fake, opt_enc],
+            feed_dict={
+                X: batch_xs,
+                is_training: True})
+        real_cost = -np.mean(real_cost)
+        fake_cost = -np.mean(fake_cost)
+
+        gen_update = True
+        dis_update = True
+
+        if real_cost > (equilibrium + margin) or \
+           fake_cost > (equilibrium + margin):
+            gen_update = False
+
+        if real_cost < (equilibrium - margin) or \
+           fake_cost < (equilibrium - margin):
+            dis_update = False
+
+        if not (gen_update or dis_update):
+            gen_update = True
+            dis_update = True
+
+        if gen_update:
+            sess.run(opt_gen, feed_dict={
+                X: batch_xs,
+                is_training: True})
+        if dis_update:
+            sess.run(opt_dis, feed_dict={
+                X: batch_xs,
+                is_training: True})
+
+        if batch_i % 50 == 0:
+            print('real:', real_cost, '/ fake:', fake_cost)
+
+            # Plot example reconstructions from latent layer
+            recon = sess.run(G, feed_dict={
+                    Z: zs,
+                    is_training: False})
+
+            recon = np.clip(recon, 0, 1)
+            m1 = utils.montage(recon.reshape([-1] + crop_shape),
+                    'imgs/manifold_%08d.png' % t_i)
+
+            # Plot

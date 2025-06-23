@@ -1,0 +1,23 @@
+```python
+    # Define the function to calculate the weight
+    def gifts(x):
+        if x == 'Gift1':
+            return 0.1
+        elif x == 'Gift2':
+            return 0.2
+        elif x == 'Gift3':
+            return 0.3
+        elif x == 'Gift4':
+            return 0.4
+        else:
+            return 0.5
+
+    # Apply the function to the 'type' column
+    data['weight'] = data['type'].apply(gifts)
+
+    # Calculate the ensemble average
+    ensemble_average = data['weight'].mean()
+    print(ensemble_average)
+    ```
+
+    This code will calculate the ensemble average of the 'weight' column. The 'weight' column is defined as a function of the 'type' column, and the function is defined as a dictionary where the keys are the 'type' values and the values are the corresponding weights. The ensemble average is then calculated as the mean of the 'weight' column.

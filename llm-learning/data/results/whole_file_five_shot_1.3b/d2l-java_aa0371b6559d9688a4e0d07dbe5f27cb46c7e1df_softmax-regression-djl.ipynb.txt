@@ -1,0 +1,42 @@
+```
+    import ai.djl.*;
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.nn.*;
+    import ai.djl.nn.core.*;
+    import ai.djl.training.*;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.listener.TrainingListener;
+    import ai.djl.training.evaluator.Accuracy;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+    import ai.djl.training.dataset.RandomAccessDataset;
+    import ai.djl.metric.*;
+    import ai.djl.util.*;
+
+    int batchSize = 256;
+    boolean randomShuffle = true;
+
+    RandomAccessDataset trainingSet = FashionMnistUtils.getDataset(Dataset.Usage.TRAIN, batchSize, randomShuffle);
+    RandomAccessDataset validationSet = FashionMnistUtils.getDataset(Dataset.Usage.TEST, batchSize, false);
+
+    public class ActivationFunction {
+        public static NDList softmax(NDList arrays) {
+            return new NDList(arrays.singletonOrThrow().logSoftmax(1));
+        }
+    }
+
+    NDManager manager = NDManager.newBaseManager();
+
+    Model model = Model.newInstance("softmax-regression");
+
+    SequentialBlock net = new SequentialBlock();
+    net.add(Blocks.batchFlattenBlock(28 * 28)); // flatten input
+    net.add(Linear.builder().setOutChannels(10).build()); // set 10 output channels
+
+    model.setBlock(net);
+
+    Loss loss = Loss.softmaxCrossEntropyLoss();
+
+    LearningRateTracker lrt = LearningRateTracker.fixedLearningRate(0.1f);
+   

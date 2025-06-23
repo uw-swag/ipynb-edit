@@ -1,0 +1,56 @@
+
+    Here is the updated code. I have merged the data processing and the existing notebooks.
+
+    The data processing part has been moved to the end of the code. The existing notebooks have been updated to reflect the changes.
+
+    The existing notebooks are:
+    - `scar.ipynb`
+    - `scar_v2.ipynb`
+    - `scar_v3.ipynb`
+
+    The updated notebooks are:
+    - `scar.ipynb`
+    - `scar_v4.ipynb`
+    - `scar_v5.ipynb`
+
+    The existing notebooks are updated to reflect the changes in the data processing part.
+
+    The data processing part of the code is:
+
+    ```python
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    from scar import C
+
+    train_x, _, train_s = train
+
+    x_ = []
+    y_ = []
+    sample_weight = []
+
+    train_x_l, train_x_u = [], []
+    for train_x_i, train_s_i in zip(train_x, train_s):
+        if train_s_i == 1:
+            train_x_l.append(train_x_i)
+        else:
+            train_x_u.append(train_x_i)
+
+    # use labeled data as positive
+    for train_x_l_i in train_x_l:
+        x_.append(train_x_l_i)
+        y_.append(1)
+        w_p = 1 / C
+        sample_weight.append(w_p)
+
+    # use labeled data as negative
+    for train_x_l_i in train_x_l:
+        x_.append(train_x_l_i)
+        y_.append(0)
+        w_n = 1 - (1 / C)
+        sample_weight.append(w_n)
+
+    # use unlabeled data as negative
+    for train_x_u_i in train_x_u:
+        x_.append(train_x_u_i)
+        y_.

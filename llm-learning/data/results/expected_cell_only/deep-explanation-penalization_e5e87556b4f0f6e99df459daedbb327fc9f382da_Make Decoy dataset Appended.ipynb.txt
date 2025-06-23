@@ -1,0 +1,8 @@
+def get_appended_dataset( dataset, stop_word):
+    # load test set
+    list_of_idx = np.arange(len(test))
+    list_of_idx = np.random.permutation(list_of_idx)
+    list_of_new_train_pos =[]
+    for i in tqdm_notebook(range(len(dev))):
+        list_of_new_train_pos.append(' '.join(test[i].text)+ ' '+' '.join(test[list_of_idx[i]].text))
+    return list_of_new_train_pos

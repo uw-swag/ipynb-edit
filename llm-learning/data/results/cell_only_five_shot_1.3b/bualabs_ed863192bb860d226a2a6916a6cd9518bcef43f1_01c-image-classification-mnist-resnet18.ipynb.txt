@@ -1,0 +1,26 @@
+```python
+    # Add credit to the MNIST website
+    # This is a simple example of how to do this.
+    # The credit is added to the footer of the website.
+
+    # First, we need to import the necessary libraries
+    import requests
+    from bs4 import BeautifulSoup
+
+    # Then, we can use the requests library to get the HTML of the MNIST website
+    url = "http://mnist.com"
+    response = requests.get(url)
+
+    # We can then use BeautifulSoup to parse the HTML
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # We can find the footer of the website and add the credit there
+    footer = soup.find('footer')
+    footer.append(requests.get(url).text)
+
+    # Finally, we can save the modified HTML to a file
+    with open('index.html', 'w') as f:
+        f.write(str(soup))
+    ```
+
+    This script will add the text of the MNIST website to the footer of the website. Please note that this is a very basic example and may not work for all websites. Also, the credit is added to the entire website, not just the footer. If you want to add the credit only to the footer, you would need to find a different way to do this.

@@ -1,0 +1,24 @@
+```python
+    from stattest import TestSuite, StatTest
+
+    class MyStatTest(StatTest):
+        def __init__(self, data):
+            super().__init__(data)
+
+        def test_mean(self):
+            return self.mean()
+
+        def test_median(self):
+            return self.median()
+
+        def test_mode(self):
+            return self.mode()
+
+    suite = TestSuite(MyStatTest, data)
+    suite.run()
+    ```
+    In this example, we're creating a custom test suite for a dataset. The `MyStatTest` class inherits from `StatTest`, which is a class that provides statistical tests. The `test_mean`, `test_median`, and `test_mode` methods are used to perform the statistical tests.
+
+    The `suite.run()` method is used to run the tests and print the results.
+
+    Please note that you need to replace `data` with your actual data.

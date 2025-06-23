@@ -1,0 +1,37 @@
+```python
+    # Importing essential libraries
+    import pandas as pd
+    import numpy as np
+    # Loading the dataset
+    df = pd.read_csv('ipl.csv')
+    df.columns
+    df.shape
+    df.dtypes
+    df.head()
+    df.columns
+    # Removing unwanted columns
+    columns_to_remove = ['mid', 'venue', 'batsman', 'bowler', 'striker', 'non-striker']
+
+    print('Before removing unwanted columns: {}'.format(df.shape))
+    df.drop(labels=columns_to_remove, axis=1, inplace=True)
+    print('After removing unwanted columns: {}'.format(df.shape))
+    df.columns
+    df.head()
+    df.index
+    df['bat_team'].unique()
+    consistent_teams = ['Kolkata Knight Riders', 'Chennai Super Kings', 'Rajasthan Royals',
+                        'Mumbai Indians', 'Kings XI Punjab', 'Royal Challengers Bangalore',
+                        'Delhi Daredevils', 'Sunrisers Hyderabad']
+    # Keeping only consistent teams
+    print('Before removing inconsistent teams: {}'.format(df.shape))
+    df = df[(df['bat_team'].isin(consistent_teams)) & (df['bowl_team'].isin(consistent_teams))]
+    print('After removing inconsistent teams: {}'.format(df.shape))
+    df['bat_team'].unique()
+    # Removing the first 5 overs data in every match
+    print('Before removing first 5 overs data: {}'.format(df.shape))
+    df = df[df['overs']>=5.0]
+    print('After removing first 5 overs data: {}'.format(df.shape))
+    # Converting the column 'date' from string into datetime object
+    from datetime import datetime
+    print("Before converting 'date' column from string to datetime object: {}".format(type(df.iloc[0,0])))
+    df['date'] = df['date'].apply(lambda x: datetime.strptime

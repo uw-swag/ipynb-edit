@@ -1,0 +1,50 @@
+```
+    [
+    Commit Message: "[docs] fix typos in docs (#828)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from typing import List, Optional, Union
+import dataclasses
+import pandas as pd
+
+from evidently.base_metric import InputData
+from evidently.base_metric import Metric
+from evidently.base_metric import MetricResult
+from evidently.model.widget import BaseWidgetInfo
+from evidently.renderers.base_renderer import MetricRenderer
+from evidently.renderers.base_renderer import default_renderer
+from evidently.renderers.html_widgets import CounterData
+from evidently.renderers.html_widgets import header_text
+from evidently.renderers.html_widgets import plotly_figure
+<\Cell_0>
+<Cell_1>
+class MyMetricResult(MetricResult):
+    sum_value: float
+<\Cell_1>
+<Cell_2>
+class MyMetric(Metric[MyMetricResult]):
+  column_name: str
+
+  def __init__(self, column_name: str):
+    self.column_name = column_name
+    super().__init__()
+
+  def calculate(self, data: InputData) -> MyMetricResult:
+    metric_value = data.current_data[self.column_name].sum()
+    return MyMetricResult(
+        sum_value = metric_value
+    )
+
+<\Cell_2>
+<Cell_3>
+@default_renderer(wrap_type=MyMetric)
+class MyMetricRenderer(MetricRenderer):
+    def render_json(self, obj: MyMetric) -> dict:
+        result = dataclasses.asdict(obj.get_result())
+        return result
+
+    def render_html(self, obj: MyMetric) -> List[BaseWidgetInfo]:
+        metric_result = obj.get_result()
+        return [
+            # helper function for visualisation. More options here https://github.com/evidentlyai/evidently/blob/fix/presets_parameters/src/evidently/renderers

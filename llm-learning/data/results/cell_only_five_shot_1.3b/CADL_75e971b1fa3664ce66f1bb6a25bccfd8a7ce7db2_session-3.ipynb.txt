@@ -1,0 +1,51 @@
+
+    '''
+    n_epochs = 10
+    batch_size = 200
+
+    sess = tf.Session()
+    sess.run(tf.initialize_all_variables())
+
+    for epoch_i in range(n_epochs):
+        print('Epoch: ', epoch_i)
+        
+        # Train
+        this_accuracy = 0
+        its = 0
+        for Xs_i, ys_i in ds.train.next_batch(batch_size):
+            this_accuracy += sess.run([accuracy, optimizer], feed_dict={
+                    X:Xs_i, Y:ys_i})[0]
+            its += 1
+            print(this_accuracy / its)
+        print('Training accuracy: ', this_accuracy / its)
+        
+        # Validation (see how the network does on unseen data).
+        this_accuracy = 0
+        its = 0
+        for Xs_i, ys_i in ds.valid.next_batch(batch_size):
+            # Note here: we are NOT running the optimizer!
+            # we only measure the accuracy!
+            this_accuracy += sess.run(accuracy, feed_dict={
+                    X:Xs_i, Y:ys_i})
+            its += 1
+        print('Validation accuracy: ', this_accuracy / its)
+
+    g = tf.get_default_graph()
+    W = sess.run(g.get_tensor_by_name('0/W:0'))
+    m = montage_filters(W)
+    plt.figure(figsize=(5, 5))
+    plt.imshow(m)
+    plt.imsave(arr=m, fname='audio-filters.png')
+    utils.build_submission('session-3.zip',
+                           ('recon.png',
+                            'sorted.png',
+                            'manifold.png',
+                            'audio-filters.png',
+                            'session-3.ipynb'))
+
+    '''
+    }
+    '''
+
+    ### Instruction:
+    [

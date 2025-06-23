@@ -1,0 +1,50 @@
+```python
+    # Description: This notebook will cover creating a recommender system using Collaborative Filtering.
+    # Inspired by: https://www.kaggle.com/tmdb/tmdb-movie-metadata
+
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics.pairwise import cosine_similarity
+    from scipy import sparse
+
+    # Load the data
+    movies = pd.read_csv('movies.csv')
+    ratings = pd.read_csv('ratings.csv')
+
+    # Merge the data
+    df = pd.merge(movies, ratings)
+
+    # Create a user-item matrix
+    user_item_matrix = df.pivot(index='userId', columns='title', values='rating').fillna(0)
+
+    # Compute the cosine similarity
+    similarity_matrix = cosine_similarity(user_item_matrix.T)
+
+    # Create a function to get recommendations
+    def recommendations(title, similarity_matrix=similarity_matrix):
+        idx = indices[title]
+        sim_scores = list(enumerate(similarity_matrix[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:11]
+        movie_indices = [i[0] for i in sim_scores]
+        return movies.iloc[movie_indices]
+    ```
+
+    ### End of Notebook
+    ```
+
+    ### Response:
+    ```python
+    # Description: This notebook will cover creating a recommender system using Content-Based Filtering.
+    # Inspired by: https://www.kaggle.com/tmdb/tmdb-movie-metadata
+
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics.pairwise import cosine_similarity
+    from scipy import sparse
+
+    # Load the data
+    movies = pd.read_csv('movies.csv')
+    ratings =

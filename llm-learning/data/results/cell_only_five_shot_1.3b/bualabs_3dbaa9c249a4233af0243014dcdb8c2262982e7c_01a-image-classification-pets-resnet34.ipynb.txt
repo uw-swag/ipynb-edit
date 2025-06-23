@@ -1,0 +1,42 @@
+```python
+    # Import necessary libraries
+    import fastbook
+    from fastbook import *
+    from fastai.vision.all import *
+    from fastai.vision.widgets import *
+
+    # Setup fastbook
+    fastbook.setup_book()
+
+    # Load the data
+    path = untar_data(URLs.PETS)
+    dogs = ImageClassifier.from_pretrained_resnet(path)
+
+    # Create a tabular widget
+    tabular_widget = widgets.Table(df, show_all=True)
+
+    # Create a file uploader
+    file_uploader = widgets.FileUpload()
+
+    # Create a button to trigger the image classification
+    btn_classify = widgets.Button(description='Classify Image')
+    btn_classify.on_click(lambda x: classify_image(file_uploader.value[0]))
+
+    # Display the widgets
+    display(tabular_widget, file_uploader, btn_classify)
+    ```
+    This code will create a new notebook with a file uploader, a table to display the results, and a button to trigger the image classification. The image classification function will take the path of the uploaded image as input and classify it.
+
+    Please note that you need to replace the `classify_image` function with your own implementation.
+
+    Also, this code assumes that you have a dataset of images of dogs. You may need to adjust the code to fit your specific needs.
+
+    The `fastbook` library is used for the notebook interface, and the `fastai` library is used for the image classification model.
+
+    The `ImageClassifier.from_pretrained_resnet` function is used to load the pre-trained ResNet34 model for image classification.
+
+    The `df` variable is a placeholder for the data you want to display in the table. You will need to replace it with your own data.
+
+    The `URLs.PETS` variable is a placeholder for the URL of the dataset you are using. You will need to replace it with the actual URL.
+
+    The `untar_data` function is used to download the dataset. You will need to replace it with your own implementation.

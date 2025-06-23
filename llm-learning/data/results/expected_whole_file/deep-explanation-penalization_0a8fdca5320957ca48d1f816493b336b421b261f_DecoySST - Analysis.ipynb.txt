@@ -1,0 +1,65 @@
+<Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+trained_model_folder = '../models/trained_models'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'annot' in fname]) 
+# other models were trained badly
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+
+results = results[results.which_adversarial == "annotated"]
+results = results.drop(columns = ['model_weights']) # don't want this because too big
+<\Cell_1>
+<Cell_2>
+
+results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]] # currently on test data - since not used for early stopping 
+results["final_cd"] = [x[-1] for x in results["explanation_divergence"]]
+results["final_test_loss"] = [x[-1] for x in results["losses_test"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+results.use_individual =results.use_individual.fillna(False)
+
+<\Cell_2>
+<Cell_3>
+results.columns
+<\Cell_3>
+<Cell_4>
+my_results = results[results.num_iters ==4]
+<\Cell_4>
+<Cell_5>
+my_results[[ 'Test Accuracy', 'final_train_loss', 'final_test_loss', 'signal_strength' ]].groupby(by = ['signal_strength']).mean()
+<\Cell_5>
+<Cell_6>
+plot = sns.scatterplot(x ='signal_strength' , y='Test Accuracy', data = my_results);
+plot.set_title("Regularizing with cd explanations");
+
+<\Cell_6>
+<Cell_7>
+plot = sns.regplot(x ='signal_strength' , y='final_test_loss', data = my_results[my_results.signal_strength <=100] );
+
+plot.set_title("Regularizing with cd explanations");
+
+<\Cell_7>
+<Cell_8>
+
+<\Cell_8>

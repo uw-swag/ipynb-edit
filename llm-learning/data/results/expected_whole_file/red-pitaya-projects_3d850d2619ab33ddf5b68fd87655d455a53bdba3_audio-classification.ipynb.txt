@@ -1,0 +1,121 @@
+<Cell_0>
+from redpitaya.overlay.mercury import mercury as overlay
+import IPython.display as ipd
+import matplotlib.pyplot as plt
+
+#Audio processing requirements
+import os
+import sys, getopt
+import signal
+import numpy as np
+from scipy.io import wavfile
+
+#Edge Impulse requirements
+import json
+import time, hmac, hashlib
+import requests
+import re, socket
+import math
+from edge_impulse_linux.runner import ImpulseRunner
+
+fpga = overlay()
+<\Cell_0>
+<Cell_1>
+in2 = fpga.osc(1, 1.0)
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+
+# trigger timing [sample periods]
+N = in2.buffer_size
+in2.trigger_pre  = 0
+in2.trigger_post = N
+
+# disable hardware trigger sources - the Jupyter notebook will trigger the start of audio recording
+in2.trig_src = 0
+<\Cell_1>
+<Cell_2>
+def record_audio():
+    # synchronization and trigger sources are the default,
+    # which is the module itself
+    in2.reset()
+    in2.start()
+    in2.trigger()
+    print ('Recording started')
+    # wait for data
+    while (in2.status_run()): pass
+    print ('Recording complete')
+    data = in2.data(N)
+    return data[1:] #Remove first sample as it maybe zero
+<\Cell_2>
+<Cell_3>
+def display_audio(audio_data,sr = 3000): #default sample rate 3 Ksps
+    return ipd.Audio(audio_data, rate=sr) # load a NumPy array
+<\Cell_3>
+<Cell_4>
+def plot_audio(audio_data):
+    # show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+    plt.plot(audio_data_returned)
+    plt.show()
+<\Cell_4>
+<Cell_5>
+def save_audio(audio_data, file='float_wave_test_raw.wav', sr = 3000): #default sample rate 3 Ksps
+    wavfile.write(file, sr, audio_data)
+<\Cell_5>
+<Cell_6>
+runner = None
+model_file_name = 'modelfile.eim'
+audio_file_name = 'float_wave_test_raw.wav'
+
+dir_path = os.path.dirname(os.path.realpath(model_file_name))
+modelfile = os.path.join(dir_path, model_file_name)
+audio_file = os.path.join(dir_path, audio_file_name)
+<\Cell_6>
+<Cell_7>
+samplerate, generator = wavfile.read(audio_file)
+
+features = np.array([], dtype=np.int16)
+runner = ImpulseRunner(modelfile)
+
+model_info = runner.init()
+labels = model_info['model_parameters']['labels']
+window_size = model_info['model_parameters']['input_features_count']
+sampling_rate = model_info['model_parameters']['frequency']
+print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
+print('labels: ', labels)
+print('window_size: ', window_size)
+print('sampling_rate: ', sampling_rate)
+<\Cell_7>
+<Cell_8>
+audio_data_returned = record_audio()
+save_audio(audio_data_returned, sr = 3000)
+
+samplerate, generator = wavfile.read(audio_file)
+features = np.array([], dtype=np.int16) #Reset features
+features = np.concatenate((features, generator), axis=0)
+
+#Reset the runner
+runner = None
+runner = ImpulseRunner(modelfile)
+model_info = runner.init()
+res = runner.classify(features[:window_size].tolist())
+
+#Show the classification key that has the highest confidence index
+best_label = max(res['result']['classification'], key=lambda key: res['result']['classification'][key])
+confidence = res['result']['classification'][best_label]
+print(best_label,"{:.2%}".format(confidence))
+<\Cell_8>
+<Cell_9>
+res
+<\Cell_9>
+<Cell_10>
+print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
+for label in labels:
+    score = res['result']['classification'][label]
+    print('%s: %.2f\t' % (label, score), end='')
+    print('', flush=True)
+<\Cell_10>
+<Cell_11>
+plot_audio(audio_data_returned)
+python_display_audio = display_audio(audio_data_returned, sr = 3000)
+python_display_audio
+<\Cell_11>

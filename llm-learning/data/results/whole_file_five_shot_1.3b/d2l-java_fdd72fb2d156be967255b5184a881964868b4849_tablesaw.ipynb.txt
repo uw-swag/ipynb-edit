@@ -1,0 +1,52 @@
+```
+    [
+    Commit Message: "fixed a few incorrect terms (#131)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import java.io.File;
+    import java.io.FileWriter;
+
+    File file = new File("../data/");
+    file.mkdir();
+
+    String dataFile = "../data/house_tiny.csv";
+
+    // Create file
+    File f = new File(dataFile);
+    f.createNewFile();
+
+    // Write to file
+    try (FileWriter writer = new FileWriter(dataFile)) {
+        writer.write("NumRooms,Alley,Price\n"); // Column names
+        writer.write("NA,Pave,127500\n");  // Each row represents a data example
+        writer.write("2,NA,106000\n");
+        writer.write("4,NA,178100\n");
+        writer.write("NA,NA,140000\n");
+    }
+    <\Cell_0>
+    <Cell_1>
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    <\Cell_1>
+    <Cell_2>
+    %%loadFromPOM
+    <dependency>
+        <groupId>tech.tablesaw</groupId>
+        <artifactId>tablesaw-jsplot</artifactId>
+        <version>0.38.1</version>
+    </dependency>
+    <\Cell_2>
+    <Cell_3>
+    import tech.tablesaw.api.*;
+
+    Table data = Table.read().file("../data/house_tiny.csv");
+    data
+    <\Cell_3>
+    <Cell_4>
+    import tech.tablesaw.columns.Column;
+
+    Table inputs = data.create(data.columns());
+    inputs.removeColumns("Price");
+    Table outputs = data.select("Price");

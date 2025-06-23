@@ -1,0 +1,54 @@
+```python
+    import pandas as pd
+    from datetime import datetime, timedelta
+
+    # Create a DataFrame with some data
+    data = {
+        'Date': pd.date_range(start='01-01-2020', periods=10),
+        'Value': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    }
+    df = pd.DataFrame(data)
+
+    # Add a new column to the DataFrame
+    df['New_Column'] = df['Value'] * 2
+
+    # Print the DataFrame
+    print(df)
+
+    # Create a new DataFrame with the same data but with a different column name
+    df_new = df.rename(columns={'Value': 'Old_Column'})
+
+    # Print the new DataFrame
+    print(df_new)
+
+    # Create a new DataFrame with the same data but with a different index
+    df_new = df.set_index('Date')
+
+    # Print the new DataFrame
+    print(df_new)
+
+    # Create a new DataFrame with the same data but with a different data type in a column
+    df_new = df.astype({'New_Column': 'float32'})
+
+    # Print the new DataFrame
+    print(df_new)
+
+    # Create a new DataFrame with the same data but with a different order of columns
+    df_new = df[['New_Column', 'Old_Column', 'Date']]
+
+    # Print the new DataFrame
+    print(df_new)
+
+    # Create a new DataFrame with the same data but with a different data type in a row
+    df_new = df.astype({'Date': 'str'})
+
+    # Print the new DataFrame
+    print(df_new)
+
+    # Create a new DataFrame with the same data but with a different data type in a row
+    df_new = df.astype({'Value': 'int64'})
+
+    # Print the new DataFrame
+    print(df_new)
+
+    # Create a new DataFrame

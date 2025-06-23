@@ -1,0 +1,72 @@
+data_integrity_dataset_tests = TestSuite(tests=[
+    TestNumberOfColumns(),
+    TestNumberOfRows(),
+    TestNumberOfNANs(),
+    TestNumberOfColumnsWithNANs(),
+    TestNumberOfRowsWithNANs(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfEmptyRows(),
+    TestNumberOfEmptyColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+])
+
+data_integrity_dataset_tests.run(reference_data=ref, current_data=curr)
+data_integrity_dataset_tests
+data_integrity_dataset_tests.json()
+data_integrity_dataset_tests.as_dict()
+data_quality_dataset_tests = TestSuite(tests=[
+    TestTargetPredictionCorrelation(),
+    TestHighlyCorrelatedFeatures(),
+    TestTargetFeaturesCorrelations(),
+    TestPredictionFeaturesCorrelations(),
+    TestCorrelationChanges(),
+])
+
+data_quality_dataset_tests.run(reference_data=ref, current_data=curr)
+data_quality_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestNumberOfDriftedFeatures(),
+    TestShareOfDriftedFeatures(),    
+])
+
+data_drift_dataset_tests.run(reference_data=ref, current_data=curr)
+data_drift_dataset_tests
+data_integrity_column_tests = TestSuite(tests=[
+    TestColumnNANShare(column_name='education'),
+    TestColumnAllConstantValues(column_name='education'),
+    TestColumnAllUniqueValues(column_name='education'),
+    TestColumnValueRegExp(column_name='education',reg_exp='^[0..9]')
+])
+
+data_integrity_column_tests.run(reference_data=ref, current_data=curr)
+data_integrity_column_tests
+data_quality_column_tests = TestSuite(tests=[
+    TestFeatureValueMin(column_name='education-num'),
+    TestFeatureValueMax(column_name='education-num'),
+    TestFeatureValueMean(column_name='education-num'),
+    TestFeatureValueMedian(column_name='education-num'),
+    TestFeatureValueStd(column_name='education-num'),
+    TestNumberOfUniqueValues(column_name='education'),
+    TestUniqueValuesShare(column_name='education'),
+    TestMostCommonValueShare(column_name='education'),
+    TestMeanInNSigmas(column_name='education-num'),
+    TestValueRange(column_name='education-num'),
+    TestNumberOfOutRangeValues(column_name='education-num'),
+    TestShareOfOutRangeValues(column_name='education-num'),
+    TestValueList(column_name='education'),
+    TestNumberOfOutListValues(column_name='education'),
+    TestShareOfOutListValues(column_name='education'),
+    TestValueQuantile(column_name='education-num', quantile=0.25),
+    TestShareOfOutListValues(column_name='education-num'),
+])
+
+data_quality_column_tests.run(reference_data=ref, current_data=curr)
+data_quality_column_tests
+data_drift_column_tests = TestSuite(tests=[
+    TestFeatureValueDrift(column_name='education-num')
+])
+
+data_drift_column_tests.run(reference_data=ref, current_data=curr)
+data_drift_column_tests

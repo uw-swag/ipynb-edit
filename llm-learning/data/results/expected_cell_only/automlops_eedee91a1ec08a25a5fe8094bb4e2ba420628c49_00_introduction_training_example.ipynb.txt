@@ -1,0 +1,96 @@
+MODEL_ID = 'dry-beans-dt'
+from google_cloud_automlops import AutoMLOps
+@AutoMLOps.pipeline #(name='automlops-pipeline', description='This is an optional description')
+def pipeline(
+    bq_table: str,
+    model_directory: str,
+    data_path: str,
+    project_id: str,
+    region: str):
+
+    create_dataset_task = create_dataset(
+        bq_table=bq_table,
+        data_path=data_path,
+        project_id=project_id)
+
+    train_model_task = train_model(
+        model_directory=model_directory,
+        data_path=data_path).after(create_dataset_task)
+
+    deploy_model_task = deploy_model(
+        model_directory=model_directory,
+        project_id=project_id,
+        region=region).after(train_model_task)
+import datetime
+pipeline_params = {
+    'bq_table': f'{PROJECT_ID}.test_dataset.dry-beans',
+    'model_directory': f'gs://{PROJECT_ID}-{MODEL_ID}-bucket/trained_models/{datetime.datetime.now()}',
+    'data_path': f'gs://{PROJECT_ID}-{MODEL_ID}-bucket/data.csv',
+    'project_id': f'{PROJECT_ID}',
+    'region': 'us-central1'
+}
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_ci=True,
+                   naming_prefix=MODEL_ID,
+                   schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)
+AutoMLOps.provision(hide_warnings=False)            # hide_warnings is optional, defaults to True
+AutoMLOps.deploy(precheck=True,                     # precheck is optional, defaults to True
+                 hide_warnings=False)               # hide_warnings is optional, defaults to True
+AutoMLOps.generate(project_id=PROJECT_ID, 
+                   pipeline_params=pipeline_params, 
+                   use_ci=True, 
+                   schedule_pattern='59 11 * * 0',
+                   naming_prefix=MODEL_ID,
+                   base_image='us-docker.pkg.dev/vertex-ai/training/tf-gpu.2-11.py310:latest', # includes required cuda pacakges
+                   custom_training_job_specs = [{
+                       'component_spec': 'train_model',
+                       'display_name': 'train-model-accelerated',
+                       'machine_type': 'a2-highgpu-1g',
+                       'accelerator_type': 'NVIDIA_TESLA_A100',
+                       'accelerator_count': 1
+                   }]
+)
+AutoMLOps.generate(project_id=PROJECT_ID, # required
+                   pipeline_params=pipeline_params, # required
+                   artifact_repo_location='us-central1', # default
+                   artifact_repo_name=None, # default
+                   artifact_repo_type='artifact-registry', # default
+                   base_image='python:3.9-slim', # default
+                   build_trigger_location='us-central1', # default
+                   build_trigger_name=None, # default
+                   custom_training_job_specs=None, # default
+                   deployment_framework='cloud-build', # default
+                   naming_prefix='automlops-default-prefix', # default
+                   orchestration_framework='kfp', # default
+                   pipeline_job_runner_service_account=None, # default
+                   pipeline_job_submission_service_location='us-central1', # default
+                   pipeline_job_submission_service_name=None, # default
+                   pipeline_job_submission_service_type='cloud-functions', # default
+                   provision_credentials_key=None, # default
+                   provisioning_framework='gcloud', # default
+                   pubsub_topic_name=None, # default
+                   schedule_location='us-central1', # default
+                   schedule_name=None, # default
+                   schedule_pattern='No Schedule Specified', # default
+                   source_repo_branch='automlops', # default
+                   source_repo_name=None, # default
+                   source_repo_type='cloud-source-repositories', # default
+                   storage_bucket_location='us-central1', # default
+                   storage_bucket_name=None, # default
+                   use_ci=False, # default
+                   vpc_connector='No VPC Specified', # default
+)
+from kfp.v2 import compiler, dsl
+from kfp.v2.dsl import Artifact, Dataset, Input, Metrics, Model, Output, OutputPath
+from google_cloud_automlops import AutoMLOps
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_ci=True,
+                   naming_prefix=MODEL_ID,
+                   schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)
+AutoMLOps.provision(hide_warnings=False)            # hide_warnings is optional, defaults to True
+AutoMLOps.deploy(precheck=True,                     # precheck is optional, defaults to True
+                 hide_warnings=False)               # hide_warnings is optional, defaults to True

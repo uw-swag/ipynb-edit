@@ -1,0 +1,59 @@
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "feat: Import necessary libraries and tools for data manipulation, visualization, and model evaluation"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.datasets import load_breast_cancer
+
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+
+from sklearn.neighbors import KNeighborsClassifier
+
+print(tuple(sorted(x.strip() for x in open("list.txt").readlines()))
+<\Cell_0>
+<Cell_1>
+cancer_dataset = load_breast_cancer()
+print(type(cancer_dataset))
+<\Cell_1>
+<Cell_2>
+print(cancer_dataset["feature_names"])
+<\Cell_2>
+<Cell_3>
+print(cancer_dataset["DESCR"])
+<\Cell_3>
+<Cell_4>
+print(cancer_dataset["target_names"])
+<\Cell_4>
+<Cell_5>
+print(cancer_dataset["target"])
+<\Cell_5>
+<Cell_6>
+print(cancer_dataset.corr())
+<\Cell_6>
+<Cell_7>
+print(cancer_dataset.corrwith(cancer_dataset.target).index)
+<\Cell_7>
+<Cell_8>
+print(cancer_dataset.corrwith(cancer_dataset.target).index)
+<\Cell_8>
+<Cell_9>
+print(cancer_dataset.corrwith(cancer_dataset.target).index)
+<\Cell_9>
+<Cell_10>
+print(cancer_dataset.corrwith(cancer_dataset.

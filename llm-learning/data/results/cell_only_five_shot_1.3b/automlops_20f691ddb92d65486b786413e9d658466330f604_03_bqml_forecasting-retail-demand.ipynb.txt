@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('demand_forecasting.csv')
+
+    # Preprocess the data
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+
+    # Split the data into train and test sets
+    train, test = train_test_split(df, test_size=0.2, random_state=42)
+
+    # Define the features and the target
+    features = ['temperature', 'humidity', 'wind_speed']
+    target = ['sales']
+
+    X_train = train[features]
+    y_train = train[target]
+    X_test = test[features]
+    y_test = test[target]
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    predictions = model.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, predictions))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, predictions))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+
+    # Plot the results
+    pd.DataFrame({'Actual': y_test, 'Predicted': predictions}).plot(kind='bar', figsize=(16,10))
+    ```

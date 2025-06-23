@@ -1,0 +1,41 @@
+```
+    // Refactoring and cleanup Chapter 7
+
+    // Remove unnecessary imports
+    import ai.djl.basicdataset.ArrayDataset;
+    import ai.djl.basicdataset.EasyTrain;
+    import ai.djl.basicdataset.Metrics;
+    import ai.djl.basicdataset.Trainer;
+    import ai.djl.modelzoo.Model;
+    import ai.djl.modelzoo.ModelZoo;
+    import ai.djl.translate.TranslateException;
+    import ai.djl.training.Evaluator;
+    import ai.djl.training.Trainer;
+    import ai.djl.training.metrics.Metrics;
+    import ai.djl.training.util.EasyTrain;
+
+    // Remove unnecessary variables
+    ArrayDataset trainIter;
+    ArrayDataset testIter;
+    int numEpochs;
+    Trainer trainer;
+
+    // Refactor the trainingChapter6 method
+    public void trainingChapter6(ArrayDataset trainIter, ArrayDataset testIter,
+                                 int numEpochs, Trainer trainer) throws IOException, TranslateException {
+
+        double avgTrainTimePerEpoch = 0;
+        Map<String, double[]> evaluatorMetrics = new HashMap<>();
+
+        trainer.setMetrics(new Metrics());
+
+        EasyTrain.fit(trainer, numEpochs, trainIter, testIter);
+
+        Metrics metrics = trainer.getMetrics();
+
+        trainer.getEvaluators().stream()
+                .forEach(evaluator -> {
+                    evaluatorMetrics.put("train_epoch_" + evaluator.getName(), metrics.getMetric("train_epoch_" + evaluator.getName()).stream()
+                            .mapToDouble(x -> x.getValue().doubleValue()).toArray());
+                    evaluatorMetrics.put("validate_epoch_" + evaluator.getName(), metrics.getMetric("validate_epoch_" + evaluator.getName()).stream()
+                            .mapToDouble(x -> x.getValue().doubleValue

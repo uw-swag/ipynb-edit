@@ -1,0 +1,48 @@
+```python
+    import gensim
+    from gensim.models import TfidfModel
+    from gensim.corpora import Dictionary
+    from nltk.tokenize import word_tokenize
+    from nltk.stem import PorterStemmer
+    from nltk.corpus import stopwords
+    import numpy as np
+    import pandas as pd
+    import re
+    from sklearn import svm
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.pipeline import Pipeline
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    # Loading the dataset
+    data = pd.read_csv('your_data.csv')
+    X = data['text']
+    y = data['label']
+
+    # Preprocessing the data
+    ps = PorterStemmer()
+    stop_words = set(stopwords.words('english'))
+
+    def preprocess(doc):
+        doc = re.sub(r'\W', ' ', str(doc))
+        doc = doc.lower()
+        doc = word_tokenize(doc)
+        doc = [ps.stem(word) for word in doc if not word in stop_words]
+        return doc
+
+    X = X.apply(preprocess)
+
+    # Creating the Bag of Words model
+    dictionary = Dictionary(X)
+    corpus = [dictionary.doc2bow(doc) for doc in X]
+    tfidf = TfidfModel(corpus)
+    corpus_tfidf = [tfidf[doc] for doc in corpus]
+
+    # Splitting the data
+    X_train, X_test, y_train, y_test = train_test_split(corpus_tfidf, y, test_size=0.2, random_state=42)
+
+    # Training the SVM model
+    clf = svm.SVC(kernel='linear')
+    clf.fit(X_train, y_train)
+
+    # Predicting the test set

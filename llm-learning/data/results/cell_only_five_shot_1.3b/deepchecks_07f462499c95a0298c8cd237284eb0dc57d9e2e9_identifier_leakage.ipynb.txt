@@ -1,0 +1,21 @@
+```python
+    import plotly.graph_objects as go
+
+    fig = go.Figure(data=[go.Scatter(x=df['x1'], y=df['x2'], mode='markers',
+                                    marker=dict(color=df['x5'], size=5,
+                                                colorscale='Viridis',
+                                                cmin=-1,
+                                                cmax=1,
+                                                label=df['label']))])
+
+    fig.update_layout(title='Scatter plot with colorbar',
+                      xaxis_title='x1',
+                      yaxis_title='x2',
+                      autosize=False,
+                      width=800,
+                      height=600)
+
+    fig.show()
+    ```
+
+    This code will create a scatter plot with the 'x5' values as the color and size of the points. The color scale is set to 'Viridis' and the colorbar will be included. The layout of the plot is also updated to include a title, x-axis title, y-axis title, and a size of 800x600. The plot is then displayed.

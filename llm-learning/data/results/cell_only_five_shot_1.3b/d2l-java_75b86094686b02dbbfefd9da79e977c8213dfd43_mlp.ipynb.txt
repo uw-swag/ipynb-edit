@@ -1,0 +1,49 @@
+```python
+    # Refactoring fixes Chapter 4 (#25)
+    # Original Code Cells:
+    '''
+    # Importing necessary libraries
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, precision_score, recall_score
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.cluster import KMeans
+    from sklearn.metrics import silhouette_score
+    from sklearn.decomposition import PCA
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import plotly.express as px
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    # Loading the dataset
+    df = pd.read_csv('/datasets/ab_test_data.csv')
+
+    # Data preprocessing
+    df.dropna(inplace=True)
+    df.drop(columns=['user_id'], inplace=True)
+
+    # Feature engineering
+    df['feature1'] = df['feature1'].fillna(df['feature1'].mean())
+    df['feature2'] = df['feature2'].fillna(df['feature2'].mean())
+
+    # Splitting the data into train and test sets
+    X = df.drop(columns=['target'])
+    y = df['target']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardizing the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Model training
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Model evaluation
+    y_pred = model.predict(X_test)
+    print('Accuracy:', accuracy_score

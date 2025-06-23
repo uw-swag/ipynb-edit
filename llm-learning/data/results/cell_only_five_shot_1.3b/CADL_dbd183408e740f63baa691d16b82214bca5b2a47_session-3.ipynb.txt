@@ -1,0 +1,10 @@
+
+The error you're encountering is because the `std()` function in Pandas DataFrame returns a Series, not a single number. To get a single number, you need to use the `values` attribute of the DataFrame. Here's how you can do it:
+
+```python
+std_img = ds.std().values[0]
+plt.imshow(std_img)
+print(std_img.shape)
+```
+
+This will convert the Series returned by `std()` into a single number, which you can then use for your image display.

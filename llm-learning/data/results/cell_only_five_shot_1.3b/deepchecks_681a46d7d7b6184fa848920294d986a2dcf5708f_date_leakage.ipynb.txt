@@ -1,0 +1,40 @@
+
+    Here's the refactored version of the code with the markdown formatting and error correction:
+
+    ```python
+    ## Checks for date leakage
+
+    The checks in this suite are designed to detect and prevent the occurrence of duplicate or overlapping dates in the training and validation datasets.
+
+    ### Steps
+
+    1. **DateTrainTestLeakageDuplicates**: This check will identify and report any instances where the same date is present in both the training and validation datasets.
+
+    2. **DateTrainTestLeakageOverlap**: This check will identify and report any instances where the same date is present in both the training and validation datasets, but the date is not unique.
+
+    ### Steps for refactoring
+
+    The steps for refactoring are as follows:
+
+    1. Rename the `Checksuite` to `Suite`.
+    2. Rename the `DateTrainTestLeakageDuplicates` to `DateDuplicates`.
+    3. Rename the `DateTrainTestLeakageOverlap` to `DateOverlap`.
+    4. Remove the redundant `n_to_show` parameter from the `DateDuplicates` check.
+
+    ### Refactored Code
+
+    ```python
+    from mlchecks.checks.leakage import DateOverlap, DateDuplicates
+    from mlchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, date_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, date=date_name)
+
+    train_ds = dataset_from_dict({'col1': [
+        datetime(2021, 10, 3, 0, 0),
+        datetime(2021, 10, 3, 0, 0),
+        datetime(2021, 10, 4, 0, 0),
+        datetime(2021, 10, 4, 0, 0),

@@ -1,0 +1,24 @@
+```
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+
+    import os
+    import subprocess
+
+    # List of notebook files
+    notebooks = ['notebook1.ipynb', 'notebook2.ipynb', 'notebook3.ipynb']
+
+    # Loop over notebooks
+    for notebook in notebooks:
+        # Run the notebook
+        subprocess.run(['jupyter', 'nbconvert', '--execute', notebook])
+
+    # Check for any errors
+    if os.path.exists('error.txt'):
+        with open('error.txt', 'r') as f:
+            error = f.read()
+            print(error)
+    else:
+        print('No errors found.')
+    ```
+    This script will run all the notebooks in the current directory and check for any errors. If there are any errors, it will print them to the console.

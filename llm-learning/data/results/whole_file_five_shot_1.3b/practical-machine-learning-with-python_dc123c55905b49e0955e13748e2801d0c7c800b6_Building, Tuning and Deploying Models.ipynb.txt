@@ -1,0 +1,44 @@
+```
+    [
+    Commit Message: "Uploading Spark assignment"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from pyspark.sql import SparkSession
+    from pyspark.ml.classification import LogisticRegressionModel
+    from pyspark.ml.evaluation import BinaryClassificationEvaluator
+
+    spark = SparkSession.builder.appName("HandsOnSpark").getOrCreate()
+
+    # Load the data
+    df = spark.read.format("libsvm").load("spark/mllib/sample_libsvm_data.txt")
+
+    # Split the data into training and test sets
+    (trainingData, testData) = df.randomSplit([0.7, 0.3])
+
+    # Train a Logistic Regression Model
+    lr = LogisticRegression(maxIter=10)
+    lrModel = lr.fit(trainingData)
+
+    # Make predictions on the test data
+    predictions = lrModel.transform(testData)
+
+    # Select (prediction, true label) and compute test error
+    evaluator = BinaryClassificationEvaluator()
+    testError = evaluator.evaluate(predictions)
+    print('Test Error = %g' % (1 - testError))
+
+    # Shutdown the Spark session
+    spark.stop()
+    '''
+    ]
+
+    ### Response:
+    The code provided is a Spark assignment. It uses PySpark, a Python library for Apache Spark, to perform a logistic regression on a dataset. The logistic regression model is trained on a dataset, and then the model is used to make predictions on a test dataset. The error rate of the predictions is calculated and printed.
+
+    Please note that this code requires a Spark environment to run. You can install Spark and PySpark using the instructions provided in the Spark documentation.
+
+    Also, the code assumes that the dataset is in a format that can be loaded into a Spark DataFrame. The dataset used in this example is a text file, but you can replace it with any other format that can be loaded into a Spark DataFrame.
+
+    Finally, please be aware that running this code will require a Sp

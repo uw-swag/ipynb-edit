@@ -1,0 +1,22 @@
+```
+    from deepchecks import Dataset
+
+# We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+# If the dataset has categorical features, the best practice is to pass a list with their names
+
+ds_train = Dataset(df_train, label=label_col, cat_features=[], use_index=False, date=None)
+ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+    ```
+
+    ### Explanation:
+    The code above is an example of how to create a DeepChecks dataset object. The `cat_features` parameter is used to specify the categorical features in the dataset. If the dataset has categorical features, the best practice is to pass a list with their names. If the dataset has no categorical features, the parameter can be left empty.
+
+    The `use_index` parameter is used to specify whether the dataset should use the index as a label. If the dataset has a date column, this parameter should be set to `False`.
+
+    The `date` parameter is used to specify the date column in the dataset. If the dataset has a date column, this parameter should be set to the name of the date column.
+
+    The `label` parameter is used to specify the label column in the dataset.
+
+    The `Dataset` function is used to create a dataset object. The first parameter is the dataframe, the second parameter is the label column, the third parameter is the list of categorical features, the fourth parameter is a boolean indicating whether to use the index as a label, and the fifth parameter is the name of the date column.
+
+    The dataset object is then used to perform various operations in the DeepChecks library.

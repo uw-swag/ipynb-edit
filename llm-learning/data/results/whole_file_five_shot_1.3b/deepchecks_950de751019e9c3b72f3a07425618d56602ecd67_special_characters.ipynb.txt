@@ -1,0 +1,33 @@
+```
+    # Fixing colab & notebook links
+    import os
+    import sys
+    sys.path.insert(0, '/opt/conda/lib/python3.7/site-packages')
+    os.environ['PATH'] = '/opt/conda/bin:' + os.environ.get('PATH', '')
+
+    !pip install nb_black
+    !nb_black --in-place --line-length 88 --target-version py36 --parallel-limit 4 --skip-string-normalization .
+
+    !jupyter nbextension enable --py widgetsnbextension
+    !jupyter nbextension enable --py ipympl
+    !jupyter nbextension enable --py plotlywidget
+    !jupyter nbextension enable --py rise
+    !jupyter nbextension enable --py execute_time
+    !jupyter nbextension enable --py celltags
+    !jupyter nbextension enable --py nbdime
+    !jupyter nbextension enable --py git_sync
+    !jupyter nbextension enable --py code_folding
+    !jupyter nbextension enable --py code_repl
+    !jupyter nbextension enable --py smart_colors
+    !jupyter nbextension enable --py metakit
+    !jupyter nbextension enable --py codecellmorph
+    !jupyter nbextension enable --py nbpresent
+    !jupyter nbextension enable --py spinner
+    !jupyter nbextension enable --py cellmagic
+    !jupyter nbextension enable --py pydoc
+    !jupyter nbextension enable --py pylab
+    !jupyter nbextension enable --py profiling
+    !jupyter nbextension enable --py ruler
+    !jupyter nbextension enable --py keyboard
+    !jupyter nbextension enable --py editortab
+    !jupyter nbextension enable --py

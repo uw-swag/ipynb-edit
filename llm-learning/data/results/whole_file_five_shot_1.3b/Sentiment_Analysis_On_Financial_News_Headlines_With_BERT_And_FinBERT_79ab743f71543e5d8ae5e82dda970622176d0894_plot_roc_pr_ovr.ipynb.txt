@@ -1,0 +1,43 @@
+```python
+    <Cell_0>
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+    import seaborn as sns; sns.set()
+    import numpy as np
+    <\Cell_0>
+    <Cell_1>
+    from skimage import data, color, feature
+    import skimage.data
+
+    image = color.rgb2gray(data.chelsea())
+    hog_vec, hog_vis = feature.hog(image, visualize=True)
+
+    fig, ax = plt.subplots(1, 2, figsize=(12, 6),
+                           subplot_kw=dict(xticks=[], yticks=[]))
+    ax[0].imshow(image, cmap='gray')
+    ax[0].set_title('input image')
+
+    ax[1].imshow(hog_vis)
+    ax[1].set_title('visualization of HOG features');
+    <\Cell_1>
+    <Cell_2>
+    from sklearn.datasets import fetch_lfw_people
+    faces = fetch_lfw_people()
+    positive_patches = faces.images
+    positive_patches.shape
+    <\Cell_2>
+    <Cell_3>
+    from skimage import data, transform
+
+    imgs_to_use = ['camera', 'text', 'coins', 'moon',
+                   'page', 'clock', 'immunohistochemistry',
+                   'chelsea', 'coffee', 'hubble_deep_field']
+    images = [color.rgb2gray(getattr(data, name)())
+              for name in imgs_to_use]
+    <\Cell_3>
+    <Cell_4>
+    from sklearn.feature_extraction.image import PatchExtractor
+
+    def extract_patches(img, N, scale=1.0, patch_size=positive_patches[0].shape):
+        extracted_patch_size = tuple((scale * np.array(patch_size)).astype(int))
+        extractor = PatchExtractor(patch_size=extracted

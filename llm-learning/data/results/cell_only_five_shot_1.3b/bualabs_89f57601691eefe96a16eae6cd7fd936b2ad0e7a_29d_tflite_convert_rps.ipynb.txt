@@ -1,0 +1,17 @@
+```python
+    import tensorflow as tf
+    import tensorflow_hub as hub
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Flatten, Conv2D, Concatenate
+
+    # Load the TFLite model.
+    model = tf.keras.models.load_model('rock_paper_scissors.tflite')
+
+    # Convert the model.
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model = converter.convert()
+
+    # Save the TFLite model.
+    with open('rock_paper_scissors.tflite', 'wb') as f:
+        f.write(tflite_model)
+    ```

@@ -1,0 +1,67 @@
+```python
+    # Example 1: Using the ALS model
+    from pyspark.ml.recommendation import ALS
+
+    # Create ALS model object
+    als = ALS(
+        rank=10,
+        maxIter=15,
+        implicitPrefs=False,
+        alpha=0.1,
+        regParam=0.05,
+        coldStartStrategy='drop',
+        nonnegative=True,
+        seed=0,
+        userCol="UserId",
+        itemCol="MovieId",
+        ratingCol="Rating"
+    )
+
+    # Fit the model
+    model = als.fit(df)
+
+    # Predict ratings for a user
+    user_prediction = model.transform(user_df)
+
+    # Example 2: Using the CountVectorizer
+    from pyspark.feature_extraction.text import CountVectorizer
+
+    # Create CountVectorizer object
+    vect = CountVectorizer(stop_words='english')
+
+    # Fit and transform the data
+    vect_df = vect.fit_transform(data)
+
+    # Example 3: Using the Logistic Regression model
+    from pyspark.ml.classification import LogisticRegression
+
+    # Create Logistic Regression model object
+    logreg = LogisticRegression(
+        family="binomial",
+        regParam=0.3,
+        elasticNetParam=0.8
+    )
+
+    # Fit the model
+    model = logreg.fit(df)
+
+    # Predict the labels
+    prediction = model.transform(user_df)
+
+    # Example 4: Using the Naive Bayes model
+    from pyspark.ml.classification import NaiveBayes
+
+    # Create Naive Bayes model object
+    nb = NaiveBayes(
+        modelType="multinomial",
+        featuresCol="features",
+        labelCol="label"
+    )
+
+    # Fit the model
+    model = nb.fit(df)
+
+    # Predict the labels
+    prediction = model.transform(user_df)
+
+    # Example 5: Using the

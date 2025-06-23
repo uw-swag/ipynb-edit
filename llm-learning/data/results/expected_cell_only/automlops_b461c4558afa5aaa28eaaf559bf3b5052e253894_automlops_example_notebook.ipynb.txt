@@ -1,0 +1,56 @@
+!pip3 install ../dist/AutoMLOps-1.0.1-py2.py3-none-any.whl --user
+AutoMLOps.makePipeline(
+    name="training-pipeline",
+    description="description", # optional
+    params=[
+        {"name": "bq_table", "type": str}, # descriptions are optional
+        {"name": "model_directory", "type": str, "description": "Description."},
+        {"name": "data_path", "type": str, "description": "Description."},
+        {"name": "project_id", "type": str, "description": "Description."},
+        {"name": "region", "type": str, "description": "Description."}
+    ],
+    pipeline=[{
+        "component_name": "create_dataset", "param_mapping": [
+            ("bq_table", "bq_table"), # (component_param_name, pipeline_param_name)
+            ("data_path", "data_path"),
+            ("project_id", "project_id")
+        ]
+    },
+    {
+        "component_name": "train_model", "param_mapping": [
+            ("model_directory", "model_directory"),
+            ("data_path", "data_path")
+        ]
+    },
+    {
+        "component_name": "deploy_model", "param_mapping": [
+            ("model_directory", "model_directory"),
+            ("project_id", "project_id"),
+            ("region", "region")
+        ]
+    }]
+)
+AutoMLOps.generate(project_id=PROJECT_ID, pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule_pattern='0 */12 * * *', cloud_tasks_queue_name='queueing-svc-test')
+AutoMLOps.go(project_id=PROJECT_ID, pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule_pattern='0 */12 * * *', cloud_tasks_queue_name='queueing-svc-test')
+AutoMLOps.go(project_id=PROJECT_ID, # required
+             pipeline_params=pipeline_params, # required
+             af_registry_location='us-central1', # default
+             af_registry_name='vertex-mlops-af', # default
+             cb_trigger_location='us-central1', # default
+             cb_trigger_name='automlops-trigger', # default
+             cloud_run_location='us-central1', # default
+             cloud_run_name='run-pipeline', # default
+             cloud_tasks_queue_location='us-central1', # default
+             cloud_tasks_queue_name='queueing-svc', # default
+             csr_branch_name='automlops', # default
+             csr_name='AutoMLOps-repo', # default
+             gs_bucket_location='us-central1', # default
+             gs_bucket_name=None, # default
+             pipeline_runner_sa=None, # default
+             run_local=True, # default
+             schedule_location='us-central1', # default
+             schedule_name='AutoMLOps-schedule', # default
+             schedule_pattern='No Schedule Specified', # default
+             use_kfp_spec=False, # default
+             vpc_connector= None # default
+)

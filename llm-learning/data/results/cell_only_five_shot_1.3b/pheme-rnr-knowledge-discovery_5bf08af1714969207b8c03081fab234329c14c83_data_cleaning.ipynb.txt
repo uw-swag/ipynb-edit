@@ -1,0 +1,42 @@
+```python
+    # Step 0: Build graph-based features
+    graph = df.groupby("thread").apply(g)
+
+    # Step 1: Build simple aggregate features
+    agg = df.groupby("thread").agg(agg_props).rename(columns=rename)
+
+    # Step 2: Builds some features off the source tweet, which has tweet_id == thread
+    src = df[df["is_source_tweet"] == 1][["thread",
+                                          "user.followers_count", 
+                                          "user.listed_count",
+                                          "user.verified",
+                                          "created",
+                                          "user.created_at",
+                                          "user.tweets_count"]] \
+                         .rename(columns={"user.followers_count": "src.followers_count",
+                                          "user.listed_count": "src.listed_count",
+                                          "user.verified": "src.user_verified",
+                                          "user.created_at": "src.created_at",
+                                          "user.tweets_count": "src.tweets_total"})
+
+    # Step 3: Build features off of the reply tweets
+    def f(x):
+        d = []
+        
+        # Get various features from the distribution of times of reply tweet
+        d.append(min(x["created"]))
+        d.append(max(x["created"]))
+        d.append(np.var(x["created"]))
+                
+        return pd.Series(d, index=["first_resp", "last_resp","resp_var"])
+        
+    replies = df[df["is_source_tweet"] == False].groupby("thread").apply(f)
+
+    graph_features = df.groupby("thread").apply(g)
+
+    dfs = [agg, src, replies, graph]
+    thrd_data = reduce(lambda left, right: pd.merge(left,right, on="thread"), dfs)
+
+    # Step 3: Add miscelaneous features
+    # Remember timestamps increase as time progresses
+    # src.created_at < created < first_resp < last_

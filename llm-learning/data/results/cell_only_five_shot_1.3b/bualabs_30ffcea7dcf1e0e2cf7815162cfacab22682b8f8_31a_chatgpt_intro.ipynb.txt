@@ -1,0 +1,22 @@
+```python
+    def get_completion(self, text: str, model: str = "gpt2", device: str = "cuda"):
+        """
+        Get completion for a given text using a given model.
+
+        Args:
+            text (str): The text to be completed.
+            model (str, optional): The model to be used. Defaults to "gpt2".
+            device (str, optional): The device to be used. Defaults to "cuda".
+
+        Returns:
+            str: The completion for the given text.
+        """
+        from transformers import pipeline
+
+        completion_pipe = pipeline("text-generation", model=model, device=device)
+        result = completion_pipe(text)
+
+        return result[0]['generated_text']
+    ```
+
+    This function uses the Hugging Face's `transformers` library to create a pipeline for text generation. It takes a text and a model as input, and returns the completion for the given text.

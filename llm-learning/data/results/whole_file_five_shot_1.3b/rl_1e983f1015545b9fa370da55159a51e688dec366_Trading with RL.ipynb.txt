@@ -1,0 +1,63 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Implementing a simple trading environment"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    class Market:
+        """Follows OpenAI gym environment convention basically
+        init with generator and number of stocks
+        reset() - generate and return first state
+        step() - generate next state and reward
+        """
+        def __init__(self, gen, lag=16, nstocks=1, episode_length=300):
+            self.genfunc = gen
+            self.nstocks = nstocks
+            self.episode_length = episode_length
+            self.t = 0
+            self.total_reward = 0
+            self.lag = lag
+            self.observation_space = np.asarray([1] * nstocks * lag * 2,)
+            self.state_size = nstocks * lag * 2
+            self.action_size = 2
+
+        def reset(self):
+            self.t = 0
+            self.total_reward = 0
+            self.gen = [self.genfunc() for _ in range(self.nstocks)]
+            self.state=[next(g) for g in self.gen]
+            self.state = np.asarray([s for s in self.state])
+            return self.state
+        
+        # ...
+        # other methods
+        # ...
+
+    # ...
+    # other classes
+    # ...
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Implementing a simple trading environment"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    class Market:
+        """Follows OpenAI gym environment convention basically
+        init with generator and number of stocks
+        reset() - generate and return first state
+        step() - generate next state and reward
+        """
+        def __init__(self, gen, lag=16, nstocks=1, episode_length=300):
+            self.genfunc = gen
+            self.nstocks = nstocks
+            self.episode_length = episode_

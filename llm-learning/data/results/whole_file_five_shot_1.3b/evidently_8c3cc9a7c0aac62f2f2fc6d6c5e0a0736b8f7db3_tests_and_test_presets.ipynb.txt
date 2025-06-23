@@ -1,0 +1,56 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    from datetime import datetime
+    from sklearn.datasets import fetch_openml
+
+    from evidently import ColumnMapping
+    from evidently.test_suite import TestSuite
+    from evidently.tests import *
+
+    from evidently.test_preset import NoTargetPerformanceTestPreset
+    from evidently.test_preset import DataQualityTestPreset
+    from evidently.test_preset import DataStabilityTestPreset
+    from evidently.test_preset import DataDriftTestPreset
+
+    # Rename tests
+    dataset_tests = TestSuite(tests=[
+        TestNumberOfColumns(),
+        TestNumberOfRows(),
+        TestNumberOfConstantColumns(),
+        TestNumberOfDuplicatedColumns(),
+        TestNumberOfDuplicatedRows(),
+        TestColumnsType(),
+        TestTargetFeaturesCorrelations(),
+        TestHighlyCorrelatedColumns(),
+        TestShareOfDriftedColumns(),
+        TestNumberOfDriftedColumns(),
+    ])
+
+    feature_level_tests = TestSuite(tests=[
+        TestMeanInNSigmas(column_name='hours-per-week'),
+        TestShareOfOutRangeValues(column_name='hours-per-week'),
+        TestColumnShareOfMissingValues(column_name='education'),
+        TestColumnValueDrift(column_name='education'),
+        TestColumnValueRegExp(column_name='education', reg_exp=r"^\s+.*"),
+    ])
+
+    no_target_performance = TestSuite(tests=[
+        NoTargetPerformanceTestPreset(columns=['education-num', 'hours-per-week']),
+    ])
+
+    data_drift = TestSuite(tests=[
+        DataDriftTestPreset(),
+    ])
+
+    data_stability = TestSuite(tests=[
+        DataStabilityTestPreset(),
+    ])
+
+    data_quality = TestSuite(tests=[
+        DataQualityTestPreset(),
+    ])
+
+    # Rename tests
+    dataset_tests.run(reference_data=

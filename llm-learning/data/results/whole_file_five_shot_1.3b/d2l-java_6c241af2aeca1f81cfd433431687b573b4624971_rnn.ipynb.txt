@@ -1,0 +1,42 @@
+```python
+    # Section 8.4: Recurrent Neural Networks
+    ## 8.4.1: Introduction to Recurrent Neural Networks
+
+    # Recurrent Neural Networks (RNNs) are a class of deep learning neural networks, which are capable of learning from sequences.
+    # They are particularly useful for tasks that involve sequential data, such as time series analysis, natural language processing,
+    # and more.
+
+    ## 8.4.2: Building a Recurrent Neural Network
+
+    # A Recurrent Neural Network (RNN) is built using a type of neural network called Long Short-Term Memory (LSTM).
+    # LSTM is a type of RNN that is particularly good at learning from sequences.
+
+    # Here is a simple example of how to build a RNN in Python using the Keras library:
+
+    from keras.models import Sequential
+    from keras.layers import LSTM, Dense
+
+    model = Sequential()
+    model.add(LSTM(100, input_shape=(1, 1)))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
+
+    ## 8.4.3: Training a Recurrent Neural Network
+
+    # After defining the model, you can train it using your data. Here is a simple example:
+
+    import numpy as np
+    data = np.random.random((1000, 1))
+    model.fit(data, data, epochs=50, verbose=0)
+
+    ## 8.4.4: Using a Recurrent Neural Network
+
+    # Once the model is trained, you can use it to make predictions. Here is a simple example:
+
+    prediction = model.predict(data)
+
+    ## 8.4.5: Conclusion
+
+    # In conclusion, RNNs are a powerful tool for tasks that involve sequential data, such as time series analysis.
+    # They are also a good choice for tasks that involve long-term dependencies, such as language translation.
+    ```

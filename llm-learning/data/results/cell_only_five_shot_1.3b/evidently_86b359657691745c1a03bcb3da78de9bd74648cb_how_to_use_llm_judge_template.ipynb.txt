@@ -1,0 +1,57 @@
+```python
+    from evidently.description import Description
+    from evidently.insights.data_item import DataItem
+    from evidently.insights.enums import DataItemType
+    from evidently.insights.report_data import ReportData
+    from evidently.insights.target import Target
+
+    class MyCustomDescription(Description):
+        def __init__(self, data_item: DataItem, target: Target):
+            super().__init__(data_item, target)
+
+        def generate_insights(self) -> ReportData:
+            # your custom logic here
+            pass
+
+    class MyCustomDataItem(DataItem):
+        def __init__(self, data: dict, target: Target):
+            super().__init__(data, target)
+
+        def generate_insights(self) -> ReportData:
+            # your custom logic here
+            pass
+
+    class MyCustomTarget(Target):
+        def __init__(self, data: dict, target: Target):
+            super().__init__(data, target)
+
+        def generate_insights(self) -> ReportData:
+            # your custom logic here
+            pass
+
+    # your custom data item type
+    class MyCustomDataItemType(DataItemType):
+        def __init__(self, data_item_type: DataItemType):
+            super().__init__(data_item_type)
+
+        def generate_insights(self) -> ReportData:
+            # your custom logic here
+            pass
+
+    # your custom evaluation
+    class MyCustomNegativityLLMEval(NegativityLLMEval):
+        def __init__(self, data_item: MyCustomDataItem, target: MyCustomTarget):
+            super().__init__(data_item, target)
+
+        def generate_insights(self) -> ReportData:
+            # your custom logic here
+            pass
+
+    # your custom evaluation
+    class MyCustomPIILLMEval(PIILLMEval):
+        def __init__(self, data_item: MyCustomDataItem, target: MyCustomTarget):
+            super().__init__(data_item, target)
+
+        def generate_insights(self) -> ReportData:
+            # your custom logic here
+            pass

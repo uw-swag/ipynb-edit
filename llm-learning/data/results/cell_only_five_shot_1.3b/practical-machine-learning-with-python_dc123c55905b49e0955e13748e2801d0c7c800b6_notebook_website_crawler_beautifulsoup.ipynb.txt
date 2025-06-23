@@ -1,0 +1,48 @@
+```python
+    # import required libraries
+    import requests
+    from bs4 import BeautifulSoup
+    import lxml
+
+    # function to extract blog post details
+    def get_post_mapping(content):
+        post_detail_list = []
+        post_soup = BeautifulSoup(content,"lxml")
+        h3_content = post_soup.find_all("h3")
+        for h3 in h3_content:
+            post_detail_list.append(
+                {'title':h3.a.get_text(),'url':h3.a.attrs.get('href')}
+                )
+        return post_detail_list
+
+    # function to extract blog post content
+    def get_post_content(content):
+        plain_text = ""
+        text_soup = BeautifulSoup(content,"lxml")
+        para_list = text_soup.find_all("div",{'class':'cms-richtext'})
+        for p in para_list[0]:
+            plain_text += p.get_text()
+        return plain_text
+
+    # define the URLs
+    crawl_url = "http://www.apress.com/in/blog/all-blog-posts"
+    post_url_prefix = "http://www.apress.com"
+
+    # send a GET request to the website
+    response = requests.get(crawl_url)
+
+    # check if the request was successful
+    if response.status_code == 200:
+        blog_post_details = get_post_mapping(response.content)
+
+    # check if any blog posts were found
+    if blog_post_details:
+        print("Blog posts found:{}".format(len(blog_post_details)))
+
+        # crawl content for each blog post
+        for post in blog_post_details:
+            print("Crawling content for post titled:",post.get('title'))
+            post_response = requests.get(post_url_prefix+post.get('url'))
+
+            if post_response.status_code == 200:
+                post['content'] = get_post

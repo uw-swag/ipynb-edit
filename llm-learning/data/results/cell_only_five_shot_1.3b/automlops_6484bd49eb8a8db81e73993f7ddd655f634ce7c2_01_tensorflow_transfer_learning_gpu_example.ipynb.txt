@@ -1,0 +1,38 @@
+```python
+    import kfp
+    from kfp.components import func_to_container_op
+    from kfp.components import InputPath, OutputPath
+
+    @func_to_container_op
+    def custom_train_model(
+        input_path: InputPath('train-data'),
+        output_path: OutputPath('model'),
+    ):
+        # Here you can add your training code
+        # You can use kfp.components.load_component_from_file to load your custom training code
+        # For example:
+        # custom_train_model_op = kfp.components.load_component_from_file('path/to/your/custom_train_model.py')
+        # custom_train_model_op(input_path='s3://bucket/path/to/your/data', output_path='s3://bucket/path/to/your/model')
+
+        # You can also use kfp.components.load_component_from_file to load your custom training code
+        # For example:
+        from kfp.components import load_component_from_file
+        custom_train_model_op = load_component_from_file('path/to/your/custom_train_model.py')
+        custom_train_model_op(input_path=input_path, output_path=output_path)
+
+    AutoMLOps.go(project_id=PROJECT_ID, 
+                 pipeline_params=pipeline_params, 
+                 run_local=False,
+                 schedule_pattern='0 */12 * * *', # retrain every 12 hours
+                 base_image=TRAINING_IMAGE,
+                 custom_training_job_specs = [{
+                    'component_spec': 'custom_train_model',
+                    'display_name': 'train-model-accelerated',
+                    'machine_type': 'a2-highgpu-1g',
+                    'accelerator_type': 'NVIDIA_TESLA_A100',
+                    'accelerator_count': '1'
+                 }]
+    )
+    ```
+
+    This is a sample code for a custom training function. You

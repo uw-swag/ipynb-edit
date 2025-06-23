@@ -1,0 +1,60 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Added presentation video"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from pymongo import MongoClient
+import numpy as np
+import pandas as pd
+import psycopg2
+<\Cell_0>
+<Cell_1>
+def access_collections():
+    """
+    Retrieves collections from "yelp" database with mongoDB.
+
+    Returns:
+        Tuple of Objects: The five collections from the "yelp" database.
+    """
+    client = MongoClient('localhost', 27017)
+    db = client.yelp
+    business = db.business
+    review = db.review
+    tip = db.tip
+    checkin = db.checkin
+    user = db.user
+    return business, review, tip, checkin, user
+<\Cell_1>
+<Cell_2>
+business, review, tip, checkin, user = access_collections()
+<\Cell_2>
+<Cell_3>
+def batched(cursor, batch_size):
+    batch = []
+    for doc in cursor:
+        batch.append(doc)
+        if batch and not len(batch) % batch_size:
+            yield batch
+            batch = []
+
+    if batch:   # last documents
+        yield batch
+<\Cell_3>
+<Cell_4>
+cursor = user.find()        
+        
+test = pd.DataFrame()
+for batch in batched(cursor, 10000):
+    test = test.append(batch, ignore_index=True)
+
+# test = pd.read_json('../data/full_data/yelp_academic_dataset_review.json', lines=True)
+# business_data = list(user.find({}))
+# test = pd.json_normalize(business_data, errors='raise')
+# business_df = pd.DataFrame(business_data)
+<\Cell_4>
+<Cell_5>
+pd.set_option('display.max_columns', None)
+pd.set_option('expand_

@@ -1,0 +1,46 @@
+```python
+    ## Add 05b tabular feature engineering notebook
+
+    ## Step 1: Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.preprocessing import OneHotEncoder
+    from sklearn.impute import SimpleImputer
+    from sklearn.compose import ColumnTransformer
+    from sklearn.pipeline import Pipeline
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    ## Step 2: Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    ## Step 3: Define the target variable and the features
+    target = 'target_variable'
+    features = df.drop(columns=[target])
+
+    ## Step 4: Define the categorical and numerical features
+    categorical_features = ['feature1', 'feature2', 'feature3']
+    numerical_features = ['feature4', 'feature5', 'feature6']
+
+    ## Step 5: Handle missing values
+    for feature in categorical_features:
+        df[feature] = df[feature].fillna(df[feature].mode().iloc[0])
+
+    for feature in numerical_features:
+        df[feature] = df[feature].fillna(df[feature].median())
+
+    ## Step 6: Encode categorical features
+    for feature in categorical_features:
+        label_encoder = LabelEncoder()
+        df[feature] = label_encoder.fit_transform(df[feature])
+
+    ## Step 7: One-hot encode categorical features
+    for feature in categorical_features:
+        one_hot_encoder = OneHotEncoder()
+        df_dummies = pd.get_dummies(df[feature])
+        df = pd.concat([df, df_dummies], axis=1)
+        df = df.drop(columns=[feature])
+
+    ## Step 8: Split the

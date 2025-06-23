@@ -1,0 +1,41 @@
+```python
+    <Cell_0>
+    # %pip install flaml[autogen]~=2.0.0rc4 docker
+    <\Cell_0>
+    <Cell_1>
+    from flaml import autogen
+
+    config_list = autogen.config_list_from_json(
+        "OAI_CONFIG_LIST",
+        filter_dict={
+            "model": ["gpt-4", "gpt4", "gpt-4-32k", "gpt-4-32k-0314"],
+        },
+    )
+    <\Cell_1>
+    <Cell_2>
+    planner = autogen.AssistantAgent(
+        name="planner",
+        llm_config={"config_list": config_list},
+        # the default system message of the AssistantAgent is overwritten here
+        system_message="You are a helpful AI assistant. You suggest coding and reasoning steps for another AI assistant to accomplish a task. Do not suggest concrete code. For any action beyond writing code or reasoning, convert it to a step which can be implemented by writing code. For example, the action of browsing the web can be implemented by writing code which reads and prints the content of a web page. Finally, inspect the execution result. If the plan is not good, suggest a better plan. If the execution is wrong, analyze the error and suggest a fix."
+    )
+    planner_user = autogen.UserProxyAgent(
+        name="planner_user",
+        max_consecutive_auto_reply=0,  # terminate without auto-reply
+        human_input_mode="NEVER",
+    )
+
+    def ask_planner(message):
+        planner_user.initiate_chat(planner, message=message)
+        # return the last message received from the planner
+        return planner_user.last_message()["content"]
+
+    <\Cell_2>
+    <Cell_3>
+    # create an AssistantAgent instance named "assistant"
+    assistant = autogen.AssistantAgent(
+        name="assistant",
+        llm_config={
+            "temperature": 0,
+            "request_timeout": 600,
+           

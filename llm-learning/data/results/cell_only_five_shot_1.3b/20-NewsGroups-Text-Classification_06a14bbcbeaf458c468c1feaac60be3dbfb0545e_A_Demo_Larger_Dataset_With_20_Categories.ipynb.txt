@@ -1,0 +1,48 @@
+```python
+    # Code you have previously used to load data
+    import pandas as pd
+
+    # Path of the file to read
+    iowa_file_path = './train.csv'
+
+    home_data = pd.read_csv(iowa_file_path)
+
+    # Set up code checking
+    from learntools.core import binder
+    binder.bind(globals())
+    from learntools.machine_learning.ex3 import *
+
+    print("Setup Complete")
+
+    # Your code goes here
+    # This is a placeholder. Replace this with your code to demonstrate doing something with the data.
+
+    # For example, you could use pandas to print the mean of each column to understand the structure of the data.
+    print(home_data.mean())
+
+    # You could also use pandas to print more detailed information about the data.
+    print(home_data.describe())
+
+    # You could use matplotlib or seaborn to visualize the distribution of the data.
+    # For example, you could use seaborn to create a histogram of the data.
+    import matplotlib.pyplot as plt
+    plt.hist(home_data['SalePrice'])
+    plt.xlabel('SalePrice')
+    plt.ylabel('Count')
+    plt.show()
+
+    # You could use scikit-learn to create a decision tree model.
+    from sklearn.tree import DecisionTreeRegressor
+
+    # Define the model. Use a random state to ensure it's the same as your notebook's random number generator.
+    # Don't forget to replace `None` with the name of your target variable(s)
+    model = DecisionTreeRegressor(random_state=1)
+
+    # Fit the model.
+    model.fit(home_data.drop(['SalePrice'], axis=1), home_data['SalePrice'])
+
+    # You could use k-fold cross validation to see how well your model is likely to perform.
+    from sklearn.model_selection import cross_val_score
+
+    # Compute the scores of the model for each of the 20 potential splits.
+   

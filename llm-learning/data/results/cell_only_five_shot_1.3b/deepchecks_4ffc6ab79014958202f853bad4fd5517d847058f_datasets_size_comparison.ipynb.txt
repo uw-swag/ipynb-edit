@@ -1,0 +1,39 @@
+```python
+    # Example 1: Using the `get_data` function to fetch data from a URL
+    from sklearn.datasets import fetch_openml
+    data = fetch_openml('mnist_784', version=1)
+    X, y = data.data, data.target
+
+    # Example 2: Using the `fit_transform` function to normalize data
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    # Example 3: Using the `predict` function to make predictions
+    from sklearn.ensemble import RandomForestClassifier
+    clf = RandomForestClassifier()
+    clf.fit(X, y)
+    y_pred = clf.predict(X)
+
+    # Example 4: Using the `fit_predict` function to fit and predict
+    from sklearn.linear_model import LogisticRegression
+    clf = LogisticRegression()
+    y_pred = clf.fit(X, y).predict(X)
+
+    # Example 5: Using the `predict_proba` function to get probabilities
+    from sklearn.svm import SVC
+    clf = SVC()
+    y_proba = clf.fit(X, y).predict_proba(X)
+
+    # Example 6: Using the `fit_predict_transform` function to fit, predict and transform
+    from sklearn.linear_model import LinearRegression
+    clf = LinearRegression()
+    y_pred = clf.fit(X, y).predict(X)
+    y_transformed = clf.fit(X, y).predict_transform(X)
+
+    # Example 7: Using the `fit_predict_proba` function to fit, predict and get probabilities
+    from sklearn.ensemble import GradientBoostingClassifier
+    clf = GradientBoostingClassifier()
+    y_proba = clf.fit(X, y).predict_proba(X)
+
+    # Example 8: Using the `fit_predict_proba` function to fit, predict and get

@@ -1,0 +1,42 @@
+
+    The code has been updated to increase the number of epochs from 10 to 100. The number of epochs is a hyperparameter that determines the number of times the entire dataset is passed through the model. It's a hyperparameter that you can tune to optimize the model's performance.
+
+    Here's the updated code:
+
+    ```python
+    # ## Colab
+    # ! pip install fastai2 kornia -q
+    # import gc
+
+    # from fastai2.basics import *
+    # from fastai2.callback.all import *
+    # from fastai2.metrics import *
+    # from fastai2.vision.all import *
+
+    # import kornia
+
+    # import pandas as pd
+    # from sklearn.metrics import *
+
+    # bs, size, e = 64, 384, 2
+
+    # pneumonia = DataBlock(blocks=(ImageBlock(), CategoryBlock), 
+    #                      get_items=partial(get_image_files, folders=['train', 'val']), 
+    #                      get_y=parent_label, 
+    #                      splitter=RandomSplitter(valid_pct=0.05), 
+    #                      item_tfms=RandomResizedCrop(size, min_scale=0.9), 
+    #                      batch_tfms=[]
+    #                      )
+    # # pneumotpneumoniahorax.summary(path/'chest_xray')
+    # dls = pneumonia.dataloaders(path/'chest_xray', bs=bs)
+
+    # class XFocalLoss(kornia.losses.FocalLoss):
+    #     y_int = True
+    #     def __init__(self, alpha: float, gamma: float = 2.0,
+    #                  reduction: str = 'none') -> None:
+    #         super(XFocalLoss, self).__init__(alpha, gamma, reduction)
+
+    #     def forward(  # type: ignore
+    #             self,
+    #             input: torch.Tensor,
+    #

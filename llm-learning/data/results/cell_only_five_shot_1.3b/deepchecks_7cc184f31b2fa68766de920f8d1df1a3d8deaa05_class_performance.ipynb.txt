@@ -1,0 +1,20 @@
+```python
+    from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+    from torch import nn
+
+    pred_formatter = ClassificationPredictionFormatter(mnist.mnist_prediction_formatter)
+    check = ClassPerformance()
+    check.run(train_ds, test_ds, mnist_model, prediction_formatter=pred_formatter)
+
+    import numpy as np
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+    from deepchecks.vision.datasets.detection import coco
+
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+    det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+    check = ClassPerformance(show_only='best')
+    check.run(train_ds, test_ds, yolo, prediction_formatter=det_formatter)
+    ```
+
+    The code is splitting the VisionData and removing the formatters. The VisionData is a PyTorch Dataset that contains images and their labels. The formatters are used to transform the predictions from the model into a format that can be used for evaluation. The formatters are used to transform the predictions from the model into a format that can be used for evaluation.

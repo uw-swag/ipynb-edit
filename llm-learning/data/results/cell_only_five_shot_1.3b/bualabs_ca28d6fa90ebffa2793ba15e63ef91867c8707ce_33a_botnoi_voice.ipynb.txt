@@ -1,0 +1,42 @@
+```python
+    def basic_functions():
+        # Define a function to calculate the mean of a list
+        def mean(lst):
+            return sum(lst) / len(lst)
+
+        # Define a function to calculate the median of a list
+        def median(lst):
+            lst.sort()
+            if len(lst) % 2 == 0:
+                return (lst[len(lst) // 2 - 1] + lst[len(lst) // 2]) / 2
+            else:
+                return lst[len(lst) // 2]
+
+        # Define a function to calculate the mode of a list
+        def mode(lst):
+            from collections import Counter
+            data = Counter(lst)
+            get_mode = dict(data)
+            mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
+
+            if len(mode) == len(lst):
+                print("No mode found")
+            else:
+                return "Mode is / are: " + ', '.join(map(str, mode))
+
+        # Define a function to calculate the range of a list
+        def range_of_list(lst):
+            return max(lst) - min(lst)
+
+        # Define a function to calculate the variance of a list
+        def variance(lst):
+            mean_lst = mean(lst)
+            variance_lst = [(x - mean_lst) ** 2 for x in lst]
+            return sum(variance_lst) / len(lst)
+
+        # Define a function to calculate the standard deviation of a list
+        def standard_deviation(lst):
+            return variance(lst) ** 0.5
+
+        return mean, median, mode, range_of_list, variance, standard_deviation
+    ```

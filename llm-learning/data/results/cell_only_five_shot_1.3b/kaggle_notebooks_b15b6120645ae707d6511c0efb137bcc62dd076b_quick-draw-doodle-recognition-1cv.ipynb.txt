@@ -1,0 +1,34 @@
+
+    '''
+    %%html
+<style>
+@import url('https://fonts.googleapis.com/css?family=Ewert|Roboto&effect=3d|ice|');
+span {font-family:'Roboto'; color:black; text-shadow:5px 5px 5px #aaa;}  
+div.output_area pre{font-family:'Roboto'; font-size:110%; color:steelblue;}      
+</style>
+import numpy as np,pandas as pd,keras as ks
+import os,ast,cv2,warnings
+import pylab as pl
+from skimage.transform import resize
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix,classification_report
+from keras.callbacks import ModelCheckpoint,ReduceLROnPlateau
+from keras.models import Sequential
+from keras.layers.advanced_activations import LeakyReLU
+from keras.layers import Activation,Dropout,Dense,Conv2D,MaxPooling2D,GlobalMaxPooling2D
+warnings.filterwarnings('ignore')
+pl.style.use('seaborn-whitegrid')
+style_dict={'background-color':'gainsboro','color':'steelblue', 
+            'border-color':'white','font-family':'Roboto'}
+fpath='../input/quickdraw-doodle-recognition/train_simplified/'
+os.listdir("../input")
+I=64 # image size in pixels
+S=2 # current number of the label set {1,...,17} -> {1-20,..., 321-340}
+T=20 # number of labels in one set 
+N=24000 # number of images with the same label in the training set
+files=sorted(os.listdir(fpath))
+labels=[el.replace(" ","_")[:-4] for el in files]
+print(labels)
+def display_drawing():
+    for k in range(5) :  
+        pl.figure(figsize=(1

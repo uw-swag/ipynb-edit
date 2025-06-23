@@ -1,0 +1,21 @@
+```python
+    import matplotlib.pyplot as plt
+
+    def autoplot(df, cols=1, figsize=(10,10)):
+        n = len(df.columns)
+        n_rows = n//cols
+        if n%cols != 0:
+            n_rows += 1
+        fig, axs = plt.subplots(n_rows, cols, figsize=figsize)
+        for i in range(n):
+            axs[i//cols, i%cols].plot(df.iloc[:,i])
+            axs[i//cols, i%cols].set_title(df.columns[i])
+        plt.tight_layout()
+        plt.show()
+
+    autoplot(df)
+    ```
+
+    This function will create a pie chart for each column in the dataframe. The number of columns to display can be specified.
+
+    Please note that the `AutoPlot` function is a simple example and may not work perfectly for all types of data. It's also not a part of the original code you provided, so it might not work as expected.

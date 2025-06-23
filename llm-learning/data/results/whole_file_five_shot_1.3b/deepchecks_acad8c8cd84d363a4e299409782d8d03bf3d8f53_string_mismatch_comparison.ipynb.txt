@@ -1,0 +1,13 @@
+```python
+    <Cell_0>
+from deepchecks.checks import StringMismatchComparison
+import pandas as pd
+
+data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+<\Cell_0>
+    ```
+
+    The commit message "Renamed MLChecks to deepchecks" is a brief description of the changes made in the code.

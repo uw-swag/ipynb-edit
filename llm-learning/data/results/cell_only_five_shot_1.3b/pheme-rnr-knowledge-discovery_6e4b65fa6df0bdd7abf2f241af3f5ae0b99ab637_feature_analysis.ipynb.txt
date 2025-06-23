@@ -1,0 +1,36 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    # Assuming you have a DataFrame df with a column 'tweet' containing the text of the tweets
+    df = pd.DataFrame({
+        'tweet': [
+            'I love programming',
+            'Python is awesome',
+            'Data science is fun',
+            'Machine learning is cool'
+        ]
+    })
+
+    # Create a CountVectorizer object
+    vectorizer = CountVectorizer()
+
+    # Fit and transform the data
+    X = vectorizer.fit_transform(df['tweet'])
+
+    # Get the feature names
+    feature_names = vectorizer.get_feature_names_out()
+
+    # Create a DataFrame with the feature names and their corresponding counts
+    df_features = pd.DataFrame({
+        'feature': feature_names,
+        'count': X.toarray().sum(axis=0)
+    })
+
+    # Sort the DataFrame by count in descending order
+    df_features = df_features.sort_values(by='count', ascending=False)
+
+    # Print the DataFrame
+    print(df_features)
+    ```
+    This code will create a DataFrame with the features (characters in the tweet) and their corresponding counts. The DataFrame is then sorted by count in descending order.

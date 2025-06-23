@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metric_preset import DataDrift, NumTargetDrift
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataQuality, DataStability
+from evidently.tests import *
+
+# Define the column mapping
+column_mapping = ColumnMapping()
+column_mapping.add_dataset_column("households", "households")
+column_mapping.add_dataset_column("median_income", "median_income")
+
+# Create a report
+drift_report = Report(metrics=[DataDrift(), NumTargetDrift()], column_mapping=column_mapping)
+
+# Fetch the data
+reference = fetch_california_housing()
+current = fetch_california_housing()
+
+# Run the report
+drift_report.run(reference_data=reference, current_data=current)
+
+# Print the report
+print(drift_report)
+    ```
+
+    This code will update the data drift preset with the new data. The new data is fetched from the sklearn.datasets module. The column mapping is also updated to include the new columns from the new data. The report is then run with the new data and the updated column mapping. The report is then printed out.

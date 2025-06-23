@@ -1,0 +1,51 @@
+
+    '''
+    [
+    Commit Message: "refactor changes for linear nb"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+%matplotlib inline 
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv('./data/training_data.csv')
+df.head(5)
+<\Cell_1>
+<Cell_2>
+print(df['title'][1])
+print('-----')
+print(df['description'][1])
+print('Published at:', df['publishedAt'][1])
+<\Cell_2>
+<Cell_3>
+# Number of clickbait and non-clickbait articles
+df['label'].value_counts()
+<\Cell_3>
+<Cell_4>
+# Plotting the number of author fields that are Null
+df['author'].isnull().value_counts().plot('barh')
+<\Cell_4>
+<Cell_5>
+# The number of characters in the description field
+df['description'].apply(len).mean()
+<\Cell_5>
+<Cell_6>
+# Comparing the number of description characters in clickbait to news
+df['description'].apply(len).groupby(df['label']).mean()
+<\Cell_6>
+<Cell_7>
+# TEST YOUR KNOWLEDGE
+# Can you write a one-liner to compute the number of clickbait articles
+# written by each author? Hint: you might find the .sum() function helpful!
+<\Cell_7>
+<Cell_8>
+df['full_content'] = (df.description + df.title)
+training, testing = train_test_split(
+    df,                # The dataset we want to split
+    train_size=0.7,    # The proportional size of our training set
+    stratify=df.label, # The labels are used for stratification
+    random_state=400   # Use the same random state for reproducibility
+)
+pipeline = pipeline.fit(training.full_content, training.label)
+evaluate(pipeline, testing.full_content, testing.

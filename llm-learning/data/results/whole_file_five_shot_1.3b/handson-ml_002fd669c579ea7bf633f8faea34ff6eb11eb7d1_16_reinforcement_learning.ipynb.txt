@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented the deep Q-learning algorithm"
+
+    Original Code Cells:
+    '''
+<Cell_63>
+import numpy as np
+import tensorflow as tf
+from tensorflow.contrib.layers import fully_connected
+
+n_states = 100
+n_actions = 10
+n_steps = 1000
+alpha = 0.01
+gamma = 0.99
+epsilon_max = 1.0
+epsilon_min = 0.05
+epsilon_decay_steps = 50000
+
+def deep_q_network(X_state, scope):
+    prev_layer = X_state
+    n_hidden_units = 128
+    hidden_activation = tf.nn.relu
+    n_outputs = n_actions
+    initializer = tf.contrib.layers.variance_scaling_initializer()
+
+    with tf.variable_scope(scope) as scope:
+        for i in range(2):
+            prev_layer = fully_connected(prev_layer, n_hidden_units, activation_fn=hidden_activation, weights_initializer=initializer)
+        outputs = fully_connected(prev_layer, n_outputs, activation_fn=None)
+    trainable_vars = {var.name[len(scope.name):]: var for var in tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=scope.name)}
+    return outputs, trainable_vars
+
+X_state = tf.placeholder(tf.float32, shape=[None, n_states])
+X_action = tf.placeholder(tf.int32, shape=[None])
+y = tf.placeholder(tf.float32, shape=[None, n_actions])
+
+q_value, q_vars = deep_q_network(X_state, scope="q_networks")
+q_value_for_action = tf.reduce_sum(q_value * tf.one_hot(X_action, n_actions), axis=1, keep_dims=True)

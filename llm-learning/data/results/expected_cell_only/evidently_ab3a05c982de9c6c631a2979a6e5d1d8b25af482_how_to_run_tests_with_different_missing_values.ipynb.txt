@@ -1,0 +1,70 @@
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+reference_data = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+current_data.iloc[:2000, 3:5] = np.nan
+current_data.iloc[:2000, 12] = np.nan
+from evidently.tests import TestNumberOfMissingValues
+from evidently.tests import TestShareOfMissingValues
+from evidently.tests import TestNumberOfColumnsWithMissingValues
+from evidently.tests import TestShareOfColumnsWithMissingValues
+from evidently.tests import TestNumberOfRowsWithMissingValues
+from evidently.tests import TestShareOfRowsWithMissingValues
+from evidently.tests import TestNumberOfDifferentMissingValues
+
+suite = TestSuite(tests=[
+    TestNumberOfMissingValues(),
+    TestShareOfMissingValues(),
+    TestNumberOfColumnsWithMissingValues(),
+    TestShareOfColumnsWithMissingValues(),
+    TestNumberOfRowsWithMissingValues(),
+    TestShareOfRowsWithMissingValues(),
+    TestNumberOfDifferentMissingValues(),
+])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+from evidently.tests import TestColumnNumberOfMissingValues
+from evidently.tests import TestColumnShareOfMissingValues
+from evidently.tests import TestColumnNumberOfDifferentMissingValues
+
+suite = TestSuite(tests=[
+    TestColumnNumberOfMissingValues(column_name='native-country'),
+    TestColumnShareOfMissingValues(column_name='native-country'),
+    TestColumnNumberOfDifferentMissingValues(column_name='native-country'),
+])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+# set all ages less than 20 to 0 and greater than 30 to INF
+current_data.loc[current_data['age'] < 20, 'age'] = 0
+current_data.loc[current_data['age'] > 30, 'age'] = np.inf
+
+# run tests for age and specify a custom missing value
+suite = TestSuite(tests=[
+    TestColumnNumberOfMissingValues(column_name='age'),
+    TestColumnShareOfMissingValues(column_name='age'),
+    TestColumnNumberOfDifferentMissingValues(column_name='age'),
+    # add 0 value to default missing values list
+    TestColumnNumberOfMissingValues(column_name='age', missing_values=[0], replace=False),
+    TestColumnShareOfMissingValues(column_name='age', missing_values=[0], replace=False),
+    TestColumnNumberOfDifferentMissingValues(column_name='age', missing_values=[0], replace=False),
+    # use 0 and missing values from Pandas as missing values list
+    TestColumnNumberOfMissingValues(column_name='age', missing_values=[0, None], replace=True),
+    TestColumnShareOfMissingValues(column_name='age', missing_values=[0, None], replace=True),
+    TestColumnNumberOfDifferentMissingValues(column_name='age', missing_values=[0], replace=True),
+])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+

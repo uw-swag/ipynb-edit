@@ -1,0 +1,33 @@
+```
+    import nbformat as nbf
+
+    # Load notebooks
+    nb1 = nbf.read('notebook1.ipynb', as_version=4)
+    nb2 = nbf.read('notebook2.ipynb', as_version=4)
+
+    # Split notebooks
+    nb1_cell_types = nb1.cells[0].cell_type
+    nb2_cell_types = nb2.cells[0].cell_type
+
+    if nb1_cell_types != nb2_cell_types:
+        raise ValueError('Notebooks have different cell types')
+
+    nb1_cells = nb1.cells[0].content
+    nb2_cells = nb2.cells[0].content
+
+    # Create new notebooks
+    new_nb1 = nbf.new_notebook(cells=nb1_cells)
+    new_nb2 = nbf.new_notebook(cells=nb2_cells)
+
+    # Add cells to new notebooks
+    for i in range(len(nb1_cells)):
+        if nb1_cell_types[i] == nb2_cell_types[i]:
+            new_nb1.cells.append(nb1_cells[i])
+            new_nb2.cells.append(nb2_cells[i])
+        else:
+            raise ValueError('Notebooks have different cell types')
+
+    # Save new notebooks
+    nbf.write(new_nb1, 'new_notebook1.ipynb')
+    nbf.write(new_nb2, 'new_notebook2.ipynb')
+    ```

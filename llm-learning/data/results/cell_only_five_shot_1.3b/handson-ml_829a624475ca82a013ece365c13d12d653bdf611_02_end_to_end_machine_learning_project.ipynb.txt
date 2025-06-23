@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Upgrade chapter 2 to sklearn 0.18 and ensure python 2 and python 3 both work"
+    Original Code Cells:
+    '''
+    import os
+import tarfile
+import urllib.request
+
+HOUSING_PATH = "datasets/housing"
+HOUSING_URL = DATASETS_URL + "/housing/housing.tgz"
+
+def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
+    os.makedirs(housing_path, exist_ok=True)
+    tgz_path = os.path.join(housing_path, "housing.tgz")
+    urllib.request.urlretrieve(housing_url, tgz_path)
+    housing_tgz = tarfile.open(tgz_path)
+    housing_tgz.extractall(path=housing_path)
+    housing_tgz.close()
+import hashlib
+
+def test_set_check(identifier, test_ratio, hash):
+    return hash(str(identifier).encode("ascii")).digest()[-1] < 256 * test_ratio
+
+def split_train_test_by_id(data, test_ratio, id_column, hash=hashlib.md5):
+    ids = data[id_column]
+    in_test_set = ids.apply(lambda id_: test_set_check(id_, test_ratio, hash))
+    return data.loc[~in_test_set], data.loc[in_test_set]
+from sklearn.cross_validation import train_test_split
+
+train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
+test_set.head()
+from sklearn.cross_validation import StratifiedShuffleSplit
+
+split = StratifiedShuffleSplit(housing["income_cat"], test_size=0.2, random_state=42)
+train_index, test_index = next(iter(split

@@ -1,0 +1,35 @@
+
+    The code you provided is for a TensorFlow 2.0 notebook. The first cell installs the TensorFlow 2.0 version and the second cell uses TensorFlow Hub to load a pre-trained model for image classification.
+
+    The TensorFlow 2.0 version is stable and recommended for most of the modern machine learning applications. The TensorFlow Hub library is a collection of pre-trained models, which can be used directly in TensorFlow applications.
+
+    The code in the second cell is for loading a pre-trained model and making predictions on a validation dataset. The predictions are then converted to a Pandas DataFrame for better visualization.
+
+    However, the code you provided is not complete. It seems like you're trying to load a pre-trained model from TensorFlow Hub, but you're not providing the correct model name. The model name should be the name of the model you want to load, not the URL.
+
+    Here's the complete code:
+
+    ```python
+    !pip install tensorflow-gpu==2.0.0-beta0
+    !pip install tensorflow_hub
+    import tensorflow as tf
+    import tensorflow_hub as hub
+    import pandas as pd
+
+    model = tf.keras.Sequential([
+      hub.KerasLayer("https://tfhub.dev/google/tf2-preview/mobilenet_v2/feature_vector/4", 
+                     output_shape=[1280],
+                     trainable=False),
+      tf.keras.layers.Dropout(0.4),
+      tf.keras.layers.Dense(train_generator.num_classes, activation='softmax')
+    ])
+
+    model.build([None, 224, 224, 3])
+
+    model.summary()
+
+    FLOWERS_SAVED_MODEL = "saved_models/flowers"
+    tf.keras.experimental.export_saved_model(model, FLOWERS_SAVED_MODEL)
+
+    # Load SavedModel
+    flowers_model = tf.keras.experimental.load_

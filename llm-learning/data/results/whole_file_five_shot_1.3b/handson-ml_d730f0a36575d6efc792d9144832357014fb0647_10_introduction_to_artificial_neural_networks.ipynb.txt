@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing a simple neural network for handson-ml2"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import tensorflow as tf
+from tensorflow.examples.tutorials.mnist import input_data
+
+# Import data
+mnist = input_data.read_data_sets("/tmp/data/", one_hot=False)
+
+# Parameters
+learning_rate = 0.001
+num_steps = 500
+batch_size = 128
+display_step = 10
+
+# Network Parameters
+num_input = 784 # MNIST data input (img shape: 28*28)
+num_classes = 10 # MNIST total classes (0-9 digits)
+dropout = 0.75 # Dropout, probability to keep units
+
+# Create the neural network
+def conv_net(features, labels, keep_prob, num_classes, reuse, is_training):
+
+    # Define a scope for reusing the variables
+    with tf.variable_scope('ConvNet', reuse=reuse):
+        
+        # Retrieve inputs
+        x = tf.identity(features, name='x')
+        
+        # Define a scope for reusing the variables
+        with tf.variable_scope('ConvNet', reuse=reuse):
+            
+            # Build the conv net
+            conv1 = tf.layers.conv2d(x, 32, 3, activation=tf.nn.relu)
+            conv1 = tf.layers.max_pooling2d(conv1, 2, 2)
+            conv1 = tf.layers.dropout(conv1, keep_prob, is_training=is_training)
+            
+            conv2 = tf.layers.conv2d(conv1, 64, 3, activation=tf.nn.relu)
+            conv2 = tf.layers.max_pooling2d(conv2, 2, 2)
+            conv2 = tf.layers.dropout(conv2, keep_prob, is_training=is_training)
+            

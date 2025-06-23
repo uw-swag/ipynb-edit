@@ -1,0 +1,23 @@
+```python
+    import djl
+    import torch
+
+    # Initialize a session
+    session = djl.Session()
+
+    # Load a model
+    model = djl.Model.from_uri(session, "<your-model-url>")
+
+    # Use the model
+    inputs = torch.randn(1, 3, 224, 224)  # Replace with your input
+    outputs = model(inputs)
+
+    # Upgrade to djl 0.13.0
+    from djl.nn import HyperParameters
+
+    hp = HyperParameters(optimizer="sgd", learning_rate=0.01)
+    model.set_hyperparameters(hp)
+
+    # Save the model
+    model.save("<your-model-path>")
+    ```

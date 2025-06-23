@@ -1,0 +1,25 @@
+```
+    batchsize = 128
+    np.random.seed(0)
+    transform = get_transforms(do_flip=False)
+
+    databunch = ImageDataBunch.from_folder(path, train='training', valid_pct=0.2, size=28, 
+                                           ds_tfms=transform, bs=batchsize, num_workers=8).normalize()
+
+    databunch.show_batch(rows=3, figsize=(5,5))
+
+    # Check accuracy
+    databunch.classes,databunch.c,databunch.vdat = databunch.get_unnormalized_dataloaders()
+    databunch.show_batch(rows=3, figsize=(5,5))
+
+    # Calculate accuracy
+    correct = 0
+    total = 0
+    for input, label in databunch.valid_dl:
+        output = databunch.model(input)
+        _, preds = torch.max(output, 1)
+        total += label.size(0)
+        correct += (preds == label).sum().item()
+
+    print('Accuracy:', 100 * correct / total)
+    ```

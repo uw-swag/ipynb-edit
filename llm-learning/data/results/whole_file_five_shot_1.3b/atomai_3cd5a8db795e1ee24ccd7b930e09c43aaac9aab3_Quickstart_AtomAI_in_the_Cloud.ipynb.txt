@@ -1,0 +1,29 @@
+```python
+    <Cell_0>
+    import sys
+    sys.path.append("../../")
+
+    import itertools
+    import pandas as pd
+
+    from reco_utils.common.notebook_utils import is_jupyter
+    from reco_utils.dataset import movielens
+    from reco_utils.dataset.python_splitters import python_random_split
+    from reco_utils.evaluation.python_evaluation import (
+        rmse, mae, rsquared, exp_var,
+        map_at_k, ndcg_at_k, precision_at_k, recall_at_k
+    )
+
+    print("System version: {}".format(sys.version))
+    print("Pandas version: {}".format(pd.__version__))
+
+    MOVIELENS_DATA_SIZE = '100k'
+
+    data = movielens.load_pandas_df(
+        size=MOVIELENS_DATA_SIZE,
+        header=['UserId', 'MovieId', 'Rating', 'Timestamp']
+    )
+
+    data.head()
+    <\Cell_0>
+    ```

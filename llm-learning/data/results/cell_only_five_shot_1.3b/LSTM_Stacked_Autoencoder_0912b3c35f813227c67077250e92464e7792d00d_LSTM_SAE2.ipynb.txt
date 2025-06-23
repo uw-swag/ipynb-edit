@@ -1,0 +1,13 @@
+```python
+    # Data Load
+def Data_Load():
+    global df
+    df = pd.read_csv('D:/Denoising/Autoencoder/LSTM_SAE/Samsung.txt', sep = ',')
+    scaler = MinMaxScaler()
+    scaled = scaler.fit_transform(df[['CLOSE']])
+    df["Close"] = scaled
+    return df
+
+# Call the function
+df = Data_Load()
+    ```

@@ -1,0 +1,34 @@
+```
+    import os
+    import sys
+    import time
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from tqdm import tqdm
+    from copy import deepcopy
+    import pickle as pkl
+    import pandas as pd
+    from os.path import join
+    import torch
+    import numpy as np
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    sns.set()
+    %matplotlib inline
+
+    trained_model_folder = '../models/SST'
+    fnames = sorted([join(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)])
+
+    results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in tqdm(fnames)]
+
+    results = pd.concat(results_list, axis=1).T.infer_objects()
+
+    results["Test Accuracy"] = [x.item() for x in results["test_acc"]]
+    results["Val Accuracy"] = [(max(x)) for x in results["accs_val"]]
+    results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+    results["final_test_loss"] = [min(x) for x in results["losses_val"]]
+    results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+
+    concise_out = results[['signal_strength', 'Val Accuracy', 'bias', 'Test Accuracy']].groupby(by = ['bias','signal_strength']).mean()
+    print(concise_out)
+    ```

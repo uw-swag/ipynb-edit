@@ -1,0 +1,18 @@
+```
+    The code you provided is for a Jupyter notebook in Google Colab. It's a bit outdated and it seems like the notebook is not using the latest version of the libraries or the AtomAI library. 
+
+    The notebook is using the AtomAI library to create a lattice mask for a 2D image. The lattice mask is created by summing the coordinates of atoms in the image. The notebook then uses the `extract_patches_` function to extract patches from the image and the `augmentor` function to apply various image distortion and noise to the patches.
+
+    The notebook also uses the `train_test_split` function to split the data into a training set and a test set. The training set is then saved to Google Drive.
+
+    However, the notebook is not using the `sklearn` library for any machine learning tasks. If you want to use machine learning in the notebook, you would need to install the `sklearn` library and import it.
+
+    If you want to use the `sklearn` library for machine learning tasks, you would need to replace the `# For a single class case, we still need to explicitly specify the single channel` comment with the following code:
+
+    ```python
+    labels_all = labels_all[..., None] if np.ndim(labels_all) == 3 else labels_all
+    ```
+
+    This code will add a single channel dimension to the labels if they are 3D, which is necessary for the `train_test_split` function.
+
+    Please note that the code you provided is not complete and may not work as expected.

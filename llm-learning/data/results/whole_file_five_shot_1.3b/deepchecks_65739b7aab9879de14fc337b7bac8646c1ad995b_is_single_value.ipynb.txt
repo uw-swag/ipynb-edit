@@ -1,0 +1,47 @@
+```yaml
+    name: Links Check
+
+    on:
+      push:
+        branches:
+          - master
+
+    jobs:
+      links-check:
+        runs-on: ubuntu-latest
+
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+
+          - name: Setup Python
+            uses: actions/setup-python@v2
+            with:
+              python-version: 3.8
+
+          - name: Install dependencies
+            run: |
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+
+          - name: Run links check
+            run: python links_check.py
+    ```
+
+    The above GitHub action will run the `links_check.py` script every time there is a push to the `master` branch. The script is expected to be in the same directory as the action file.
+
+    The `links_check.py` script is a simple Python script that checks the links in the README file. If any link is not valid, it will print an error message.
+
+    The `setup-python@v2` action is used to install Python 3.8. The `actions/checkout@v2` action is used to checkout the repository, and the `pip` command is used to install the `links_check.py` script and its dependencies.
+
+    The `python -m pip install --upgrade pip` command is used to upgrade pip, which is a common way to upgrade pip in a GitHub action.
+
+    The `pip install -r requirements.txt` command is used to install the dependencies specified in the `requirements.txt` file.
+
+    The `python links_check.py` command is used to run the `links_check.py` script.
+
+    The `run: python links_check.py` line is used to run the command in the GitHub action.
+
+    The `uses: actions/setup-python@v2` action is used to set up Python 3.8. The `uses: actions/checkout@v2` action is used to checkout the repository.
+
+    The `with: python-version: 3.8` line is used to set the Python version to 3.8.

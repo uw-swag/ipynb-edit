@@ -1,0 +1,52 @@
+
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras import layers
+
+    # Split the preprocessed data into a training and testing dataset
+    # Split our preprocessed data into our features and target arrays
+    X = attrition_df.drop("Attrition",1).values
+    y = attrition_df["Attrition"].values
+    X_traino, X_testo, y_traino, y_testo = train_test_split(X, y, random_state=78, test_size= 0.20, train_size= 0.80, stratify =y)
+
+    # yes/no in y_testo
+    never =0
+    ever=0
+    for k in y_testo:
+        if k == '0':
+            never=never+1
+        if k== '1':
+            ever=ever+1
+    print(f'yes {ever}, no {never}')
+
+    # yes/no that it predicts
+    hever =0
+    lever=0
+    for k in y_pred_testo:
+        if k == '0':
+            hever=hever+1
+        if k== '1':
+            lever=lever+1
+    print(f'yes {lever}, no {hever}')
+
+    # Building the neural network
+    model = keras.Sequential([
+        layers.Dense(64, activation='relu', input_shape=[len(X_traino[0])]),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(1, activation='sigmoid')
+    ])
+
+    optimizer = tf.keras.optimizers.RMSprop(0.001)
+
+    model.compile(loss='binary_crossentropy',
+                  optimizer=optimizer,
+                  metrics=['accuracy'])
+
+    # Training the neural network
+    model.fit(
+        X_traino,
+        y_traino,
+        epochs=10,
+        batch_size=32,
+        validation

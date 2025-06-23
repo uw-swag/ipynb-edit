@@ -1,0 +1,33 @@
+
+    The code you provided is for a Jupyter notebook. Here's the updated code for the commit message "Update drift plot title":
+
+```python
+import numpy as np
+import pandas as pd
+
+from deepchecks.tabular import Dataset
+from deepchecks.tabular.checks import TrainTestLabelDrift
+import pprint
+
+np.random.seed(42)
+
+train_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=[1,0], p=[0.5, 0.5], size=(1000, 1))], axis=1)
+test_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=[1,0], p=[0.35, 0.65], size=(1000, 1))], axis=1) 
+
+df_train = pd.DataFrame(train_data, columns=['col1', 'col2', 'target'])
+df_test = pd.DataFrame(test_data, columns=['col1', 'col2', 'target'])
+
+train_dataset = Dataset(df_train, label='target')
+test_dataset = Dataset(df_test, label='target')
+
+check = TrainTestLabelDrift()
+result = check.run(train_dataset=train_dataset, test_dataset=test_dataset)
+
+# Update the title of the plot
+result.plot.title = "Updated Drift Plot Title"
+
+# Display the plot
+result.plot()
+```
+
+This code will update the title of the plot to "Updated Drift Plot Title". Please note that you need to replace `"Updated Drift Plot Title"` with the actual title you want to use.

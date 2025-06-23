@@ -1,0 +1,96 @@
+import numpy as np
+import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.cm as cmx
+from mpl_toolkits.mplot3d import Axes3D
+%matplotlib inline
+
+from sklearn.decomposition import PCA
+from sklearn.cluster import MiniBatchKMeans, KMeans
+from sklearn.datasets.samples_generator import make_blobs
+from sklearn.neighbors import kneighbors_graph
+from sklearn.metrics import classification_report
+header = ['area', 'perimeter', 'compactness', 'length', 'width', 'asymmetry', 'length_g', 'type']
+seeds = pd.read_csv('../input/seeds_dataset.txt', delimiter='\t+', names=header, engine='python')
+print('Accuracy of clustering is ' + '{}{}'.format(round(100 * sum(kmeans_pred == seeds.type) / len(seeds.type), 2), '%'))
+#Visualizing the data
+def clus_col(X, centroids, preds):
+    """
+    Function to assign colors to clusters.
+    """
+    for x in range(centroids[0].shape[0]):
+        yield (np.array([X[i] for i in range(X.shape[0]) if preds[i] == x]))
+
+def draw_hist(h, centroids):
+    """
+    Data for plotting history
+    """
+    for centroid in centroids:
+        yield (centroid[:,h])
+            
+            
+def plot_clust(X, centroids, preds=None):
+    #Number of colors shoud be equal to the number of clusters, so add more if necessary.
+    colors = ['green', 'fuchsia', 'tan']
+    
+    #If clusters are defined (preds != None), colors are assigned to clusters.    
+    clust = [X] if preds is None else list(clus_col(X, centroids, preds))
+    
+    #Plot clusters
+    fig = plt.figure(figsize=(7, 5))
+    for i in range(len(clust)):
+        plt.plot(clust[i][:,0], clust[i][:,1], 'o', color=colors[i], alpha=0.75, label='Cluster %d'%i)
+    plt.xlabel('area')
+    plt.ylabel('asymmetry')
+
+    #Plot history of centroids.
+    tempx = list(draw_hist(0, centroids))
+    tempy = list(draw_hist(1, centroids))
+    
+    for x in range(len(tempx[0])):
+        plt.plot(tempx, tempy, 'ro--', markersize=6)
+
+    leg = plt.legend(loc=4)
+def find_centroids(X, centroids):
+    preds = np.zeros((X.shape[0], 1))
+    for j in range(preds.shape[0]):
+
+        dist, label = 9999999, 0
+        for i in range(centroids.shape[0]):
+            distsquared = np.sum(np.square(X[j] - centroids[i]))
+            if distsquared < dist:
+                dist = distsquared
+                label = i
+
+        preds[j] = label
+        
+    return preds
+def calc_centroids(X, preds):
+    """
+    Calculate new centroids
+    """
+    
+    for x in range(len(np.unique(preds))):
+        yield np.mean((np.array([X[i] for i in range(X.shape[0]) if preds[i] == x])), axis=0)
+def iters(X, first_centroids, K, n_iter):
+    centroid_history = []
+    current_centroids = first_centroids
+    for iter in range(n_iter):
+        centroid_history.append(current_centroids)
+        preds = find_centroids(X, current_centroids)
+        current_centroids = np.array(list(calc_centroids(X, preds)))
+    return preds, centroid_history
+preds, centroid_history = iters(X, first_centroids, 3, 20)
+first_centroids = np.array([[12, 13, 0.85, 6, 2, 4, 4], [18, 15, 0.9, 6, 3, 5, 5], [19, 14, 0.9, 5.8, 2, 3, 6]])
+X = np.array(seeds.drop(['type'], axis=1))
+#Reshaping into 1-D array.
+r = np.reshape(preds, 210, 1).astype(int)
+r
+#Labels created by KMeans don't correspond to the original (obviously), so they need to be changed. 
+for i in range(len(r)):
+    if r[i] == 0:
+        r[i] = 3
+reduced_data = PCA(n_components=2).fit_transform(seeds.drop(['type'], axis=1))
+kmeans = KMeans(init='k-means++', n_clusters=3, n_init=10)
+kmeans.fit(reduced_data)

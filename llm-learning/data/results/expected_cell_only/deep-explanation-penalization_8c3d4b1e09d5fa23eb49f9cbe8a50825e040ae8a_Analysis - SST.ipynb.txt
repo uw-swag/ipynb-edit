@@ -1,0 +1,9 @@
+trained_model_folder = '../models/SST'
+save_path = '../results_for_export'
+
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) 
+
+
+results = results[results.bias == 'Genderbias']
+# results = results[results.bias == 'Article']
+# results = results[results.bias == 'Decoy']

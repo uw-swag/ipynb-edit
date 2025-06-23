@@ -1,0 +1,53 @@
+```python
+    from deepchecks.tabular.base import Dataset
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from deepchecks.tabular.checks.performance import RegressionErrorDistribution
+
+    # Load data
+    diabetes = load_diabetes()
+    df = pd.DataFrame(data=np.c_[diabetes['data'], diabetes['target']],
+                      columns=diabetes['feature_names'] + ['target'])
+
+    # Split data
+    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+
+    # Create Dataset
+    train_ds = Dataset(train_df, label='target')
+    test_ds = Dataset(test_df, label='target')
+
+    # Create model
+    model = GradientBoostingRegressor()
+
+    # Train model
+    model.fit(train_ds)
+
+    # Evaluate model
+    error_dist = RegressionErrorDistribution(model)
+    error_dist.evaluate(test_ds)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature to the base class (#988)"
+    Original Code Cells:
+    '''
+    from deepchecks.tabular.base import Dataset
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from deepchecks.tabular.checks.performance import RegressionErrorDistribution
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from deepchecks.tabular.base import Dataset
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from deepchecks.tabular.checks.performance import RegressionErrorDistribution
+
+    # Load data

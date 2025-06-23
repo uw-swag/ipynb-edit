@@ -1,0 +1,30 @@
+```python
+    import matplotlib.pyplot as plt
+import numpy as np
+
+# Assuming 'D' is your dataset
+D=all
+
+plt.rcParams['figure.dpi'] = 150
+
+fig, ax = plt.subplots()
+ax.bar(range(len(D)), list(D.values()), align='center')
+plt.xticks(range(len(D)), list(D.keys()))
+plt.xlabel("Labeled age")
+plt.ylabel("Number of otoliths")
+
+# Plotting the test set distribution
+test = all
+
+ax.bar(range(len(test)), list(test.values()), align='center')
+plt.xticks(range(len(test)), list(test.keys()))
+plt.xlabel("Labeled age")
+plt.ylabel("Number of otoliths")
+
+for rect in ax.patches:
+    height = rect.get_height()
+    ax.annotate(f'{int(height)}', xy=(rect.get_x()+rect.get_width()/2, height), 
+                xytext=(0, 0), textcoords='offset points', ha='center', va='bottom') 
+    
+plt.show()
+    ```

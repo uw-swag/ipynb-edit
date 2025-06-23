@@ -1,0 +1,66 @@
+```markdown
+    ## cohttp.async
+
+    [cohttp.async](https://hexdocs.pm/cohttp/cohttp.html#module-cohttp-async) is a library for asynchronous HTTP client and server for Erlang/OTP 24+.
+
+    ### Installation
+
+    If you're using OTP 23 or later, you can add `cohttp_async` to your list of dependencies in `mix.exs`:
+
+    ```elixir
+    def deps do
+      [
+        {:cohttp_async, "~> 1.0"}
+      ]
+    end
+    ```
+
+    And then run `mix deps.get` to install it.
+
+    ### Example
+
+    Here is an example of how to use `cohttp.async` to make a GET request:
+
+    ```elixir
+    defmodule MyServer do
+      use Cohttp.Server
+
+      def init(request) do
+        {:ok, request}
+      end
+
+      def handle(request, state) do
+        {:ok, request, state}
+      end
+    end
+
+    defmodule MyClient do
+      use Cohttp.Client
+
+      def get(url) do
+        {:ok, request} = Cohttp.Request.new(:get, url)
+        {:ok, response} = Cohttp.Client.request(request)
+        {:ok, Cohttp.Response.body(response)}
+      end
+    end
+
+    defmodule MyApp do
+      use Application
+
+      def start(_type, _args) do
+        MyServer.start()
+        MyClient.get("http://example.com")
+      end
+    end
+    ```
+
+    This example starts a server and a client, and then makes a GET request to "http://example.com".
+
+    ### License
+
+    cohttp.async is licensed under the MIT License.
+    ```
+    ---
+    ## cohttp.async
+
+    [cohttp.async](https://hexdocs.pm/cohttp/cohttp.html#module-cohttp-async) is a library for asynchronous HTTP client and server for Erlang/OTP 24+.

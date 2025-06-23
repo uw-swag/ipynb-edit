@@ -1,0 +1,24 @@
+```python
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.pipeline import make_pipeline
+    from sklearn.metrics import classification_report
+
+    # Create a model based on Multinomial Naive Bayes
+    model = make_pipeline(TfidfVectorizer(), MultinomialNB())
+
+    # Train the model using our data
+    model.fit(documents, labels)
+
+    # Predict the labels of the test set
+    predicted = model.predict(test_data)
+
+    # Print the classification report
+    print(classification_report(test_labels, predicted))
+
+    # Predict the labels of the new example
+    new_example = ["I", "like", "watching", "football"]
+    print(model.predict([new_example]))
+    ```
+
+    This code will create a chatbot using the Naive Bayes classifier from the scikit-learn library. The chatbot will be trained on a set of patterns and responses, and then it will be used to predict the label of new, unseen examples.

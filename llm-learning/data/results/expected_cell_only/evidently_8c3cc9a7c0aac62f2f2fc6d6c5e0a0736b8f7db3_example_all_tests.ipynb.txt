@@ -1,0 +1,157 @@
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestColumnDrift
+from evidently.tests import TestColumnValueMin
+from evidently.tests import TestColumnValueMax
+from evidently.tests import TestColumnValueMean
+from evidently.tests import TestColumnValueMedian
+from evidently.tests import TestColumnValueStd
+from evidently.tests import TestMeanInNSigmas
+from evidently.tests import TestValueRange
+from evidently.tests import TestNumberOfOutRangeValues
+from evidently.tests import TestShareOfOutRangeValues
+from evidently.tests import TestValueList
+from evidently.tests import TestNumberOfOutListValues
+from evidently.tests import TestShareOfOutListValues
+from evidently.tests import TestNumberOfUniqueValues
+from evidently.tests import TestMostCommonValueShare
+from evidently.tests import TestUniqueValuesShare
+from evidently import ColumnMapping
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+curr = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+
+suite_with_ref = TestSuite(tests=[
+    TestColumnValueMin(column_name='hours-per-week'),
+    TestColumnValueMax(column_name='hours-per-week'),
+    TestColumnValueMean(column_name='hours-per-week'),
+    TestColumnValueMedian(column_name='hours-per-week'),
+    TestColumnValueStd(column_name='hours-per-week'),
+    TestMeanInNSigmas(column_name='hours-per-week'),
+    TestValueRange(column_name='hours-per-week'),
+    TestNumberOfOutRangeValues(column_name='hours-per-week'),
+    TestShareOfOutRangeValues(column_name='hours-per-week'),
+    TestValueList(column_name='education'),
+    TestNumberOfOutListValues(column_name='hours-per-week'),
+    TestShareOfOutListValues(column_name='education'),
+    TestNumberOfUniqueValues(column_name='hours-per-week'),
+    TestMostCommonValueShare(column_name='education'),
+    TestUniqueValuesShare(column_name='education')
+])
+suite_with_ref.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping())
+suite_with_ref
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestShareOfDriftedColumns
+from evidently.tests import TestNumberOfDriftedColumns
+from evidently import ColumnMapping
+from sklearn.datasets import fetch_openml
+from evidently.test_preset import NoTargetPerformanceTestPreset
+from evidently.test_preset import DataQualityTestPreset
+from evidently.test_preset import DataStabilityTestPreset
+from evidently.test_preset import DataDriftTestPreset
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+curr = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+
+suite = TestSuite(tests=[
+    TestShareOfDriftedColumns(),
+    TestNumberOfDriftedColumns(),
+    TestColumnDrift(column_name='education-num'),
+    TestColumnDrift(column_name='education')
+])
+
+suite.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestValueMAE
+from evidently.tests import TestValueRMSE
+from evidently.tests import TestValueMeanError
+from evidently.tests import TestValueMAPE
+from evidently.tests import TestValueAbsMaxError
+from evidently.tests import TestValueR2Score
+from evidently import ColumnMapping
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+
+suite = TestSuite(tests=[
+    TestValueMAE(),
+    TestValueRMSE(),
+    TestValueMeanError(),
+    TestValueMAPE(),
+    TestValueAbsMaxError(),
+    TestValueR2Score()
+])
+
+suite.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite
+from evidently import ColumnMapping
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+
+suite = TestSuite(tests=[
+    TestValueMAE(),
+    TestValueRMSE(),
+    TestValueMeanError(),
+    TestValueMAPE(),
+    TestValueAbsMaxError(),
+    TestValueR2Score()
+])
+
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite

@@ -1,0 +1,30 @@
+```python
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    # Create a DataFrame
+    df = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2],"col3":[2,3,4,4,4,3,4,5,6,4]})
+
+    # Create a Suite and add the DataDuplicates check
+    suite = Suite(Dataset(df, name="df"))
+    suite.add_check(DataDuplicates())
+
+    # Run the Suite
+    suite.run()
+
+    # Create a DataFrame without duplicates
+    df_no_dups = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2], "col3":[1,2,3,4,5,6,7,8,9,0]})
+
+    # Create a Suite and add the DataDuplicates check
+    suite_no_dups = Suite(Dataset(df_no_dups, name="df_no_dups"))
+    suite_no_dups.add_check(DataDuplicates())
+
+    # Run the Suite
+    suite_no_dups.run()
+    ```
+
+    The `DataDuplicates` check in the first part of the code is used to find duplicates in the DataFrame. The `DataDuplicates(n_to_show=2)`, `DataDuplicates(columns=["col1"])`, `DataDuplicates(ignore_columns=["col3"])`, and `DataDuplicates(ignore_columns=["col3"])` options are used to customize the behavior of the check.
+
+    The second part of the code is used to find duplicates in

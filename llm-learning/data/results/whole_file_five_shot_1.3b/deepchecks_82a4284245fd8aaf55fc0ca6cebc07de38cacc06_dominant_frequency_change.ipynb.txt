@@ -1,0 +1,39 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.integrity import DominantFrequencyChange
+    from deepchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    iris = load_iris(return_X_y=False, as_frame=True)
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+    train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+                features=iris.feature_names,
+                label_name='target')
+
+    test_df = pd.concat([X_test, y_test], axis=1)
+
+    # make duplicates in the test data
+    test_df.loc[test_df.index % 2 == 0, 'petal length (cm)'] = 5.1
+    test_df.loc[test_df.index / 3 > 8, 'sepal width (cm)'] = 2.7
+
+    validation_dataset = Dataset(test_df, 
+                features=iris.feature_names,
+                label_name='target')
+    <\Cell_1>
+    <Cell_2>
+    check = DominantFrequencyChange()
+    <\Cell_2>
+    <Cell_3>
+    check.run(validation_dataset, train_dataset)
+    <\Cell_3>
+    <Cell_4>
+
+    <\Cell_4>
+    ```
+
+    The code above is a demonstration of how to use the DominantFrequencyChange check in Deepchecks, a library for data quality checks. The check is designed to detect when the dominant frequency of a feature changes significantly. In this case, it's used to detect when the 'petal length (cm)' and 'sepal width (cm)' features in the test dataset have significantly changed.

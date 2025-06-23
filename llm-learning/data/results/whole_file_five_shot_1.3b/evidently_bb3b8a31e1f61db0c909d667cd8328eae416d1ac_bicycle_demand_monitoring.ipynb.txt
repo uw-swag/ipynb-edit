@@ -1,0 +1,60 @@
+```
+    ## Instruction:
+    [
+    Commit Message: "[docs] fix typos in docs (#828)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import io
+import numpy as np
+import os
+import pandas as pd
+from pathlib import Path
+import requests
+import zipfile
+
+from datetime import datetime
+from sklearn import datasets, ensemble
+
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import TargetDriftPreset
+from evidently.metric_preset import DataQualityPreset
+from evidently.metric_preset.regression_performance import RegressionPreset 
+
+from evidently.metrics import (
+    RegressionQualityMetric,
+    RegressionPredictedVsActualScatter,
+    RegressionPredictedVsActualPlot,
+    RegressionErrorPlot,
+    RegressionAbsPercentageErrorPlot,
+    RegressionErrorDistribution,
+    RegressionErrorNormality,
+    RegressionTopErrorMetric,
+    RegressionErrorBiasTable,
+    
+    DatasetSummaryMetric,
+    ColumnSummaryMetric,
+    DatasetMissingValuesMetric,
+    DatasetCorrelationsMetric
+)
+<\Cell_0>
+<Cell_1>
+# !wget https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip -P data/
+<\Cell_1>
+<Cell_2>
+# !unzip data/bike+sharing+dataset.zip -d data/
+<\Cell_2>
+<Cell_3>
+raw_data = pd.read_csv("data/hour.csv", header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+<\Cell_3>
+<Cell_4>
+raw_data.head()
+<\Cell_4>
+<Cell_5>
+# Get weeks number
+days = len(raw_data.index.unique())
+weeks = days / 7
+
+print(f'days = {

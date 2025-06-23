@@ -1,0 +1,40 @@
+```python
+    # Content-Based Filtering
+
+    # Content-Based Filtering is a method of information retrieval that seeks to locate the items in a database that are most similar to a query item.
+
+    # The similarity is measured by a measure of how similar the contents of the items are.
+
+    # The most common method of content-based filtering is the cosine similarity.
+
+    # Here is a simple example of how to implement content-based filtering in Python using the scikit-learn library:
+
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Let's assume we have the following documents:
+    documents = ['This is the first document.',
+                 'This document is the second document.',
+                 'And this is the third one.',
+                 'Is this the first document?']
+
+    # We can convert these documents into a matrix of token counts using CountVectorizer:
+    vectorizer = CountVectorizer().fit_transform(documents)
+
+    # Compute the cosine similarity matrix:
+    csim = cosine_similarity(vectorizer, vectorizer)
+
+    # To find the most similar document to a given document, we can find the index of the input document in the cosine similarity matrix, and then return the index of the document with the highest cosine similarity:
+
+    input_vector = vectorizer[0]
+    sim_doc_indices = csim[0].argsort()[:-10:-1]  # Get the indices of the 10 most similar documents
+
+    print('Most similar documents:')
+    for sim_doc_index in sim_doc_indices:
+        print(f'{documents[sim_doc_index]}\n')
+    ```
+    This code will output the 10 most similar documents to the first document in the list.
+
+    Note: This is a very basic example and real-world content-based filtering would be more complex, taking into account many other factors such as the context of the query, the nature of the documents, and the relevance of the documents to the query.
+
+    Also, this code uses the cosine similarity as a measure of similarity, which is not the only way

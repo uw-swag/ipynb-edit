@@ -1,0 +1,27 @@
+
+    The code you provided is a Jupyter notebook that uses the geopandas, kaggle, pandas, folium, and other libraries to perform data analysis and visualization. 
+
+    The issue you're facing is that the `iframe` is not being displayed correctly. The `iframe` is used to embed a web page within a web page. However, in the code you've provided, the `iframe` is not being displayed because the `embed_map` function is not defined. 
+
+    To fix this issue, you need to define a function that can embed a folium map into an iframe. Here's a simple example of how you can do this:
+
+    ```python
+    from IPython.display import IFrame
+
+    def embed_map(m, title="Map"):
+        m.save('map.html')
+        return IFrame(src='map.html', height=600, width=800)
+    ```
+
+    This function saves the map to a file named 'map.html', and then uses the `IFrame` function to embed this file into an iframe. The `height` and `width` parameters determine the size of the iframe.
+
+    After defining this function, you can use it to embed the maps in your notebook:
+
+    ```python
+    m_1 = folium.Map(...)
+    ...
+    m_1.save('map.html')
+    return IFrame(src='map.html', height=600, width=800)
+    ```
+
+    This will create an iframe that displays the map, and you can then embed this iframe in your notebook.

@@ -1,0 +1,65 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sqlalchemy import create_engine
+from matplotlib import collections as mc
+from collections import deque
+from itertools import product
+
+# Standard Python Library for working with graphs
+import networkx as nx
+
+# Helper library to visualize graphs
+import nxpd
+
+pd.set_option("display.max_columns", 100)
+pd.set_option("display.precision", 2)
+%matplotlib inline
+plt.style.use('ggplot')
+
+def load_dataframe_from_yelp_2(query):
+    """
+    Connects to yelp_2 database on Postgres and
+    loads a Pandas dataframe based off sql query.
+
+    Args:
+        query (string): Sql query to select data from yelp_2.
+
+    Returns:
+        Dataframe: Pandas dataframe of records
+                    from sql query of yelp_2 database.
+    """
+    connect = 'postgresql+psycopg2://postgres:password@localhost:5432/yelp_2'
+    engine = create_engine(connect)
+    df = pd.read_sql(query, con=engine)
+    df = df.copy()
+    return df
+
+def counter(x):
+    if x in ['None', None, '']:
+        return 0
+    else:
+        y = x.split(',')
+        return len(y)
+
+query = '''
+        SELECT user_id,
+               friends
+        FROM user_friends
+        ;
+        '''
+df = load_dataframe_from_yelp_2(query)
+df.columns
+df['friend_count'] = df.friends.apply(counter)
+df.head(5)
+
+TOO BIG!!!
+
+area_dict = dict(zip(df['user_id'], df['friends']))
+area_dict_2 = {}
+for k, v in area_dict.items():
+    area_dict_2[k] = v.split(",")
+area_dict_2
+
+

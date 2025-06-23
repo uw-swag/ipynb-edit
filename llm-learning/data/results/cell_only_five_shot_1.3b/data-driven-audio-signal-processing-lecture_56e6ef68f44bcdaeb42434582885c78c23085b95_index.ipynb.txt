@@ -1,0 +1,63 @@
+```
+    {
+        "name": "Python",
+        "description": "Python",
+        "metadata": {
+            "language": "python",
+            "runtime": "python",
+            "interpreter": "2.7"
+        },
+        "cell_type": "code",
+        "execution_count": null,
+        "outputs": [],
+        "source": [
+            "import numpy as np",
+            "import pandas as pd",
+            "from sklearn.model_selection import train_test_split",
+            "from sklearn.preprocessing import StandardScaler",
+            "from sklearn.linear_model import LogisticRegression",
+            "from sklearn.metrics import confusion_matrix",
+            "from sklearn.metrics import classification_report"
+        ]
+    },
+    {
+        "name": "Markdown",
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## Data Preprocessing"
+        ]
+    },
+    {
+        "name": "Code",
+        "cell_type": "code",
+        "metadata": {
+            "execution": {
+                "time_limit": 2000
+            }
+        },
+        "source": [
+            "df = pd.read_csv('data.csv')",
+            "df = df.drop(['Unnamed: 0'], axis=1)",
+            "X = df.iloc[:, :-1].values",
+            "y = df.iloc[:, -1].values"
+        ]
+    },
+    {
+        "name": "Code",
+        "cell_type": "code",
+        "metadata": {
+            "execution": {
+                "time_limit": 2000
+            }
+        },
+        "source": [
+            "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)"
+        ]
+    },
+    {
+        "name": "Code",
+        "cell_type": "code",
+        "metadata": {
+            "execution": {
+                "

@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added some examples of metrics and metric presets usage"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Metrics and Metric Presets
+    # Metrics are used to measure the performance of a model. They are used to track the performance of a model over time.
+    # Metric presets are a way to define common metrics for a model. They can be used to create a set of common metrics for a model.
+
+    # Here is an example of how to use metrics and metric presets:
+
+    # Import the necessary libraries
+    from tensorflow.keras.metrics import Mean
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense
+
+    # Define a simple model
+    model = Sequential()
+    model.add(Dense(32, input_dim=8, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+
+    # Compile the model
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=10, batch_size=32)
+
+    # Evaluate the model
+    model.evaluate(X_test, y_test)
+
+    # Get the metrics
+    metrics = model.metrics_names
+    for metric in metrics:
+        print(f'{metric}: {model.history.get(metric)}')
+
+    # Here is an example of how to use metric presets:
+
+    # Import the necessary libraries
+    from tensorflow.keras.metrics import Mean
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense
+
+    # Define a simple model
+    model = Sequential()
+    model.add(Dense(32, input_dim=8, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+

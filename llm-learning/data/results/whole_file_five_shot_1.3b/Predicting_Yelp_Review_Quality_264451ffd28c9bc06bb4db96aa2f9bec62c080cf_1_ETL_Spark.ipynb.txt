@@ -1,0 +1,53 @@
+```
+    # Feature Engineering
+    ## Text Preprocessing
+    # Removing stop words
+    stop_words = set(stopwords.words('english'))
+    text_processed = " ".join([word for word in text.split() if word not in stop_words])
+
+    ## Tokenization
+    tokens = nltk.word_tokenize(text_processed)
+
+    ## Stemming
+    stemmer = PorterStemmer()
+    tokens = [stemmer.stem(token) for token in tokens]
+
+    ## Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(token) for token in tokens]
+
+    return tokens
+    ```
+    ## Vectorization
+    vectorizer = CountVectorizer(analyzer='word')
+    X = vectorizer.fit_transform(texts)
+    X = X.toarray()
+
+    return X
+    ```
+    ## Feature Selection
+    # Selecting top 1000 features
+    feature_names = vectorizer.get_feature_names_out()
+    top_1000_features = [feature_names[i] for i in np.argsort(X.sum(axis=0))[-1000:]]
+
+    return top_1000_features
+    ```
+    ## Model Training
+    # Using TF-IDF for feature extraction and Logistic Regression for model training
+    tfidf = TfidfVectorizer(max_features=1000)
+    X_train_tfidf = tfidf.fit_transform(X_train)
+    logreg = LogisticRegression()
+    logreg.fit(X_train_tfidf, y_train)
+
+    return logreg
+    ```
+    ## Model Evaluation
+    # Evaluating model performance using accuracy score
+    y_pred = logreg.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+
+    return accuracy
+    ```
+    ## Model Prediction
+    # Predicting new text
+    new_text = ["This is a

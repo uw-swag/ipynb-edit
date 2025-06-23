@@ -1,0 +1,17 @@
+BUCKET_NAME = f'{PROJECT_ID}-{MODEL_ID}-bucket'
+BUCKET_URI = f'gs://{BUCKET_NAME}/'
+AF_REGISTRY_NAME = 'vertex-mlops-af'   # Artifact Registry name
+REGION = 'us-central1'
+pipeline_params = {
+    'endpoint_sa': SERVICE_ACCOUNT,
+    'project_id': PROJECT_ID,
+    'model_dir': f'{BUCKET_URI}model/',
+    'lr': 5e-5,
+    'epochs': 5,
+    'logging_steps': 500,
+    'serving_image_tag': SERVING_IMAGE,
+    'eval_batch': 4,
+    'region': 'us-central1',
+    'train_batch': 4,
+    'vertex_experiment_tracking_name': 'finetune-flan-t5'
+}

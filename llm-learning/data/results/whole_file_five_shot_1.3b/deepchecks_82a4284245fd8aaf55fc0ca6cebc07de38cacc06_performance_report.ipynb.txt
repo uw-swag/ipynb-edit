@@ -1,0 +1,39 @@
+```
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    from deepchecks.checks.performance import PerformanceReport
+
+    iris = load_iris(as_frame=True)
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    ds = Dataset(frame, 
+                features=iris.feature_names,
+                label_name='target')
+    clf.fit(X, Y)
+
+    check = PerformanceReport()
+    check.run(ds, clf)
+
+    check = PerformanceReport(alternative_scorers={'Recall - Micro': 'recall_micro'})
+    check.run(ds, clf)
+
+    from sklearn.datasets import load_diabetes
+
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    train = Dataset(diabetes, label_name='target')
+    clf = AdaBoostRegressor(random_state=0)
+    clf.fit(train.features_columns, train.label_col)
+
+    check = PerformanceReport()
+    check.run(train, clf)
+    ```
+
+    The code above is an example of how to use the DeepChecks library to analyze the performance of an AdaBoost classifier on the Iris dataset and a regression task on the diabetes dataset. The `PerformanceReport` class is used to generate a report of the performance of the model. The `run` method of the `PerformanceReport` class is used to generate the report.
+
+    The `alternative_scorers` parameter in the `PerformanceReport` class allows you to specify alternative scorers to be used in the report. In this case, the 'Recall - Micro' scorer is used.
+
+    The DeepChecks library is a flexible and powerful tool for data analysis and visualization. It provides a wide range of features to help users understand and interpret their data.

@@ -1,0 +1,32 @@
+
+    The code you provided is a part of a Jupyter notebook. It's used to train a Gradient Boosting Regressor model on a diabetes dataset and then run a regression error distribution check on the test set.
+
+    However, the code you provided is not complete and does not provide a complete solution. It's missing the part where the model is evaluated on the test set and the results are visualized.
+
+    Here's a complete version of the code:
+
+    ```python
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RegressionErrorDistribution
+
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+
+    train = Dataset(train_df, label_name='target', cat_features=['sex'])
+    test = Dataset(test_df, label_name='target', cat_features=['sex'])
+
+    clf = GradientBoostingRegressor(random_state=0)
+    _ = clf.fit(train.features_columns, train.label_col)
+
+    check = RegressionErrorDistribution()
+    check.run(test, clf)
+
+    test.data[test.label_name] = 150
+    check = RegressionErrorDistribution()
+    check.run(test, clf)
+    ```
+
+    This code will train a model, run a regression error distribution check, and then make predictions on the test set.

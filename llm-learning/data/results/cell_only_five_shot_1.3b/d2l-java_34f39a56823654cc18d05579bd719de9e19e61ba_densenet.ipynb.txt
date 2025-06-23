@@ -1,0 +1,47 @@
+```python
+    import torch
+import torch.nn as nn
+
+class DenseNet(nn.Module):
+    def __init__(self, num_classes=10):
+        super(DenseNet, self).__init__()
+
+        self.densenet = models.densenet121(pretrained=True)
+        self.densenet.classifier = nn.Linear(self.densenet.classifier.in_features, num_classes)
+
+    def forward(self, x):
+        x = self.densenet(x)
+        return x
+
+# Instantiate the model
+model = DenseNet(num_classes=10)
+
+# Move the model to the GPU if available
+if torch.cuda.is_available():
+    model.cuda()
+
+# Define the loss function and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+# Train the model
+for epoch in range(num_epochs):
+    # Forward pass: Compute predicted y by passing x to the model
+    outputs = model(inputs)
+
+    # Compute the loss
+    loss = criterion(outputs, labels)
+
+    # Backward pass: Compute gradient of the loss with respect to all the learnable parameters of the model
+    loss.backward()
+
+    # Update parameters using the computed gradient
+    optimizer.step()
+
+    # Reset the gradients to zero
+    optimizer.zero_grad()
+
+    # Print loss every 100 epochs
+    if epoch % 100 == 0:
+        print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, loss.item()))
+    ```

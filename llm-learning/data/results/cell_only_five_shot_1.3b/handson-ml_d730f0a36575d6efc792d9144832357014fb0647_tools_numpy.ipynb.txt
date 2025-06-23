@@ -1,0 +1,48 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    import seaborn as sns
+    from handson_ml2.data_prep import get_data
+    from handson_ml2.model_selection import train_test_split
+    from handson_ml2.model_selection import GridSearchCV
+    from handson_ml2.feature_extraction import RareLabelEncoder
+    from handson_ml2.feature_extraction import SimpleImputer
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import StandardScaler
+
+    # Download the data
+    df = get_data()
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(df.drop("target", axis=1), df["target"])
+
+    # Save the figure
+    plt.figure(figsize=(10, 4))
+
+    plt.subplot(1, 2, 1)
+    sns.heatmap(df.corr(), annot=True, cmap="RdYlGn")
+    plt.title("Correlation Matrix")
+
+    plt.subplot(1, 2, 2)
+    plt.hist(df["target"])
+    plt.title("Distribution of Target")
+
+    plt.tight_layout()
+    plt.savefig("figures/correlation.png")
+
+    # Add a Colab link
+    from google.colab import files
+    files.download("figures/correlation.png")
+
+    # Point to handson-ml2
+    import sys
+    sys.path.insert(0, "../handson-ml2")
+    ```
+
+    ### Explanation:
+    - The code first downloads the data, then splits it into a training set and a test set.
+    - It then creates a correlation matrix heatmap and a histogram of the target variable.
+    - The heatmap is saved as

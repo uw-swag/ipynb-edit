@@ -1,0 +1,46 @@
+```
+    [
+    Commit Message: "Recsys tests (#906)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    try:
+        import evidently
+    except:
+        !pip install git+https://github.com/evidentlyai/evidently.git
+    <\Cell_0>
+    <Cell_1>
+    import pandas as pd
+    import numpy as np
+
+    import io
+    import os
+    import zipfile
+
+    import requests
+    <\Cell_1>
+    <Cell_2>
+    !pip install implicit
+    <\Cell_2>
+    <Cell_3>
+    content = requests.get("http://files.grouplens.org/datasets/movielens/ml-100k.zip").content
+
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+      train = arc.read("ml-100k/ua.base").decode().split("\n")
+      test = arc.read("ml-100k/ua.test").decode().split("\n")
+      movies = arc.read("ml-100k/u.item").decode(encoding='latin-1').split("\n")
+      users = arc.read("ml-100k/u.user").decode(encoding='latin-1').split("\n")
+    <\Cell_3>
+    <Cell_4>
+    columns = ['user_id', 'movie_id', 'rating', 'timestamp']
+
+    data = [[x for x in e.split('\t')] for e in train]
+    train = pd.DataFrame(data, columns=columns).dropna().astype(int)
+
+    data = [[x for x in e.split('\t')] for e in test]
+    test = pd.DataFrame(data, columns=columns).dropna().astype(int)
+
+    columns = ['user_id', 'age', 'gender', 'occupation', 'zip_code']
+
+    data = [[x for x in e.split('|')] for e in users]
+    users = pd.DataFrame(data, columns=

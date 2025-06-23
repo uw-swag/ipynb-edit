@@ -1,0 +1,24 @@
+```
+    # Remove example notebooks from root
+    import os
+    import shutil
+
+    # Get the path to the current directory
+    current_dir = os.getcwd()
+
+    # Get the list of all files in the current directory
+    files = os.listdir(current_dir)
+
+    # Iterate over each file
+    for file in files:
+        # If the file is a notebook and is not the current notebook
+        if file.endswith('.ipynb') and file != 'your_current_notebook.ipynb':
+            # Get the full path to the notebook
+            notebook_path = os.path.join(current_dir, file)
+            # Remove the notebook
+            os.remove(notebook_path)
+
+    # Remove the current notebook
+    os.remove('your_current_notebook.ipynb')
+    ```
+    This script will remove all notebooks in the current directory, except for the current notebook. Please replace 'your_current_notebook.ipynb' with the name of your current notebook.

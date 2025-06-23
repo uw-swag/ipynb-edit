@@ -1,0 +1,33 @@
+
+    ### Instruction
+    [
+    Commit Message:"[Automatic] Examples Update (#510)"
+    Original Code Cells:
+    '''
+    import graphlab
+    sales = graphlab.SFrame('home_data.gl/')
+    sales
+    graphlab.canvas.set_target('ipynb')
+    sales.show(view="Scatter Plot", x="sqft_living", y="price")
+    train_data,test_data = sales.random_split(.8,seed=0)
+    sqft_model = graphlab.linear_regression.create(train_data, target='price', features=['sqft_living'],validation_set=None)
+    print test_data['price'].mean()
+    print sqft_model.evaluate(test_data)
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+    plt.plot(test_data['sqft_living'],test_data['price'],'.',
+    test_data['sqft_living'],sqft_model.predict(test_data),'-')
+    sqft_model.get('coefficients')
+    my_features = ['bedrooms', 'bathrooms', 'sqft_living', 'sqft_lot', 'floors', 'zipcode']
+    sales[my_features].show()
+    sales.show(view='BoxWhisker Plot', x='zipcode', y='price')
+    my_features_model = graphlab.linear_regression.create(train_data,target='price',features=my_features,validation_set=None)
+    print my_features
+    print sqft_model.evaluate(test_data)
+    print my_features_model.evaluate(test_data)
+    house1 = sales[sales['id']=='5309101200']
+    house1
+    print house1['price']
+    print sqft_model.predict(house1)
+    print my_features_model.predict(house1)
+    house2 = sales[sales['id']=='1925069082']

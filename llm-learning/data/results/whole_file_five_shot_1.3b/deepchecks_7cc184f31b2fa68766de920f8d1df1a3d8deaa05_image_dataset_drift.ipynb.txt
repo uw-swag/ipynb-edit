@@ -1,0 +1,20 @@
+
+The code you provided is splitting the VisionData and adding brightness to the images. The brightness is added by subtracting the image from 255 and then multiplying it by 0.07. This is a simple way to simulate a formatter that increases the brightness of the images.
+
+However, the code you provided is not actually splitting the VisionData. The VisionData class in deepchecks is designed to handle datasets that are loaded from a dataloader, not to split the dataset. The code you provided is splitting the dataset into a training and a test set, but the VisionData class does not have a method to do this.
+
+If you want to split the dataset, you can use the `train_test_split` function from the `sklearn.model_selection` module. Here's an example:
+
+```python
+from sklearn.model_selection import train_test_split
+
+# Assuming `train_dataloader` is your dataloader
+train_images, test_images, train_labels, test_labels = train_test_split(train_dataloader, train_dataloader, test_size=0.2, random_state=42)
+
+train_ds = VisionData(train_images, train_labels, image_formatter=ImageFormatter(pil_formatter), label_formatter=DetectionLabelFormatter(lambda x: x))
+test_ds = VisionData(test_images, test_labels, image_formatter=ImageFormatter(pil_formatter), label_formatter=DetectionLabelFormatter(lambda x: x))
+```
+
+In this example, `train_images` and `test_images` are the images used for training and testing respectively, and `train_labels` and `test_labels` are the corresponding labels.
+
+Please note that the `train_test_split` function splits the dataset randomly, so the order of the images in the training and testing sets may not be the same as in the original dataset. If you want to keep the same order, you can shuffle the dataset before splitting.

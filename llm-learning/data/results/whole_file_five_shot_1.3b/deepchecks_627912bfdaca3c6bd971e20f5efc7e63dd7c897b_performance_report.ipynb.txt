@@ -1,0 +1,39 @@
+```python
+    # Import necessary libraries
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'path/to/source/directory'
+    dest_dir = 'path/to/destination/directory'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Create the destination directory if it doesn't exist
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+
+    # Refactor the files
+    for file in files:
+        # Get the full path of the source file
+        source_file = os.path.join(source_dir, file)
+
+        # Get the base name of the source file
+        base_name = os.path.splitext(file)[0]
+
+        # Get the full path of the destination file
+        dest_file = os.path.join(dest_dir, base_name)
+
+        # Check if the destination file already exists
+        if os.path.exists(dest_file):
+            # If the destination file already exists, append a number to the base name
+            i = 1
+            while os.path.exists(dest_file + '_' + str(i)):
+                i += 1
+            dest_file = dest_file + '_' + str(i)
+
+        # Copy the source file to the destination directory
+        shutil.copy2(source_file, dest_file)
+    ```
+    This script will copy all files from the source directory to the destination directory, appending a number to the base name of each file if the destination directory already contains a file with the same base name.

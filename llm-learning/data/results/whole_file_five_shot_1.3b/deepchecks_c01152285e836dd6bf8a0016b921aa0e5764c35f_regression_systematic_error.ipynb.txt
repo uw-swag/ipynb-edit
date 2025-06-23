@@ -1,0 +1,36 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RegressionSystematicError
+
+    # Load the dataset
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+    train_df['target'] = train_df['target'] + 150
+
+    # Create datasets
+    train = Dataset(train_df, label_name='target', cat_features=['sex'])
+    test = Dataset(test_df, label_name='target', cat_features=['sex'])
+
+    # Train the model
+    clf = GradientBoostingRegressor(random_state=0)
+    _ = clf.fit(train.features_columns, train.label_col)
+
+    # Create the systematic error check
+    check = RegressionSystematicError()
+
+    # Run the check
+    result = check.run(test, clf)
+
+    # Plot the box plot
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.boxplot(x=result.data['mean'], y=result.data.index, ax=ax)
+    ax.set_title('Mean Systematic Error')
+    ax.set_xlabel('Systematic Error')
+    ax.set_ylabel('Index')
+    ax.axhline(y=result.data['mean'].mean(), color='r', linestyle='-')
+    ax.annotate(f'Mean: {result.data["mean"].mean():.2f}', xy=(0.05, 0.95), xycoords='axes fraction', ha

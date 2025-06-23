@@ -1,0 +1,25 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.linear_model import LogisticRegression
+
+    from scar import C
+
+    x_new = x[:]
+    y_new = s[:]
+
+    tau = 0.5
+    w_p = tau / (C * tau)
+    w_n = (1 - tau) / (1 - C * tau)
+
+    class_weight = {0: w_n, 1: w_p}
+
+    clf = LogisticRegression(class_weight=class_weight).fit(x_new, y_new)
+
+    y_hat = clf.predict(x)
+
+    from utils import visualize_pn_data
+
+    visualize_pn_data(x, y)
+    visualize_pn_data(x, y_hat)
+    ```

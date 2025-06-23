@@ -1,0 +1,38 @@
+```python
+    # Model Evaluation
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Predicting the Test set results
+    y_pred = rf_clf.predict(df_test.drop(label_col, axis=1))
+
+    # Model Accuracy
+    from sklearn.metrics import accuracy_score
+    accuracy = accuracy_score(df_test[label_col], y_pred)
+    print(f"Accuracy: {accuracy}")
+
+    # Confusion Matrix
+    cm = confusion_matrix(df_test[label_col], y_pred)
+    print(f"Confusion Matrix: \n{cm}")
+
+    # Classification Report
+    cr = classification_report(df_test[label_col], y_pred)
+    print(f"Classification Report: \n{cr}")
+
+    # Feature Importance
+    importances = rf_clf.feature_importances_
+    indices = np.argsort(importances)[::-1]
+
+    # Print the feature ranking
+    print(f"Feature ranking:")
+
+    for f in range(df_train.shape[1]):
+        print(f"{f+1}. feature {indices[f]} ({importances[indices[f]]})")
+    ```
+
+    This code will evaluate the model's performance on the test set, print the accuracy, confusion matrix, and classification report. It also prints the feature importances.
+
+    The feature importances are calculated as the (normalized) total reduction of the criterion brought by the feature. It is a measure of the total amount of "information" the feature provides about the classification task.
+
+    The higher the importance, the more important the feature.
+
+    The feature importances can be used to select the most relevant features for the model.

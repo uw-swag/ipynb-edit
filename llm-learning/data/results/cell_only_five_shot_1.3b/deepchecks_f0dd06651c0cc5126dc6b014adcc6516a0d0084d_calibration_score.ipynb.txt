@@ -1,0 +1,45 @@
+```python
+    from deepchecks.tabular.checks import CalibrationScore
+    from deepchecks.tabular.base import Dataset
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    import warnings
+
+    def custom_formatwarning(msg, *args, **kwargs):
+        # ignore everything except the message
+        return str(msg) + '\n'
+
+    warnings.formatwarning = custom_formatwarning
+
+    # Load iris dataset
+    iris = load_iris()
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    df['target'] = iris.target
+
+    # Split the dataset
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    # Create a dataset
+    train_dataset = Dataset(X_train, y_train, features=df.columns[:-1])
+
+    # Create a logistic regression model
+    model = LogisticRegression()
+
+    # Train the model
+    model.fit(train_dataset)
+
+    # Create a calibration score check
+    calibration_score = CalibrationScore(model)
+
+    # Check the calibration score
+    calibration_score.check()
+
+    # Create a dataset
+    test_dataset = Dataset(X_test, y_test, features=df.columns[:-1])
+
+    # Check the model's performance on the test set
+    model.score(test_dataset)
+
+    ```

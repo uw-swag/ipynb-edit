@@ -1,0 +1,13 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from mlchecks.checks.overview import ModelInfo
+
+    clf = AdaBoostClassifier()
+    iris = load_iris()
+    X = iris.data
+    Y = iris.target
+    clf.fit(X, Y)
+
+    ModelInfo().run(clf)
+    ```

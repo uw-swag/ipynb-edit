@@ -1,0 +1,44 @@
+
+The code you provided is used to train a Random Forest Classifier on the breast cancer dataset and then test the accuracy of the model. The accuracy is then calculated and displayed in a test suite. The test suite is then saved as an HTML file.
+
+The code you provided is correct and should work as expected. However, there are a few minor issues with it:
+
+1. The code is missing the part where you calculate the classification probabilities. You can calculate these probabilities by calling the `predict_proba` method on the model.
+
+2. The code is missing the part where you calculate the accuracy of the model. You can calculate the accuracy of the model by comparing the predicted values to the actual values.
+
+Here is the corrected code:
+
+```python
+from sklearn import datasets, ensemble, model_selection
+from sklearn.metrics import accuracy_score
+
+bcancer = datasets.load_breast_cancer(as_frame=True)
+bcancer_frame = bcancer.frame
+bcancer_frame['target'] = bcancer.target
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+train_data, test_data = model_selection.train_test_split(
+    bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = prediction
+bcancer_column_mapping.numerical_features = numerical_features
+
+suite_classification = TestSuite(tests=[TestAccuracyScore()])
+
+# Calculate classification probabilities
+test_data['classification_probas'] = model.predict_proba(test_data[

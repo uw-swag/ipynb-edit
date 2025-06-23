@@ -1,0 +1,27 @@
+
+    Here is the code you provided, but I've added a new cell to it. This cell is for adding sentiment-scored sentences to the dataset.
+
+    The function `get_appended_dataset` is used to create a new dataset that includes sentiment-scored sentences. The sentiment-scored sentences are created by appending the text of two sentences from the original dataset to each other.
+
+    Here is the code:
+
+    ```python
+    def get_appended_dataset(dataset):
+        # load test set
+        list_of_idx = np.arange(len(test))
+        list_of_idx = np.random.permutation(list_of_idx)
+        list_of_new_train_pos =[]
+        for i in tqdm_notebook(range(len(dev))):
+            list_of_new_train_pos.append(' '.join(test[i].text)+ ' '+' '.join(test[list_of_idx[i]].text))
+        return list_of_new_train_pos
+    ```
+
+    This function takes as input a dataset and returns a new dataset where each sentence in the original dataset is appended to two other sentences from the original dataset. The sentiment-scores of the sentences are not used in this function, but they can be added to the dataset if needed.
+
+    The function uses the `tqdm_notebook` function from the `tqdm` library to display a progress bar.
+
+    The `np.arange` function is used to create a list of indices. The `np.random.permutation` function is used to randomly permute the indices.
+
+    The `for` loop iterates over the indices of the development set. For each index, it appends the text of the current test sentence and a random index from the test set to the list of new training positions.
+
+    The function returns the list of new training positions.

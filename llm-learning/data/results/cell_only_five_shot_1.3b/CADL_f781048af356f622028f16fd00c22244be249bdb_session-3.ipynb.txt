@@ -1,0 +1,36 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import tensorflow as tf
+
+    def montage_filters(W):
+        """
+        This function is used to create a montage of filters.
+        """
+        (n, h, w, n_filters) = W.shape
+        n_filters = n_filters // n  # Average filters of each feature map.
+        height = w * n_filters
+        width = h * n_filters
+        montage = np.zeros((height, width, n_filters))
+
+        for i in range(n):
+            for j in range(n_filters):
+                montage[j*height:(j+1)*height, i*width:(i+1)*width, :] = W[i, :, :, j]
+
+        return montage
+
+    g = tf.get_default_graph()
+    W = ...
+
+    assert(W.dtype == np.float32)
+    m = montage_filters(W)
+    plt.figure(figsize=(5, 5))
+    plt.imshow(m)
+    plt.imsave(arr=m, fname='audio.png')
+    g = tf.get_default_graph()
+    for layer_i in range(len(n_filters)):
+        W = sess.run(g.get_tensor_by_name('{}/W:0'.format(layer_i)))
+        plt.figure(figsize=(5, 5))
+        plt.imshow(montage_filters(W))
+        plt.title('Layer {}\'s Learned Convolution Kernels'.format(layer_i))
+    ```

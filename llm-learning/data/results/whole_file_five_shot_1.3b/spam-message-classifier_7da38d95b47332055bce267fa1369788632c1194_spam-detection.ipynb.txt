@@ -1,0 +1,59 @@
+```
+    <Cell_0>
+    PATH_TO_DATA = '/home/yorko/Documents/data/amazon_reviews_sample100k_grocery.csv.zip'
+    <\Cell_0>
+    <Cell_1>
+    # some necessary imports
+    import os
+    import pickle
+    import json
+    from pprint import pprint
+    import numpy as np
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import Pipeline
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score, confusion_matrix
+    import seaborn as sns
+    from matplotlib import pyplot as plt
+    <\Cell_1>
+    <Cell_2>
+    df = pd.read_csv(PATH_TO_DATA)
+    <\Cell_2>
+    <Cell_3>
+    df.head()
+    <\Cell_3>
+    <Cell_4>
+    df.shape
+    <\Cell_4>
+    <Cell_5>
+    df.columns
+    <\Cell_5>
+    <Cell_6>
+    df['Cat1'].unique()
+    <\Cell_6>
+    <Cell_7>
+    df['Cat2'].value_counts()
+    <\Cell_7>
+    <Cell_8>
+    df['Cat3'].nunique()
+    <\Cell_8>
+    <Cell_9>
+    texts = ['i have a cat', 
+             'you have a dog', 
+             'you and i have a cat and a dog']
+
+    vocabulary = list(enumerate(set([word for sentence in texts 
+                                     for word in sentence.split()])))
+    print('Vocabulary:', vocabulary)
+
+    def vectorize(text): 
+        vector = np.zeros(len(vocabulary)) 
+        for i, word in vocabulary:
+            num = 0 
+            for w in text: 
+                if w == word: 
+                    num += 1 
+        if num: 
+            vector

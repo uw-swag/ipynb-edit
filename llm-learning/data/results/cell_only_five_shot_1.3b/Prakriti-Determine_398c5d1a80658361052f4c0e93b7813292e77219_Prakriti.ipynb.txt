@@ -1,0 +1,25 @@
+```python
+    ## Turn on the project
+    ## This is a simple script that will turn on the project.
+    ## It assumes that the project is already set up and running.
+    ## If the project is not running, it will start it.
+
+    ## Check if the project is running
+    response = requests.get(
+        BASE_URL + "workspace/list",
+        headers = my_header,
+        json={
+            "path": upload_location_for_endtoend_notebook
+        }
+    )
+
+    if response.json()['entities']:
+        print("The project is already running.")
+    else:
+        print("The project is not running. Starting it now...")
+        ## This is where you would start the project.
+        ## For now, we'll just print a message and wait for a minute.
+        print("Project is starting. Please wait...")
+        time.sleep(60)
+        print("Project has started.")
+    ```

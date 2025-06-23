@@ -1,0 +1,65 @@
+```
+    # Example/llm tutorial (#1188)
+
+    ## Introduction
+
+    This tutorial is an example of how to use the llm (Likelihood Ratio Minimization) method to estimate the parameters of a model.
+
+    ## Prerequisites
+
+    Before you start, you should have a basic understanding of the following:
+
+    - Python programming
+    - Numpy and Scipy libraries
+    - Matplotlib for data visualization
+
+    ## Tutorial
+
+    ### Step 1: Import necessary libraries
+
+    You need to import the necessary libraries.
+
+    ```python
+    import numpy as np
+    import scipy.optimize as sp
+    import matplotlib.pyplot as plt
+    ```
+
+    ### Step 2: Generate some data
+
+    Generate some data that you will use to train your model.
+
+    ```python
+    np.random.seed(0)
+    x = np.linspace(0, 10, 100)
+    y = 3*x + 2 + np.random.normal(0, 1, 100)
+    ```
+
+    ### Step 3: Define the model
+
+    Define the model you want to estimate the parameters of.
+
+    ```python
+    def model(x, a, b, c):
+        return a*x**2 + b*x + c
+    ```
+
+    ### Step 4: Estimate the parameters
+
+    Use the llm method to estimate the parameters of the model.
+
+    ```python
+    def llm(x, y, a, b, c):
+        return np.sum((y - model(x, a, b, c))**2)
+
+    p0 = [1, 1, 1]
+    popt, pcov = sp.curve_fit(llm, x, y, p0)
+    ```
+
+    ### Step 5: Plot the data and the model
+
+    Plot the data and the model.
+
+    ```python
+    plt.figure(figsize=(8, 6))
+    plt.plot(x, y, 'o', label='Data

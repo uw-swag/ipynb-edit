@@ -1,0 +1,28 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Plotting the MSE for the two different training scenarios
+    plt.figure(figsize=(10, 5))
+    plt.plot(1/len(Y_train) * np.array(MSE_train1), label=r'training $\mu = 0$', color='C0', linestyle='-')
+    plt.plot(1/len(Y_test) * np.array(MSE_test1), label=r'validation', color='C0', linestyle='--')
+    plt.plot(1/len(Y_train) * np.array(MSE_train2), label='training $\mu = 5$', color='C1', linestyle='-')
+    plt.plot(1/len(Y_test) * np.array(MSE_test2), label='validation', color='C1', linestyle='--')
+
+    plt.xlabel('iteration')
+    plt.ylabel('MSE')
+    plt.xlim([0, 1000])
+    plt.legend()
+    plt.grid()
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    plt.plot(1/len(Y_train) * np.array(MSE_train1), label=r'training $\mu = 0$', color='C0', linestyle='-')
+plt.plot(1/len(Y_test) * np.array(MSE_test1), label=r'validation', color='C0', linestyle='--')
+plt.plot(1/len(Y_train) * np.array(MSE_train2), label='training $\mu = 5$', color='C1', linestyle='-')
+plt.plot(1/len(Y_test) *

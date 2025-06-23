@@ -1,0 +1,11 @@
+```python
+    from deepchecks.tabular.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    ```
+
+    The code above is a fix for a bug in the `StringMismatchComparison` function. The bug was that the function was not correctly identifying the mismatches in the compared data. The function now correctly identifies the mismatches by using a regular expression pattern to match the mismatches.

@@ -1,0 +1,53 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.svm import SVC
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    data = pd.read_csv('your_data.csv')
+
+    # Data exploration
+    data.head()
+
+    # Split the data into features and target variable
+    X = data.drop('target_variable', axis=1)
+    y = data['target_variable']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the SVM model
+    svc = SVC(kernel='rbf', C=1.0, gamma=0.1)
+    svc.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = svc.predict(X_test)
+
+    # Print the confusion matrix and classification report
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # Plot the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    sns.heatmap(cm, annot=True, fmt="d")
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.show()
+
+    # Enhance the notebook
+    # Add more code cells to perform more complex data analysis, model training, etc.
+    ```
+
+    Please

@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from scipy import stats
+
+    # Assuming you have two datasets, df1 and df2
+    df1 = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+    df2 = pd.DataFrame({'A': [1, 2, 3], 'B': [7, 8, 9]})
+
+    # Perform dependent t-test
+    t_statistic, p_value = stats.ttest_rel(df1['A'], df2['A'])
+
+    print('T-statistic:', t_statistic)
+    print('P-value:', p_value)
+    ```
+
+    ### Solution:
+    ```python
+    import pandas as pd
+    import numpy as np
+    from scipy import stats
+
+    # Assuming you have two datasets, df1 and df2
+    df1 = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+    df2 = pd.DataFrame({'A': [1, 2, 3], 'B': [7, 8, 9]})
+
+    # Perform dependent t-test
+    t_statistic, p_value = stats.ttest_rel(df1['A'], df2['A'])
+
+    print('T-statistic:', t_statistic)
+    print('P-value:', p_value)
+
+    # If p-value is less than 0.05, we reject the null hypothesis and conclude that the two samples are significantly different.
+    if p_value < 0.05:
+        print("The samples are significantly different")
+    else:
+        print("The samples are not significantly different")
+    ```

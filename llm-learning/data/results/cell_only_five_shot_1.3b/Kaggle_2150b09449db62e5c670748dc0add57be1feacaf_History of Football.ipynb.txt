@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Load the dataset
+    df = pd.read_csv('path_to_your_file.csv')
+
+    # Check the first few rows of the dataset
+    print(df.head())
+
+    # Check the summary statistics of the dataset
+    print(df.describe())
+
+    # Check the distribution of the target variable
+    sns.countplot(df['target_variable'])
+    plt.show()
+
+    # Check the distribution of the features
+    df.hist(figsize=(12, 12))
+    plt.show()
+
+    # Check the correlation between the features
+    plt.figure(figsize=(12, 12))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Check the missing values in the dataset
+    print(df.isnull().sum())
+
+    # Check the distribution of the categorical variables
+    df.select_dtypes(include=['object']).nunique()
+
+    # Check the distribution of the numerical variables
+    df.select_dtypes(include=['int64', 'float64']).hist(figsize=(12, 12))
+    plt.show()
+    ```
+
+    Please replace 'path_to_your_file.csv' and 'target_variable' with your actual file path and target variable name.
+
+    This script will perform a basic Exploratory Data Analysis (EDA) on the football history dataset. It will show the first few rows of the dataset, the summary statistics of the dataset, the distribution of the target variable, the distribution of the features, the correlation between the features, the missing values in the dataset, and the distribution of the categorical and numerical variables.

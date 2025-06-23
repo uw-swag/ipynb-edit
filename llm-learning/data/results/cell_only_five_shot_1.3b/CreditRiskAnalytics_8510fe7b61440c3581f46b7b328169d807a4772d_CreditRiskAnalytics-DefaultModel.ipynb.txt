@@ -1,0 +1,47 @@
+```python
+    import pickle
+
+    # Save the model to disk
+    filename = 'model.pkl'
+    pickle.dump(model, open(filename, 'wb'))
+
+    # Load the model from disk
+    loaded_model = pickle.load(open(filename, 'rb'))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding Data Visualization"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is an example of how you can visualize your data using matplotlib and seaborn:
+
+    ```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Plotting a histogram
+    plt.figure(figsize=(10,6))
+    sns.histplot(data=df, x="column_name", bins=30, kde=True)
+    plt.title('Histogram of column_name')
+    plt.show()
+
+    # Plotting a correlation matrix
+    plt.figure(figsize=(10,8))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.title('Correlation Matrix')
+    plt.show()
+    ```
+
+    Replace "column_name" with the name of the column you want to visualize.
+
+    This code will create two plots: a histogram of the data and a correlation matrix of the data.
+
+    The histogram shows the distribution of the data, and the correlation matrix shows the correlation between different features.
+
+    Please note that you need to have a pandas DataFrame `df` and the column name `column_name` in your code.

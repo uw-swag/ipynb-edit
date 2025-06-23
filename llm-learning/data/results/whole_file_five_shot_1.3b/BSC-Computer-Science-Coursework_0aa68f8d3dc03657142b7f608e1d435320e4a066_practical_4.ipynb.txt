@@ -1,0 +1,29 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import scipy.stats as stats
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    # Load the iris dataset
+    iris = load_iris()
+    data = iris.data
+    target = iris.target
+
+    # Create a DataFrame
+    df = pd.DataFrame(data, columns=iris.feature_names)
+    df['target'] = target
+
+    # Compute the correlation matrix
+    corr_matrix = df.corr()
+
+    # Select the correlation matrix of the target variable
+    target_corr_matrix = corr_matrix['target']
+
+    # Perform a hypothesis test
+    t_statistic, p_value = stats.ttest_ind(df['sepal length (cm)'], df['sepal width (cm)'], equal_var=False, nan_policy='omit')
+
+    print("T-Statistic: ", t_statistic)
+    print("P-Value: ", p_value)
+    <\Cell_0>
+    ```

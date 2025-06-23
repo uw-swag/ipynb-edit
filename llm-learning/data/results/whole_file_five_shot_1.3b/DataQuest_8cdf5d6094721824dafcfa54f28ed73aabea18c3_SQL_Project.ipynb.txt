@@ -1,0 +1,40 @@
+
+    '''
+    [
+    Commit Message: "More progress on the mission: GuidedProject_DesigningAndCreatingADatabase"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%matplotlib inline
+import pandas as pd
+import sqlite3
+
+pd.set_option('max_columns', 180)
+pd.set_option('max_rows', 200000)
+pd.set_option('max_colwidth', 5000)
+
+game_log = pd.read_csv('game_log.csv')
+park_codes = pd.read_csv('park_codes.csv')
+person_codes = pd.read_csv('person_codes.csv')
+team_codes = pd.read_csv('team_codes.csv')
+<\Cell_0>
+<Cell_1>
+print('Explore game_log data')
+print('\ngame_log data set size\n\tRows: {rows}\n\tCols: {cols}'.format(rows=game_log.shape[0], cols=game_log.shape[1]))
+print('\ngame_log columns')
+for col in game_log.columns:
+    print('\t- ' + col)
+print('\n\n\n*****First 3 rows of game_log*****\n')
+print(game_log.head(3))
+print('\n\n\n*****Last 3 rows of game_log*****\n')
+print(game_log.tail(3))
+<\Cell_1>
+<Cell_2>
+!cat game_log_fields.txt
+<\Cell_2>
+<Cell_3>
+print('Explore park_codes data')
+print('\npark_codes data set size\n\tRows: {rows}\n\tCols: {cols}'.format(rows=park_codes.shape[0], cols=park_codes.shape[1]))
+print('\npark_codes columns')
+for col in park_codes.columns:
+    print('\t- '

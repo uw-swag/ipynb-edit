@@ -1,0 +1,44 @@
+```python
+    # Module 03: Code files added
+    # This module is about the implementation of a machine learning model using the Scikit-learn library.
+
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn import svm
+    from sklearn import metrics
+    from sklearn import model_selection as ms
+    import cv2
+    from matplotlib import pyplot as plt
+
+    # Define the kernels for the SVM
+    kernels = ['linear', 'poly', 'rbf', 'sigmoid']
+
+    # Function to plot the decision boundary
+    def plot_decision_boundary(svm, X, y):
+        h = .02  # step size in the mesh
+        x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
+                             np.arange(y_min, y_max, h))
+        Z = svm.predict(np.c_[xx.ravel(), yy.ravel()])
+
+        # Put the result into a color plot
+        Z = Z.reshape(xx.shape)
+        plt.figure(figsize=(10, 6))
+        plt.pcolormesh(xx, yy, Z, cmap=plt.cm.Pastel1)
+
+        # Plot also the training points
+        plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Paired)
+        plt.xlabel('Feature 1')
+        plt.ylabel('Feature 2')
+        plt.title('SVM Decision Boundary')
+        plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Module 04: Code files added"
+    Original Code Cells:
+    '''
+    

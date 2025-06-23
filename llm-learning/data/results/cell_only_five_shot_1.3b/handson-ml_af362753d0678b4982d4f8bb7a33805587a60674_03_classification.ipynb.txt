@@ -1,0 +1,31 @@
+```python
+    import sys
+    sys.path.append("../../")
+    import os
+    import numpy as np
+    import zipfile
+    from tqdm import tqdm
+    import papermill as pm
+    import scrapbook as sb
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import cross_val_score
+    from sklearn.metrics import precision_score, recall_score
+    from sklearn.pipeline import make_pipeline
+
+    if y_scores.ndim == 2:
+        y_scores = y_scores[:, 1]
+
+    log_clf = LogisticRegression(random_state=42)
+    score = cross_val_score(log_clf, X_train_transformed, y_train, cv=3, verbose=3)
+    score.mean()
+
+    X_test_transformed = preprocess_pipeline.transform(X_test)
+
+    log_clf = LogisticRegression(random_state=42)
+    log_clf.fit(X_train_transformed, y_train)
+
+    y_pred = log_clf.predict(X_test_transformed)
+
+    print("Precision: {:.2f}%".format(100 * precision_score(y_test, y_pred)))
+    print("Recall: {:.2f}%".format(100 * recall_score(y_test, y_pred)))
+    ```

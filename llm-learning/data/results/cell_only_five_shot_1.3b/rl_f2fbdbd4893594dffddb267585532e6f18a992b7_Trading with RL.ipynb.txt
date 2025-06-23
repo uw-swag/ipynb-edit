@@ -1,0 +1,55 @@
+
+    Here is the refactored code for the market simulation. The simulation is based on the Ornstein-Uhlenbeck process, which is a stochastic process that describes the price of a financial asset as a function of time. The process is characterized by a mean reversion process and a random process.
+
+    The code is divided into two parts:
+
+    1. The first part of the code simulates the stock price based on the Ornstein-Uhlenbeck process.
+    2. The second part of the code is a refactoring of the original code to improve the readability and maintainability of the code.
+
+    The refactored code is as follows:
+
+    ```python
+    import random
+    import datetime
+    import pdb
+
+    import numpy as np
+    import pandas as pd
+
+    import plotly.graph_objects as go
+
+    # set seeds for reproducibility
+    random.seed(4465)
+    np.random.seed(4465)
+
+    # simulate market data
+    total_time=10
+    ticks = 10000
+    tick_length = total_time/ticks
+
+    m = 0.1
+    k = 10
+    amplitude = 0
+
+    print("Amplitude: %.3f" % amplitude)
+    print("Period: %.3f" % (2 * np.pi * np.sqrt((m/k))))
+
+    # a = -ky/m
+    start_trend = 100
+    stock_price = start_trend + amplitude
+    stock_velocity = 0
+
+    noise = 0.01
+    damping = 0.01
+
+    trend_per_tick = 0.0
+    trend_index = start_trend
+    trend_series = []
+    stock_series = []
+    time_series = []
+
+    for i in range(ticks):
+        acc = - k / m * (stock_price - trend_index) 
+        stock_velocity = stock_velocity + acc * tick_length
+        stock_velocity = stock_velocity * (1-damping)
+        stock_price += stock_velocity * tick_length

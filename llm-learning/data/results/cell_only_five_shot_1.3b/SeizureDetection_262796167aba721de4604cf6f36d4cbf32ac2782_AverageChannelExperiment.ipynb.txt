@@ -1,0 +1,33 @@
+```python
+    import pandas as pd
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
+    from sklearn.utils import shuffle
+
+    def averageChannels(df):
+        # Replace 'channel' with the actual column name
+        df_channel_average = df.groupby('channel').mean().reset_index()
+        return df_channel_average
+
+    def featureExtractionAverage(df, sample_rate, step):
+        # Replace 'feature' with the actual column name
+        df_feature_extraction = df.groupby(df.index // sample_rate).mean()[['feature']].reset_index(drop=True)
+        df_feature_extraction = df_feature_extraction[::step]
+        return df_feature_extraction
+
+    def featureNormalization(df):
+        scaler = StandardScaler()
+        df_normalized = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+        return df_normalized
+
+    def dimentionalityReduction(df, pca_tolerance):
+        pca = PCA(tolerance=pca_tolerance)
+        df_reduced = pd.DataFrame(pca.fit_transform(df), columns=['PC1', 'PC2', 'PC3', 'PC4', 'PC5', 'PC6', 'PC7', 'PC8', 'PC9', 'PC10'])
+        return df_reduced
+
+    def oversamplingSMOTE(df, target, neighbors):
+        imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+        df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+        smote = SMOTE(random_state=42, n_neighbors=neighbors)
+        X_res, y_res = smote.fit_resample(df_imputed.drop('seizure', axis=1), df_imputed['se

@@ -1,0 +1,12 @@
+```python
+    #Dataset for Data Quality and Integrity
+    adult_data = datasets.fetch_openml(name='adult', version=2, as_frame='auto')
+    adult = adult_data.frame
+
+    adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+    adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+    adult_cur.iloc[:2000, 3:5] = np.nan
+    ```
+
+    The code above is a sample of how to update the data to remove future warnings. The first part of the code fetches the adult dataset from the openml library and assigns it to the variable `adult`. The second part of the code filters the data to only include rows where the education column is not in the list ['Some-college', 'HS-grad', 'Bachelors']. The third part of the code selects the first 2000 rows of the data and replaces the third and fourth columns with NaN values.

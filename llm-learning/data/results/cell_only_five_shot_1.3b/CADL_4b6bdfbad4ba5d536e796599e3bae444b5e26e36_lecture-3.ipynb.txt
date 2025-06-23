@@ -1,0 +1,31 @@
+```python
+    import tensorflow as tf
+
+    # Assuming Ws is a list of weight matrices
+    Ws = [...]
+
+    # Assuming X is the input image
+    X = [...]
+
+    # We'll enumerate the shapes list to get us there
+    for layer_i, shape in enumerate(shapes):
+        # We'll use a variable scope to help encapsulate our variables
+        # This will simply prefix all the variables made in this scope
+        # with the name we give it.
+        with tf.variable_scope("decoder/layer/{}".format(layer_i)):
+
+            # Create a weight matrix which will increasingly reduce
+            # down the amount of information in the input by performing
+            # a matrix multiplication
+            W = Ws[layer_i]
+
+            # Now we'll convolve by the transpose of our previous convolution tensor
+            h = tf.nn.conv2d_transpose(X, W,
+                tf.pack([tf.shape(X)[0], shape[1], shape[2], shape[3]]),
+                strides=[1, 2, 2, 1], padding='SAME')
+
+            # And then use a relu activation function on its output
+            current_input = tf.nn.relu(h)
+
+    # Now current_input is the output of the decoder
+    ```

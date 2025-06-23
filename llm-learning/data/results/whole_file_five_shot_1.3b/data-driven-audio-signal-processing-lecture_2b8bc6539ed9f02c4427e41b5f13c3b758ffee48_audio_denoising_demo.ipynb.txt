@@ -1,0 +1,23 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import SimpleRNN, Embedding, Dense
+
+    # Define the model
+    model = Sequential()
+    model.add(Embedding(input_dim=10000, output_dim=64))
+    model.add(SimpleRNN(units=64, return_sequences=True))
+    model.add(SimpleRNN(units=64))
+    model.add(Dense(units=10, activation='softmax'))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # Generate dummy data
+    x_train = tf.random.uniform((100, 100), minval=0, maxval=100)
+    y_train = tf.random.uniform((100, 10), minval=0, maxval=10, dtype=tf.int32)
+
+    # Train the model
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+    ```
+    This code creates a simple Recurrent Neural Network (RNN) model using the Keras library in TensorFlow. The model is a simple RNN with an Embedding layer, two SimpleRNN layers, and a Dense layer. The model is then compiled with the Adam optimizer and the categorical cross-entropy loss function, and the accuracy metric. Dummy data is generated for training the model.

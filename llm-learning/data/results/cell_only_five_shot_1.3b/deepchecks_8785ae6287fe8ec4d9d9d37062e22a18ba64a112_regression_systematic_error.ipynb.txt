@@ -1,0 +1,54 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#321)"
+    Original Code Cells:
+    '''
+    %matplotlib inline
+
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    import sys
+    from itertools import product
+
+    from reco_utils.common.spark_utils import start_or_get_spark
+    from reco_utils.evaluation.spark_evaluation import SparkRankingEvaluation, SparkRatingEvaluation
+    from reco_utils.dataset.url_utils import maybe_download
+    from reco_utils.dataset.spark_splitters import spark_random_split
+
+    from pyspark.ml.recommendation import ALS
+    from pyspark.sql.functions import col
+    from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+    param_dict = {
+        "rank": [10, 15, 20, 25],
+        "regParam": [0.001, 0.1, 1.0]
+    }
+    rmse_score = []
+
+    for g in param_grid:
+        als = ALS(
+            **g,
+            userCol=COL_USER, 
+            itemCol=COL_ITEM, 
+            ratingCol=COL_RATING, 
+            coldStartStrategy="drop"
+        )
+        
+        model = als.fit(dfs_train)
+        
+        dfs_pred = model.transform(dfs_test).drop(COL_RATING)
+        
+        evaluations = SparkRatingEvaluation(
+            dfs_test, 
+            dfs_pred,
+            col_user=COL_USER,
+            col_item=COL_ITEM,
+            col_rating=COL_RATING,
+            col_prediction=COL_PREDICTION
+        )
+
+        rmse_score.append(evaluations.rmse())
+
+    rmse_score = [float('%.4f' % x

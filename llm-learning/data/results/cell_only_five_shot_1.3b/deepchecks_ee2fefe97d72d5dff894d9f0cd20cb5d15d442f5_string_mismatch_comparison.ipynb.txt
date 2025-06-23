@@ -1,0 +1,69 @@
+```python
+    # Assuming df is your DataFrame and 'FI' is the column you want to prioritize
+    df = df.sort_values('FI', ascending=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing a function to calculate the mean of a list of numbers"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def mean_of_list(num_list):
+        return sum(num_list) / len(num_list)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a function to calculate the median of a list of numbers"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def median_of_list(num_list):
+        sorted_list = sorted(num_list)
+        length = len(sorted_list)
+        if length % 2 == 0:
+            return (sorted_list[length // 2 - 1] + sorted_list[length // 2]) / 2
+        else:
+            return sorted_list[length // 2]
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a function to calculate the mode of a list of numbers"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from collections import Counter
+
+    def mode_of_list(num_list):
+        num_counts = Counter(num_list)
+        max_count = max(num_counts.values())
+        mode_val = [num for num, freq in num_counts.items() if freq == max_count]
+        if len(mode_val) == len(num_list):
+            return "No unique mode"
+        else:
+            return mode_val
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a function to calculate the range of a list of numbers"
+    Original Code Cells:
+    '''
+    

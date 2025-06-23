@@ -1,0 +1,57 @@
+```
+    [
+    Commit Message: "Changed sample pictures."
+    Original Code Cells:
+    '''
+    <Cell_0>
+from IPython.display import display, Javascript, Image
+from google.colab.output import eval_js
+
+from base64 import b64decode
+import numpy as np
+import io
+import PIL
+
+import matplotlib.pyplot as plt
+<\Cell_0>
+<Cell_1>
+def take_photo(filename=None, quality=0.8):
+  js = Javascript('''
+    async function takePhoto(quality) {
+      const div = document.createElement('div');
+      const video = document.createElement('video');
+      video.style.display = 'block';
+      const stream = await navigator.mediaDevices.getUserMedia({video: true});
+
+      document.body.appendChild(div);
+      div.appendChild(video);
+      video.srcObject = stream;
+      await video.play();
+
+      // Resize the output to fit the video element.
+      google.colab.output.setIframeHeight(document.documentElement.scrollHeight, true);
+
+      // Wait for video to be clicked.
+      await new Promise((resolve) => video.onclick = resolve);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      stream.getVideoTracks()[0].stop();
+      div.remove();
+      return canvas.toDataURL('image/jpeg', quality);
+    }
+    ''')
+  display(js)
+  data = eval_js('takePhoto({})'.format(quality))
+  binary = b64decode(data.split(',')[1])
+
+  if filename is None:
+    ## return numpy array
+    f = io.BytesIO(binary)
+    return np.asarray(PIL.Image.open(f))
+  else:
+    # save file and return length of file
+    with open(filename, 'wb') as f:
+        f

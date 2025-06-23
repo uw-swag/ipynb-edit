@@ -1,0 +1,34 @@
+logged_json_profile
+#log into MLflow
+client = MlflowClient()
+
+#set experiment
+mlflow.set_experiment('Model Quality Evaluation')
+
+#generate model profile
+model_profile = Profile(sections=[DataDriftProfileSection(), RegressionPerformanceProfileSection()])
+
+#start new run
+for date in experiment_batches:
+    with mlflow.start_run() as run: #inside brackets run_name='test'
+        
+        # Log parameters
+        mlflow.log_param("begin", date[0])
+        mlflow.log_param("end", date[1])
+
+        # Get metrics
+        model_profile.calculate(reference, 
+                        current.loc[date[0]:date[1]],
+                        column_mapping=column_mapping_drift)
+        logged_json_profile = json.loads(model_profile.json())
+        
+        me = logged_json_profile["regression_performance"]["data"]["metrics"]["current"]["mean_error"]
+        mae = logged_json_profile["regression_performance"]["data"]["metrics"]["current"]["mean_abs_error"]
+        drift_share = logged_json_profile["data_drift"]["data"]["metrics"]["share_drifted_features"]
+        
+        # Log metrics
+        mlflow.log_metric('me', round(me, 3))
+        mlflow.log_metric('mae', round(mae, 3))
+        mlflow.log_metric('drift_share', round(drift_share, 3))
+
+        print(run.info)

@@ -1,0 +1,19 @@
+```python
+    from deepchecks import Dataset
+    from deepchecks.checks.methodology.boosting_overfit import BoostingOverfit
+
+    # Assuming train_df and val_df are your DataFrames
+    train_ds = Dataset(train_df, label='target')
+    validation_ds = Dataset(val_df, label='target')
+
+    # Create a BoostingOverfit check
+    bof_check = BoostingOverfit(train_ds)
+
+    # Perform the check
+    report = bof_check.run(validation_ds)
+
+    # Print the report
+    print(report)
+    ```
+
+    This code will perform the BoostingOverfit check on the training dataset and print the report. The report will provide information about the overfitting in the model.

@@ -1,0 +1,12 @@
+```
+    from deepchecks.tabular.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    ```
+    The code above is used to compare two columns in a DataFrame. The `StringMismatchComparison` check is used to find the differences between the two columns. The `run` method is used to execute the check and return the result.
+
+    Please note that the `StringMismatchComparison` check is not available in the DeepChecks library. You may need to implement it yourself or use a different check that is available in the DeepChecks library.

@@ -1,0 +1,20 @@
+```python
+    import pandas as pd
+
+    from evidently.v2.metrics import DataIntegrityMetrics
+    from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+    from evidently.v2.test_suite import TestSuite
+    from evidently.v2.tests import TestNumberOfColumns
+    from evidently.v2.tests import TestNumberOfDriftedFeatures
+
+    suite = TestSuite(tests=[TestNumberOfColumns(NumberRange(exact=3)), TestNumberOfDriftedFeatures(), ])
+
+    suite.run_calculate(InputData(reference_data=None, current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping()))
+    suite.run_checks()
+
+    suite.show(mode="inline")
+    suite.save_html("example.html")
+    suite.json()
+    suite.save_json("example.json")
+    ```

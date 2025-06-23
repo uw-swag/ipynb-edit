@@ -1,0 +1,60 @@
+
+    '''
+    Commit Message: "Added more notebooks and data sets for ML"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+from redpitaya.overlay.mercury import mercury as overlay
+fpga = overlay()
+in2 = fpga.osc(1, 1.0)
+
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 3 Ksps
+
+# trigger timing [sample periods]
+N = in2.buffer_size
+in2.trigger_pre  = 0
+in2.trigger_post = N
+
+# disable hardware trigger sources - the Jupyter notebook will trigger the start of audio recording
+in2.trig_src = 0
+<\Cell_0>
+<Cell_1>
+in2.reset()
+in2.start()
+in2.trigger()
+# wait for data
+while (in2.status_run()): pass
+print ('Recording complete')
+data = in2.data(N)
+<\Cell_1>
+<Cell_2>
+import IPython.display as ipd
+sr = 3000 # sample rate 3 Ksps
+ipd.Audio(data, rate=sr) # load a NumPy array
+<\Cell_2>
+<Cell_3>
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy as sp
+import scipy.fftpack
+audio_spectrum = sp.fftpack.fft(data)
+
+plt.style.use('ggplot')
+
+# sampling information
+Fs = 3000 # sample rate
+T = 1/Fs # sampling period
+t = 5 # seconds of sampling
+#N = Fs*t # total points in signal
+N = data.size
+
+t_vec = np.arange(N)*T # time vector for plotting
+y=data #data is the audio recorded above
+
+plt.plot(t_vec,y)
+plt.ylabel('Amplitude [V]')
+plt.xlabel('Time [seconds]')
+plt.show()
+<\

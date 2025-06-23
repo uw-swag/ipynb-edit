@@ -1,0 +1,36 @@
+
+    ### Instruction:
+    [
+    Commit Message: ":pencil2: improve README.md and some examples"
+    Original Code Cells:
+    '''
+    #require "cairo2";;
+#require "iocaml-kernel";;
+#require "lwt.simple-top";;
+#require "lwt.unix";;
+open Lwt.Infix ;;
+let pi2 = 2.0 *. 3.14159265358979 ;;
+let w = 800. ;;
+let h = 400. ;;
+let r = 20.0 ;;
+let e = -0.9 ;;
+let g = 1.0 ;; (* gravity *)
+let m = 1.0 ;; (* mass *)
+
+let plot_ball ~context x y =
+  let surface = Cairo.Image.create Cairo.Image.ARGB32 ~width:800 ~height:400 in
+  let ctx = Cairo.create surface in
+  Cairo.arc ctx ~x ~y ~r ~a1:0.0 ~a2:pi2 ;
+  Cairo.fill ctx ;
+  Cairo.PNG.write_to_stream ~output:(output_string Iocaml.mime) surface  ;
+  Iocaml.send_clear ~context () ;
+  Iocaml.send_mime ~context ~base64:true "image/png"
+;;
+
+let context = Iocaml.cell_context() ;;
+let _ =
+  let rec aux x y vx vy () =
+    let x, vx = if x < 0.0 then (0.0, e *. vx) else if x > w then (w, e *. vx) else (x +. vx, vx) in
+    let y, vy = if y < 0.0 then (0.0, e *. vy) else if y > h then (h, e *. vy) else (y +. vy, vy +. m *. g) in
+    plot_ball ~context x y ;
+    Lwt_unix.sleep 0.01 >>= aux x y

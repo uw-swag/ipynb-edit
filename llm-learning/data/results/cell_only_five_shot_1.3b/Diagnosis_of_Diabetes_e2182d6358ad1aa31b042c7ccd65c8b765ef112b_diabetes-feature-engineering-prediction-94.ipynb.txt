@@ -1,0 +1,26 @@
+```python
+    from google.cloud import storage
+
+    def upload_blob(bucket_name, source_file_name, destination_blob_name):
+        """Uploads a file to the bucket."""
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+
+        blob.upload_from_filename(source_file_name)
+
+        print(
+            "File {} uploaded to {}.".format(
+                source_file_name, destination_blob_name
+            )
+        )
+    ```
+    This function uploads a file to a Google Cloud Storage bucket. The `bucket_name` is the name of the bucket, `source_file_name` is the path to the file you want to upload, and `destination_blob_name` is the name you want to give to the uploaded file in the bucket.
+
+    You can use this function like this:
+
+    ```python
+    upload_blob('my_bucket', 'local/path/to/my_file.txt', 'my_blob_name')
+    ```
+
+    This will upload the file `local/path/to/my_file.txt` to the bucket `my_bucket` with the blob name `my_blob_name`.

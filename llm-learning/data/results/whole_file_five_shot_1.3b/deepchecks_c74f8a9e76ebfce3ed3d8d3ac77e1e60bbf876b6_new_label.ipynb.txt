@@ -1,0 +1,25 @@
+```python
+    from mlchecks.checks.integrity.new_label import NewLabelTrainValidation
+    from mlchecks.base import Dataset
+    import pandas as pd
+
+    test_data = {"col1": [0, 1, 2, 3] * 10}
+    val_data = {"col1": [4, 5, 6, 7, 8, 9] * 10}
+    test = Dataset(pd.DataFrame(data=test_data), label="col1")
+    val = Dataset(pd.DataFrame(data=val_data), label="col1")
+
+    NewLabelTrainValidation().run(test, val)
+
+    test_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": [1,2,2,3]*10}
+    val_data = {"col1": ["a","b","d"] * 10, "col2": [1, 4, 5]*10}
+    test = Dataset(pd.DataFrame(data=test_data), label="col2")
+    val = Dataset(pd.DataFrame(data=val_data), label="col2")
+
+    NewLabelTrainValidation().run(test, val)
+    ```
+
+    The code above checks the integrity of the labels in the test and validation datasets. The `NewLabelTrainValidation` class is used to perform a train-validation check on the labels. The `run` method of the `NewLabelTrainValidation` class is used to perform the check.
+
+    The code is designed to handle different types of labels, including strings and integers. The check is performed on the "col1" label, and the results are printed to the console.
+
+    The second part of the code is similar to the first, but with different test and validation data. The check is performed on the "col2" label.

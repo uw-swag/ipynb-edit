@@ -1,0 +1,111 @@
+import numpy as np
+from torchtext import data
+from torchtext import datasets
+from nltk import Tree
+import os
+import csv
+from os.path import join as oj
+def write_dataset(name, noise =1.0):
+    data_path = "./.data/sst/trees"
+    os.makedirs(data_path, exist_ok=True)
+    with open(oj(data_path, name + ".txt")) as f:
+        content = []
+        content = f.read().splitlines()
+    parsed_dataset = []
+    for line in (content):
+        t = Tree.fromstring(line)
+        text = t.leaves()
+        label = int(t.label()) 
+        if label !=2: 
+            label = int(label >2)
+            stop_position = [int(len(child.leaves())) for child in t][0]
+            segment_labels = np.asarray([float(child.label()) for child in t])
+            diff = segment_labels[0] - segment_labels[1]
+            if label ==0:
+                segment_labels = 4-segment_labels 
+      
+            if segment_labels.sum() ==0  or diff <3:
+                segment_labels = np.asarray([0.5, 0.5])#np.round(np.asarray([ratio, 1- ratio]), decimals =1)
+            else:
+#                 segment_labels  =np.round(segment_labels/segment_labels.sum(), decimals =1)
+                segment_labels =   (segment_labels == segment_labels.max()).astype(np.float32)
+            
+            parsed_dataset.append((" ".join(text), label, segment_labels[0],segment_labels[1] , stop_position))
+    file_path = "../data"
+    file_name = name + '_segment_annotated_SST.csv'
+
+    with open(os.path.join(file_path, file_name), 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        for line in parsed_dataset:
+
+            if np.random.uniform() <noise:
+    
+                writer.writerow(line)
+
+
+write_dataset("train", noise = 1)
+
+write_dataset("dev")
+write_dataset("test")
+len(train)
+a = 0
+is_neg =0
+test_list = []
+for i in range(len(train)):
+    test_list.append(float(train[i].segment2_label))
+ 
+    if float(train[i].segment2_label) !=0.5:
+        print(" ".join(train[i].text), train[i].label)
+        print(" ".join(train[i].text[:int(train[i].stop_pos)]), train[i].segment1_label)
+        print()
+        a+=1
+        if int(train[i].label) ==0:
+            is_neg +=1
+            
+ 
+
+print(a/len(train))
+print(is_neg/a)
+0.007803468208092485 *(len(train))
+name = "train"
+
+data_path = "./.data/sst/trees"
+os.makedirs(data_path, exist_ok=True)
+with open(oj(data_path, name + ".txt")) as f:
+    content = []
+    content = f.read().splitlines()
+parsed_dataset = []
+for line in (content[:11]):
+    t = Tree.fromstring(line)
+    text = t.leaves()
+    label = int(t.label()) 
+    if label !=2: 
+        label = int(label >2)
+        stop_position = [int(len(child.leaves())) for child in t][0]
+
+
+        segment_labels = np.asarray([float(child.label()) for child in t])
+        diff = segment_labels[0] - segment_labels[1]
+
+        if label ==0:
+            segment_labels = 4-segment_labels 
+        ratio = stop_position/len(text)
+        segment_labels[0] =ratio * segment_labels[0]
+        segment_labels[1]=segment_labels[1] *(1-ratio)
+
+        #segment_labels = (segment_labels >2).astype(np.float32)
+
+        if segment_labels.sum() ==0  or diff <2:
+            segment_labels = np.asarray([0.5, 0.5])#np.round(np.asarray([ratio, 1- ratio]), decimals =1)
+        else:
+            segment_labels  =np.round(segment_labels/segment_labels.sum(), decimals =1)
+
+
+        parsed_dataset.append((" ".join(text), label, segment_labels[0],segment_labels[1] , stop_position))
+
+t.leaves()
+t.label()
+t.pprint()
+for child in t:
+    print(child.label())
+    print(child.leaves())

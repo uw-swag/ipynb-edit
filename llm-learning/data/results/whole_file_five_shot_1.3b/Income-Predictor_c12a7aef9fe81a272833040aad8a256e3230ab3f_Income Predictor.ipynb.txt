@@ -1,0 +1,45 @@
+
+    '''
+    [
+    Commit Message: "Add machine learning models and analyse results"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Working with data
+import numpy as np
+import pandas as pd
+
+# Visualizations
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+%matplotlib inline
+
+# Ignore warnings
+import warnings
+warnings.filterwarnings('ignore');
+<\Cell_0>
+<Cell_1>
+columns = ['Age', 'Work Class', 'Final Weight', 'Education', 'Education Number', 'Marital Status', 'Occupation',
+          'Relationship', 'Race', 'Sex', 'Capital Gain', 'Capital Loss', 'Hours per Week', 'Country', 'Income']
+dataset = pd.read_csv('income-dataset.csv', names = columns)
+<\Cell_1>
+<Cell_2>
+from sklearn.preprocessing import LabelEncoder
+
+labelEncoder = LabelEncoder()
+dataset['Income'] = labelEncoder.fit_transform(dataset['Income'])
+<\Cell_2>
+<Cell_3>
+dataset.info()
+<\Cell_3>
+<Cell_4>
+rcParams['figure.figsize'] = 20, 12
+dataset[['Age', 'Final Weight', 'Education Number', 'Capital Gain', 'Capital Loss', 'Hours per Week']].hist()
+<\Cell_4>
+<Cell_5>
+plt.matshow(dataset.corr())
+plt.colorbar()
+plt.xticks(np.arange(len(dataset.corr().columns)), dataset.corr().columns.values, rotation = 45) 
+plt.yticks(np.arange(len(dataset.corr().columns)), dataset.corr().columns.values) 
+for (i, j), corr in np.ndenumerate(dataset.corr()):
+    plt.text(j, i, '{:0.1f}'.format(corr), ha='center', va='center', color='white',

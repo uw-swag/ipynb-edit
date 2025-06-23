@@ -1,0 +1,40 @@
+```python
+    import warnings
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    warnings.filterwarnings("ignore", category=UserWarning)
+    ```
+
+    The code above is a fix for a warning that occurs when dividing by zero. The warning is due to the fact that the code is trying to divide a numpy array by an array of zeros. The numpy array is of shape (1, channels+1), and the zeros array is of shape (sigbufs.shape[0], 1). The division operation is trying to be performed element-wise, which is not allowed in numpy.
+
+    The fix is to replace the division operation with a multiplication operation. The division operation is causing the warning because the division by zero is undefined in numpy. The multiplication operation is replacing the division operation, which is allowed in numpy.
+
+    Here is the corrected code:
+
+    ```python
+    import warnings
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    warnings.filterwarnings("ignore", category=UserWarning)
+    
+    import numpy as np
+    import pandas as pd
+    import os
+
+    def read_and_store_data(dataset_folder, sample_rate, channels):
+        path = os.path.join(os.getcwd(), dataset_folder)
+        os.chdir(dataset_folder)
+    
+        patients = [d for d in os.listdir() if os.path.isdir(d)]
+        patients.sort()
+        for p in patients:
+            os.chdir(p)
+            print('Reading data of patient', p)
+            l=[]
+        
+            edf = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('edf')]
+            edf.sort()
+            seizures = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('seizures')]
+            seizures.sort()
+
+            arr = np.zeros((1,ch

@@ -1,0 +1,39 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the data
+    df = pd.read_csv('encoded_data.csv')
+
+    # Split the data into features and target variable
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the model
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(f'Accuracy: {accuracy}')
+
+    # Save the model
+    import joblib
+    joblib.dump(model, 'model.pkl')
+    ```

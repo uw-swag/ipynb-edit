@@ -1,0 +1,46 @@
+```python
+    # To support both python 2 and python 3
+    from __future__ import division, print_function, unicode_literals
+
+    # Common imports
+    import numpy as np
+    from sklearn.datasets import load_iris
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # To make this notebook's output stable across runs
+    np.random.seed(42)
+
+    # Load the iris dataset as an example
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the dataset into a training set and a test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Define the decision tree classifier
+    tree_clf = DecisionTreeClassifier(random_state=42)
+
+    # Train the classifier
+    tree_clf.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = tree_clf.predict(X_test)
+
+    # Check the accuracy of the classifier
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {accuracy}")
+
+    # Now, we will use GridSearchCV to find the best parameters for the classifier
+    from sklearn.model_selection import GridSearchCV
+
+    params = {'max_leaf_nodes': list(range(2, 100)), 'min_samples_split': [2, 3, 4]}
+    grid_search_cv = GridSearchCV(DecisionTreeClassifier(), params, n_jobs=-1, cv=3)
+
+    grid_search_cv.fit(X_train, y_train)
+
+    # Get the best parameters
+    best_params = grid_search_cv.best_params_
+    print(f"Best parameters: {best_params}

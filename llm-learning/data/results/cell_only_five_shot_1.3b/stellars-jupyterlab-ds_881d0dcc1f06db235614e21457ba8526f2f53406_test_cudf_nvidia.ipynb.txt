@@ -1,0 +1,88 @@
+```python
+    import pytest
+    import logging
+
+    # Set up logging
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
+
+    def test_addition():
+        assert add(1, 2) == 3
+        assert add(0, 0) == 0
+        assert add(-1, 1) == 0
+
+    if __name__ == "__main__":
+        test_addition()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "added exception handling"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def safe_division(a, b):
+        try:
+            return a / b
+        except ZeroDivisionError:
+            logger.error("Division by zero is not allowed")
+            return 0
+
+    if __name__ == "__main__":
+        print(safe_division(1, 0))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "added function to calculate factorial"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def factorial(n):
+        if n == 0:
+            return 1
+        else:
+            return n * factorial(n-1)
+
+    if __name__ == "__main__":
+        print(factorial(5))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "added function to calculate gcd"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def gcd(a, b):
+        if b == 0:
+            return a
+        else:
+            return gcd(b, a % b)
+
+    if __name__ == "__main__":
+        print(gcd(18, 48))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "added function to calculate lcm"
+    Original Code Cells:
+    '''
+    
+    '''

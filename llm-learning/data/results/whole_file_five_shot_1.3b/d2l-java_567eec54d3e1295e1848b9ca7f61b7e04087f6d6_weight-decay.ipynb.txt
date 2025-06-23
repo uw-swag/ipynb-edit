@@ -1,0 +1,30 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.fc1 = nn.Linear(10, 10)
+            self.fc2 = nn.Linear(10, 1)
+            self.weight_decay = nn.weight_decay(self.fc1.weight, 'L2', 0.01)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = self.fc2(x)
+            return x
+
+    net = Net()
+
+    criterion = nn.MSELoss()
+    optimizer = optim.SGD(net.parameters(), lr=0.001, weight_decay=0.01)
+
+    for epoch in range(100):
+        for batch_idx, (data, target) in enumerate(train_loader):
+            optimizer.zero_grad()
+            output = net(data)
+            loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
+    ```

@@ -1,0 +1,35 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.leakage import DataSampleLeakageReport
+    from deepchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    iris = load_iris(return_X_y=False, as_frame=True)
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+    train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+                features=iris.feature_names,
+                label='target')
+
+    test_df = pd.concat([X_test, y_test], axis=1)
+    bad_test = test_df.append(train_dataset.data.iloc[[0, 1, 1, 2, 3, 4]], ignore_index=True)
+                    
+    test_dataset = Dataset(bad_test, 
+                features=iris.feature_names,
+                label='target')
+    <\Cell_1>
+    <Cell_2>
+    check = DataSampleLeakageReport()
+    <\Cell_2>
+    <Cell_3>
+    check.run(test_dataset=test_dataset, train_dataset=train_dataset)
+    <\Cell_3>
+    ```
+
+    The code above is a part of a Jupyter notebook, and it's used to display a DataSampleLeakageReport from the deepchecks library. The DataSampleLeakageReport is a check that checks for leakage in the test set. It compares the distribution of the test set's target variable with the distribution of the train set's target variable. If the distributions are significantly different, it suggests that the test set is leaking information from the train set

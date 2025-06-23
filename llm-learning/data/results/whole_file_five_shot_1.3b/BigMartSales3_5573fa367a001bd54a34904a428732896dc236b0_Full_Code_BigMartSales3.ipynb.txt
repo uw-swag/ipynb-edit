@@ -1,0 +1,62 @@
+```python
+    def twoSum(numbers, target):
+        num_len = len(numbers)
+        i, j = 0, num_len-1
+        sum_ = 0
+        
+        while i < j:
+            sum_ = numbers[i] + numbers[j]
+            if sum_ > target:
+                j -= 1
+            elif sum_ < target:
+                i += 1
+            else:
+                return [i+1, j+1]
+
+    def removeElement(nums, val):
+        nums_len = len(nums)
+        k = 0
+        
+        for i in range(nums_len):
+            if nums[i] != val:
+                nums[k] = nums[i]
+                k += 1
+        return k
+
+    def minSubArrayLenON2(target, nums):
+        len_ = len(nums)
+        sums = [0]
+        min_sub_seq = len_ + 999
+        
+        for ele in nums:
+            if len(sums):
+                sums.append(sums[-1] + ele)
+            else:
+                sums.append(nums[0])
+        
+        for i in range(0, len_):
+            for j in range(i, len_):
+                if (sums[j] - sums[i] + nums[i]) >= target:
+                    min_sub_seq = min(min_sub_seq, j - i + 1)
+                    break
+        return min_sub_seq if min_sub_seq != len_ + 999 else 0
+
+    def isPalindrome(x):
+        if not x:
+            return True
+        elif x % 10 == 0 or x < 0:
+            return False
+        
+        rev = 0
+        num = x
+        rem = 0
+        while num > 0:
+            rem = num % 10
+            rev = rev * 10 + rem
+            num //= 10
+        return rev == x
+
+    def rotate(nums, k):
+        len_ = len(nums)
+        k = k % len_
+        if not k:

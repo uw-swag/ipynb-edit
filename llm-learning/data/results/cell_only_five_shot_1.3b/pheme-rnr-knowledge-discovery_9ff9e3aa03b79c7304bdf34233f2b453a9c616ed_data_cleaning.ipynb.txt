@@ -1,0 +1,20 @@
+```python
+    import threading
+
+    class ThreadSafeList:
+        def __init__(self):
+            self.list = []
+            self.lock = threading.Lock()
+
+        def append(self, item):
+            with self.lock:
+                self.list.append(item)
+
+    # Usage
+    thread_safe_list = ThreadSafeList()
+    thread_safe_list.append(1)
+    thread_safe_list.append(2)
+    thread_safe_list.append(3)
+    ```
+
+    This code creates a thread-safe list using Python's built-in threading module. The list is appended to in a thread-safe manner, meaning that multiple threads can safely append to the list without causing any issues.

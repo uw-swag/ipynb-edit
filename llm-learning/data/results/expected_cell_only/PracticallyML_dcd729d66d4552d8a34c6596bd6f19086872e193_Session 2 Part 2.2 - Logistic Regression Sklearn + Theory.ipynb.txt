@@ -1,0 +1,101 @@
+# glass identification dataset
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
+file = './data/glass.data'
+col_names = ['id','ri','na','mg','al','si','k','ca','ba','fe','glass_type']
+glass = pd.read_csv(file, names=col_names, index_col='id')
+glass['assorted'] = glass.glass_type.map({1:0, 2:0, 3:0, 4:0, 5:1, 6:1, 7:1})
+plt.scatter(glass.al, glass.assorted)
+# fit a linear regression model
+from sklearn.linear_model import LinearRegression
+import numpy as np
+linreg = LinearRegression()
+feature_cols = ['al']
+X = glass[feature_cols]
+y = glass.ri
+linreg.fit(X, y)
+# fit a linear regression model and store the predictions
+feature_cols = ['al']
+X = glass[feature_cols]
+y = glass.assorted
+linreg.fit(X, y)
+assorted_pred = linreg.predict(X)
+# transform predictions to 1 or 0
+assorted_pred_class = np.where(assorted_pred >= 0.5, 1, 0)
+assorted_pred_class
+# plot the class predictions
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, assorted_pred_class, color='red')
+# add predicted class to DataFrame
+glass['assorted_pred_class'] = assorted_pred_class
+
+# sort DataFrame by al
+glass.sort_values('al', inplace=True)
+# plot the class predictions again
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, glass.assorted_pred_class, color='red')
+# fit a linear regression model and store the class predictions
+from sklearn.linear_model import LogisticRegression
+logreg = LogisticRegression(C=1e9)
+feature_cols = ['al']
+X = glass[feature_cols]
+y = glass.assorted
+logreg.fit(X, y)
+assorted_pred_class = logreg.predict(X)
+# print the class predictions
+assorted_pred_class
+# plot the class predictions
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, assorted_pred_class, color='red')
+# store the predicted probabilites of class 1
+assorted_pred_prob = logreg.predict_proba(X)[:, 1]
+# plot the predicted probabilities
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, assorted_pred_prob, color='red')
+# examine some example predictions
+print(logreg.predict_proba(np.array([1]).reshape(-1,1)))
+print(logreg.predict_proba(np.array([2]).reshape(-1,1)))
+print(logreg.predict_proba(np.array([3]).reshape(-1,1)))
+# create a table of probability versus odds
+table = pd.DataFrame({'probability':[0.1, 0.2, 0.25, 0.5, 0.6, 0.8, 0.9]})
+table['odds'] = table.probability/(1 - table.probability)
+table
+# exponential function: e^1
+np.exp(1)
+# time needed to grow 1 unit to 2.718 units
+np.log(2.718)
+np.log(np.exp(5))
+# add log-odds to the table
+table['logodds'] = np.log(table.odds)
+table
+# plot the predicted probabilities again
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, assorted_pred_prob, color='red')
+# compute predicted log-odds for al=2 using the equation
+logodds = logreg.intercept_ + logreg.coef_[0] * 2
+logodds
+# convert log-odds to odds
+odds = np.exp(logodds)
+odds
+# convert odds to probability
+prob = odds/(1 + odds)
+prob
+# compute predicted probability for al=2 using the predict_proba method
+logreg.predict_proba(2)[:, 1]
+# examine the coefficient for al
+zip(feature_cols, logreg.coef_[0])
+# increasing al by 1 (so that al=3) increases the log-odds by 4.18
+logodds = 0.64722323 + 4.1804038614510901
+odds = np.exp(logodds)
+prob = odds/(1 + odds)
+prob
+# compute predicted probability for al=3 using the predict_proba method
+logreg.predict_proba(3)[:, 1]
+# examine the intercept
+logreg.intercept_
+# convert log-odds to probability
+logodds = logreg.intercept_
+odds = np.exp(logodds)
+prob = odds/(1 + odds)
+prob

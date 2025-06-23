@@ -1,0 +1,14 @@
+sr2 = 40 # sample rate 48 Ksps
+ipd.Audio('/tmp/stream_files/data_file_2020-05-23_13-23-32.wav', rate=sr2) # load a NumPy array
+import pydub 
+import numpy as np
+
+def read(file):
+    """MP3 to numpy array"""
+    a = pydub.AudioSegment.from_wav(file)
+    y = np.array(a.get_array_of_samples())
+    if a.channels == 2:
+        y = y.reshape((-1, 2))
+    return np.float32(y) / 2**15
+np_sound = read('/tmp/stream_files/data_file_2020-05-23_13-23-32.wav')
+ipd.Audio(np_sound, rate=48000)

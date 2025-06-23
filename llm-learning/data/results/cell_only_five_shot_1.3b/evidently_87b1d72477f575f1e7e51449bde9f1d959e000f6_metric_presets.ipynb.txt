@@ -1,0 +1,16 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("example_app").getOrCreate()
+
+    # Load data
+    df = spark.read.json("data.json")
+
+    # Add a metric preset mechanism
+    df.withColumn("metric", col("value") * 2).show()
+
+    # Stop the SparkSession
+    spark.stop()
+    ```

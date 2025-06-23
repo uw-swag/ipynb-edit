@@ -1,0 +1,24 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    # Create a CountVectorizer object
+    vectorizer = CountVectorizer()
+
+    # Fit the vectorizer to the data
+    X = vectorizer.fit_transform(corpus)
+
+    # Get the feature names
+    feature_names = vectorizer.get_feature_names_out()
+
+    # Get the term-document matrix
+    term_doc_matrix = X.todense()
+
+    # Print the term-document matrix
+    print(term_doc_matrix)
+    ```
+
+    The term-document matrix is a matrix where each row represents a document and each column represents a term. The value at a given row and column represents the frequency of the term in the document.
+
+    The `CountVectorizer` class from the `sklearn.feature_extraction.text` module is used to create a term-document matrix. The `fit_transform` method is used to fit the vectorizer to the data and then transform the data into the term-document matrix. The `todense` method is used to convert the sparse term-document matrix to a dense matrix.
+
+    The resulting term-document matrix can be used for various natural language processing tasks, such as text classification, text clustering, and text summarization.

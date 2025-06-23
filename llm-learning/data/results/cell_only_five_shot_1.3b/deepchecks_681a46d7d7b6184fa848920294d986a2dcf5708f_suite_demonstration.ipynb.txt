@@ -1,0 +1,53 @@
+```python
+    from mlchecks import CheckSuite
+    from mlchecks.checks import *
+
+    suite = CheckSuite('My Single Suite',
+        IsSingleValue(),
+        MixedNulls(),
+        MixedTypes(),
+        StringMismatch()
+    )
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding more checks to the suite (#207)"
+    Original Code Cells:
+    '''
+    from mlchecks import CheckSuite
+    from mlchecks.checks import *
+
+    suite = CheckSuite('My Single Suite',
+        IsSingleValue(),
+        MixedNulls(),
+        MixedTypes(),
+        StringMismatch()
+    )
+
+    suite.add_check(IsDifferentFromZero())
+    suite.add_check(IsPositive())
+    suite.add_check(IsNonNegative())
+    suite.add_check(IsNonPositive())
+    suite.add_check(IsNonZero())
+    suite.add_check(IsLessThanOne())
+    suite.add_check(IsLessThanOrEqualToOne())
+    suite.add_check(IsGreaterThanOrEqualToOne())
+    suite.add_check(IsGreaterThanOne())
+    suite.add_check(IsInRange())
+    suite.add_check(IsInList())
+    suite.add_check(IsInSet())
+    suite.add_check(IsInString())
+    suite.add_check(IsInNumeric())
+    suite.add_check(IsInDate())
+    suite.add_check(IsInTime())
+    suite.add_check(IsInDateTime())
+    suite.add_check(IsInTimeSpan())
+    suite.add_check(IsInTimePeriod())
+    suite.add_check(IsInCreditCard())
+    suite.add_check(IsInISBN())
+    suite.add_check(IsInMACAddress())
+    suite.add_check(IsInIPAddress())
+    suite.add_check(IsInURL())
+    suite.add_check(IsInEmail())
+    suite.add_check

@@ -1,0 +1,32 @@
+```python
+    import os
+    import shutil
+
+    # Get the list of all files in the current directory
+    files = os.listdir()
+
+    # Create a dictionary to store the files by their extension
+    file_dict = {}
+
+    # Loop through the files
+    for file in files:
+        # Get the extension of the file
+        extension = file.split('.')[-1]
+
+        # If the extension is not in the dictionary, add it
+        if extension not in file_dict:
+            file_dict[extension] = []
+
+        # Add the file to the appropriate list in the dictionary
+        file_dict[extension].append(file)
+
+    # Create a new directory for the notebooks
+    if not os.path.exists('notebooks'):
+        os.makedirs('notebooks')
+
+    # Move the notebooks into the new directory
+    for extension, files in file_dict.items():
+        for file in files:
+            if file.endswith('.ipynb'):
+                shutil.move(file, 'notebooks')
+    ```

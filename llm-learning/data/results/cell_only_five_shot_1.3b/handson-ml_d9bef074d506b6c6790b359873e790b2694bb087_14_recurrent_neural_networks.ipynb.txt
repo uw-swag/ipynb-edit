@@ -1,0 +1,33 @@
+```python
+    import urllib.request
+
+    import errno
+    import os
+    import zipfile
+
+    WORDS_PATH = "datasets/words"
+    WORDS_URL = 'http://mattmahoney.net/dc/text8.zip'
+
+    def mkdir_p(path):
+        """Create directories, ok if they already exist.
+        
+        This is for python 2 support. In python >=3.2, simply use:
+        >>> os.makedirs(path, exist_ok=True)
+        """
+        try:
+            os.makedirs(path)
+        except OSError as exc:
+            if exc.errno == errno.EEXIST and os.path.isdir(path):
+                pass
+            else:
+                raise
+
+    def fetch_words_data(words_url=WORDS_URL, words_path=WORDS_PATH):
+        os.makedirs(words_path, exist_ok=True)
+        zip_path = os.path.join(words_path, "words.zip")
+        if not os.path.exists(zip_path):
+            urllib.request.urlretrieve(words_url, zip_path)
+        with zipfile.ZipFile(zip_path) as f:
+            data = f.read(f.namelist()[0])
+        return data.decode("ascii").split()
+    ```

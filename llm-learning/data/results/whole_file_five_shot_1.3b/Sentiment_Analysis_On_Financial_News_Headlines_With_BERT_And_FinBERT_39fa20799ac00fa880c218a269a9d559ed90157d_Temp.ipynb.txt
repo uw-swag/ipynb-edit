@@ -1,0 +1,33 @@
+```python
+    <Cell_0>
+    import sys
+    sys.path.append("../..")
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from pyadlml.dataset import set_data_home, fetch_uci_adl_binary
+    set_data_home('/home/chris/code/adlml/data_home')
+
+    subject = 'OrdonezB'
+    data = fetch_uci_adl_binary(keep_original=True, cache=True, subject=subject)
+    <\Cell_0>
+    <Cell_1>
+    from pyadlml.dataset.plot.activities import hist_counts
+    from pyadlml.dataset.plot.activities import boxplot_duration
+    from pyadlml.dataset.plot.activities import hist_cum_duration
+    from pyadlml.dataset.plot.activities import heatmap_transitions
+    from pyadlml.dataset.plot.devices import hist_counts
+    from pyadlml.dataset.plot.devices import boxsplot_on_duration
+    from pyadlml.dataset.plot.devices import heatmap_trigger_one_day
+    from pyadlml.dataset.plot.devices import heatmap_trigger_time
+    from pyadlml.dataset.plot.devices import heatmap_cross_correlation
+    from pyadlml.dataset.plot.devices import hist_trigger_time_diff
+    from pyadlml.dataset.plot.devices import hist_on_off
+    from pyadlml.dataset.plot.raw import hist_activities
+    from pyadlml.dataset.plot.raw import heatmap_contingency_01
+    from pyadlml.dataset.plot.raw import heatmap_cross_correlation
+    from pyadlml.preprocessing import RawEncoder
+    from pyadlml.preprocessing import LabelEncoder
+    from pyadlml.preprocessing import ChangepointEncoder
+    from pyadlml.preprocessing import LastFiredEncoder
+    from pyadlml.preprocessing import LaggedRawEncoder, LaggedLabelEncoder
+    from pyad

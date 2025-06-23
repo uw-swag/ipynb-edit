@@ -1,0 +1,45 @@
+```
+    from fastai import *
+    from fastai.text import *
+    import sklearn.feature_extraction.text as sklearn_text
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # Load the dataset
+    df = pd.read_csv('movie_reviews.csv')
+    df.head()
+
+    # Split the dataset into training and testing sets
+    train, test = train_test_split(df, test_size=0.2)
+
+    # Create a CountVectorizer object
+    vect = CountVectorizer()
+
+    # Fit the vectorizer to the training data and transform the training and testing data
+    X_train = vect.fit_transform(train.text)
+    X_test = vect.transform(test.text)
+
+    # Create a Multinomial Naive Bayes object
+    nb = MultinomialNB()
+
+    # Fit the model to the training data
+    nb.fit(X_train, train.sentiment)
+
+    # Make predictions on the testing data
+    predictions = nb.predict(X_test)
+
+    # Calculate the accuracy of the model
+    accuracy = accuracy_score(test.sentiment, predictions)
+
+    print(f'Accuracy: {accuracy}')
+
+    # Print the top 10 most common words
+    count_vect = CountVectorizer()
+    count_vect.fit(df.text)
+    for i, freq in enumerate(count_vect.get_feature_names_out()):
+        print(f'{freq}: {df[df.sentiment=="positive"].text.str.contains(freq).sum()}')
+    ```
+
+    This script uses the Naive Bayes classifier from the sklearn library to classify movie reviews as positive or negative. The script first loads the dataset, then splits it into a training set and a testing set. It creates a CountVectorizer object to transform the text data, and then fits the

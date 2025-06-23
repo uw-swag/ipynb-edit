@@ -1,0 +1,30 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from textblob import TextBlob
+    from nltk.corpus import stopwords
+    from nltk.stem import WordNetLemmatizer
+    from nltk.tokenize import word_tokenize
+    from pyspark.sql.functions import udf
+    from pyspark.sql.types import ArrayType, StringType
+
+    # Load data
+    text_data_train = spark.read.json('text_data_train.json')
+    text_data_test = spark.read.json('text_data_test.json')
+    non_text_data_train = spark.read.csv('non_text_data_train.csv', header=True, inferSchema=True)
+    non_text_data_test = spark.read.csv('non_text_data_test.csv', header=True, inferSchema=True)
+    holdout_data = spark.read.json('holdout_data.json')
+
+    # Define a UDF to remove stopwords and lemmatize words
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+
+    remove_stopwords_udf = udf(lambda words: [word for word in words if word not in stop_words], ArrayType(StringType()))
+    lemmatize_words_udf = udf(lambda words: [lemmatizer.lemmatize(word) for word in words], ArrayType(StringType()))
+
+    # Apply UDFs to the dataframes
+    text_data_train = text_data_train.withColumn('cleaned_text', remove_stopwords_udf(text_data_train['text']))
+    text_data_train = text_data_train.withColumn('cleaned_text', lemmatize_words_udf(text_data_train['cleaned_text']))
+
+    text_data_test = text_data_test.withColumn('cleaned_text', remove_stopwords_udf(text_data_test['text']))
+    text_data_test = text_data_test.

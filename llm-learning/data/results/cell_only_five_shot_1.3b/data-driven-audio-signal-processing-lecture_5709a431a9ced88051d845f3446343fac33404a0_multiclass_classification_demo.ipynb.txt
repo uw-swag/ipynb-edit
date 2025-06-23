@@ -1,0 +1,26 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras import layers
+
+    # Define a simple sequential model
+    model = tf.keras.models.Sequential()
+
+    # Add a Dense layer with 10 units and 'relu' activation function
+    model.add(layers.Dense(10, activation='relu'))
+
+    # Add another Dense layer with 10 units and 'relu' activation function
+    model.add(layers.Dense(10, activation='relu'))
+
+    # Compile the model with 'adam' optimizer and 'categorical_crossentropy' loss function
+    model.compile(optimizer='adam', loss='categorical_crossentropy')
+
+    # Fit the model with dummy data
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+
+    # Evaluate the model on the test data
+    model.evaluate(x_test, y_test)
+
+    # Predict the labels of the test data
+    y_pred = model.predict(x_test)
+    ```
+    This code creates a simple feed-forward neural network using TensorFlow's Keras API. The network consists of two Dense layers, each with 10 units and 'relu' activation function. The model is compiled with 'adam' optimizer and 'categorical_crossentropy' loss function, which is suitable for multi-class classification problems. The model is then trained for 10 epochs on the training data, and its performance is evaluated on the test data. Finally, the model's predictions are made on the test data.

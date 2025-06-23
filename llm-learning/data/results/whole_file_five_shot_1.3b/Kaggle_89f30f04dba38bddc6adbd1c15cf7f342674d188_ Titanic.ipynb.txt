@@ -1,0 +1,19 @@
+
+    The feature "Fare" has been added to the dataset. This feature is a measure of the ticket fare or the cost of the ticket. The data set includes the "Fare" feature which is a continuous variable.
+
+    The code snippet for adding the "Fare" feature to the dataset is as follows:
+
+    ```python
+    #Introducing dummies for Fare
+    fare_dummy = pd.get_dummies(train_DF['Fare'])
+    train_DF = train_DF.join(fare_dummy)
+    fare_dummy_test = pd.get_dummies(test_DF['Fare'])
+    test_DF = test_DF.join(fare_dummy_test)
+
+    train_DF.drop(['Fare'], axis = 1, inplace = True)
+    test_DF.drop(['Fare'], axis = 1, inplace = True)
+    ```
+
+    This code introduces dummy variables for the "Fare" feature, which is a categorical variable. The dummy variables are created by binning the "Fare" feature into different categories. The "Fare" feature is then dropped from the original data sets.
+
+    Please note that the "Fare" feature is not a feature of the dataset that is being used for training the model, it's a feature of the test set that the model is supposed to predict.

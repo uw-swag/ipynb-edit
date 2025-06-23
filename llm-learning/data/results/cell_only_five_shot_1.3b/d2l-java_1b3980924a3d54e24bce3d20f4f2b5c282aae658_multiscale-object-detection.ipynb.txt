@@ -1,0 +1,29 @@
+```java
+    public void displayAnchors(Image img, int fmapWidth, int fmapHeight, List<Float> sizes) {
+        NDManager manager = NDManager.newBaseManager();
+        NDArray fmap = manager.zeros(new Shape(1, 10, fmapWidth, fmapHeight));
+
+        List<Float> ratios = Arrays.asList(1f, 2f, 0.5f);
+
+        MultiBoxPrior mbp = MultiBoxPrior.builder().setSizes(sizes).setRatios(ratios).build();
+        NDArray anchors = mbp.generateAnchorBoxes(fmap);
+
+        ImageUtils.drawBBoxes(img, anchors.get(0), null);
+        ImageUtils.showImage(img);
+    }
+
+    Image img2 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img2, 4, 4, Arrays.asList(0.15f));
+
+    Image img3 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img3, 2, 2, Arrays.asList(0.4f));        
+
+    Image img4 = img.duplicate(Image.Type.TYPE_INT_ARGB);
+    displayAnchors(img4, 1, 1, Arrays.asList(0.8f));       
+    ```
+
+    The code above is a function that generates anchor boxes for a given image and displays them. The anchor boxes are generated using a MultiBoxPrior object, which is a class that generates anchor boxes for a given feature map. The anchor boxes are then drawn on the image using the ImageUtils.drawBBoxes method. The image is then displayed using the ImageUtils.showImage method.
+
+    The function takes an image, a feature map width, a feature map height, and a list of sizes as parameters. The sizes are used to generate the anchor boxes for the feature map. The anchor boxes are then drawn on the image and the image is displayed.
+
+    The commented out lines of code are the function calls to display the images. Uncommenting them will display the images with

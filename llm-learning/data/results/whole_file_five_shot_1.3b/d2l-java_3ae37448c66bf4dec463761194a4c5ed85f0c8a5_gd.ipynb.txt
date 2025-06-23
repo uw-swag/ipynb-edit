@@ -1,0 +1,54 @@
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell for the 2D optimization"
+    Original Code Cells:
+    '''
+<Cell_0>
+import ai.djl.ndarray.*;
+
+import tech.tablesaw.plotly.traces.ScatterTrace;
+
+import java.lang.Math;
+<\Cell_0>
+<Cell_1>
+public class Weights {
+    public float x1, x2;
+    public Weights(float x1, float x2) {
+        this.x1 = x1;
+        this.x2 = x2;
+    }
+}
+
+public ArrayList<Weights> train2d(Function<Float, Float> trainer, int steps) {
+    // TODO: add when tablesaw adds support for contour and meshgrids
+    float x1 = 5f, x2 = -2f, s1 = 0f, s2 = 0f;
+    return newton(trainer, steps);
+}
+<\Cell_1>
+<Cell_2>
+float eta = 0.1f;
+
+BiFunction<Float, Float, Float> f = (x1, x2) -> x1 * x1 + 2 * x2 * x2; // Objective
+
+Function<Float, Float> gradf = (x1, x2) -> new Float[]{2 * x1, 4 * x2}; // Gradient
+
+Function<Float, Float> hessf = (x1, x2) -> new Float[]{2 * x1, 4 * x2}; // Hessian
+
+showTrace(newton(1));
+<\Cell_2>
+<Cell_3>
+showTrace(newton(0.5f));
+<\Cell_3>
+<Cell_4>
+showTrace(newton(1));
+<\Cell_4>
+<Cell_5>
+showTrace(newton(0.15f * (float)Math.PI));
+<\Cell_5>
+<Cell_6>
+showTrace(newton(0.5f));
+<\Cell_6>
+<Cell_7

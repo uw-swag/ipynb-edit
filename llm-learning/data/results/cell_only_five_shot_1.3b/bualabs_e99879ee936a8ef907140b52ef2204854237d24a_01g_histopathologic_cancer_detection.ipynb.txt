@@ -1,0 +1,24 @@
+```python
+    # !kaggle competitions download -c {dataset} -p "{data_path}"
+    !kaggle datasets download {dataset2} -p "{data_path2}" --unzip
+    bs = 64
+    SZ = 224
+    path = data_path
+    # tfms = get_transforms(flip_vert=True, max_rotate=180., max_zoom=1.1, max_warp=0.)
+    tfms = get_transforms(do_flip=True, flip_vert=True, max_rotate=0., max_zoom=1.1, max_warp=0., max_lighting=0.05)
+    df =  pd.read_csv(data_path/'train_labels.csv')
+    df.head()
+    # Create databunch
+    data = (ImageList.from_df(path=path/'train', df=df, suffix='.tif')[:1000]
+            .split_by_rand_pct(0.1, seed=1234)
+            .label_from_df(cols='label')
+            .add_test((path/'test').ls(), label=None)
+            .transform(tfms, size=SZ)
+            .databunch(bs=bs)
+            .normalize())
+    learn = cnn_learner(data, models.densenet161, metrics=[accuracy, AUROC()],
+                        model_dir=config_path/'My Drive/models', 
+                        wd=1e-1, callback_fns=[ShowGraph, PeakMemMetric]).to_fp16()
+    # model = EfficientNet.from_name('efficientnet-b0', override_params={'num_classes': data.c})
+    # learn = Learner(data, model, metrics=[accuracy, AUROC()],model_dir=config_path/'My Drive/models', 
+    #                 wd=1e-1, callback_fns=[ShowGraph, PeakMemMetric]).to_fp16()

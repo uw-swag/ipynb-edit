@@ -1,0 +1,22 @@
+import os
+from os.path import join as oj
+import sys, time
+import numpy as np
+import matplotlib.pyplot as plt
+import pickle as pkl
+import pandas as pd
+import seaborn as sns
+sns.set()
+%matplotlib inline
+trained_model_folder = '../models/SST'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) 
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects()
+results["Test Accuracy"] = [(x.item()) for x in results["test_acc"]] 
+results["Val Accuracy"] = [(max(x)) for x in results["accs_val"]] 
+results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+results["final_val_loss"] = [min(x[:5]) for x in results["losses_val"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+results = results.round(decimals =0)
+concise_out = results[['signal_strength','bias','Val Accuracy',  'Test Accuracy']].groupby(by = ['bias','signal_strength']).mean()
+concise_out

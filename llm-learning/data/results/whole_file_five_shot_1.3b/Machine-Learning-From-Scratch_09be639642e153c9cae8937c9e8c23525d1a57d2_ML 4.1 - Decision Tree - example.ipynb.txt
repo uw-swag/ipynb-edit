@@ -1,0 +1,22 @@
+```python
+    from sklearn.ensemble import RandomForestClassifier
+
+    rf_clf = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=42)
+    rf_clf.fit(X, y)
+
+    def plot_feature_importances(clf, X, y):
+        import pandas as pd
+        import matplotlib.pyplot as plt
+
+        feature_importances = pd.DataFrame(clf.feature_importances_,
+                                          index=X.columns,
+                                          columns=["importance"]).sort_values("importance", ascending=False)
+        display(feature_importances)
+
+        feature_importances.plot(kind="bar", figsize=(12, 6))
+        plt.title("Feature Importances (Random Forest)")
+        plt.show()
+
+    plot_feature_importances(rf_clf, X, y)
+    ```
+    '''

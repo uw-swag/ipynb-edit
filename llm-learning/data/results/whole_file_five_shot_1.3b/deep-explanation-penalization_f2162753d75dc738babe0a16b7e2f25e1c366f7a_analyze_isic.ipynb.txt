@@ -1,0 +1,50 @@
+
+    '''
+    Commit Message: "add notebook changes"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+import sys
+from os.path import join as oj
+
+sys.path.append("../src")
+from utils import load_precalculated_dataset,get_output, load_img_dataset,get_auc_f1,calc_weights
+import numpy as np
+from torchvision import  transforms
+import pickle as pkl
+
+from tqdm.notebook import tqdm
+import matplotlib.pyplot as plt
+import os
+from numpy.random import randint
+import time
+from torchvision import models
+import copy
+from tqdm import tqdm
+from torch import nn
+import pandas as pd
+import seaborn as sns
+sns.set()
+import torch.nn.functional as F
+from PIL import Image
+import torch
+device = torch.device("cuda")
+pd.set_option('precision', 2)
+
+<\Cell_0>
+<Cell_1>
+save_path = "../results_for_export"
+trained_model_folder = '../models/ISIC_new'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'pkl'  in fname]) 
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1, sort = True).T.infer_objects() 
+idx_best_loss = [np.asarray(x).argmax() for x in results['val_acc_history']]  
+results['final_acc'] = [x[idx_best_loss[i]] for i,x in enumerate(results['val_acc_history'])] 
+
+<\Cell_1>
+<Cell_2>
+results[['regularizer_rate',
+                       'final_acc',

@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding missing figure in chapter 02"
+    Original Code Cells:
+    '''
+    housing.plot(kind="scatter", x="longitude", y="latitude", alpha=0.4,
+    s=housing["population"]/100, label="population", figsize=(10,7),
+    c="median_house_value", cmap=plt.get_cmap("jet"), colorbar=True,
+    sharex=False) # sharex=False fixes a bug (temporary solution)
+                  # See: https://github.com/pandas-dev/pandas/issues/10611
+                  # Thanks to Wilmer Arellano for pointing it out.
+plt.legend()
+save_fig("housing_prices_scatterplot")
+
+    '''
+    ]
+
+    ### Response:
+    It seems like you're trying to add a figure to a chapter in a Jupyter notebook. However, you didn't provide the context or the chapter number. 
+
+    If you're trying to add a figure to a chapter in a Jupyter notebook, you can use the `plot` function to add a figure to a specific cell. 
+
+    Here's an example:
+
+    ```python
+    from IPython.display import display, Image
+
+    # Assuming you have a function that generates the figure
+    fig = generate_figure()
+
+    # Display the figure
+    display(Image(filename='figure.png'))
+
+    # Add the figure to a specific cell
+    display(fig)
+    ```
+
+    In this example, `generate_figure` is a function that generates the figure you want to add. The `display` function is used to display the figure and the `Image` function is used to display the figure as an image. The `display` function is used to add the figure to a specific cell.
+
+    Please provide more context or the chapter number so I can give you a more accurate answer.

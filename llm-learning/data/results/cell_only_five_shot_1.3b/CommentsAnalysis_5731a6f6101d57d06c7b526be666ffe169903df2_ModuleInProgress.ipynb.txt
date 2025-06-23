@@ -1,0 +1,62 @@
+
+    '''
+    ## Notebook for the web app
+
+    This notebook will guide you through the process of creating a web application using Flask, a popular micro web framework in Python.
+
+    ### Step 1: Installing the necessary packages
+
+    To start, you will need to install the following packages:
+
+    ```python
+    pip install flask
+    pip install flask_sqlalchemy
+    pip install flask_login
+    pip install flask_wtf
+    pip install wtforms
+    pip install wtforms.validators
+    pip install sqlalchemy
+    pip install pandas
+    pip install numpy
+    pip install scikit-learn
+    pip install matplotlib
+    pip install seaborn
+    pip install plotly
+    pip install dash
+    pip install dash-bootstrap-components
+    ```
+
+    ### Step 2: Setting up the Flask application
+
+    Now, let's create a new Flask application.
+
+    ```python
+    from flask import Flask
+    app = Flask(__name__)
+    ```
+
+    ### Step 3: Creating the database
+
+    We will use SQLAlchemy to create a database.
+
+    ```python
+    from flask_sqlalchemy import SQLAlchemy
+    from flask_login import LoginManager
+    app = Flask(__name__)
+    app.config['SECRET_KEY'] = 'mysecretkey'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    db = SQLAlchemy(app)
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'login'
+    ```
+
+    ### Step 4: Creating the user model
+
+    We will use Flask-Login to create a user model.
+
+    ```python
+    from flask_login import UserMixin
+    from werkzeug.security import generate_password_hash, check_password_hash
+    class User(UserMixin, db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        username = db.Column(db.String(64),

@@ -1,0 +1,29 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import precision_score, make_scorer
+
+    from deepchecks.checks import ClassPerformance
+    from deepchecks.base import Dataset
+
+    iris = load_iris(as_frame=True)
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    train_ds = Dataset(train, label_name="target")
+    test_ds = Dataset(test, label_name="target")
+
+    clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+
+    check = ClassPerformance()
+    check.run(test_ds, clf)
+
+    scorers = {
+        "precision": make_scorer(precision_score, average=None, zero_division=0),
+    }
+
+    check = ClassPerformance(alternative_scorers=scorers)
+    check.run(test_ds, clf)
+    ```
+
+    The code above merges the performance report, class imbalance, and train-test overfitting into one check. The `ClassPerformance` check is used to evaluate the performance of the classifier. The `alternative_scorers` parameter is used to specify alternative scorers to be used in the check. In this case, the `precision_score` is used as an alternative scorer.

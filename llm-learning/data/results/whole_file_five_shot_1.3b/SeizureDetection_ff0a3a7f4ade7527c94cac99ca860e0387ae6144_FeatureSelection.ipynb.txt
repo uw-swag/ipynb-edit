@@ -1,0 +1,13 @@
+```python
+    import pandas as pd
+    from sklearn import decomposition
+
+    def majorityClassUndersampling(features, pca_tolerance):
+        pca_ft = features.iloc[:,:features.columns.size-1]
+        pca = decomposition.PCA(n_components = pca_tolerance).fit(pca_ft)
+        seizures = features['seizure'].copy()
+        red_ft = pd.DataFrame(pca.transform(pca_ft))
+        red_ft['seizure'] = seizures
+        del pca_ft, pca, seizures
+        return red_ft
+    ```

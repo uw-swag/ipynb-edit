@@ -1,0 +1,20 @@
+```python
+    # Importing necessary libraries
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.datasets import load_iris
+
+    # Loading the iris dataset
+    iris = load_iris()
+
+    # Creating a dataframe
+    df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+
+    # Plotting pairplot
+    sns.pairplot(df, hue='target')
+    plt.show()
+    ```
+
+    ### Explanation:
+    The code above is a Python script that uses the seaborn and pandas libraries to create a pairplot of the iris dataset. The pairplot function from seaborn is used to create a grid of Axes such that each variable in the dataset is a column in the plot. The hue parameter is used to color the points in the plot based on the 'target' column in the dataset. The plt.show() function is used to display the plot.

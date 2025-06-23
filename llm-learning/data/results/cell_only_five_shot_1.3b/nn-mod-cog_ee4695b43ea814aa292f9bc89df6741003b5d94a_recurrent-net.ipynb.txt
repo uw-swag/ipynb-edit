@@ -1,0 +1,56 @@
+```python
+    # Set up code checking
+    from learntools.core import binder
+    binder.bind(globals())
+    from learntools.deep_learning.exercise_3 import *
+    print("Setup Complete")
+
+    # Importing required libraries
+    from keras.models import Sequential
+    from keras.layers import SimpleRNN, Dense
+
+    # Creating a Sequential model
+    model = Sequential()
+
+    # Adding the first RNN layer with 10 units
+    model.add(SimpleRNN(10, input_shape=(10,1)))
+
+    # Adding a Dense layer with 1 unit
+    model.add(Dense(1))
+
+    # Compiling the model
+    model.compile(optimizer='adam', loss='mse')
+
+    # Fitting the model
+    model.fit(X_train, y_train, epochs=10, verbose=0)
+
+    # Evaluating the model
+    model.evaluate(X_test, y_test, verbose=0)
+
+    # Making a prediction
+    prediction = model.predict(X_new)
+
+    # step_1.check()
+    # step_1.solution()
+    # step_2.check()
+    # step_2.solution()
+    # step_3.check()
+    # step_3.solution()
+    # step_4.check()
+    # step_4.solution()
+    # step_5.check()
+    # step_5.solution()
+    # step_6.check()
+    # step_6.solution()
+    # step_7.check()
+    # step_7.solution()
+    # step_8.check()
+    # step_8.solution()
+    # step_9.check()
+    # step_9.solution()
+    # step_10.check()
+    # step_10.solution()
+    # step_11.check()
+    # step_11.solution()
+    # step_12.check()
+    # step_12.solution()

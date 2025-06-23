@@ -1,0 +1,46 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv1D, SimpleRNN
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+
+    # Load the data
+    data = pd.read_csv('../input/wine-reviews/winemag-data-130k-v2.csv', index_col=0)
+
+    # Preprocess the data
+    # This is a placeholder for your actual preprocessing steps
+    # You may need to fill in the details based on the specifics of your dataset
+    # For example, you may need to handle missing values, normalize numerical features, etc.
+
+    # Split the data into training and testing sets
+    train_df, test_df = train_test_split(data, test_size=0.2, random_state=42)
+
+    # Scale the data
+    scaler = StandardScaler()
+    train_scaled = scaler.fit_transform(train_df)
+    test_scaled = scaler.transform(test_df)
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(32, activation='relu', input_shape=(train_scaled.shape[1],)))
+    model.add(Dense(16, activation='relu'))
+    model.add(Dense(1))
+
+    # Compile the model
+    model.compile(
+        loss='mean_squared_error',
+        optimizer='adam',
+        metrics=['mean_absolute_error', 'mean_squared_error']
+    )
+
+    # Train the model
+    history = model.fit(
+        train_scaled,
+        train_df['points'],
+        epochs=100,
+        validation_split=0

@@ -1,0 +1,36 @@
+```
+    // %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.6.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    %maven net.java.dev.jna:jna:5.3.0
+    %maven ai.djl.mxnet:mxnet-engine:0.6.0
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+
+    // Import the necessary libraries
+    import ai.djl.ndarray.NDArray;
+    import ai.djl.ndarray.types.Shape;
+    import ai.djl.ndarray.types.DataType;
+    import ai.djl.training.DefaultTrainingConfig;
+    import ai.djl.training.EasyTrain;
+    import ai.djl.training.Trainer;
+    import ai.djl.training.dataset.ArrayDataset;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.util.ProgressBar;
+    import ai.djl.training.util.TrainUtil;
+    import ai.djl.training.util.ModelFileHelper;
+    import ai.djl.training.util.ModelFileHelper.ModelFileType;
+
+    // Create a Convolutional Block
+    Conv2D block = Conv2D.builder()
+            .setKernel(new Shape(1, 2))
+            .optBias(false)
+            .setNumFilters(1)
+            .build();
+
+    block.setInitializer(new NormalInitializer());
+    block.initialize(manager, DataType.FLOAT32, X.getShape());
+
+    Par

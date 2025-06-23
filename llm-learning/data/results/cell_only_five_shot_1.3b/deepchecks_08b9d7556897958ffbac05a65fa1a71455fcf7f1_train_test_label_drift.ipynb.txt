@@ -1,0 +1,36 @@
+```python
+    # SETUP. You don't need to worry for now about what this code does or how it works. If you're ever curious about the 
+    # code behind these exercises, it's available under an open source license here: https://github.com/Kaggle/learntools/
+    from learntools.core import binder; binder.bind(globals())
+    from learntools.python.ex7 import *
+    print('Setup complete.')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding base vision package (#773)"
+    Original Code Cells:
+    '''
+    from learntools.core import binder; binder.bind(globals())
+    from learntools.python.ex7 import *
+    print('Setup complete.')
+    '''
+    ]
+
+    ### Response:
+    The code provided is already complete. It sets up the environment for the Python exercises. The `binder.bind(globals())` line binds the global namespace to the binder, which allows the exercises to be accessed from any cell in the notebook. The `from learntools.python.ex7 import *` line imports all the functions and classes defined in the `ex7` module. The `print('Setup complete.')` line prints a message to indicate that the setup is complete.
+
+    However, if you want to add a new exercise, you can do so by creating a new Python file in the `exercises` directory. The file should contain a function that defines the exercise. The function should be named after the exercise, and it should be decorated with `@check_qa`. The function should take no arguments and return a tuple of two elements: the exercise's title and the function that implements the exercise.
+
+    For example, if you want to add an exercise that calculates the sum of two numbers, you could define the function like this:
+
+    ```python
+    from learntools.python.ex7 import *
+
+    def ex_sum():
+        def f(a, b):
+            return a + b
+        return 'Sum', f
+    ```
+
+    Then, you can add the exercise to the list in the `exercises` module's code.

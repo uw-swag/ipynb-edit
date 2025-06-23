@@ -1,0 +1,44 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Code Update (#581)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is the updated code:
+
+```python
+import sys, os
+sys.path.append("../../")
+import papermill as pm
+import lightgbm as lgb
+import pandas as pd
+
+import reco_utils.recommender.lightgbm.lightgbm_utils as lgb_utils
+
+print("System version: {}".format(sys.version))
+print("LightGBM version: {}".format(lgb.__version__))
+data_path = '../../tests/resources/lightgbm'
+train_file = os.path.join(data_path, r'tiny_criteo0.csv')
+valid_file = os.path.join(data_path, r'tiny_criteo1.csv')
+test_file = os.path.join(data_path, r'tiny_criteo2.csv')
+output_file = os.path.join(data_path, r'output.txt')
+
+if not os.path.exists(train_file):
+    # to do: upload our test resources.
+    download_lgb_resources(r'https://recodatasets.blob.core.windows.net/lightgbm/', data_path, 'resources.zip')
+
+test_data = pd.read_csv(test_file)
+display(test_data.head())
+del test_data
+cate_cols = ['C'+str(i) for i in range(1, 27)]
+nume_cols = ['I'+str(i) for i in range(1, 14)]
+label_col = 'Label'
+num_encoder = lgb_utils.NumEncoder(cate_cols, nume_cols, label_col)
+train_x, train_y = num_encoder.fit_transform(train_file)
+valid_x, valid_y = num_encoder.transform(valid_file)
+test_x, test_y = num

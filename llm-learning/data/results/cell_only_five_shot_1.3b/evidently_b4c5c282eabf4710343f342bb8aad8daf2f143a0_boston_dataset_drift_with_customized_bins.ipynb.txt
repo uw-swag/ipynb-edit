@@ -1,0 +1,43 @@
+```python
+    from mmtfPyspark.datasets import advancedSearchDataset
+    from mmtfPyspark.datasets.utils import column_mapping
+
+    # Define the column mapping
+    column_mapping_dict = {
+        "column1": "column1",
+        "column2": "column2",
+        # Add more columns as needed
+    }
+
+    # Define the parameters for dataset drift calculation
+    drift_params = {
+        "window_size": 100,  # The number of data points to consider in the window for drift calculation
+        "threshold": 0.01,  # The threshold for drift detection
+        "direction": "both",  # The direction of drift detection ('both', 'positive', 'negative')
+        "normal_group": "group1",  # The name of the group of data points to use as the normal
+        "treatment_group": "group2",  # The name of the group of data points to use as the treatment
+    }
+
+    # Define the parameters for bins customization
+    bins_params = {
+        "bins": 10,  # The number of bins to use for customization
+        "bin_type": "equal_width",  # The type of bins to use ('equal_width', 'equal_frequency')
+    }
+
+    # Create a SparkSession
+    spark = SparkSession.builder.master("local[4]").appName("AdvancedSearchDatasetDemo").getOrCreate()
+
+    # Define the structure query
+    structure_query = ("<orgPdbQuery>"
+                       "<queryType>org.pdb.query.simple.StoichiometryQuery</queryType>"
+                       "<stoichiometry>A3B3C3</stoichiometry>"
+                       "</orgPdbQuery>"
+                       )
+
+    # Get the dataset
+    ds = advancedSearchDataset.get_dataset(structure_query)
+
+    # Customize the dataset with column mapping and bins
+    ds = ds.customize(column_mapping=column_mapping_dict, drift_params=drift_params, bins_params=bins_params)
+
+    # Show the

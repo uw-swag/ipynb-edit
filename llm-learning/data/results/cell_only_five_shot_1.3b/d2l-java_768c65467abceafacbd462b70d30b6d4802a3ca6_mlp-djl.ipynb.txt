@@ -1,0 +1,18 @@
+```
+    ## Learning Rate Tracker
+    The LearningRateTracker class in TensorFlow is used to control the learning rate during training. The learning rate is a hyperparameter that is set during the training process. The `LearningRateTracker.fixedLearningRate(0.5f)` function is used to set a fixed learning rate of 0.5.
+
+    ## Optimizer
+    The Optimizer class in TensorFlow is used to define the optimizer for the model. The optimizer is responsible for updating the model's parameters based on the gradients computed during backpropagation. The `Optimizer.sgd().setLearningRateTracker(lrt).build();` function is used to set the SGD optimizer with a fixed learning rate tracker.
+
+    ## Loss Function
+    The Loss class in TensorFlow is used to define the loss function for the model. The loss function measures the difference between the model's predictions and the actual values. The `Loss.softmaxCrossEntropyLoss();` function is used to set the softmax cross entropy loss.
+
+    ## Training Configuration
+    The DefaultTrainingConfig class in TensorFlow is used to configure the training process. The `addEvaluator(new Accuracy())` function is used to add the accuracy evaluator to the training configuration. The `addTrainingListeners(TrainingListener.Defaults.basic());` function is used to add the basic training listeners to the training configuration.
+
+    ## Model Training
+    The try-with-resources statement in Java is used to automatically close the resources when they are no longer needed. The `Model.newInstance("mlp")` function is used to create a new instance of the model. The `setBlock(net)` function is used to set the neural network block of the model. The `newTrainer(config)` function is used to create a new trainer for the model. The `initialize(new Shape(1, 784))` function is used to initialize the trainer. The `setMetrics(new Metrics())` function is used to set the metrics for the trainer.
+
+    ## Training Loop
+    The `EasyTrain.fit(trainer, numEpochs, trainIter, testIter);` function

@@ -1,0 +1,29 @@
+```python
+    # Adding session 3
+    session_3 = nml.Session(
+        name='Session 3',
+        problem_type='classification_binary',
+        metrics=['accuracy', 'precision', 'recall', 'f1_score', 'roc_auc'],
+        chunk_size=5000,
+        timestamp_column_name='timestamp',
+        y_pred='prediction',
+        y_true='label'
+    )
+
+    session_3.fit(reference_df)
+    results_3 = session_3.calculate(analysis_df)
+
+    display(results_3.filter(period='analysis').to_df())
+    print(results_3.filter(period='analysis').to_df().to_markdown(tablefmt="grid"))
+
+    display(results_3.filter(period='reference').to_df())
+    print(results_3.filter(period='reference').to_df().to_markdown(tablefmt="grid"))
+
+    figure = results_3.plot(kind='performance')
+    figure.show()
+    figure.write_image(f'../_static/tutorials/performance_calculation/session_3.svg')
+
+    figure = results_3.filter(period='all', metrics=['roc_auc']).plot(kind='performance')
+    figure.show()
+    figure.write_image(f'../_static/tutorials/performance_calculation/session_3-ROC-AUC.svg')
+    ```

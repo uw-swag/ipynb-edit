@@ -1,0 +1,12 @@
+```python
+    # Fix widget size in ColumnValuePlot
+    for i in range(len(df.columns)):
+        df.iloc[:, i] = df.iloc[:, i].astype(str).astype('category')
+        df.iloc[:, i] = df.iloc[:, i].cat.set_categories(df.iloc[:, i].cat.get_categories().sort_values(), ordered=True)
+        df.iloc[:, i] = df.iloc[:, i].cat.remove_unused_categories()
+
+    # Fix titles in DatasetDriftMetric
+    drift_metric.set_title(f"Dataset Drift Metric\n"
+                           f"Drift Type: {drift_metric.drift_type}\n"
+                           f"Drift Value: {drift_metric.drift_value}")
+    ```

@@ -1,0 +1,23 @@
+```
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.13.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+
+    %maven ai.djl.mxnet:mxnet-engine:0.13.0
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-backport
+    import ai.djl.Device;
+    import ai.djl.ndarray.NDManager;
+    import ai.djl.ndarray.NDArray;
+    import ai.djl.ndarray.LazyNDArray;
+    import ai.djl.ndarray.index.NDIndex;
+    import ai.djl.ndarray.types.Shape;
+
+    // You have to use the MXNet engine for Q1 since
+    // it is currently the only engine in DJL
+    // to support Lazy NDArrays
+    NDManager manager = NDManager.newBaseManager(Device.cpu(), "MXNet");
+    ```
+
+    Please note that the version of DJL (0.13.0) is not available in the Maven repository. You may need to manually download the corresponding JAR files from the DJL website and add them to your classpath.

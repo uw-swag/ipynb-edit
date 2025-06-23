@@ -1,0 +1,45 @@
+```python
+    # This is a Kubeflow Pipelines example.
+    # It uses KFP's DSL (Domain Specific Language) to define a pipeline.
+    # The pipeline consists of two steps:
+    # 1. A component to create a dataset from a BigQuery table.
+    # 2. A component to train a model using Scikit-learn and save it to a file.
+    # The output of the first step is used as input for the second step.
+
+    @dsl.pipeline(
+        name='my-pipeline',
+        description='A simple pipeline',
+        pipeline_root='gs://my-bucket/my-pipeline-root'
+    )
+    def pipeline(
+        pipeline_params: dict = dsl.Parameter(
+            name='pipeline_params',
+            type=dict,
+            description='The parameters for the pipeline'
+        )
+    ):
+        create_dataset_op = create_dataset(
+            bq_table=pipeline_params['bq_table'],
+            output_data_path=dsl.OutputPath('Dataset'),
+            project=pipeline_params['project']
+        )
+
+        train_model_op = train_model(
+            output_model_directory=pipeline_params['output_model_directory'],
+            dataset=create_dataset_op.outputs['output_data_path'],
+            metrics=dsl.Output(name='metrics'),
+            model=dsl.Output(name='model')
+        )
+
+        deploy_model_op = deploy_model(
+            model=train_model_op.outputs['model'],
+            project=pipeline_params['project'],
+            region=pipeline_params['region'],
+            vertex_endpoint=dsl.Output(name='vertex_endpoint'),
+            vertex_model=dsl.Output(name='vertex_model')
+        )
+
+    # Run the pipeline
+    pipeline_params = {
+        'bq_table': f'{PROJECT_ID}.test_dataset.dry-beans',
+        'output_model_directory': f'gs://{PROJECT_ID}-bucket/trained_models

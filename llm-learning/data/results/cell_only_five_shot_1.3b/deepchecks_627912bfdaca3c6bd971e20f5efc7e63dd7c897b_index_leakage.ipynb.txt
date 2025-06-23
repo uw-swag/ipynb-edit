@@ -1,0 +1,22 @@
+```python
+    # Refactor notebook folder structure
+    import os
+    import shutil
+
+    # Define the source and destination folders
+    source_folder = "path/to/source/folder"
+    destination_folder = "path/to/destination/folder"
+
+    # Get a list of all files in the source folder
+    files = os.listdir(source_folder)
+
+    # Create the destination folder if it doesn't exist
+    if not os.path.exists(destination_folder):
+        os.makedirs(destination_folder)
+
+    # Move each file to the destination folder
+    for file in files:
+        shutil.move(os.path.join(source_folder, file), destination_folder)
+
+    print(f"Folder structure has been refactored from {source_folder} to {destination_folder}")
+    ```

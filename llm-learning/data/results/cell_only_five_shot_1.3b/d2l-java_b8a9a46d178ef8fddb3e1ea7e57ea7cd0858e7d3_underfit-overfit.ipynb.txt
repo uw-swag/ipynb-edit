@@ -1,0 +1,46 @@
+```python
+    NDArray weight = null;
+
+    public void train(NDArray trainFeatures, NDArray testFeatures, NDArray trainLabels, NDArray testLabels, int nDegree) 
+        throws IOException, TranslateException {
+
+        Loss l2Loss = Loss.l2Loss();
+        NDManager manager = NDManager.newBaseManager();
+        Tracker lrt = Tracker.fixed(0.01f);
+        Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+        DefaultTrainingConfig config = new DefaultTrainingConfig(l2Loss)
+                .optOptimizer(sgd) // Optimizer (loss function)
+                .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+
+        Model model = Model.newInstance("mlp");
+        SequentialBlock net = new SequentialBlock();
+        // Switch off the bias since we already catered for it in the polynomial
+        // features
+        Linear linearBlock = Linear.builder().optBias(false).setUnits(1).build();
+        net.add(linearBlock);
+
+        model.setBlock(net);
+        Trainer trainer = model.newTrainer(config);
+
+        int batchSize = Math.min(10, (int) trainLabels.getShape().get(0));
+
+        ArrayDataset trainIter = loadArray(trainFeatures, trainLabels, batchSize, true);
+        ArrayDataset testIter = loadArray(testFeatures, testLabels, batchSize, true);
+
+        trainer.initialize(new Shape(1, nDegree));
+
+        for (int epoch = 1; epoch <= numEpochs; epoch++) {
+
+            // Iterate over dataset
+            for (Batch batch : trainer.iterateDataset(trainIter)) {
+                // Update loss and evaluator
+                EasyTrain.trainBatch(trainer, batch);
+
+                // Update parameters
+                trainer.step();
+
+                batch.close();
+            }
+            // reset training and validation evaluators at end of epoch
+
+            for (Batch

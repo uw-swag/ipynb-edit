@@ -1,0 +1,29 @@
+```python
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Assuming y_true and y_pred are defined
+    cm = confusion_matrix(y_true, y_pred)
+
+    # Plotting the confusion matrix
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm, annot=True, fmt='d')
+    plt.title('Confusion Matrix')
+    plt.ylabel('True Label')
+    plt.xlabel('Predicted Label')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "[Issue 985] Confusion matrix report - unseen classes bug fix (#1029)"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    y_true = np.array([1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1,

@@ -1,0 +1,56 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "add class 5 and 6 homework solutions"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# display plots in the notebook
+%matplotlib inline
+
+# increase default figure and font sizes for easier viewing
+plt.rcParams['figure.figsize'] = (8, 6)
+plt.rcParams['font.size'] = 14
+<\Cell_0>
+<Cell_1>
+# define a list of column names (as strings)
+col_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
+
+# define the URL from which to retrieve the data (as a string)
+url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
+
+# retrieve the CSV file and add the column names
+iris = pd.read_csv(url, header=None, names=col_names)
+<\Cell_1>
+<Cell_2>
+iris.shape
+<\Cell_2>
+<Cell_3>
+iris.head()
+<\Cell_3>
+<Cell_4>
+iris.dtypes
+<\Cell_4>
+<Cell_5>
+iris.describe()
+<\Cell_5>
+<Cell_6>
+iris.species.value_counts()
+<\Cell_6>
+<Cell_7>
+iris.isnull().sum()
+<\Cell_7>
+<Cell_8>
+# sort the DataFrame by petal_width and display the NumPy array
+print iris.sort('petal_width').values
+<\Cell_8>
+<Cell_9>
+# mean of sepal_length grouped by species
+iris.groupby('species').sepal_length.mean()
+<\Cell_9>
+<Cell_10>
+# mean of all numeric columns grouped by species
+iris.groupby('species').mean()

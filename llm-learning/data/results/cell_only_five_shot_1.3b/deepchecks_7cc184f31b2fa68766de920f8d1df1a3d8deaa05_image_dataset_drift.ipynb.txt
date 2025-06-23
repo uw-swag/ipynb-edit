@@ -1,0 +1,30 @@
+```python
+    import numpy as np
+
+from deepchecks.vision.dataset import VisionData
+from deepchecks.vision.checks import ImageDatasetDrift
+from deepchecks.vision.datasets.detection.coco import load_dataset
+
+train_dataloader = load_dataset(train=True)
+test_dataloader = load_dataset(train=False)
+def pil_formatter(batch):
+    return [np.array(img) for img in batch[0]]
+from deepchecks.vision.utils.image_formatters import ImageFormatter
+from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter
+
+train_ds = VisionData(train_dataloader, image_formatter=ImageFormatter(pil_formatter), label_formatter=DetectionLabelFormatter(lambda x: x))
+test_ds = VisionData(test_dataloader, image_formatter=ImageFormatter(pil_formatter), label_formatter=DetectionLabelFormatter(lambda x: x))
+def add_brightness(img):
+    reverse = 255 - img
+    addition_of_brightness = (reverse * 0.07).astype(int)
+    return img + addition_of_brightness
+
+def pil_drift_formatter(batch):
+    return [add_brightness(np.array(img)) for img in batch[0]]
+# Use the pil_drift_formatter to insert extra brightness to the train dataset:
+train_ds = VisionData(train_dataloader, image_formatter=ImageFormatter(pil_drift_formatter), label_formatter=DetectionLabelFormatter(lambda x: x))
+test_ds = VisionData(test_dataloader, image_formatter=ImageFormatter(pil_formatter), label_formatter=DetectionLabelFormatter(lambda x: x))
+check = ImageDatasetDrift()
+check.run(train_dataset=train_ds, test_dataset=test_ds)
+
+```

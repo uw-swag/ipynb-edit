@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+
+    # Create a DataFrame
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['label'] = df['x2'] + 0.1 * df['x1']
+    df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+    # Create a Dataset
+    ds = Dataset(df, label_name='label')
+
+    # Create a test DataFrame
+    df_test = df.copy()
+    df_test['x2'] = df['x2'] + 0.5 * df['x1']
+    df_test['x3'] = 0.3 * df['x3'] + df['label']
+
+    # Create a test Dataset
+    ds_test = Dataset(df_test, label_name='label')
+
+    # Run the check
+    SingleFeatureContributionTrainTest().run(train_dataset=ds, test_dataset=ds_test)
+
+    # Create a custom check
+    my_check = SingleFeatureContributionTrainTest(ppscore_params={'sample': 10})
+
+    # Run the custom check
+    my_check.run(train_dataset=ds, test_dataset=ds_test)
+    ```

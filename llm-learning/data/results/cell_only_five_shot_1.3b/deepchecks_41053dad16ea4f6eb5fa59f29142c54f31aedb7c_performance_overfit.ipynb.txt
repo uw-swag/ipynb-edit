@@ -1,0 +1,38 @@
+```python
+    from deepchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from deepchecks.checks import TrainTestDifferenceOverfit
+    import pandas as pd
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(
+                X, Y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([X_train, y_train], axis=1), 
+                features=iris.feature_names,
+                label='target')
+    test_ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+                features=iris.feature_names,
+                label='target')
+    clf.fit(X_train, y_train)
+    ```
+
+    The code above is a Python script that uses the DeepChecks library to perform an AdaBoost classification on the Iris dataset. The DeepChecks library is a Python library for data-driven machine learning that provides a unified interface to a variety of machine learning algorithms.
+
+    The script first imports the necessary libraries and loads the Iris dataset. It then splits the data into a training set and a test set. The training set is used to train the AdaBoost classifier, and the test set is used to evaluate the performance of the classifier.
+
+    The script then creates a DeepChecks Dataset object for the training and test sets, and uses the fit method to train the classifier.
+
+    Finally, the script uses the trained classifier to make predictions on the test set, and prints the accuracy of the predictions.
+
+    Please note that the DeepChecks library is not installed in your environment. You can install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    Also, please

@@ -1,0 +1,32 @@
+```python
+    # Content-based filtering
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import linear_kernel
+
+    # Step 1: Create a TfidfVectorizer object. This will tokenize the text, remove stop words, and perform stemming/lemmatization
+    tf = TfidfVectorizer(stop_words='english')
+
+    # Step 2: Transform the training data into TF-IDF representation
+    tfidf_matrix = tf.fit_transform(data['content'])
+
+    # Step 3: Compute the cosine similarity matrix
+    cosine_similarities = linear_kernel(tfidf_matrix, tfidf_matrix)
+
+    # Step 4: Get a list of recommended items
+    indices = pd.Series(data.index, index=data['title']).drop_duplicates()
+    sim_scores = list(enumerate(cosine_similarities[indices['item1']]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:11]
+    item_indices = [i[0] for i in sim_scores]
+
+    # Step 5: Get the scores of the 10 most similar items
+    scores = [cosine_similarities[indices['item1'][i]][0] for i in item_indices]
+
+    # Step 6: Get the titles of the 10 most similar items
+    titles = [data['title'][i] for i in item_indices]
+
+    # Step 7: Print the result
+    for i in range(10):
+        print(f"{i+1}. {titles[i]}")
+    ```
+    This code is a simple implementation of content-based filtering using the TF-IDF vectorizer from scikit-learn. It computes the cosine similarity between items based on their content, and then recommends the 10 most similar items.

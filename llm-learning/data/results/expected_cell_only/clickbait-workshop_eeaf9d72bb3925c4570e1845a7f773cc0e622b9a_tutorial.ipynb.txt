@@ -1,0 +1,43 @@
+df['full_content'] = df.description + ' ' + df.title
+df.head(1)
+pipeline = pipeline.fit(training.title, training.label)
+from sklearn.model_selection import cross_val_predict
+predicted_labels = cross_val_predict(pipeline, training.title, training.label)
+from utils.plotting import pipeline_performance
+pipeline_performance(training.label, predicted_labels)
+training[training.label != predicted_labels]
+predicted_labels = cross_val_predict(pipeline, training.full_content, training.label)
+pipeline_performance(training.label, predicted_labels)
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+steps = (
+    ('vectorizer', TfidfVectorizer()),
+    ('classifier', LinearSVC())
+)
+pipeline = Pipeline(steps)
+
+predicted_labels = cross_val_predict(pipeline, training.full_content, training.label)
+pipeline_performance(training.label, predicted_labels)
+import re
+def mask_integers(s):
+    return re.sub(r'\d+', 'INTMASK', s)
+
+steps = (
+    ('vectorizer', TfidfVectorizer(preprocessor=mask_integers)),
+    ('classifier', LinearSVC())
+)
+pipeline = Pipeline(steps)
+
+predicted_labels = cross_val_predict(pipeline, training.full_content, training.label)
+pipeline_performance(training.label, predicted_labels)
+gs_params = {
+    'vectorizer__stop_words': ['english', None],
+    'vectorizer__ngram_range': [(1, 1), (1, 2), (2, 2)],
+    'vectorizer__preprocessor': [mask_integers, None],
+    'classifier__C': [0.001, 0.01, 0.1, 1, 10, 100]
+}
+print(gs.best_params_)
+print(gs.best_score_)
+pipeline = gs.best_estimator_
+predicted_labels = pipeline.predict(testing.full_content)
+pipeline_performance(testing.label, predicted_labels)

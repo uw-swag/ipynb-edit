@@ -1,0 +1,21 @@
+```python
+    # Cleaning data
+    # This is a placeholder for the actual data cleaning process
+    # You can replace this with your actual data cleaning code
+
+    # For example, if you have a pandas DataFrame df, you can use the following code to clean it:
+
+    # Remove rows with missing values
+    df = df.dropna()
+
+    # Remove duplicates
+    df = df.drop_duplicates()
+
+    # Remove outliers
+    df = df[(np.abs(stats.zscore(df)) < 3).all(axis=1)]
+
+    # Convert categorical variables to numerical variables
+    df = pd.get_dummies(df)
+
+    return df
+    ```

@@ -1,0 +1,91 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.metric_preset import DataDriftPreset, TargetDriftPreset, DataQualityPreset, RegressionPreset
+from evidently.metrics import *
+
+from evidently.test_suite import TestSuite
+from evidently.tests.base_test import generate_column_tests
+from evidently.test_preset import DataStabilityTestPreset, NoTargetPerformanceTestPreset
+from evidently.tests import *
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+report = Report(metrics=[
+    DataDriftPreset(), 
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+report = Report(metrics=[
+    ColumnSummaryMetric(column_name='AveRooms'),
+    ColumnQuantileMetric(column_name='AveRooms', quantile=0.25),
+    ColumnDriftMetric(column_name='AveRooms'),
+    
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+report = Report(metrics=[
+    generate_column_metrics(ColumnQuantileMetric, parameters={'quantile':0.25}, columns=['AveRooms', 'AveBedrms']),
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+report = Report(metrics=[
+    ColumnSummaryMetric(column_name='AveRooms'),
+    generate_column_metrics(ColumnQuantileMetric, parameters={'quantile':0.25}, columns='num'),
+    DataDriftPreset()
+])
+
+report.run(reference_data=reference, current_data=current)
+report
+report.as_dict()
+report.json()
+#report.save_html('report.html')
+#report.save_json('report.json')
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithMissingValues(),
+    TestNumberOfRowsWithMissingValues(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedColumns(),
+])
+
+tests.run(reference_data=reference, current_data=current)
+tests
+suite = TestSuite(tests=[
+    NoTargetPerformanceTestPreset(),
+])
+
+suite.run(reference_data=reference, current_data=current)
+suite
+suite = TestSuite(tests=[
+    TestColumnDrift('Population'),
+    TestMeanInNSigmas('HouseAge'),
+    NoTargetPerformanceTestPreset(columns=['AveRooms', 'AveBedrms', 'AveOccup'])
+])
+
+suite.run(reference_data=reference, current_data=current)
+suite
+suite = TestSuite(tests=[
+    TestColumnDrift('Population'),
+    TestShareOfOutRangeValues('Population'),
+    generate_column_tests(TestMeanInNSigmas, columns='num'),
+    
+])
+
+suite.run(reference_data=reference, current_data=current)
+suite
+suite.as_dict()
+suite.json()
+#suite.save_html('test_suite.html')
+#suite.save_json('test_suite.json')

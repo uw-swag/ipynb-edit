@@ -1,0 +1,48 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+    from keras.optimizers import Adam
+    from rl.agents import DQNAgent
+    from rl.memory import SequentialMemory
+    from rl.policy import EpsGreedyQPolicy
+
+    # Create environment
+    env = gym.make('CartPole-v0')
+
+    # Define the number of actions and the number of states
+    nb_actions = env.action_space.n
+    nb_steps = 50000
+    nb_episodes = 20
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(12, input_dim=4, activation='relu'))
+    model.add(Dense(24, activation='relu'))
+    model.add(Dense(nb_actions, activation='linear'))
+    model.compile(loss='mse', optimizer=Adam(lr=1e-3))
+
+    # Define the memory
+    memory = SequentialMemory(limit=10000, window_length=1)
+
+    # Define the policy
+    policy = EpsGreedyQPolicy()
+
+    # Define the agent
+    agent = DQNAgent(model=model, memory=memory, nb_actions=nb_actions, 
+                     nb_steps_warmup=1000, target_model_update=1e-2, 
+                     policy=policy)
+
+    # Train the agent
+    agent.fit(env, nb_steps=nb_steps, nb_episodes=nb_episodes, visualize=True)
+
+    # Save the agent
+    agent.save("pole_agent.h5")
+
+    # Enjoy the trained agent
+    agent.load("pole_agent.h5")
+    agent.test(env

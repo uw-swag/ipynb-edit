@@ -1,0 +1,188 @@
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+
+import joblib
+import pandas as pd
+import mlflow
+import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+
+from evidently.pipeline.column_mapping import ColumnMapping
+
+from src.reports import (
+    build_model_monitoring_report,
+    get_model_monitoring_metrics
+)
+
+from config import MLFLOW_TRACKING_URI, DATA_DIR, FILENAME, REPORTS_DIR
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+# Download original dataset with: python src/pipelines/load_data.py 
+raw_data = pd.read_csv(f"../{DATA_DIR}/{FILENAME}")
+
+# Set datetime index 
+raw_data = raw_data.set_index('dteday')
+
+
+raw_data.head()
+<\Cell_2>
+<Cell_3>
+target = 'cnt'
+prediction = 'prediction'
+datetime = 'dteday'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'mnth', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', ]
+FEATURE_COLUMNS = numerical_features + categorical_features
+
+column_mapping = ColumnMapping()
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.datetime = datetime
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+<\Cell_3>
+<Cell_4>
+# Update MLFLOW_RUN_ID 
+
+# Copy a Run ID from the "Model Testing" experiment
+MLFLOW_RUN_ID = '3fa3d32fbe214b8bb94c938e31e7cc57'
+
+# Set up MLFlow Client
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+client = MlflowClient()
+print(f"Client tracking uri: {client.tracking_uri}")
+
+# Get 
+model_path = mlflow.artifacts.download_artifacts(
+    run_id=MLFLOW_RUN_ID, 
+    artifact_path='model.joblib'
+)
+print("Model path: ", model_path)
+<\Cell_4>
+<Cell_5>
+# Load Model
+
+regressor = joblib.load(model_path)
+
+regressor
+<\Cell_5>
+<Cell_6>
+# Define dates for train data
+train_dates = ('2011-01-02 00:00:00','2011-03-06 23:00:00')
+
+# Define dates for inference batches
+prediction_batches = [ 
+    ('2011-03-07 00:00:00','2011-03-13 23:00:00'),
+    ('2011-03-14 00:00:00','2011-03-20 23:00:00'),
+    ('2011-03-21 00:00:00','2011-03-27 23:00:00'), 
+]
+<\Cell_6>
+<Cell_7>
+# Define the reference dataset
+reference_data = raw_data.loc[train_dates[0]:train_dates[1]]
+reference_prediction = regressor.predict(reference_data[FEATURE_COLUMNS])
+reference_data['prediction'] = reference_prediction
+
+print(reference_data.shape)
+<\Cell_7>
+<Cell_8>
+current_dates = prediction_batches[0]
+current_data = raw_data.loc[current_dates[0]:current_dates[1]]  
+
+print(current_data.shape)
+# current_data.head()
+<\Cell_8>
+<Cell_9>
+current_prediction = regressor.predict(current_data[numerical_features + categorical_features])
+current_data['prediction'] = current_prediction
+
+print(current_data.shape)
+<\Cell_9>
+<Cell_10>
+model_report = build_model_monitoring_report(
+    reference_data=reference_data.reset_index(drop=True),
+    current_data=current_data.reset_index(drop=True),
+    column_mapping=column_mapping,
+)
+
+model_metrics = get_model_monitoring_metrics(model_report)
+model_metrics
+<\Cell_10>
+<Cell_11>
+current_dates = prediction_batches[1]
+current_data = raw_data.loc[current_dates[0]:current_dates[1]]  
+
+current_prediction = regressor.predict(current_data[numerical_features + categorical_features])
+current_data['prediction'] = current_prediction
+
+print(current_dates)
+print(current_data.shape)
+# current_data.head()
+<\Cell_11>
+<Cell_12>
+model_report = build_model_monitoring_report(
+    reference_data=reference_data.reset_index(drop=True),
+    current_data=current_data.reset_index(drop=True),
+    column_mapping=column_mapping,
+)
+
+model_metrics = get_model_monitoring_metrics(model_report)
+model_metrics
+<\Cell_12>
+<Cell_13>
+# Set up MLFlow Client
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+client = MlflowClient()
+print(f"Client tracking uri: {client.tracking_uri}")
+
+# Set experiment name
+mlflow.set_experiment("Monitor Model")
+<\Cell_13>
+<Cell_14>
+
+# Run model monitoring for each batch of dates
+for current_dates in prediction_batches:
+    
+    print(f"Current batch dates: {current_dates}") 
+
+    # Start a new Run for the batch
+    with mlflow.start_run(run_name=current_dates[1]) as run: 
+        
+        # Show newly created run metadata info
+        print("Experiment id: {}".format(run.info.experiment_id))
+        print("Run id: {}".format(run.info.run_id))
+        print("Run name: {}".format(run.info.run_name))
+            
+        # Log parameters
+        mlflow.log_param("begin", current_dates[0])
+        mlflow.log_param("end", current_dates[1])
+        
+        # Make predictions for the current batch data
+        current_data = raw_data.loc[current_dates[0]:current_dates[1]]
+        current_prediction = regressor.predict(current_data[FEATURE_COLUMNS])
+        current_data['prediction'] = current_prediction
+
+        # Build the Model Monitoring report
+        model_report = build_model_monitoring_report(
+            reference_data=reference_data.reset_index(drop=True),
+            current_data=current_data.reset_index(drop=True),
+            column_mapping=column_mapping,
+        )
+        
+        # Log Metrics
+        model_metrics = get_model_monitoring_metrics(model_report)
+        mlflow.log_metrics(model_metrics)
+        
+        # Log Monitoring Report 
+        monitoring_report_path = f"../{REPORTS_DIR}/model_monitoring_report.html"
+        model_report.save_html(monitoring_report_path)
+        mlflow.log_artifact(monitoring_report_path)
+        
+        print(run.info)
+<\Cell_14>

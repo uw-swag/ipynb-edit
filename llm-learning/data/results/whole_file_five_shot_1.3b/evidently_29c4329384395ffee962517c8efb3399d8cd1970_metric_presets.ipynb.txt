@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add visualisations for metrics (#300)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+from sklearn.datasets import fetch_openml
+<\Cell_0>
+<Cell_1>
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+<\Cell_1>
+<Cell_2>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDrift
+from evidently.metrics import DataIntegrityMetrics
+from evidently.metrics import DataQualityMetrics
+
+report = Report(metrics=[
+#     DataIntegrityMetrics(),
+    DataDrift(),
+#     DataQualityMetrics()
+])
+
+report.run(reference_data=ref, current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+report
+<\Cell_2>
+<Cell_3>
+
+<\Cell_3>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is for creating a visualization of metrics. However, it seems like you're trying to create a report of metrics, which is not the correct approach. You can create a report by using the `Report` class from the `evidently` library. Here's an example:
+
+    ```python
+    from

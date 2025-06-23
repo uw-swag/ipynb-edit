@@ -1,0 +1,53 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.model_selection import GridSearchCV
+
+    # Load the dataset
+    df = pd.read_csv('mlc97.csv')
+
+    # Preprocess the data
+    df = df.dropna()
+
+    # Define features and target
+    X = df.drop('Class', axis=1)
+    y = df['Class']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Define the model
+    model = RandomForestClassifier()
+
+    # Define the parameter grid
+    param_grid = {
+        'n_estimators': [50, 100, 200],
+        'max_depth': [None, 10, 20, 30],
+        'min_samples_split': [2, 5, 10]
+    }
+
+    # Perform grid search
+    grid_search = GridSearchCV(model, param_grid, cv=5)
+    grid_search.fit(X_train, y_train)
+
+    # Print the best parameters
+    print("Best parameters: ", grid_search.best_params_)
+
+    # Predict the test set results
+    y_pred = grid_search.predict(X_test)
+
+    # Print the classification report
+    print(classification_report(y_test, y_pred))
+
+    # Print the confusion matrix
+    print(confusion_matrix(y_test, y_pred))
+    ```

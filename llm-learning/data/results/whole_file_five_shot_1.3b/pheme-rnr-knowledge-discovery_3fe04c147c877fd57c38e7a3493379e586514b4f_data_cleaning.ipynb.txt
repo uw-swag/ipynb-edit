@@ -1,0 +1,49 @@
+```python
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import numpy as np
+    from functools import reduce
+    from sklearn.decomposition import PCA
+    from sklearn.manifold import TSNE
+    import matplotlib.pyplot as plt
+
+    # Your code here
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "added PCA and TSNE visualizations"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import numpy as np
+    from functools import reduce
+    from sklearn.decomposition import PCA
+    from sklearn.manifold import TSNE
+    import matplotlib.pyplot as plt
+
+    # Your code here
+    <\Cell_0>
+    <Cell_1>
+    ottawa_threads_values=ottawa_threads.values
+    n,d=ottawa_threads_values.shape
+    ottawa_threads_values=convertTrueFalseTo01(ottawa_threads_values[:,1:d])
+    n,d=ottawa_threads_values.shape
+
+    myprint.t=0
+    for i in range(d):
+        print(ottawa_threads_values[0,i])
+    for i in range(n):
+        for j in range(d):
+            if type(ottawa_threads_values[i,j])==str:
+                myprint('i,j:',i,',',j,',',ottawa_threads_values[i,j])
+    ottawa_threads_values,_,_=standardize_cols(ottawa_threads_values)
+    print(ottawa_threads_values)
+    n,d=ottawa_threads_values.shape
+    print(ottawa_threads_values.shape)
+
+    model=PCA(n_components=2)
+    model.fit(ottawa_threads_values)
+    Z_PCA

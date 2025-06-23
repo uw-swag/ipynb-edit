@@ -1,0 +1,51 @@
+```python
+    import pandas as pd
+import numpy as np
+np.random.seed(42)
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+    # Load the iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred = clf.predict(X_test)
+
+    # Evaluate the model
+    from sklearn.metrics import accuracy_score, classification_report
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # Import SHAP
+    import shap
+
+    # Create a SHAP explainer
+    explainer = shap.TreeExplainer(clf)
+
+    # Compute SHAP values
+    shap_values = explainer.shap_values(X_train)
+
+    # Visualize the first prediction's explanation
+    shap.force_plot(explainer.expected_value[0], shap_values[0], X_train)
+
+    # Remove SHAP check
+    import os
+    os.environ['SHAP_ENABLE_RUNTIME'] = 'false'
+
+    # Train a new model
+    clf_no_shap = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf_no_shap.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred

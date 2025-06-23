@@ -1,0 +1,62 @@
+```
+    ### Update all main notebooks
+    ### Commit Message: "Update all main notebooks"
+    ### Original Code Cells:
+    '''
+    import sys
+    sys.path.append("../..")
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import pyadlml
+    import requests
+    
+    # Your code here
+    
+    from pyadlml.datasets import set_data_home, fetch_aras
+    set_data_home('/home/chris/code/adlml/data_home')
+
+    data = fetch_aras(cache=True, keep_original=True)
+    
+    # Your code here
+    
+    data.df_activities.head()
+    data.df_activities_res2.head()
+    data.df_devices.head()
+    
+    # Your code here
+    
+    from pyadlml.dataset.plot.activities import hist_counts
+
+    idle = True
+
+    hist_counts(data.df_activities, figsize=(10,8));#, idle=idle);
+    
+    # Your code here
+    
+    from pyadlml.dataset.plot.activities import boxplot_duration
+
+    idle = False
+
+    boxplot_duration(data.df_activities, idle=idle);
+    
+    # Your code here
+    
+    from pyadlml.dataset.plot.activities import hist_cum_duration
+
+    idle = True
+    y_scale = 'log'
+
+    hist_cum_duration(data.df_activities, y_scale=y_scale, idle=idle, figsize=(10,8));
+    
+    # Your code here
+    
+    from pyadlml.dataset.plot.activities import heatmap_transitions
+
+    idle = False
+    z_scale = None #'log'
+
+    heatmap_transitions(data.df_activities, z_scale=z_scale, idle=idle, figsize=(10,10));
+    
+    # Your code here
+    
+    from pyadlml.

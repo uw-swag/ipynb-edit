@@ -1,0 +1,27 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("MultitaskingExample").getOrCreate()
+
+    # Define a DataFrame
+    df = spark.range(10)
+
+    # Show the DataFrame
+    df.show()
+
+    # Perform a parallel operation
+    df_transformed = df.select(col("*").multiply(2))
+
+    # Show the transformed DataFrame
+    df_transformed.show()
+
+    # Perform a sequential operation
+    df_final = df_transformed.select(col("*").divide(2))
+
+    # Show the final DataFrame
+    df_final.show()
+    ```
+
+    This code creates a SparkSession, defines a DataFrame, performs a parallel operation on the DataFrame, performs a sequential operation on the DataFrame, and finally shows the final DataFrame.

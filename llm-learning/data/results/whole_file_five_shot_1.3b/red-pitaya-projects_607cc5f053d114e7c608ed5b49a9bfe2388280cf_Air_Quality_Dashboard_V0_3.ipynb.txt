@@ -1,0 +1,33 @@
+
+    '''
+    Commit Message: "Updated libraries and licences to MIT"
+    Original Code Cells:
+    '''
+    %matplotlib notebook
+    import matplotlib
+    import matplotlib.pyplot as plt
+    from matplotlib.animation import FuncAnimation
+    import collect_air_data
+    import time
+    from datetime import datetime
+    import pandas as pd
+    from ipywidgets import interact, interactive, fixed, interact_manual
+    import ipywidgets as widgets
+    from ipywidgets import Button, HBox, VBox
+
+    air_data = collect_air_data.collect_air_object()
+    #Manage relative values of PMS here
+    pms_ref_0_3 = air_data.pms_ref_0_3
+    pms_ref_0_5 = air_data.pms_ref_0_5
+    pms5003_data = air_data.pms5003.read()
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    clean_data_table['Analog Temperature (oC)'] = [air_data.analog_temp()]
+    clean_data_table['Analog VOC in Air'] = [air_data.analog_voc_ratio()]
+    clean_data_table['Analog Alcohol in Air'] = [air_data.analog_alcohol_ratio()]
+    clean_data_table['GM102B VOC'] = [air_data.GM102B_ratio()]
+    clean_data_table['GM302B VOC'] = [air_data.GM302B_ratio()]
+    clean_data_table['GM502B VOC'] = [air_data.GM502B_ratio()]
+    clean_data_table['GM702B VOC'] = [air_data.GM702B_ratio()]
+    df = df.append(clean_data_table, ignore_index = True)
+    df.index.name = 'timestamp'
+    filename = "CSV-Data/

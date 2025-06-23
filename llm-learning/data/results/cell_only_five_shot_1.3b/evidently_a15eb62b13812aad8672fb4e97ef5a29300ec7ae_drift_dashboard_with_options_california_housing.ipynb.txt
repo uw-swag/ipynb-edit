@@ -1,0 +1,28 @@
+```python
+    def test_details_support():
+        # Assuming we have a function 'get_details' in a module 'details'
+        from details import get_details
+
+        # Testing the function with some data
+        data = [
+            {"name": "John", "age": 30, "city": "New York"},
+            {"name": "Jane", "age": 25, "city": "Chicago"},
+            {"name": "Bob", "age": 35, "city": "San Francisco"}
+        ]
+
+        # Expected output
+        expected_output = [
+            {"name": "John", "age": 30, "city": "New York", "details": "Age: 30, City: New York"},
+            {"name": "Jane", "age": 25, "city": "Chicago", "details": "Age: 25, City: Chicago"},
+            {"name": "Bob", "age": 35, "city": "San Francisco", "details": "Age: 35, City: San Francisco"}
+        ]
+
+        # Actual output
+        actual_output = [get_details(item) for item in data]
+
+        # Checking if the actual output is as expected
+        assert actual_output == expected_output, f"Expected {expected_output}, but got {actual_output}"
+
+    # Running the test
+    test_details_support()
+    ```

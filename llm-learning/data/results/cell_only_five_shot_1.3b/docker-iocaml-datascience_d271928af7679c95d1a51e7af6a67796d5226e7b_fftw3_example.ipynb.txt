@@ -1,0 +1,23 @@
+```python
+    import fftw3
+
+    # Create a 3D array of complex numbers
+    N = 100
+    fftw_in = fftw3.malloc_complex(N)
+    fftw_out = fftw3.malloc_complex(N)
+
+    # Initialize the FFTW arrays
+    for i in range(N):
+        fftw_in[i] = fftw3.complex(0.0, 0.0)
+
+    # Perform the FFT
+    fftw3.fft(fftw_in, fftw_out, flags='FFTW_FORWARD')
+
+    # Print the result
+    for i in range(N):
+        print(f"fftw_out[{i}] = {fftw_out[i]}")
+
+    # Free the FFTW arrays
+    fftw3.free(fftw_in)
+    fftw3.free(fftw_out)
+    ```

@@ -1,0 +1,27 @@
+```python
+    import pandas as pd
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Convert the 'date' column to datetime
+    df['date'] = pd.to_datetime(df['date'])
+
+    # Set the 'date' column as the index
+    df.set_index('date', inplace=True)
+
+    # Sort the data by date
+    df.sort_index(inplace=True)
+
+    # Resample the data to get the monthly average
+    monthly_average = df.resample('M').mean()
+
+    # Plot the monthly average
+    monthly_average.plot()
+
+    # Save the plot to a file
+    plt.savefig('monthly_average.png')
+
+    # Print the resampled data
+    print(monthly_average)
+    ```

@@ -1,0 +1,68 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+    # Generate some random data
+    np.random.seed(0)
+    X = np.random.randn(100, 1)
+    y = 2 + 3 * X + np.random.randn(100, 1)
+
+    # Fit a linear regression model
+    model = LinearRegression()
+    model.fit(X, y)
+
+    # Print the coefficients
+    print('Coefficients:', model.coef_)
+
+    # Plot the data and the fitted line
+    plt.scatter(X, y)
+    plt.plot(X, model.predict(X), color='red')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Computational examples for logistic regression"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LogisticRegression
+
+    # Generate some random data
+    np.random.seed(0)
+    X = np.random.randn(100, 1)
+    y = (X[:, 0] > 0).astype(int)
+
+    # Fit a logistic regression model
+    model = LogisticRegression()
+    model.fit(X, y)
+
+    # Print the coefficients
+    print('Coefficients:', model.coef_)
+
+    # Plot the data and the fitted line
+    plt.scatter(X[:, 0], y)
+    plt.plot(X[:, 0], model.predict(X), color='red')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Computational examples for k-means clustering"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import

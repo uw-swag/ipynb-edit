@@ -1,0 +1,16 @@
+```python
+    # Add condition to check if the target variable is a single value
+    from deepchecks.checks.model_performance import ModelInfo, PerformanceReport, TrainTestDifferenceOverfit, ConfusionMatrixReport, NaiveModelComparison
+
+    # Check if the target variable is a single value
+    def is_single_value(df):
+        return df.nunique() == 1
+
+    # Add the check to the suite
+    MyModelSuite.add_check(ModelInfo(check_target_uniqueness=is_single_value))
+
+    # Run the suite
+    MyModelSuite.run(model=rf_clf, train_dataset=ds_train, test_dataset=ds_test, check_datasets_policy='both')
+    ```
+
+    This code will add a new check to the suite that checks if the target variable in the dataset is a single value. If it is, the check will fail.

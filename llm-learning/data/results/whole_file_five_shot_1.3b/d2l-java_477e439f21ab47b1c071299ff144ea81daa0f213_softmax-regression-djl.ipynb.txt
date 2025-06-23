@@ -1,0 +1,21 @@
+```python
+    # Upgrade to DJL 0.13.0
+    import ai.djl.basicdataset.cv.classification as classification;
+    import ai.djl.metric as metric;
+
+    int batchSize = 256;
+    boolean randomShuffle = true;
+
+    // Get Training and Validation Datasets
+    FashionMnist trainingSet = FashionMnist.builder()
+        .optUsage(classification.Dataset.Usage.TRAIN)
+        .setSampling(batchSize, randomShuffle)
+        .optLimit(Long.getLong("DATASET_LIMIT", Long.MAX_VALUE))
+        .build();
+
+    FashionMnist validationSet = FashionMnist.builder()
+        .optUsage(classification.Dataset.Usage.TEST)
+        .setSampling(batchSize, false)
+        .optLimit(Long.getLong("DATASET_LIMIT", Long.MAX_VALUE))
+        .build();
+    ```

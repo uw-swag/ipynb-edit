@@ -1,0 +1,12 @@
+```
+    # Fixing colab & notebook links
+    import os
+    import re
+
+    # Get all the notebook files
+    notebook_files = [f for f in os.listdir('.') if re.match(r'.*\.ipynb', f)]
+
+    # Fix the links
+    for notebook in notebook_files:
+        os.system(f'jupyter nbconvert --config-file=nbconfig.py "{notebook}" --to notebook --output-dir="."')
+    ```

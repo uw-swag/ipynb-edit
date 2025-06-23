@@ -1,0 +1,11 @@
+data_drift_report = Report(metrics=[
+    DataDriftPreset(num_stattest='ks', 
+                    cat_stattest='psi', 
+                    num_stattest_threshold=0.2, 
+                    cat_stattest_threshold=0.2),
+],
+  options={"render": {"raw_data": True}}
+                           )
+
+data_drift_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_report

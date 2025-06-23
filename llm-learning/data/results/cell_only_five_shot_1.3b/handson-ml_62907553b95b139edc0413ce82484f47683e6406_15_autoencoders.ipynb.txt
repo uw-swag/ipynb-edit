@@ -1,0 +1,36 @@
+
+    The error in the training process is due to the fact that the model is trained with the same encoder and decoder at the same time. This is not allowed in a stacked autoencoder. 
+
+    The error is caused by the fact that the model is trying to train the decoder with the same weights as the encoder. This is not allowed because the decoder's weights are not updated during the training of the encoder. 
+
+    To fix this error, you need to train the decoder separately from the encoder. This means that the decoder should be trained to output the same values as the encoder's output, but with the decoder's own parameters.
+
+    Here is the corrected code:
+
+    ```python
+    from functools import partial
+
+    def train_autoencoder(X_train, n_neurons, n_epochs, batch_size,
+                          learning_rate = 0.01, l2_reg = 0.0005,
+                          activation=tf.nn.elu, seed=42):
+        graph = tf.Graph()
+        with graph.as_default():
+            tf.set_random_seed(seed)
+
+            n_inputs = X_train.shape[1]
+
+            X = tf.placeholder(tf.float32, shape=[None, n_inputs])
+
+            my_dense_layer = partial(
+                tf.layers.dense,
+                activation=activation,
+                kernel_initializer=tf.contrib.layers.variance_scaling_initializer(),
+                kernel_regularizer=tf.contrib.layers.l2_regularizer(l2_reg))
+
+            hidden = my_dense_layer(X, n_neurons, name="hidden")
+            outputs = my_dense_layer(hidden, n_inputs, activation=None, name="outputs")
+
+            reconstruction_loss = tf.reduce_mean(tf.square(outputs - X))
+
+            reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+            loss = tf.add_n([reconstruction_loss] + reg_

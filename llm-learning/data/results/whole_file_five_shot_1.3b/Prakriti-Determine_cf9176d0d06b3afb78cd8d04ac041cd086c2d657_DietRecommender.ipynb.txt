@@ -1,0 +1,23 @@
+```
+    <Cell_0>
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+df=pd.read_csv("../Dataset/diet.csv")
+df
+<\Cell_1>
+<Cell_2>
+df.loc[df["Doshas"]=="Vata"].drop("Doshas",axis=1).to_numpy().tolist()[0]
+<\Cell_2>
+<Cell_3>
+def recommend_Diet(prakriti:str)-> list[str]:
+    try:
+        recommends=df.loc[df["Doshas"]==prakriti].drop("Doshas",axis=1).to_numpy().tolist()[0]
+        return recommends
+    except IndexError as ie:
+        print(ie)
+<\Cell_3>
+<Cell_4>
+recommend_Diet(prakriti="Pitta - Kapha")
+<\Cell_4>
+```

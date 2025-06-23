@@ -1,0 +1,21 @@
+```java
+    AirfoilRandomAccess airfoil = TrainingChapter11.getDataCh11(10, 1500);
+
+    public TrainingChapter11.LossTime trainAdadelta(float rho, int numEpochs) {
+        int featureDimension = airfoil.getFeatureArraySize();
+        Map<String, Float> hyperparams = new HashMap<>();
+        hyperparams.put("rho", rho);
+        return TrainingChapter11.trainCh11(Optimization::adadelta, 
+                                           initAdadeltaStates(featureDimension), 
+                                           hyperparams, airfoil, 
+                                           featureDimension, numEpochs);
+    }
+
+    trainAdadelta(0.9f, 2);
+
+    // Optimizer adadelta = Optimizer.adadelta().optRho(0.9f).build();
+
+    // TrainingChapter11.trainConciseCh11(adadelta, airfoil, 2);
+    ```
+
+    The code above is a corrected version of the code you provided. The optimizer `adadelta` is not yet implemented in DJL, so the `trainAdadelta` method is returning `null`. You need to implement the `adadelta` method or use a different optimizer.

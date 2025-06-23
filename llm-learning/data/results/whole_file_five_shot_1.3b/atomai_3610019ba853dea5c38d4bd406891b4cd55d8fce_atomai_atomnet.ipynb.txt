@@ -1,0 +1,33 @@
+```python
+    # [START colab_tutorial]
+    # This is a simple example of using the AtomNet model in Google Colab.
+    # Please note that you need to have a Google account and the necessary permissions to access the AtomNet model.
+
+    # Import necessary libraries
+    import os
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import tensorflow as tf
+    import tensorflow_datasets as tfds
+    from atomnet import AtomNet
+
+    # Download the AtomNet model
+    model_dir = 'atomnet_model'
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+    model_path = os.path.join(model_dir, 'atomnet_model.h5')
+    if not os.path.exists(model_path):
+        tf.keras.applications.resnet50.download_and_load_model(model_path)
+
+    # Load the AtomNet model
+    model = AtomNet(model_path)
+
+    # Use the model to predict atom types
+    atom_types = model.predict(np.random.rand(1, 1024, 1))
+    print(atom_types)
+
+    # Plot the predicted atom types
+    plt.imshow(atom_types[0])
+    plt.show()
+    # [END colab_tutorial]
+    ```

@@ -1,0 +1,42 @@
+```
+    # ! pip install geopandas
+    # ! pip install git+https://github.com/python-visualization/folium
+    # ! pip install kaggle --upgrade
+
+    import pandas as pd
+    import geopandas as gpd
+
+    import folium
+    from folium import *
+    from folium.plugins import *
+
+    import os
+    from pathlib import Path
+
+    dataset = 'alexisbcook/geospatial-learn-course-data'
+
+    config_path = Path(os.getenv("HOME"))
+    data_path = config_path/"datasets"/dataset
+    data_path.mkdir(parents=True, exist_ok=True)
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/.kaggle"
+
+    !kaggle datasets download {dataset} -p "{data_path}" --unzip
+
+    plate_boundaries = gpd.read_file(data_path/"Plate_Boundaries/Plate_Boundaries/Plate_Boundaries.shp")
+    plate_boundaries['coordinates'] = plate_boundaries.apply(lambda x: [(b,a) for (a,b) in list(x.geometry.coords)], axis='columns')
+    plate_boundaries.drop('geometry', axis=1, inplace=True)
+
+    plate_boundaries.head()
+
+    earthquakes = pd.read_csv(data_path/"earthquakes1970-2014.csv", parse_dates=["DateTime"])
+    earthquakes.head()
+
+    from IPython.display import IFrame, HTML
+
+    def embed_map(m, file_name):    
+        m.save(file_name)
+        return IFrame(src=file_name, width='100%', height='500px')
+
+    m_1 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+    for i in range(len(plate_boundaries)):
+        folium.Pol

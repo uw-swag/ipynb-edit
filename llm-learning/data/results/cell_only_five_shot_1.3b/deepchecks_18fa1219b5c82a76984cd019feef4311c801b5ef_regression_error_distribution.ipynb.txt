@@ -1,0 +1,23 @@
+```python
+    # Count the number of games where White won.
+    num_white_wins = df[df["Result"] == "1-0"].shape[0]
+    white_wins_proportion = num_white_wins / len(df)
+    print(f"White won {num_white_wins} out of {len(df)} games ({white_wins_proportion:.2%}).")
+
+    # Count the number of games where the result was 1-0 when White had a higher
+    # rating.
+    num_white_wins_with_higher_rating = (
+        df[(df["WhiteElo"] > df["BlackElo"]) & (df["Result"] == "1-0")].shape[0]
+    )
+    num_games_with_higher_rated_white = (
+        df[(df["WhiteElo"] > df["BlackElo"])].shape[0]
+    )
+    white_wins_with_higher_rating_proportion = (
+        num_white_wins_with_higher_rating / num_games_with_higher_rated_white
+    )
+    print(
+        f"White won {num_white_wins_with_higher_rating} out of "
+        f"{num_games_with_higher_rated_white} games "
+        f"({white_wins_with_higher_rating_proportion:.2%}) when they had a higher rating."
+    )
+    ```

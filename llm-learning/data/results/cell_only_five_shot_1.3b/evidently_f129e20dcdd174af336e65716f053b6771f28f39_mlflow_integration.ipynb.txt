@@ -1,0 +1,37 @@
+```python
+    # Version 0.35.dev0 (+ and updated tutorial with MLflow integration)
+    import json
+    import pandas as pd
+
+    from evidently.model_profile import Profile
+    from evidently.profile_sections import DataDriftProfileSection
+
+    import mlflow
+    import mlflow.sklearn
+    from mlflow.tracking import MlflowClient
+    #load data
+    raw_data = pd.read_csv('bike_demand_prediction_data.csv', header=0, 
+                           sep=',', parse_dates=['datetime'], index_col='datetime')
+    #set column mapping for Evidently Profile
+    data_columns = {}
+    data_columns['numerical_features'] = ['weather', 'temp', 'atemp', 'humidity', 'windspeed']
+    data_columns['categorical_features'] = ['holiday', 'workingday']
+    #evaluate data drift with Evidently Profile
+    def eval_drift(reference, production, column_mapping):
+        data_drift_profile = Profile(sections=[DataDriftProfileSection])
+        data_drift_profile.calculate(reference, production, column_mapping=column_mapping)
+        report = data_drift_profile.json()
+        json_report = json.loads(report)
+
+        drifts = []
+        for feature in column_mapping['numerical_features'] + column_mapping['categorical_features']:
+            drifts.append((feature, json_report['data_drift']['data']['metrics'][feature]['p_value'])) 
+        return drifts
+
+    # MLflow integration
+    mlflow.set_experiment('bike_demand_prediction')
+    with mlflow.start_run():
+        mlflow.log_param("data_path", "bike_demand_prediction_data.csv")
+        mlflow.log_param("column_mapping", str(data_columns))
+        mlflow.log_param("reference_data_path", "reference_data.csv")
+        mlflow.log_param("production_data_path", "

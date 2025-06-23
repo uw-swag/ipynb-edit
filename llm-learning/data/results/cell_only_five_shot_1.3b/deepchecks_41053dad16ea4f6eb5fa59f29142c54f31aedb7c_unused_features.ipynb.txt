@@ -1,0 +1,31 @@
+```python
+    from deepchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from deepchecks.checks import UnusedFeatures
+    import pandas as pd
+    %matplotlib inline
+    from deepchecks import Dataset
+
+    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                    'race', 'sex', 'native-country']
+    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
+    test_ds = Dataset(test_df, label=label_name, cat_features=cat_features)
+
+    numeric_features = list(set(train_ds.features) - set(cat_features))
+
+    # Update dataset properties
+    train_ds.update_dataset_properties(numeric_features=numeric_features)
+    test_ds.update_dataset_properties(numeric_features=numeric_features)
+
+    # Add checks
+    checks = [UnusedFeatures(train_ds, test_ds)]
+
+    # Run checks
+    report = deepchecks.report(checks)
+    report.show()
+    ```
+
+    This code will update the dataset properties and add the unused features check to the report. The unused features check will show the features that are not used in the dataset.

@@ -1,0 +1,19 @@
+```python
+    import os
+    import re
+
+    # Replace the links in the notebook
+    notebook_path = 'your_notebook_path.ipynb'
+    with open(notebook_path, 'r') as f:
+        lines = f.readlines()
+
+    for i, line in enumerate(lines):
+        if 'colab.research.google.com' in line:
+            lines[i] = re.sub(r'colab.research.google.com', 'your_colab_link', line)
+        if 'notebooks.azure.com' in line:
+            lines[i] = re.sub(r'notebooks.azure.com', 'your_notebook_link', line)
+
+    # Write the updated lines back to the file
+    with open(notebook_path, 'w') as f:
+        f.writelines(lines)
+    ```

@@ -1,0 +1,41 @@
+```
+    class CustomFocalLoss(focal.FocalLoss):
+    def __init__(self, alpha: float, gamma: float = 2.0,
+                 reduction: str = 'none') -> None:
+        super(CustomFocalLoss, self).__init__(alpha, gamma, reduction)
+        self.alpha: float = alpha
+        self.gamma: float = gamma
+        self.reduction: str = reduction
+        self.eps: float = 1e-6
+
+    def activation(self, out): return F.softmax(out, dim=-1)
+    def decodes(self, out):    return out.argmax(dim=-1)
+
+    '''
+    This code is a custom version of the FocalLoss class from the PyTorch library. The class has been modified to include an `alpha` parameter, which is used to adjust the balance between the focal loss and the cross-entropy loss. The `gamma` parameter is used to adjust the balance between the focal loss and the cross-entropy loss. The `reduction` parameter is used to specify how to reduce the loss.
+
+    The `activation` method is used to compute the softmax function on the output of the loss. The `decodes` method is used to get the predicted class from the output of the loss.
+
+    The `eps` parameter is used to avoid division by zero when computing the focal loss.
+
+    The `__call__` method is used to compute the loss.
+
+    The `forward` method is used to compute the loss.
+
+    The `forward` method is used to compute the loss.
+
+    The `__init__` method is used to initialize the class.
+
+    The `__repr__` method is used to return a string representation of the class.
+
+    The `__str__` method is used to return a string representation of the class.
+
+    The `__getitem__` method is used to get an item from the class.
+
+    The `__setitem__` method is used to set an item in the class.
+
+    The `__delitem__` method is used to delete an item from the class.
+
+    The `__iter__` method is used to iterate over the class.
+
+    The

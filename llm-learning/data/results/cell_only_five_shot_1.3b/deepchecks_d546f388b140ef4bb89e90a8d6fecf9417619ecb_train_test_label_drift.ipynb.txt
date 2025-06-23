@@ -1,0 +1,24 @@
+```
+    from deepchecks.vision.datasets.classification.coco import load_dataset
+
+    # Load the training and testing datasets
+    mnist_dataloader_train = load_dataset(train=True, batch_size=64)
+    mnist_dataloader_test = load_dataset(train=False, batch_size=1000)
+
+    from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter, ClassificationPredictionFormatter
+
+    # Create a classification dataset from the training and testing data
+    train_ds = VisionData(mnist_dataloader_train, label_transformer=ClassificationLabelFormatter(lambda x: x))
+    test_ds = VisionData(mnist_dataloader_test, label_transformer=ClassificationLabelFormatter(lambda x: x))
+
+    from deepchecks.vision.datasets.detection.coco import get_trained_yolov5_object_detection, get_coco_dataloader
+
+    # Get the COCO dataloader
+    dataloader = get_coco_dataloader()
+
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+
+    # Create a detection dataset from the training and testing data
+    train_ds = VisionData(dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+    test_ds = VisionData(dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+    ```

@@ -1,0 +1,52 @@
+
+    # Import necessary libraries
+    from pyspark.sql import SparkSession
+    from pyspark.ml.recommendation import ALS
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Recommendation_System").getOrCreate()
+
+    # Load the data
+    df = spark.read.format("csv").option("inferSchema", "true").option("header", "true").load("path_to_your_data")
+
+    # Split the data into training and test sets
+    (training, test) = df.randomSplit([0.8, 0.2])
+
+    # Create ALS model
+    als = ALS()
+
+    # Train the model
+    model = als.fit(training)
+
+    # Make predictions
+    predictions = model.transform(test)
+
+    # Evaluate the model
+    evaluator = RegressionEvaluator(metricName="rmse", labelCol="rating", predictionCol="prediction")
+    rmse = evaluator.evaluate(predictions)
+    print("Root Mean Squared Error (RMSE) on test data = " + str(rmse))
+
+    # Recommend products
+    user_id = "user_id"
+    products_to_recommend = 5
+    top_n = 10
+    recommendations = model.recommendProducts(user_id, products_to_recommend)
+    for product in recommendations.take(top_n):
+        print(product)
+
+    # Stop the SparkSession
+    spark.stop()
+
+    # Save the model
+    model.save("path_to_save_model")
+
+    # Load the model
+    saved_model = ALS.load("path_to_save_model")
+
+    # Make predictions on new data
+    new_data = spark.read.format("csv").option("inferSchema", "true").option("header", "true").load("path_to_new_data")
+    new_predictions = saved_model.transform(new_data)
+
+    # Evaluate the model
+    new_evaluator

@@ -1,0 +1,196 @@
+# load model
+# filter out three sections
+    # wrong decisions
+    # almost wrong decisions
+    # high confidence?
+# if works:
+# load those into training
+# 
+from torchtext import data
+from torchtext import datasets
+import torch.nn as nn
+
+%load_ext autoreload
+%autoreload 4
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import torch
+import pickle
+import os
+import sys
+sys.path.append('../../acd')
+sys.path.append('../../acd/visualization')
+sys.path.append('../../acd/acd/util')
+sys.path.append('../../acd/acd/scores')
+sys.path.append('../../acd/acd/agglomeration')
+import viz_1d as viz
+import tiling_1d as tiling
+import agg_1d as agg
+import cd
+import score_funcs
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+# form class to hold data
+class B:
+    text = torch.zeros(1).to(device)
+
+sys.path.append('..../../acd/dsets/sst')
+from dsets.sst import dset
+from dsets.sst.model import LSTMSentiment
+import os
+from os.path import join as oj
+import sys, time
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import pickle
+
+r = pd.read_pickle('../results/word_fairness_test.pkl')
+
+r.sent.mean() - r.sent.std()
+r[ r["count"] >2000]
+r[r.word == "dull"]
+
+has_word = train_batch.text == list_of_vocab[0]
+
+from functools import reduce
+
+# load model
+
+init_model_folder = '../models/init_models'
+init_models = os.listdir(init_model_folder)
+model =torch.load(join(init_model_folder, init_models[3]))
+sst_pkl = pickle.load(open('../../acd/dsets/sst/sst.pkl', 'rb'))
+np.random.seed(42)
+vector_cache = os.path.join(os.getcwd(), '../data/.vector_cache/input_vectors.pt')
+word_vectors ='glove.6B.300d'
+batch_size=  50
+inputs = data.Field(lower= True)
+answers = data.Field(sequential=False, unk_token=None)
+
+# load data set
+
+
+
+train, dev, test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label != 'neutral')
+
+
+inputs.build_vocab(train, dev, test)
+if word_vectors:
+    if os.path.isfile(vector_cache):
+        inputs.vocab.vectors = torch.load(vector_cache)
+    else:
+        inputs.vocab.load_vectors(word_vectors)
+        makedirs(os.path.dirname(vector_cache))
+        torch.save(inputs.vocab.vectors,vector_cache)
+answers.build_vocab(train)
+
+
+train_iter, dev_iter, test_iter = data.BucketIterator.splits((train, dev, test),
+                                                             batch_size=batch_size, 
+                                                             device=torch.device(0),
+                                                             sort_key=lambda x: len(x.text), 
+                                                             shuffle = True,
+                                                             sort_within_batch=True, 
+                                                             sort = False)
+model.eval()
+criterion = nn.CrossEntropyLoss(reduction = 'none')
+neg_words = ["not" , "bad", "nothing", "n't","pretentious", "dull" ,"lacks","without"]
+list_of_vocab = [inputs.vocab.stoi[x] for x in neg_words]
+has_word = reduce((lambda x, y: x + y), [train_batch.text == x for x in list_of_vocab])
+#num_fit += ((has_word[:-1] + has_word[1:]) ==2).sum()
+filter_mask = ((has_word[:-1] + has_word[1:]) ==2).argmax(dim = 0).byte()
+torch.masked_select(train_batch.text, filter_mask[None, :] )[::2]
+
+# iterate through the entire train set and write down idx that fulfill 
+n_correct = 0
+incorrect_batches_list = []
+incorrect_labels_list = []
+num_fit = 0
+with torch.no_grad():
+    for train_batch_dix, train_batch in enumerate(train_iter):
+        answer = model(train_batch)
+        neg_words = ["not" , "bad", "nothing", "n't"]#,"pretentious", "dull" ,"lacks","without"]
+        list_of_vocab = [inputs.vocab.stoi[x] for x in neg_words]
+        has_word = reduce((lambda x, y: x + y), [train_batch.text == x for x in list_of_vocab])
+        num_fit += ((has_word[:-1] + has_word[1:]) ==2).sum()
+#         if ((has_word[:-1] + has_word[1:]) ==2).any():
+#             break
+        mask = ( 1- (torch.max(answer, 1)[1].data == train_batch.label.data)).cpu().numpy()
+
+#         mask = (criterion(answer, train_batch.label) > 3).cpu().numpy()
+        n_correct += mask.sum()
+        incorrect_batches =train_batch.text.data.cpu().numpy()[:, np.where(mask)[0]]
+        incorrect_labels = train_batch.label.data.cpu().numpy()[np.where(mask)[0]]
+        for i in range(incorrect_batches.shape[1]):
+            if  incorrect_batches[:,i].shape[0] <10:
+                incorrect_batches_list.append(incorrect_batches[:,i])
+                incorrect_labels_list.append(incorrect_labels[i])
+        
+            #check if correct
+print(n_correct.item()/len(train))
+print(n_correct.item())
+num_fit
+float(num_fit)/len(train)
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+# form class to hold data
+class B:
+    text = torch.zeros(1).to(device)
+def batch_from_str_list(s):
+    batch = B()
+    nums = np.expand_dims(np.array([sst_pkl['stoi'][x] for x in s]).transpose(), axis=1)
+    batch.text = torch.LongTensor(nums).to(device) #cuda()
+    return batch
+def batch_from_numpy(s):
+    batch = B()
+    nums = s
+    batch.text = torch.LongTensor(nums).to(device) #cuda()
+    return batch
+label_in_text = lambda x: "positive" if x ==0 else "negative"
+batch_idx = 0
+batch_idx +=1
+# base parameters
+sweep_dim = 1 # how large chunks of text should be considered (1 for words)
+method = 'cd' # build_up, break_down, cd
+percentile_include = 99.5 # keep this very high so we don't add too many words at once
+num_iters = 25 # maximum number of iterations (rarely reached)
+
+# text and label
+sentence = [sst_pkl['itos'][x] for x in incorrect_batches_list[batch_idx]]
+# sentence = ["'s", 'not', 'bad',]
+label = incorrect_labels_list[batch_idx] 
+
+
+def batch_from_str_list(s):
+    batch = B()
+    nums = np.expand_dims(np.array([sst_pkl['stoi'][x] for x in s]).transpose(), axis=1)
+    batch.text = torch.LongTensor(nums).to(device) #cuda()
+    return batch
+
+# prepare inputs
+batch = batch_from_str_list(sentence)
+scores_all = model(batch).data.cpu().numpy()[0] # predict
+label_pred = np.argmax(scores_all) # get predicted class
+
+# agglomerate
+lists = agg.agglomerate(model, batch, percentile_include, method, sweep_dim, # only works for sweep_dim = 1
+                    label_pred, num_iters=num_iters, device=device) # see agg_1d.agglomerate to understand what this dictionary contains
+lists = agg.collapse_tree(lists) # don't show redundant joins
+
+# visualize
+viz.word_heatmap(sentence, lists, label_pred, label, fontsize=9)
+print(label_in_text(label))
+sentence =['simone', 'is', 'not', 'a', 'bad', 'film', '.']
+

@@ -1,0 +1,43 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from keras.models import Sequential
+    from keras.layers import Dense
+
+    # Drafting 16a, b basic neural networks
+
+    # Part a: Basic Neural Network
+    # Using Sequential model
+
+    model_a = Sequential()
+    model_a.add(Dense(12, input_dim=8, activation='relu'))
+    model_a.add(Dense(8, activation='relu'))
+    model_a.add(Dense(1, activation='sigmoid'))
+
+    # Compiling the model
+    model_a.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Part b: Basic Neural Network
+    # Using Sequential model
+
+    model_b = Sequential()
+    model_b.add(Dense(12, input_dim=8, activation='relu'))
+    model_b.add(Dense(8, activation='relu'))
+    model_b.add(Dense(1, activation='sigmoid'))
+
+    # Compiling the model
+    model_b.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Training the models
+    model_a.fit(X_train, Y_train, epochs=150, batch_size=10)
+    model_b.fit(X_train, Y_train, epochs=150, batch_size=10)
+
+    # Evaluating the models
+    _, accuracy_a = model_a.evaluate(X_test, Y_test)
+    _, accuracy_b = model_b.evaluate(X_test, Y_test)
+
+    print('Model A Accuracy: %.2f' % (accuracy_a*100))
+    print('Model B Accuracy: %.2f' % (accuracy_b*100))
+
+    # Plotting the

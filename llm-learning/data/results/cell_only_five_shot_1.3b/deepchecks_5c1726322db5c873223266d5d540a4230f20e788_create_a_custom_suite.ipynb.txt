@@ -1,0 +1,13 @@
+```
+    from deepchecks import Dataset
+
+    df_train = pd.read_csv('train.csv')
+    df_test = pd.read_csv('test.csv')
+    label_col = 'target'
+
+    ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use_default_index=False)
+    ds_test =  Dataset(df_test,  label_name=label_col, cat_features=[])
+
+    new_custom_suite.run(model=rf_clf, train_dataset=ds_train, test_dataset=ds_test)
+    ```
+    This code reverts the changes made in the original code. It reads the training and test datasets, and then runs the custom suite on the model and datasets.

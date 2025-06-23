@@ -1,0 +1,24 @@
+```python
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'source_directory'
+    dest_dir = 'destination_directory'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Iterate over each file
+    for file in files:
+        # Construct the full source and destination paths
+        source_path = os.path.join(source_dir, file)
+        dest_path = os.path.join(dest_dir, file)
+
+        # Check if the destination directory exists, if not create it
+        if not os.path.exists(dest_dir):
+            os.makedirs(dest_dir)
+
+        # Move the file to the destination directory
+        shutil.move(source_path, dest_path)
+    ```

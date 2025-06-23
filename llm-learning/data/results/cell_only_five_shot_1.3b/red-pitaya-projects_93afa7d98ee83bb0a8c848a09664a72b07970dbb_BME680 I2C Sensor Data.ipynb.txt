@@ -1,0 +1,41 @@
+```python
+    import sys #Import from the folder above
+sys.path.append("..")
+
+import bme680
+import threading
+import time
+
+# Create a BME680 sensor object
+sensor = bme680.BME680()
+
+# Setup the sensor
+sensor.set_humidity_oversample(bme680.OS_200x)
+sensor.set_pressure_oversample(bme680.OS_1x)
+sensor.set_temperature_oversample(bme680.OS_1x)
+sensor.set_filter(bme680.FILTER_SIZE_3)
+sensor.set_gas_detection(bme680.ENABLE)
+
+# Create a lock to prevent race conditions
+lock = threading.Lock()
+
+# Function to read the sensor data
+def read_sensor_data():
+    while True:
+        if sensor.get_sensor_data():
+            with lock:
+                print(sensor.data)
+        time.sleep(1)
+
+# Create a new thread to read the sensor data
+threading.Thread(target=read_sensor_data).start()
+
+# Main function
+def main():
+    while True:
+        # Main loop
+        pass
+
+if __name__ == "__main__":
+    main()
+    ```

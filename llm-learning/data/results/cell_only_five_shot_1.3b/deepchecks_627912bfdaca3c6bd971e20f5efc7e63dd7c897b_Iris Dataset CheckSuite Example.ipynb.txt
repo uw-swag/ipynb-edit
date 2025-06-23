@@ -1,0 +1,39 @@
+
+The folder structure of the notebook can be refactored to improve readability and maintainability. Here's a suggested refactoring:
+
+```python
+# main.py
+import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Load and preprocess data
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+label_col = 'target'
+df_train, df_val = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+# Train model
+rf_clf = RandomForestClassifier()
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col])
+
+# Evaluate model
+from mlchecks import Dataset
+ds_train = Dataset(df_train, cat_features=[], label = label_col)
+ds_val =  Dataset(df_val, cat_features=[], label = label_col)
+from mlchecks.suites import IntegrityCheckSuite
+IntegrityCheckSuite.run(train_dataset=ds_train, validation_dataset=ds_val, check_datasets_policy='both')
+
+train_len = round(0.67*iris_df.shape[0])
+alternative_train_df = iris_df[:train_len]
+alternative_val_df = iris_df[train_len:]
+IntegrityCheckSuite.run(train_dataset=alternative_train_df, validation_dataset=alternative_val_df,
+                        check_datasets_policy='both')
+
+from mlchecks import CheckSuite
+from mlchecks.checks import *
+
+# check out which builtin performance checks exist
+print([class_name for class_name in dir(mlchecks.checks.performance) if class_name[0].isupper()])
+
+MyModelSuite = CheckSuite

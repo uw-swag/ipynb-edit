@@ -1,0 +1,55 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Adding a new section for the model"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %load_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    import torch
+    from torch import tensor
+    from torch import nn
+    import torch.nn.functional as F
+    from torch.utils import data 
+    import matplotlib.pyplot as plt
+
+    from pathlib import Path
+    from IPython.core.debugger import set_trace
+    from fastai import datasets
+    from fastai.metrics import accuracy
+    import pickle, gzip, math, torch
+    import operator
+    <\Cell_1>
+    <Cell_2>
+    class Model(nn.Module):
+        def __init__(self, n_in, nh, n_out):
+            super().__init__()
+            self.layers = [nn.Linear(n_in, nh), nn.ReLU(), nn.Linear(nh, n_out)]
+        def __call__(self, x):
+            for l in self.layers:
+                x = l(x)
+            return x
+    <\Cell_2>
+    <Cell_3>
+    n, m = x_train.shape
+    c = y_train.max()+1
+    n, m, c
+    <\Cell_3>
+    <Cell_4>
+    train_mean, train_std = x_train.mean(), x_train.std()
+    x_train = normalize(x_train, train_mean, train_std)
+    x_valid = normalize(x_valid, train_mean, train_std)
+    <\Cell_4>
+    <Cell_5>
+    def get_model():
+        loss_func = F.cross_entropy
+        model = Model(m, nh, c.numpy())
+        return model, loss_func
+    <\Cell_5>
+    <Cell_6>
+    model, loss_func = get_model()
+    <\Cell_

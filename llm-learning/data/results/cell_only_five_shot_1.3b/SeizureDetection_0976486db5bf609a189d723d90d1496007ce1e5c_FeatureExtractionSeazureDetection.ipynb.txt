@@ -1,0 +1,24 @@
+```python
+    # Feature Normalization
+    features = (features - features.mean()) / features.std()
+
+    # Feature Selection
+    correlation_matrix = features.corr().abs()
+    upper_triangle = correlation_matrix.where(np.triu(np.ones(correlation_matrix.shape), k=1).astype(np.bool))
+    to_drop = [column for column in upper_triangle.columns if any(upper_triangle[column] > 0.7)]
+    features = features.drop(features[to_drop], axis=1)
+
+    # Compute the average bandpower of an EEG signal
+    def bandpower(x, fs, win):
+        bands = [0.5, 4, 8, 12, 30, 100]
+        freqs, psd = signal.welch(x, fs, nperseg=win)
+        avg_power = []
+        for band in bands:
+            idx = np.logical_and(freqs >= band, freqs <= band+10)
+            power_simps = simps(psd[idx], dx=10)
+            avg_power.append(power_simps)
+        return avg_power
+
+    # Use the function to compute the average bandpower of the signal
+    avg_bandpower = bandpower(features, sample_rate, time_window)
+    ```

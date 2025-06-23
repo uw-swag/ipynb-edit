@@ -1,0 +1,43 @@
+```python
+    import tensorflow as tf
+    from tensorflow.contrib.layers import fully_connected
+
+    n_steps = 20
+    n_inputs = 1
+    n_neurons = 100
+    n_outputs = 1
+
+    X = tf.placeholder(tf.float32, [None, n_steps, n_inputs])
+    y = tf.placeholder(tf.float32, [None, n_steps, n_outputs])
+
+    cell = tf.contrib.rnn.BasicRNNCell(num_units=n_neurons)
+    outputs, states = tf.nn.dynamic_rnn(cell, X, dtype=tf.float32)
+
+    n_outputs = 1
+    learning_rate = 0.001
+
+    stacked_outputs = fully_connected(outputs, n_outputs, activation_fn=None)
+    outputs = tf.reshape(stacked_outputs, [-1, n_steps, n_outputs])
+
+    loss = tf.reduce_sum(tf.square(outputs - y))
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+    training_op = optimizer.minimize(loss)
+
+    init = tf.global_variables_initializer()
+    num_steps = 100001
+
+    with tf.Session() as session:
+        init.run()
+
+        average_loss = 0
+        for step in range(num_steps):
+            print("\rIteration: {}".format(step), end="\t")
+            batch_inputs, batch_labels = generate_batch(batch_size, num_skips, skip_window)
+            feed_dict = {X: batch_inputs, y: batch_labels}
+
+            # We perform one update step by evaluating the training op (including it
+            # in the list of returned values for session.run()
+            _, loss_val = session.run([training_op, loss], feed_dict=feed_dict)
+            average_loss += loss_val
+
+            if

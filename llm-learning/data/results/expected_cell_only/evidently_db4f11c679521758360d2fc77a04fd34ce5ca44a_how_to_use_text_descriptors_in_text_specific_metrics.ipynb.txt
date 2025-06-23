@@ -1,0 +1,95 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset, TextEvals
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment, RegExp
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="Review_Text")
+    ]
+)
+
+text_evals_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_evals_report
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="Review_Text", descriptors=[
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        ]
+    )
+])
+
+text_evals_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_evals_report
+text_evals_report = Report(metrics=[
+    TextEvals(columns=["Review_Text", "Title"], descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        TriggerWordsPresence(words_list=['dress', 'gown']),
+        TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+#NO descriptors
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text")
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+#NO descriptors, several columns
+
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(columns=["Review_Text", "Title"])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        TriggerWordsPresence(words_list=['dress', 'gown']),
+        TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(columns=["Review_Text", "Title"], descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        TriggerWordsPresence(words_list=['dress', 'gown']),
+        TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report

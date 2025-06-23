@@ -1,0 +1,35 @@
+```
+    %pylab inline
+    from IPython.display import Image
+    import numpy.linalg as LA
+    
+    def plot_clusters(X, y=None, Mu_array=0):
+        fig, ax = plt.subplots(figsize=(6, 4))
+        plt.scatter(X[:, 0], X[:, 1], c=y, s=1)
+        if sum(Mu_array) != 0:
+            plt.scatter(Mu_array[:,0],Mu_array[:,1],marker="x", color="black", linewidth=2)
+        
+        plt.xlabel("$x_1$", fontsize=14)
+        plt.ylabel("$x_2$", fontsize=14, rotation=0)
+        plt.grid()
+        plt.tight_layout()  
+        plt.show()     
+
+    if 0:
+        blob_centers = np.array(
+            [[ 0.2,  2.3],
+             [-1.5 ,  2.3],
+             [-2.8,  1.8],
+             [-2.8,  2.8],
+             [-2.8,  1.3]])
+        blob_std = np.array([0.4, 0.3, 0.1, 0.1, 0.1])
+        X, y = make_blobs(n_samples=2000, centers=blob_centers,
+                          cluster_std=blob_std, random_state=7)
+
+    if 1:
+        # two off-diagonal blobs
+        X1, _ = make_blobs(n_samples=1000, centers=((4, -4), (0, 0)), random_state=42)
+        X1 = X1.dot(np.array([[0.374, 0.95], [0.732, 0.598]]))
+        # three spherical blobs
+        blob_centers = np.array(
+            [[ -

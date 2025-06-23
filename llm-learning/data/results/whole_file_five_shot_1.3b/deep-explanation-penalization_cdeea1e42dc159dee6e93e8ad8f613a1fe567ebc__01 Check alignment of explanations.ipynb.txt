@@ -1,0 +1,36 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('./resources/full_data_set_long.csv')
+
+    # Select features and target
+    X = df.drop('AVG_HOUSE_PRICE', axis=1)
+    y = df['AVG_HOUSE_PRICE']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a Linear Regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Calculate the mean squared error
+    mse = metrics.mean_squared_error(y_test, y_pred)
+
+    # Print the mean squared error
+    print('Mean Squared Error:', mse)
+
+    # Print the coefficients
+    print('Coefficients:', model.coef_)
+    ```

@@ -1,0 +1,21 @@
+
+    Here, the weights for the weighted cross entropy loss are adjusted. The original code was using a uniform weight of 1 for all classes, but in the context of medical diagnosis, it's important to give more importance to the classes that are more likely to be present in the dataset.
+
+    In the original code, the weights are set to a tensor with two dimensions. The first dimension is the number of classes, and the second dimension is 1. The second dimension is set to 0.5, which means that the weights for the first class (which is the positive class) are 0.5, and the weights for the second class (which is the negative class) are 0.5.
+
+    Here's the adjusted code:
+
+    ```python
+    weights = torch.tensor([[2.0]*1 + [0.5]]).cuda()
+    loss_func = CrossEntropyLossFlat(weight=weights)
+    ```
+
+    In this code, the weights are set to a tensor with two dimensions. The first dimension is the number of classes, and the second dimension is 1. The second dimension is set to 0.5, which means that the weights for the first class (which is the positive class) are 0.5, and the weights for the second class (which is the negative class) are 0.5.
+
+    The `CrossEntropyLossFlat` function is used to calculate the loss, and the `weight` parameter is used to set the weights for the loss.
+
+    The `dataloaders` function is used to create a dataloader for the dataset, and the `bs` parameter is used to set the batch size.
+
+    The `DataBlock` class is used to define the dataset, and the `get_items`, `get_y`, `splitter`, `item_tfms`, and `batch_tfms` parameters are used to define the dataset.
+
+    The `partial` function is used to create a partial function, and the `get_image_files`, `parent_label`, `DataBlock`, `RandomSplitter`, `ImageBlock`, `CategoryBlock`, `CrossEntropyLossFlat`, `RandomResizedCrop`, `DataLoader`, `dataload

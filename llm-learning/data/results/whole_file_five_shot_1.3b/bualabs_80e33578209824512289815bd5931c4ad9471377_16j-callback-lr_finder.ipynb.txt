@@ -1,0 +1,23 @@
+```python
+    # Importing necessary libraries
+    import matplotlib.pyplot as plt
+    from keras.callbacks import Callback
+
+    # Define the callback
+    class LRFinder(Callback):
+        def on_epoch_begin(self, epoch, logs=None):
+            # Get the learning rate for the current epoch
+            lr = self.model.optimizer.lr
+            print('\nLR for epoch {} is {}'.format(epoch, lr))
+
+        def on_train_batch_end(self, batch, logs=None):
+            # Get the learning rate for the current batch
+            lr = self.model.optimizer.lr
+            print('\nLR for batch {} is {}'.format(batch, lr))
+
+    # Create an instance of the callback
+    lr_finder = LRFinder()
+
+    # Train the model with the callback
+    model.fit(X_train, y_train, callbacks=[lr_finder], ...)
+    ```

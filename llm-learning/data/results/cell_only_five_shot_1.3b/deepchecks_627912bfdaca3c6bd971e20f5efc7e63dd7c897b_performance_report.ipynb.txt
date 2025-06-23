@@ -1,0 +1,46 @@
+```python
+    # Import necessary libraries
+    import os
+
+    # Define the folder structure
+    folder_structure = {
+        "data": {
+            "raw": "raw_data",
+            "processed": "processed_data",
+            "interim": "interim_data"
+        },
+        "notebooks": {
+            "analysis": "analysis_notebooks",
+            "visualization": "visualization_notebooks"
+        },
+        "models": "models",
+        "scripts": "scripts"
+    }
+
+    # Create the folders
+    for folder_name, subfolders in folder_structure.items():
+        for subfolder_name, subfolder_path in subfolders.items():
+            os.makedirs(os.path.join(folder_name, subfolder_path), exist_ok=True)
+
+    # Refactor the notebook folder structure
+    notebook_folder_structure = {
+        "data": {
+            "raw": "data/raw",
+            "processed": "data/processed",
+            "interim": "data/interim"
+        },
+        "notebooks": {
+            "analysis": "notebooks/analysis",
+            "visualization": "notebooks/visualization"
+        },
+        "models": "models",
+        "scripts": "scripts"
+    }
+
+    # Create the folders in the notebook structure
+    for notebook_folder_name, subfolders in notebook_folder_structure.items():
+        for subfolder_name, subfolder_path in subfolders.items():
+            os.makedirs(os.path.join(notebook_folder_name, subfolder_path), exist_ok=True)
+    ```
+
+    This code will create the folders in the specified structure. The `os.makedirs(os.path.join(folder_name, subfolder_path), exist_ok=True)` line will create the folder if it doesn't exist and will not throw an error if it does.

@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from deepchecks.tabular.checks.methodology import *
+from deepchecks.tabular.base import Dataset
+
+df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+df['x4'] = df['x1'] * 0.5 + df['x2']
+df['label'] = df['x2'] + 0.1 * df['x1']
+df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+ds = Dataset(df, label='label')
+SingleFeatureContribution().run(ds)
+my_check = SingleFeatureContribution(ppscore_params={'sample': 10})
+my_check.run(dataset=ds)
+
+    ```
+
+    ### Explanation:
+    The code snippet you provided is a part of a Jupyter notebook. The code is used to perform a check on a dataset using the `SingleFeatureContribution` check. The `SingleFeatureContribution` check is a methodology that computes the Pareto-Power-Score (PPS) for a single feature. The PPS is a measure of the contribution of a feature to the overall dataset.
+
+    The code is importing necessary libraries, creating a DataFrame, and then running the `SingleFeatureContribution` check on the DataFrame.
+
+    The `SingleFeatureContribution` check is run with a sample size of 10. The sample size is a parameter that can be adjusted to control the size of the sample used for the PPS calculation.
+
+    The PPS score for each feature is then printed out.
+
+    The PPS score is a measure of the contribution of a feature to the overall dataset. A higher PPS score indicates a higher contribution of the feature to the overall dataset.
+
+    The code is also using the `deepchecks.tabular.base.Dataset` class to create a dataset from the DataFrame.
+
+    The `deepchecks.tabular.checks.methodology.SingleFeatureContribution` class

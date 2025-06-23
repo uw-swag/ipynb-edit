@@ -1,0 +1,17 @@
+```python
+    from mlchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+
+    # Prioritize columns according to FI in multicolumn checks
+    df['FI'] = df['col1'].str.extract('(?<=\$)(.*?)(?=\$)').fillna(df['col1'])
+    df['FI'] = df['FI'].str.extract('(?<=\.)(.*?)(?=\?)').fillna(df['FI'])
+    df['FI'] = df['FI'].str.extract('(?<=bar)(.*?)(?=foo)').fillna(df['FI'])
+    df['FI'] = df['FI'].str.extract('(?<=foo)(.*?)(?=bar)').fillna(df['FI'])
+
+    StringMismatch().run(df)
+    ```
+
+    The code above prioritizes columns according to the first instance of a number in the string. If there are multiple instances, it prioritizes the one that appears first. If there are no instances, it leaves the string as is.

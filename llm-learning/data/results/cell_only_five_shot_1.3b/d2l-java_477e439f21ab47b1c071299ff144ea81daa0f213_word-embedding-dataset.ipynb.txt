@@ -1,0 +1,26 @@
+```java
+    import de.uni_potsdam.de.julius.ndmanager.api.NDManager;
+    import de.uni_potsdam.de.julius.ndmanager.api.array.ArrayDataset;
+    import de.uni_potsdam.de.julius.ndmanager.api.array.Batch;
+    import de.uni_potsdam.de.julius.ndmanager.api.array.Shape;
+    import de.uni_potsdam.de.julius.ndmanager.api.vocab.Vocab;
+    import de.uni_potsdam.de.julius.ndmanager.api.vocab.VocabLoader;
+    import de.uni_potsdam.de.julius.ndmanager.api.vocab.VocabManager;
+    import de.uni_potsdam.de.julius.ndmanager.api.vocab.VocabType;
+
+    NDManager manager = NDManager.newBaseManager(Functions.tryGpu(0));
+    Pair<ArrayDataset, Vocab> datasetVocab = loadDataPTB(512, 5, 5, manager);
+    ArrayDataset dataset = datasetVocab.getKey();
+    Vocab vocab = datasetVocab.getValue();
+
+    for (Batch batch : dataset.getData(manager)) {
+        for (int i = 0; i < batch.getData().size(); i++) {
+            System.out.println(names[i] + " shape: " + batch.getData().get(i).getShape());
+        }
+        break;
+    }
+    ```
+
+    The code you provided is a Java code snippet for loading a dataset and printing the shape of each element in the batch. The `loadDataPTB` function is a placeholder for the actual function that loads the data. The `names` array is also a placeholder for the actual names of the elements in the dataset.
+
+    The code uses the DL4J (Deep Learning for Java) library, which is a Java library for deep learning. The `NDManager` class is used to manage the data and

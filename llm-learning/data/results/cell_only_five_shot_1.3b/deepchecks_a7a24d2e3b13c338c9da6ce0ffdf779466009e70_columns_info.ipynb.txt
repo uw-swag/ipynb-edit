@@ -1,0 +1,38 @@
+```python
+    import sys
+    sys.path.append("../../")
+    from reco_utils.recommender.deeprec.deeprec_utils import download_deeprec_resources 
+    from reco_utils.recommender.newsrec.newsrec_utils import prepare_hparams
+    from reco_utils.recommender.newsrec.models.naml import NAMLModel
+    from reco_utils.recommender.newsrec.io.naml_iterator import NAMLIterator
+    import papermill as pm
+    from tempfile import TemporaryDirectory
+    import tensorflow as tf
+    import os
+
+    print("System version: {}".format(sys.version))
+    print("Tensorflow version: {}".format(tf.__version__))
+
+    tmpdir = TemporaryDirectory()
+    data_path = tmpdir.name
+    yaml_file = os.path.join(data_path, r'naml.yaml')
+    train_file = os.path.join(data_path, r'train.txt')
+    valid_file = os.path.join(data_path, r'test.txt')
+    wordEmb_file = os.path.join(data_path, r'embedding.npy')
+    if not os.path.exists(yaml_file):
+        download_deeprec_resources(r'https://recodatasets.blob.core.windows.net/newsrec/', data_path, 'naml.zip')
+    epochs=5
+    seed=42
+    hparams = prepare_hparams(yaml_file, wordEmb_file=wordEmb_file, epochs=epochs)
+    print(hparams)
+    iterator = NAMLIterator
+    model = NAMLModel(hparams, iterator, seed=seed)
+    print(model.run_eval(valid_file))
+    model.fit(train_file, valid_file)
+    res_syn = model.run_eval(valid_file)
+    print(res_syn)
+    pm.record("res_syn", res_syn)
+    ```
+
+    ### Instruction:
+    [

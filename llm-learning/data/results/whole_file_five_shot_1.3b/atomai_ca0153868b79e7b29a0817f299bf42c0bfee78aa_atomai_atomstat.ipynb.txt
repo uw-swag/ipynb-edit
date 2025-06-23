@@ -1,0 +1,46 @@
+```
+    # Update (simplify) model loading
+
+    # Install the required library
+    !pip install -q git+https://github.com/ziatdinovmax/atomai.git
+
+    # Import necessary libraries
+    from atomai import atomnet, atomstat, models
+    from atomai.utils import load_model
+    import numpy as np
+
+    # Download and load the test data
+    download_link = 'https://drive.google.com/uc?id=1gs5myob3qVRTHksq3qU90OHLZNH5ynT6'
+    !gdown -q $download_link -O 'test_data.npz'
+    !unzip -qq 'test_data.npz'
+
+    # Path to file with trained weights
+    weights_path = '/content/simple_model_weights.pt'
+
+    # Initialize model (by default all models that we train are 'dilUnet')
+    model = models.dilUnet(nb_classes=3)
+
+    # Load the weights into the model skeleton
+    model = load_model(model, weights_path)
+
+    # Load experimental data
+    expdata = np.load('bfo_test_img.npy')
+
+    # Get raw NN output
+    nn_input, nn_output = atomnet.predictor(
+        expdata, model, use_gpu=False).run()
+
+    # Transform NN output into atomic coordinates
+    coordinates = atomnet.locator(nn_output).run()
+
+    # Stack the raw NN output into an atomstat object
+    imstack = atomstat.imlocal(nn_output, coordinates, crop_size=16, coord_class=1)
+
+    # Plot the scree plot of the PCA results
+    imstack.pca_scree_plot(plot_results=True)
+
+    # Perform PCA on the stack
+    pca_results = imstack.imblock_pca(4, plot_results=True)
+
+    # Perform ICA on the stack
+    ica_results = imstack.imblock_ica(4, plot_results=True)

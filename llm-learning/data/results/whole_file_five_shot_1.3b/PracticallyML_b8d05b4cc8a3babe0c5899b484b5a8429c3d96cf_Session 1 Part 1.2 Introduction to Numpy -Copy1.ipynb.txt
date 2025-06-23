@@ -1,0 +1,37 @@
+```python
+    # Import necessary modules for web browsing with Selenium.
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+
+    # Import functions for waiting.
+    from selenium.webdriver.support.wait import WebDriverWait
+    from selenium.webdriver.support import expected_conditions
+
+    # Import exceptions for error handling.
+    from selenium.common.exceptions import TimeoutException
+    from selenium.common.exceptions import NoSuchElementException
+    from selenium.common.exceptions import StaleElementReferenceException
+
+    # Create a Chrome WebDriver instance to open a new Chrome window.
+    driver = webdriver.Chrome()
+
+    # Create a WebDriverWait instance to wait for elements on the web page.
+    wait = WebDriverWait(driver, 4)
+
+    # Open the website.
+    driver.get("https://www.drdatastats.com/turkiye-il-ve-ilceler-listesi/")
+
+    # Create a list to store the information to be extracted from the website.
+    ilce_list = []
+
+    # Wait until the table is visible on the page.
+    wait.until(expected_conditions.visibility_of_element_located((By.XPATH, "/html/body/div[5]/div[2]/div/div[2]/div/div/article/div[3]/figure[1]/table/tbody")))
+
+    # Find all the rows in the table.
+    rows = driver.find_elements(By.XPATH, "/html/body/div[5]/div[2]/div/div[2]/div/div/article/div[3]/figure[1]/table/tbody/tr")
+
+    # Iterate through the rows in the table.
+    for i in range(len(rows)-1):
+    
+        # Extract the XPath for the district (ilçe).
+        ilce_path = f"/html/body/div[5]/div[2]/div/div[2]/div/div/article/div[3]/figure[1]/table/tbody

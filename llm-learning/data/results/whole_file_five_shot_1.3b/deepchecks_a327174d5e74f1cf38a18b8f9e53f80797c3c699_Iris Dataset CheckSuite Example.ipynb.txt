@@ -1,0 +1,24 @@
+```
+    ## ROC Curve
+    ## AUC-ROC is a performance measurement for classification problem at various thresholds settings.
+
+    from sklearn.metrics import roc_curve, roc_auc_score
+
+    ## Compute ROC curve and ROC area for each class
+    roc_auc = roc_auc_score(df_test[label_col], rf_clf.predict_proba(df_test.drop(label_col, axis=1))[:,1])
+    fpr, tpr, _ = roc_curve(df_test[label_col], rf_clf.predict_proba(df_test.drop(label_col, axis=1))[:,1])
+
+    ## Plot ROC curve
+    import matplotlib.pyplot as plt
+    plt.figure()
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic')
+    plt.legend(loc="lower right")
+    plt.show()
+    ```
+    ROC curve is a graphical representation of the diagnostic ability of a binary classifier. It plots the true positive rate against the false positive rate. The area under the ROC curve (AUC-ROC) is a measure of the classifier's performance.

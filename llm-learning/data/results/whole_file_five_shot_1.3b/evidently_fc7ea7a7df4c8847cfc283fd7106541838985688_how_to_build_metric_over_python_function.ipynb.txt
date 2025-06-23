@@ -1,0 +1,13 @@
+```python
+    # Define a custom metric
+    def custom_metric(y_true, y_pred):
+        # Compute the metric here
+        # For example, we can compute the mean squared error
+        mse = np.mean((y_true - y_pred)**2)
+        return mse
+
+    # Use the custom metric as a metric in a Keras model
+    model.compile(loss=custom_metric, optimizer='adam')
+    ```
+
+    This is a simple example of how to implement a custom metric in Keras. The custom_metric function computes the mean squared error between the true and predicted values. This function is then used as a metric in the model's compilation step.

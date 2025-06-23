@@ -1,0 +1,39 @@
+
+Here is the code for the Scraper module. This module is used to scrape data from the web. The function `create_df` is used to convert the data into a pandas DataFrame. The function `restructure_stats_features` is used to restructure the data.
+
+```python
+import pandas as pd
+import numpy as np
+
+def create_df(path):
+    """
+    Function to convert date to datetime and add 'Id' column
+    """
+    df = (pd.read_csv(path)
+         .assign(Date=lambda df: pd.to_datetime(df.Date))
+         .pipe(lambda df: df.dropna(thresh=len(df) - 2, axis=1))  # Drop cols with NAs
+         .dropna(axis=0)  # Drop rows with NAs
+         .sort_values('season')
+         .reset_index(drop=True)
+         .assign(gameId=lambda df: list(df.index + 1))
+         )
+    return df
+
+def restructure_stats_features(stats_features):
+    non_features = ['homeGame', 'Team', 'gameId']
+
+    stats_features_restructured = (stats_features.query('homeGame == 1')
+                                    .rename(columns={col: 'f_' + col + 'Home' for col in stats_features.columns if col not in non_features})
+                                    .rename(columns={'Team': 'HomeTeam'})
+                                    .pipe(pd.merge, (stats_features.query('homeGame == 0')
+                                                        .rename(columns={'Team': 'AwayTeam'})
+                                                        .rename(columns={col: 'f_' + col + 'Away' for col in stats_features.columns 
+                                                                         if col not in non_features})), on=['gameId'])
+                                    .dropna())
+    return stats_features_restructured
+
+df = create_df('path_to_your_file.csv')
+df = restructure_stats_features(df)
+```
+
+This code assumes that the data is in a CSV file and that the 'Date' column is present. The 'Date

@@ -1,0 +1,42 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_compas
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the COMPAS dataset
+    compas_data = load_compas()
+
+    # Convert the data into a pandas DataFrame
+    df = pd.DataFrame(data=np.c_[compas_data['data'], compas_data['target']],
+                     columns=compas_data['feature_names'] + ['target'])
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df[compas_data['feature_names']], df['target'], test_size=0.2, random_state=42)
+
+    # Create a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the classifier
+    clf.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = clf.predict(X_test)
+
+    # Print a classification report
+    print(classification_report(y_test, y_pred))
+
+    # Print a confusion matrix
+    print(confusion_matrix(y_test, y_pred))
+
+    # Plot the feature importances
+    plt.figure(figsize=(10, 10))
+    plt.barh(compas_data['feature_names'], clf.feature_importances_)
+    plt.xlabel('Feature Importance')
+    plt.show()
+    <\Cell_0>
+    ```

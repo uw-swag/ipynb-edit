@@ -1,0 +1,33 @@
+```python
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from tensorflow.python import keras
+
+    img_rows, img_cols = 28, 28
+    num_classes = 10
+
+    def prep_data(raw, train_size, val_size):
+        y = raw[:, 0]
+        out_y = keras.utils.to_categorical(y, num_classes)
+    
+        x = raw[:,1:]
+        num_images = raw.shape[0]
+        out_x = x.reshape(num_images, img_rows, img_cols, 1)
+        out_x = out_x / 255
+        return out_x, out_y
+
+    fashion_file = "../input/fashionmnist/fashion-mnist_train.csv"
+    fashion_data = np.loadtxt(fashion_file, skiprows=1, delimiter=',')
+    x, y = prep_data(fashion_data, train_size=50000, val_size=5000)
+
+    # Your Code Here
+
+    # Your code to compile the model in this cell
+    # Your code to fit the model here
+
+    # Your code to evaluate the model in this cell
+    # Your code to predict the model's output in this cell
+
+    # Your code to save the model in this cell
+    # Your code to load the model in this cell
+    ```

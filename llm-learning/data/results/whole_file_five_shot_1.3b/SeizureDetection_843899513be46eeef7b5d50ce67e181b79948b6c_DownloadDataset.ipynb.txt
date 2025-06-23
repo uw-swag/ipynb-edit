@@ -1,0 +1,44 @@
+```python
+    import os
+    import wget
+
+    folders = 24
+    list_of_folders = []
+    for i in range (1, folders+1):
+        name = 'chb'
+        if i<10:
+            name = 'chb0'
+        list_of_folders.append(str(name) + str(i))
+
+    base_url = 'https://archive.physionet.org/pn6/chbmit/'
+
+    for l in list_of_folders:
+        if not os.path.exists(l):
+            os.mkdir(l)
+            print("Creation of the directory %s succeeded" % l)
+        else:
+            print ("Directory %s already exists" % l)
+        
+        os.chdir(l)
+        
+        url = base_url + l + '/' + 'MD5SUMS'
+        print ('Downloading ', url, ' to ', os.getcwd())
+        if not os.path.isfile('MD5SUMS'):
+            wget.download(url)
+        else:
+            print('File MD5SUMS already exists to ', os.getcwd())
+        f = open('MD5SUMS','r')
+        lines = f.readlines()
+        f.close()
+        
+        for line in lines:
+            fname = line[line.find('chb'):line.find('\n')].strip()
+            url = base_url + l + '/' + fname
+            print ('Downloading ', url, ' to ', os.getcwd())
+            if not os.path.isfile(fname):
+                wget.download(url)
+            else:
+                print('File ', fname ,' already exists to ', os.getcwd())
+        
+        os.chdir('..')
+    ```

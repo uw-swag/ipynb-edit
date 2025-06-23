@@ -1,0 +1,18 @@
+classification_performance = TestSuite(tests=[
+   MulticlassClassificationTestPreset(stattest='psi')
+])
+
+classification_performance.run(reference_data=iris_ref, current_data=iris_cur)
+classification_performance
+label_binary_classification_performance = TestSuite(tests=[
+    BinaryClassificationTestPreset(),
+])
+
+label_binary_classification_performance.run(reference_data=bcancer_label_ref, current_data=bcancer_label_cur)
+label_binary_classification_performance
+prob_binary_classification_performance = TestSuite(tests=[
+    BinaryClassificationTestPreset(stattest='psi', probas_threshold=0.89),
+])
+
+prob_binary_classification_performance.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+prob_binary_classification_performance

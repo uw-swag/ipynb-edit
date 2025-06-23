@@ -1,0 +1,77 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets, model_selection, linear_model
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import ProbClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+iris = datasets.load_iris()
+<\Cell_2>
+<Cell_3>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_3>
+<Cell_4>
+reference, production, y_train, y_test = model_selection.train_test_split(iris_frame, 
+                                                                          iris.target, 
+                                                                          random_state=111)
+<\Cell_4>
+<Cell_5>
+model = linear_model.LogisticRegression()
+#model = neighbors.KNeighborsClassifier(n_neighbors=1)
+<\Cell_5>
+<Cell_6>
+model.fit(reference, y_train)
+<\Cell_6>
+<Cell_7>
+train_probas = pd.DataFrame(model.predict_proba(reference))
+train_probas.columns = iris.target_names
+test_probas = pd.DataFrame(model.predict_proba(production))
+test_probas.columns = iris.target_names
+<\Cell_7>
+<Cell_8>
+reference['target'] = [iris.target_names[x] for x in y_train]
+production['target'] = [iris.target_names[x] for x in y_test]
+<\Cell_8>
+<Cell_9>
+reference.reset_index(inplace=True, drop=True)
+reference['result'] = [iris.target_names[x] for x in y_train]
+merged_reference = pd.concat([reference, train_probas], axis = 1)
+
+production.reset_index(inplace=True, drop=True)
+production['result'] = [iris.target_names[x] for x in y_test]
+merged_production = pd.concat([production, test_probas], axis = 1)
+<\Cell_9>
+<Cell_10>
+iris_column_mapping = {}
+
+iris_column_mapping['target'] = 'target'
+iris_column_mapping['prediction'] = iris.target_names.tolist()
+iris_column_mapping['numerical_features'] = iris.feature_names
+<\Cell_10>
+<Cell_11>
+iris_prob_classification_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab])
+iris_prob_classification_dashboard.calculate(merged_reference, merged_production, 
+                                             column_mapping = iris_column_mapping)
+iris_prob_classification_dashboard.show()
+<\Cell_11>
+<Cell_12>
+#iris_prob_classification_dashboard.save('iris_prob_classification_performance.html')
+<\Cell_12>
+<Cell_13>
+iris_prob_classification_profile = Profile(sections=[ProbClassificationPerformanceProfileSection])
+iris_prob_classification_profile.calculate(merged_reference, merged_production, 
+                                           column_mapping = iris_column_mapping)
+<\Cell_13>
+<Cell_14>
+iris_prob_classification_profile.json() 
+<\Cell_14>

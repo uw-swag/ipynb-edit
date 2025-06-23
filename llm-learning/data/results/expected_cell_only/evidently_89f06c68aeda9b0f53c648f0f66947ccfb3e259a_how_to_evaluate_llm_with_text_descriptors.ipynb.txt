@@ -1,0 +1,98 @@
+from evidently.ui.workspace.cloud import CloudWorkspace
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metrics import ColumnSummaryMetric, ColumnDistributionMetric, ColumnDriftMetric, DataDriftTable, TextDescriptorsDistribution
+from evidently.tests import TestColumnValueMin, TestColumnValueMean, TestCategoryShare, TestShareOfOutRangeValues
+
+from evidently.metric_preset import DataDriftPreset, DataQualityPreset, TextOverviewPreset, TextEvals
+
+from evidently.descriptors import HuggingFaceModel, HuggingFaceToxicityModel, OpenAIPrompting 
+from evidently.descriptors import RegExp, BeginsWith, EndsWith, Contains, DoesNotContain, IncludesWords, ExcludesWords
+from evidently.descriptors import TextLength, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment
+#Descriptors with Hugging Face models
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        HuggingFaceModel(model="DaNLP/da-electra-hatespeech-detection", display_name="Hugging Face Toxicity for response"),
+        HuggingFaceModel(model="SamLowe/roberta-base-go_emotions", params={"label": "disappointment"}, 
+                         display_name="Hugging Face Disappointment for response"), 
+        HuggingFaceModel(model="SamLowe/roberta-base-go_emotions", params={"label": "optimism"}, 
+                         display_name="Hugging Face Optimism for response"),     
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)], 
+           current_data= assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)], 
+           column_mapping=column_mapping)
+
+report    
+#Simplified descriptors for widely-used Hugging Face models 
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        HuggingFaceToxicityModel(toxic_label="hate"),
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)], 
+           current_data= assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)], 
+           column_mapping=column_mapping)
+
+report
+#Descriptors with external models
+#to run OpenAIPrompting descriptor make sure you set environement variable with openai token 
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        OpenAIPrompting(prompt=pii_prompt, prompt_replace_string="REPLACE", model="gpt-3.5-turbo-instruct", feature_type="num", display_name="PII for response (by gpt3.5)"),
+        OpenAIPrompting(prompt=negativity_prompt, prompt_replace_string="REPLACE", model="gpt-3.5-turbo-instruct", feature_type="cat", display_name="Negativity for response (by gpt3.5)")       
+    ])
+])
+
+report.run(reference_data= None, #assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)], 
+           current_data= assistant_logs[:20], #assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)], 
+           column_mapping=column_mapping)
+
+report    
+test_suite = TestSuite(tests=[
+    TestColumnValueMin(column_name = Sentiment().on("response"), gt=0),
+    TestCategoryShare(column_name = "feedback", category="downvote", lt=0.1),
+    TestCategoryShare(column_name = IncludesWords(words_list=['salary']).on("response"), category="False", lt=0.1), 
+])
+
+test_suite.run(reference_data=None, current_data=assistant_logs[:20])
+test_suite
+from evidently.ui.workspace.cloud import CloudWorkspace
+from evidently.ui.dashboards import DashboardPanelTestSuite, ReportFilter, TestSuitePanelType
+from evidently.renderers.html_widgets import WidgetSize
+"""ws = CloudWorkspace(
+    	token="YOUR_TOKEN_HERE",
+    	url="https://app.evidently.cloud"
+)"""
+#project = ws.create_project("Virtual assistant testing", team_id="TEAM_ID_HERE")
+#project.description = "A project to test NANs"
+def create_test_suite(i: int):
+    test_suite = TestSuite(
+        tests=[
+            TestColumnValueMin(column_name=TextLength().on("response"), gt=100),
+            TestShareOfOutRangeValues(column_name=TextLength().on("question"), left=30, right=100, lt=0.1),
+            TestColumnValueMin(column_name=Sentiment().on("response"), gt=0),
+            TestColumnValueMean(column_name=OOV().on("response"), lt=15),
+        ],
+        timestamp=datetime.now() + timedelta(days=i),
+    )
+    test_suite.run(reference_data=None, current_data=assistant_logs.iloc[20 * i : 20 * (i + 1), :], column_mapping=column_mapping)
+    return test_suite
+for i in range(0, 3):
+        test_suite = create_test_suite(i=i)
+        #ws.add_test_suite(project.id, test_suite)
+"""project.dashboard.add_panel(
+    DashboardPanelTestSuite(
+        title="Test results",
+        filter=ReportFilter(metadata_values={}, tag_values=[], include_test_suites=True),
+        size=WidgetSize.FULL,
+        panel_type=TestSuitePanelType.DETAILED,
+        time_agg="1D",
+    )
+)
+project.save()"""

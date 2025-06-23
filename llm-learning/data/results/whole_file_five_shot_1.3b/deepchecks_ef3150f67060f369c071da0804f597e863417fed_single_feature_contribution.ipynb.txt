@@ -1,0 +1,24 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+
+    # Example 1: Generating a random DataFrame
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['label'] = df['x2'] + 0.1 * df['x1']
+    df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+    # Example 2: Creating a Dataset
+    ds = Dataset(df, label_name='label')
+
+    # Example 3: Running the SingleFeatureContribution check
+    SingleFeatureContribution().run(ds)
+
+    # Example 4: Running the SingleFeatureContribution check with custom parameters
+    my_check = SingleFeatureContribution(ppscore_params={'sample': 10})
+    my_check.run(dataset=ds)
+    ```

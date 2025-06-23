@@ -1,0 +1,79 @@
+
+    ## Chapter 4.8
+
+    ### Notebook 4.8
+
+    #### Instruction:
+    [
+    Commit Message: "Adding code to create SQLite database"
+    Original Code:
+    ```python
+    import sqlite3
+
+    # Create a connection to the SQLite database
+    conn = sqlite3.connect('my_database.db')
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Create a table
+    cursor.execute('''
+        CREATE TABLE employees(
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            salary INTEGER,
+            department TEXT,
+            position TEXT,
+            hire_date TEXT
+        )
+    ''')
+
+    # Insert some data
+    cursor.execute('''
+        INSERT INTO employees(name, salary, department, position, hire_date)
+        VALUES('John', 50000, 'Sales', 'Manager', '2020-01-01')
+    ''')
+
+    # Commit the changes
+    conn.commit()
+
+    # Close the connection
+    conn.close()
+    ```
+    ]
+
+    ### Notebook 4.9
+
+    #### Instruction:
+    [
+    Commit Message: "Adding code to read SQLite database"
+    Original Code:
+    ```python
+    import sqlite3
+
+    # Create a connection to the SQLite database
+    conn = sqlite3.connect('my_database.db')
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Read data
+    cursor.execute('''
+        SELECT * FROM employees
+    ''')
+
+    # Fetch all the rows
+    rows = cursor.fetchall()
+
+    # Print the rows
+    for row in rows:
+        print(row)
+
+    # Close the connection
+    conn.close()
+    ```
+    ]
+
+    ## End of Chapter 4.8 and 4.9
+
+    ## Notebook 4.8 and 4.9 are completed.

@@ -1,0 +1,13 @@
+```
+    from deepchecks.vision.checks.performance import SimpleModelComparison
+    from deepchecks.vision.datasets.classification import mnist
+
+    mnist_model = mnist.load_model()
+    train_ds = mnist.load_dataset(train=True, object_type='VisionData')
+    test_ds = mnist.load_dataset(train=False, object_type='VisionData')
+    check = SimpleModelComparison(strategy='stratified')
+    result = check.run(train_ds, test_ds, mnist_model)
+    result
+    result.value.sort_values(by=['Class', 'Metric']).head(10)
+    ```
+    The code above is a simple example of how to use DeepChecks to compare two models. The `SimpleModelComparison` check is used to compare two models. The `stratified` strategy is used to ensure that the comparison is fair and not biased. The result is then sorted by 'Class' and 'Metric' and the top 10 results are displayed.

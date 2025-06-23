@@ -1,0 +1,42 @@
+```python
+    # Importing necessary libraries
+    import boto3
+    import sagemaker
+    from sagemaker.amazon.amazon_estimator import get_image_uri
+
+    # Setting up the Sagemaker session
+    sess = sagemaker.Session()
+
+    # Getting the S3 bucket and prefix
+    bucket = sess.default_bucket()
+    prefix = 'sagemaker/DEMO-hpo-xgboost'
+
+    # Getting the S3 URI for the Sagemaker image
+    container = get_image_uri(sess.boto_region_name, 'xgboost')
+
+    # Creating a Sagemaker estimator
+    xgb = sagemaker.estimator.Estimator(container,
+                                        role, 
+                                        train_instance_count=1, 
+                                        train_instance_type='ml.p2.xlarge',
+                                        output_path='s3://{}/{}/output'.format(bucket, prefix),
+                                        sagemaker_session=sess)
+
+    # Setting the hyperparameters
+    xgb.set_hyperparameters(max_depth=5,
+                            eta=0.2,
+                            gamma=4,
+                            min_child_weight=6,
+                            subsample=0.8,
+                            silent=0,
+                            objective='binary:logistic',
+                            num_round=100)
+
+    # Training the model
+    xgb.fit({'train': s3_input_train, 'test': s3_input_test})
+
+    # Deploying the model
+    xgb_predictor = xgb.deploy(initial_instance_count=1, instance_type='ml.m4.xlarge')
+    ```
+    '''
+    ]

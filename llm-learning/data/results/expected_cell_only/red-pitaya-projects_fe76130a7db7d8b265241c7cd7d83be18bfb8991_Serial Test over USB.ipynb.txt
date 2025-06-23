@@ -1,0 +1,11 @@
+headers = ["PM 0.3","PM 0.5","PM 1.0","PM 2.5","PM 5.0","PM 10.0","Temp","Pressure","Humidity","CO2",
+           "BME680 VOC","QM9 VOC","MiCS5524 VOC","CCS811 VOC","Date"]
+try:
+    dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+    df = pd.read_csv(filename, parse_dates=['Date'], date_parser=dateparse,index_col=0)
+    df
+except:
+    df = pd.DataFrame() #Create an empty data frame to append to later
+
+print ("Creating serial object...")
+serial_obj = create_serial_obj(portPath, baud, timeout)

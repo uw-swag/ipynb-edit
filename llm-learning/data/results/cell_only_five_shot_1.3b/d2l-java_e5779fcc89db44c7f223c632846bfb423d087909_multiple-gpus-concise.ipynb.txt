@@ -1,0 +1,52 @@
+
+    public SequentialBlock resnetBlock(int numChannels, int numResiduals, boolean isFirstBlock) {
+
+        SequentialBlock blk = new SequentialBlock();
+        for (int i = 0; i < numResiduals; i++) {
+
+            if (i == 0 && !isFirstBlock) {
+                blk.add(new Residual(numChannels, true, new Shape(2, 2)));
+            } else {
+                blk.add(new Residual(numChannels, false, new Shape(1, 1)));
+            }
+        }
+        return blk;
+    }
+
+    int numClass = 10;
+
+    SequentialBlock net = new SequentialBlock();
+    net
+        .add(
+                Conv2d.builder()
+                        .setFilters(64)
+                        .setKernelShape(new Shape(3, 3))
+                        .optPadding(new Shape(1, 1))
+                        .build())
+        .add(BatchNorm.builder().build())
+        .add(Activation.relu)
+        .add(resnetBlock(64, 2, true))
+        .add(resnetBlock(128, 2, false))
+        .add(resnetBlock(256, 2, false))
+        .add(resnetBlock(512, 2, false))
+        .add(Pool.globalAvgPool2dBlock())
+        .add(Linear.builder().setUnits(numClass).build());
+
+    }
+
+    '''
+
+    }
+
+    ### Instruction:
+    [
+    Commit Message: "Refactoring fixes (#34)"
+    Original Code Cells:
+    '''
+    public SequentialBlock resnetBlock(int numChannels, int numResiduals, boolean isFirstBlock) {
+
+        SequentialBlock blk = new SequentialBlock();
+        for (int i = 0; i < numResiduals; i++) {
+
+            if (i == 0 && !isFirstBlock) {
+                blk.add(new Residual(numChannels, true, new Sh

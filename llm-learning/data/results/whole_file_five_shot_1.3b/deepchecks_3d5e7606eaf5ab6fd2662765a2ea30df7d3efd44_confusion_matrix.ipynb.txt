@@ -1,0 +1,13 @@
+```python
+    from deepchecks.vision.datasets.detection import coco
+
+    yolo = coco.load_model(pretrained=True)
+    train_ds = coco.load_dataset(object_type='VisionData')
+
+    from deepchecks.vision.checks.performance import ConfusionMatrixReport
+
+    check = ConfusionMatrixReport(categories_to_display=20)
+    check.run(train_ds, yolo)
+    ```
+
+    The issue with the confusion matrix report is that it does not handle unseen classes correctly. The current implementation of the ConfusionMatrixReport class does not handle unseen classes. This is a known issue and will be fixed in a future version.

@@ -1,0 +1,43 @@
+```
+    # Ridge Regression
+    ridgeReg.fit(X, Y)
+    print('Ridge Regression CV Score: ', cv_error(ridgeReg))
+
+    # Lasso Regression
+    lassoReg = Lasso()
+    lassoReg.fit(X, Y)
+    print('Lasso Regression CV Score: ', cv_error(lassoReg))
+
+    # ElasticNet Regression
+    elasticNetReg = ElasticNet()
+    elasticNetReg.fit(X, Y)
+    print('ElasticNet Regression CV Score: ', cv_error(elasticNetReg))
+
+    # Random Forest Regression
+    rfReg = RandomForestRegressor()
+    rfReg.fit(X, Y)
+    print('Random Forest CV Score: ', cv_error(rfReg))
+
+    # LassoCV for Cross Validation
+    lassoCV = LassoCV()
+    lassoCV.fit(X, Y)
+    print('LassoCV CV Score: ', cv_error(lassoCV))
+
+    # RidgeCV for Cross Validation
+    ridgeCV = RidgeCV()
+    ridgeCV.fit(X, Y)
+    print('RidgeCV CV Score: ', cv_error(ridgeCV))
+
+    # ElasticNetCV for Cross Validation
+    elasticNetCV = ElasticNetCV()
+    elasticNetCV.fit(X, Y)
+    print('ElasticNetCV CV Score: ', cv_error(elasticNetCV))
+
+    # RandomForestCV for Cross Validation
+    rfCV = RandomForestCV()
+    rfCV.fit(X, Y)
+    print('RandomForestCV CV Score: ', cv_error(rfCV))
+
+    # Comparing the error of each model
+    error_metrics = pd.DataFrame({'Ridge': cv_error(ridgeReg), 'Lasso': cv_error(lassoReg), 'ElasticNet': cv_error(elasticNetReg),
+                                  'RandomForest': cv_error(rfReg), 'LassoCV': cv_error(lassoCV), 'RidgeCV':

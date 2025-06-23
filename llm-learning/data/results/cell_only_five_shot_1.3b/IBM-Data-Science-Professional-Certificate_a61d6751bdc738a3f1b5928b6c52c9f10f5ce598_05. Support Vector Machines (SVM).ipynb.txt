@@ -1,0 +1,56 @@
+```python
+    # Importing necessary libraries
+    from sklearn import datasets
+    from sklearn import svm
+    from sklearn.model_selection import train_test_split
+    from sklearn import metrics
+
+    # Loading the iris dataset as an example
+    iris = datasets.load_iris()
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=1)
+
+    # Creating a SVM Classifier
+    clf = svm.SVC(kernel='linear')
+
+    # Training the model
+    clf.fit(X_train, y_train)
+
+    # Predicting the response for test dataset
+    y_pred = clf.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+    # Model Precision
+    print("Precision:",metrics.precision_score(y_test, y_pred, average='macro'))
+
+    # Model Recall
+    print("Recall:",metrics.recall_score(y_test, y_pred, average='macro'))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Create 06. Decision Trees.ipynb"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    from sklearn import datasets
+    from sklearn.model_selection import train_test_split
+    from sklearn import tree
+    from sklearn import metrics
+
+    # Loading the iris dataset as an example
+    iris = datasets.load_iris()
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=1)
+
+    #

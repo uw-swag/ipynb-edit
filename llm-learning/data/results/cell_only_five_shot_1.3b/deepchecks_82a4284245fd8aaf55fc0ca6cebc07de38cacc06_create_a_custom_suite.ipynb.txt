@@ -1,0 +1,46 @@
+```python
+    import nannyml as nml
+    import pandas as pd
+    from IPython.display import display
+
+    # Load synthetic data
+    reference, analysis, analysis_target = nml.load_synthetic_sample()
+
+    # Extract metadata
+    metadata = nml.extract_metadata(data=reference, model_name='wfh_predictor', exclude_columns='identifier')
+    metadata.target_column_name = 'work_home_actual'
+
+    # Display the first few rows of the reference data
+    display(reference.head())
+
+    # Initialize the Univariate Statistical Drift Calculator
+    univariate_calculator = nml.UnivariateStatisticalDriftCalculator(model_metadata=metadata, chunk_size=5000)
+
+    # Fit the calculator to the reference data
+    univariate_calculator = univariate_calculator.fit(reference_data=reference)
+
+    # Concatenate the reference and analysis data
+    data = pd.concat([reference, analysis], ignore_index=True)
+
+    # Calculate the univariate results
+    univariate_results = univariate_calculator.calculate(data=data)
+
+    # Display a small subset of the results
+    display(univariate_results.data.iloc[:5, :9])
+
+    # Plot the drift results for all model inputs
+    for feature in metadata.features:
+        figure = univariate_results.plot(kind='feature_drift', metric='statistic', feature_label=feature.label)
+        figure.show()
+
+    # Plot the distribution drift results for continuous model inputs
+    for feature in metadata.continuous_features:
+        figure = univariate_results.plot(kind='feature_distribution', feature_label=feature.label)
+        figure.show()
+
+    # Plot the distribution drift results for categorical model inputs
+    for feature in metadata.categorical_features:
+        figure = univariate_results.plot(kind='feature_distribution', feature_label=feature.label)
+        figure.show()
+
+    # Rank the

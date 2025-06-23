@@ -1,0 +1,22 @@
+```
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import pymongo
+    from pymongo import MongoClient
+    <\Cell_0>
+    <Cell_1>
+    client = MongoClient('localhost', 27017)
+    db = client['yelp_db']
+    collection = db['yelp_academic_dataset_user']
+    data = pd.read_json("../data/full_data/yelp_academic_dataset_user.json", lines=True)
+    data.to_json("yelp_academic_dataset_user.json")
+    <\Cell_1>
+    <Cell_2>
+    data.info()
+    <\Cell_2>
+    <Cell_3>
+
+    <\Cell_3>
+    ```

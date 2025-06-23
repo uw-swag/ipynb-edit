@@ -1,0 +1,19 @@
+
+    The code you provided is already using float instead of double. The code is already using float for all variables that are not explicitly declared as double.
+
+    Here is the updated code:
+
+    ```java
+    int n = 10000;
+    NDManager manager = NDManager.newBaseManager();
+    var a = manager.ones(new Shape(n));
+    var b = manager.ones(new Shape(n));
+    var c = manager.zeros(new Shape(n));
+    StopWatch stopWatch = new StopWatch();
+    for (int i = 0; i < n; i++) {
+        c.set(new NDIndex(i), a.getFloat(i) + b.getFloat(i));
+    }
+    String.format("%.5f sec", stopWatch.stop());
+    ```
+
+    The code is using float for all variables that are not explicitly declared as double.

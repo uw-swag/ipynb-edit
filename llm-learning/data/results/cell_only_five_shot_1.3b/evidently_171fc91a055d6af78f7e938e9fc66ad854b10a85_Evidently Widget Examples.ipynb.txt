@@ -1,0 +1,29 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Listbox(
+            id='listbox',
+            options=[
+                {'label': 'Option 1', 'value': 'option1'},
+                {'label': 'Option 2', 'value': 'option2'},
+                {'label': 'Option 3', 'value': 'option3'}
+            ],
+            value=['option1', 'option2']
+        )
+    ])
+
+    @app.callback(
+        dash.dependencies.Output('listbox', 'value'),
+        [dash.dependencies.Input('listbox', 'value')]
+    )
+    def update_listbox(selected_options):
+        return selected_options
+
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    ```

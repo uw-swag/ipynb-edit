@@ -1,0 +1,59 @@
+
+    ## G Test Documentation
+
+    ## G Test Examples
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature to the G Test (#391)"
+    Original Code Cells:
+    '''
+    def g_test(data, target, features, alpha=0.05):
+        """
+        Perform a G-test to test the goodness of fit of a model.
+
+        Parameters:
+        data (pandas.DataFrame): The data to be tested.
+        target (str): The target variable.
+        features (list): The features to be used in the model.
+        alpha (float): The significance level.
+
+        Returns:
+        tuple: A tuple containing the p-value and the G-test statistic.
+        """
+        # Split the data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(data[features], data[target], test_size=0.2, random_state=42)
+
+        # Train a model on the training set
+        model = SomeModel()
+        model.fit(X_train, y_train)
+
+        # Make predictions on the testing set
+        y_pred = model.predict(X_test)
+
+        # Compute the G-test statistic
+        g_test_statistic = g_test_statistic(y_test, y_pred)
+
+        # Compute the p-value
+        p_value = g_test(g_test_statistic, alpha=alpha)
+
+        return p_value, g_test_statistic
+
+    '''
+    ]
+
+    ### Response:
+    
+    ## G Test Documentation
+
+    The G-test is a statistical test that is used to determine if the observed data differs significantly from the expected data. It is often used to test the goodness of fit of a model.
+
+    ## G Test Examples
+
+    Here is an example of how to use the G-test in a Python script:
+
+    ```python
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+
+    data = p

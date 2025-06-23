@@ -1,0 +1,54 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add more unittests (#315)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection, NumTargetDriftProfileSection
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+ca = fetch_california_housing(as_frame=True)
+<\Cell_2>
+<Cell_3>
+ca_frame = ca.frame
+<\Cell_3>
+<Cell_4>
+ca_frame.head()
+<\Cell_4>
+<Cell_5>
+target = 'MedHouseVal'
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+<\Cell_5>
+<Cell_6>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.numerical_features = numerical_features
+<\Cell_6>
+<Cell_7>
+ref_data_sample = ca_frame[:15000].sample(1000, random_state=0)
+prod_data_sample = ca_frame[15000:].sample(1000, random_state=0)
+<\Cell_7>
+<Cell_8>
+ca_target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab(verbose_level=1)])
+<\Cell_8>
+<Cell_9>
+ca_target

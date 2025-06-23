@@ -1,0 +1,50 @@
+```python
+    # Testing in E017
+    # This is a test commit for the E017 environment
+    # The test is to ensure that the code is working as expected in the E017 environment
+
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+
+    # Loading the dataset
+    data = pd.read_csv('your_dataset.csv')
+
+    # Standardizing the data
+    scaler = StandardScaler()
+    data_scaled = scaler.fit_transform(data)
+
+    # Applying PCA
+    pca = PCA(n_components=2)
+    data_pca = pca.fit_transform(data_scaled)
+
+    # Printing the results
+    print("Original dataset shape: ", data.shape)
+    print("PCA transformed dataset shape: ", data_pca.shape)
+
+    # Checking if the transformed data has the same shape as the original data
+    assert data.shape == data_pca.shape, "The shape of the transformed data does not match the shape of the original data"
+
+    # Testing the PCA component
+    pca_component = pca.components_
+    print("PCA components: ", pca_component)
+
+    # Testing the explained variance
+    explained_variance = pca.explained_variance_
+    print("Explained variance: ", explained_variance)
+
+    # Testing the explained variance ratio
+    explained_variance_ratio = pca.explained_variance_ratio_
+    print("Explained variance ratio: ", explained_variance_ratio)
+
+    # Testing the inverse transformation
+    data_inverse = pca.inverse_transform(data_pca)
+    print("Inverse transformed dataset: ", data_inverse)
+
+    # Checking if the inverse transformation is the original data
+    assert np.allclose(data, data_inverse), "The inverse transformation is not the original data"
+
+    print("All tests passed in E017")
+    ```

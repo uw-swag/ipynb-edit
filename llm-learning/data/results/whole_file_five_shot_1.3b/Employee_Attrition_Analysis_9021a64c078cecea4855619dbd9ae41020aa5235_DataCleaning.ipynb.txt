@@ -1,0 +1,46 @@
+```
+    # dependencies
+    import pandas as pd
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+    # read in csv
+    file_path = "../resources/IBM_employee_data.csv"
+    attrition_df = pd.read_csv(file_path)
+    attrition_df.head()
+
+    # determine if any missing values and data types for columns
+    attrition_df.info()
+
+    # column names
+    attrition_df.columns
+
+    # ambiguous/unnecessary columns - only going to keep MonthlyIncome
+    attrition_df[["DailyRate", "HourlyRate", "MonthlyIncome", "MonthlyRate", "StandardHours", "Over18"]]
+
+    # these columns are either unique identifiers, ambiguous or constant thru each column
+    columns_to_drop = ["DailyRate", "HourlyRate", "MonthlyRate", "StandardHours", "EmployeeCount", 
+                       "EmployeeNumber", "Over18"]
+
+    # drop columns
+    attrition_df.drop(columns=columns_to_drop, inplace=True)
+    attrition_df.head()
+
+    # making a list of columns with object data types
+    attrition_cat = attrition_df.dtypes[attrition_df.dtypes == "object"].index.tolist()
+    attrition_cat
+
+    # number of unique items in each column
+    attrition_df[attrition_cat].nunique()
+
+    # remove attrition from this list as it is our target variable
+    attrition_cat.remove("Attrition")
+    attrition_cat
+
+    # columns that were pre-encoded with a ranking system that need to be encoded as well
+    ranking_system_col = ["JobInvolvement", "JobLevel", "JobSatisfaction", "WorkLifeBalance", 
+                          "RelationshipSatisfaction", "EnvironmentSatisfaction", "StockOptionLevel",
+                         "Education", "PerformanceRating"]
+
+    attrition_df[ranking_system_col]
+
+    # join lists together to be encoded

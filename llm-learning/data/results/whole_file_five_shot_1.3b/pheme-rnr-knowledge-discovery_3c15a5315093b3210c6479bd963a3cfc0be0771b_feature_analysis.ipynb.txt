@@ -1,0 +1,42 @@
+```
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    from lib.util import fetch_thread
+
+    Z, y = fetch_thread("germanwings-crash")
+    Z.describe()
+
+    from scipy.stats import pearsonr
+
+    corr = Z.apply(lambda x: pearsonr(x, y), axis=0, result_type='expand')\
+        .T \
+        .rename(columns={0: "coef", 1: "pval"}) \
+        .sort_values(by=["coef"], ascending=False)
+
+    plt.figure(figsize=(15,15))
+    plt.title("Correlation Between Features and Rumor Label (Germanwings Crash)")
+
+    labels = [index + " (p = %.2f)" % round(row.pval, 2) for index, row in corr.iterrows()]
+    ax = sns.barplot(y=labels, x=corr.coef, palette="Set2")
+    ax.set(xlabel="Pearson Correlation Coefficient", ylabel="Feature")
+
+    offset = 0.01
+    i = 0
+    for index, row in corr.iterrows():
+        ax.text(row.coef + (offset if row.coef > 0 else -offset), i, round(row.coef, 2), 
+                color="black",
+                ha="center",
+                fontsize='small')
+        i += 1
+
+    f, ax = plt.subplots(figsize=(18,18))
+    sns.heatmap(Z.corr(), annot=True, linewidth=0.5, fmt='.1f', ax=ax)
+
+    plt.show()
+
+    plt.close()
+
+    f, ax = plt.subplots(figsize=(18,18))
+    sns.heatmap(Z.corr(), annot=True, linewidth=0

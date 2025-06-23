@@ -1,0 +1,25 @@
+```ocaml
+    (* User-defined Archimedes backend "iocaml" *)
+    module R = Archimedes.Backend.Register(struct
+      include Archimedes_cairo.B
+      let name = "iocaml"
+      let close ~options b =
+        Cairo.PNG.write_to_stream ~output:(output_string Iocaml.mime) (Cairo.get_target (Obj.magic b)) ;
+        close ~options b ; Iocaml.send_mime ~base64:true "image/png"
+    end)
+    let vp = A.init ~w:500. ~h:300. ["iocaml"] in
+    A.Axes.box vp;
+    A.fx vp sin 0. 10.;
+    A.close vp
+    ```
+    The above code is a simple example of using the Archimedes library to create a graphical plot using the Cairo backend. The plot is a sine wave, and the resulting image is sent to the Iocaml backend for display.
+
+    The Iocaml backend is a simple OCaml interface to the Iocaml library, which is a graphical user interface for OCaml. It can be used to display images in a web browser.
+
+    The Archimedes library is a library for creating 2D plots in OCaml. It provides a backend system for different types of plots, and it also provides a simple interface to the Archimedes library.
+
+    The Cairo backend is a library for rendering images in Cairo, a 2D graphics library. It can be used to create and render images in a variety of formats.
+
+    The `A.init` function initializes a new plot with the specified backend names. The `A.Axes.box` function adds a box to the plot. The `A.fx` function adds a function to the plot. The `A.close` function closes the plot.
+
+    The `Cairo.PNG.write_to_stream` function writes a Cairo surface to a stream. The `Cairo.get_target` function gets the target of a Cairo surface. The `output_string` function writes a string to a stream. The `Iocaml.mime` function gets the MIME type for Iocaml. The `I

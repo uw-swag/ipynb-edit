@@ -1,0 +1,53 @@
+
+    '''
+    Commit Message: "Plotted Geographicall Prod-Consumption States"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import matplotlib
+    import seaborn as sns
+
+    matplotlib.rc('font', size=20)
+    matplotlib.rc('axes', titlesize=20)
+    matplotlib.rc('axes', labelsize=20)
+    matplotlib.rc('xtick', labelsize=20)
+    matplotlib.rc('ytick', labelsize=20)
+    matplotlib.rc('legend', fontsize=20)
+    matplotlib.rc('figure', titlesize=20)
+
+    %matplotlib inline
+    np.random.seed(42)
+<\Cell_0>
+<Cell_1>
+    data = pd.read_csv("honeyproduction.csv").rename(columns={
+        'state':'state_code',
+        'numcol':'n_colony',
+        'yieldpercol':'production_per_colony',
+        'totalprod':'total_production',
+        'stocks':'stock_held',
+        'priceperlb':'price_per_lb',
+        'prodvalue':'total_production_value'
+    })
+
+    state_code_to_name = {
+        'AK': 'Alaska',
+        'AL': 'Alabama',
+        'AR': 'Arkansas',
+        'AZ': 'Arizona',
+        'CA': 'California',
+        'CO': 'Colorado',
+        'CT': 'Connecticut',
+        'DC': 'District of Columbia',
+        'DE': 'Delaware',
+        'FL': 'Florida',
+        'GA': 'Georgia',
+        'HI': 'Hawaii',
+        'IA': 'Iowa',
+        'ID': 'Idaho',
+        'IL': 'Illinois',
+        'IN': 'Indiana',
+       

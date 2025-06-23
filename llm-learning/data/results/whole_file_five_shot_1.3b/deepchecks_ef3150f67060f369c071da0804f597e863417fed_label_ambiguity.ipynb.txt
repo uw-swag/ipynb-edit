@@ -1,0 +1,21 @@
+```
+    from deepchecks.checks.integrity import LabelAmbiguity
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                  "col2":[1,2,1,2,5,2,5,2,3,2],
+                                  "my_label":[2,3,4,4,4,3,4,5,6,4]}),
+                     label_name="my_label")
+
+    LabelAmbiguity().run(dataset)
+
+    LabelAmbiguity(n_to_show=1).run(dataset)
+
+    clean_dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                      "col2":[1,2,1,2,5,2,5,2,3,2],
+                                      "my_label":[2,3,2,3,4,3,4,3,6,3]}),
+                     label_name="my_label")
+
+    LabelAmbiguity().run(clean_dataset)
+    ```

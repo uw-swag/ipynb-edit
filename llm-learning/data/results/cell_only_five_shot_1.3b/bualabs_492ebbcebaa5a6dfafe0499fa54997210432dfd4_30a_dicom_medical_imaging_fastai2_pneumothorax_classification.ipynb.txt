@@ -1,0 +1,35 @@
+```python
+    import matplotlib.pyplot as plt
+    from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+    from matplotlib.figure import Figure
+    import numpy as np
+    from PIL import Image
+
+    def show_dicom_image(image_path):
+        # Load the DICOM image
+        img = Image.open(image_path)
+
+        # Create a new figure and axis
+        fig = Figure(figsize=(10, 5))
+        ax = fig.add_subplot(111)
+
+        # Display the DICOM image
+        ax.imshow(img)
+
+        # Create a new Tkinter window
+        root = tk.Tk()
+
+        # Create a new FigureCanvasTkAgg object
+        canvas = FigureCanvasTkAgg(fig, master=root)
+
+        # Add the canvas to the Tkinter window
+        canvas.draw()
+
+        # Show the Tkinter window
+        root.mainloop()
+
+    # Call the function with the path to your DICOM image
+    show_dicom_image('/path/to/your/dicom/image.dcm')
+    ```
+
+    This function opens a new Tkinter window with the DICOM image. The image is displayed in a matplotlib FigureCanvasTkAgg object, which is then drawn and displayed in the Tkinter window.

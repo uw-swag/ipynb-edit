@@ -1,0 +1,30 @@
+```python
+    import nannyml as nml
+    from nannyml.components import ComponentAnalysis
+    from nannyml.datasets import load_synthetic_car_loan_dataset
+
+    # Load the synthetic dataset
+    reference_df, analysis_df, analysis_targets_df = load_synthetic_car_loan_dataset()
+
+    # Create a component analysis
+    component_analysis = ComponentAnalysis(
+        reference_df=reference_df,
+        analysis_df=analysis_df,
+        analysis_targets_df=analysis_targets_df,
+        target_names=['target1', 'target2'],
+        feature_names=['feature1', 'feature2', 'feature3'],
+        n_components=2,
+        random_state=42
+    )
+
+    # Perform the component analysis
+    component_analysis.fit()
+
+    # Get the component scores
+    component_scores = component_analysis.get_scores()
+
+    # Print the component scores
+    print(component_scores)
+    ```
+
+    This code will perform a component analysis on the dataset. The `ComponentAnalysis` class from the `nannyml.components` module is used to perform the analysis. The `fit` method is used to perform the analysis, and the `get_scores` method is used to get the component scores. The scores are then printed to the console.

@@ -1,0 +1,32 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.feature_extraction.text import TfidfTransformer
+    from sklearn.pipeline import Pipeline
+    from sklearn.svm import LinearSVC
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+    from sklearn.datasets import fetch_20newsgroups
+
+    # Load dataset
+    twenty_train = fetch_20newsgroups(subset='train', shuffle=True)
+
+    # Create a text representation of the data
+    count_vect = CountVectorizer()
+    X_train_counts = count_vect.fit_transform(twenty_train.data)
+
+    # Apply TF-IDF scaling
+    tfidf_transformer = TfidfTransformer()
+    X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
+
+    # Train a SVM model
+    clf = LinearSVC().fit(X_train_tfidf, twenty_train.target)
+
+    # Predict the test set
+    twenty_test = fetch_20newsgroups(subset='test', shuffle=True)
+    X_test_counts = count_vect.transform(twenty_test.data)
+    X_test_tfidf = tfidf_transformer.transform(X_test_counts)
+    predicted = clf.predict(X_test_tfidf)
+
+    # Print the accuracy
+    print('Accuracy:', accuracy_score(twenty_test.target, predicted))
+    ```

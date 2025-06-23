@@ -1,0 +1,29 @@
+```python
+    from transformers import BertTokenizer, BertConfig, BertForMaskedLM, pipeline
+
+    dir_path = r"./models/CSG/BERT_model"
+
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    config = BertConfig.from_pretrained(os.path.join(dir_path, "config.json"))
+    csg_model = BertForMaskedLM.from_pretrained(os.path.join(dir_path, "pytorch_model.bin"), from_tf=bool('.ckpt' in 'bert-base-uncased'), config=config)
+    csg_model.eval()
+    my_unmasker(questions["q1"]["sentence"])
+    target_sent = questions["q1"]["sentence"]
+    print(target_sent)
+    answer = questions["q1"]["answer"]
+    print(answer)
+    cs_fs = list()
+    for c in cs:
+        fs = 0.25*c["s0"] + 0.25*c["s1"] + 0.25*c["s2"] + 0.25*c["s3"]
+        cs_fs.append((c["word"], fs))
+
+    cs_fs
+
+    ```
+
+    ### Explanation:
+    The code is used to perform a sentiment analysis task using a pre-trained BERT model. The sentiment analysis task is a common task in natural language processing. The code first loads a pre-trained BERT model and a sentiment analysis task. Then, it tokenizes the input sentence, feeds it into the BERT model, and finally, it prints the output.
+
+    The code also includes a negative sample, which is a common technique in natural language processing to train a model on a small amount of data and then use the model to generate a new sentence. The code also includes a comparison framework, which is a set of methods used to compare different models or datasets. The code uses a framework to compare the performance of a model on a specific task.
+
+    The code also includes a comparison of the dataset weight, which is a measure of the importance of a feature in a machine learning model.

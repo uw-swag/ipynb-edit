@@ -1,0 +1,26 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Reduced to 3000 samples."
+    Original Code Cells:
+    '''
+    earthquakes = pd.read_csv("./datasets/alexisbcook/geospatial-learn-course-data/earthquakes1970-2014.csv", parse_dates=["DateTime"])
+len(earthquakes), earthquakes.head()
+# Create a base map with plate boundaries
+m_2 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5, prefer_canvas=True)
+# for i in range(len(plate_boundaries)):
+#     folium.PolyLine(locations=plate_boundaries.coordinates.iloc[i], weight=2, color='black').add_to(m_2)
+    
+earthquakes['marker_color'] = pd.cut(earthquakes['Depth'], bins=4, 
+                              labels=['yellow', 'orange', 'red', 'purple'])
+
+# Circle(location=[36, 135], radius=50000, color='red').add_to(m_2)
+# Circle(location=[38, 135], radius=50000, color='green').add_to(m_2)
+# Circle(location=[33, 135], radius=50000, color='blue').add_to(m_2)
+
+# Your code here: Add a map to visualize earthquake depth
+for idx, e in earthquakes.iterrows():
+    Circle(location=[e['Latitude'], e['Longitude']], radius=15000, color=e['marker_color']).add_to(m_2)
+    # print((e['Latitude'], e['Longitude']))
+    # Circle(location=(e['Latitude'], e['Longitude']), radius=5000, color='red').add_to(m_2)
+    if idx > 3000: break

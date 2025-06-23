@@ -1,0 +1,60 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently.pipeline.column_mapping import ColumnMapping
+
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataQuality, DataStability, DataDrift
+from evidently.tests import *
+<\Cell_0>
+<Cell_1>
+data = fetch_california_housing(as_frame=True)
+housing_data = data.frame
+<\Cell_1>
+<Cell_2>
+housing_data.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+housing_data['prediction'] = housing_data['target'].values + np.random.normal(0, 5, housing_data.shape[0])
+<\Cell_2>
+<Cell_3>
+housing_data.head()
+<\Cell_3>
+<Cell_4>
+reference = housing_data.sample(n=5000, replace=False)
+current = housing_data.sample(n=5000, replace=False)
+<\Cell_4>
+<Cell_5>
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithNANs(),
+    TestNumberOfRowsWithNANs(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedFeatures(), 
+])
+
+tests.run(reference_data=reference, current_data=current)
+tests
+<\Cell_5>
+<Cell_6>
+tests.json()
+<\Cell_6>
+<Cell_7>
+data_stability = TestSuite(tests=[
+    DataStability(),
+])
+
+data_stability.run(reference_data=reference, current_data=current)
+data_stability
+<\Cell_7>
+<Cell_8>
+drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()])
+drift_dashboard.calculate(reference, current)
+drift_dashboard.show()
+<\Cell_8>

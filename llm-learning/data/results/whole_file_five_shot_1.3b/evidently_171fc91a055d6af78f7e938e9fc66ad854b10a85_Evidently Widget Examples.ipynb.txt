@@ -1,0 +1,32 @@
+```python
+    <Cell_0>
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs.widget_gallery_tab import WidgetGalleryTab
+
+    import pandas as pd
+    <\Cell_0>
+    <Cell_1>
+    dashboard = Dashboard(tabs=[WidgetGalleryTab()])
+    <\Cell_1>
+    <Cell_2>
+    dashboard.calculate(pd.DataFrame([[1, 2],[1, 2],[1, 2]]), None, None)
+    <\Cell_2>
+    <Cell_3>
+    dashboard.save("widget_example.html")
+    <\Cell_3>
+    <Cell_4>
+    dashboard.show()
+    <\Cell_4>
+    ```
+
+    The code above creates a new Dashboard instance, adds a WidgetGalleryTab to the Dashboard, calculates some data, saves the Dashboard to an HTML file, and then shows the Dashboard.
+
+    The WidgetGalleryTab is a part of the evidently library that provides a wide range of widgets for data visualization. The calculate method is used to calculate some data and the save and show methods are used to save the Dashboard to an HTML file and display it respectively.
+
+    Please note that you need to have the evidently library installed in your Python environment. You can install it using pip:
+
+    ```bash
+    pip install evidently
+    ```
+
+    Also, the code provided is a simple example and may not work as expected in a real-world scenario. You may need to adjust the code to fit your specific needs.

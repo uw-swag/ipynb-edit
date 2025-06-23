@@ -1,0 +1,30 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import NumTargetDrift
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataStabilityTestPreset
+from evidently.tests import *
+
+# Create a mapping of columns
+column_mapping = ColumnMapping()
+column_mapping.add_source("current", ["MedInc", "AveRooms", "AveBedrms", "Population", "AveOccup"])
+column_mapping.add_target("reference", ["MedInc", "AveRooms", "AveBedrms", "Population", "AveOccup"])
+
+# Create a report
+drift_report = Report(metrics=[DataDriftPreset(), NumTargetDrift()], column_mapping=column_mapping)
+
+# Run the report
+drift_report.run(reference_data=fetch_california_housing().data, current_data=current)
+
+# Print the report
+drift_report
+    ```

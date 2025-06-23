@@ -1,0 +1,3 @@
+bigram_measures = BigramAssocMeasures()
+finder = BigramCollocationFinder.from_words(' '.join(list(df['description'])).split())
+top10_collocations = finder.nbest(BigramAssocMeasures.pmi, 10)

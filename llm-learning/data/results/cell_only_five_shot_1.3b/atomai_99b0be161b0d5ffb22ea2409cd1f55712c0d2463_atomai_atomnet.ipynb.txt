@@ -1,0 +1,15 @@
+```python
+    import os
+    import shutil
+
+    # Get the list of all notebooks
+    notebooks = [f for f in os.listdir('.') if f.endswith('.ipynb')]
+
+    # Create the 'examples' directory if it doesn't exist
+    if not os.path.exists('examples'):
+        os.makedirs('examples')
+
+    # Move each notebook to the 'examples' directory
+    for notebook in notebooks:
+        shutil.move(notebook, 'examples')
+    ```

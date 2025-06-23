@@ -1,0 +1,39 @@
+
+    ## Add Classification Performance Tests. (#267)
+
+    ### Code:
+
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    from evidently.test_suite import TestSuite
+    from evidently.tests import TestNumberOfColumns
+    from evidently.tests import TestNumberOfDriftedFeatures
+    from evidently.tests import TestValueMAE, TestValueMeanError
+    from evidently.tests import TestAccuracyScore, TestPrecisionScore, TestF1Score, TestRecallScore, TestRocAuc, TestLogLoss, TestTPR, TestTNR, TestFPR, TestFNR
+    from sklearn import datasets, ensemble, model_selection
+
+    bcancer = datasets.load_breast_cancer(as_frame=True)
+    bcancer_frame = bcancer.frame
+    bcancer_frame['target'] = bcancer.target
+    target = 'target'
+    prediction = 'prediction'
+
+    numerical_features = bcancer.feature_names
+    categorical_features = []
+
+    features = numerical_features.tolist() + categorical_features
+    train_data, test_data = model_selection.train_test_split(
+        bcancer_frame, random_state=0)
+    model = ensemble.RandomForestClassifier(random_state=0)
+    model.fit(train_data[features], train_data.target)
+    train_predictions = model.predict(train_data[features])
+    test_predictions = model.predict(test_data[features])
+    train_data['prediction'] = [bcancer.target_names[x] for x in train_predictions]
+    test_data['prediction'] = [bcancer.target_names[x] for x in test_predictions]
+
+    train_data['target'] = [bcancer.target_names[x] for x in train_data['target']]
+    test_data['target'] = [bcancer.target_names[x] for x in test_data['target']]
+
+    train_data.reset_index(inplace=True, drop=True)

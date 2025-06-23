@@ -1,0 +1,59 @@
+```yaml
+    name: Links Checks
+
+    on:
+      push:
+        branches:
+          - main
+
+    jobs:
+      links-check:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Setup Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+
+        - name: Install Dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Run Links Check
+          run: python -m links_check
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add-missing-imports-to-config-notebook (#776)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.svm import SVC
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import roc_curve
+    from sklearn.metrics import roc_auc_score
+    from sklearn.metrics import precision_recall_curve
+    from sklearn.metrics import average_precision_score
+    from sklearn.metrics import f1_score
+    from sklearn.metrics import hamming_loss
+    from sklearn.metrics import jaccard_score
+    from sklearn.metrics import cohen_kappa_score
+    from sklearn.metrics import log_loss
+    from sklearn

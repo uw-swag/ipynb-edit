@@ -1,0 +1,14 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Loading the dataset
+    df = pd.read_csv('twitter_data.csv')
+
+    # Calculating the proportion of tweets with a shared hashtag
+    hashtag_proportion = df['hashtags'].apply(lambda x: len(x.split('#'))).sum() / len(df)
+
+    print(f'The proportion of tweets with a shared hashtag is {hashtag_proportion}')
+    ```
+    This code will calculate the proportion of tweets in the dataset that have a shared hashtag. The proportion is calculated by splitting each tweet by '#' and counting the number of splits. The sum of these counts is divided by the total number of tweets to get the proportion.

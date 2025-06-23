@@ -1,0 +1,28 @@
+```python
+    from deepchecks.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    # Assuming you have a DataFrame df with a column 'category'
+    df = pd.DataFrame({'category': ['a', 'b', 'c', 'a', 'b', 'c']})
+
+    # Create a Dataset from the DataFrame
+    ds = Dataset(df, label='category')
+
+    # Create a new check
+    check = CategoryMismatchTrainTest(train_test_split_ratio=0.5)
+
+    # Run the check
+    result = check.run(ds)
+
+    # Print the result
+    print(result)
+    ```
+
+    The above code will create a new DeepChecks check that checks for category mismatches in the training and test sets. The `CategoryMismatchTrainTest` check splits the data into a training set and a test set, and then checks for any categories in the test set that are not present in the training set.
+
+    The `train_test_split_ratio` parameter is used to specify the ratio of the data to be used for the test set. The default value is 0.2, but it can be adjusted according to your needs.
+
+    The `run` method of the check is used to run the check on the dataset. The result of the check is a report that includes the number of categories that were found in the test set that were not found in the training set.
+
+    The `print` statement at the end of the code will print the result of the check.

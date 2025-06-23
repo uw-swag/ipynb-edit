@@ -1,0 +1,16 @@
+```python
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs.regression import RegressionPerformanceTab
+    from evidently.widgets.target_name_widget import TargetNameWidget
+    from evidently.widgets.reg_quality_metrics_bar_widget import RegQualityMetricsBarWidget
+    from evidently.widgets.reg_pred_vs_actual_widget import RegPredActualWidget
+    from evidently.widgets.reg_error_distr_widget import RegErrorDistrWidget
+
+    dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0, include_widgets=[
+        TargetNameWidget("Regression Model Performance Report.", kind='regression'),
+        RegPredActualWidget("Reference: Predicted vs Actual"),
+        RegPredActualWidget("Current: Predicted vs Actual", dataset='current'),
+        RegQualityMetricsBarWidget(),
+        RegErrorDistrWidget()
+    ])])
+    ```

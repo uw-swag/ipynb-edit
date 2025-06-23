@@ -1,0 +1,45 @@
+<Cell_0>
+from redpitaya.overlay.mercury import mercury as overlay
+
+fpga = overlay()
+<\Cell_0>
+<Cell_1>
+gen0 = fpga.gen(0)
+gen1 = fpga.gen(1)
+<\Cell_1>
+<Cell_2>
+gen0.amplitude = 1.0
+gen0.offset    = 0.0
+gen0.waveform  = gen0.sin()
+
+gen1.amplitude = 1.0
+gen1.offset    = 0.0
+gen1.waveform  = gen1.sin()
+<\Cell_2>
+<Cell_3>
+gen0.waveform # returns waveform normalized to range of [-1,1]
+gen1.waveform # returns waveform normalized to range of [-1,1]
+<\Cell_3>
+<Cell_4>
+gen0.mode = 'PERIODIC'
+gen1.mode = 'PERIODIC'
+gen0.frequency = 125000000/128
+gen1.frequency = 125000000/128
+<\Cell_4>
+<Cell_5>
+print(gen0.frequency)
+print(gen1.frequency)
+<\Cell_5>
+<Cell_6>
+gen1.sync_src = fpga.sync_src["gen0"]
+gen1.phase = 90
+
+gen0.start()
+gen0.enable = True
+gen1.enable = True
+gen0.trigger()
+<\Cell_6>
+<Cell_7>
+gen0.enable = False
+gen1.enable = False
+<\Cell_7>

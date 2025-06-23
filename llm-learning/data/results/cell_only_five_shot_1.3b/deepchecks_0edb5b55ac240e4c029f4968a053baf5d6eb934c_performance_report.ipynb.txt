@@ -1,0 +1,14 @@
+```python
+    from deepchecks.vision.base import VisionDataset
+    from torchvision import models
+    import torchvision
+    import torch
+    from torch import nn
+    import torch.nn.functional as F
+    from torchvision.transforms import ToTensor
+    import copy
+    from deepchecks.vision.dataset import VisionDataset
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+
+    train_ds = VisionDataset(coco_dataloader, label_transformer=DetectionLabelFormatter(lambda x: x), num_classes=80)
+    ```

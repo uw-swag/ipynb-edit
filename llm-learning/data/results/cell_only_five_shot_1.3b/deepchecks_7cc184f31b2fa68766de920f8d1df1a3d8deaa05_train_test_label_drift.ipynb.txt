@@ -1,0 +1,33 @@
+
+The code you provided is splitting the VisionData and removing the formatters. The VisionData class in Deepchecks is used to handle datasets that are compatible with the vision models in Deepchecks. The formatters are used to transform the labels and predictions of the models.
+
+In your code, you're creating a VisionData object for both the training and testing datasets. The formatters are applied to the labels and predictions of the models.
+
+The code is splitting the VisionData object into two parts: the training part and the testing part. This is done by creating a new VisionData object for each dataset. The formatters are not applied to the training and testing datasets separately.
+
+The formatters are applied to the labels and predictions of the models in the training and testing datasets separately.
+
+Here's the code with the formatters removed:
+
+```python
+from deepchecks.vision.dataset import VisionData
+from deepchecks.vision.checks import TrainTestLabelDrift
+from deepchecks.vision.datasets.classification.mnist import load_dataset
+
+mnist_dataloader_train = load_dataset(train=True, batch_size=64)
+mnist_dataloader_test = load_dataset(train=False, batch_size=1000)
+
+from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter
+
+train_ds = VisionData(mnist_dataloader_train, label_formatter=ClassificationLabelFormatter())
+test_ds = VisionData(mnist_dataloader_test, label_formatter=ClassificationLabelFormatter())
+
+from deepchecks.vision.datasets.classification.mnist import load_model as load_mnist_model
+from deepchecks.vision.datasets.classification.mnist import mnist_prediction_formatter
+from torch.nn import Softmax
+from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+
+mnist_model = load_mnist_model(pretrained=True)
+
+from deepchecks.vision.checks import ClassPerformance
+pred_formatter = ClassificationPredictionFormatter(mnist_

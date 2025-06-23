@@ -1,0 +1,34 @@
+```
+    <Cell_0>
+# Find path to PySpark
+import findspark
+findspark.init()
+
+# Import PySpark and initalize SparkContext object
+import pyspark
+sc = pyspark.SparkContext()
+
+# read the hamlet.txt file into an RDD (Resilient Distributed Data Set)
+raw_hamlet = sc.textFile('hamlet.txt')
+first_five_elements = raw_hamlet.take(5)
+first_five_elements
+<\Cell_0>
+<Cell_1>
+split_hamlet = raw_hamlet.map(lambda line: line.split('\t'))
+<\Cell_1>
+<Cell_2>
+def hamlet_speaks(line):
+    id = line[0]
+    speaketh = False
+    
+    if "HAMLET" in line:
+        speaketh = True
+    
+    if speaketh:
+        yield id,"hamlet speaketh!"
+
+hamlet_spoken = split_hamlet.flatMap(lambda x: hamlet_speaks(x))
+hamlet_spoken.take(10)
+<\Cell_2>
+    ```
+    The code above is a simple example of how to use PySpark to process a text file. It reads a text file, splits each line into words, and then checks if "HAMLET" is in each line. If it is, it yields an ID and a message. The `flatMap` function is used to apply the `hamlet_speaks` function to each line, and the `take` function is used to print the first 10 elements of the result.

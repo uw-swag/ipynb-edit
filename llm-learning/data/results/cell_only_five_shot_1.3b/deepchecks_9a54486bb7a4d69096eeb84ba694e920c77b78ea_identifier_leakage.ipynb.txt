@@ -1,0 +1,24 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from deepchecks.checks.methodology import *
+from deepchecks.base import Dataset
+
+    # Split the data into training and testing sets
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a dataset from the training data
+    train_ds = Dataset(X_train, y_train)
+
+    # Create a dataset from the testing data
+    test_ds = Dataset(X_test, y_test)
+
+    # Run the checks
+    report = DeepChecks().run(train_ds, test_ds)
+
+    # Print the report
+    print(report)
+    ```

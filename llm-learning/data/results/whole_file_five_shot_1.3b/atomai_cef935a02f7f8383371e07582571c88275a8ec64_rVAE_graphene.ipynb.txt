@@ -1,0 +1,35 @@
+
+    [
+    Commit Message: "Bump notebook to v0.6.7"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    #@title Download dataset
+    !gdown https://drive.google.com/uc?id=1-JZSRjIjNjkR0ZQ8ffRDAZ2FID53Yhon
+    !gdown https://drive.google.com/uc?id=1-84vLdGFsimD1jaTcGcMzNRCSvjId7-Y
+    !gdown https://drive.google.com/uc?id=1-Lowglj7fwEFaJoC9EBKDyfCIsMgOnyu
+    <\Cell_0>
+    <Cell_1>
+    !pip install -q atomai
+    <\Cell_1>
+    <Cell_2>
+    #import matplotlib.gridspec as gridspec
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import cv2
+    import atomai as aoi
+    <\Cell_2>
+    <Cell_3>
+    i = 10 # Choose movie frame
+
+    # Squeeze the channels in the predicted image (this is optional)
+    d_img = np.uint8(decoded_imgs[i]*255)
+    d_img = cv2.cvtColor(d_img, cv2.COLOR_BGR2GRAY)
+    # Get coordinates for C and Si atoms
+    lattice_coord_ = lattice_coord[i]
+    coord_Si = lattice_coord[i][np.where(lattice_coord[i][:,2]==1)][:,0:2]
+    coord_C = lattice_coord[i][np.where(lattice_coord[i][:,2]==0)][:,0:2]
+    # Plotting
+    fig = plt.figure(figsize = (15, 10), dpi = 100)
+    ax1 = fig.add_subplot(131)
+    ax1.imshow(STEM_real

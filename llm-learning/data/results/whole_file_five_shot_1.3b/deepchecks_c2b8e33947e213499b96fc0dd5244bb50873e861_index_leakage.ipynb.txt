@@ -1,0 +1,36 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#619)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.base import Dataset
+from deepchecks.checks import IndexTrainTestLeakage
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+def dataset_from_dict(d: dict, index_name: str = None) -> Dataset:
+    dataframe = pd.DataFrame(data=d)
+    return Dataset(dataframe, index_name=index_name)
+<\Cell_1>
+<Cell_2>
+train_ds = dataset_from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1')
+test_ds = dataset_from_dict({'col1': [4, 3, 5, 6, 7]}, 'col1')
+check_obj = IndexTrainTestLeakage()
+check_obj.run(train_ds, test_ds)
+<\Cell_2>
+<Cell_3>
+train_ds = dataset_from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1')
+test_ds = dataset_from_dict({'col1': [4, 3, 5, 6, 7]}, 'col1')
+check_obj = IndexTrainTestLeakage(n_index_to_show=1)
+check_obj.run(train_ds, test_ds)
+<\Cell_3>
+<Cell_4>
+train_ds = dataset_from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1')
+test_ds = dataset_from_dict({'col1': [20, 21, 5, 6, 7]}, 'col1')
+check_obj = IndexTrainTestLeakage()
+check_obj.run(train_ds, test_ds)
+<\Cell_4>
+
+    '''
+   

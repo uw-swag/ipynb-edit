@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update the notebook to learn a clasifier by weighted logistic regression"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+x, y, s = load_scar()
+<\Cell_1>
+<Cell_2>
+from scar import C, ALPHA
+
+w_p = (s == 0).sum() / len(s)
+w_n = (s == 1).sum() / len(s)
+
+class_weight = {0: w_n, 1: w_p}
+<\Cell_2>
+<Cell_3>
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression(class_weight=class_weight, random_state=0).fit(x, s)
+y_hat = clf.predict(x)
+y_hat_prob = clf.predict_proba(x)[:, 1]
+<\Cell_3>
+<Cell_4>
+from utils import visualize_pn_data, visualize_pn_data_proba
+<\Cell_4>
+<Cell_5>
+visualize_pn_data(x, y)
+<\Cell_5>
+<Cell_6>
+visualize_pn_data(x, y_hat)
+<\Cell_6>
+<Cell_7>
+visualize_pn_data_proba(x, y_hat_prob)
+<\Cell_7>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already set up to learn a classifier by weighted logistic regression. The class weights are calculated based on the distribution of the positive and negative classes in the dataset. The class weights are then used to create a Logistic Regression model. The model is then used to predict the class of the data and the predicted probabilities are also plotted.

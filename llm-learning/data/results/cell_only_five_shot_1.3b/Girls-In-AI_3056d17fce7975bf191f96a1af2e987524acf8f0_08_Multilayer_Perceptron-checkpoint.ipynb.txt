@@ -1,0 +1,21 @@
+
+    # Predictions
+    _, pred_train = model(X_train, apply_softmax=True).max(dim=1)
+    _, pred_test = model(X_test, apply_softmax=True).max(dim=1)
+    # Train and test accuracies
+    train_acc = get_accuracy(y_pred=pred_train, y_target=y_train)
+    test_acc = get_accuracy(y_pred=pred_test, y_target=y_test)
+    print ("train acc: {0:.1f}%, test acc: {1:.1f}%".format(train_acc, test_acc))
+    # Visualize the decision boundary
+    plt.figure(figsize=(12,5))
+    plt.subplot(1, 2, 1)
+    plt.title("Train")
+    plot_multiclass_decision_boundary(model=model, X=X_train, y=y_train)
+    plt.subplot(1, 2, 2)
+    plt.title("Test")
+    plot_multiclass_decision_boundary(model=model, X=X_test, y=y_test)
+    plt.show()
+    # Confusion matrix
+    cm = confusion_matrix(y_test, pred_test)
+    plot_confusion_matrix(cm=cm, classes=[0, 1, 2])
+    print (classification_report(y_test, pred_test))

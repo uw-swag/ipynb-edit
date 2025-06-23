@@ -1,0 +1,19 @@
+```python
+    from vision_data.vision_data import VisionData
+    from vision_data.formatters import format_vision_data
+
+    # Load the VisionData
+    vision_data = VisionData.load('path_to_vision_data.json')
+
+    # Format the VisionData
+    formatted_vision_data = format_vision_data(vision_data)
+
+    # Split the formatted VisionData
+    train_data, test_data = formatted_vision_data.split(0.8)
+
+    # Remove formatters from the train_data
+    train_data = train_data.remove_formatters()
+
+    # Remove formatters from the test_data
+    test_data = test_data.remove_formatters()
+    ```

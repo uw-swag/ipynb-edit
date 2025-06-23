@@ -1,0 +1,33 @@
+```java
+    import dev.djl.Model;
+    import dev.djl.ModelException;
+    import dev.djl.training.DefaultTrainingConfig;
+    import dev.djl.training.EasyTrain;
+    import dev.djl.training.Training;
+    import dev.djl.training.dataset.ArrayDataset;
+    import dev.djl.training.loss.Loss;
+    import dev.djl.training.optimizer.Optimizer;
+    import dev.djl.training.util.ProgressBar;
+
+    // Initialize the model
+    Model model = Model.newInstance("my-model");
+
+    // Define the training config
+    DefaultTrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
+        .optOptimizer(Optimizer.sgd())
+        .addEvaluator(new Accuracy())
+        .setEvaluatorInterval(1)
+        .setTrainEpochs(numEpochs)
+        .setValidationEpochs(1)
+        .setDevice(Device.gpu());
+
+    // Initialize the training object
+    Training training = model.newTraining(config);
+
+    // Train the model
+    training.train(trainIter, testIter, new ProgressBar());
+
+    // Evaluate the model
+    Map<String, Double> evaluatorMetrics = new HashMap<>();
+    double avgTrainTimePerEpoch = training.getEvaluatorMetrics().get("accuracy");
+    ```

@@ -1,0 +1,66 @@
+```python
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+
+    """
+    quality_metrics.py
+    ~~~~~~~~~~~~~~~~~
+    This module contains functions to calculate quality metrics.
+    """
+
+    import tabulate
+    import numpy as np
+
+    def calculate_quality(data):
+        """
+        Calculate quality metrics for a given data set.
+
+        Parameters:
+        data (list): A list of data points.
+
+        Returns:
+        dict: A dictionary containing the quality metrics.
+        """
+        # Check if tabulate is installed
+        if not tabulate_is_installed():
+            raise ImportError('tabulate module is not installed.')
+
+        # Calculate metrics
+        mean = np.mean(data)
+        std_dev = np.std(data)
+        min_val = np.min(data)
+        max_val = np.max(data)
+        median = np.median(data)
+
+        metrics = {
+            'mean': mean,
+            'std_dev': std_dev,
+            'min': min_val,
+            'max': max_val,
+            'median': median,
+        }
+
+        return metrics
+
+    def tabulate_is_installed():
+        """
+        Check if the tabulate module is installed.
+
+        Returns:
+        bool: True if the tabulate module is installed, False otherwise.
+        """
+        try:
+            import tabulate  # noqa: F401
+            return True
+        except ImportError:
+            return False
+    ```
+    This code checks if the tabulate module is installed before calculating the quality metrics. If it's not installed, it raises an ImportError.
+
+    The quality metrics calculated are the mean, standard deviation, minimum, maximum, and median of the data.
+
+    The function `calculate_quality` takes a list of data points as input and returns a dictionary containing the quality metrics.
+
+    The function `tabulate_is_installed` checks if the tabulate module is installed. It returns True if the tabulate module is installed, and False otherwise.
+
+    The function `calculate_quality` checks if the tabulate module is installed

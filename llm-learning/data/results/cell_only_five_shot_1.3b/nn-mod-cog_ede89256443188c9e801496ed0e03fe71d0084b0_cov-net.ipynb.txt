@@ -1,0 +1,37 @@
+```
+    import keras
+    from keras.datasets import mnist
+    from keras.models import Sequential
+    from keras.layers import Dense, Flatten
+    from keras.layers import Conv2D, AveragePooling2D
+    from keras import backend as K
+    print(f'x_train shape:{ x_train.shape}')
+    print(f'x_test shape:{ x_test.shape}')
+    import matplotlib.pyplot as plt
+
+    fig = plt.figure()
+    for i in range(6):
+        plt.subplot(2,3,i+1)
+        plt.imshow(x_train[i], cmap=plt.get_cmap('gray'))
+    img_rows, img_cols = 28, 28 # wight/height
+
+    if K.image_data_format() == 'channels_first':
+        x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
+        x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
+        input_shape = (1, img_rows, img_cols)
+    else:
+        x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+        x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+        input_shape = (img_rows, img_cols, 1)
+    epochs = 12 # number of passes of the entire dataset
+    batch_size = 128 # model iterations before a gradient upgrade
+
+    model.fit(x_train, y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              verbose=1,
+              validation_data=(x_test, y_test))
+
+    # AlexNet regularization
+    from keras.regularizers import l2
+    model = Sequential()

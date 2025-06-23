@@ -1,0 +1,40 @@
+
+    '''
+    %%html
+<style> 
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+body {background-color: gainsboro;} 
+a {color: #37c9e1; font-family: 'Roboto';} 
+h1 {color: #37c9e1; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #ccc;} 
+h2, h3 {color: slategray; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #ccc;}
+h4 {color: #818286; font-family: 'Roboto';}
+span {text-shadow: 4px 4px 4px #ccc;}
+div.output_prompt, div.output_area pre {color: slategray;}
+div.input_prompt, div.output_subarea {color: #37c9e1;}      
+div.output_stderr pre {background-color: gainsboro;}  
+div.output_stderr {background-color: slategrey;}       
+</style>
+import numpy as np 
+import pandas as pd
+import tensorflow as tf
+
+from PIL import ImageFile
+from tqdm import tqdm
+import h5py
+import cv2
+
+import matplotlib.pylab as plt
+from matplotlib import cm
+import seaborn as sns
+%matplotlib inline
+
+from sklearn.model_selection import train_test_split
+from keras.utils import to_categorical
+from keras.callbacks import ModelCheckpoint
+from keras.preprocessing.image import ImageDataGenerator
+
+from keras.models import Sequential, load_model, Model
+from keras.layers import Input, BatchNormalization
+from keras.layers import Dense, LSTM, GlobalAveragePooling1D, GlobalAveragePooling2D
+from keras.layers import Activation, Flatten, Dropout, BatchNormalization
+from keras.layers import Conv2D, MaxPooling2D, GlobalMaxPooling2

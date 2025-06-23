@@ -1,0 +1,32 @@
+```python
+    # Upgrading to 0.11.0
+    # This is a placeholder for the actual upgrade process.
+    # Please replace this with the actual upgrade steps.
+
+    # Importing Required Libraries
+    import matplotlib.pyplot as plt
+    import cv2
+    import numpy as np
+
+    # Importing the image & converting it to the GrayScale!
+    image = cv2.imread("Me With Medal.png", 0)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    plt.figure(figsize = (35, 15))
+    plt.imshow(image);
+
+    # Upgrading to 0.11.0
+    # This is a placeholder for the actual upgrade process.
+    # Please replace this with the actual upgrade steps.
+
+    # Importing Required Libraries
+    import nannyml as nml
+    from IPython.display import display
+
+    reference_df, analysis_df, analysis_targets_df = nml.load_synthetic_car_loan_dataset()
+
+    analysis_targets_df.head(3)
+    print(analysis_targets_df.head(3).to_markdown(tablefmt="grid"))
+    analysis_with_targets = analysis_df.merge(analysis_targets_df, left_index=True, right_index=True)
+
+    display(analysis_with_targets.head(3))
+    ```

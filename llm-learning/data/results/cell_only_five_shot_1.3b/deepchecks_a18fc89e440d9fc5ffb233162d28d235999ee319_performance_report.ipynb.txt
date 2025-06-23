@@ -1,0 +1,28 @@
+```python
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    from deepchecks.checks.performance import PerformanceReport
+
+    iris = load_iris(as_frame=True)
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    ds = Dataset(frame, features=iris.feature_names, label_name='target')
+    clf.fit(X, Y)
+    check = PerformanceReport()
+    check.run(ds, clf)
+
+    from sklearn.datasets import load_diabetes
+
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    train = Dataset(diabetes, label_name='target')
+    clf = AdaBoostRegressor(random_state=0)
+    clf.fit(train.features_columns, train.label_col)
+    check = PerformanceReport()
+    check.run(train, clf)
+    ```
+
+    The code above merges the performance report, class imbalance, and train-test overfitting into one check. The performance report checks the model's performance on the iris dataset, while the class imbalance check checks for class imbalance in the diabetes dataset. The train-test overfitting check is performed on the diabetes dataset.

@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error
+
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Split your data
+    train, test = train_test_split(df, test_size=0.2)
+
+    # Train your model
+    model = RandomForestRegressor()
+    model.fit(train.drop('target', axis=1), train['target'])
+
+    # Test your model
+    predictions = model.predict(test.drop('target', axis=1))
+    mse = mean_squared_error(test['target'], predictions)
+
+    print(f'Mean Squared Error: {mse}')
+    ```
+    '''
+    ]

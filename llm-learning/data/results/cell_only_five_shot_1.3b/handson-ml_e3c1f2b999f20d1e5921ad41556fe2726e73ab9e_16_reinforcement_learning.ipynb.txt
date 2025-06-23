@@ -1,0 +1,21 @@
+```python
+    def run_bipedal_walker(model_path=None, n_max_steps = 1000):
+    env = gym.make("BipedalWalker-v3")
+    frames = []
+    with tf.Session() as sess:
+        if model_path is None:
+            init.run()
+        else:
+            saver.restore(sess, model_path)
+        obs = env.reset()
+        for step in range(n_max_steps):
+            img = env.render(mode="rgb_array")
+            frames.append(img)
+            action_index_val = action_index.eval(feed_dict={X: obs.reshape(1, n_inputs)})
+            action = possible_actions[action_index_val]
+            obs, reward, done, info = env.step(action[0])
+            if done:
+                break
+    env.close()
+    return frames
+    ```

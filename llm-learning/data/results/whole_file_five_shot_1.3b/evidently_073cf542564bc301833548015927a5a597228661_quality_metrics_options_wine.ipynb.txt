@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Removed examples with an old api"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+import numpy as np
+from sklearn.datasets import fetch_openml
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ClassificationPerformanceTab
+
+wine_column_mapping = ColumnMapping()
+
+wine_column_mapping.target = 'target'
+wine_column_mapping.target = 'target.quality'
+wine_column_mapping.target = 'quality'
+wine_column_mapping.target = 'quality'
+
+model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab()])
+model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                      merged_test_data.sample(1000, random_state=0),
+                                      column_mapping=wine_column_mapping)
+model_performance_dashboard.show()
+<\Cell_2>
+<Cell_3>
+model_performance_dashboard.show()
+<\Cell_3>
+<Cell_4>
+model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                      merged_test_data.sample(1000, random_state=0),
+                                      column_mapping=wine_column_mapping)
+model_performance_dashboard.show()
+<\Cell_4>
+<Cell_5>
+model_performance_dashboard.show()
+<\Cell_5>
+<Cell_6>
+model_performance_dashboard.show()
+<\Cell_6>
+<Cell_7>
+model_performance_dashboard.show()
+<\Cell_7>
+<Cell_8>
+model_performance_dashboard.show()
+<\Cell_8>
+<Cell_9>
+model_performance_dashboard

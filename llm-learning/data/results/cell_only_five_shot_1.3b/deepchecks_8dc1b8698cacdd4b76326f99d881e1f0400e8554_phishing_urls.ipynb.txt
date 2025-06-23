@@ -1,0 +1,17 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Loading the dataset
+    df = pd.read_csv('phishing_urls.csv')
+
+    # Checking for missing values
+    print(df.isnull().sum())
+
+    # Filling missing values
+    df.fillna(df.mean(), inplace=True)
+
+    # Saving the updated dataset
+    df.to_csv('phishing_urls.csv', index=False)
+    ```

@@ -1,0 +1,8 @@
+```
+    #add files via upload
+    from google.cloud import storage
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket('my-bucket')
+    blob = bucket.blob('source/destination')
+    blob.upload_from_filename('/local/path/to/file')
+    ```

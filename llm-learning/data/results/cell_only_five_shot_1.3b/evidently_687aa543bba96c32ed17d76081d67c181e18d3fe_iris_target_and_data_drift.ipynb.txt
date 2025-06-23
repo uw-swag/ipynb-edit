@@ -1,0 +1,20 @@
+```python
+    # Refactoring the column_mapping
+    def refactor_column_mapping(column_mapping):
+        if column_mapping is None:
+            return None
+
+        refactored_column_mapping = {}
+        for old_column, new_column in column_mapping.items():
+            if isinstance(old_column, str):
+                old_column = old_column.split('.')
+            if isinstance(new_column, str):
+                new_column = new_column.split('.')
+            refactored_column_mapping[tuple(old_column)] = new_column
+        return refactored_column_mapping
+
+    iris_data_and_target_drift_dashboard.calculate(iris_frame[:75], iris_frame[75:], column_mapping=refactor_column_mapping(iris_data_and_target_drift_dashboard.column_mapping))
+    iris_target_and_data_drift_profile.calculate(iris_frame[:75], iris_frame[75:], column_mapping=refactor_column_mapping(iris_target_and_data_drift_profile.column_mapping))
+    ```
+
+    This refactoring code will split the old column names into their component parts and use these as keys in the new column mapping. This is useful when the old column names are in a hierarchical format.

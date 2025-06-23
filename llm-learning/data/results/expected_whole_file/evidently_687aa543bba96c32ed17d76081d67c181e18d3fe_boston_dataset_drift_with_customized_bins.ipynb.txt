@@ -1,0 +1,80 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets
+
+from plotly.graph_objects import histogram
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection
+<\Cell_0>
+<Cell_1>
+boston = datasets.load_boston()
+<\Cell_1>
+<Cell_2>
+boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)
+<\Cell_2>
+<Cell_3>
+boston_frame['target'] = boston.target
+<\Cell_3>
+<Cell_4>
+boston_frame.head()
+<\Cell_4>
+<Cell_5>
+column_mapping = {}
+
+column_mapping['target'] = 'target'
+column_mapping['prediction'] = None
+column_mapping['datetime'] = None
+
+column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping['categorical_features'] = ['CHAS', 'RAD']
+<\Cell_5>
+<Cell_6>
+#set parameters to detect dataset drift: 
+# - confidence level for the individual features
+# - share of the drifted features to detect dataset drift
+column_mapping['drift_conf_level'] = 0.99
+column_mapping['drift_features_share'] = 0.5
+
+#set the custom bins to plot in the datadrift table 
+column_mapping['xbins'] = {
+    'CRIM': dict(start=-10., end=100.,size=5.), # OPTION 1
+    'NOX': histogram.XBins(start=-0.5, end=1.5, size=.05) # OPTION 2 (NB: Xbins is not JSON serializable)
+}
+
+#set the custom number of bins to plot in the datadrift table 
+column_mapping['nbinsx'] = {'TAX': 3, 'PTRATIO': 5}
+<\Cell_6>
+<Cell_7>
+boston_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+boston_data_and_target_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], 
+                                                   column_mapping = column_mapping)
+<\Cell_7>
+<Cell_8>
+boston_data_and_target_drift_dashboard.show()
+<\Cell_8>
+<Cell_9>
+#boston_data_and_target_drift_dashboard.save('boston_datadrift_with_customized_bins.html')
+<\Cell_9>
+<Cell_10>
+#for profile all the column_mapping parameters should be JSON serializable
+column_mapping['xbins'] = {
+    'CRIM': dict(start=-10., end=100.,size=5.), # OPTION 1
+    'NOX': histogram.XBins(start=-0.5, end=1.5, size=.05).to_plotly_json() #transform'XBins' to JSON serializable fromat
+}
+<\Cell_10>
+<Cell_11>
+boston_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+<\Cell_11>
+<Cell_12>
+boston_target_and_data_drift_profile.calculate(boston_frame[:200], boston_frame[200:], 
+                                               column_mapping = column_mapping) 
+<\Cell_12>
+<Cell_13>
+boston_target_and_data_drift_profile.json()
+<\Cell_13>

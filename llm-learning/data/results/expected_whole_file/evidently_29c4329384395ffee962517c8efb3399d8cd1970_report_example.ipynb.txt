@@ -1,0 +1,149 @@
+<Cell_0>
+from evidently import ColumnMapping
+from evidently.report import Report
+<\Cell_0>
+<Cell_1>
+import numpy as np
+import pandas as pd
+
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+<\Cell_1>
+<Cell_2>
+from evidently.metrics import DataDriftMetrics
+
+column_mapping = ColumnMapping(target='target', prediction='preds')
+report = Report(metrics=[DataDriftMetrics()])
+
+report.run(reference_data=ref, current_data=curr, column_mapping=column_mapping)
+report
+<\Cell_2>
+<Cell_3>
+test_classification_dataset_curr = pd.DataFrame(
+    {
+        "target": ["1", "2", "2", "1"],
+        "2": [0.5, 0.2, 0.1, 0.9],
+        "1": [0.5, 0.3, 0.7, 0.1],
+    }
+)
+test_classification_dataset_ref = pd.DataFrame(
+    {
+        "target": ["1", "2", "2", "1"],
+        "2": [0.5, 0.2, 0.1, 0.9],
+        "1": [0.5, 0.3, 0.7, 0.1],
+    }
+)
+column_mapping=ColumnMapping(prediction=["1", "2"], pos_label="2")
+<\Cell_3>
+<Cell_4>
+from evidently.metrics import ClassificationPerformanceMetrics
+from evidently.metrics import ClassificationPerformanceMetricsTopK
+from evidently.metrics import ClassificationPerformanceMetricsThreshold
+
+
+report = Report(metrics=[
+    ClassificationPerformanceMetricsTopK(k=2),
+    ClassificationPerformanceMetricsThreshold(classification_threshold=0.5),
+])
+report.run(
+    current_data=test_classification_dataset_curr,
+    reference_data=test_classification_dataset_ref,
+    column_mapping=column_mapping
+)
+report
+<\Cell_4>
+<Cell_5>
+current_data = pd.DataFrame(
+    {
+        "target": [1, 0, 1, 1, 0, 0, 0, 0, 1, 1],
+        "prediction": [0, 1, 0, 1, 0, 0, 1, 0, 0, 1],
+    }
+)
+reference_data = pd.DataFrame(
+    {
+        "target": [1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+        "prediction": [1, 1, 0, 1, 0, 0, 1, 0, 0, 1],
+    }
+)
+<\Cell_5>
+<Cell_6>
+report = Report(metrics=[
+    ClassificationPerformanceMetrics(),
+])
+report.run(
+    current_data=current_data,
+    reference_data=reference_data,
+    column_mapping=ColumnMapping()
+)
+report
+<\Cell_6>
+<Cell_7>
+from evidently.metrics import DataIntegrityMetrics
+from evidently.metrics import DataIntegrityValueByRegexpMetrics
+from evidently.metrics import DataIntegrityNullValuesMetrics
+
+report = Report(metrics=[
+    DataIntegrityMetrics(),
+    DataIntegrityValueByRegexpMetrics(column_name="target", reg_exp=".*0+.*"),
+    DataIntegrityNullValuesMetrics(null_values=[None, "", 0], replace=True),
+])
+report.run(
+    current_data=current_data,
+    reference_data=reference_data,
+    column_mapping=ColumnMapping()
+)
+report
+<\Cell_7>
+<Cell_8>
+from evidently.metrics import DataQualityMetrics
+from evidently.metrics import DataQualityStabilityMetrics
+from evidently.metrics import DataQualityValueListMetrics
+from evidently.metrics import DataQualityValueRangeMetrics
+from evidently.metrics import DataQualityValueQuantileMetrics
+from evidently.metrics import DataQualityCorrelationMetrics
+
+
+report = Report(metrics=[
+    DataQualityMetrics(),
+    DataQualityStabilityMetrics(),
+    DataQualityValueListMetrics(column="target"),
+    DataQualityValueRangeMetrics(column="target", left=0, right=1),
+    DataQualityValueQuantileMetrics(column="target", quantile=0.5),
+    DataQualityCorrelationMetrics(),
+])
+report.run(
+    current_data=current_data,
+    reference_data=reference_data,
+    column_mapping=ColumnMapping()
+)
+report
+<\Cell_8>
+<Cell_9>
+from evidently.metrics import RegressionPerformanceMetrics
+
+report = Report(metrics=[
+    RegressionPerformanceMetrics(),
+])
+report.run(
+    current_data=current_data,
+    reference_data=reference_data,
+    column_mapping=ColumnMapping()
+)
+report
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>

@@ -1,0 +1,38 @@
+
+    # Update the code to use the latest version of numpy and matplotlib
+    # np.random provides different options to create random data
+    # create a 4x4 matrix with random, normally distributed values
+    # you might want to set a random seed first to get reproducible results:
+    # --> execute the cell a few times to see you always get a different matrix
+    # --> then uncomment the line below and excecute it again a few times
+    # np.random.seed(13)
+    R = np.random.randn(4, 4)
+    R
+    # create randomly distributed data
+    x = np.random.randn(100)
+    y = np.random.randn(100)
+    # create a scatter plot of x vs y
+    plt.figure()
+    # by passing for c an array of the same length as x and y,
+    # each dot can have its individual color
+    plt.scatter(x, y, c=x)
+    plt.xlabel("X axis")
+    plt.ylabel("Y axis")
+    plt.colorbar()  # creates a colorbar (more appropriate than a legend here)
+    plt.title("Title of the figure")
+    # create a dataframe from a matrix M with 100 rows and 3 columns
+    M = np.random.random((100, 3))
+    df = pd.DataFrame(M)
+    df
+    # convert dataframe to numpy array
+    df.to_numpy()
+    # create a more interesting dataframe from a dictionary (keys are columns ("features"))
+    df = pd.DataFrame(
+       {
+          'sex': ['m', 'w', 'm', 'w'],
+          'height': [1.80, 1.77, 1.89, 1.65],
+          'weight': [65.3, 73.4, 80.0, 77.0],
+          'subject_id': ['subject1', 'subject8', 'subject12', 'subject23']
+       }
+    )
+    # look at the dataframe

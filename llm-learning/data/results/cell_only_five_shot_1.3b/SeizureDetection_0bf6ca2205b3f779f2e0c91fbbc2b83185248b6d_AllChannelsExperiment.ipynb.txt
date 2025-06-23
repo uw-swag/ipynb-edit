@@ -1,0 +1,33 @@
+```python
+    from ipynb.fs.full.ImportExportData import exportDataframeToCSV,importCsvToDataframe
+    from ipynb.fs.full.EdfManipulation import read_and_store_data
+    from ipynb.fs.full.ClassificationPerformanceIndexes import classificationPerformanceIndexes
+    from ipynb.fs.full.FeatureClassificationMethods import *
+    from ipynb.fs.full.FeatureComputation import averageChannels, featureExtractionAverage
+    from ipynb.fs.full.FeatureNormalization import featureNormalization
+    from ipynb.fs.full.FeatureSelection import dimentionalityReduction
+    from ipynb.fs.full.DatasetBalancing import oversamplingSMOTE
+    from ipynb.fs.full.SplitDataset import createTrainingAndTestDatasets
+
+    def AllChannelsFeatures(df, readEdf, sample_rate, step, pca_tolerance, smote_neighbors, csvExportFile):
+        if readEdf:
+            ndf = df.copy()
+            print("df shape:", df.shape)
+            features = pd.DataFrame(featureExtractionFull (ndf, sample_rate, step))
+            print("features shape:", features.shape)
+            del ndf
+            features = featureNormalization(features)
+            print("normalized features shape:", features.shape)
+            reduced_features = dimentionalityReduction(features, pca_tolerance)
+            print("reduced features shape:", reduced_features.shape)
+            del features
+            smote_features = utils.shuffle(oversamplingSMOTE(reduced_features.drop('seizure', axis = 1), reduced_features['seizure'], smote_neighbors))
+            smote_features.reset_index(drop = True, inplace = True)
+            print("smote features shape:", smote_features.shape)
+            del reduced_features
+            exportDataframeToCSV(smote_features, csvExportFile)
+        else:
+            smote_features = df
+        return smote_features
+    ```
+

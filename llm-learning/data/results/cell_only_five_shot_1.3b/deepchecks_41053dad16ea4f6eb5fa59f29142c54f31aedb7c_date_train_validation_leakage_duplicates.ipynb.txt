@@ -1,0 +1,27 @@
+```python
+    from deepchecks.checks.methodology import DateTrainTestLeakageDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, date_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        if date_name:
+            dataframe[date_name] = pd.to_datetime(dataframe[date_name])
+        return Dataset(dataframe)
+
+    # Create a dataset
+    d = {'A': [1, 2, 3, 4, 5], 'B': [10, 20, 30, 40, 50], 'C': [100, 200, 300, 400, 500]}
+    dataset = dataset_from_dict(d, 'date')
+
+    # Create a suite
+    suite = Suite(datasets=[dataset])
+
+    # Add a check
+    suite.add_check(DateTrainTestLeakageDuplicates(date_column='date'))
+
+    # Run the suite
+    suite.run()
+    ```
+
+    This code will create a dataset from a dictionary, add a date column, and then add a check for duplicates in the date column. The check will then run and print the results.

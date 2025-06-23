@@ -1,0 +1,14 @@
+#column-level tests
+data_integrity_column_tests = TestSuite(tests=[
+    TestColumnNumberOfMissingValues(column_name='education'),
+    TestColumnShareOfMissingValues(column_name='education'),
+    TestColumnNumberOfDifferentMissingValues(column_name='education'),
+    TestColumnAllConstantValues(column_name='education'),
+    TestColumnAllUniqueValues(column_name='education'),
+    TestColumnRegExp(column_name='education',reg_exp='^[0..9]'),
+    TestCategoryShare(column_name='education', category='Some-college', lt=0.5),
+    TestCategoryShare(column_name='age', category=27., lt=0.5)
+])
+
+data_integrity_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_column_tests

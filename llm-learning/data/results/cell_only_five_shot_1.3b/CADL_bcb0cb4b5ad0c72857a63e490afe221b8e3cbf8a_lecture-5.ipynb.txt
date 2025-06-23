@@ -1,0 +1,10 @@
+```python
+    batch_xs = sess.run(batch)
+    # We get batch_size at a time, so 100
+    print(batch_xs.shape)
+    # The datatype is float32 since what is what we use in the tensorflow graph
+    # And the max value still has the original image range from 0-255
+    print(batch_xs.dtype, np.max(batch_xs.dtype))
+    # So to plot it, we'll need to divide by 255.
+    plt.imshow(batch_xs[0] / 255.0)
+    ```

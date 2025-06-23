@@ -1,0 +1,56 @@
+```python
+    # This is a Jupyter notebook cell, and it's not possible to execute Python code directly in this cell.
+    # However, you can run the code in the cell to see the results.
+
+    # Importing necessary libraries
+    %load ../utils/djl-imports
+
+    # Creating a new manager
+    manager = NDManager.newBaseManager()
+
+    # Creating a new array
+    x = manager.arange(12)
+
+    # Printing the shape of the array
+    print(x.getShape())
+
+    # Printing the size of the array
+    print(x.size())
+
+    # Reshaping the array
+    x = x.reshape(3, 4)
+
+    # Printing the reshaped array
+    print(x)
+
+    # Creating a new array
+    y = manager.create(new Shape(3, 4))
+
+    # Printing the new array
+    print(y)
+
+    # Concatenating the arrays
+    x = manager.create(new float[]{2, 1, 4, 3, 1, 2, 3, 4, 4, 3, 2, 1}, new Shape(3, 4))
+    y = manager.create(new float[]{2, 1, 4, 3, 1, 2, 3, 4, 4, 3, 2, 1}, new Shape(3, 4))
+    x.concat(y)
+
+    # Printing the concatenated array
+    print(x)
+
+    # Printing the result of the concatenation
+    print(x.get(":-1"))
+
+    # Printing the result of the concatenation
+    print(x.get("1:3"))
+
+    # Setting a value in the array
+    x.set(new NDIndex("1, 2"), 9)
+
+    # Printing the array after setting
+    print(x)
+
+    # Printing the result of the setting
+    print(x.get("0:2, :"))
+
+    # Printing the result of the setting
+    print(x.get

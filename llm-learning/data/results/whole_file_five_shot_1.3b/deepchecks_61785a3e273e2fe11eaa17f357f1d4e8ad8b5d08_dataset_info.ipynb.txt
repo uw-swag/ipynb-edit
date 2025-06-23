@@ -1,0 +1,25 @@
+```
+    <Cell_0>
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    <\Cell_0>
+    <Cell_1>
+    df = load_iris(return_X_y=False, as_frame=True)
+    df = pd.concat([df.data, df.target], axis=1)
+    <\Cell_1>
+    <Cell_2>
+    from mlchecks.checks.overview import DatasetInfo, dataset_info
+    from mlchecks.base import Dataset
+
+    dataset_info(Dataset(df))
+    <\Cell_2>
+    ```
+    The check `DatasetInfo` is used to check the information of the dataset. The function `dataset_info` is a function that takes a `Dataset` object as input and returns a string that describes the dataset. The string is then printed to the console.
+
+    The `Dataset` object is created by passing the dataframe `df` to the `Dataset` constructor. The `DatasetInfo` check is then applied to this `Dataset` object, printing the result to the console.
+
+    Please note that the `mlchecks` library is not installed in your environment. You can install it using pip:
+    ```
+    pip install mlchecks
+    ```
+    Also, please note that the `mlchecks` library is a part of the `mlchecks` package, not a standalone library. You need to install the `mlchecks` package separately.

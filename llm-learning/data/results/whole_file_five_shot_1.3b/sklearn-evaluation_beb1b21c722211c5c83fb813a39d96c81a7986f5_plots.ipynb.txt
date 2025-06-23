@@ -1,0 +1,28 @@
+
+    '''
+    print('Adds nb to show plot module')
+    '''
+<\Cell_97>
+<Cell_98>
+ys_3 = np.array([run_weak_classifier(x, weak_classifiers) for x in test_xis])
+c, s = prediction_stats(test_ys, ys_3)
+
+sns.heatmap(c / c.sum(), cmap='YlGnBu', annot=True, square=True, fmt='.1%',
+            xticklabels=['Predicted negative', 'Predicted positive'], 
+            yticklabels=['Negative', 'Positive'])
+plt.title(f'{weak_classifiers[1].classifier} alone)
+
+print(f'Precision {s.tp/(s.tp+s.fn):.2f}, recall {s.tp/(s.tp+s.fn):.2f}, false positive rate {s.fp/(s.fp+s.tn):.2f}, false negative rate {s.fn/(s.tp+s.fn):.2f}.')
+<\Cell_98>
+<Cell_99>
+ys_4 = np.array([run_weak_classifier(x, weak_classifiers) for x in test_xis])
+c, s = prediction_stats(test_ys, ys_4)
+
+sns.heatmap(c / c.sum(), cmap='YlGnBu', annot=True, square=True, fmt='.1%',
+            xticklabels=['Predicted negative', 'Predicted positive'], 
+            yticklabels=['Negative', 'Positive'])
+plt.title(f'{weak_classifiers[1].classifier} alone)
+
+print(f'Precision {s.tp/(s.tp+s.fn):.2f}, recall {s.tp/(s.tp+s.fn):.2f}, false positive rate {s.fp/(s.fp+s.tn):.2f}, false negative rate {s.fn/(s.tp+s.fn):.2f}.')
+<\Cell_99>
+<Cell_100

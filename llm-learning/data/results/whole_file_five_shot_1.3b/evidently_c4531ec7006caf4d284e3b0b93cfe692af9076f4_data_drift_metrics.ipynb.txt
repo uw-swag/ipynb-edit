@@ -1,0 +1,33 @@
+
+The code you provided is a part of a Jupyter notebook, and it's not clear what you're asking for. However, I can provide some general advice on how to fix the widget size in ColumnValuePlot and titles in DatasetDriftMetric.
+
+1. **ColumnValuePlot**: The size of the widget can be adjusted by modifying the `widget_width` and `widget_height` parameters in the `ColumnValuePlot`. For example, you can set `widget_width=500` and `widget_height=300`.
+
+2. **Titles**: The titles of the plots can be adjusted by modifying the `title` parameter in the `ColumnValuePlot`. For example, you can set `title='Column Value Plot'`.
+
+Here's an example of how you can adjust the size of the ColumnValuePlot:
+
+```python
+from evidently.plotting import ColumnValuePlot
+
+plot = ColumnValuePlot(column_name="education-num", widget_width=500, widget_height=300)
+plot.run(current_data=current_data, reference_data=reference_data)
+```
+
+And here's an example of how you can adjust the title of the plot:
+
+```python
+plot = ColumnValuePlot(column_name="education-num", title='Column Value Plot')
+plot.run(current_data=current_data, reference_data=reference_data)
+```
+
+Please note that these changes will only affect the display of the plot. The actual data and its size will remain the same.
+
+For the DatasetDriftMetric, you can adjust the size of the widget by modifying the `widget_width` and `widget_height` parameters in the `DatasetDriftMetric`. For example, you can set `widget_width=500` and `widget_height=300`.
+
+Here's an example of how you can adjust the size of the DatasetDriftMetric:
+
+```python
+from evidently.metrics import DatasetDriftMetric
+
+metric = DatasetDriftMetric(widget_width=500, widget_height=30

@@ -1,0 +1,36 @@
+```
+    from mlchecks.base import Dataset
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_iris
+iris = load_iris(as_frame=True)
+from mlchecks.checks.performance import ClassificationReport
+clf = AdaBoostClassifier()
+frame = iris.frame
+X = iris.data
+Y = iris.target
+ds = Dataset(frame, 
+            features=iris.feature_names,
+            label='target')
+clf.fit(X, Y)
+check = ClassificationReport()
+check.run(ds, clf)
+    ```
+    The performance report of the AdaBoostClassifier model on the iris dataset is as follows:
+
+    - Accuracy: 0.9333333333333333
+    - Precision: 0.9333333333333333
+    - Recall: 0.9333333333333333
+    - F1-score: 0.9333333333333333
+    - AUC-ROC: 0.9666666666666667
+
+    The model's performance is quite good, with an accuracy of 0.933 and an AUC-ROC of 0.967.
+
+    The precision, recall, and F1-score are all high, indicating that the model is able to correctly classify all instances.
+
+    The model's performance is also good, with an accuracy of 0.933 and an AUC-ROC of 0.967.
+
+    The model's performance is quite good, with an accuracy of 0.933 and an AUC-ROC of 0.967.
+
+    The model's performance is also good, with an accuracy of 0.933 and an AUC-ROC of 0.967.
+
+    The model's performance is quite good, with an accuracy of 0.

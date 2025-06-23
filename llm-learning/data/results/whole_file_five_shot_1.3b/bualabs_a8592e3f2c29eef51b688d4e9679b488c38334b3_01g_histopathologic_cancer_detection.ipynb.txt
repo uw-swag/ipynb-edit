@@ -1,0 +1,46 @@
+```python
+    from keras.preprocessing.image import ImageDataGenerator
+    from keras.applications import ResNet50
+    from keras.optimizers import Adam
+    from keras.callbacks import EarlyStopping
+    from keras.layers import Dense, GlobalAveragePooling2D
+    from keras.models import Model
+    from keras.optimizers import Adam
+    from keras.applications.resnet import preprocess_input, decode_predictions
+    from keras.preprocessing.image import load_img, img_to_array
+    import numpy as np
+
+    # Load the ResNet50 model
+    base_model = ResNet50(weights='imagenet', include_top=False)
+
+    # Add a global spatial average pooling layer
+    x = base_model.output
+    x = GlobalAveragePooling2D()(x)
+    # Add a fully-connected layer
+    x = Dense(1024, activation='relu')(x)
+    # and a logistic layer
+    predictions = Dense(num_classes, activation='softmax')(x)
+
+    # This is the model we will train
+    model = Model(inputs=base_model.input, outputs=predictions)
+
+    # First: train only the top layers (which were randomly initialized)
+    for layer in base_model.layers:
+        layer.trainable = False
+
+    # Compile the model (should be done after setting layers to non-trainable)
+    model.compile(optimizer=Adam(lr=1e-4), loss='categorical_crossentropy')
+
+    # Prepare the image data augmentation
+    datagen = ImageDataGenerator(
+        preprocessing_function=preprocess_input,
+        rotation_range=20,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.15,
+        zoom_range=0.2,
+        horizontal_flip=True,
+        fill_mode='nearest')
+
+    # Compute quantities for the preprocessing layer (if any)
+    datagen.fit

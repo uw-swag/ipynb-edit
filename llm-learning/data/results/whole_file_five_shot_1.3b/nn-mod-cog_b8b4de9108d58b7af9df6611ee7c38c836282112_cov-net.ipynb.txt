@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    import tensorflow as tf
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.layers import Input, Dense, Conv2D, Flatten, concatenate
+    from tensorflow.keras.optimizers import Adam
+
+    class CovNet(Model):
+        def __init__(self, num_classes=10):
+            super(CovNet, self).__init__()
+            self.conv1 = Conv2D(32, kernel_size=(3, 3), activation='relu')
+            self.conv2 = Conv2D(64, kernel_size=(3, 3), activation='relu')
+            self.flatten = Flatten()
+            self.d1 = Dense(128, activation='relu')
+            self.d2 = Dense(num_classes, activation='softmax')
+
+        def call(self, x):
+            x = self.conv1(x)
+            x = self.conv2(x)
+            x = self.flatten(x)
+            x = self.d1(x)
+            return self.d2(x)
+
+    def cov_net(input_shape=(28, 28, 1)):
+        inputs = Input(shape=input_shape)
+        model = CovNet()
+        model.compile(optimizer=Adam(), loss='categorical_crossentropy', metrics=['accuracy'])
+        return model
+    ```

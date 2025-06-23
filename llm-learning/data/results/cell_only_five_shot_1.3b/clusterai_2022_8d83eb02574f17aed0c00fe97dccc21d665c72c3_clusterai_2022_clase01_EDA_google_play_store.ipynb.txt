@@ -1,0 +1,53 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from google.cloud import bigquery
+
+    # Connect to BigQuery
+    client = bigquery.Client()
+
+    # Query to extract data
+    query = """
+    SELECT *
+    FROM `bigquery-public-data.google_play_store.app`
+    LIMIT 10000
+    """
+
+    df = client.query(query).to_dataframe()
+
+    # Checking the first few rows of the dataframe
+    print(df.head())
+
+    # Checking the general information of the dataframe
+    print(df.info())
+
+    # Checking the statistical summary of the dataframe
+    print(df.describe())
+
+    # Checking for missing values
+    print(df.isnull().sum())
+
+    # Checking the distribution of the ratings
+    sns.countplot(df['rating'])
+    plt.show()
+
+    # Checking the distribution of the reviews
+    sns.countplot(df['reviews'])
+    plt.show()
+
+    # Checking the distribution of the size
+    sns.distplot(df['size'])
+    plt.show()
+
+    # Checking the distribution of the price
+    sns.distplot(df['price'])
+    plt.show()
+
+    # Checking the correlation matrix
+    plt.figure(figsize=(12,10))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+    ```
+
+    This script will perform Exploratory Data Analysis (EDA) on the Google Play Store dataset. It will show the first few rows of the data, the general information of the data, the statistical summary of the data, the distribution of the ratings, the distribution of the reviews, the distribution of the size, the distribution of the price, and the correlation matrix.

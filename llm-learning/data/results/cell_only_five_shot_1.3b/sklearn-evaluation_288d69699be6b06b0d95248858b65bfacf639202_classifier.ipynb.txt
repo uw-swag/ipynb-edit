@@ -1,0 +1,23 @@
+```
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn import datasets
+    from sklearn_evaluation import plot, table
+    import matplotlib.pyplot as plt
+    data = datasets.make_classification(200, 10, n_informative=5,
+                                        class_sep=0.65)
+    X = data[0]
+    y = data[1]
+    # shuffle and split training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+    est = RandomForestClassifier(n_estimators=5)
+    est.fit(X_train, y_train)
+    y_pred = est.predict(X_test)
+    y_score = est.predict_proba(X_test)
+    y_true = y_test
+    plot.confusion_matrix(y_true, y_pred)
+    plot.feature_importances(est, top_n=5)
+    print(table.feature_importances(est))
+    plot.precision_recall(y_true, y_score)
+    plot.roc(y_true, y_score)
+    ```

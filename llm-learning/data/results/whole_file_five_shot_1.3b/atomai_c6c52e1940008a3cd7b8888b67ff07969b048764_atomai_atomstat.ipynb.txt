@@ -1,0 +1,14 @@
+```
+    # Update Colab notebooks metadata
+    import os
+    import datetime
+
+    # Get the current date and time
+    now = datetime.datetime.now()
+
+    # Format the date and time as a string
+    current_time = now.strftime("%Y-%m-%d %H:%M:%S")
+
+    # Update the metadata of the notebook
+    os.system(f"jupyter nbmetadata --set '{{'metadata':{{'last_execution':'{current_time}'}}}}'")
+    ```

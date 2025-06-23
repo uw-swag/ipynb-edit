@@ -1,0 +1,36 @@
+```python
+    from sagemaker.model import Model
+    from sagemaker.tuner import IntegerParameter, CategoricalParameter, ContinuousParameter, HyperparameterTuner
+
+    # Load the model
+    model = Model.load(model_data='s3://{}/model/model.tar.gz'.format(sagemaker_session.default_bucket()))
+
+    # Define the hyperparameter search space
+    hyperparameter_ranges = {'C': ContinuousParameter(0, 1),
+                             'gamma': ContinuousParameter(0, 1),
+                             'kernel': CategoricalParameter(['linear', 'rbf'])}
+
+    # Define the objective metric
+    objective_metric_name = 'validation:accuracy'
+
+    # Define the objective metric to minimize
+    minimize_metric_name = 'loss'
+
+    # Define the hyperparameter tuner
+    tuner = HyperparameterTuner(estimator,
+                                objective_metric_name,
+                                hyperparameter_ranges,
+                                minimize_metric_name,
+                                max_jobs=9,
+                                max_parallel_jobs=3)
+
+    # Start the hyperparameter tuning job
+    tuner.fit({'train': 's3://{}/train/train.csv'.format(sagemaker_session.default_bucket()),
+               'validation': 's3://{}/validation/validation.csv'.format(sagemaker_session.default_bucket())},
+              include_cls_metadata=False)
+
+    # Get the best hyperparameters
+    best_hps = tuner.get_best_result(num_trials=1)
+
+    print('Best hyperparameters found: ', best_hps)
+    ```

@@ -1,0 +1,44 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from wordcloud import WordCloud
+    from IPython.display import Image
+    from IPython.core.display import display
+    import numpy as np
+
+    # Load the data
+    df = pd.read_csv('your_data.csv')
+
+    # Waffle chart
+    plt.figure(figsize=(10,8))
+    df.groupby('Category').size().plot(kind='bar', color='skyblue')
+    plt.title('Waffle Chart')
+    plt.xlabel('Category')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # Word cloud
+    wordcloud = WordCloud(width = 800, height = 800, 
+                background_color ='white', 
+                stopwords =停用词, 
+                min_font_size = 10).generate(str(df['Your_Column']))
+    
+    plt.figure(figsize = (8, 8), facecolor = None) 
+    plt.imshow(wordcloud) 
+    plt.axis("off") 
+    plt.tight_layout(pad = 0) 
+    
+    plt.show()
+
+    # Regression plot
+    sns.lmplot(x='x_column', y='y_column', data=df)
+    plt.show()
+    ```
+    Please replace 'your_data.csv', 'Category', 'Your_Column', 'x_column', 'y_column' with your actual data and column names.
+
+    The 'stopwords' variable is a list of words that you want to remove from the word cloud. You can add more stopwords if you want.
+
+    The 'min_font_size' variable is the minimum font size for the words in the word cloud. You can adjust this value to make the words larger or smaller.
+
+    The 'x_column' and 'y_column' variables are the columns in your data that you want to use for the x and y values in the regression plot. You can replace these with

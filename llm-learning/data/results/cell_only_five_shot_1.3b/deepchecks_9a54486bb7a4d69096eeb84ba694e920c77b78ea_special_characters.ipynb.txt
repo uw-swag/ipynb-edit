@@ -1,0 +1,25 @@
+```python
+    from deepchecks.checks import SpecialCharacters
+    import pandas as pd
+
+    # Create a DataFrame
+    df = pd.DataFrame({
+        'text': ['Hello, world!', '$$', '@hello', '$$world', '$$hello$$world']
+    })
+
+    # Create a SpecialCharacters check
+    check = SpecialCharacters(column='text')
+
+    # Run the check
+    result = check.run(df)
+
+    # Print the results
+    print(result)
+    ```
+
+    ### Explanation:
+    The `SpecialCharacters` check is a function that checks for special characters in a column of a DataFrame. It's a simple check that doesn't do anything more complex than checking for special characters.
+
+    The `run` method of the `SpecialCharacters` check is used to run the check on a DataFrame. It returns a DataFrame with two columns: 'value' and 'count'. The 'value' column contains the original value from the DataFrame, and the 'count' column contains the number of special characters found.
+
+    The `print` statement at the end of the code will print the results of the check to the console.

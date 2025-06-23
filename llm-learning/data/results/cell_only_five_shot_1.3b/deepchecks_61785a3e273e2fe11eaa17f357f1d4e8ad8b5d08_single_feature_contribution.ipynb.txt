@@ -1,0 +1,20 @@
+```python
+    def single_feature_contribution(ds):
+        # This function calculates the contribution of a single feature to the model's performance
+        # It takes a pandas DataFrame as input and returns a dictionary with the feature name and its contribution
+        feature_contribution = {}
+        for col in ds.columns:
+            feature_contribution[col] = ds[col].nunique()
+        return feature_contribution
+
+    def single_feature_contribution_train_validation(train_dataset=ds, validation_dataset=ds_validation):
+        # This function calculates the contribution of a single feature in the training and validation datasets
+        # It takes two pandas DataFrames as input and returns a dictionary with the feature name and its contribution
+        feature_contribution = {}
+        for col in train_dataset.columns:
+            feature_contribution[col] = train_dataset[col].nunique()
+        for col in validation_dataset.columns:
+            if col not in feature_contribution.keys():
+                feature_contribution[col] = validation_dataset[col].nunique()
+        return feature_contribution
+    ```

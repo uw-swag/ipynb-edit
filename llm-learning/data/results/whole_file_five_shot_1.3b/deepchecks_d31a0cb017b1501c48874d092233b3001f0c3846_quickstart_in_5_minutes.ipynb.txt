@@ -1,0 +1,36 @@
+
+    The code you provided is a refactoring of a vision suite in DeepChecks, a library for building and validating machine learning pipelines. The refactoring includes:
+
+    1. Installing the DeepChecks library if it's not installed yet.
+    2. Loading a pre-trained YOLO model from the DeepChecks datasets.
+    3. Loading the COCO dataset for training and testing.
+    4. Creating a suite of checks for the DeepChecks vision library.
+    5. Formatter for detection predictions.
+    6. Running the suite on the loaded datasets.
+    7. Saving the results as an HTML file.
+    8. Running a check for label drift in the training and testing datasets.
+
+    The refactoring is done to improve the code structure and make it more modular and maintainable. It also includes comments to explain the changes made.
+
+    However, the code you provided is not complete and does not run as expected. It seems like the code is missing the actual execution of the checks and the saving of the results.
+
+    Here is a complete version of the code:
+
+    ```python
+    import sys
+    !{sys.executable} -m pip install deepchecks -U --quiet #--user
+
+    from deepchecks.vision.datasets.detection import coco
+    yolo = coco.load_model(pretrained=True)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    from deepchecks.vision import VisionData
+    from deepchecks.vision.utils import DetectionLabelFormatter
+
+    # The num_classes is explicitly declared to aid computation, but would be inferred automatically otherwise.
+    train_ds = VisionData(coco_train_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+    test_ds = VisionData(coco_test_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+
+    from deepchecks.vision.

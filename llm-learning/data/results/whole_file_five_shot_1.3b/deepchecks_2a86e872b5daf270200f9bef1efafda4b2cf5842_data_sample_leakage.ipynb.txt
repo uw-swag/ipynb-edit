@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "removed warning from data sample in notebook (#68)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from mlchecks.checks.leakage import DataSampleLeakageReport
+from mlchecks.base import Dataset
+<\Cell_0>
+<Cell_1>
+iris = load_iris(return_X_y=False, as_frame=True)
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+train_dataset = Dataset(bad_test, 
+            features=iris.feature_names,
+            label='target')
+<\Cell_1>
+<Cell_2>
+check = DataSampleLeakageReport()
+<\Cell_2>
+<Cell_3>
+check.run(validation_dataset=validation_dataset, train_dataset=train_dataset)
+<\Cell_3>
+<Cell_4>
+<\Cell_4>
+
+<\Cell_4>
+<Cell_5>
+check = DataSampleLeakageReport()
+<\Cell_5>
+<Cell_6>
+check.run(validation_dataset=validation_dataset, train_dataset=train_dataset)
+<\Cell_6>
+<Cell_7>
+check = DataSampleLeakageReport()
+<\Cell_7>
+<Cell_8>
+check.run(validation_dataset=validation_dataset, train_dataset=train_dataset)
+<\Cell_8>
+<Cell_9>
+check = DataSampleLeakageReport()
+<\Cell_9>
+<Cell_10>
+check.run(validation_dataset=validation_dataset, train_dataset=train_dataset)
+<\Cell_10>
+<Cell_

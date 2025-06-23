@@ -1,0 +1,34 @@
+```python
+    # workflow:
+
+    # we work on already trained models
+    # load both models
+    # 1 is student, 2 is teacher
+    # identify where 1 is wrong, 2 is correct
+    # 
+
+    # 1. Load both models
+    model1 = torch.load('models/model1.pt', map_location=torch.device(0))
+    model2 = torch.load('models/model2.pt', map_location=torch.device(0))
+
+    # 2. Identify where 1 is wrong, 2 is correct
+    is_correct = np.empty((2, num_batches*batch_size-(50-22)))
+
+    model1.eval()
+    model2.eval()
+
+    with torch.no_grad():
+        for dev_batch_idx, dev_batch in enumerate(dev_iter):
+            answer1 = model1(dev_batch)
+            answer2 = model2(dev_batch)
+
+            is_correct[0, cur_idx:cur_idx + dev_batch.label.shape[0]] = (torch.max(answer1, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data).cpu().numpy()
+            is_correct[1, cur_idx:cur_idx + dev_batch.label.shape[0]] = (torch.max(answer2, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data).cpu().numpy()
+
+            cur_idx += dev_batch.label.shape[0]
+            n_dev_correct += (((torch.max(answer1, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data) +
+            (torch.max(answer2, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data)) >= 1).sum()
+
+        dev_acc = 100. * n_dev_correct / len(dev)
+
+    is_correct -= is_correct.mean(axis=1)[

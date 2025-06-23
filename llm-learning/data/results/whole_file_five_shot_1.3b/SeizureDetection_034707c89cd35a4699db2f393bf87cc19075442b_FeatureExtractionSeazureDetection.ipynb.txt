@@ -1,0 +1,47 @@
+```
+    ## Code Refactoring
+
+    The code is now split into several files for better organization and readability. Here are the refactored cells:
+
+    ```python
+    ## Code Refactoring
+
+    # Import necessary libraries
+    import os
+    import pywt
+    import pathlib
+    import pyedflib
+    import numpy as np
+    import pandas as pd
+    from pyentrp import entropy
+    from tqdm.notebook import tqdm
+    from imblearn.over_sampling import SMOTE
+    from scipy import integrate, signal, stats
+    from sklearn import decomposition, model_selection, metrics, neighbors, preprocessing, svm, utils
+
+    # Function to read EEG data from edf file
+    def readEdfFile(pathToFile):
+        f = pyedflib.EdfReader(pathToFile)
+        n = f.signals_in_file
+        signal_labels = f.getSignalLabels()
+        sigbufs = np.zeros((f.getNSamples()[0],n))
+        for i in np.arange(n):
+            sigbufs[:,i] = f.readSignal(i)
+        f._close()
+        del i,f,n,signal_labels
+        return sigbufs
+
+    # Function to get seizure period from edf file
+    def get_seizure_period(file_location):
+        bytes_array = []
+        for b in pathlib.Path(file_location).read_bytes(): bytes_array.append(b)
+        return int(str(bin(bytes_array[38]))[2:]+str(bin(bytes_array[41]))[2:],2), bytes_array[49]
+
+    # Function to read and store data
+    def read_and_store_data (dataset_folder, sample_rate) :
+        path = os.path.join(os.getcwd(), dataset_folder)
+        os.chdir(dataset_folder)
+        
+        patients = [d for d in os.listdir() if os.path.isdir(d)]
+        patients.sort()
+        

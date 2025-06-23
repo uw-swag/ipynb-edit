@@ -1,0 +1,28 @@
+```python
+    from deepchecks.vision.dataset import VisionData
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    from deepchecks.vision.datasets.classification.mnist import load_dataset
+    from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter
+
+    from deepchecks.vision.datasets.detection.coco import load_dataset
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter
+
+    mnist_dataloader_train = load_dataset(train=True, batch_size=64)
+    mnist_dataloader_test = load_dataset(train=False, batch_size=1000)
+
+    train_ds = VisionData(mnist_dataloader_train, label_transformer=ClassificationLabelFormatter(lambda x: x))
+    test_ds = VisionData(mnist_dataloader_test, label_transformer=ClassificationLabelFormatter(lambda x: x))
+
+    check = TrainTestLabelDrift()
+    check.run(train_ds, test_ds)
+
+    train_dataloader = load_dataset(train=True)
+    test_dataloader = load_dataset(train=False)
+
+    train_ds = VisionData(train_dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+    test_ds = VisionData(test_dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+
+    check = TrainTestLabelDrift()
+    check.run(train_ds, test_ds)
+    ```

@@ -1,0 +1,33 @@
+```python
+    def validate_models(models, X, y):
+        """
+        Validate models with respect to each person
+        :param models: list of models to validate
+        :param X: features
+        :param y: target
+        :return: list of validation results
+        """
+        results = []
+        for model in models:
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            model.fit(X_train, y_train)
+            predictions = model.predict(X_test)
+            accuracy = accuracy_score(y_test, predictions)
+            f1_score = f1_score(y_test, predictions, average='weighted')
+            precision = precision_score(y_test, predictions, average='weighted')
+            recall = recall_score(y_test, predictions, average='weighted')
+            results.append({
+                'model': model.__class__.__name__,
+                'accuracy': accuracy,
+                'f1_score': f1_score,
+                'precision': precision,
+                'recall': recall
+            })
+        return results
+
+    # Example usage
+    models = [LogisticRegression(), RandomForestClassifier(), GradientBoostingClassifier()]
+    results = validate_models(models, X, y)
+    for result in results:
+        print(f"Model: {result['model']}, Accuracy: {result['accuracy']}, F1 Score: {result['f1_score']}, Precision: {result['precision']}, Recall: {result['recall']}")
+    ```

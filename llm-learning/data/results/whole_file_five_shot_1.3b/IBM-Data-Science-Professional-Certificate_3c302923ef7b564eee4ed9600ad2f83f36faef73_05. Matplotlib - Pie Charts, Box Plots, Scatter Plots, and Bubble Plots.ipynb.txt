@@ -1,0 +1,20 @@
+```python
+    # Save the trained model
+    model.save('model.h5')
+
+    # Load the saved model
+    from keras.models import load_model
+    model = load_model('model.h5')
+
+    # Save the feature names
+    with open('feature_names.txt', 'w') as f:
+        f.write('x0\n')
+        f.write(','.join(features.columns.tolist()))
+
+    # Save the thetas
+    with open('thetas.txt', 'w') as f:
+        f.write(','.join(map(str, thetas)))
+
+    # Save the cost history
+    costs.to_csv('costs.csv')
+    ```

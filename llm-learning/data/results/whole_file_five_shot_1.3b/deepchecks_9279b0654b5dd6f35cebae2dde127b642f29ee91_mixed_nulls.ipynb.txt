@@ -1,0 +1,15 @@
+```python
+    import deepchecks
+from deepchecks.checks import MixedNulls
+import pandas as pd
+
+# Example 1: MixedNulls check on a DataFrame with mixed types of null values
+data = {'col1': ['sog', '1', 'cat', None, None]}
+dataframe = pd.DataFrame(data=data)
+MixedNulls().run(dataframe)
+
+# Example 2: MixedNulls check on a DataFrame with mixed types of null values
+data = {'col1': ['nan', None, 'null', 'Nan', '1', 'cat'], 'col2':['', '', 'None', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+dataframe = pd.DataFrame(data=data)
+MixedNulls().run(dataframe)
+    ```

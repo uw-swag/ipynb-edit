@@ -1,0 +1,43 @@
+```python
+    # Finalized evaluation and model selection examples
+
+    # Finalized evaluation
+    # --------------------
+    # After training, you can evaluate the model on the test set.
+
+    # Evaluate the model on the test set
+    evaluations = SparkRatingEvaluation(
+        dfs_test, 
+        dfs_pred,
+        col_user=COL_USER,
+        col_item=COL_ITEM,
+        col_rating=COL_RATING,
+        col_prediction=COL_PREDICTION
+    )
+
+    # Print the RMSE score
+    print("RMSE score is {}".format(evaluations.rmse()))
+
+    # Finalized model selection
+    # -------------------------
+    # After training, you can select the best model based on the RMSE score.
+
+    # Get the best model
+    best_model = model.bestModel
+
+    # Print the best model parameters
+    print("Best model parameters: {}".format(best_model.getParams()))
+
+    # Recommend movies for the user with the best model
+    dfs_rec = best_model.recommendForAllUsers(10)
+
+    # Show the recommendations
+    dfs_rec.show(10)
+
+    # Recommend movies for a subset of users
+    users = dfs_train.select(als.getUserCol()).distinct().limit(3)
+    dfs_rec_subset = best_model.recommendForUserSubset(users, 10)
+
+    # Show the recommendations
+    dfs_rec_subset.show(10)
+    ```

@@ -1,0 +1,27 @@
+```python
+    <Cell_0>
+import numpy as np
+
+from deepchecks.vision.checks.performance import MeanAverageRecallReport
+from deepchecks.vision.datasets.detection import coco
+<\Cell_0>
+<Cell_1>
+yolo = coco.load_model(pretrained=True)
+
+test_ds = coco.load_dataset(train=False, object_type='VisionData')
+<\Cell_1>
+<Cell_2>
+check = MeanAverageRecallReport()
+result = check.run(test_ds, yolo)
+result
+<\Cell_2>
+<Cell_3>
+result.value
+<\Cell_3>
+<Cell_4>
+check = MeanAverageRecallReport().add_condition_test_average_recall_not_less_than(0.4)
+result = check.run(test_ds, yolo)
+result.show(show_additional_outputs=False)
+<\Cell_4>
+
+```

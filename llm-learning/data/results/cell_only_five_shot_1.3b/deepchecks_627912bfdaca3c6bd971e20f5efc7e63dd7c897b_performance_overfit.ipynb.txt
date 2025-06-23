@@ -1,0 +1,32 @@
+```python
+    # Refactoring notebook folder structure
+
+    # First, let's create a new directory for our notebooks
+    os.makedirs('notebooks', exist_ok=True)
+
+    # Then, we'll create a new directory for each type of notebook
+    os.makedirs('notebooks/data_science', exist_ok=True)
+    os.makedirs('notebooks/machine_learning', exist_ok=True)
+    os.makedirs('notebooks/deep_learning', exist_ok=True)
+    os.makedirs('notebooks/computer_vision', exist_ok=True)
+    os.makedirs('notebooks/ai', exist_ok=True)
+
+    # Now, we'll move our notebooks into the new directories
+    for file in os.listdir(os.path.join('..', 'notebooks')):
+        if file.endswith('.ipynb'):
+            shutil.move(os.path.join('..', 'notebooks', file),
+                        os.path.join('notebooks', file))
+
+    # Now, we'll create a new directory for our data
+    os.makedirs('data', exist_ok=True)
+
+    # Then, we'll move our data into the new directory
+    for file in os.listdir(os.path.join('..', 'data')):
+        if file.endswith('.csv') or file.endswith('.txt') or file.endswith('.xlsx'):
+            shutil.move(os.path.join('..', 'data', file),
+                        os.path.join('data', file))
+    ```
+
+    This script will create a new directory for each type of notebook, move the notebooks into these new directories, and then create a new directory for our data and move the data into this new directory.
+
+    Please note that this script assumes that your notebooks and data are in the same directory as your script. If they are in different directories, you will need to adjust the paths accordingly.

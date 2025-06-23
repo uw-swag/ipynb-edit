@@ -1,0 +1,34 @@
+```python
+    # @title Authorization Form
+    ACCOUNT_ID = "ACCOUNT_ID"  # @param {type:"string"}
+    AUTH_TOKEN = "AUTH_TOKEN"  # @param {type:"string"}
+    MATERIALS_PROJECT_API_KEY = "MATERIALS_PROJECT_API_KEY"  # @param {type:"string"}
+    ORGANIZATION_ID = "ORGANIZATION_ID"  # @param {type:"string"}
+
+    import os
+    import sys
+
+    if "COLAB_JUPYTER_IP" in os.environ:
+        os.environ.update(
+            dict(
+                ACCOUNT_ID=ACCOUNT_ID,
+                AUTH_TOKEN=AUTH_TOKEN,
+                MATERIALS_PROJECT_API_KEY=MATERIALS_PROJECT_API_KEY,
+                ORGANIZATION_ID=ORGANIZATION_ID,
+            )
+        )
+
+        !GIT_BRANCH="dev"; export GIT_BRANCH; export IS_USING_GIT_LFS=true; curl -s "https://raw.githubusercontent.com/Exabyte-io/api-examples/${GIT_BRANCH}/scripts/env.sh" | bash
+        from examples.utils.notebook import get_notebook_info
+
+        os.chdir(os.path.join("api-examples", os.path.dirname(get_notebook_info()["notebook_path"])))
+
+    if sys.platform == "emscripten":
+        apiConfig = data_from_host.get("apiConfig")
+        os.environ.update(data_from_host.get("environ", {}))
+        os.environ.update(
+            dict(
+                ACCOUNT_ID=apiConfig.get("accountId"),
+                AUTH_TOKEN=apiConfig.get("authToken"),
+                MATERIALS_PROJECT_API_KEY=MATERIALS_PROJECT_API_KEY,
+                ORGANIZATION_ID=apiConfig.get("organizationId") or

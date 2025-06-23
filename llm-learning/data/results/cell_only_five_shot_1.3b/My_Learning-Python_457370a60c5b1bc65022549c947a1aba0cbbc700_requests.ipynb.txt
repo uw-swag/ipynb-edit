@@ -1,0 +1,21 @@
+```python
+    import requests
+
+    def make_request(url):
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return None
+
+    def main():
+        url = "https://jsonplaceholder.typicode.com/posts"
+        data = make_request(url)
+        if data is not None:
+            print(data)
+        else:
+            print("Failed to fetch data")
+
+    if __name__ == "__main__":
+        main()
+    ```

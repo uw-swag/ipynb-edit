@@ -1,0 +1,57 @@
+```python
+    ## Data Wrangling - More Notes
+
+    ## Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    ## Loading the data
+    df = pd.read_csv('data.csv')
+
+    ## Checking the data
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+
+    ## Data Cleaning
+    ## Removing duplicates
+    df = df.drop_duplicates()
+
+    ## Handling missing values
+    ## Filling missing values with the mean of the column
+    df = df.fillna(df.mean())
+
+    ## Encoding categorical variables
+    ## One-hot encoding
+    df = pd.get_dummies(df)
+
+    ## Saving the cleaned data
+    df.to_csv('cleaned_data.csv', index=False)
+
+    ## Data Transformation
+    ## Standardizing the data
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    df = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    ## Data Visualization
+    ## Histogram
+    df.hist(bins=50, figsize=(20,15))
+    plt.show()
+
+    ## Data Splitting
+    ## Splitting the data into training and testing sets
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    ## Model Training
+    ## Logistic Regression
+    from sklearn.linear_model import LogisticRegression
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    ## Model Evaluation
+    ## Accuracy
+    from sklearn.metrics import accuracy_score
+    y_pred = model.predict(X_test)
+   

@@ -1,0 +1,28 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten, Conv2D, MaxPooling2D
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+    # Load the data
+    # Assuming you have a dataset in the form of .npz files
+    data = np.load('data.npz')
+    X_train, y_train, X_test, y_test = data['X_train'], data['y_train'], data['X_test'], data['y_test']
+
+    # Create a Sequential model
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), input_shape=X_train.shape[1:]))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Compile the model
+    model.compile(loss='binary_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
+
+    # Train the model
+    model.fit(X_train, y_train, batch_size=32, epochs=3)
+
+    # Evaluate the model
+    model.evaluate(X_test, y_test)
+    ```

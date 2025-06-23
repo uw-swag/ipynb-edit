@@ -1,0 +1,47 @@
+```python
+    !pip install scikit-learn==0.23.1
+    ```
+
+    '''
+    %pip install -U scikit-learn
+    '''
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Update 02. Implementing a simple linear regression model"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    np.random.seed(0)
+    X = 2 * np.random.rand(100, 1)
+    Y = 2 + 3 * X + np.random.randn(100, 1)
+
+    X_new = np.array([[0], [2]])
+
+    plt.figure(figsize=(10, 4))
+
+    plt.subplot(131)
+    plt.plot(X, Y, "b.")
+    plt.plot(X_new, 2 * X_new + 3, "r-")
+    plt.xlabel("$X_1$", fontsize=18)
+    plt.ylabel("$Y$", fontsize=18, rotation=0)
+    plt.axis([0, 2, 0, 15])
+
+    plt.subplot(132)
+    plt.plot(X, Y, "b.")
+    plt.plot(X_new, 1.5 * X_new + 2, "r-")
+    plt.xlabel("$X_1$", fontsize=18)
+    plt.axis([0, 2, 0, 15])
+
+    plt.subplot(133)
+    plt.plot(X, Y, "b.")
+    plt.plot(X_new, 1.8 * X_new + 3, "r-")
+    plt.xlabel("$X_1$", fontsize=18)
+    plt.axis([0, 2, 0, 15])
+
+    plt.tight_layout()
+    plt.show()
+    '''

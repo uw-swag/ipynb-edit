@@ -1,0 +1,47 @@
+```
+    # Adding files via upload
+    from google.cloud import storage
+
+    def upload_blob(bucket_name, source_file_name, destination_blob_name):
+        """Uploads a file to the bucket."""
+        # bucket_name = "your-bucket-name"
+        # source_file_name = "local/path/to/file"
+        # destination_blob_name = "storage-object-name"
+
+        storage_client = storage.Client()
+
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+
+        blob.upload_from_filename(source_file_name)
+
+        print(
+            "File {} uploaded to {}.".format(
+                source_file_name, destination_blob_name
+            )
+        )
+    ```
+    This function is used to upload files to a Google Cloud Storage bucket. The function takes the name of the bucket, the local path to the file, and the name of the object in the bucket as arguments. It then uploads the file to the specified object in the bucket.
+
+    Please replace the `bucket_name`, `source_file_name`, and `destination_blob_name` with your actual values.
+
+    Also, make sure you have the Google Cloud SDK installed and authenticated. You can do this by setting the `GOOGLE_APPLICATION_CREDENTIALS` environment variable to the path of your service account key JSON file.
+
+    You can install the Google Cloud SDK using the following command:
+
+    ```
+    pip install google-cloud-storage
+    ```
+
+    If you're running this code in a Jupyter notebook, you can use the following code to authenticate the SDK:
+
+    ```python
+    from google.oauth2 import service_account
+
+    creds = service_account.Credentials.from_service_account_file(
+        "path/to/keyfile.json"
+    )
+
+    scoped_creds = creds.with_scopes(["https://www.googleapis.com/auth/cloud-platform"])
+
+    storage_client = storage.Client(

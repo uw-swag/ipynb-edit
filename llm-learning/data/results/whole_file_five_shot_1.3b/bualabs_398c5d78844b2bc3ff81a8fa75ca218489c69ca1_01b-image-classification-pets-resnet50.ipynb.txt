@@ -1,0 +1,64 @@
+
+    '''
+    Commit Message: "Finished describe 02"
+    Original Code Cells:
+    '''
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import tensorflow as tf
+
+    import gym
+    import trading_env
+
+    import os
+    import agent 
+    from os import __file__
+<\Cell_0>
+<Cell_1>
+env = gym.make('trading-v0')
+env_trading = gym.make('test_trading-v0')
+<\Cell_1>
+<Cell_2>
+rewards = []
+portfolio = []
+while True:
+    action = np.array([0.5]) #Holding
+    s, r, done, _ = env_trading.step(action)
+    
+    rewards.append(r)
+    portfolio.append(env_trading.portfolio_value)
+    if done:
+        break
+print(np.array(s).shape)
+<\Cell_2>
+<Cell_3>
+plt.plot(portfolio)
+plt.show()
+<\Cell_3>
+<Cell_4>
+a = agent.StochasticPolicyGradientAgent(env_trading)
+<\Cell_4>
+<Cell_5>
+learner.load('resnet50-1')
+<\Cell_5>
+<Cell_6>
+learner.save('resnet50-2')
+<\Cell_6>
+<Cell_7>
+learner.load('resnet50-2')
+<\Cell_7>
+<Cell_8>
+learner.save('resnet50-3')
+<\Cell_8>
+<Cell_9>
+learner.load('resnet50-3')
+<\Cell_9>
+<Cell_10>
+learner.load('resnet50-3')
+<\Cell_10>
+<Cell_11>
+learner.load('resnet50-3')
+<\Cell_11>
+<Cell_12>

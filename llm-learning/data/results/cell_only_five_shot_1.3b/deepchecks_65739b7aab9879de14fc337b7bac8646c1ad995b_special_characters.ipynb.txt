@@ -1,0 +1,45 @@
+```yaml
+    name: Links Check
+
+    on:
+      push:
+        branches:
+          - master
+
+    jobs:
+      links-check:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Setup Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+
+        - name: Install Dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Run Links Check
+          run: python links_check.py
+    ```
+
+    This is a GitHub action that runs a Python script named `links_check.py` on every push to the `master` branch. The `links_check.py` script is expected to be in the same directory as the GitHub action file.
+
+    The `links_check.py` script is a simple Python script that uses the `requests` library to check the links in the README file of the repository. If any link is not valid, it will print the link and the response status code.
+
+    The `links_check.py` script is expected to be in the same directory as the GitHub action file.
+
+    The `links_check.py` script is a simple Python script that uses the `requests` library to check the links in the README file of the repository. If any link is not valid, it will print the link and the response status code.
+
+    The `links_check.py` script is expected to be in the same directory as the GitHub action file.
+
+    The `links_check.py` script is a simple Python script that uses the `requests` library to check the links in the README file of the repository. If any link is not valid, it will print the link and the response status code.
+
+    The `links_check.py` script is expected to be in the same directory as the GitHub action file.
+
+    The `links_check.py` script is a simple Python script that uses the `requests` library to check the links in the README file of the repository. If any link is not valid

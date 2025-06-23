@@ -1,0 +1,18 @@
+```python
+    import deepchecks
+    from deepchecks.checks import MixedNulls
+    import pandas as pd
+
+    data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+    dataframe = pd.DataFrame(data=data)
+
+    # Run the MixedNulls check
+    mixed_nulls_check = MixedNulls()
+    mixed_nulls_check.run(dataframe)
+    ```
+
+    The `MixedNulls` check in Deepchecks is used to detect mixed null values in the dataframe. It checks for null values in the dataframe, and if a value is null, it checks if it's a string, integer, float, or boolean. If it's a mixed type, it's considered a null value.
+
+    The `run` method of the `MixedNulls` check is used to perform the check on the dataframe. It returns a report of the check, which includes the number of null values in the dataframe, the number of mixed null values, and the percentage of null values.
+
+    The code above is an example of how to use the `MixedNulls` check in Deepchecks. It creates a dataframe with some mixed null values, and then runs the `MixedNulls` check on the dataframe. The result of the check is printed to the console.

@@ -1,0 +1,34 @@
+```python
+    import argparse
+    import os.path as osp
+    from munch import Config
+
+    # Define the argument parser
+    parser = argparse.ArgumentParser(description='Download Alpaca Datasets')
+    parser.add_argument("--config", default=osp.join(ROOT, "configs", "high_frequency_trading", "high_frequency_trading_BTC_dqn_dqn_adam_mse.py"),
+                        help="download datasets config file path")
+    parser.add_argument("--task_name", type=str, default="train")
+    parser.add_argument("--test_style", type=str, default='-1')
+    args = parser.parse_args([])
+
+    # Load the configuration file
+    cfg = Config.fromfile(args.config)
+    task_name = args.task_name
+
+    # Update the configuration file with the new values
+    cfg = replace_cfg_vals(cfg)
+
+    # Update the test style
+    cfg.data.update({'test_style': args.test_style})
+
+    # Check the task name and perform the appropriate actions
+    if task_name.startswith("train"):
+        trainer.train_and_valid()
+        trainer.test()
+        print("train end")
+    elif task_name.startswith("test"):
+        trainer.test()
+        print("test end")
+    ```
+
+    The code has been fixed to ensure that the `argparse` module is correctly handling command-line arguments, the configuration file is correctly loaded, and the test style is correctly updated.

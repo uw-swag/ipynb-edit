@@ -1,0 +1,42 @@
+```python
+    from keras.models import Sequential
+    from keras.layers import Dense, Flatten, BatchNormalization
+    from keras.initializers import glorot_uniform
+
+    # define model
+    model = Sequential()
+    model.add(BatchNormalization(input_shape=(784,)))
+    model.add(Dense(256, activation='relu', kernel_initializer=glorot_uniform(seed=1)))
+    model.add(BatchNormalization())
+    model.add(Dense(10, activation='softmax', kernel_initializer=glorot_uniform(seed=1)))
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "website build script and fix all notebooks"
+    Original Code Cells:
+    '''
+    SequentialBlock net = new SequentialBlock();
+net.add(Blocks.batchFlattenBlock(784));
+net.add(Linear.builder().setOutChannels(256).build());
+net.add(Activation::relu);
+net.add(Linear.builder().setOutChannels(10).build());
+net.setInitializer(new NormalInitializer());
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from keras.models import Sequential
+    from keras.layers import Dense, Flatten, BatchNormalization
+    from keras.initializers import glorot_uniform
+
+    # define model
+    model = Sequential()
+    model.add(BatchNormalization(input_shape=(784,)))
+    model.add(Dense(256, activation='relu', kernel_initializer=glorot_uniform(seed=1)))
+    model.add(BatchNormalization())
+    model.add(Dense(10, activation='softmax', kernel_initializer=glorot_uniform(seed=1)))
+    model.compile(optimizer='adam', loss='categorical_

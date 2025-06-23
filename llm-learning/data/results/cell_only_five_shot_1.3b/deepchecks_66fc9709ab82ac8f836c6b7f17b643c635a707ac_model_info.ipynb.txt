@@ -1,0 +1,34 @@
+```python
+    # Bug fixes for rare format detection
+    def rare_format_detection(self, data):
+        # Check if the data is a list
+        if isinstance(data, list):
+            # Check if the list is empty
+            if not data:
+                return "Empty list"
+            # Check if the list contains only one element
+            elif len(data) == 1:
+                return "Single element list"
+            else:
+                return "Multiple elements list"
+        # Check if the data is a tuple
+        elif isinstance(data, tuple):
+            return "Tuple"
+        # Check if the data is a dictionary
+        elif isinstance(data, dict):
+            return "Dictionary"
+        # Check if the data is a set
+        elif isinstance(data, set):
+            return "Set"
+        # Check if the data is a string
+        elif isinstance(data, str):
+            return "String"
+        # Check if the data is a number
+        elif isinstance(data, (int, float)):
+            return "Number"
+        # Check if the data is a boolean
+        elif isinstance(data, bool):
+            return "Boolean"
+        else:
+            return "Unknown data type"
+    ```

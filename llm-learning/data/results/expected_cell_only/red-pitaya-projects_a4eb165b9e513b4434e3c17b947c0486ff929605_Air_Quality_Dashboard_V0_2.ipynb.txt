@@ -1,0 +1,28 @@
+pms5003_data = air_data.pms5003.read()
+print(pms5003_data.pm_per_1l_air(0.3))
+print(pms5003_data.pm_per_1l_air(0.5))
+print(pms5003_data.pm_per_1l_air(1.0))
+print(pms5003_data.pm_per_1l_air(2.5))
+print(pms5003_data.pm_per_1l_air(5.0))
+print(pms5003_data.pm_per_1l_air(10.0))
+while True:
+    if air_data.bme_680.get_sensor_data():
+        output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
+            air_data.bme_680.data.temperature,
+            air_data.bme_680.data.pressure,
+            air_data.bme_680.data.humidity)
+        #Only print gas data if the heater is stable
+        if air_data.bme_680.data.heat_stable:
+            print('{0},{1} Ohms'.format(
+                output,
+                air_data.bme_680.data.gas_resistance))
+            break
+        else:
+            print(output)
+    time.sleep(1)
+air_data.analog_temp()
+air_data.analog_voc_ratio()
+air_data.analog_alcohol_ratio()
+air_data.reset_initial_values()
+air_data.voc_air_ref
+air_data.alcohol_air_ref

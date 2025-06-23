@@ -1,0 +1,18 @@
+
+    The code you provided seems to be correct for dimensionality reduction using Principal Component Analysis (PCA). The function `dimentionalityReduction` takes two arguments: `features`, which is a pandas DataFrame containing the features to be reduced, and `pca_tolerance`, which is the number of principal components to retain.
+
+    The function first selects all columns of `features` except the last one, and then fits a PCA model to the selected features. The transformed features are then stored in a new DataFrame `red_ft`. The original 'seizure' column from `features` is also copied to `red_ft`.
+
+    If you're experiencing a bug in PCA, it could be due to several reasons. Here are a few things to check:
+
+    1. Ensure that the features you're using for PCA are numerical. PCA is a technique for dimensionality reduction, and it works best with numerical data.
+
+    2. Check the values in your features DataFrame. If there are any missing values, PCA might fail.
+
+    3. Ensure that the number of principal components you're reducing to is within the acceptable range. PCA is a technique for dimensionality reduction, and it's often used to reduce the number of features in your data.
+
+    4. Check the values in your `pca_tolerance` argument. If it's not an integer, PCA might fail.
+
+    5. If you're using a different PCA implementation, make sure it's compatible with your pandas version.
+
+    If you're still having issues, please provide more information about the bug or the problem you're encountering.

@@ -1,0 +1,47 @@
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+%matplotlib inline
+trained_model_folder = '../models/trained_models'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'annot' in fname]) 
+# other models were trained badly
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+
+results = results[results.which_adversarial == "annotated"]
+results = results.drop(columns = ['model_weights']) # don't want this because too big
+
+results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]] # currently on test data - since not used for early stopping 
+results["final_cd"] = [x[-1] for x in results["explanation_divergence"]]
+results["final_test_loss"] = [x[-1] for x in results["losses_test"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+results.use_individual =results.use_individual.fillna(False)
+
+results.columns
+my_results = results[results.num_iters ==4]
+my_results[[ 'Test Accuracy', 'final_train_loss', 'final_test_loss', 'signal_strength' ]].groupby(by = ['signal_strength']).mean()
+plot = sns.scatterplot(x ='signal_strength' , y='Test Accuracy', data = my_results);
+plot.set_title("Regularizing with cd explanations");
+
+plot = sns.regplot(x ='signal_strength' , y='final_test_loss', data = my_results[my_results.signal_strength <=100] );
+
+plot.set_title("Regularizing with cd explanations");
+
+

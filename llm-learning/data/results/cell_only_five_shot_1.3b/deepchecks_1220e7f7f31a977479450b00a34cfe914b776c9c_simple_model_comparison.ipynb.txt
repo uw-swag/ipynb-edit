@@ -1,0 +1,45 @@
+```python
+    # Import necessary libraries
+    import tensorflow as tf
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
+
+    # Load the vision model
+    vision_model = tf.keras.models.load_model('vision_model.h5')
+
+    # Load the vision model's weights
+    vision_model.load_weights('vision_model_weights.h5')
+
+    # Compare the vision model with a baseline model
+    baseline_model = tf.keras.models.load_model('baseline_model.h5')
+    baseline_model.load_weights('baseline_model_weights.h5')
+
+    # Compare the vision model's performance with the baseline model
+    results = baseline_model.evaluate(test_images, test_labels)
+    print('Baseline Model Performance:', results)
+
+    results = vision_model.evaluate(test_images, test_labels)
+    print('Vision Model Performance:', results)
+
+    # Generate confusion matrix
+    y_pred = vision_model.predict(test_images)
+    y_pred = np.argmax(y_pred, axis=1)
+    cm = confusion_matrix(test_labels, y_pred)
+
+    # Plot the confusion matrix
+    sns.heatmap(cm, annot=True, fmt='d')
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predicted Label')
+    plt.ylabel('True Label')
+    plt.show()
+
+    # Generate classification report
+    y_pred = vision_model.predict(test_images)
+    y_pred = np.argmax(y_pred, axis=1)
+    report = classification_report(test_labels, y_pred)
+    print('Classification Report:', report)
+    ```
+    This script compares the performance of the vision model with a baseline model. It also generates a confusion matrix and a classification report. The confusion matrix shows the true and predicted labels, while the

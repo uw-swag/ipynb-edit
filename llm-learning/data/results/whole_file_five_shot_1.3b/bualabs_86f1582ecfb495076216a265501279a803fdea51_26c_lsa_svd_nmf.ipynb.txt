@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented Factor Analysis (FBPCA) and Non-negative Matrix Factorization (NMF) for dimensionality reduction."
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+from sklearn.decomposition import FactorAnalysis
+from sklearn.decomposition import NMF
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import matplotlib.pyplot as plt
+<\Cell_0>
+<Cell_1>
+%matplotlib inline
+np.set_printoptions(suppress=True)
+<\Cell_1>
+<Cell_2>
+categories = ['alt.atheism', 'talk.religion.misc', 'comp.graphics', 'sci.space']
+remove = ('headers', 'footers', 'quotes')
+newsgroups_train = fetch_20newsgroups(subset='train', categories=categories, remove=remove)
+newsgroups_test = fetch_20newsgroups(subset='test', categories=categories, remove=remove)
+<\Cell_2>
+<Cell_3>
+newsgroups_train.filenames.shape, newsgroups_train.target.shape
+<\Cell_3>
+<Cell_4>
+print("\n------------------\n".join(newsgroups_train.data[:7]))
+<\Cell_4>
+<Cell_5>
+np.array(newsgroups_train.target_names)[newsgroups_train.target[:7]]
+<\Cell_5>
+<Cell_6>
+newsgroups_train.target[:7]
+<\Cell_6>
+<Cell_7>
+vectorizer = CountVectorizer(stop_words='english')
+vectors = vectorizer.fit_transform(newsgroups_train.data).todense()
+vectors.shape
+<\Cell_7>
+<Cell_8>
+print(len(newsgroups_train.data), vectors.shape)
+<\Cell_8>
+<Cell_9>
+vocab = np.array(vectorizer.

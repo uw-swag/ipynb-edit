@@ -1,0 +1,18 @@
+import time
+#Analog sensors setup
+from redpitaya.overlay.mercury import mercury as FPGA
+
+import sys #Import from the folder above
+sys.path.append("..")
+
+import collect_air_data
+import bme680
+
+air_data = collect_air_data.collect_air_object("/dev/ttyPS1",bme680.BME680(i2c_addr=0x76, i2c_device=None),
+                 FPGA.analog_in(1), #ANALOG_TEMP_pin
+                 FPGA.analog_in(2), #voc_pin
+                 FPGA.analog_in(3)) #analog_alcohol_pin
+#Manage relative values of PMS here
+pms_ref_0_3 = air_data.pms_ref_0_3
+pms_ref_0_5 = air_data.pms_ref_0_5
+pms_ref_1_0 = air_data.pms_ref_1_0

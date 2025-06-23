@@ -1,0 +1,47 @@
+
+    ## Adding a solution to the bottom of a linear regression notebook
+
+    ## Step 1: Importing the necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    ## Step 2: Defining the linear regression function
+    def linear_regression(X, y):
+        # Calculate the mean of the X and y values
+        mean_x = np.mean(X)
+        mean_y = np.mean(y)
+
+        # Calculate the number of elements
+        n = len(X)
+
+        # Calculate the slope (b1) and y-intercept (b0)
+        numer = 0
+        denom = 0
+        for i in range(n):
+            numer += (X[i] - mean_x) * (y[i] - mean_y)
+            denom += (X[i] - mean_x) ** 2
+        b1 = numer / denom
+        b0 = mean_y - (b1 * mean_x)
+
+        return b0, b1
+
+    ## Step 3: Generating some random data
+    X = np.random.rand(100)
+    y = 3 * X + 2 + np.random.randn(100)
+
+    ## Step 4: Plotting the data
+    plt.scatter(X, y, color='red')
+    plt.xlabel('X')
+    plt.ylabel('y')
+    plt.title('Linear Regression')
+    plt.show()
+
+    ## Step 5: Applying the linear regression function
+    b0, b1 = linear_regression(X, y)
+    print(f'The equation of the line is y = {b0:.2f} + {b1:.2f}x')
+
+    ## Step 6: Plotting the regression line
+    plt.scatter(X, y, color='red')
+    plt.plot([min(X), max(X)], [b0, b0 + b1 * max(X)], color='blue')
+    plt.xlabel('X')
+   

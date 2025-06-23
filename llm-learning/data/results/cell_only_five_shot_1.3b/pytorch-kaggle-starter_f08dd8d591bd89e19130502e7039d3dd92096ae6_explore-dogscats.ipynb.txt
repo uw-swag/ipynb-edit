@@ -1,0 +1,19 @@
+```python
+    def make_metadata(df, metadata_path):
+        """
+        This function takes a pandas dataframe and a metadata path,
+        and returns a new dataframe with metadata.
+        """
+        # Load the metadata
+        metadata_df = pd.read_csv(metadata_path)
+
+        # Merge the metadata with the original dataframe
+        df = pd.merge(df, metadata_df, on='image_id', how='left')
+
+        # Fill missing values with 0
+        df = df.fillna(0)
+
+        return df
+
+    metadata_df = make_metadata(df, cfg.METADATA_PATH)
+    ```

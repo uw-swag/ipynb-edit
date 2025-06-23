@@ -1,0 +1,22 @@
+```
+    def elu(z, alpha=1):
+        return np.where(z<0, alpha*(np.exp(z)-1), z)
+
+    plt.plot(z, elu(z), "b-", linewidth=2)
+    plt.plot([-5, 5], [0, 0], 'k-')
+    plt.plot([-5, 5], [-1, -1], 'k--')
+    plt.plot([0, 0], [-2.2, 3.2], 'k-')
+    plt.grid(True)
+    props = dict(facecolor='black', shrink=0.1)
+    plt.title(r"ELU activation function ($\alpha=1$)", fontsize=14)
+    plt.axis([-5, 5, -2.2, 3.2])
+
+    save_fig("elu_plot")
+    plt.show()
+    ```
+
+    The code snippet provided is a simple plot of the ELU activation function. The function is defined as `elu(z, alpha=1)`, where `z` is the input and `alpha` is a parameter that controls the shape of the function. The function is plotted on the same axes as the original plot, with a black grid. The title and axis labels are also included.
+
+    The repetitive outputs in the original code are due to the use of the `np.where` function, which returns a tensor of the same shape as the condition tensor, but with the values replaced according to the condition. In this case, the `np.where` function is used to replace negative values in `z` with `alpha*(np.exp(z)-1)`, and keep positive values unchanged.
+
+    The repetitive outputs in the code snippet are due to the use of the `np.where` function, which returns a tensor of the same shape as the condition tensor, but with the values replaced according to the condition. In this case, the `np.where` function is used to replace negative values in `z` with `alpha*(np.exp(z)-1)`, and keep positive values unchanged.

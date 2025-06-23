@@ -1,0 +1,38 @@
+
+
+
+save_path = "../results_for_export"
+trained_model_folder = '../models/MNIST'
+fnames = [oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]
+# other models were trained badly
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+results['final_acc'] = [max(x) for x in results['accs_test']] 
+results = results[results.method!= "ExpectedGrad"]
+kwargs = {'num_workers': 1, 'pin_memory': True}
+test_x_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "test_x.npy")))
+test_y_color= torch.Tensor(np.load(oj("../data/ColorMNIST", "test_y.npy"))).type(torch.int64)
+test_dataset_color = utils.TensorDataset(test_x_tensor,test_y_color) # create your datset
+
+test_loader_color = utils.DataLoader(test_dataset_color,
+        batch_size=256, shuffle=True, **kwargs) # create your dataloader
+
+test_net = Net()
+test_net = test_net.to(0)
+pd.set_option('precision', 2)
+plot_results = results[['method', 'regularizer_rate',"final_acc"]].groupby(by = ['method','regularizer_rate']).mean()
+results = results[results.regularizer_rate < 5000]
+sns.set()
+sns.reset_defaults()
+plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results[results.method == 'CDEP'],label="CDEP",ci=None ,legend = "brief"  );
+plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results[results.method == 'Grad'], label="RRR" ,ci=None );
+plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results[results.method == 'EGradients'], label="Expected Gradients",ci=None  );
+plot.set(xscale="log")
+#plot.set(yscale="log")
+plot.set_xlabel("Regularization strength")
+plot.set_ylabel("Test Accuracy")
+plot.set_title("");
+fig  = plot.get_figure()
+fig.tight_layout()
+fig.savefig(oj(save_path,"ColorMNIST_results"))

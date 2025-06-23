@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+
+    np.random.seed(42)
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.05 + df['x2']
+    df['x5'] = df['x2'] + 0.01 * df['x1']
+    df['label'] = df['x5'].apply(lambda x: 0 if x < 0 else 1)
+
+    dataset = Dataset(df, label_name='label', index_name='x1', datetime_name='x2')
+
+    IdentifierLeakage().run(dataset)
+
+    my_check = IdentifierLeakage(ppscore_params={'sample': 10})
+    my_check.run(dataset=dataset)
+    ```
+
+    The code above is a simple example of how to use the `IdentifierLeakage` check in Deepchecks. This check is used to detect if the identifier leakage is present in the dataset. The `run` method of the `IdentifierLeakage` check is used to execute the check on the given dataset.
+
+    The `ppscore_params` parameter is a dictionary that contains the parameters for the `ppscore` method. The `ppscore` method is used to calculate the PPScore, a measure of the leakage in the identifier. The `run` method of the `IdentifierLeakage` check will return a DataFrame with the results of the check.
+
+    The `IdentifierLeakage` check is a part of the `deepchecks.checks.methodology` module. It is used to detect if the identifier leakage is present in the dataset.
+
+    The `deepchecks.base.Dataset` class is used to create a dataset from a pandas DataFrame. The `Dataset` class has several methods that can be used to create a dataset from a pandas Data

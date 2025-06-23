@@ -1,0 +1,13 @@
+```
+    weights = torch.tensor([[1.8]*1 + [0.6]]).cuda()
+    loss_func = CrossEntropyLossFlat(weight=weights)
+    ```
+    The above code is a PyTorch implementation of a Cross Entropy Loss function with a custom weight. The weight is a tensor of shape (2,), where the first element is 1.8 and the second element is 0.6. This weight is then used to weight the loss of the model.
+
+    The loss function is then defined as `CrossEntropyLossFlat`, which is a PyTorch loss function that computes the cross entropy loss between the model's output and the target. The `weight` parameter is used to assign different weights to different classes.
+
+    If you want to use a different loss function, you can replace `CrossEntropyLossFlat` with the name of the loss function you want to use. For example, if you want to use focal loss, you can replace `CrossEntropyLossFlat` with `FocalLoss`.
+
+    Also, if you want to use a different reduction method, you can replace `'mean'` with the name of the method you want to use. For example, if you want to use the sum of the loss over the classes, you can replace `'mean'` with `'sum'`.
+
+    Finally, remember to replace the `weights` tensor with your actual weight values.

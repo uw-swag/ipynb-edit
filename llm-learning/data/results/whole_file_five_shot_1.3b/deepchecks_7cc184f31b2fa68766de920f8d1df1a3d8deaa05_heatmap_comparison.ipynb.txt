@@ -1,0 +1,33 @@
+```python
+    from deepchecks.vision.dataset import VisionData
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    from deepchecks.vision.datasets.classification.mnist import load_dataset
+
+    mnist_data_train = load_dataset(train=True, batch_size=64, object_type='VisionData')
+    mnist_data_test = load_dataset(train=False, batch_size=64, object_type='VisionData')
+
+    from deepchecks.vision.checks.distribution import HeatmapComparison
+
+    check = HeatmapComparison()
+    check.run(mnist_data_train, mnist_data_test)
+
+    from deepchecks.vision.datasets.detection.coco import load_dataset, yolo_label_formatter, yolo_image_formatter, LABEL_MAP
+
+    train_dataloader = load_dataset(train=True)
+    test_dataloader = load_dataset(train=False)
+
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter
+    from deepchecks.vision.utils.image_formatters import ImageFormatter
+
+    train_ds = VisionData(train_dataloader, label_formatter=DetectionLabelFormatter(yolo_label_formatter),
+                          image_formatter=ImageFormatter(yolo_image_formatter), label_map=LABEL_MAP)
+    test_ds = VisionData(test_dataloader, label_formatter=DetectionLabelFormatter(yolo_label_formatter),
+                         image_formatter=ImageFormatter(yolo_image_formatter), label_map=LABEL_MAP)
+
+    check = HeatmapComparison()
+    check.run(train_ds, test_ds)
+
+    check = HeatmapComparison(classes_to_display=['person'])
+    check.run(train_ds, test_ds)
+    ```

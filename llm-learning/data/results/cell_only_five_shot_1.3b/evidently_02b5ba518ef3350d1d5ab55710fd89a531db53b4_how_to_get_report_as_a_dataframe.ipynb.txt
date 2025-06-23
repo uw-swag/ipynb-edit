@@ -1,0 +1,21 @@
+```python
+    # Remove the nbextension
+    try:
+        import nbformat as nbf
+        with open("notebook.ipynb", "r") as f:
+            nb = nbf.read(f, as_version=4)
+
+        # Find the cell with the nbextension
+        for cell in nb.cells:
+            if cell['cell_type'] == 'code' and 'nbextension' in cell['metadata']:
+                del cell['metadata']['nbextension']
+
+        with open("notebook.ipynb", "w") as f:
+            nbf.write(nb, f)
+
+    except FileNotFoundError:
+        print("Notebook file not found.")
+
+    except Exception as e:
+        print("An error occurred: ", e)
+    ```

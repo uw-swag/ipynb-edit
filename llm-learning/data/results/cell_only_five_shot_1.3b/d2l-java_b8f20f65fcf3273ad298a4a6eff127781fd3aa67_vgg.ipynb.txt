@@ -1,0 +1,31 @@
+```
+    int batchSize = 128;
+    int numEpochs = 10;
+    double[] trainLoss;
+    double[] testAccuracy;
+    double[] epochCount;
+    double[] trainAccuracy;
+
+    epochCount = new double[numEpochs];
+
+    for (int i = 0; i < epochCount.length; i++) {
+        epochCount[i] = i+1;
+    }
+
+    FashionMnist trainIter = FashionMnist.builder()
+                        .optPipeline(new Pipeline().add(new Resize(224)).add(new ToTensor()))
+                        .optUsage(Dataset.Usage.TRAIN)
+                        .setSampling(batchSize, true)
+                        .build();
+
+    FashionMnist testIter = FashionMnist.builder()
+                        .optPipeline(new Pipeline().add(new Resize(224)).add(new ToTensor()))
+                        .optUsage(Dataset.Usage.TEST)
+                        .setSampling(batchSize, true)
+                        .build();
+
+    trainIter.prepare();
+    testIter.prepare();
+    ```
+
+    The code you provided seems to be correct. It creates a training and testing iterator for the FashionMnist dataset, with the batch size and number of epochs set correctly.

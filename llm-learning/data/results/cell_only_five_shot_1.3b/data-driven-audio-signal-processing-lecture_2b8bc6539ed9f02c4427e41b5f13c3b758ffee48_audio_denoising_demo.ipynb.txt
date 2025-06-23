@@ -1,0 +1,22 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import SimpleRNN, Embedding, Dense
+
+    # Define the model
+    model = Sequential()
+    model.add(Embedding(input_dim=10000, output_dim=64))
+    model.add(SimpleRNN(units=64, return_sequences=True))
+    model.add(SimpleRNN(units=64))
+    model.add(Dense(units=10, activation='softmax'))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # Train the model
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+
+    # Predict on test data
+    predictions = model.predict(x_test)
+    ```
+    This code creates a simple Recurrent Neural Network (RNN) model using TensorFlow's Keras API. The model is trained on the `x_train` and `y_train` data, and then it makes predictions on the `x_test` data.

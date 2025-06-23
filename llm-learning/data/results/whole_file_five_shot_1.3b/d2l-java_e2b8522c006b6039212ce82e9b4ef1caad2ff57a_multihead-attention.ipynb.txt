@@ -1,0 +1,40 @@
+```python
+    import torch
+    import torch.nn as nn
+
+    class MultiHeadAttention(nn.Module):
+        def __init__(self, embed_dim, num_heads):
+            super(MultiHeadAttention, self).__init__()
+            self.embed_dim = embed_dim
+            self.num_heads = num_heads
+            self.head_dim = embed_dim // num_heads
+            self.linear_q = nn.Linear(embed_dim, embed_dim)
+            self.linear_k = nn.Linear(embed_dim, embed_dim)
+            self.linear_v = nn.Linear(embed_dim, embed_dim)
+            self.linear_out = nn.Linear(embed_dim, embed_dim)
+
+        def split_heads(self, tensor, batch_size):
+            tensor = tensor.view(batch_size, -1, self.num_heads, self.head_dim)
+            return tensor.transpose(1, 2)
+
+        def forward(self, query, key, value, mask=None):
+            batch_size = query.shape[0]
+
+            q = self.linear_q(query)
+            k = self.linear_k(key)
+            v = self.linear_v(value)
+
+            q = self.split_heads(q, batch_size)
+            k = self.split_heads(k, batch_size)
+            v = self.split_heads(v, batch_size)
+
+            scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.head_dim)
+
+            if mask is not None:
+                scores = scores.masked_fill(mask == 0, -1e10)
+
+            attention = torch.softmax(scores, dim=-1)
+            attention = torch.nn.functional.dropout(attention, p=0.1, training=self.training)
+
+            output = torch.matmul(attention, v)
+            output = output.transpose(1, 2).contiguous().view(

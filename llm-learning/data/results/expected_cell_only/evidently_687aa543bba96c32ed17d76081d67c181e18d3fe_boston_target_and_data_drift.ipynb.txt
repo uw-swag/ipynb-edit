@@ -1,0 +1,4 @@
+boston_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()])
+boston_data_and_target_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], 
+                                                   column_mapping = column_mapping)
+boston_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection(), NumTargetDriftProfileSection()])

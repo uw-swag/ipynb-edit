@@ -1,0 +1,25 @@
+```
+    %%capture --no-stderr
+    # %pip install flaml[autogen]~=2.0.2
+    llm_config = {"config_list": config_list_gpt4}
+    human = autogen.UserProxyAgent(
+       name="Human",
+       system_message="A human admin.",
+       code_execution_config={"last_n_messages": 2, "work_dir": "groupchat"},
+    )
+    alice = autogen.AssistantAgent(
+        name="Alice",
+        llm_config=llm_config,
+    )
+    bob = autogen.AssistantAgent(
+        name="Bob",
+        system_message="Code and answer reviewer."
+        "For code, prevent code execution if unsafe or missing important details, e.g., sort order in arxiv API. Suggest changes. Otherwise, approve and return the final code to execute."
+        "For answer, carefully check the interpretation of code result and fix any errors. If the interpretation is correct, approve and return the final answer to the user.",
+        llm_config=llm_config,
+    )
+    groupchat = autogen.GroupChat(agents=[human, alice, bob], messages=[], max_round=12)
+    manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config)
+    human.initiate_chat(manager, message="Find a latest paper about gpt-4 on coursera.com")
+    # type exit to terminate the chat
+    ```

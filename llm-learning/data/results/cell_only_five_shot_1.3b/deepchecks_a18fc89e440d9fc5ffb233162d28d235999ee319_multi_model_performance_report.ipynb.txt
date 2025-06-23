@@ -1,0 +1,31 @@
+```python
+    # Load the performance report
+    performance_report = pd.read_csv('performance_report.csv')
+
+    # Check for class imbalance
+    class_imbalance = performance_report['class_imbalance'].values[0]
+
+    # Check for overfitting
+    overfitting = performance_report['overfitting'].values[0]
+
+    # Merge the performance report and class imbalance and overfitting into one dataframe
+    merged_report = pd.DataFrame({
+        'class_imbalance': [class_imbalance],
+        'overfitting': [overfitting],
+    }, index=[0])
+
+    # Append the merged report to the existing one
+    performance_report = pd.concat([performance_report, merged_report])
+
+    # Save the updated performance report
+    performance_report.to_csv('performance_report.csv', index=False)
+
+    # Now, you can use the updated performance report to train your models
+    # For example, you can use the following code to load the updated performance report
+    updated_performance_report = pd.read_csv('performance_report.csv')
+
+    # And use the updated performance report to train your models
+    clf1 = AdaBoostRegressor().fit(updated_performance_report['features_columns'], updated_performance_report['label_col'])
+    clf2 = RandomForestRegressor().fit(updated_performance_report['features_columns'], updated_performance_report['label_col'])
+    clf3 = DecisionTreeRegressor().fit(updated_performance_report['features_columns'], updated_performance_report['label_col'])
+    ```

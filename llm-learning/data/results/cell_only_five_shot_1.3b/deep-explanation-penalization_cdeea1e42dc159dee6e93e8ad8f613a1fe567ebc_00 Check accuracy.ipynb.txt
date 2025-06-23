@@ -1,0 +1,24 @@
+```python
+    # check out how two models differ
+    dev_iter.init_epoch()
+    import torch.optim as O
+    import torch.nn as nn
+    criterion = nn.CrossEntropyLoss()
+    n_dev_correct, dev_loss = 0, 0
+    cur_idx = 0
+    for dev_batch_idx, dev_batch in enumerate(dev_iter):
+
+        if dev_batch_idx >num_batches-1:
+            break
+        answer1 = nn.functional.softmax(model1(dev_batch))
+        answer2  = nn.functional.softmax(model2(dev_batch))
+        is_correct[0, cur_idx:cur_idx + dev_batch.label.shape[0]] = answer1[:,0].cpu().numpy() #(torch.max(answer1, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data).cpu().numpy()
+        is_correct[1, cur_idx:cur_idx + dev_batch.label.shape[0]] =  answer2[:,0].cpu().numpy()#(torch.max(answer2, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data).cpu().numpy()
+        correct_label[cur_idx:cur_idx + dev_batch.label.shape[0]] =dev_batch.label.cpu().numpy()
+        cur_idx+=dev_batch.label.shape[0]
+        n_dev_correct += (((torch.max(answer1, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data)+
+        (torch.max(answer2, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data))>=1).sum()
+        dev_loss = criterion(answer1, dev_batch.label)
+    dev_acc = 100. * n_dev_correct / len(dev)
+
+    print('model', i, 'acc: ', dev_acc

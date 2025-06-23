@@ -1,0 +1,56 @@
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+!pip install catboost
+from evidently.report import Report
+from evidently.metric_preset import ClassificationPreset
+from evidently.pipeline.column_mapping import ColumnMapping
+dataset = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv", sep = ',', header = 0)
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'Attrition'
+column_mapping.prediction = ['yes', 'no']
+column_mapping.pos_label = 'yes'
+
+column_mapping.numerical_features = ['Age','DailyRate', 'DistanceFromHome', 'Education',
+       'EmployeeNumber', 'EnvironmentSatisfaction', 'HourlyRate',
+       'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+       'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike',
+       'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel',
+       'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
+       'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
+       'YearsWithCurrManager']
+
+column_mapping.categorical_features = ['b_travel_Non-Travel',
+       'b_travel_Travel_Frequently', 'b_travel_Travel_Rarely',
+       'department_Human Resources', 'department_Research & Development',
+       'department_Sales', 'edu_field_Human Resources',
+       'edu_field_Research & Development', 'edu_field_Sales', 'gender_bin',
+       'job_role_Healthcare Representative', 'job_role_Human Resources',
+       'job_role_Laboratory Technician', 'job_role_Manager',
+       'job_role_Manufacturing Director', 'job_role_Research Director',
+       'job_role_Research Scientist', 'job_role_Sales Executive',
+       'job_role_Sales Representative', 'marital_Divorced', 'marital_Married',
+       'marital_Single', 'overtime_No', 'overtime_Yes']
+classification_performance_report = Report(metrics=[
+    ClassificationPreset(),
+])
+
+classification_performance_report.run(reference_data=rf_merged_train, current_data=rf_merged_test, column_mapping = column_mapping)
+
+classification_performance_report
+#classification_performance_report.save_html('ibm_hr_attrition_baseline_performance.html')
+classification_performance_report = Report(metrics=[
+    ClassificationPreset(),
+])
+
+classification_performance_report.run(reference_data=cat_merged_train, current_data=cat_merged_test, column_mapping = column_mapping)
+
+classification_performance_report
+#classification_performance_report.save_html('ibm_hr_attrition_better_model_performance.html')
+classification_performance_report.run(reference_data=rf_merged_test, current_data=cat_merged_test, column_mapping = column_mapping)
+
+classification_performance_report
+#classification_performance_report.save_html('ibm_hr_attrition_model_comparison.html')
+

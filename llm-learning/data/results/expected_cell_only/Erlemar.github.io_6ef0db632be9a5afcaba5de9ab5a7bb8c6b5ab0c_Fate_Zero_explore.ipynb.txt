@@ -1,0 +1,65 @@
+import nltk
+from nltk.tokenize import RegexpTokenizer
+from nltk.text import Text
+from nltk.util import ngrams
+from nltk.stem.wordnet import WordNetLemmatizer
+import spacy
+en_stop = spacy.en.STOPWORDS
+nlp = spacy.load('en')
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.ticker as ticker
+%matplotlib inline
+from cycler import cycler
+
+import re
+import os
+from scipy.misc import imread
+from collections import Counter, defaultdict
+#fate_folder = 'Data various/Fate_Zero/'
+files = [os.path.join(fate_folder, f) for f in sorted(os.listdir(fate_folder)) if str(f).endswith('txt')]
+files
+#I'll also need a tokenized text.
+text_tokens_lists = []
+tokenizer = RegexpTokenizer(r'\w+')
+lemma = WordNetLemmatizer()
+for j in text_lists:
+    tokens = tokenizer.tokenize(j.lower())
+    stopped_tokens = [i for i in tokens if i not in en_stop]
+    lemmatized = [lemma.lemmatize(i) for i in stopped_tokens]
+    text_tokens_lists.append(lemmatized)
+
+text_tokens = [j for i in text_tokens_lists for j in i]
+def offsets(text):
+    '''
+    Collect positions of words in text.
+    '''
+    offsets = defaultdict(list)
+    for ent in text.ents:
+        if ent.label_ == 'PERSON':
+            offsets[ent.lemma_].append(ent.start)
+            
+    return dict(offsets)
+
+occurences = offsets(nlp_text)
+
+def plot_character(labels):
+    x = [occurences[label] for label in labels] 
+    plt.figure(figsize=(16,12))
+    bins_n = 20
+    n, bins, patches = plt.hist(x, bins_n, label=labels)
+    plt.clf()
+    ax = plt.subplot(111)
+    for i, a in enumerate(n):
+        ax.plot([float(x) / (bins_n - 1) for x in range(len(a))], a, label=labels[i])
+
+    matplotlib.rcParams['axes.prop_cycle'] = cycler(color=['r', 'b', 'y', 'black', 'cyan', 'green', 'lightgray'])
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    #Divide plot into chapters. It isn't exact, but should be accurate enough.
+    labels = [0, 0, 'Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5', 'Act 6', 'Act 7', 'Act 8', 'Act 9', 'Act 10', 'Act 11',
+              'Act 12', 'Act 13', 'Act 14', 'Act 15', 'Act 16', 'Act 17', 'Act 18', 'Epilogue']
+    ax.set_xticklabels(labels)
+    tick_spacing = 0.05
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))

@@ -1,0 +1,59 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+    from dash_extensions.components.DataDrift import DataDrift
+    from dash_extensions.components.DataDrift import DataDriftConfig
+    from dash_extensions.components.Profiler import Profiler
+    from dash_extensions.components.Profiler import ProfilerConfig
+
+    app = dash.Dash(__name__)
+
+    data_drift_opts = DataDriftConfig(
+        id='data-drift-component',
+        interval=1000,
+        display_options={
+            'data_card': {
+                'title': 'Data Drift',
+                'description': 'Drift in data',
+                'detail': 'Drift in data',
+                'schema': 'drift_schema',
+                'schema_detail': 'drift_schema_detail',
+            },
+            'profile_card': {
+                'title': 'Data Profile',
+                'description': 'Profile of data',
+                'detail': 'Profile of data',
+                'schema': 'profile_schema',
+                'schema_detail': 'profile_schema_detail',
+            },
+        },
+    )
+
+    app.layout = html.Div([
+        dcc.Interval(
+            id='interval-component',
+            interval=1*1000,  # in milliseconds
+            n_intervals=0
+        ),
+        DataDrift(
+            id='data-drift-component',
+            data_drift_opts=data_drift_opts,
+        ),
+        Profiler(
+            id='profile-component',
+            profiler_config=ProfilerConfig(
+                data_card={
+                    'title': 'Data Profile',
+                    'description': 'Profile of data',
+                    'detail': 'Profile of data',
+                    'schema': 'profile_schema',
+                    'schema_detail': 'profile_schema_detail',
+                },
+            ),
+        ),
+    ])
+
+    @app.callback(
+        Output('data-drift-component', 'figure'),

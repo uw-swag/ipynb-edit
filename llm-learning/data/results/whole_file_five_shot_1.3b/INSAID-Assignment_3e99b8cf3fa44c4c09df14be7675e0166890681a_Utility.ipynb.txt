@@ -1,0 +1,30 @@
+```python
+    from sklearn.linear_model import LinearRegression
+    from sklearn.cluster import KMeans
+    from sklearn.metrics import mean_squared_error
+    from math import sqrt
+
+    class RegressionClusteringUtility:
+
+        @staticmethod
+        def linear_regression(X, y):
+            # Fit a linear regression model
+            model = LinearRegression()
+            model.fit(X, y)
+            return model
+
+        @staticmethod
+        def kmeans_clustering(X, n_clusters):
+            # Fit a KMeans clustering model
+            model = KMeans(n_clusters=n_clusters)
+            model.fit(X)
+            return model
+
+        @staticmethod
+        def evaluate_model(model, X, y):
+            # Evaluate the model and calculate the RMSE
+            y_pred = model.predict(X)
+            rmse = sqrt(mean_squared_error(y, y_pred))
+            return rmse
+    ```
+    This utility class provides methods for linear regression and KMeans clustering, as well as a method to evaluate the performance of a model. The `evaluate_model` method calculates the Root Mean Squared Error (RMSE) of the model's predictions.

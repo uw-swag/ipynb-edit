@@ -1,0 +1,39 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    class CapsuleLayer(nn.Module):
+        def __init__(self, num_capsule, in_channels, out_channels, kernel_size, stride, padding):
+            super(CapsuleLayer, self).__init__()
+            self.num_capsule = num_capsule
+            self.in_channels = in_channels
+            self.out_channels = out_channels
+            self.kernel_size = kernel_size
+            self.stride = stride
+            self.padding = padding
+
+            self.capsule_conv = nn.Conv2d(in_channels, out_channels, kernel_size, stride, padding)
+            self.capsule_batch_norm = nn.BatchNorm2d(out_channels)
+            self.capsule_relu = nn.ReLU()
+
+        def forward(self, x):
+            x = self.capsule_conv(x)
+            x = self.capsule_batch_norm(x)
+            x = self.capsule_relu(x)
+            return x
+
+    class CapsuleNet(nn.Module):
+        def __init__(self, num_capsule, num_classes, num_routing, num_iteration):
+            super(CapsuleNet, self).__init__()
+            self.num_capsule = num_capsule
+            self.num_classes = num_classes
+            self.num_routing = num_routing
+            self.num_iteration = num_iteration
+
+            self.capsule_layers = self._make_capsule_layers()
+
+        def _make_capsule_layers(self):
+            layers = []
+            for i in range(self.num_capsule):
+                layers.append(CapsuleLayer(num_capsule=self.num_capsule, in_channels=self.num_capsule, out_channels=self.num_classes, kernel

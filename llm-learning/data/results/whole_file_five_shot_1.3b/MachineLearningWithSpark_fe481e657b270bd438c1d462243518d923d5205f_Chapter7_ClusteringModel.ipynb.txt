@@ -1,0 +1,41 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.ml.clustering import KMeans
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Clustering").getOrCreate()
+
+    # Load the data
+    df = spark.read.format("libsvm").load("data.txt")
+
+    # Split the data into training and test sets
+    (trainingData, testData) = df.randomSplit([0.7, 0.3])
+
+    # Train a KMeans model
+    kmeans = KMeans().setK(2).setMaxIterations(10).setFeaturesCol("features")
+    model = kmeans.fit(trainingData)
+
+    # Make predictions
+    predictions = model.transform(testData)
+
+    # Evaluate clustering by computing WCSS
+    wcss = model.computeCost(trainingData)
+    print("Within-Cluster-Sum of Squared Errors (WCSS) with 2 clusters: {}".format(wcss))
+
+    # Show the cluster centers
+    centers = model.clusterCenters()
+    print("Cluster Centers: ")
+    for center in centers:
+        print(center)
+
+    # Show the result
+    # prediction.show()
+    ```
+
+    This code uses the KMeans algorithm to perform clustering on the data. The data is loaded from a file, split into a training set and a test set, and a KMeans model is trained on the training set. The model's predictions are then evaluated.
+
+    The WCSS (Within-Cluster-Sum of Squared Errors) is a measure of how well the data points are grouped together. The lower the WCSS, the better the model.
+
+    Finally, the cluster centers are printed out.
+
+    Please replace "data.txt" with your actual data file path.

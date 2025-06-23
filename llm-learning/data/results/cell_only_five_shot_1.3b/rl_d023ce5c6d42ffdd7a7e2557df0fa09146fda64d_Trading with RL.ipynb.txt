@@ -1,0 +1,53 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import random
+    import scipy.stats as stats
+
+    # set seeds for reproducibility
+    np.random.seed(4465)
+    random.seed(4465)
+
+    # simulate market data
+    amplitude = 5
+    forcemult = 0.00001
+
+    startindex = 100
+    stockprice = startindex + amplitude
+    trend = 0.0
+    stocktrend = 0.0
+
+    trendindex = startindex
+    trendseries = []
+    stockseries = []
+    date = []
+    for i in range(1000):
+        acceleration = trendindex - stockprice
+        stocktrend = stocktrend + acceleration * forcemult
+        stockprice *= (1+stocktrend)
+        stockseries.append(stockprice)
+        trendseries.append(trendindex)
+        date.append(i)
+        trendindex *= (1 + trend)
+
+    trendseries = pd.DataFrame({'dateindex': date, 'trend' : trendseries, 'stock': stockseries})
+
+    # plotting the data
+    plt.figure(figsize=(10,5))
+    plt.plot(trendseries['dateindex'], trendseries['trend'], label='Trend')
+    plt.plot(trendseries['dateindex'], trendseries['stock'], label='Stock')
+    plt.title('Simulated Stock Price Data As Simple Harmonic Motion (Sine Wave)')
+    plt.xlabel('Timesteps')
+    plt.ylabel('Value')
+    plt.legend()
+    plt.show()
+
+    # simulate as damped harmonic motion with random disturbances 
+    # an Ornstein-Uhlenbeck process
+    sigma = 1.
+    mu = 10.
+    tau = .05
+    dt = .0002  # Time step.
+    T = 1.  # Total time.
+    n = int(T / dt)  # Number of time steps.

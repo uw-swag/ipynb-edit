@@ -1,0 +1,28 @@
+
+The code you provided is updating the properties of a dataset in a machine learning workflow. Here's a brief explanation of what each part of the code does:
+
+1. `from deepchecks.base import Dataset`: This line imports the `Dataset` class from the `deepchecks.base` module. The `Dataset` class is used to represent a dataset in a machine learning workflow.
+
+2. `clf = AdaBoostClassifier()`: This line creates an instance of the AdaBoostClassifier.
+
+3. `frame = iris.frame`: This line assigns the iris dataset to a variable `frame`.
+
+4. `X = iris.data` and `Y = iris.target`: These lines assign the features and target variables of the iris dataset to `X` and `Y` respectively.
+
+5. `ds = Dataset(frame, features=iris.feature_names, label='target')`: This line creates a `Dataset` object `ds` from the iris dataset.
+
+6. `clf.fit(X, Y)`: This line fits the AdaBoostClassifier to the iris dataset.
+
+7. `check = PerformanceReport()`: This line creates a `PerformanceReport` object.
+
+8. `check.run(ds, clf)`: This line runs the `PerformanceReport` on the `ds` dataset.
+
+9. `check = PerformanceReport(alternative_metrics={'Recall - Micro': 'recall_micro'})`: This line creates a `PerformanceReport` object with the 'Recall - Micro' metric.
+
+10. `diabetes = load_diabetes(return_X_y=False, as_frame=True).frame`: This line loads the diabetes dataset and assigns it to a variable `diabetes`.
+
+11. `train = Dataset(diabetes, label='target')`: This line creates a `Dataset` object `train` from the diabetes dataset.
+
+12. `clf = AdaBoostRegressor(random_state=0)`: This line creates an instance of the AdaBoostRegressor.
+
+13. `cl

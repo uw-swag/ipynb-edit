@@ -1,0 +1,38 @@
+```python
+    <Cell_0>
+    import os
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import confusion_matrix, accuracy_score
+
+    # Download and Load the Dataset
+    file_path = "uploads/Iris.csv"
+    dataset = pd.read_csv(file_path, names=['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'Class'])
+    dataset.head()
+
+    # Setup X & Y Columns 
+    X = dataset.drop(columns='Class')
+    Y = dataset['Class']
+
+    # Train, Test & Split 
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
+
+    # Standardize Data + Fit Transform 
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    data1 = sc.transform(X_test)
+    X_test = sc.transform(X_test)
+
+    # Init Classifier & Predict
+    classifier = RandomForestClassifier(max_depth=2, random_state=0)
+    classifier.fit(X_train, y_train)
+    y_pred = classifier.predict(X_test)
+    cm = confusion_matrix(y_test, y_pred)
+    print(cm)
+
+    # Print Accuracy Score of the Matrix
+    print('\nAccuracy: ' + str("%.5f" % accuracy_score(y_test, y_pred)))
+    <\Cell_0>
+    ```

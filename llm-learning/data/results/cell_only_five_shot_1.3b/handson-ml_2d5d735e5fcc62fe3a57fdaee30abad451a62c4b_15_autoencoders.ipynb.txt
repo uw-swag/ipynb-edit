@@ -1,0 +1,10 @@
+```python
+    # Crop long outputs to make it easier to visualize the notebooks on github.com
+    import pandas as pd
+
+    # Assuming df is your DataFrame and 'output' is the column with long outputs
+    df['output'] = df['output'].apply(lambda x: x[:100] + '...' if len(str(x)) > 100 else x)
+
+    # Save the DataFrame to a new CSV file
+    df.to_csv('output.csv', index=False)
+    ```

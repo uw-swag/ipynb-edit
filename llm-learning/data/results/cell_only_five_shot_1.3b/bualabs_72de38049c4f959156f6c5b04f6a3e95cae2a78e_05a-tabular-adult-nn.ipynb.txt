@@ -1,0 +1,43 @@
+```python
+    # Importing packages
+    import pandas as pd
+
+    # Let's try to read from the superstore.csv
+    df_orders = pd.read_csv('data/superstore.csv')
+    df_orders
+
+    # Let's try to read from the superstore.csv
+    df_orders = pd.read_csv('data/superstore.csv', index_col='Order ID') # added the index_col='Order ID', parameter.
+    df_orders
+
+    # Let's try to read from the superstore.csv
+    pd.set_option('display.max_columns', 20)
+    pd.set_option('display.max_rows', 5)
+    df_orders
+    df_orders.head()
+    df_orders.tail(5)
+    df_orders.shape
+
+    # Let's print the columns (features) names.
+    df_orders.columns
+
+    # Let's print the columns data types.
+    df_orders.dtypes
+
+    # Let's try to rename the column.
+    df_orders.columns = ['OrderID', 'OrderDate', 'ShipDate', 'ShipMode', 'CustomerID', 'CustomerName', 'Segment' , 'Country', 'City', 'State', 'PostalCode', 'Region', 'ProductID', 'Category', 'SubCategory', 'ProductName' , 'Sales', 'Quantity', 'Discount', 'Profit']
+    df_orders
+
+    # Let's try to change the datatypes of the following column in the dataset.
+    df_orders['OrderDate'] = df_orders['OrderDate'].astype('datetime64[ns]')
+    df_orders['ShipDate'] = df_orders['ShipDate'].astype('datetime64[ns]')
+    df_orders['PostalCode'] = df_orders['PostalCode'].astype('object')
+    df_orders.dtypes
+
+    df_orders.head(3)
+
+    # len() to show numbers of rows in a dataframe
+    len(df_orders)
+
+    # Describing statistical information on the dataset
+    df_orders

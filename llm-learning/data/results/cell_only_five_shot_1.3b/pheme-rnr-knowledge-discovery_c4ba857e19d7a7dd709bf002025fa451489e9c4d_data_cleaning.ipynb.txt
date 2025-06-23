@@ -1,0 +1,7 @@
+```python
+    # Convert datetimes to Unix timestamps
+    for col in df.columns:
+        if pd.api.types.is_datetime64_any(df[col]):
+            df[col] = df[col].apply(lambda x: int(time.mktime(x.timetuple())))
+    return df
+    ```

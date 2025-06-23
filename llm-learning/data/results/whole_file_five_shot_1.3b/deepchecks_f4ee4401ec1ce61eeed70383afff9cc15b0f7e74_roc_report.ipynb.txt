@@ -1,0 +1,48 @@
+```
+    [
+    Commit Message: "Adding notebooks (#702)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.base import Dataset
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import RocReport
+import pandas as pd
+import warnings
+
+def custom_formatwarning(msg, *args, **kwargs):
+    # ignore everything except the message
+    return str(msg) + '\n'
+
+warnings.formatwarning = custom_formatwarning
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+clf = LogisticRegression(penalty='none')
+frame = iris.frame
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=55)
+clf.fit(X_train, y_train)
+ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+            features=iris.feature_names,
+            label='target')
+<\Cell_1>
+<Cell_2>
+check = RocReport()
+<\Cell_2>
+<Cell_3>
+check.run(ds, clf)
+<\Cell_3>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a basic example of how to use the DeepChecks library to run a ROC report on a logistic regression model. The ROC report is a type of performance check that measures the performance of a classification model at distinguishing between classes.
+
+    The DeepChecks library is a Python library for data science and machine learning that provides a unified interface to perform a variety of checks on datasets. The checks are designed to provide a quick and easy way to understand the performance of a model, and they can be run on any dataset.
+
+    The code also includes a custom warning formatter that ignores

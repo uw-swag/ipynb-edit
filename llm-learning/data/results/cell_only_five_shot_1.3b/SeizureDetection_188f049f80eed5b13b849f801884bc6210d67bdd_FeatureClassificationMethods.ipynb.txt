@@ -1,0 +1,41 @@
+```python
+    from keras.models import Sequential
+    from keras.layers import LSTM, Dense, Dropout, Activation, Flatten
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import confusion_matrix, classification_report
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import tensorflow as tf
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your data and what you want to achieve
+    # For example, you might want to fill missing values, normalize numerical data, etc.
+
+    # Split the data into features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Normalize the data
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    # Create the first LSTM model
+    model1 = Sequential()
+    model1.add(LSTM(100, input_shape=(X_train.shape[1], X_train.shape[2])))
+    model1.add(Dense(1))
+    model1.compile(loss='mean_squared_error', optimizer='adam')
+
+    # Train the model
+    history1 = model1.fit(X_train, y_train, epochs=100, batch_size=32, validation_data=(X_test, y_test), verbose=1)
+
+    # Create the second LSTM model
+    model2 = Sequential()
+    model2.add(LSTM(100, input_shape=(X_train.shape[1], X_

@@ -1,0 +1,49 @@
+```python
+    from evidently.ui.workspace.cloud import CloudWorkspace
+
+    from evidently.report import Report
+    from evidently.metric_preset import DataQualityPreset
+    from evidently.metric_preset import DataDriftPreset
+
+    from evidently.test_suite import TestSuite
+    from evidently.tests import *
+    from evidently.test_preset import DataDriftTestPreset
+    from evidently.tests.base_test import TestResult, TestStatus
+    from evidently import metrics
+
+    from evidently.ui.dashboards import DashboardPanelPlot
+    from evidently.ui.dashboards import DashboardPanelTestSuite
+    from evidently.ui.dashboards import PanelValue
+    from evidently.ui.dashboards import PlotType
+    from evidently.ui.dashboards import ReportFilter
+    from evidently.ui.dashboards import TestFilter
+    from evidently.ui.dashboards import TestSuitePanelType
+    from evidently.renderers.html_widgets import WidgetSize
+
+    # Upload data
+    data_upload_result = ws.upload_data(project.id, data_df)
+
+    # Download data
+    data_download_result = ws.download_data(project.id, data_df)
+
+    # Add report
+    ws.add_report(project.id, data_report)
+
+    # Get report
+    report_result = ws.get_report(project.id, report_id)
+
+    # Delete report
+    ws.delete_report(project.id, report_id)
+
+    # Get test suite
+    test_suite_result = ws.get_test_suite(project.id, test_suite_id)
+
+    # Delete test suite
+    ws.delete_test_suite(project.id, test_suite_id)
+
+    # Get dashboard
+    dashboard_result = ws.get_dashboard(project.id, dashboard_id)
+
+    # Delete dashboard
+    ws.delete_dashboard(project.id, dashboard_id)
+    ```

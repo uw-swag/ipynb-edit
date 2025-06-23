@@ -1,0 +1,48 @@
+```python
+    # Example 1: Testing a function
+    def test_addition():
+        assert add(1, 2) == 3
+        assert add('a', 'b') == 'ab'
+
+    # Example 2: Testing a class
+    class TestClass:
+        def test_method(self):
+            obj = TestClass()
+            assert obj.method() == 'test'
+
+    # Example 3: Testing a method with multiple assertions
+    def test_multiple_assertions():
+        result = multiple_assertions(5, 2)
+        assert result == 7
+        assert result > 0
+        assert result < 10
+
+    # Example 4: Testing a method with exception
+    def test_exception():
+        with pytest.raises(ValueError):
+            divide(1, 0)
+
+    # Example 5: Testing a method with setup and teardown
+    def test_setup_teardown():
+        obj = TestClass()
+        obj.setup()
+        result = obj.method()
+        obj.teardown()
+        assert result == 'test'
+
+    # Example 6: Testing a method with fixture
+    def test_fixture():
+        result = fixture_function()
+        assert result == 'test'
+
+    # Example 7: Testing a method with parametrized test
+    @pytest.mark.parametrize("a, b, expected", [(1, 1, 2), (0, 1, 1), (-1, -1, 0)])
+    def test_parametrized_test(a, b, expected):
+        assert add(a, b) == expected
+
+    # Example 8: Testing a method with multiple parametrized tests
+    @pytest.mark.parametrize("a, b, expected", [(1, 1, 2), (0, 1, 1), (-1, -1, 0)])
+    def test_multiple_parametrized_tests(a, b, expected):
+        assert add(a, b) == expected
+    ```
+    This is an example of how to write tests for your Python code. The

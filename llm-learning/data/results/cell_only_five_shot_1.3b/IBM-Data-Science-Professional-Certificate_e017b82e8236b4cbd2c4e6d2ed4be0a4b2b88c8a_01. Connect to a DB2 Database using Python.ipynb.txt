@@ -1,0 +1,72 @@
+```python
+    # Importing the required libraries
+    import ipywidgets as widgets
+    from IPython.display import display
+    from ibm_db import connect, fetch
+
+    # Connecting to the DB2 database
+    try:
+        connection = connect(
+            host="<hostname>",
+            user="<username>",
+            password="<password>",
+            database="<database>",
+            uid="<username>",
+            pwd="<password>"
+        )
+        print("Connected to the database")
+    except:
+        print("Failed to connect to the database")
+
+    # Fetching data from the database
+    try:
+        sql = "SELECT * FROM <table_name>"
+        stmt = connection.create_statement(sql)
+        rows = stmt.execute_fetch(None, True)
+        while rows:
+            print(rows[0])
+            rows = stmt.execute_fetch(None, True)
+    except:
+        print("Failed to fetch data from the database")
+
+    # Closing the connection
+    connection.close()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Create 02. Create a Jupyter Notebook for Data Analysis.ipynb"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Loading the dataset
+    df = pd.read_csv('<file_path>')
+
+    # Displaying the first few rows of the dataset
+    print(df.head())
+
+    # Checking for missing values
+    print(df.isnull().sum())
+
+    # Describing the dataset
+    print(df.describe())
+
+    # Visualizing the dataset
+    sns.pairplot(df)
+    plt.show()
+
+    # Saving the dataset
+    df.to_csv('<file_path>', index=False)
+    ```
+
+    ### Instruction

@@ -1,0 +1,44 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import os
+    import csv
+    from datetime import datetime
+
+    DATA_PATH = 'data/'
+
+    # Define a function to create a DataFrame from a CSV file
+    def create_df(path):
+        df = (pd.read_csv(path)
+             .assign(Date=lambda df: pd.to_datetime(df.Date))
+             .pipe(lambda df: df.dropna(thresh=len(df) - 2, axis=1))
+             .dropna(axis=0)
+             .sort_values('season')
+             .reset_index(drop=True)
+             .assign(gameId=lambda df: list(df.index + 1))
+             )
+        return df
+
+    # Create a DataFrame from all seasons
+    df = create_df(os.path.join(DATA_PATH, 'all_seasons_joined.csv'))
+
+    # Define a function to create EMA features from a DataFrame
+    def create_stats_features_ema(stats, span):
+        multi_line_stats = create_multiline_df_stats(stats)
+        ema_features = multi_line_stats[['Date', 'season', 'gameId', 'Team', 'homeGame']].copy()
+        feature_names = multi_line_stats.drop(columns=['Date', 'season', 'gameId', 'Team', 'homeGame']).columns
+        for feature_name in feature_names:
+            feature_ema = (multi_line_stats.groupby('Team')[feature_name]
+                            .transform(lambda row: row.ewm(span=span, min_periods=2).mean().shift(1)))
+            ema_features[feature_name] = feature_ema
+        return ema_features
+
+    # Add weighted average to each row with a span of 50
+    df = create_stats_features_ema(df, 50)
+
+    # Restructure the stats features
+    df = restructure_stats_features(df)
+
+    # Save the DataFrame to a CSV file
+    df

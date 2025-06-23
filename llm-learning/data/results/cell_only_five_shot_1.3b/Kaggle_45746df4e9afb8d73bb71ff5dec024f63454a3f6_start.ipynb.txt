@@ -1,0 +1,24 @@
+```python
+    import xgboost as xgb
+
+    # Load data
+    dtrain = xgb.DMatrix('train.csv')
+    dtest = xgb.DMatrix('test.csv')
+
+    # Specify the parameter
+    param = {'max_depth':2, 'eta':1, 'objective':'binary:logistic'}
+
+    # Train the model
+    model = xgb.train(param, dtrain)
+
+    # Predict the test set
+    pred = model.predict(dtest)
+
+    # Create a submission file
+    sample_submission = pd.DataFrame({
+        'Id': range(1,20001),
+        'Prediction': pred
+    })
+
+    sample_submission.to_csv('submission.csv', index=False)
+    ```

@@ -1,0 +1,32 @@
+
+    The code you provided is a part of a Jupyter notebook. The notebook is used to train a classifier on a dataset and then test the classifier on a test dataset. The classifier is trained using a support vector machine (SVM) with different class weights. The classifier's performance is evaluated using the F1 score.
+
+    The code is not complete and there are some issues with it. Here are some potential issues:
+
+    1. The `load_scar` function is not defined. It seems like it's supposed to load a dataset, but it's not defined anywhere in the code.
+
+    2. The `f1_prime` function is not defined. It's used to calculate the F1 score, but it's not defined anywhere in the code.
+
+    3. The `plot_x_y` and `plot_x_y_proba` functions are not defined. They seem to be used to plot the true labels and the predicted labels, respectively, but they're not defined anywhere in the code.
+
+    To fix these issues, you would need to define the `load_scar`, `f1_prime`, and `plot_x_y` and `plot_x_y_proba` functions.
+
+    Here's a possible fix:
+
+    ```python
+    from sklearn.datasets import load_svmlight_file
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import f1_score
+    import matplotlib.pyplot as plt
+
+    def load_scar():
+        train_data, train_labels, test_data, test_labels = load_svmlight_file('path_to_your_data.txt')
+        train_x, valid_x, train_s, valid_s = train_test_split(train_data, train_labels, test_size=0.2, random_state=0)
+        return train_x, valid_x, test_data
+
+    def f1_prime(y_true, y_pred):
+        # Implement your f1_prime calculation here
+        pass
+
+    def plot_x_y(x, y):
+        plt.scatter(x,

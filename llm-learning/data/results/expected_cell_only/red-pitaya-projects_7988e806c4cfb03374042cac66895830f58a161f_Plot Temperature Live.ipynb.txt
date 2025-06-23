@@ -1,0 +1,71 @@
+from IPython.display import display, clear_output
+from datetime import datetime, date
+import time
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import matplotlib.animation as animation
+import pandas as pd
+import numpy as np
+import ipywidgets as widgets
+import threading
+
+filename = str(date.today()) + " temperature data.csv"
+headers = ["Temperature (oC)","Date"]
+try:
+    df = pd.read_csv(filename,names=headers,skiprows = 1)
+    df
+except:
+    df = pd.DataFrame() #Create an empty data frame to append to later
+df
+keep_running = True
+
+def collect_data():
+    while keep_running == True:
+        global df
+        clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+        current_temp = !xadc_get_value_temp
+        temp_value = float(current_temp[0][:5])
+        clear_output(wait=True)
+        display('Collecting temperatures. '+ str(len(df.index)) +' value(s) recorded.')
+        clean_data_table['Temperature (oC)'] = [temp_value]
+        clean_data_table['Date'] = [datetime.now()]
+        df = df.append(clean_data_table)
+        time.sleep(1)
+keep_running = True
+t1=threading.Thread(target=collect_data)
+t1.start()
+keep_running = False
+df
+df[headers] #Make sure the DataFrame is in the correct order
+df.to_csv(filename,names=headers)
+df
+df = pd.read_csv(filename,names=headers,skiprows = 1)
+dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+df = pd.read_csv(filename, parse_dates=['Date'], date_parser=dateparse,index_col=0)
+df
+#x = df['Date']
+#y1 = df['Temperature (oC)']
+
+# plot
+fig = plt.figure()
+ax1 = fig.add_subplot(1,1,1)
+
+def animate(i):
+    x = df['Date']
+    y1 = df['Temperature (oC)']
+    ax1.cla()
+    fig.clf()
+    ax1.plot(x,y1, label='Temperature (oC)')
+
+ani = animation.FuncAnimation(fig,animate, interval=1000)
+
+
+#plt.cla()
+#plt.plot(x,y1, label='Temperature (oC)')
+#plt.legend()
+# beautify the x-labels
+#plt.gcf().autofmt_xdate()
+plt.show()
+df[headers] #Make sure the DataFrame is in the correct order
+df.to_csv(filename,names=headers)
+df

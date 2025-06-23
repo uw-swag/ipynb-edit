@@ -1,0 +1,53 @@
+```python
+    from pyspark.ml.feature import Tokenizer
+    from pyspark.ml.feature import StopWordsRemover
+    from pyspark.ml.feature import IDF
+    from pyspark.ml.classification import LogisticRegressionModel
+    from pyspark.ml.classification import LogisticRegression
+    from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+
+    # split the data into training and test sets
+    (trainingData, testData) = data.randomSplit([0.7, 0.3])
+
+    # train a logistic regression model
+    lr = LogisticRegression(maxIter=10)
+    lrModel = lr.fit(trainingData)
+
+    # make predictions on the test data
+    predictions = lrModel.transform(testData)
+
+    # select (prediction, true label, probability)
+    selected = predictions.select("prediction", "label", "probability")
+
+    # show the prediction results
+    for row in selected.collect():
+        print(row)
+
+    # compute accuracy
+    evaluator = MulticlassClassificationEvaluator()
+    accuracy = evaluator.evaluate(selected)
+    print("Test Error = " + str(1.0 - accuracy))
+
+    # shuffle data
+    shuffledData = data.orderBy(F.rand())
+
+    # split the data into training and test sets
+    (trainingData, testData) = shuffledData.randomSplit([0.7, 0.3])
+
+    # train a logistic regression model
+    lr = LogisticRegression(maxIter=10)
+    lrModel = lr.fit(trainingData)
+
+    # make predictions on the test data
+    predictions = lrModel.transform(testData)
+
+    # select (prediction, true label, probability)
+    selected = predictions.select("prediction", "label", "probability")
+
+    # show the prediction results
+    for row in selected.collect():
+        print(row)
+
+    # compute accuracy
+    evaluator = MulticlassClassificationEvaluator()
+    accuracy = evaluator.evaluate(selected

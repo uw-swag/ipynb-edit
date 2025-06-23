@@ -1,0 +1,79 @@
+```python
+    # Regression
+    def regression(X, Y):
+        from sklearn.linear_model import LinearRegression
+        import numpy as np
+
+        X = np.asarray(X).reshape(-1,1)
+        Y = np.asarray(Y).reshape(-1,1)
+
+        model = LinearRegression()
+        model.fit(X,Y)
+
+        return model
+
+    # Clustering
+    def clustering(X, Y):
+        from sklearn.cluster import KMeans
+        import numpy as np
+
+        X = np.asarray(X).reshape(-1,1)
+        Y = np.asarray(Y).reshape(-1,1)
+
+        model = KMeans(n_clusters=2)
+        model.fit(X)
+
+        return model
+    ```
+    '''
+    }
+    '''
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding pre-baked reusable utility for Time Series Forecasting"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Time Series Forecasting
+    def time_series_forecasting(X, Y):
+        from fbprophet import Prophet
+        import pandas as pd
+
+        df = pd.DataFrame({'ds': X, 'y': Y})
+
+        model = Prophet()
+        model.fit(df)
+
+        future = model.make_future_dataframe(periods=365)
+        forecast = model.predict(future)
+
+        return forecast
+    ```
+    '''
+    '''
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding pre-baked reusable utility for Text Classification"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Text Classification
+    def text_classification(X, Y):
+        from sklearn.feature_extraction.text import CountVectorizer
+        from sklearn.naive_bayes

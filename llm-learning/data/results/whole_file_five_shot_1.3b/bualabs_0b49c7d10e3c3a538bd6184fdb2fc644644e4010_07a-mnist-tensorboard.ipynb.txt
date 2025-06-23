@@ -1,0 +1,48 @@
+```
+    # Description: This script is for training a model using FastAI library. It includes callbacks for TensorBoard.
+
+    # Import necessary libraries
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    from fastai import *
+    from fastai.vision import *
+    from fastai.metrics import accuracy
+    from fastai.callbacks.tensorboard import *
+
+    # Define the path
+    path = untar_data(URLs.MNIST)
+    path
+
+    # List the files in the path
+    path.ls()
+
+    # Get the filenames in the training folder
+    (path/'training').ls()
+
+    # Get the filenames of 5th class in the training folder
+    filenames = get_image_files(path/'training/5')
+    len(filenames), filenames[:10]
+
+    # Create a databunch
+    batchsize = 64
+    np.random.seed(0)
+    transform = get_transforms(do_flip=False)
+    databunch = ImageDataBunch.from_folder(path, train='training', valid_pct=0.2, size=28, 
+                                       ds_tfms=transform, bs=batchsize, num_workers=8).normalize()
+    databunch.show_batch(rows=3, figsize=(10, 10))
+
+    # Get the classes in the dataset
+    databunch.classes
+
+    # Create a learner
+    learner = cnn_learner(databunch, models.resnet18, metrics=accuracy)
+
+    # Define the project ID for TensorBoard
+    proj_id = '07a-mnist-tensorboard'
+    tboard_path = Path('data/tensorboard/' + proj_id)
+
+    # Append TensorBoard callback to the learner
+    learner.callback_fns.append(partial(LearnerTensorboardWriter, base_dir=tboard_path, name='LearnerTensorboardWriter'))
+
+    # Print the command to

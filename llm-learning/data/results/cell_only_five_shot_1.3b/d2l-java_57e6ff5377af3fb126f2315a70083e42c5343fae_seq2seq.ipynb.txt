@@ -1,0 +1,35 @@
+
+    The divide by zero error in the provided code is due to the fact that the code is using the length of the label sequence as the denominator in the calculation of the BLEU score. If the label sequence is empty, the code will result in a division by zero error.
+
+    To fix this, you should check if the length of the label sequence is greater than zero before performing the division. Here's the corrected code:
+
+    ```java
+    /* Compute the BLEU. */
+    public static double bleu(String predSeq, String labelSeq, int k) {
+        String[] predTokens = predSeq.split(" ");
+        String[] labelTokens = labelSeq.split(" ");
+        int lenPred = predTokens.length, lenLabel = labelTokens.length;
+        double score = Math.exp(Math.min(0, 1 - lenLabel / lenPred));
+        for (int n = 1; n < k + 1; n++) {
+            int numMatches = 0;
+            HashMap<String, Integer> labelSubs = new HashMap<>();
+            for (int i = 0; i < lenLabel - n + 1; i++) {
+                String key =
+                        String.join(" ", Arrays.copyOfRange(labelTokens, i, i + n, String[].class));
+                labelSubs.put(key, labelSubs.getOrDefault(key, 0) + 1);
+            }
+            for (int i = 0; i < lenPred - n + 1; i++) {
+                String key =
+                        String.join(" ", Arrays.copyOfRange(predTokens, i, i + n, String[].class));
+                if (labelSubs.getOrDefault(key, 0) > 0) {
+                    numMatches += 1;
+                    labelSubs.put(key, labelSubs.getOrDefault(key, 0) - 1);
+                }
+            }
+            score *= Math.pow(numMatches / (lenPred - n + 1), Math.pow(0.5, n));
+        }
+        return score;
+    }
+    ```
+
+    This code will prevent a division by zero error by

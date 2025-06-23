@@ -1,0 +1,16 @@
+```python
+    from sklearn.ensemble import RandomForestClassifier
+    from imblearn.over_sampling import SMOTE
+
+    # Initialize the classifier
+    rf = RandomForestClassifier(random_state=42)
+
+    # Initialize the oversampling method
+    smote = SMOTE(random_state=42)
+
+    # Fit and transform the data
+    X_res, y_res = smote.fit_resample(X, y)
+
+    # Fit the classifier
+    rf.fit(X_res, y_res)
+    ```

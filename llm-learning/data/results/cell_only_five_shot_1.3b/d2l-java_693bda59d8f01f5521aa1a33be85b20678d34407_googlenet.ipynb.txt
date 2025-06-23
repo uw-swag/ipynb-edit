@@ -1,0 +1,35 @@
+```python
+    import tensorflow as tf
+
+    def googlenet(input_tensor, is_training=False):
+        """
+        Implementation of GoogleNet model.
+
+        Args:
+            input_tensor: A `Tensor` of size [batch_size, height, width, channels].
+            is_training: A `bool`, whether this model is being trained or not.
+
+        Returns:
+            A `Tensor` of size [batch_size, num_classes].
+        """
+        # Define the base model
+        base_model = tf.keras.applications.MobileNetV2(
+            input_tensor=input_tensor,
+            include_top=False,
+            weights='imagenet',
+            pooling=None,
+            classes=1000)
+
+        # Freeze the base model
+        base_model.trainable = is_training
+
+        # Define the top model
+        x = tf.keras.layers.GlobalAveragePooling2D()(base_model.output)
+        x = tf.keras.layers.Dense(1024, activation='relu')(x)
+        output_tensor = tf.keras.layers.Dense(1000, activation='softmax')(x)
+
+        # Create the model
+        model = tf.keras.Model(inputs=base_model.input, outputs=output_tensor)
+
+        return model
+    ```

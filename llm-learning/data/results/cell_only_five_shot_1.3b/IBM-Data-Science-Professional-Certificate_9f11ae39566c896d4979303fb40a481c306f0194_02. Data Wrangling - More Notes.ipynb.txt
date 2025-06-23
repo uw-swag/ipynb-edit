@@ -1,0 +1,39 @@
+
+    # Changes to folder structure
+    # 1. Moved all the notebooks to a new folder named 'notebooks'
+    # 2. Moved all the data files to a new folder named 'data'
+    # 3. Moved all the images to a new folder named 'images'
+
+    # New folder structure
+    # root
+    # |-- notebooks
+    # |-- data
+    # |-- images
+
+    # Moving notebooks
+    notebooks_path = 'path_to_notebooks'
+    data_path = 'path_to_data'
+    images_path = 'path_to_images'
+
+    for folder in ['notebooks', 'data', 'images']:
+        for file in os.listdir(folder):
+            if file.endswith('.ipynb'):
+                shutil.move(os.path.join(folder, file), os.path.join(notebooks_path, file))
+            else:
+                shutil.move(os.path.join(folder, file), os.path.join(data_path, file))
+
+    # Moving images
+    for file in os.listdir('images'):
+        if file.endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg')):
+            shutil.move(os.path.join('images', file), os.path.join(images_path, file))
+
+    # Moving other files
+    for file in os.listdir():
+        if file not in ['notebooks', 'data', 'images']:
+            shutil.move(file, 'other_files')
+
+    # Removing old folder
+    os.rmdir('images')
+
+    '''
+

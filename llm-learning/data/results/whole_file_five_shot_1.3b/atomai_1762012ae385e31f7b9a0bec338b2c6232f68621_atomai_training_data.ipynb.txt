@@ -1,0 +1,35 @@
+```
+    [
+    Commit Message: "Bump to version 0.2.0"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    pip install -q git+https://github.com/ziatdinovmax/atomai.git --upgrade
+    <\Cell_0>
+    <Cell_1>
+    from atomai.utils import create_lattice_mask, extract_patches_, augmentor
+    import numpy as np
+    import matplotlib.pyplot as plt
+    <\Cell_1>
+    <Cell_2>
+    download_link = 'https://drive.google.com/uc?id=1_uo7BXjDU-laUAs4Uj1aFqwqfnxi9tpz'
+    !gdown $download_link -O 'img_w_coord.npy'
+    img_w_coord = np.load('img_w_coord.npy')
+    lattice_im = img_w_coord['lattice_img']
+    xy_atoms_a = img_w_coord['lattice_coord_a']
+    xy_atoms_b = img_w_coord['lattice_coord_b']
+    print(lattice_im.shape, xy_atoms_a.shape, xy_atoms_b.shape)
+    <\Cell_2>
+    <Cell_3>
+    lattice_mask_a = create_lattice_mask(lattice_im, xy_atoms_a)
+    lattice_mask_b = create_lattice_mask(lattice_im, xy_atoms_b)
+    <\Cell_3>
+    <Cell_4>
+    n = 5
+
+    n = n + 1
+    fig = plt.figure( figsize=(30, 8))
+    for i in range(1, n):   
+        ax = fig.add_subplot(2, n, i)
+        ax.imshow(images_all[i-1,0,:,:], cmap='gray')
+        ax.set_title('Augmented image ' + str(i-1) )

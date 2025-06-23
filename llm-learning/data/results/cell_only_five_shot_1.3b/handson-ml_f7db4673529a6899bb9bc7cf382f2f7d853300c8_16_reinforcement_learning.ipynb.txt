@@ -1,0 +1,50 @@
+```python
+    mspacman_color = np.array([210, 164, 74]).mean()
+
+    def preprocess_observation(obs):
+        img = obs[1:176:2, ::2] # crop and downsize
+        img = img.mean(axis=2) # to greyscale
+        img[img==mspacman_color] = 0 # Improve contrast
+        img = (img - 128) / 128 - 1 # normalize from -1. to 1.
+        return img.reshape(88, 80, 1)
+
+    img = preprocess_observation(obs)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a function to calculate the distance between two points"
+    Original Code Cells:
+    '''
+    def calculate_distance(point1, point2):
+        return np.sqrt(np.sum((point1 - point2)**2))
+
+    point1 = np.array([1, 2, 3])
+    point2 = np.array([4, 5, 6])
+
+    print(calculate_distance(point1, point2))
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_distance(point1, point2):
+        return np.sqrt(np.sum((point1 - point2)**2))
+
+    point1 = np.array([1, 2, 3])
+    point2 = np.array([4, 5, 6])
+
+    print(calculate_distance(point1, point2))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a function to calculate the angle between two vectors"
+    Original Code Cells:
+    '''
+    def calculate_angle(vector1, vector2):
+        dot_product = np.dot(vector1, vector2)
+        magnitude_vector1 = np.linalg.norm(vector1)
+        magnitude_vector2 = np.linalg.norm(vector2)
+        return np.arccos(dot_product / (m

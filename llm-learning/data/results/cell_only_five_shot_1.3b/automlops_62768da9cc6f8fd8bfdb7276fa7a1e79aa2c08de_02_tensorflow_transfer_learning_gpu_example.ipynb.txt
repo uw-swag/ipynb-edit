@@ -1,0 +1,25 @@
+
+    '''
+    import sys
+    sys.path.append("../")
+    import io, time, urllib.request
+    import fastai
+    from fastai.vision import *
+    from ipywebrtc import CameraStream, ImageRecorder
+    import ipywidgets as widgets
+    from torch.cuda import get_device_name
+    from utils_ic.constants import IMAGENET_IM_SIZE
+    from utils_ic.datasets import imagenet_labels, data_path
+    from utils_ic.imagenet_models import model_to_learner
+
+
+    print(f"Fast.ai: {fastai.__version__}")
+    print(get_device_name(0))
+    # Download an example image
+    IM_URL = "https://cvbp.blob.core.windows.net/public/images/cvbp_cup.jpg"
+    urllib.request.urlretrieve(IM_URL, os.path.join(data_path(), "example.jpg"))
+
+    im = open_image(os.path.join(data_path(), "example.jpg"), convert_mode='RGB')
+    im
+
+    '''

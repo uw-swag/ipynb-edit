@@ -1,0 +1,42 @@
+```python
+    import io
+    import numpy as np
+    import os
+    import pandas as pd
+    from pathlib import Path
+    import requests
+    import zipfile
+
+    from datetime import datetime
+    from sklearn import datasets, ensemble
+
+    from evidently.pipeline.column_mapping import ColumnMapping
+    from evidently.report import Report
+    from evidently.metric_preset import DataDriftPreset
+    from evidently.metric_preset import TargetDriftPreset
+
+    from evidently.metrics import (
+        RegressionQualityMetric,
+        RegressionPredictedVsActualScatter,
+        RegressionPredictedVsActualPlot,
+        RegressionErrorPlot,
+        RegressionAbsPercentageErrorPlot,
+        RegressionErrorDistribution,
+        RegressionErrorNormality,
+        RegressionTopErrorMetric,
+        RegressionErrorBiasTable,
+    
+        DatasetSummaryMetric,
+        ColumnSummaryMetric,
+        DatasetMissingValuesMetric,
+        DatasetCorrelationsMetric
+    )
+
+    # Update imports to handle error
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+    # Rest of the code...
+    ```

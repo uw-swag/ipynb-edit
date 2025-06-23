@@ -1,0 +1,38 @@
+```python
+    # This is a simple Python script that uses the datetime module to create a folder named 'Days' and a subfolder for each day of the week.
+
+    import os
+    import datetime
+
+    # Get the current date
+    current_date = datetime.datetime.now()
+
+    # Create the 'Days' folder
+    if not os.path.exists('Days'):
+        os.makedirs('Days')
+
+    # Create a subfolder for each day of the week
+    for i in range(7):
+        day_name = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'][i]
+        day_folder = os.path.join('Days', day_name)
+        if not os.path.exists(day_folder):
+            os.makedirs(day_folder)
+
+    print(f"Folder 'Days' created with subfolders for each day of the week.")
+    ```
+
+    This script will create a 'Days' folder in the current directory. It will then create a subfolder for each day of the week (Monday, Tuesday, etc.) within the 'Days' folder.
+
+    Please note that this script will not create a subfolder for the current day. If you want to create a subfolder for the current day, you can modify the script as follows:
+
+    ```python
+    # Get the current day of the week
+    current_day = datetime.datetime.today().weekday()
+
+    # Create a subfolder for the current day
+    day_folder = os.path.join('Days', day_name[current_day])
+    if not os.path.exists(day_folder):
+        os.makedirs(day_folder)
+    ```
+
+    This script will create a subfolder for the current day of the week within the 'Days' folder.

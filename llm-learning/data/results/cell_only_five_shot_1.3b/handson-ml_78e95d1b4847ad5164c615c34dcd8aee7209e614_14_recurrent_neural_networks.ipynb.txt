@@ -1,0 +1,44 @@
+```python
+    import numpy as np
+    import tensorflow as tf
+    from six.moves.urllib.request import UrlOpenerToHandler
+
+    np.random.seed(133)
+    tf.random.set_seed(133)
+
+    # Data generation
+    vocab_size = 10000
+    embedding_size = 512
+    max_length = 20
+    num_skips = 2
+    num_sampled = 64
+    num_train_batches = 1000
+    num_valid_batches = 200
+    num_test_batches = 100
+    data_gen = tf.keras.preprocessing.text.TokenAndSequenceGenerator(
+        "./data/raw/",
+        num_words=vocab_size,
+        maxlen=max_length,
+        num_skips=num_skips,
+        num_samples=num_sampled,
+        test_ratio=1.0 / 10.0,
+        num_train_samples=num_train_batches * num_skips,
+        num_valid_samples=num_valid_batches * num_skips,
+        num_test_samples=num_test_batches * num_skips,
+        seed=133,
+        num_worker=2,
+        pick_next_batch_function=None,
+        batch_size=32,
+        test_batch_size=32,
+        train_data_gen=True,
+        valid_data_gen=True,
+        test_data_gen=True,
+        num_unique_characters=10000,
+        num_available_characters=65536,
+        num_available_words=10000,
+        num_available_sentences=10000,
+        num_available_paragraphs=10000,
+        num_available_articles=10000,
+        num_available_quotes=10000,
+        num_available_dashes=10000,
+        num_available_

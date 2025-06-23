@@ -1,0 +1,37 @@
+
+The code you provided is a mix of Python and Jupyter notebook cells. It appears to be a set of instructions for a PySpark job, which is used for processing large datasets. The instructions include installing libraries, reading a MMTF file, filtering the data, and performing various transformations on the data.
+
+The instructions are not complete and there are a few missing parts. For example, the instructions for setting the number of cores to 4 in Spark are not included. The instructions for using albumentations for image augmentation are also not included.
+
+Here is a complete set of instructions:
+
+```python
+<Cell_0>
+from pyspark import SparkConf, SparkContext
+from mmtfPyspark.io import mmtfReader
+from mmtfPyspark.webfilters import WildTypeQuery
+<\Cell_0>
+<Cell_1>
+conf = SparkConf().setMaster("local[4]") \
+                  .setAppName("wildTypeQuery")
+sc = SparkContext(conf = conf)
+<\Cell_1>
+<Cell_2>
+path = "../../resources/mmtf_reduced_sample/"
+
+pdb = mmtfReader.read_sequence_file(path, sc) \
+                .filter(WildTypeQuery(includeExpressionTags = True, percentSequenceCoverage = WildTypeQuery.SEQUENCE_COVERAGE_95))
+<\Cell_2>
+<Cell_3>
+count = pdb.count()
+
+print(f"Number of structures after filtering : {count}")
+
+pdb.top(5)
+<\Cell_3>
+<Cell_4>
+sc.stop()
+<\Cell_4>
+```
+
+Please note that the instructions for setting the number of cores to 4 in Spark are not included. The instructions for using albumentations for image augmentation are also not included.

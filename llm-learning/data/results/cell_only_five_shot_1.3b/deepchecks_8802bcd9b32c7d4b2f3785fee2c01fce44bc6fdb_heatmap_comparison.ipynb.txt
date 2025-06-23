@@ -1,0 +1,20 @@
+```
+    from deepchecks.vision.checks import TrainTestLabelDrift
+    from deepchecks.vision.datasets.classification.mnist import load_dataset
+
+    mnist_data_train = load_dataset(train=True, batch_size=64, object_type='VisionData')
+    mnist_data_test = load_dataset(train=False, batch_size=64, object_type='VisionData')
+    from deepchecks.vision.checks.distribution import HeatmapComparison
+    check = HeatmapComparison()
+    check.run(mnist_data_train, mnist_data_test)
+    from deepchecks.vision.datasets.detection.coco import load_dataset
+
+    train_ds = load_dataset(train=True, object_type='VisionData')
+    test_ds = load_dataset(train=False, object_type='VisionData')
+    check = HeatmapComparison()
+    check.run(train_ds, test_ds)
+    check = HeatmapComparison(classes_to_display=['person', 'cat'])
+    check.run(train_ds, test_ds)
+    ```
+
+    The code above is a sample of how to use DeepChecks to analyze and visualize the distribution of data in the MNIST and COCO datasets. The `TrainTestLabelDrift` check is used to analyze the drift in the labels in the training and testing datasets. The `HeatmapComparison` check is used to compare the distribution of images in the training and testing datasets. The `classes_to_display` parameter is used to specify the classes to display in the heatmap.

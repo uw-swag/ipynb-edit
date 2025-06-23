@@ -1,0 +1,25 @@
+```python
+    class Inception:
+        def __init__(self, n1x1x128, n2x3x64, n3x4x64, n4x6x32, n5x6x32, n6x6x256, pool_proj=15, nb_filter=64):
+            self.n1x1x128 = n1x1x128
+            self.n2x3x64 = n2x3x64
+            self.n3x4x64 = n3x4x64
+            self.n4x6x32 = n4x6x32
+            self.n5x6x32 = n5x6x32
+            self.n6x6x256 = n6x6x256
+            self.pool_proj = pool_proj
+            self.nb_filter = nb_filter
+
+        def _conv_block(self, x, nb_filter, name):
+            x = tf.keras.layers.Conv2D(nb_filter, (1, 1), padding='same', activation='relu')(x)
+            x = tf.keras.layers.Conv2D(nb_filter, (3, 3), padding='same', activation='relu')(x)
+            x = tf.keras.layers.MaxPooling2D((2, 2), strides=(2, 2))(x)
+            return x
+
+        def call(self, inputs):
+            x = self._conv_block(inputs, self.n1x1x128, 'conv1')
+            x = self._conv_block(x, self.n2x3x64, 'conv2')
+            x = self._conv_block(x, self.n3x4x64, 'conv3')
+            x = self._conv_block(x, self.n4x6x32, 'conv4')
+            x = self._conv_block(x, self.n5x6x32, 'conv5')
+            x = self._conv

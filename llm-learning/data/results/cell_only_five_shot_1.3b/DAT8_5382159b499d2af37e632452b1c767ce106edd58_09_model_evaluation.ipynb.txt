@@ -1,0 +1,45 @@
+```python
+    class Class9Materials:
+        def __init__(self, class9_materials):
+            self.class9_materials = class9_materials
+
+        def update_class9_materials(self, new_class9_materials):
+            self.class9_materials = new_class9_materials
+
+        def get_class9_materials(self):
+            return self.class9_materials
+
+        def add_class9_material(self, new_class9_material):
+            self.class9_materials.append(new_class9_material)
+
+        def remove_class9_material(self, material_to_remove):
+            if material_to_remove in self.class9_materials:
+                self.class9_materials.remove(material_to_remove)
+
+        def update_class9_material(self, old_material, new_material):
+            if old_material in self.class9_materials:
+                index = self.class9_materials.index(old_material)
+                self.class9_materials[index] = new_material
+
+        def get_material_count(self):
+            return len(self.class9_materials)
+
+        def get_material_by_index(self, index):
+            if index < len(self.class9_materials):
+                return self.class9_materials[index]
+            else:
+                return None
+
+        def get_material_by_name(self, name):
+            for material in self.class9_materials:
+                if material.name == name:
+                    return material
+            return None
+
+        def get_material_by_type(self, material_type):
+            materials_of_type = []
+            for material in self.class9_materials:
+                if material.type == material_type:
+                    materials_of_type.append(material)
+            return materials_of_type
+    ```

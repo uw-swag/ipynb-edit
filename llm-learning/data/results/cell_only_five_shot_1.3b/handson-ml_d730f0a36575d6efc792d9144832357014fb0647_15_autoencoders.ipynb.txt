@@ -1,0 +1,42 @@
+```python
+    # imports
+    import tensorflow as tf
+    from handson_ml.image import download_data
+    from handson_ml.image.lenet import LeNet
+    from handson_ml.image.utils import show_image
+
+    # download the mnist dataset
+    mnist = download_data(dataset_name="mnist_png", as_frame=False)
+
+    # load the mnist dataset
+    (X_train, y_train), (X_test, y_test) = mnist["train"], mnist["test"]
+
+    # reshape the data
+    X_train = X_train.values.reshape(-1, 28, 28, 1)
+    X_test = X_test.values.reshape(-1, 28, 28, 1)
+
+    # define the model
+    model = LeNet(width=28, height=28, channels=1, classes=10)
+
+    # compile the model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # train the model
+    history = model.fit(X_train, y_train, batch_size=128, epochs=5, validation_data=(X_test, y_test))
+
+    # plot the training and validation accuracy values
+    plt.plot(history.history['accuracy'])
+    plt.plot(history.history['val_accuracy'])
+    plt.title('Model accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Test'], loc='upper left')
+    plt.show()
+
+    # plot the training and validation loss values
+    plt.plot(history.history['loss'])
+    plt.plot(history.history['val_loss'])
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Test'], loc='upper left

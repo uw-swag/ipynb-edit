@@ -1,0 +1,51 @@
+
+    Here is the updated code:
+
+    ## Importing necessary libraries
+    from sklearn.model_selection import GridSearchCV
+    from xgboost import XGBClassifier
+
+    ## Defining the parameters
+    params = {
+        'max_depth': [5, 6, 7, 8],
+        'n_estimators': [200, 300, 400, 500, 600],
+        'subsample': [0.6, 0.7, 0.8, 1],
+        'min_child_weight': [1, 4, 5, 6, 8],
+        'learning_rate': [0.01, 0.02, 0.1]
+    
+        }
+
+    ## Defining the model
+    model_xgb = XGBClassifier()
+
+    ## Performing the grid search
+    tuned_model = GridSearchCV(model_xgb, param_grid = params, cv = 10, scoring = 'accuracy', n_jobs = -1)
+
+    ## Fitting the model
+    tuned_model.fit(X_train, y_train)
+
+    ## Printing the best parameters
+    print(tuned_model.best_params_)
+
+    ## Printing the best score
+    print(tuned_model.best_score_)
+
+    ## Printing the best model
+    print(tuned_model.best_estimator_)
+
+    ## Predicting the test set results
+    y_pred = tuned_model.predict(X_test)
+
+    ## Evaluating the model
+    print(classification_report(y_test, y_pred))
+
+    ## Saving the model
+    joblib.dump(tuned_model, 'tuned_model.pkl')
+
+    ## Loading the model
+    loaded_model = joblib.load('tuned_model.pkl')
+
+    ## Predicting the test set results with the loaded model
+    y_pred_loaded = loaded_model.predict(X_test)
+
+    ## Evaluating

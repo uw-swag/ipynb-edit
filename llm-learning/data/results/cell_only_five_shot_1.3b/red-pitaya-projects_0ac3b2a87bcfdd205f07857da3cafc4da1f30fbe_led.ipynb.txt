@@ -1,0 +1,31 @@
+```
+    # Adding a new Jupyter notebook
+    # This is a markdown cell
+    # You can add your code here
+
+    ## Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import skimage.exposure as skie
+    %matplotlib inline
+
+    ## Loading the image
+    img = plt.imread('https://github.com/ipython-books/'
+                     'cookbook-2nd-data/blob/master/'
+                     'beach.png?raw=true')[..., 0]
+
+    ## Displaying the image
+    plt.imshow(img, cmap=plt.cm.gray)
+    plt.show()
+
+    ## Rescaling the image
+    rescaled_img = skie.rescale_intensity(img, in_range=(0.4, .95), out_range=(0, 1))
+    plt.imshow(rescaled_img, cmap=plt.cm.gray)
+    plt.show()
+
+    ## Equalizing the image
+    equalized_img = skie.equalize_adapthist(img)
+    plt.imshow(equalized_img, cmap=plt.cm.gray)
+    plt.show()
+    ```
+    This code will create a Jupyter notebook with three cells. The first cell will load an image, the second cell will display the image, and the third cell will display the rescaled and equalized image.

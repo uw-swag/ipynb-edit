@@ -1,0 +1,43 @@
+```python
+    # in package "display"
+    import (
+        "net/http"
+        "io/ioutil"
+        "image"
+    )
+
+    // Example: download and display a PNG
+    resp, err := http.Get("https://github.com/gopherdata/gophernotes/raw/master/files/gophernotes-logo.png")
+    bytes, err := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    display.PNG(bytes)
+
+    // Example: download and display an SVG
+    resp, err := http.Get("http://jupyter.org/assets/nav_logo.svg")
+    bytes, err := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    display.SVG(string(bytes))
+
+    // Example: download and display a JPEG
+    resp, err := http.Get("https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Gophercolor.jpg/320px-Gophercolor.jpg")
+    bytes, err := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    display.JPEG(bytes)
+
+    // Example: download and display an image
+    resp, err := http.Get("https://github.com/gopherdata/gophernotes/raw/master/files/gophernotes-logo.png")
+    img, ext, err := image.Decode(resp.Body)
+    resp.Body.Close()
+    display.Image(img)
+
+    // Example: display a Markdown file
+    resp, err := http.Get("https://raw.githubusercontent.com/gopherdata/gophernotes/master/files/markdown.md")
+    bytes, err := ioutil.ReadAll(resp.Body)
+    resp.Body.Close()
+    display.Markdown(string(bytes))
+
+    // Example: display a LaTeX equation
+    display.Math("e^{i\Pi}+1=0")
+
+    // Example: display a PDF file
+   

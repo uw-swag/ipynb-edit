@@ -1,0 +1,54 @@
+```
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from sklearn.datasets import load_breast_cancer
+
+    # Loading the breast cancer dataset
+    cancer_dataset = load_breast_cancer()
+
+    # Printing the type of the dataset
+    print(type(cancer_dataset))
+
+    # Printing the number of features in the dataset
+    print(len(cancer_dataset["feature_names"]))
+
+    # Printing the features of the dataset
+    print(cancer_dataset["feature_names"])
+
+    # Printing the data of the dataset
+    print(cancer_dataset["data"])
+
+    # Printing the target names of the dataset
+    print(cancer_dataset["target_names"])
+
+    # Printing the target of the dataset
+    print(cancer_dataset["target"])
+
+    # Printing the description of the dataset
+    print(cancer_dataset["DESCR"])
+
+    # Converting the dataset into a DataFrame
+    cancer_df = pd.DataFrame(np.c_[cancer_dataset['data'], cancer_dataset['target']], columns=np.append(cancer_dataset["feature_names"], ["target"]))
+
+    # Printing the info of the DataFrame
+    print(cancer_df.info())
+
+    # Printing the description of the DataFrame
+    print(cancer_df.describe())
+
+    # Plotting the pairplot
+    # sns.pairplot(cancer_df, hue="target")
+
+    # Plotting the countplot
+    sns.countplot(data=cancer_df, x="target", hue="target")
+
+    # Plotting the heatmap
+    plt.figure(figsize=(20, 20))
+    sns.heatmap(cancer_df.corr(), annot=True, cmap="coolwarm", linewidths=2)
+    plt.show()
+
+    # Dropping the target column

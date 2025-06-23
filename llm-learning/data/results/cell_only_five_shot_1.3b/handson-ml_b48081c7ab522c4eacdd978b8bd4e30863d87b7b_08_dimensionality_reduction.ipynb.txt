@@ -1,0 +1,27 @@
+```
+    # Replace V with Vt and add a note about the error in ch 8
+    X_centered = X - X.mean(axis=0)
+    U, s, Vt = np.linalg.svd(X_centered)
+    c1 = Vt.T[:, 0]
+    c2 = Vt.T[:, 1]
+    np.allclose(X_centered, U.dot(s).dot(Vt))
+    W2 = Vt.T[:, :2]
+    X2D = X_centered.dot(W2)
+    X3D_inv_using_svd = X2D.dot(Vt[:2, :])
+    Vt[:2]
+
+    # Note: The error in chapter 8 is that the SVD decomposition is not being used correctly. The original code is using the SVD of X_centered, which is not the correct way to compute the transformation matrix W2. The correct way to compute W2 is to use the SVD of X2D, which is the transformation matrix that transforms X2D into X3D.
+    ```
+
+    ### Original Code Cells:
+    ```
+    X_centered = X - X.mean(axis=0)
+    U, s, V = np.linalg.svd(X_centered)
+    c1 = V.T[:, 0]
+    c2 = V.T[:, 1]
+    np.allclose(X_centered, U.dot(s).dot(V))
+    W2 = V.T[:, :2]
+    X2D = X_centered.dot(W2)
+    X3D_inv_using_svd = X2D.dot(V[:2, :])
+    V[:2]
+    ```

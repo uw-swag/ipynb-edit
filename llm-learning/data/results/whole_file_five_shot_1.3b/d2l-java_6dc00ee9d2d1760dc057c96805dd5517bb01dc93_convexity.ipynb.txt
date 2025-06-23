@@ -1,0 +1,36 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.optimize import minimize
+
+    def convexity(x, y):
+        n = len(x)
+        h = np.zeros(n)
+        for i in range(n):
+            h[i] = x[i]
+        h[0] = 0
+        h[n-1] = 1
+        f = np.zeros(n)
+        for i in range(n):
+            f[i] = y[i]
+        f[0] = 0
+        f[n-1] = 0
+        g = np.zeros(n)
+        for i in range(n):
+            g[i] = (f[i+1]-f[i])/(h[i+1]-h[i])
+        h_sum = np.sum(h)
+        g_sum = np.sum(g)
+        h_square_sum = np.sum(h**2)
+        g_square_sum = np.sum(g**2)
+        h_g_sum = np.sum(h*g)
+        a = (h_sum*g_sum - h_g_sum) / (h_square_sum - h_sum**2)
+        b = (h_g_sum - h_sum*g_sum) / (h_square_sum - h_sum**2)
+        c = g_sum - a*h_sum
+        d = a*b*c
+        e = (a+b)**2*c - a*b**2
+        f = a*b*d - a*b**2*c - a**2*d
+        g = a*b*e - a*b**2*d - a**2*e
+        h = a*b*f - a*b**2*e - a**2*f
+        i = a*b*g - a*b**2*f - a**2*g
+        j = a*b*h - a*b**2*g - a**2*h
+        k = a*b*i - a*b**2*h - a**

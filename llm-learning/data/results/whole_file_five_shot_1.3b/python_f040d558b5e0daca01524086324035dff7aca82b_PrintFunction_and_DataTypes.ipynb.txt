@@ -1,0 +1,42 @@
+```python
+    #%%time
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from adjustText import adjust_text
+
+    #%%
+    def counter(x):
+        counts = np.zeros((len(x), 21))
+
+        for i in range(len(x)):
+            for aa in range(0, 21):
+                counts[i, aa] = np.sum(x[i] == aa)
+        return counts
+
+    #%%
+    def average_sequence_content(df):
+        counts = counter(df)[:, 1:]
+        sequence_ratio = counts / counts.sum(axis = 1).reshape(-1, 1)
+        average_sequence_ratio = np.sum(sequence_ratio, axis = 0) / len(df)
+        return average_sequence_ratio
+
+    #%%
+    thermophiles_y = y_data[(y_data <= 45) * (y_data >= 20)]
+    cryophiles_y = y_data[(y_data < 20)]
+    thermophiles_X = X_data[(y_data <= 45) * (y_data >= 20)]
+    cryophiles_X = X_data[(y_data < 20)]
+
+    #%%
+    thermophile_count_sum = average_sequence_content(thermophiles_X)
+    mesophile_count_sum = average_sequence_content(mesophiles_X)
+    cryophile_count_sum = average_sequence_content(cryophiles_X)
+
+    #%%
+    df1 = pd.DataFrame(thermophile_count_sum, index = aa_residues, columns = ["Residue"])
+    df1 = df1.loc[order_descending]
+    sns.barplot(x = df1.index, y = "Residue", data = df1, color = 'Orange', alpha = 0.6, label = 'Mesophiles')
+
+    #%%
+    df2 = pd.DataFrame(

@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+
+    # Assuming you have a DataFrame df with columns: ['feature1', 'feature2', 'feature3', 'target']
+    df = pd.read_csv('your_data.csv')
+
+    # Feature engineering
+    # Here, we're creating a new feature 'feature4' by combining 'feature1' and 'feature2'
+    df['feature4'] = df['feature1'] + df['feature2']
+
+    # Encoding categorical features
+    for column in df.columns:
+        if df[column].dtype == 'object':
+            encoder = LabelEncoder()
+            df[column] = encoder.fit_transform(df[column])
+
+    # Dropping original features
+    df = df.drop(['feature1', 'feature2'], axis=1)
+
+    # Saving the new DataFrame to a new CSV file
+    df.to_csv('new_data.csv', index=False)
+    ```
+    This script performs some basic feature engineering and encoding on a DataFrame. It creates a new feature 'feature4' by combining 'feature1' and 'feature2', encodes categorical features, and finally, drops the original features. The new DataFrame is then saved to a new CSV file.
+
+    Please replace 'your_data.csv' and 'new_data.csv' with your actual input and output file paths.
+
+    Note: This is a very basic example. Depending on the specific requirements of your project, you may need to perform more complex feature engineering and encoding.

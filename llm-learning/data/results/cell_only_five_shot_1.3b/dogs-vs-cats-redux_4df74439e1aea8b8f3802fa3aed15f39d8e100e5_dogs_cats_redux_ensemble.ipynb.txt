@@ -1,0 +1,34 @@
+```python
+    # InceptionResNetV2 architecture
+    def generate_augmented_images(input_shape=(299, 299, 3), batch_size=20, aug_mult=1):
+        train_aug_dir = 'train_aug_'+'x'.join(map(str, input_shape))  # train_aug_3x299x299
+
+        train_gen = image.ImageDataGenerator(rotation_range=10,
+                                             width_shift_range=0.1,
+                                             height_shift_range=0.1,
+                                             shear_range=0.1,
+                                             zoom_range=0.1,
+                                             horizontal_flip=True)
+
+        train_batches = train_gen.flow_from_directory(train_path,
+                                                      shuffle=False,        ###############
+                                                      batch_size=batch_size, 
+                                                      class_mode='categorical', 
+                                                      target_size=input_shape[:-1])
+    
+        # create dirs for each class
+        %cd $path
+        for fn in set(map(os.path.dirname, train_batches.filenames)):
+            os.makedirs(f'{train_aug_dir}/{fn}', exist_ok=True)
+        
+    
+        for i in enumerate(tqdm(range(int(train_batches.samples/train_batches.batch_size*aug_mult)))):
+            batch = train_batches.next()
+            idx = ((train_batches.batch_index - 1)*train_batches.batch_size)%train_batches.samples
+            filenames = train_batches.filenames[idx:idx+train_batches.batch_size]
+
+            # TODO:
+            assert len(filenames) == len(batch[0]), 'train_batch.samples is not divisible by batch_size'
+
+            for img, filename in zip(batch[0], filenames):
+                new_filename = f'{path}/{train_aug_dir}/{filename.split(".

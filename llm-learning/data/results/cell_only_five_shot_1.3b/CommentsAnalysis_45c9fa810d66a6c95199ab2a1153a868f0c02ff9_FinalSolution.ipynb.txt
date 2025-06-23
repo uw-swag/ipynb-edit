@@ -1,0 +1,29 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding real-time spectrogram"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.io import wavfile
+    from scipy.signal import spectrogram
+    from scipy.signal.windows import hann
+
+    def real_time_spectrogram(audio_file, sample_rate, window_size, overlap):
+        # Load audio file
+        samples, sample_rate = librosa.load(audio_file, sr=sample_rate)
+
+        # Compute spectrogram
+        spectrogram, freqs, timebins, _ = scipy.signal.spectrogram(samples, fs=sample_rate, window=hann(window_size), noverlap=overlap)
+
+        # Plot spectrogram
+        plt.pcolormesh(timebins, freqs, spectrogram)
+        plt.ylabel('Frequency [Hz]')
+        plt.xlabel('Time [s]')
+        plt.show()
+
+    # Usage
+    real_time_spectrogram('audio.wav', 22050, 2048, 512)
+    '''
+    ]

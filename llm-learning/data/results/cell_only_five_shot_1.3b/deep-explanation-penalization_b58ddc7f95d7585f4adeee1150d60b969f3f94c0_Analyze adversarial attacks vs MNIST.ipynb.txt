@@ -1,0 +1,32 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    # Load ISIC 2018 dataset
+    df = pd.read_csv('ISIC_2018_Task3_Training_Data.csv')
+
+    # Add ISIC Grad Codes
+    df['ISIC_Grad_Codes'] = df['ISIC_No'].apply(lambda x: 'Grad' if 'Grad' in str(x) else 'Not Grad')
+
+    # Count the number of grad results
+    grad_results = df[df['ISIC_Grad_Codes'] == 'Grad']
+    print(f'Number of grad results: {len(grad_results)}')
+
+    # Calculate the mean of the grad results
+    mean_grad_results = grad_results['ISIC_No'].mean()
+    print(f'Mean ISIC No of grad results: {mean_grad_results}')
+
+    # Calculate the standard deviation of the grad results
+    std_dev_grad_results = grad_results['ISIC_No'].std()
+    print(f'Standard deviation of ISIC No of grad results: {std_dev_grad_results}')
+
+    # Calculate the median of the grad results
+    median_grad_results = grad_results['ISIC_No'].median()
+    print(f'Median of ISIC No of grad results: {median_grad_results}')
+
+    # Calculate the mode of the grad results
+    mode_grad_results = grad_results['ISIC_No'].mode()
+    print(f'Mode of ISIC No of grad results: {mode_grad_results}')
+    ```
+
+    This script loads the ISIC 2018 dataset, adds a new column to the dataframe indicating whether each image is a grad result, counts the number of grad results, calculates the mean, standard deviation, median, and mode of the ISIC No of the grad results, and prints these values.

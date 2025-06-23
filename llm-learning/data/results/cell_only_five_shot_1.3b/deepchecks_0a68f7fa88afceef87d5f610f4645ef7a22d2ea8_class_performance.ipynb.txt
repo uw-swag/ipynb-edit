@@ -1,0 +1,45 @@
+```
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+
+    # Load the dataset
+    df = pd.read_csv('/data/Images/Datasets/LISA/training/allTrainingAnnotations.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your dataset and what you want to achieve
+    # For example, you might need to handle missing values, normalize numerical data, etc.
+
+    # Split the data into features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a model
+    # Here, we'll use a simple logistic regression model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred))
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_pred))
+    print("Accuracy Score:")
+    print(accuracy_score(y_test, y_pred))
+
+    # Performance report
+    # This is just a placeholder. You should replace it with your actual performance report.
+    # For example, you might want to calculate some performance metrics like precision, recall, F1-score, etc.
+    performance_report = {
+        "accuracy": accuracy_score(y_test, y_pred),
+        "precision": precision_score(y_test, y_pred),

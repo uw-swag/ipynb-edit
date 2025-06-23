@@ -1,0 +1,62 @@
+```python
+    # Fixing the boosting_overfit test
+    def fix_boosting_overfit(self, model, X_train, y_train, X_test, y_test):
+        # Train the model
+        model.fit(X_train, y_train)
+
+        # Predict on the test set
+        y_pred = model.predict(X_test)
+
+        # Calculate the accuracy
+        accuracy = accuracy_score(y_test, y_pred)
+
+        # Check if the model is overfitting
+        if self.is_overfitting(model, X_train, y_train, X_test, y_test):
+            # If overfitting, remove the last layer of the model
+            model.layers.pop()
+
+            # Retrain the model
+            model.fit(X_train, y_train)
+
+            # Predict on the test set
+            y_pred = model.predict(X_test)
+
+            # Calculate the accuracy again
+            accuracy_after_overfit = accuracy_score(y_test, y_pred)
+
+            # If the accuracy after overfitting is higher, return the model
+            if accuracy_after_overfit > accuracy:
+                return model
+
+        return model
+
+    # Update the display
+    def update_display(self, model, X_train, y_train, X_test, y_test):
+        # Fix the model
+        model = self.fix_boosting_overfit(model, X_train, y_train, X_test, y_test)
+
+        # Display the model
+        self.display(model)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature to the model (#153)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Adding a new feature to the model
+    def add_new_feature(self, model, new_feature):
+        # Add the new feature to the model
+        model.add_layer(new_feature)
+
+        # Return the updated model
+        return model
+    ```
+
+    ### Instruction

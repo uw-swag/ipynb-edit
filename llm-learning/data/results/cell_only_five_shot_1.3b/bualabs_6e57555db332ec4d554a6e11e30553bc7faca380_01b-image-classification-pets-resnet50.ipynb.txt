@@ -1,0 +1,45 @@
+```
+    ## ResNet50 with Keras
+
+    ## Description
+    ResNet50 is a deep learning model that is widely used in various applications. It is a convolutional neural network (CNN) that is designed to replace the previous ResNet architecture. ResNet50 is a variant of ResNet that has 50 layers, and it's often used in tasks like image classification, object detection, and more.
+
+    ## Importing Libraries
+    ```python
+    import keras
+    from keras.applications.resnet50 import ResNet50
+    from keras.applications.resnet50 import preprocess_input, decode_predictions
+    from keras.applications.resnet50 import ResNet50Weights
+    from keras.preprocessing import image
+    import numpy as np
+    ```
+
+    ## Loading the Model
+    ```python
+    model = ResNet50(weights='imagenet')
+    ```
+
+    ## Preprocessing
+    ```python
+    img_path = 'path_to_your_image.jpg'
+    img = image.load_img(img_path, target_size=(224, 224))
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = preprocess_input(x)
+    ```
+
+    ## Predicting
+    ```python
+    preds = model.predict(x)
+    print('Predicted:', decode_predictions(preds, top=3)[0])
+    ```
+
+    This notebook demonstrates how to use the ResNet50 model with Keras. The model is loaded with the 'imagenet' weights, and then the model is used to predict the top 3 most likely classes for an image.
+
+    Please replace 'path_to_your_image.jpg' with the path to the image you want to classify.
+
+    ## Note
+    This notebook assumes that you have a working Keras installation and that you have a pre-loaded image to classify.
+    ```
+    ## Note
+    This notebook is a simple demonstration of how to use the ResNet5

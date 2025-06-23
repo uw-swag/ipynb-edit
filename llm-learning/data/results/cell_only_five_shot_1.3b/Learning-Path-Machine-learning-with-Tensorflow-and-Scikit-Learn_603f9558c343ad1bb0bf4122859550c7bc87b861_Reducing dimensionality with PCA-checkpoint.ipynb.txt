@@ -1,0 +1,50 @@
+
+    '''
+    # Module 03: Code files added
+    # This module is about the implementation of a recommendation system using item similarity.
+
+    # Importing necessary libraries
+    import matplotlib.pyplot as plt
+    %matplotlib inline 
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import train_test_split
+    from sklearn import linear_model
+    from sklearn.cluster import KMeans
+    from sklearn import datasets
+    import random
+    import time
+    import pylab as pl
+    import psycopg2
+    from lib.itemsimilarityclasscopy import item_similarity_recommender_py
+    from lib.precisionrecallcopy import remove_percentage, precision_recall_calculator, plot_precision_recall
+
+    # Get deployed data from Heroku Postgres
+    import os
+
+    DATABASE_URL = os.environ['DATABASE_URL']
+
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+
+    # Read data from the database using a SQL query
+    df = pd.read_sql_query("SELECT * FROM user_track_df LIMIT 100000", conn)
+
+    # Don't forget to close the connection when you're done
+    conn.close()
+
+    df.head()
+
+    # Splitting the data into train and test data
+    train_data_similarity, test_data_similarity = train_test_split(df, test_size = 0.20, random_state=0)
+
+    # Creating the item similarity model
+    is_model = item_similarity_recommender_py()
+    is_model.create(train_data_similarity, 'user_id', 'song_id')
+
+    # Printing the songs for the user in the training data
+    user_id = df['user_id'][5]
+    user_items = is_model.get_user_items(user_id)
+
+    print("------------------------------------------------------------------------------------")
+    print("

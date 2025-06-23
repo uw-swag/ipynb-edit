@@ -1,0 +1,279 @@
+<Cell_0>
+# Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For Map vizualization
+import folium
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For random selection 
+import random
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Communicating with operating and file system
+import os
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+<\Cell_0>
+<Cell_1>
+DATASET = "./data/train.csv"
+df = pd.read_csv(DATASET)
+df.info()
+<\Cell_1>
+<Cell_2>
+df.head()
+<\Cell_2>
+<Cell_3>
+df['room_type'].value_counts().plot(kind = 'pie', colors=['green', 'gold', 'black'], figsize = (8, 8))
+plt.title('Pie Chart for Room Type Distribution', fontsize = 20)
+plt.xlabel('Room Type')
+plt.ylabel('Number of entries')
+plt.show()
+<\Cell_3>
+<Cell_4>
+print('Number of entries for "Entire home/apartment": {}'.format(max(df['room_type'].value_counts())))
+<\Cell_4>
+<Cell_5>
+# In order to plot numerical data we have to clean 'price' column by remove '$' symbol in each row
+def remove_dollar(row):
+    if row[0] == '$':
+        return row[1:]
+    return row
+
+df['price'] = df['price'].apply(lambda row: float(remove_dollar(row).replace(',','')))
+<\Cell_5>
+<Cell_6>
+# Calculate mean price for each month
+mean_prices = []
+months = ['February', 'March', 'April']
+for month in months:
+    mean_prices.append(np.mean(df.loc[df['month'] == month]['price']))
+<\Cell_6>
+<Cell_7>
+# Plot price fluctuation over the 3 months
+plot = plt.plot(months, mean_prices)
+plt.xlabel('Month')
+plt.ylabel('Price $')
+plt.title('Mean Price Fluctuation over February, March and April')
+plt.show()
+<\Cell_7>
+<Cell_8>
+for i, month in enumerate(months):
+    print("Mean price in month {}: ${:.2f}".format(month, mean_prices[i]))
+<\Cell_8>
+<Cell_9>
+neighs = df.groupby('neighbourhood')
+reviews = neighs['number_of_reviews'].sum().sort_values().tail(5)
+
+reviews.plot(kind = 'bar', color=['#e59e6d', '#ba9653', '#963821', 'black', '#007a33'], figsize = (8, 6))
+plt.xlabel('Neighbourhood')
+plt.ylabel('Reviews')
+plt.title('Distribution of reviews in the top neighbourhoods')
+<\Cell_9>
+<Cell_10>
+# Get the previously found neighbourhoods as a list
+list_of_neighs = reviews.keys().tolist()
+n_reviews = reviews.tolist()
+# And print its members
+print("Top 5 neighbourhoods are: \n")
+for i,n in enumerate(list_of_neighs):
+    print('{} with {} reviews'.format(n, n_reviews[i]))
+<\Cell_10>
+<Cell_11>
+res = df['neighbourhood'].value_counts()
+# We want the most common neighbourhood, thus the head of the list
+neig = res.keys().tolist()[0]
+# And also the properties it has
+n_props = res.tolist()[0]
+print("The neighbourhood with the most listings is {} with {} properties".format(neig, n_props))
+<\Cell_11>
+<Cell_12>
+neighbourhoods = df['neighbourhood'].value_counts().keys().tolist()
+months = df['month'].value_counts().keys().tolist()
+
+for neighbourhood in neighbourhoods:
+    for month in reversed(months):
+        print("{} in {}: {}".format(neighbourhood, month, 
+            df.loc[(df['neighbourhood'] == neighbourhood) & (df['month'] == month)]['month'].value_counts().tolist()[0]))
+    print("----------------------------")
+<\Cell_12>
+<Cell_13>
+rand_neighbourhoods = random.choices(neighbourhoods, k=4)
+
+fig = plt.figure()
+
+for idx, rand_neighbourhood in enumerate(rand_neighbourhoods):
+    ax = fig.add_subplot(2, 2, idx+1)
+    df.loc[df['neighbourhood'] == rand_neighbourhood]['month'].value_counts().sort_values().plot(kind = 'bar', color = ['orange', 'dodgerblue', 'gray'], figsize = (8, 6))
+    ax.set_title(rand_neighbourhood)
+
+plt.tight_layout()
+plt.show()
+<\Cell_13>
+<Cell_14>
+df['neighbourhood'].value_counts().plot(kind = 'bar', color = ['purple','gold'], figsize = (8, 6))
+plt.title('Histogram of variable neighbourhood', fontsize = 20)
+plt.xlabel('Neighbourhood')
+plt.ylabel('Number of entries')
+plt.show()
+<\Cell_14>
+<Cell_15>
+print("Most common type of room in every neighbourhood: \n")
+for neighbourhood in neighbourhoods:
+    print("{}: {} - entries: {}".format(neighbourhood, 
+                                    np.argmax(df.loc[df['neighbourhood'] == neighbourhood]['room_type'].value_counts()),
+                                    np.max(df.loc[df['neighbourhood'] == neighbourhood]['room_type'].value_counts())))
+
+<\Cell_15>
+<Cell_16>
+# Group the data by the room type
+room_types = df.groupby('room_type')
+# FInd out the mean value of the prices in each room type
+prices = room_types['price'].mean().sort_values(ascending = False)
+prices.plot(kind = 'bar', color=['#00471b', '#eee1c6', '#0077c0'] ,figsize = (8, 6))
+plt.title('Cost per room type', fontsize = 20)
+plt.xlabel('Room Type')
+plt.ylabel('Cost in $')
+plt.show()
+<\Cell_16>
+<Cell_17>
+types = prices.keys().tolist()
+values = prices.tolist()
+
+print('The most expensive room type is "{}" with {:.1f} mean price'.format(types[0], values[0]))
+<\Cell_17>
+<Cell_18>
+# store in a new dataframe the info latitude/longitude/transit for month February
+data = df[['latitude', 'longitude', 'transit']].loc[df['month'] == 'February']
+data.dropna(inplace=True)
+tooltip = 'Click me!'
+
+for row in data.itertuples():
+    mapit = folium.Map(location=[row.latitude, row.longitude], zoom_start=12)
+
+for row in data[:100].itertuples():
+    folium.Marker(location=[row.latitude, row.longitude], popup=row.transit, icon=folium.Icon(icon='info-sign')).add_to(mapit)
+<\Cell_18>
+<Cell_19>
+# Display map generated from Folium
+mapit
+<\Cell_19>
+<Cell_20>
+df['neighbourhood'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540, background_color="white").generate(' '.join(df['neighbourhood'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+<\Cell_20>
+<Cell_21>
+df['transit'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540, background_color="black").generate(' '.join(df['transit'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+<\Cell_21>
+<Cell_22>
+df['description'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540, background_color="white").generate(' '.join(df['description'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+<\Cell_22>
+<Cell_23>
+# Note: the neighs is the df grouped by the neighbourhood field, as stated above
+scores = neighs['review_scores_rating'].mean().sort_values(ascending = False).head(5)
+scores.plot(kind = 'barh', color=['powderblue', 'olive', 'indigo', 'magenta', 'gold'] ,figsize = (8, 6))
+plt.title('Review mean score per neighbourhood', fontsize = 20)
+# We know that the reviews are high, so no need to use all the range (0-100)
+plt.xlim((95,100))
+plt.ylabel('Neighbourhood')
+plt.xlabel('Review score /100')
+plt.show()
+<\Cell_23>
+<Cell_24>
+list_of_neighs = scores.keys().tolist()
+n_scores = scores.tolist()
+# And print its members
+print("Top 5 neighbourhoods are: \n")
+for i,n in enumerate(list_of_neighs):
+    print('{} with {:.2f} review score'.format(n, n_scores[i]))
+<\Cell_24>
+<Cell_25>
+room_types = df['room_type'].value_counts().keys()
+print("Average number of people each room type accommodates: \n")
+for room_type in room_types:
+    print("{}: {}".format(room_type, round(df.loc[df['room_type'] == room_type]['accommodates'].mean())))
+<\Cell_25>
+<Cell_26>
+df = df[['id', 'name', 'description']]
+df.info()
+<\Cell_26>
+<Cell_27>
+df.head()
+<\Cell_27>
+<Cell_28>
+# drop any NaN value
+df.dropna(inplace=True)
+<\Cell_28>
+<Cell_29>
+df.info()
+<\Cell_29>
+<Cell_30>
+def preprocess_text(text):
+    # remove all punctuation
+    text = re.sub(r'[^\w\d\s]', ' ', text)
+    # collapse all white spaces
+    text = re.sub(r'\s+', ' ', text)
+    # convert to lower case
+    text = re.sub(r'^\s+|\s+?$', '', text.lower())
+    # remove stop words and perform stemming
+    stop_words = nltk.corpus.stopwords.words('english')
+    lemmatizer = WordNetLemmatizer() 
+    return ' '.join(
+        lemmatizer.lemmatize(term) 
+        for term in text.split()
+        if term not in set(stop_words)
+    )
+<\Cell_30>
+<Cell_31>
+# Concatenate name and description in one column and perform preprocessing
+df['info'] = df['name'] + df['description']
+df['processed_info'] = df['info'].apply(lambda row : preprocess_text(row))
+df.head()
+<\Cell_31>
+<Cell_32>
+tfidf_vec = TfidfVectorizer(ngram_range=(1, 2)).fit_transform(df.processed_info)
+tfidf_data = pd.DataFrame(tfidf_vec.toarray())
+tfidf_data.head()
+<\Cell_32>
+<Cell_33>
+
+<\Cell_33>

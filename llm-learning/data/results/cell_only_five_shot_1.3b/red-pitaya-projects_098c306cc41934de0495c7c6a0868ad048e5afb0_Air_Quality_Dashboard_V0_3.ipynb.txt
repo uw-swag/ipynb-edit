@@ -1,0 +1,40 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        html.H1('My Dashboard'),
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Montreal'},
+                ],
+                'layout': {
+                    'title': 'Dash Data Visualization'
+                }
+            }
+        ),
+        dcc.Graph(
+            id='example-graph2',
+            figure={
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Montreal'},
+                ],
+                'layout': {
+                    'title': 'Dash Data Visualization 2'
+                }
+            }
+        )
+    ])
+
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    ```
+
+    This code creates a second dashboard with two graphs. The first graph is a bar chart, and the second graph is also a bar chart, but with a different title.

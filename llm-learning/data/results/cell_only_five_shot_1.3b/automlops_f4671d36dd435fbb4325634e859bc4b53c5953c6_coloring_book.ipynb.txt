@@ -1,0 +1,31 @@
+```python
+    import data
+    import AutoMLOps
+    import datetime
+
+    pipeline_params = {
+        "bq_table": "sandbox-srastatter.mlops_boxer_test.dry-beans",
+        "output_model_directory": f"gs://mlops-boxer-test/trained_models/{datetime.datetime.now()}",
+        "project": "sandbox-srastatter",
+        "region": "us-central1"
+    }
+
+    # Adding regional support to the job
+    pipeline_params["job_name"] = f"{pipeline_params['job_name']}_regional"
+
+    # Loading data to BigQuery
+    data.load_data_to_bq(project_id=pipeline_params["project"], file="data/Dry_Beans_Dataset.csv")
+
+    # Generating the pipeline
+    AutoMLOps.generate(project_id=pipeline_params["project"], pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule='0 */12 * * *')
+
+    # Going to the pipeline
+    AutoMLOps.go(project_id=pipeline_params["project"], pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule='0 */12 * * *')
+
+    # Improved Git Workflow
+    # Adding a new feature to the job
+    pipeline_params["job_name"] = f"{pipeline_params['job_name']}_new_feature"
+
+    # Improved console output
+    print(f"Starting the job: {pipeline_params['job_name']}")
+    ```

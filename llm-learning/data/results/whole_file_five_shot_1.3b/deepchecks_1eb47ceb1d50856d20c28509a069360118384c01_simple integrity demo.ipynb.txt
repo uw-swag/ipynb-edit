@@ -1,0 +1,23 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67*len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    from deepchecks.suites import integrity_suite
+
+    integrity_suite().run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    The code above is used to load the iris dataset, split it into a training set and a test set, and then run a suite of checks on the datasets. The suite includes checks for data integrity, missing values, and outliers.
+
+    The `integrity_suite().run()` function is used to run the checks. The `train_dataset` parameter is the training dataset, and the `test_dataset` parameter is the test dataset. The `check_datasets_policy` parameter is used to specify the policy for running the checks. In this case, 'both' means that the checks will be run on both the training and test datasets.
+
+    The `deepchecks.suites` module provides a variety of suites that can be used to run checks on different types of datasets. The `integrity_suite()` function is used to get the suite for checking data integrity.
+
+    The `run()` function of the suite is used to run the checks. The function takes as input the training and test datasets, and returns a dictionary with the results of the checks.
+
+    The dictionary can be used to analyze the results of the checks, for example, to see if the data is missing or if there are any outliers.

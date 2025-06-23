@@ -1,0 +1,42 @@
+
+The code you provided is a live plotting of temperature data from an XADC (analog to digital converter) in Python using matplotlib. The data is appended to a pandas DataFrame and then plotted in real-time.
+
+However, there are a few changes you can make to make this code more efficient and cleaner:
+
+1. You can use a `for` loop to append the data to the DataFrame and then plot it. This will make your code more efficient and easier to read.
+
+2. You can use the `time.time()` function to get the current time in seconds and then use this to update the plot.
+
+Here's an example of how you could modify your code:
+
+```python
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import pandas as pd
+import time
+
+headers = ["Temperature (oC)","Time(Minutes)"]
+df = pd.DataFrame() #Create an empty data frame to append to later
+
+def animate(i):
+    global df
+    current_temp = !xadc_get_value_temp
+    temp_value = float(current_temp[0][:5])
+    clean_data_table = pd.DataFrame({'Temperature (oC)': [temp_value], 'Time(Minutes)': [i/60]})
+    df = df.append(clean_data_table)
+    
+    x = df['Time(Minutes)']
+    y1 = df['Temperature (oC)']
+    plt.cla()
+    plt.plot(x,y1)
+    plt.gcf().autofmt_xdate()
+    plt.xlabel('Time (Minutes)')
+    plt.ylabel('Temprature (C)')
+    plt.title("Temperature - Arcylic Case with Fan")
+
+ani = FuncAnimation(plt.gcf(), animate,interval=1000)
+plt.show()
+```
+
+In this version of the code, the data is appended to the DataFrame and then plotted in real-time. The `time.time()

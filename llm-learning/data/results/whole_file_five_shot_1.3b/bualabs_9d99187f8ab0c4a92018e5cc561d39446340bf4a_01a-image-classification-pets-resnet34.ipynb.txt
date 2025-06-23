@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Describe the process of training the model in markdown cells"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import error_rate
+<\Cell_0>
+<Cell_1>
+path = untar_data(URLs.PETS)
+path.ls()
+<\Cell_1>
+<Cell_2>
+path_annotations = path/'annotations'
+path_images = path/'images'
+<\Cell_2>
+<Cell_3>
+filenames = get_image_files(path_images)
+filenames[:15]
+<\Cell_3>
+<Cell_4>
+batchsize = 64
+np.random.seed(42)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+<\Cell_4>
+<Cell_5>
+data = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=224, bs=batchsize).normalize(imagenet_stats)
+<\Cell_5>
+<Cell_6>
+len(data.train_ds), len(data.valid_ds)
+<\Cell_6>
+<Cell_7>
+data.show_batch(rows=3, figsize=(12, 9))
+<\Cell_7>
+<Cell_8>
+print(data.classes)
+<\Cell_8>
+<Cell_9>
+print(data.c)
+<\Cell_9>
+<Cell_10>
+len(data.classes)
+<\Cell_10>
+<Cell_11>
+learner = cnn_learner(data, models.resnet34, metrics=error_rate)
+<\Cell_11>
+<Cell_12>
+learner.fit_one_cycle(4)
+<\Cell_12>
+<Cell_13>
+lear

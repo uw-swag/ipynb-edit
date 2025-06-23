@@ -1,0 +1,20 @@
+```python
+    import cv2
+
+    # Load the image
+    image = cv2.imread('image.jpg')
+
+    # Convert the image to grayscale
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Apply a Gaussian blur
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+
+    # Apply edge detection
+    edges = cv2.Canny(blur, 50, 150)
+
+    # Save the image
+    cv2.imwrite('edges.jpg', edges)
+    ```
+
+    This code will read an image, convert it to grayscale, apply a Gaussian blur, and then apply edge detection. The result is saved as a new image.

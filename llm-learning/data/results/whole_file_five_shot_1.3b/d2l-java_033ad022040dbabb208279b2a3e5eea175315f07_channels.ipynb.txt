@@ -1,0 +1,40 @@
+
+    '''
+    import ai.djl.ndarray.NDManager;
+    import ai.djl.ndarray.index.NDIndex;
+    import ai.djl.ndarray.types.DataType;
+    import ai.djl.ndarray.types.Shape;
+
+    NDArray X = manager.create(new Shape(2, 3, 3), DataType.FLOAT32);
+    X.set(new NDIndex(0), manager.arange(9));
+    X.set(new NDIndex(1), manager.arange(1, 10));
+    X = X.toType(DataType.FLOAT32, true);
+
+    NDArray K = X.reshape(new Shape(2, 2, 2));
+    K = K.toType(DataType.FLOAT32, true);
+
+    NDArray Y = K.dot(X);
+
+    System.out.println(Y.reshape(K.getShape()).sum().getFloat() < 1e-6);
+<\Cell_9>
+<Cell_10>
+NDArray Y = Y.reshape(K.getShape());
+System.out.println(Y.sum().getFloat() < 1e-6);
+<\Cell_10>
+<Cell_11>
+Y = Y.reshape(K.getShape());
+System.out.println(Y.sum().getFloat() < 1e-6);
+<\Cell_11>
+<Cell_12>
+Y = Y.reshape(K.getShape());
+System.out.println(Y.sum().getFloat() < 1e-6);
+<\Cell_12>
+<Cell_13>
+Y = Y.reshape(K.getShape());
+System.out.println(Y.sum().getFloat() < 1e-6);
+<\Cell_13>
+<Cell_14>
+Y = Y.reshape(K.getShape());
+System.out.println(Y.sum().getFloat() < 1e-6);
+<\Cell_14>
+<Cell_1

@@ -1,0 +1,44 @@
+
+    ### Exercise 7.8: Voting Classifier
+
+    # Voting Classifier is a meta-estimator that fits base classifiers and makes a prediction based on the most frequent class of the individual classifiers.
+
+    from sklearn.ensemble import VotingClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.svm import SVC
+
+    # Define the classifiers
+    clf1 = LogisticRegression()
+    clf2 = DecisionTreeClassifier()
+    clf3 = SVC()
+
+    # Create a voting classifier
+    eclf = VotingClassifier(estimators=[('lr', clf1), ('dt', clf2), ('svc', clf3)], voting='soft')
+
+    # Fit the classifier
+    eclf.fit(X_train, y_train)
+
+    # Predict the class labels
+    y_pred = eclf.predict(X_test)
+
+    # Calculate the accuracy
+    accuracy = metrics.accuracy_score(y_test, y_pred)
+    print("Accuracy: %0.2f" % accuracy)
+
+    ### Exercise 7.9: Stacking Ensemble
+
+    # Stacking is a meta-estimator that fits base classifiers and makes a prediction based on the most frequent class of the individual classifiers.
+
+    from sklearn.ensemble import StackingClassifier
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+
+    # Define the base classifiers
+    clf1 = KNeighborsClassifier(n_neighbors=3)
+    clf2 = RandomForestClassifier(n_estimators=100)
+    clf3 = LogisticRegression()
+
+    # Define the stacking classifier
+    stack = StackingClassifier(estimators=[('knn', clf1), ('rf', clf2), ('lr', clf3)], final_estim

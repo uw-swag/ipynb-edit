@@ -1,0 +1,48 @@
+```python
+    # Install the necessary dependencies
+    import sys
+    sys.path.append("../../")
+
+    import os
+    import shutil
+    import itertools
+
+    import pandas as pd
+    import sklearn.preprocessing
+
+    import azureml as aml
+    import azureml.widgets
+    import azureml.train.dnn
+    import azureml.train.hyperdrive as hd
+
+    from reco_utils.dataset import movielens
+    from reco_utils.dataset.python_splitters import python_random_split
+    from reco_utils.common import tf_utils
+    from reco_utils.evaluation.python_evaluation import (
+        rmse, mae, rsquared, exp_var,
+        map_at_k, ndcg_at_k, precision_at_k, recall_at_k
+    )
+
+    from IPython.display import clear_output
+
+    # Connect to a workspace
+    SUBSCRIPTION_ID = '<subscription-id>'
+    RESOURCE_GROUP  = '<resource-group>'
+    WORKSPACE_NAME  = '<workspace-name>'
+
+    # Remote compute (cluster) configuration. If you want to save the cost more, set these to small.
+    VM_SIZE = 'STANDARD_NC6'
+    VM_PRIORITY = 'lowpriority'
+    # Cluster nodes
+    MIN_NODES = 4
+    MAX_NODES = 8
+    # Hyperdrive experimentation configuration
+    MAX_TOTAL_RUNS = 200  # Number of runs (training-and-evaluation) to search the best hyperparameters. 
+    MAX_CONCURRENT_RUNS = 8
+
+    # Recommend top k items
+    TOP_K = 10
+    # Select Movielens data size: 100k, 1m, 10m, or 20m
+    MOVIELENS_DATA_SIZE = '1m'
+    # Number of samples to train. Epochs = NUM_SAMPLES_TO_TRAIN / num-train
+    NUM_SAMPLES_

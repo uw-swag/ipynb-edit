@@ -1,0 +1,18 @@
+```python
+    from sklearn.decomposition import PCA
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
+
+    # Separate the code for latent factor models and classifiers
+    pca = PCA(n_components=2)
+    pca.fit(X)
+    X_pca = pca.transform(X)
+
+    logistic_regression = LogisticRegression()
+    logistic_regression.fit(X_pca, y)
+
+    svc = SVC()
+    svc.fit(X_pca, y)
+
+    # Continue with the rest of your code
+    ```

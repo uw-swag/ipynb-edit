@@ -1,0 +1,114 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets, model_selection, linear_model, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ProbClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+iris = datasets.load_iris()
+<\Cell_2>
+<Cell_3>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_3>
+<Cell_4>
+iris_frame['target'] = iris.target
+<\Cell_4>
+<Cell_5>
+train_data, test_data = model_selection.train_test_split(iris_frame, random_state=0)
+<\Cell_5>
+<Cell_6>
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = iris.feature_names
+categorical_features = []
+
+features = numerical_features + categorical_features
+<\Cell_6>
+<Cell_7>
+model = linear_model.LogisticRegression()
+<\Cell_7>
+<Cell_8>
+model.fit(train_data[features], train_data.target)
+<\Cell_8>
+<Cell_9>
+# make a data frame with predictions for each class
+
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = iris.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = iris.target_names
+<\Cell_9>
+<Cell_10>
+train_probas.head()
+<\Cell_10>
+<Cell_11>
+# get labels for target: [0, 1, 0, 2] -> ['setosa', 'versicolor', 'setosa', 'virginica']
+
+train_data['target'] = [iris.target_names[x] for x in train_data['target']]
+test_data['target'] = [iris.target_names[x] for x in test_data['target']]
+<\Cell_11>
+<Cell_12>
+# merge train and test data with predictions
+
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+<\Cell_12>
+<Cell_13>
+merged_train_data.head()
+<\Cell_13>
+<Cell_14>
+iris_column_mapping = ColumnMapping()
+
+iris_column_mapping.target = 'target'
+iris_column_mapping.prediction = iris.target_names.tolist()
+iris_column_mapping.numerical_features = iris.feature_names
+<\Cell_14>
+<Cell_15>
+iris_prob_classification_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=1)])
+iris_prob_classification_dashboard.calculate(merged_train_data, merged_test_data, 
+                                             column_mapping = iris_column_mapping)
+iris_prob_classification_dashboard.show()
+<\Cell_15>
+<Cell_16>
+from evidently.report import Report
+from evidently.metrics import ClassificationPerformanceMetrics
+
+# bcancer_column_mapping.pos_label = 'malignant'
+report = Report(metrics=[ClassificationPerformanceMetrics()])
+report.run(current_data=merged_test_data, reference_data=merged_train_data, column_mapping=iris_column_mapping)
+report
+<\Cell_16>
+<Cell_17>
+iris_prob_classification_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=0)])
+iris_prob_classification_dashboard.calculate(merged_train_data, merged_test_data, 
+                                             column_mapping = iris_column_mapping)
+iris_prob_classification_dashboard.show()
+<\Cell_17>
+<Cell_18>
+# iris_prob_classification_dashboard.save('iris_prob_classification_dashboard.html')
+<\Cell_18>
+<Cell_19>
+iris_prob_classification_profile = Profile(sections=[ProbClassificationPerformanceProfileSection()])
+<\Cell_19>
+<Cell_20>
+iris_prob_classification_profile.calculate(merged_train_data, merged_test_data, 
+                                           column_mapping = iris_column_mapping)
+<\Cell_20>
+<Cell_21>
+iris_prob_classification_profile.json() 
+<\Cell_21>

@@ -1,0 +1,43 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, accuracy_score
+
+    # Load the mental health survey data
+    df = pd.read_csv('mental_health_survey.csv')
+
+    # Preprocess the data
+    # This step depends on the structure of your data and what you want to do with it
+    # For example, you might want to fill missing values, normalize numerical data, etc.
+
+    # Select features
+    features = df[['feature1', 'feature2', 'feature3', 'feature4', 'feature5']]
+
+    # Select target
+    target = df['target']
+
+    # Encode categorical features
+    label_encoder = LabelEncoder()
+    features['feature1'] = label_encoder.fit_transform(features['feature1'])
+    features['feature2'] = label_encoder.fit_transform(features['feature2'])
+    features['feature3'] = label_encoder.fit_transform(features['feature3'])
+    features['feature4'] = label_encoder.fit_transform(features['feature4'])
+    features['feature5'] = label_encoder.fit_transform(features['feature5'])
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=42)
+
+    # Train a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print('Accuracy:', accuracy_score(y_test, y_

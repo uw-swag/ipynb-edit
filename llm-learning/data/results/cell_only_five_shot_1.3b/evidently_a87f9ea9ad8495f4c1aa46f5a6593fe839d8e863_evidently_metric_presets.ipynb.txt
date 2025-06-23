@@ -1,0 +1,43 @@
+```
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import DataQualityPreset
+from evidently.metric_preset import RegressionPreset
+from evidently.metric_preset import ClassificationPreset
+from evidently.metric_preset import NumTargetDrift, CatTargetDrift, TargetDriftPreset
+
+classification_performance_report = Report(metrics=[
+    ClassificationPreset(),
+])
+
+classification_performance_report.run(reference_data=bcancer_ref, current_data=bcancer_cur,
+                                     column_mapping=ColumnMapping(prediction='pos'))
+
+num_target_drift_report = Report(metrics=[
+    NumTargetDrift(),
+])
+
+num_target_drift_report.run(reference_data=housing_ref, current_data=housing_cur)
+
+cat_target_drift_report = Report(metrics=[
+    CatTargetDrift(),
+])
+
+cat_target_drift_report.run(reference_data=iris_ref, current_data=iris_cur)
+
+#to be fixed in the next release
+target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+target_drift_report.run(reference_data=iris_ref, current_data=iris_cur)
+
+```
+
+The code above is a rework of the `TargetDriftPreset` and the removal of the old target drift presets. The `TargetDriftPreset` is a preset for target drift metrics, and it's used to calculate the target drift metrics. The `TargetDriftPreset` is a part of the `DataDriftPreset`, which is a base class for all data drift presets.

@@ -1,0 +1,48 @@
+```python
+    # Update the launch_dict with the scraped data
+    launch_dict['Flight No.'] = flight_numbers
+    launch_dict['Launch site'] = launch_sites
+    launch_dict['Payload'] = payloads
+    launch_dict['Payload mass'] = payload_masses
+    launch_dict['Orbit'] = orbits
+    launch_dict['Customer'] = customers
+    launch_dict['Launch outcome'] = launch_outcomes
+    launch_dict['Version Booster'] = version_boosters
+    launch_dict['Booster landing'] = booster_landings
+    launch_dict['Date'] = dates
+    launch_dict['Time'] = times
+
+    # Print the updated launch_dict
+    print(launch_dict)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Update 02. Data Cleaning - Data Cleaning.ipynb"
+    Original Code Cells:
+    '''
+    # Remove any rows with missing values
+    df = df.dropna()
+
+    # Remove any rows where the 'Launch outcome' is 'unknown'
+    df = df[df['Launch outcome'] != 'unknown']
+
+    # Remove any rows where the 'Launch outcome' is 'fail'
+    df = df[df['Launch outcome'] != 'fail']
+
+    # Remove any rows where the 'Launch outcome' is 'success'
+    df = df[df['Launch outcome'] != 'success']
+
+    # Remove any rows where the 'Payload mass' is less than 100000
+    df = df[df['Payload mass'] >= 100000]
+
+    # Remove any rows where the 'Orbit' is less than 1
+    df = df[df['Orbit'] >= 1]
+
+    # Remove any rows where the 'Flight No.' is less than 1000
+    df = df[df['Flight No.'] >= 1000]
+
+    # Remove any rows where the 'Customer' is 'unknown'
+    df = df[df['Customer'] != 'unknown']
+
+    # Remove any rows where the 'Booster landing' is '

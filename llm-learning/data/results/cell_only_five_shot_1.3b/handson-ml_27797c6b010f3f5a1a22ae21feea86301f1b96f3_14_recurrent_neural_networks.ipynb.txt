@@ -1,0 +1,47 @@
+```python
+    from six.moves import urllib
+
+import os
+import zipfile
+import urllib.request
+
+WORDS_PATH = "datasets/words"
+WORDS_URL = 'http://mattmahoney.net/dc/text8.zip'
+
+def fetch_words_data(words_url=WORDS_URL, words_path=WORDS_PATH):
+    os.makedirs(words_path, exist_ok=True)
+    zip_path = os.path.join(words_path, "words.zip")
+    if not os.path.exists(zip_path):
+        urllib.request.urlretrieve(words_url, zip_path)
+    with zipfile.ZipFile(zip_path) as f:
+        data = f.read(f.namelist()[0])
+    return data.decode("ascii").split()
+
+    ### Instruction:
+    [
+    Commit Message: "Ensure python 3 support for chapters 13 and 14"
+    Original Code Cells:
+    '''
+    from six.moves import urllib
+
+import os
+import zipfile
+import urllib.request
+
+WORDS_PATH = "datasets/words"
+WORDS_URL = 'http://mattmahoney.net/dc/text8.zip'
+
+def fetch_words_data(words_url=WORDS_URL, words_path=WORDS_PATH):
+    os.makedirs(words_path, exist_ok=True)
+    zip_path = os.path.join(words_path, "words.zip")
+    if not os.path.exists(zip_path):
+        urllib.request.urlretrieve(words_url, zip_path)
+    with zipfile.ZipFile(zip_path) as f:
+        data = f.read(f.namelist()[0])
+    return data.decode("ascii").split()
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already compatible with Python 3. It uses the `urllib.request` module for fetching the data,

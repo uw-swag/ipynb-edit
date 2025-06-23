@@ -1,0 +1,34 @@
+#Dataset for binary probabilistic classifcation
+bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+bcancer = bcancer_data.frame
+
+bcancer['target'] = [bcancer_data.target_names[x] for x in bcancer.target]
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+bcancer_ref['benign'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 0]
+bcancer_ref['malignant'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+
+bcancer_cur['benign'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 0]
+bcancer_cur['malignant'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+#options
+stat_test_option = DataDriftOptions(all_features_stattest='psi')
+
+color_scheme = ColorOptions()
+color_scheme.primary_color = "#5a86ad"
+color_scheme.fill_color = "#fff4f2"
+color_scheme.zero_line_color = "#016795"
+color_scheme.current_data_color = "#c292a1" 
+color_scheme.reference_data_color = "#017b92"
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnDriftMetric('age', options=stat_test_option),
+],
+                                  color_options=color_scheme
+)
+
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_report

@@ -1,0 +1,48 @@
+```
+    def fit(X, y, n_features=2, n_neurons=3, n_output=1, iterations=10, eta=0.001):
+        """Multi-layer perceptron trained with backpropagation
+        
+        Args:
+            X (ndarray): matrix of features
+            y (ndarray): vector of expected values
+            n_features (int): number of feature vectors 
+            n_neurons (int): number of neurons in hidden layer
+            n_output (int): number of output neurons
+            iterations (int): number of iterations over the training set
+            eta (float): learning rate
+        
+        Returns: 
+            errors (list): list of errors over iterations
+            param (dic): dictionary of learned parameters
+        """
+        
+        ## ~~ Initialize parameters ~~##
+        param = init_parameters(n_features=n_features, 
+                                n_neurons=n_neurons, 
+                                n_output=n_output)
+
+        ## ~~ storage errors after each iteration ~~##
+        errors = []
+        
+        for _ in range(iterations):
+            
+            ##~~ Forward-propagation ~~##
+            
+            Z1 = linear_function(param['W1'], X, param['b1'])
+            S1 = sigmoid_function(Z1)
+            Z2 = linear_function(param['W2'], S1, param['b2'])
+            S2 = sigmoid_function(Z2)
+        
+            ##~~ Error computation ~~##
+            error = cost_function(S2, y)
+            errors.append(error)
+            
+            ##~~ Backpropagation ~~##
+            
+            # update output weights
+            delta2 = (S2 - y)* S2*(1-S2)
+            W2_gradients = S1.T @ delta2
+            param["W2"] = param["W2"] - W2_gradients * eta
+
+            # update output bias
+            param["b2"] = param["b2"] - np.sum(delta2, axis=0, keepdims=True) * eta

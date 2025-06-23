@@ -1,0 +1,32 @@
+```
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import requests
+    from bs4 import BeautifulSoup
+
+    # Define the URL of the webpage
+    url = 'https://www.marketwatch.com/investing/stock/symbol/MSFT'
+
+    # Send a request to the website
+    response = requests.get(url)
+
+    # Parse the HTML content of the page with BeautifulSoup
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Extract the stock data
+    stock_data = soup.find_all('div', {'class': 'css-1dbjc4n r-1awozwy r-1qd0xha'})
+
+    # Create a list to store the extracted data
+    data = []
+
+    # Loop through each data point and extract the information
+    for point in stock_data:
+        date = point.find('span', {'class': 'css-1r9hf3a'}).text
+        open_price = point.find('span', {'class': 'css-1r9hf3a css-1qd0xha'}).text
+        high_price = point.find('span', {'class': 'css-1r9hf3a css-1qd0xha css-19t6fk1'}).text
+        low_price = point.find('span', {'class': 'css-1r9hf3a css-1qd0xha css-19t6fk1 css-1adbjw1'}).text
+        close_price = point.find('span', {'class': 'css-1r9hf3a css-1qd0xha css-19t6fk1 css-1adbjw1 css-1adbjw1'}).text
+        volume = point.find('span', {'class': 'css-1r9hf3a css-1qd0xha css-19t6fk1 css-1adbjw1 css-1adbjw1'}).text
+
+        # Append the extracted data to the list

@@ -1,0 +1,71 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.model_selection import train_test_split
+    from csv import reader
+    from random import randrange
+    from math import sqrt
+    from sklearn.metrics import accuracy_score, classification_report
+    from sklearn import preprocessing
+
+    # Your code here
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding data preprocessing steps (#98)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Data preprocessing steps
+    df = pd.read_csv("winequality-white.csv", ";")
+    df.head(6)
+
+    min_max_scaler = preprocessing.MinMaxScaler()
+    df_scaled = min_max_scaler.fit_transform(df)
+    datasetn = pd.DataFrame(df_scaled)
+
+    m = np.random.rand(len(datasetn)) < 0.8
+    train = datasetn[m]
+    test = datasetn[~m]
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing SGD for regression (#97)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # SGD for regression
+    learn_rate = 0.000001
+    epoch = 120
+
+    coefficients, error_list = coefficients_sgd(train.values, learn_rate, epoch)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding model evaluation steps (#96)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Model evaluation steps
+    y_pred = [predict(x, coefficients) for x in test]
+    df_actual = pd.DataFrame(list(test[:, -1]),

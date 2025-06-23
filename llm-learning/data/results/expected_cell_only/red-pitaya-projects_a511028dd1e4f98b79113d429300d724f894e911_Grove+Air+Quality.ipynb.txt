@@ -1,0 +1,19 @@
+ANALOG_Alcohol = FPGA.analog_in(2) # define which pin will be used for alcohol sensor
+ANALOG_Alcohol.read()
+Air_Quality_Sensor_Data = FPGA.analog_in(1) # define which pin will be used for alcohol sensor
+
+AQsensorValue = 0
+ 
+#Get a average data by testing 100 times
+i = 1
+while i <= 100:
+    AQsensorValue = sensorValue + Air_Quality_Sensor_Data.read()
+    i += 1
+AQsensorValue = AQsensorValue/100.0;
+
+AQsensor_volt = AQsensorValue/1024*3.3;
+AQ_RS_air = AQsensor_volt/(3.3-AQsensor_volt); #Get the value of RS via in a clear air - omit *R16
+
+print(AQsensorValue,AQsensor_volt,AQ_RS_air)
+Air_Quality_Sensor_Data = FPGA.analog_in(1) # define which pin will be used for alcohol sensor
+Air_Quality_Sensor_Data.read()

@@ -1,0 +1,130 @@
+<Cell_0>
+# glass identification dataset
+import pandas as pd
+file = './data/glass.data'
+col_names = ['id','ri','na','mg','al','si','k','ca','ba','fe','glass_type']
+glass = pd.read_csv(file, names=col_names, index_col='id')
+glass['assorted'] = glass.glass_type.map({1:0, 2:0, 3:0, 4:0, 5:1, 6:1, 7:1})
+<\Cell_0>
+<Cell_1>
+# Reading the first 5 entries of the DataFrame
+glass.head()
+<\Cell_1>
+<Cell_2>
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+<\Cell_2>
+<Cell_3>
+sns.lmplot(x='al', y='ri', data=glass, ci=None)
+<\Cell_3>
+<Cell_4>
+# scatter plot using Matplotlib
+plt.scatter(glass.al, glass.ri)
+<\Cell_4>
+<Cell_5>
+# fit a linear regression model
+from sklearn.linear_model import LinearRegression
+import numpy as np
+linreg = LinearRegression()
+feature_cols = ['al']
+X = glass[feature_cols]
+y = glass.ri
+linreg.fit(X, y)
+<\Cell_5>
+<Cell_6>
+# look at the coefficients to get the equation for the line, but then how do you plot the line?
+print(linreg.intercept_)
+print(linreg.coef_)
+<\Cell_6>
+<Cell_7>
+# you could make predictions for arbitrary points, and then plot a line connecting them. 
+# np.shape(np.array([1]).reshape(-1,1))
+print(linreg.predict(np.array([1]).reshape(-1,1)))
+print(linreg.predict(np.array([2]).reshape(-1,1)))
+print(linreg.predict(np.array([3]).reshape(-1,1)))
+<\Cell_7>
+<Cell_8>
+# or you could make predictions for all values of X, and then plot those predictions connected by a line
+ri_pred = linreg.predict(X)
+plt.plot(glass.al, ri_pred, color='red')
+<\Cell_8>
+<Cell_9>
+# put the plots together
+plt.scatter(glass.al, glass.ri)
+plt.plot(glass.al, ri_pred, color='red')
+<\Cell_9>
+<Cell_10>
+# compute prediction for al=2 using the equation
+linreg.intercept_ + linreg.coef_ * 2
+<\Cell_10>
+<Cell_11>
+# compute prediction for al=2 using the predict method
+linreg.predict(np.array([2]).reshape(-1,1))
+<\Cell_11>
+<Cell_12>
+# examine coefficient for al
+print(feature_cols, linreg.coef_)
+<\Cell_12>
+<Cell_13>
+# increasing al by 1 (so that al=3) decreases ri by 0.0025
+1.51699012 - 0.0024776063874696243
+<\Cell_13>
+<Cell_14>
+# compute prediction for al=3 using the predict method
+linreg.predict(np.array([3]).reshape(-1,1))
+<\Cell_14>
+<Cell_15>
+plt.scatter(glass.al, glass.assorted)
+<\Cell_15>
+<Cell_16>
+# fit a linear regression model and store the predictions
+feature_cols = ['al']
+X = glass[feature_cols]
+y = glass.assorted
+linreg.fit(X, y)
+assorted_pred = linreg.predict(X)
+<\Cell_16>
+<Cell_17>
+# scatter plot that includes the regression line
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, assorted_pred, color='red')
+<\Cell_17>
+<Cell_18>
+# understanding np.where
+import numpy as np
+nums = np.array([5, 15, 8])
+<\Cell_18>
+<Cell_19>
+# np.where returns the first value if the condition is True, and the second value if the condition is False
+np.where(nums > 10, 'big', 'small')
+<\Cell_19>
+<Cell_20>
+# examine the predictions
+assorted_pred[:10]
+<\Cell_20>
+<Cell_21>
+# transform predictions to 1 or 0
+assorted_pred_class = np.where(assorted_pred >= 0.5, 1, 0)
+assorted_pred_class
+<\Cell_21>
+<Cell_22>
+# plot the class predictions
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, assorted_pred_class, color='red')
+<\Cell_22>
+<Cell_23>
+# add predicted class to DataFrame
+glass['assorted_pred_class'] = assorted_pred_class
+
+# sort DataFrame by al
+glass.sort_values('al', inplace=True)
+<\Cell_23>
+<Cell_24>
+# plot the class predictions again
+plt.scatter(glass.al, glass.assorted)
+plt.plot(glass.al, glass.assorted_pred_class, color='red')
+<\Cell_24>
+<Cell_25>
+
+<\Cell_25>

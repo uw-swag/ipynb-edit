@@ -1,0 +1,49 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added exaples for custom descriptors, semantic similarity; removed TextOverviewPreset (#1288)"
+    Original Code Cells:
+    '''
+<\Cell_28>
+<Cell_29>
+#Built-in descriptors without parameters
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        Sentiment(display_name="Question sentiment"),
+        TextLength(display_name= "Question length"),
+        OOV(display_name= "Question out of vocabulary words"),
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        Sentiment(display_name="Response sentiment"),
+        NonLetterCharacterPercentage(display_name="Non letter characters in response"),
+        SentenceCount(display_name="Sentence count in response"),
+        WordCount(display_name="Word count in response"),
+    ]),
+    ColumnCategoryMetric(column_name=IncludesWords(words_list=['salary']).for_column("response"), category=True),
+    timestamp=datetime.now() + timedelta(days=i),
+])
+
+report.run(reference_data=None, current_data=assistant_logs.iloc[20 * i : 20 * (i + 1), :], column_mapping=column_mapping)
+<\Cell_29>
+<Cell_30>
+project.dashboard.add_panel(
+    DashboardPanelTestSuite(
+        title="Test results",
+        filter=ReportFilter(metadata_values={}, tag_values=[], include_test_suites=True),
+        size=WidgetSize.FULL,
+    )
+)
+project.save()
+<\Cell_30>
+<Cell_31>
+<Cell_32>
+<\Cell_32>
+
+    '''
+    ]
+
+    ### Response:
+
+    ### Instruction:
+    [
+    Commit Message: "Added exaples for custom descriptors, semantic similarity; removed TextOverviewPreset (#1288

@@ -1,0 +1,30 @@
+```python
+    # Import necessary libraries
+    import unittest
+    from recommenders.recommender_system import RecommenderSystem
+    from recommenders.data_management import DataManager
+    from recommenders.user_interface import UserInterface
+
+    class TestRecommenderSystem(unittest.TestCase):
+
+        def setUp(self):
+            # Initialize the data manager
+            self.data_manager = DataManager()
+
+            # Initialize the recommender system
+            self.recommender_system = RecommenderSystem(self.data_manager)
+
+            # Initialize the user interface
+            self.user_interface = UserInterface()
+
+        def test_recommendation(self):
+            # Test the recommendation function
+            recommendation = self.recommender_system.recommend(self.user_interface.get_user_input())
+
+            # Check if the recommendation is not None
+            self.assertIsNotNone(recommendation)
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+    This test case checks if the recommendation function of the recommender system returns a non-null value. If the recommendation function returns a null value, the test case will fail.

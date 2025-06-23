@@ -1,0 +1,39 @@
+```python
+    <Cell_0>
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.model_selection import StratifiedKFold, cross_val_score
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+    <\Cell_0>
+    <Cell_1>
+    # Load the dataset
+    df = pd.read_csv('https://raw.githubusercontent.com/ferdouszislam/Android-Malware-Detection-ML/main/datasets/Feature-Selected_Dataset/Main_Dataset-Weka_Feature_Selected.csv?token=AKGHTOZCFCA62MER45KW3HLAUEPP4')
+    df.info()
+    <\Cell_1>
+    <Cell_2>
+    # Split the dataset into features and target variable
+    X = df.drop('class', axis = 1)
+    y = df['class']
+    <\Cell_2>
+    <Cell_3>
+    # Define the model
+    decisionTree_model_gscv = DecisionTreeClassifier(random_state=42)
+
+    # Define the parameter grid
+    param_grid = {'max_depth': np.arange(1, 30), 'criterion': ['gini', 'entropy']}
+
+    # Perform grid search
+    decisionTree_gscv = GridSearchCV(decisionTree_model_gscv, param_grid, scoring=['accuracy', 'f1', 'roc_auc'], refit='accuracy', cv=cv)
+    decisionTree_gscv.fit(X, y)
+    <\Cell_3>
+    <Cell_4>
+    # Check the best parameters
+    decisionTree_gscv.best_params_
+    <\Cell_4>
+    <Cell_5>
+    # Evaluate the model
+    accuracies = cross_val_score(decisionTree_model_gscv, X

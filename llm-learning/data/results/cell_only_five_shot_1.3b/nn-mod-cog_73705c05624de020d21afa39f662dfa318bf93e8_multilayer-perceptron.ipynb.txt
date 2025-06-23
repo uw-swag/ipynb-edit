@@ -1,0 +1,33 @@
+```python
+    import numpy as np
+    from sklearn import datasets
+    from sklearn.utils import shuffle
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+
+    X1, y1 = datasets.make_gaussian_quantiles(cov=2.,
+                                 n_samples=300, n_features=2,
+                                 n_classes=2, random_state=1)
+    X2, y2 = datasets.make_gaussian_quantiles(mean=(3, 3), cov=1.5,
+                                 n_samples=700, n_features=2,
+                                 n_classes=2, random_state=1)
+    X = np.concatenate((X1, X2))
+    y = np.concatenate((y1, - y2 + 1))
+    y = 2*y-1
+
+    X, y = shuffle(X, y)
+
+    Xtest,X = np.split(X,[400])
+    ytest,y = np.split(y,[400])
+
+    Xblue = X[y==-1]
+    Xred = X[y==1]
+    plt.scatter(Xblue[:,0],Xblue[:,1],c='b',s=20)
+    _=plt.scatter(Xred[:,0],Xred[:,1],c='r',s=20)
+
+    def plot_decision_boundary(t, X, y):
+        plot_step = 0.02
+        x0_min, x0_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+        x1_min, x1_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+        xx0, xx1 = np.meshgrid(np.arange(x0_min, x0_max, plot_step), np.arange(x1_min, x1_max, plot_step))
+        yypred = t.predict(np.c_[xx0.ravel(),xx1

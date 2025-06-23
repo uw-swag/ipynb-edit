@@ -1,0 +1,29 @@
+```
+    The function `string_length_out_of_bounds` is a check in the mlchecks library that checks if the length of any string in a DataFrame is greater than a specified number of percentiles. If it is, the check returns a list of the strings that violate the condition.
+
+    The function `string_length_out_of_bounds` is used to identify outliers in the length of strings in a DataFrame. It's a good practice to use this function before performing any data analysis or machine learning tasks, as it can help identify and remove outliers in the data.
+
+    However, the function `string_length_out_of_bounds` is not a function that you can call directly. It's a method of the `mlchecks.checks.integrity.string_length_out_of_bounds` class. You can use it as a method of a class that inherits from `mlchecks.checks.integrity.string_length_out_of_bounds.StringLengthOutOfBounds`.
+
+    Here's an example of how you can use it:
+
+    ```python
+    from mlchecks.checks.integrity.string_length_out_of_bounds import StringLengthOutOfBounds
+
+    # Create an instance of the check
+    check = StringLengthOutOfBounds(num_percentiles=10)
+
+    # Run the check on the DataFrame
+    outliers = check.run(df)
+
+    # Print the outliers
+    print(outliers)
+    ```
+
+    In this example, the `num_percentiles` parameter is set to 10, which means that the check will only return strings that are 10 percent longer than the median length of all strings in the DataFrame.
+
+    The `run` method of the `StringLengthOutOfBounds` class returns a list of strings that violate the condition specified by the check.
+
+    The `outliers` list can be used to remove outliers from the DataFrame.
+
+    Please note that the `string_length_out_of_bounds` function is not a standalone function, but a method of the `mlchecks.checks.integrity.string_length

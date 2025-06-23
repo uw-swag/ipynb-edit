@@ -1,0 +1,47 @@
+```python
+    # Function Approximation in Deep Neural Networks
+    # TensorFlow
+
+    import tensorflow as tf
+    from tensorflow.contrib.layers import fully_connected
+
+    # Parameters
+    learning_rate = 0.01
+    num_steps = 500
+    batch_size = 100
+    display_step = 100
+
+    # Network Parameters
+    num_input = 784 # MNIST data input (img shape: 28*28)
+    num_classes = 10 # MNIST total classes (0-9 digits)
+    num_hidden_layers = 3 # Number of hidden layers
+    num_hidden_units = 256 # Number of hidden units per layer
+
+    # TensorFlow graph
+    graph = tf.Graph()
+
+    with graph.as_default():
+
+        # Input data
+        tf_train_dataset = tf.placeholder(tf.float32, shape=(batch_size, num_input))
+        tf_train_labels = tf.placeholder(tf.float32, shape=(batch_size, num_classes))
+
+        # Define a scope for reusing the variables
+        reuse = tf.variable_scope(tf.get_variable_scope(), reuse=True)
+
+        # Define the DNN
+        def dnn(x, reuse):
+            # Hidden layer 1
+            layer = fully_connected(x, num_hidden_units, scope='hidden_layer_1', reuse=reuse)
+            # Hidden layer 2
+            layer = fully_connected(layer, num_hidden_units, scope='hidden_layer_2', reuse=reuse)
+            # Output layer
+            layer = fully_connected(layer, num_classes, scope='output_layer', reuse=reuse)
+            return layer
+
+        # Define the loss and optimizer
+        # ...
+
+    # Training
+    # ...
+    ```

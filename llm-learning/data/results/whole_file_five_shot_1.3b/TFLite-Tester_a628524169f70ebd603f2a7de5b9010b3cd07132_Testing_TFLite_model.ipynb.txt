@@ -1,0 +1,50 @@
+```
+    [
+    Commit Message: "removed unnecessary comments"
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install tensorflow-gpu==2.0.0
+!pip install tensorflow_hub
+<\Cell_0>
+<Cell_1>
+from __future__ import absolute_import, division, print_function, unicode_literals
+
+import matplotlib.pylab as plt
+import tensorflow as tf
+import tensorflow_hub as hub
+import numpy as np
+<\Cell_1>
+<Cell_2>
+import pandas as pd
+
+# Increase precision of presented data for better side-by-side comparison
+pd.set_option("display.precision", 8)
+<\Cell_2>
+<Cell_3>
+print("Version: ", tf.__version__)
+print("Hub version: ", hub.__version__)
+print("Eager mode: ", tf.executing_eagerly())
+print("GPU is", "available" if tf.test.is_gpu_available() else "NOT AVAILABLE")
+<\Cell_3>
+<Cell_4>
+data_root = tf.keras.utils.get_file(
+  'flower_photos','https://storage.googleapis.com/download.tensorflow.org/example_images/flower_photos.tgz',
+   untar=True)
+<\Cell_4>
+<Cell_5>
+# Create data generator for training and validation
+
+IMAGE_SHAPE = (224, 224)
+TRAINING_DATA_DIR = str(data_root)
+
+datagen_kwargs = dict(rescale=1./255, validation_split=.20)
+valid_datagen = tf.keras.preprocessing.image.ImageDataGenerator(**datagen_kwargs)
+valid_generator = valid_datagen.flow_from_directory(
+    TRAINING_DATA_DIR, 
+    subset="validation", 
+    shuffle=True,
+    target_size=IMAGE_SHAPE
+)
+
+train_datagen = tf.keras.pre

@@ -1,0 +1,17 @@
+```python
+    import torch
+    import matplotlib.pyplot as plt
+
+    x = torch.linspace(-10, 10, 100)
+    y1 = torch.sigmoid(x)  # Sigmoid function
+    y3 = torch.relu(x)  # ReLU function
+
+    plt.ylim(top=2.0, bottom=-0.5)
+    plt.xlim(right=2.0, left=-2.0)
+    plt.legend(['Sigmoid', 'ReLU'], loc='upper left')
+    plt.grid()
+
+    plt.plot(x.numpy(), y1.numpy())
+    plt.plot(x.numpy(), y3.numpy())
+    plt.show()
+    ```

@@ -1,0 +1,43 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add descriptions to code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+x, y, s = load_scar()
+<\Cell_1>
+<Cell_2>
+from scar import C
+
+tau = 0.5
+w_p = tau / (C * tau)
+w_n = (1 - tau) / (1 - C * tau)
+
+class_weight = {1: w_p, 0: w_n}
+<\Cell_2>
+<Cell_3>
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression(class_weight=class_weight).fit(x, s)
+y_hat = clf.predict(x)
+<\Cell_3>
+<Cell_4>
+from utils import visualize_pn_data
+<\Cell_4>
+<Cell_5>
+visualize_pn_data(x, y)
+<\Cell_5>
+<Cell_6>
+visualize_pn_data(x, y_hat)
+<\Cell_6>
+
+    '''
+    ]
+
+    ### Response:
+    The code cells are designed to perform various tasks such as data loading, model training, and visualization.

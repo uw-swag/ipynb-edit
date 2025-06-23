@@ -1,0 +1,24 @@
+```
+    The code you provided is a part of a Jupyter notebook and it's not clear what the purpose of this code is. It seems to be a custom DeepChecks check, which is a library for validating the quality of machine learning models. The check is comparing the sizes of the train and test datasets.
+
+    However, without more context, it's hard to say exactly what the purpose of this code is. If you have any specific questions about it, feel free to ask.
+
+    Here's the updated code:
+
+    ```python
+    from deepchecks import TrainTestBaseCheck, CheckResult, Dataset
+
+    class DatasetSizeComparison(TrainTestBaseCheck):
+        """Check which compares the sizes of train and test datasets."""
+
+        def run(self, train_dataset: Dataset, test_dataset: Dataset, model=None) -> CheckResult:
+            ## Check logic
+            train_size = train_dataset.n_samples
+            test_size = test_dataset.n_samples
+
+            ## Return value as check result
+            return_value = {'train_size': train_size, 'test_size': test_size}
+            return CheckResult(return_value)
+    ```
+
+    This code is a custom DeepChecks check that compares the sizes of the train and test datasets.

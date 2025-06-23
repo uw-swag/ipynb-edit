@@ -1,0 +1,53 @@
+```java
+    public class ImagePanel extends JPanel {
+        int SCALE;
+        BufferedImage img;
+
+        public ImagePanel() {
+            this.SCALE = 1;
+        }
+
+        public ImagePanel(int scale, BufferedImage img) {
+            this.SCALE = scale;
+            this.img = img;
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.scale(SCALE, SCALE);
+            g2d.drawImage(this.img, 0, 0, this);
+        }
+    }
+
+    public class Container extends JPanel {
+        public Container(String label) {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            JLabel l = new JLabel(label, JLabel.CENTER);
+            l.setAlignmentX(Component.CENTER_ALIGNMENT);
+            add(l);
+        }
+
+        public Container(String trueLabel, String predLabel) {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            JLabel l = new JLabel(trueLabel, JLabel.CENTER);
+            l.setAlignmentX(Component.CENTER_ALIGNMENT);
+            add(l);
+            JLabel l2 = new JLabel(predLabel, JLabel.CENTER);
+            l2.setAlignmentX(Component.CENTER_ALIGNMENT);
+            add(l2);
+        }
+    }
+
+    public static void showImages(Image[] dataset,
+                                    int number, int WIDTH, int HEIGHT, int SCALE,
+                                    NDManager manager)
+            throws IOException, TranslateException {
+        // Plot a list of images
+        JFrame frame = new JFrame("");
+        for (int record = 0; record < number; record++) {
+            Image i = dataset[record];
+            BufferedImage img = (BufferedImage) i.getWrappedImage();
+            Graphics2D g = (Graphics2D) img.getGraphics();
+
+            J

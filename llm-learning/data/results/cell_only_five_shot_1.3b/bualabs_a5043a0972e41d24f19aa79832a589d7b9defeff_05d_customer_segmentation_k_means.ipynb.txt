@@ -1,0 +1,16 @@
+```python
+    import bs4 as bs
+    import urllib.request
+
+    source = urllib.request.urlopen('http://bualabs.com').read()
+    soup = bs.BeautifulSoup(source,'lxml')
+
+    for paragraph in soup.find_all('p'):
+        links = paragraph.find_all('a', href=True)
+        for link in links:
+            print(link['href'])
+    ```
+
+    This code will print out the URLs of all the links in the webpage.
+
+    Please note that this code will only work if the website 'bualabs.com' is publicly accessible. If it's not, you'll need to use a different method to get the links.

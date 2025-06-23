@@ -1,0 +1,40 @@
+```python
+    import nannyml as nml
+    import sys
+    !{sys.executable} -m pip install deepchecks -U --quiet #--user
+
+    from deepchecks.vision.datasets.detection import coco
+    yolo = coco.load_model(pretrained=True)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    from deepchecks.vision import VisionData
+    from deepchecks.vision.utils import DetectionLabelFormatter
+
+    # The num_classes is explicitly declared to aid computation, but would be inferred automatically otherwise.
+    train_ds = VisionData(coco_train_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+    test_ds = VisionData(coco_test_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+
+    from deepchecks.vision.suites import full_suite
+
+    suite = full_suite()
+
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+    det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+
+    result = suite.run(train_dataset=train_ds, test_dataset=test_ds, model=yolo, prediction_formatter=det_formatter)
+
+    result.save_as_html('full_suite_result.html')
+
+    result
+
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    check = TrainTestLabelDrift()
+    result = check.run(train_ds, test_ds)
+    result
+
+    result.value
+    ```

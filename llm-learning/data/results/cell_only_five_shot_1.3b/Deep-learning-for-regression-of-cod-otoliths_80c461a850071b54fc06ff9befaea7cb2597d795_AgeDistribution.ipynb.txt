@@ -1,0 +1,23 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import MinMaxScaler
+
+    # Assuming you have a pandas DataFrame 'df' with 'Age' column
+    df['Age'].hist(bins=30)
+    plt.title('Age Distribution')
+    plt.xlabel('Age')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # Normalize the Age column
+    scaler = MinMaxScaler()
+    df['Age'] = scaler.fit_transform(df[['Age']])
+
+    # Plot the normalized Age distribution
+    df['Age'].hist(bins=30)
+    plt.title('Normalized Age Distribution')
+    plt.xlabel('Normalized Age')
+    plt.ylabel('Frequency')
+    plt.show()
+    ```

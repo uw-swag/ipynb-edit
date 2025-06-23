@@ -1,0 +1,32 @@
+
+    The code you provided is used to plot a scatter plot of the actual values of Rainfall against the day of the year. The plot shows three lines: one for the actual values, one for the predicted values, and one for the model's predictions.
+
+    If you want to update the images of the output, you can use the `plt.savefig()` function to save the plot as an image file. Here's how you can do it:
+
+    ```python
+    plt.figure(figsize=(20,10))
+    Y_test1=test['Rainfall']
+
+    plt.scatter(test.drop(['Station','StationIndex'],axis=1)['dayofyear'],Y_test1,color='red')
+    plt.plot(test.drop(['Station','StationIndex'],axis=1)['dayofyear'],Y_test,color='green')
+    plt.plot(test.drop(['Station','StationIndex'],axis=1)['dayofyear'],Y_pred,color='blue')
+
+    plt.savefig('output.png')
+    ```
+
+    This will save the plot as an image file named 'output.png'. You can replace 'output.png' with any name you want.
+
+    Please note that the `plt.savefig()` function will save the image in the current working directory. If you want to save the image in a specific location, you can provide the full path to the file. For example:
+
+    ```python
+    plt.figure(figsize=(20,10))
+    Y_test1=test['Rainfall']
+
+    plt.scatter(test.drop(['Station','StationIndex'],axis=1)['dayofyear'],Y_test1,color='red')
+    plt.plot(test.drop(['Station','StationIndex'],axis=1)['dayofyear'],Y_test,color='green')
+    plt.plot(test.drop(['Station','StationIndex'],axis=1)['dayofyear'],Y_pred,color='blue')
+
+    plt.savefig('/path/to/your/directory/output.png')
+    ```
+
+    Replace '/path/to

@@ -1,0 +1,55 @@
+
+    # Add Output Folder
+    def Output(show):
+        global mean_list, mean_list2
+        
+        # Predict
+        pred = model.predict(window_list)
+        
+        # Sum all window size units
+        mean_list = [0 for i in range(len(df))]
+        for i in range(len(window_list)):
+            for j in range(20):
+                mean_list[i+j] += pred[i][j]
+
+        # Calculate average
+        mean_list2= []
+        count = 19
+        for i in range(len(mean_list)):
+            if i < 20:
+                mean_list2.append(mean_list[i] / (i+1))
+            elif i >=20 and (i <= len(mean_list)-20):
+                mean_list2.append(mean_list[i] / 20)
+            else:
+                mean_list2.append(mean_list[i] / count)
+                count -= 1
+
+        # If value is equal 1, then Show the plot
+        if show == 1:
+            price = list(df["Close"])
+            plt.figure(figsize = (15,10))
+            plt.plot(mean_list2, label = 'denoised')
+            plt.plot(price, label = 'origin')
+            plt.grid()
+            plt.legend(loc ='upper right')
+            plt.xlabel('Time')
+            plt.ylabel('Price')
+            plt.show()
+        else:
+            print('Complete')
+
+    # Check how much the predicted value changes when the same model and the same data are used.
+    MAE_list = []
+    for i in range(0,10):
+        Train(0)
+        Output(0)
+        MAE_list.append(Check_MAE())
+
+    # Attempt several model training
+    MAE_list = []
+    for i in range(0,10):
+        Train(0)
+        Output(0)
+        MAE_list.append(Check_MAE())
+
+   

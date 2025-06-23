@@ -1,0 +1,31 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+    # Assuming you have a function to evaluate your model
+    def evaluate_model(model, X_test, y_test):
+        y_pred = model.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
+        return accuracy, precision, recall, f1
+
+    # Example usage
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Assume you have a DataFrame df with your data
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
+
+    accuracy, precision, recall, f1 = evaluate_model(model, X_test, y_test)
+    print(f'Accuracy: {accuracy}\nPrecision: {precision}\nRecall: {recall}\nF1 Score: {f1}')
+    ```

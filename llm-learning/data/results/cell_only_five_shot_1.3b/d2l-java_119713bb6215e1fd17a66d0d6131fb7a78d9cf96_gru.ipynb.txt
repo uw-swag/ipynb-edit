@@ -1,0 +1,21 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import GRU, Dense
+
+    # Define the model
+    model = Sequential()
+    model.add(GRU(units=50, input_shape=(100, 1), return_sequences=True))
+    model.add(GRU(units=50))
+    model.add(Dense(1, activation='sigmoid'))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=10, batch_size=32)
+
+    # Evaluate the model
+    model.evaluate(X_test, y_test)
+    ```
+    This code defines a Gated Recurrent Unit (GRU) model with two GRU layers and a final Dense layer. The model is then compiled with the Adam optimizer and the binary cross-entropy loss function, which is suitable for a binary classification problem. The model is trained for 10 epochs with a batch size of 32. Finally, the model's performance is evaluated on the test data.

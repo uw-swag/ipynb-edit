@@ -1,0 +1,71 @@
+```
+    # Trying ResNet 34 with 300 pictures per category
+
+    ## Code:
+
+    ## Step 1: Import necessary libraries
+
+    ```python
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    ```
+
+    ## Step 2: Define the folders and files
+
+    ```python
+    folder = 'eczema'
+    file = 'urls_eczema.txt'
+    ```
+
+    ## Step 3: Create the download path
+
+    ```python
+    path = Path('data/skin')
+    download_path = path/'downloads'
+    dest = download_path/folder
+    dest.mkdir(parents=True, exist_ok=True)
+    ```
+
+    ## Step 4: Define the classes
+
+    ```python
+    classes = ['eczema','psoriasis','acne', 'rosacea']
+    ```
+
+    ## Step 5: Download the images
+
+    ```python
+    download_images(path/file, dest, max_pics=200)
+    ```
+
+    ## Step 6: Verify the downloaded images
+
+    ```python
+    for c in classes:
+        print(c)
+        verify_images(download_path/c, delete=True, max_size=500)
+    ```
+
+    ## Step 7: Create a databunch
+
+    ```python
+    batchsize = 64
+    np.random.seed(55)
+
+    databunch = ImageDataBunch.from_folder(download_path, train='.', 
+                                       valid_pct=0.2, 
+                                       ds_tfms=get_transforms(), 
+                                       size=320, bs=batchsize).normalize(imagenet_stats)
+    ```
+
+    ## Step 8: Show the databunch
+
+    ```python
+    databunch.show_batch(rows=3, figsize=(12, 12))
+    ```
+
+    ## Step 9: Check the classes, batch size, and sizes
+
+    ```python
+   

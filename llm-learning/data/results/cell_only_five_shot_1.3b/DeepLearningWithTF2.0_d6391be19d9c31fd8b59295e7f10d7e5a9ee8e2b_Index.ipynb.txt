@@ -1,0 +1,49 @@
+
+    ### Instruction:
+    [
+    Commit Message: "index link update"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is the updated code:
+
+```python
+import os
+import fnmatch
+from shutil import copyfile
+from random import randint
+
+ppm_filelist = []
+absolute_path="Z:\\Autonomous Drive - Testdaten"
+print(absolute_path)
+for root, dirs, files in os.walk(absolute_path):
+    ppm_filelist += [os.path.join(root, file) for file in files if fnmatch.fnmatch(file, '*.ppm')]
+size=len(ppm_filelist)
+testSize=250
+trainingSize=2500
+print(size)
+
+#Trainingsdaten
+zeroclass_path="Y:\\Zero_Class\\00043\\"
+i=0
+for i in range(2500):
+    index=randint(0, size-1)
+    z= "%s%d.ppm"%(zeroclass_path,i)
+    copyfile(ppm_filelist[index], z)
+    i=i+1
+
+#Testdaten
+zeroclass_path="Y:\\Zero_Class_Test\\00043\\"
+i=0
+for i in range(250):
+    index=randint(0, size-1)
+    z= "%s%d.ppm"%(zeroclass_path,i)
+    copyfile(ppm_filelist[index], z)
+    i=i+1
+```
+
+This code will generate a random index link for training and test datasets. The `randint(0, size-1)` function generates a random index for the `ppm_filelist`. The `copyfile(ppm_filelist[index], z)` function copies a file from the `ppm_filelist` to the destination path.

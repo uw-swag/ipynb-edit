@@ -1,0 +1,42 @@
+```python
+    # Import necessary libraries
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col, split, regexp_replace, count
+    from pyspark.ml.feature import HashingTF, CountVectorizer, VectorAssembler
+    from pyspark.sql.types import StructType, StructField, IntegerType, FloatType, StringType
+
+    # Define constants
+    TOP_K = 10
+    MOVIELENS_DATA_SIZE = 'mock10'
+    COL_USER="UserId"
+    COL_ITEM="ItemId"
+    COL_RATING="Rating"
+    COL_TITLE="Title"
+    COL_GENRE="Genre"
+
+    # Define schema
+    schema = StructType(
+        (
+            StructField(COL_USER, IntegerType()),
+            StructField(COL_ITEM, IntegerType()),
+            StructField(COL_RATING, FloatType()),
+            StructField("Timestamp", StringType()),
+        )
+    )
+
+    # Load MovieLens data
+    spark = SparkSession.builder.getOrCreate()
+    data = movielens.load_spark_df(spark, size=MOVIELENS_DATA_SIZE, schema=schema, title_col=COL_TITLE, genres_col=COL_GENRE)
+    data.show()
+
+    # Get movie features "title" and "genres"
+    movies = (
+        data.groupBy(COL_ITEM, COL_TITLE, COL_GENRE).count()
+        .na.drop()  # remove rows with null values
+        .withColumn(COL_GENRE, split(col(COL_GENRE), "\\|"))  # convert to array of genres
+        .withColumn(COL_TITLE, regexp_replace(col(COL_TITLE), "[\(),:^0-9]", ""))  # remove year from title
+        .drop("count")  # remove unused columns
+    )
+
+    # Perform HashingTF on column "text"
+    text_hasher = HashingTF(inputCol="text", output

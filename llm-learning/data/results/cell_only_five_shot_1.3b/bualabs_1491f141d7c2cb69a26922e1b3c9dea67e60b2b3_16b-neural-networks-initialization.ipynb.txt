@@ -1,0 +1,16 @@
+```
+    import torch
+    import math
+
+    gain = math.sqrt(2.) # ReLU
+
+    w1 = torch.randn(m, nh) * math.sqrt(2./m) * gain
+    b1 = torch.zeros(nh)
+    w2 = torch.randn(nh, nh) * math.sqrt(2./nh) * gain
+    b2 = torch.zeros(nh)
+    w3 = torch.randn(nh, nh) * math.sqrt(2./nh) * gain
+    b3 = torch.zeros(nh)
+    w4 = torch.randn(nh, 1) * math.sqrt(2./nh) * gain
+    b4 = torch.zeros(1)
+    ```
+    This code is for initializing the weights and biases for a neural network using Kaiming initialization. The gain is a hyperparameter that controls the amount of initialization.

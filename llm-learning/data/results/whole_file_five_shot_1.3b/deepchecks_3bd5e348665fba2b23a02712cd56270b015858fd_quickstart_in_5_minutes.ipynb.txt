@@ -1,0 +1,50 @@
+```
+    ## Documentation of whole dataset drift check 📜
+
+    ### Overview
+    The dataset drift check is a tool that helps to detect and manage changes in the dataset. It is a part of the DeepChecks library, which is a collection of data science tools for data analysis.
+
+    ### Installation
+    If you don't have DeepChecks installed yet, you can install it using pip:
+    ```python
+    import sys
+    !{sys.executable} -m pip install deepchecks --quiet
+    ```
+
+    ### Usage
+    Here's a general example of how to use the dataset drift check:
+
+    ```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    np.random.seed(22)
+
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Load Data
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+    # Train Model
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+
+    # Import necessary libraries
+    from deepchecks import Dataset
+
+    # We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+    # If the dataset has categorical features, the best practice is to pass a list with their names
+
+    ds_train = Dataset(df_train, label=label_col, cat_features=[])
+    ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+
+    # Import necessary libraries
+    from deepchecks.suites import full_suite
+
+    suite = full_suite()
+
+   

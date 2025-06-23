@@ -1,0 +1,38 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.layers import Dense, Flatten
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.datasets import mnist
+    import numpy as np
+
+    # Load MNIST dataset
+    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+    # Normalize the images
+    x_train, x_test = x_train / 255.0, x_test / 255.0
+
+    # Reshape the images
+    x_train = x_train.reshape(-1, 28*28)
+    x_test = x_test.reshape(-1, 28*28)
+
+    # Create a deep network
+    model = Sequential([
+        Dense(128, activation='relu'),
+        Dense(10)
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
+
+    # Train the model
+    model.fit(x_train, y_train, epochs=5)
+
+    # Evaluate the model
+    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
+
+    print('\nTest accuracy:', test_acc)
+    ```
+
+    This code demonstrates the use of a fully-connected deep network to denoise audio. The network consists of two dense layers, with 128 neurons in each layer. The model is trained on the MNIST dataset, which consists of handwritten digits. The model is then evaluated on the test set.

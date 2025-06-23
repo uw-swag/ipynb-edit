@@ -1,0 +1,21 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Load the data
+    data = pd.read_csv('data.csv')
+
+    # Check for missing values
+    print(data.isnull().sum())
+
+    # If there are missing values, you can either drop them or fill them with a specific value
+    # For example, if you want to fill the missing values with 0
+    data = data.fillna(0)
+
+    # If there are missing values, you can also drop them
+    data = data.dropna()
+
+    # Save the cleaned data
+    data.to_csv('cleaned_data.csv', index=False)
+    ```

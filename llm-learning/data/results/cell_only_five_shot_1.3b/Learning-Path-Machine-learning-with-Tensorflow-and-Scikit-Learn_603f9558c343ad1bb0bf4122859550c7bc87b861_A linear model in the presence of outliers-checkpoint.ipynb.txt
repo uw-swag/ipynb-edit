@@ -1,0 +1,32 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    from sklearn.linear_model import Lasso
+    from sklearn.metrics import mean_squared_error as RSS
+    import matplotlib.pyplot as plt
+
+    # Defining the function for Lasso Regression
+    def lasso(X, y, alpha, tol):
+        lasso_model = Lasso(alpha=alpha, tol=tol)
+        lasso_model.fit(X, y)
+        return lasso_model.coef_
+
+    # Defining the function for RSS
+    def RSS(y_true, y_pred):
+        return np.sum(np.square(y_true - y_pred))
+
+    # Defining the function for plotting
+    def plot(x, y, label):
+        plt.plot(x, y, label=label)
+        plt.legend()
+        plt.show()
+    ```
+    This code block imports the necessary libraries and defines the functions for Lasso Regression, RSS, and plotting.
+    The Lasso function takes in the features matrix X, the target vector y, the regularization parameter alpha, and the tolerance for the Lasso regression.
+    The RSS function calculates the Residual Sum of Squares, which is a measure of how well the model's predictions match the actual values.
+    The plot function takes in the x-values, y-values, and a label for the plot, and plots the data.
+    The code block also includes a comment to explain what each part of the code does.
+    Please note that the code block is incomplete and does not contain the actual code for the Lasso Regression, RSS, and plotting.
+    You need to replace the placeholders with your actual data.
+    Also, the code block assumes that you have a function `RSS(y_test - yHat4_new_test)` that calculates the RSS for a given model and a test set.
+    The code block also assumes that you have a function `lasso(X4, y, 10, tol=1e-6)` that performs Lasso Regression with a regularization parameter of 10 and a

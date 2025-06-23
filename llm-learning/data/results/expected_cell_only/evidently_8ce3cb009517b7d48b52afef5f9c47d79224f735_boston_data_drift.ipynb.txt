@@ -1,0 +1,30 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection, NumTargetDriftProfileSection
+boston_data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+boston_data_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:])
+boston_data_drift_dashboard.show()
+#boston_data_drift_dashboard.save('reports/boston_data_drift_no_mapping.html')
+boston_data_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], column_mapping = column_mapping)
+boston_data_drift_dashboard.show()
+#boston_data_drift_dashboard.save('boston_data_drift_with_mapping.html')
+boston_data_drift_profile = Profile(sections=[DataDriftProfileSection])
+boston_data_drift_profile.calculate(boston_frame[:200], boston_frame[200:], 
+                                               column_mapping = column_mapping) 
+boston_data_drift_profile.json()
+boston_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab, NumTargetDriftTab])
+boston_data_and_target_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], 
+                                                   column_mapping = column_mapping)
+boston_data_and_target_drift_dashboard.show()
+#boston_data_and_target_drift_dashboard.save('boston_data_and_target_drift_with_mapping.html')
+boston_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection, NumTargetDriftProfileSection])
+boston_target_and_data_drift_profile.calculate(boston_frame[:200], boston_frame[200:], 
+                                               column_mapping = column_mapping) 
+boston_target_and_data_drift_profile.json()

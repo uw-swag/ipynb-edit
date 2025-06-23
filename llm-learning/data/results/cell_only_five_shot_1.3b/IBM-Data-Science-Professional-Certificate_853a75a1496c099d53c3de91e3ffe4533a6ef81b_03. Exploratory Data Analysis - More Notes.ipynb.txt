@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add 03. Exploratory Data Analysis - More Notes.ipynb"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from sklearn.datasets import fetch_california_housing
+    from sklearn.linear_model import LinearRegression
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.impute import SimpleImputer
+
+    df = pd.read_csv("https://static-1300131294.cos.ap-shanghai.myqcloud.com/data/code-for-videos/data/housing.csv")
+    df.head()
+    df.tail()
+    df.info()
+    len(df)
+    len(df.columns)
+    train_data, test_data = train_test_split(df, test_size=0.1,random_state=20)
+    train_data.describe(include='all').transpose()
+    train_data.isnull().sum()
+    print('The Percentage of missing values in total_bedrooms is: {}%'.format(train_data.isnull().sum()['total_bedrooms'] / len(train_data) * 100))
+    train_data['ocean_proximity'].value_counts()
+    sns.countplot(data=train_data, x='ocean_proximity')
+    correlation = train_data.corr()
+    correlation['median_house_value']
+    plt.figure(figsize=(12,7))
+    sns.heatmap(correlation,annot=True,cmap='crest')
+    plt.figure(figsize=(12,7))
+    sns.scatterplot(data = train_data, x='longitude', y='latitude')
+    plt.figure(figsize=(12,7))
+    sns.

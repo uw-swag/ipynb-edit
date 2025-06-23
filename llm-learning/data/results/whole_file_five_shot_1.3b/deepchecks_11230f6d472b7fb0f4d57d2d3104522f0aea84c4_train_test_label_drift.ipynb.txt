@@ -1,0 +1,13 @@
+```python
+    import deepchecks.vision.checks as ck
+    from deepchecks.vision.datasets.detection.coco import load_dataset
+
+    train_dataloader = load_dataset(train=True)
+    test_dataloader = load_dataset(train=False)
+
+    train_ds = VisionData(train_dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+    test_ds = VisionData(test_dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+
+    check = ck.TrainTestLabelDrift()
+    check.run(train_ds, test_ds)
+    ```

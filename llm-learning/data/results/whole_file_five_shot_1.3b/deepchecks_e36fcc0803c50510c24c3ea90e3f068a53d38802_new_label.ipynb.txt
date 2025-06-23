@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks.integrity.new_label import NewLabelTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    test_data = {"col1": [0, 1, 2, 3] * 10}
+    val_data = {"col1": [4, 5, 6, 7, 8, 9] * 10}
+    test = Dataset(pd.DataFrame(data=test_data), label="col1")
+    val = Dataset(pd.DataFrame(data=val_data), label="col1")
+
+    NewLabelTrainTest().run(test, val)
+    ```
+
+    This code is used to run the NewLabelTrainTest check on the test and validation datasets. The check is used to ensure that the labels in the datasets are consistent.

@@ -1,0 +1,51 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added Data Science Practical 02: Handling Numerical Data"
+    Original Code:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import MinMaxScaler
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Handle missing values
+    df = df.fillna(df.mean())
+
+    # Normalize the numerical data
+    scaler = MinMaxScaler()
+    df[['column1', 'column2']] = scaler.fit_transform(df[['column1', 'column2']])
+
+    # Save the normalized data
+    df.to_csv('normalized_data.csv', index=False)
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a basic example of handling numerical data in a dataset. It first loads a dataset, checks for missing values, fills missing values with the mean of the column, normalizes the numerical data using the MinMaxScaler, and then saves the normalized data to a new CSV file.
+
+    However, the code you provided is missing the part where you handle categorical data. If your dataset contains categorical data, you would need to handle it in a different way. For example, you might need to one-hot encode categorical variables, or you might need to use a different method to handle missing values.
+
+    Here's an example of how you might handle categorical data:
+
+    ```python
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Handle missing values
+    df = df.fillna(df.mode().iloc[0])
+
+    # One-hot encode categorical variables
+    df = pd.get_dummies(df)
+
+    # Normalize the numerical data
+    scaler = MinMaxScaler()
+    df[['column1', 'column2']] = scaler.fit_transform(df[['column1', '

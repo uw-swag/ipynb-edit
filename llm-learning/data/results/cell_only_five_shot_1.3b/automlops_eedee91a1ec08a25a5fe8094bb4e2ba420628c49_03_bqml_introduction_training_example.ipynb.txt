@@ -1,0 +1,22 @@
+```python
+    from kfp.v2 import dsl
+from kfp.v2.dsl import Artifact, Metrics, Model, Output
+from AutoMLOps import AutoMLOps
+
+# major version updates for v1.2.0
+# ...
+# your code here
+# ...
+
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_ci=True,
+                   schedule_pattern='0 */12 * * *'
+)
+AutoMLOps.launch(project_id=PROJECT_ID, 
+                 pipeline_params=pipeline_params, 
+                 use_ci=True, 
+                 schedule_pattern='0 */12 * * *'
+)
+
+    ```

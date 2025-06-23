@@ -1,0 +1,43 @@
+```python
+    import sys
+    sys.path.append("../../")
+    import time
+    import os
+    import numpy as np
+    import torch
+    import torch.cuda as cuda
+    import torch.nn as nn
+    import torchvision
+    import requests
+
+    from utils_cv.action_recognition.model import VideoLearner 
+    from utils_cv.action_recognition.dataset import VideoRecord, VideoDataset
+    from utils_cv.action_recognition.data import Urls
+    from utils_cv.common.gpu import system_info
+    from utils_cv.common.data import data_path, download
+
+    system_info()
+    # Number of consecutive frames used as input to the DNN. Recommended: 32 for high accuracy, 8 for inference speed.
+    MODEL_INPUT_SIZE = 32
+
+    # Batch size. Reduce if running out of memory.
+    BATCH_SIZE = 4
+
+    # Number of training epochs
+    EPOCHS = 8
+
+    # Learning rate
+    LR = 0.0001
+    TRAIN_SPLIT = download(Urls.hmdb_train_split_1, os.path.join(DATA_ROOT, "hmdb51_train_split_1.txt"))
+    TEST_SPLIT = download(Urls.hmdb_test_split_1, os.path.join(DATA_ROOT, "hmdb51_test_split_1.txt"))
+    data = VideoDataset(
+        VIDEO_DIR,
+        train_split_file=TRAIN_SPLIT,
+        test_split_file=TEST_SPLIT,
+        batch_size=BATCH_SIZE,
+        sample_length=MODEL_INPUT_SIZE,
+        video_ext="avi",
+    )
+    print(
+        f"Training dataset: {len(data.train_ds)} | Training DataLoader: {data.train_dl} \
+        \nTesting dataset: {len(data.test_ds)} | Testing DataLoader: {data.test_dl

@@ -1,0 +1,37 @@
+```python
+    # Atent factor and classification on all of the dataset
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
+
+    # Random Forest Classifier
+    rf_clf = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=0)
+    rf_clf.fit(gw_thrds_values, gw_thrds_rumortags)
+
+    # Predict
+    Y_pred_test = rf_clf.predict(gw_thrds_values)
+
+    # Accuracy
+    accuracy = accuracy_score(gw_thrds_rumortags, Y_pred_test)
+    print(f"Accuracy: {accuracy}")
+
+    # F1 Score
+    f1 = f1_score(gw_thrds_rumortags, Y_pred_test)
+    print(f"F1 Score: {f1}")
+
+    # AUC
+    Y_proba_test = rf_clf.predict_proba(gw_thrds_values)[::,1]
+    auc = roc_auc_score(gw_thrds_rumortags, Y_proba_test)
+    print(f"AUC: {auc}")
+
+    # Feature Importance
+    feature_importances = rf_clf.feature_importances_
+    print(f"Feature Importances: {feature_importances}")
+
+    # Plot ROC AUC Curve
+    plt.figure(figsize=(15, 9))
+    plt.title('ROC AUC Curve')
+    plt.plot(fpr, tpr, label='AUC = %0.2f' % auc)
+    plt.legend(loc='lower right')
+    plt.plot([0, 1], [0, 1],'r--')
+    plt.xlim([0, 1])
+    plt.ylim

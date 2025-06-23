@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented model comparison"
+    Original Code Cells:
+    '''
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.tree import DecisionTreeClassifier
+
+    models = [
+        ("Logistic Regression", LogisticRegression()),
+        ("Random Forest", RandomForestClassifier()),
+        ("SVM", SVC()),
+        ("KNN", KNeighborsClassifier()),
+        ("Naive Bayes", GaussianNB()),
+        ("Decision Tree", DecisionTreeClassifier())
+    ]
+
+    for name, model in models:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        model.fit(X_train, y_train)
+        y_pred = model.predict(X_test)
+        print(f"{name} Accuracy: {accuracy_score(y_test, y_pred)}")
+        print(f"{name} Precision: {precision_score(y_test, y_pred)}")
+        print(f"{name} Recall: {recall_score(y_test, y_pred)}")
+        print(f"{name} F1 Score: {f1_score(y_test, y_pred)}")
+    '''
+    ]
+
+    ### Response:
+    The code you've provided is used to compare different machine learning models on a dataset. It uses the scikit-learn library in Python, which provides various metrics for model evaluation. The models are Logistic Regression, Random Forest, SVM, KNN, Naive Bayes, and Decision Tree. For

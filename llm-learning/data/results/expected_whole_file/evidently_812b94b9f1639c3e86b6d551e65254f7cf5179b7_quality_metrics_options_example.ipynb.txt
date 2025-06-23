@@ -1,0 +1,122 @@
+<Cell_0>
+!pip install -e /Users/olgafilippova/work/evidently
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+from sklearn.datasets import fetch_openml
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+import seaborn as sns
+
+import pandas as pd
+
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ProbClassificationPerformanceProfileSection
+<\Cell_1>
+<Cell_2>
+wine = fetch_openml(name='wine_quality', version=1)
+<\Cell_2>
+<Cell_3>
+wine_df = wine.frame
+<\Cell_3>
+<Cell_4>
+red = wine_df[:1599]
+white = wine_df[1599:]
+<\Cell_4>
+<Cell_5>
+wine_column_mapping = ColumnMapping()
+wine_column_mapping.numerical_features = wine.feature_names
+<\Cell_5>
+<Cell_6>
+from evidently.dashboard.tabs import DataDriftTab
+<\Cell_6>
+<Cell_7>
+model_performance_dashboard = Dashboard(tabs=[DataDriftTab()])
+model_performance_dashboard.calculate(red.sample(1000, random_state=0), 
+                                      white.sample(1000, random_state=0), 
+                                      column_mapping=wine_column_mapping)
+model_performance_dashboard.show()
+<\Cell_7>
+<Cell_8>
+default_df['y'] = default_df['y'].astype(int)
+<\Cell_8>
+<Cell_9>
+wine_df['target'] = (wine_df['quality'] > 5).astype(int)
+<\Cell_9>
+<Cell_10>
+train_data, test_data = train_test_split(wine_df, random_state=0)
+<\Cell_10>
+<Cell_11>
+model = LogisticRegression()
+<\Cell_11>
+<Cell_12>
+model.fit(wine_df[wine.feature_names], wine_df.target)
+<\Cell_12>
+<Cell_13>
+train_probas = pd.DataFrame(model.predict_proba(train_data[wine.feature_names]))
+train_probas.columns = ['bad', 'good']
+test_probas = pd.DataFrame(model.predict_proba(test_data[wine.feature_names]))
+test_probas.columns = ['bad', 'good']
+<\Cell_13>
+<Cell_14>
+train_data['target'] = train_data['target'].map({1: 'good', 0: 'bad'}).astype(str).values
+test_data['target'] = test_data['target'].map({1: 'good', 0: 'bad'}).astype(str).values
+<\Cell_14>
+<Cell_15>
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+<\Cell_15>
+<Cell_16>
+wine_column_mapping = ColumnMapping()
+
+wine_column_mapping.target = 'target'
+wine_column_mapping.prediction = ['good', 'bad']
+wine_column_mapping.numerical_features = wine.feature_names
+<\Cell_16>
+<Cell_17>
+wine_model_performance_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=1)])
+wine_model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                           merged_test_data.sample(1000, random_state=0), 
+                                              column_mapping = wine_column_mapping)
+wine_model_performance_dashboard.show()
+<\Cell_17>
+<Cell_18>
+from evidently.options import QualityMetricsOptions
+<\Cell_18>
+<Cell_19>
+m_options = QualityMetricsOptions(cut_quantile={'chlorides': ('right', 0.95), 'MedHouseVal': ('right', 0.5)}, 
+                                  classification_threshold = 0.8,
+                                  conf_interval_n_sigmas=3)
+<\Cell_19>
+<Cell_20>
+wine_model_performance_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=1)],
+                                             options=[m_options])
+wine_model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                           merged_test_data.sample(1000, random_state=0), 
+                                              column_mapping = wine_column_mapping)
+wine_model_performance_dashboard.show()
+<\Cell_20>
+<Cell_21>
+from evidently.dashboard.tabs import DataDriftTab
+<\Cell_21>
+<Cell_22>
+model_performance_dashboard = Dashboard(tabs=[DataDriftTab()], options=[m_options])
+model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                      merged_test_data.sample(1000, random_state=0),
+                                      column_mapping=wine_column_mapping)
+model_performance_dashboard.show()
+<\Cell_22>
+<Cell_23>
+
+<\Cell_23>

@@ -1,0 +1,22 @@
+```python
+    from deepchecks.checks.methodology import DateTrainTestLeakageOverlap
+    from deepchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, date_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, date=date_name)
+
+    # Create a CheckSuite
+    suite = CheckSuite(
+        [
+            DateTrainTestLeakageOverlap(dataset_from_dict(d1), dataset_from_dict(d2))
+            for d1, d2 in zip(data_dicts1, data_dicts2)
+        ]
+    )
+
+    # Rename the CheckSuite
+    suite.rename("suite")
+    ```
+    This code will rename the CheckSuite named "checksuite" to "suite" in the CheckSuite object.

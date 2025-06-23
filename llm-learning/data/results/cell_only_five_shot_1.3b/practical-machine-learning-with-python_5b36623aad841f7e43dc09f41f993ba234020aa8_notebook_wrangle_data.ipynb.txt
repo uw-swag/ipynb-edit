@@ -1,0 +1,44 @@
+```python
+    # minor fixes for issues #5, #8, and #9
+
+    ## Issue #5
+    # Fix the issue with the data type of 'Age' column. It should be an integer.
+    df['Age'] = df['Age'].astype(int)
+
+    ## Issue #8
+    # The 'Age' column should not have any missing values.
+    df['Age'].dropna(inplace=True)
+
+    ## Issue #9
+    # The 'Age' column should not have any outliers.
+    # We can use the IQR method to detect outliers.
+    Q1 = df['Age'].quantile(0.25)
+    Q3 = df['Age'].quantile(0.75)
+    IQR = Q3 - Q1
+    df = df[~((df['Age'] < (Q1 - 1.5 * IQR)) | (df['Age'] > (Q3 + 1.5 * IQR)))]
+
+    ## Issue #10
+    # The 'Age' column should not have any duplicates.
+    df.drop_duplicates(inplace=True)
+
+    ## Issue #11
+    # The 'Age' column should not have any negative values.
+    df = df[df['Age'] >= 0]
+
+    ## Issue #12
+    # The 'Age' column should not have any values less than 0.
+    df = df[df['Age'] >= 0]
+
+    ## Issue #13
+    # The 'Age' column should not have any values greater than 100.
+    df = df[df['Age'] <= 100]
+
+    ## Issue #14
+    # The 'Age' column should not have any values less than 0.
+    df = df[df['Age'] >= 0]
+
+    ## Issue #15
+    # The 'Age' column should not have any values greater than 100.
+    df = df[df['Age'] <= 100]
+
+    ##

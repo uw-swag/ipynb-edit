@@ -1,0 +1,17 @@
+```python
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Assuming y_test and y_pred are your test and prediction results
+    cm = confusion_matrix(y_test, y_pred)
+
+    # Plotting the confusion matrix
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm, annot=True)
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.show()
+    ```
+    This code will create a heatmap of the confusion matrix. The x-axis represents the predicted values, the y-axis represents the actual values, and the color of each cell represents the number of instances of that value in the test set.

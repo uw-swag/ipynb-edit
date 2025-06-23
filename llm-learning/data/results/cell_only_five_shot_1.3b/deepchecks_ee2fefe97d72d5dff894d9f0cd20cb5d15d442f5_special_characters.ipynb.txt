@@ -1,0 +1,22 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Define the dataframe
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': ['small', 'large', 'large', 'small', 'small', 'large', 'small', 'large'],
+        'D': [1, 2, 2, 3, 3, 4, 5, 6],
+        'E': [2, 4, 5, 5, 6, 6, 8, 9],
+        'F': [1, 1, 0, 1, 0, 0, 1, 1]
+    })
+
+    # Prioritize columns according to FI in multicolumn checks
+    df['FI'] = df['F'] * df['D'] + df['E']
+    df = df.sort_values('FI', ascending=False)
+
+    # Print the dataframe
+    print(df)
+    ```

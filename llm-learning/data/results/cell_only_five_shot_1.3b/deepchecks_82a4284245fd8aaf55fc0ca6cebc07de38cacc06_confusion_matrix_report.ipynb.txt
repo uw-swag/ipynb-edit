@@ -1,0 +1,39 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import confusion_matrix, classification_report
+
+    # Load the dataset
+    data = pd.read_csv('data.csv')
+
+    # Split the dataset into features and target variable
+    features = data.iloc[:, :-1].values
+    target = data.iloc[:, -1].values
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.2, random_state=0)
+
+    # Feature Scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the Random Forest Classifier
+    classifier = RandomForestClassifier(n_estimators=10, random_state=0)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    cm = confusion_matrix(y_test, y_pred)
+    cr = classification_report(y_test, y_pred)
+
+    print(cm)
+    print(cr)
+    ```
+    This script loads a dataset, splits it into features and target variables, and then trains a Random Forest Classifier on the training set. It then makes predictions on the test set and evaluates the model by printing the confusion matrix and classification report.

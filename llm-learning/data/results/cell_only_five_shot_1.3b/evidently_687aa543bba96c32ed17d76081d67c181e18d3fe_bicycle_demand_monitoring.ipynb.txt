@@ -1,0 +1,21 @@
+```python
+    # Refactoring: column_mapping
+    # The original code is using a dictionary to map columns. This can be replaced with a more flexible approach like a class.
+    # This will allow for more flexibility in the future and easier maintenance.
+
+    class ColumnMapping:
+        def __init__(self, mapping):
+            self.mapping = mapping
+
+        def get(self, key):
+            return self.mapping.get(key)
+
+    column_mapping = ColumnMapping(column_mapping)
+    regression_perfomance_dashboard.calculate(reference, None, column_mapping=column_mapping)
+    ```
+
+    The refactoring is done by creating a `ColumnMapping` class that takes a dictionary as an argument. This dictionary will be used to map columns. The `get` method of the `ColumnMapping` class is then used to retrieve the mapped column.
+
+    The original code is then updated to use the `ColumnMapping` class instead of a dictionary.
+
+    This refactoring is a simple example and may not be necessary for all use cases. Depending on the complexity of the code and the requirements of the project, it may be necessary to refactor the code further.

@@ -1,0 +1,41 @@
+```python
+    from kfp import dsl
+from kfp.dsl import Artifact, Dataset, Metrics, Output
+
+    @dsl.pipeline(
+        name='My Pipeline',
+        description='A sample pipeline with Kubeflow Pipelines'
+    )
+    def my_pipeline(
+        input_dataset: Dataset = Dataset(),
+        output_artifact: Artifact = Artifact(),
+        metrics: Metrics = Metrics()
+    ):
+        # Define your steps here
+        step_1 = dsl.ContainerOp(
+            name='Step 1',
+            image='my-image',
+            input_artifacts=[input_dataset],
+            output_artifacts=[output_artifact]
+        )
+
+        step_2 = dsl.ContainerOp(
+            name='Step 2',
+            image='my-image',
+            input_artifacts=[output_artifact],
+            output_artifacts=[metrics]
+        )
+
+        step_1.run().wait_for_completion()
+        step_2.run().wait_for_completion()
+
+    # Run the pipeline
+    my_pipeline()
+    ```
+
+    This is a simple example of a Kubeflow Pipelines pipeline. The pipeline consists of two steps:
+
+    1. The first step runs a container image (`my-image`) that takes an input dataset and produces an output artifact.
+    2. The second step runs a container image that takes the output artifact and produces a set of metrics.
+
+    The pipeline is then run with the `my_pipeline()` function.

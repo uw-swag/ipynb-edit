@@ -1,0 +1,50 @@
+```
+    # Update bike dataset link. (#626)
+    # Original Code Cells:
+    '''
+    <Cell_0>
+    import warnings
+    warnings.filterwarnings('ignore')
+    warnings.simplefilter('ignore')
+    <\Cell_0>
+    <Cell_1>
+    import json
+    import pandas as pd
+    import requests
+    import zipfile
+    import io
+
+    from evidently.pipeline.column_mapping import ColumnMapping
+    from evidently.report import Report
+    from evidently.metric_preset import DataDriftPreset
+
+    import mlflow
+    import mlflow.sklearn
+    from mlflow.tracking import MlflowClient
+    <\Cell_1>
+    <Cell_2>
+    #load data
+    content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+        raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'])
+    <\Cell_2>
+    <Cell_3>
+    #observe data structure
+    raw_data.head()
+    <\Cell_3>
+    <Cell_4>
+    #set column mapping for Evidently Profile
+    data_columns = ColumnMapping()
+    data_columns.datetime = 'dteday'
+    data_columns.numerical_features = ['weathersit', 'temp', 'atemp', 'hum', 'windspeed']
+    data_columns.categorical_features = ['holiday', 'workingday']
+    <\Cell_4>
+    <Cell_5>
+    #evaluate data drift with Evidently Profile
+    def eval_drift(reference, production, column_mapping):
+        """
+        Returns a list with pairs (feature_name, drift_score)
+        Drift Score depends on the selected statistical test or distance and the threshold
+        """    
+        data_drift_report = Report(metrics=[DataDriftPreset()])
+        data

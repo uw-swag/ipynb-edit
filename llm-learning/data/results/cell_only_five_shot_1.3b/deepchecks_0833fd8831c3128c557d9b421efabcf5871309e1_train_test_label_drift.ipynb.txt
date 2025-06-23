@@ -1,0 +1,24 @@
+```python
+    from deepchecks.vision.datasets.classification import mnist
+    from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter, ClassificationPredictionFormatter
+
+    train_ds = VisionData(mnist.load_dataset(train=True, batch_size=64), label_transformer=ClassificationLabelFormatter(lambda x: x))
+    test_ds = VisionData(mnist.load_dataset(train=False, batch_size=1000), label_transformer=ClassificationLabelFormatter(lambda x: x))
+
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+
+    train_ds = VisionData(coco.load_dataset(train=True), label_transformer=DetectionLabelFormatter(lambda x: x))
+    test_ds = VisionData(coco.load_dataset(train=False), label_transformer=DetectionLabelFormatter(lambda x: x))
+
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    drift_check = TrainTestLabelDrift(train_ds, test_ds)
+    drift_check.run()
+    ```
+
+    This code will run a label drift check on the training and testing datasets. The `TrainTestLabelDrift` class from `deepchecks.vision.checks` checks for label drift in the training and testing datasets.
+
+    The `run()` method of the `TrainTestLabelDrift` class will return a `LabelDriftReport` object, which contains the results of the label drift check.
+
+    The `LabelDriftReport` object can be used to analyze the results of the label drift check and make decisions about how to handle the drift.

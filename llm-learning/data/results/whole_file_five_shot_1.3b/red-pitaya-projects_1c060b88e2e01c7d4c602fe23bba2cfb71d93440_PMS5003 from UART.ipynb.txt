@@ -1,0 +1,20 @@
+```
+    # Move notebooks into folders
+    import os
+    import shutil
+
+    # Define the source and destination folders
+    source_folder = "../input"
+    destination_folder = "./notebooks"
+
+    # Iterate over all files in the source folder
+    for filename in os.listdir(source_folder):
+        # Check if the file is a notebook
+        if filename.endswith(".ipynb"):
+            # Construct the full source and destination file paths
+            source_file = os.path.join(source_folder, filename)
+            destination_file = os.path.join(destination_folder, filename)
+
+            # Move the notebook to the destination folder
+            shutil.move(source_file, destination_file)
+    ```

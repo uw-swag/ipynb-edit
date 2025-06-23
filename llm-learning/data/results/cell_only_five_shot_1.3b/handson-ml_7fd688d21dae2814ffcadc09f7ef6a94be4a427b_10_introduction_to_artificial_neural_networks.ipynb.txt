@@ -1,0 +1,41 @@
+
+The code you provided is using TensorFlow's high-level API, which is more flexible and allows you to define your model in a more Pythonic way. The `fully_connected` function is now using TensorFlow's `layers` API, which is more concise and easier to read.
+
+Here's the revised code:
+
+```python
+import tensorflow as tf
+
+from tensorflow.contrib.layers import fully_connected
+
+n_inputs = 28*28  # MNIST
+n_hidden1 = 300
+n_hidden2 = 100
+n_outputs = 10
+learning_rate = 0.01
+
+X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
+y = tf.placeholder(tf.int64, shape=(None), name="y")
+
+with tf.name_scope("dnn"):
+    hidden1 = fully_connected(X, n_hidden1, scope="hidden1")
+    hidden2 = fully_connected(hidden1, n_hidden2, scope="hidden2")
+    logits = fully_connected(hidden2, n_outputs, activation_fn=None, scope="outputs")
+
+with tf.name_scope("loss"):
+    xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
+    loss = tf.reduce_mean(xentropy, name="loss")
+
+with tf.name_scope("train"):
+    optimizer = tf.train.GradientDescentOptimizer(learning_rate)
+    training_op = optimizer.minimize(loss)
+
+with tf.name_scope("eval"):
+    correct = tf.nn.in_top_k(logits, y, 1)
+    accuracy = tf.reduce_mean(tf.cast(correct, tf.float32))
+    
+init = tf.global_variables_initializer()
+saver = tf.train.Saver()
+```
+
+In this rev

@@ -1,0 +1,14 @@
+```
+    import numpy as np
+    import pandas as pd
+    from sklearn.linear_model import LogisticRegression
+
+    clf = LogisticRegression(random_state=0).fit(x, y)
+
+    y_hat = clf.predict(x)
+    y_prob_hat = clf.predict_proba(x)[:, 1]
+
+    visualize_pn_data(x, y)
+    visualize_pn_data(x, y_hat)
+    visualize_pn_data_proba(x, y_prob_hat)
+    ```

@@ -1,0 +1,39 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab
+<\Cell_0>
+<Cell_1>
+boston = datasets.load_boston()
+<\Cell_1>
+<Cell_2>
+boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)
+<\Cell_2>
+<Cell_3>
+boston_data_drift_report = Dashboard(boston_frame[:200], boston_frame[200:], tabs=[DriftTab])
+<\Cell_3>
+<Cell_4>
+boston_data_drift_report.save('reports/boston_data_drift_no_mapping.html')
+<\Cell_4>
+<Cell_5>
+column_mapping = {}
+
+column_mapping['target'] = None
+column_mapping['prediction'] = None
+column_mapping['datetime'] = None
+
+column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping['categorical_features'] = ['CHAS', 'RAD']
+<\Cell_5>
+<Cell_6>
+boston_data_drift_report = Dashboard(boston_frame[:200], boston_frame[200:], column_mapping = column_mapping, 
+                                     tabs=[DriftTab])
+<\Cell_6>
+<Cell_7>
+boston_data_drift_report.save('reports/boston_data_drift_with_mapping.html')
+<\Cell_7>

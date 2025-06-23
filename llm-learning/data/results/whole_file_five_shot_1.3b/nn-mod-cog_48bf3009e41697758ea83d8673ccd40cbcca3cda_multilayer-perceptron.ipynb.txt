@@ -1,0 +1,22 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(32, input_dim=8, activation='relu'))  # input layer
+    model.add(Dense(16, activation='relu'))  # hidden layer
+    model.add(Dense(1, activation='sigmoid'))  # output layer
+
+    # Compile the model
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=100, batch_size=10)
+
+    # Predict the response for test dataset
+    y_pred = model.predict(X_test)
+    ```
+
+    This is a simple example of a multilayer perceptron (MLP) model in TensorFlow. The model is a simple neural network with one input layer, one hidden layer, and one output layer. The input layer has 8 neurons and the output layer has 1 neuron. The hidden layer has 16 neurons. The model is trained for 100 epochs with a batch size of 10. The model's performance is evaluated using the 'accuracy' metric.

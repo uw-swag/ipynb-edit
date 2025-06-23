@@ -1,0 +1,70 @@
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+from evidently.metric_preset import DataDriftPreset
+from evidently.test_preset import DataDriftTestPreset
+from evidently.core import AllDict
+data = datasets.fetch_california_housing(as_frame=True)
+housing_data = data.frame
+
+housing_data.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+housing_data['prediction'] = housing_data['target'].values + np.random.normal(0, 5, housing_data.shape[0])
+reference = housing_data.sample(n=5000, replace=False)
+current = housing_data.sample(n=5000, replace=False)
+current.iloc[:20, 3:5] = np.nan
+report = Report(metrics=[
+    DataDriftPreset(), 
+])
+
+report.run(reference_data=reference, current_data=current)
+report.json()
+report.json(include_render=False)
+# specify what to include in dict/json
+
+report.as_dict(include={
+    "DataDriftTable": {
+        "drift_by_columns":{
+            "target":{
+                "column_name", "column_type", "drift_score"
+            }}}})
+# specify what to include in dict/json, use True to include all the fields for a dictionary
+
+report.as_dict(include={"DataDriftTable":{"drift_by_columns":{"target":True}}})
+# specify what to include in dict/json, use AllDict to apply filters to column-based results
+
+report.as_dict(include={
+    "DataDriftTable": {
+        "drift_by_columns":AllDict({
+                "column_name", "column_type", "drift_score"
+            })}},
+              exclude={"DataDriftTable": {"drift_by_columns":AllDict({
+                 "column_type"
+            })}})
+# specify what to include in dict/json, combine include and exclude
+
+report.as_dict(
+    include={"DatasetDriftMetric": {"share_of_drifted_columns"}},
+    exclude={"DataDriftTable":{"drift_by_columns"}}
+)
+# TestSuites support include in dict/json as well
+
+test_suite = TestSuite(tests=[
+    DataDriftTestPreset(),
+])
+
+test_suite.run(reference_data=reference, current_data=current)
+test_suite
+test_suite.as_dict(exclude={"TestColumnDrift":{"parameters":True}})
+test_suite.as_dict(
+    exclude={"TestColumnDrift":{"parameters":True}},
+    include={"TestShareOfDriftedColumns":{"name", "status"}}
+)

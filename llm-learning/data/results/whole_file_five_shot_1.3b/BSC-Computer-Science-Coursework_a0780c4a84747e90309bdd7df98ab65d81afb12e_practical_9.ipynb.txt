@@ -1,0 +1,25 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Standardize the features
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Apply PCA
+    pca = PCA(n_components=2)
+    pca.fit(df_scaled)
+
+    # Transform the data
+    pca_data = pca.transform(df_scaled)
+
+    # Create a DataFrame for the PCA data
+    pca_df = pd.DataFrame(data=pca_data, columns=['PC1', 'PC2'])
+    <\Cell_0>
+    ```

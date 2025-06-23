@@ -1,0 +1,27 @@
+table_column_metrics_report = Report(metrics=[
+    ColumnSummaryMetric(column_name = RegExp(reg_exp=r'.*\?.*', display_name="Questions").for_column("Review_Text")),
+    ColumnDriftMetric(column_name = SentenceCount(display_name="SentenceCount").for_column("Review_Text")),
+    ColumnCorrelationsMetric(column_name = WordCount(display_name="WordCount").for_column("Review_Text")),
+    ColumnDistributionMetric(column_name = Sentiment(display_name="Sentiment").for_column("Review_Text")),
+    ColumnValueRangeMetric(column_name = TextLength(display_name="TextLength").for_column("Review_Text"), left=0, right=20)
+])
+
+table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_metrics_report
+table_column_test_suite = TestSuite(tests=[
+    TestColumnDrift(column_name = RegExp(reg_exp=r'.*\?.*', display_name="Questions").for_column("Review_Text")),
+    TestValueRange(column_name = TextLength(display_name="TextLength").for_column("Review_Text")),
+    TestNumberOfOutRangeValues(column_name = TextLength(display_name="TextLength").for_column("Review_Text")),
+    TestShareOfOutRangeValues(column_name = TextLength(display_name="TextLength").for_column("Review_Text")),
+    TestMeanInNSigmas(column_name = TextLength(display_name="TextLength").for_column("Review_Text")),
+    TestColumnValueMin(column_name = SentenceCount(display_name="SentenceCount").for_column("Review_Text")),
+    TestColumnValueMax(column_name = WordCount(display_name="WordCount").for_column("Review_Text")),
+    TestColumnValueMean(column_name = Sentiment(display_name="Sentiment").for_column("Review_Text")),
+    TestColumnValueMedian(column_name = TextLength(display_name="TextLength").for_column("Review_Text")),
+    TestColumnValueStd(column_name = TextLength(display_name="TextLength").for_column("Review_Text")),
+    TestColumnQuantile(column_name = TextLength(display_name="TextLength").for_column("Review_Text"), quantile=0.25),
+])
+
+table_column_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_test_suite
+

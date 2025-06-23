@@ -1,0 +1,13 @@
+```
+    iris = load_iris(as_frame=True)
+    clf = LogisticRegression(max_iter=1)
+    frame = iris.frame
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=55)
+    clf.fit(X_train, y_train)
+    ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+                features=iris.feature_names)
+    ```
+
+    The `label_name` parameter in the `Dataset` constructor is not used in this context. The `label_name` parameter is used in the `Dataset` constructor to specify the name of the label column in the dataset. It's not used in the training process of the model.

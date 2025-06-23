@@ -1,0 +1,37 @@
+
+Here is a function that generates a trading environment with multiple stocks, actions, and different volatilities. The environment is also able to take an argument for the number of stocks.
+
+```python
+class trading_env:
+    def __init__(self, gen, nstocks=1):
+        self.genfunc = gen
+        self.nstocks = nstocks
+        self.reset()
+
+    def reset(self):
+        self.gen = [self.genfunc() for _ in range(self.nstocks)]
+        nextvals = [next(g) for g in self.gen]
+        self.t = nextvals[0][0]
+        self.observation_space = np.asarray([s[1] for s in nextvals])
+        return self.observation_space
+
+    def render(self):
+        print(self.observation_space)
+
+    def step(self, action):
+        nextvals = [next(g) for g in self.gen]
+        self.t = nextvals[0][0]
+        stock_prices = np.asarray([s[1] for s in nextvals])
+        stock_delta = stock_prices - self.observation_space
+        reward = action.T.dot(stock_delta)
+        self.observation_space = stock_prices
+        return self.observation_space, reward
+
+def generate_trading_env(nstocks=1, gen=shm_gen, noise=0.0, damping=0.0, coef=100, amplitude=1, start_trend=100, trend_per_tick=0.0):
+    return trading_env(gen(noise=noise, damping=damping, coef=coef, amplitude=amplitude, start_trend=start_trend, trend_per_tick=trend_per_tick), nstocks)
+```
+
+You can use this function to generate a trading environment with multiple stocks, actions, and different volatilities. The environment is also able to take an argument for the number of stocks.
+
+```python
+env = generate_trading_env(nstocks=3, gen=shm_gen

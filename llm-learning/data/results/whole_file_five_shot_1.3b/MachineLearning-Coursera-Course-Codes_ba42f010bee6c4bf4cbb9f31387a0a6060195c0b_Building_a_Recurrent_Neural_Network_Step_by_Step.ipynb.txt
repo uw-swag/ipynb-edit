@@ -1,0 +1,35 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import SimpleRNN, Embedding, Dense
+
+    # Step 1: Define the model
+    model = Sequential()
+
+    # Step 2: Add an embedding layer
+    model.add(Embedding(input_dim=10000, output_dim=32, input_length=100))
+
+    # Step 3: Add a simple RNN layer
+    model.add(SimpleRNN(units=32, return_sequences=True))
+
+    # Step 4: Add another RNN layer
+    model.add(SimpleRNN(units=32, return_sequences=True))
+
+    # Step 5: Add a dense layer
+    model.add(Dense(units=1, activation='sigmoid'))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    # Step 6: Train the model
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+
+    # Step 7: Evaluate the model
+    model.evaluate(x_test, y_test)
+    ```
+
+    This is a simple example of a Recurrent Neural Network (RNN) using the Keras library in TensorFlow. The model is a simple RNN with two layers, and the final layer is a dense layer with a sigmoid activation function. The model is trained for 10 epochs, and the test data is evaluated at the end.
+
+    Please note that you need to replace `x_train`, `y_train`, `x_test`, and `y_test` with your actual data.
+
+    Also, this is a very basic example. In a real-world scenario, you would need to preprocess your data, handle overfitting, and possibly use more complex architectures.

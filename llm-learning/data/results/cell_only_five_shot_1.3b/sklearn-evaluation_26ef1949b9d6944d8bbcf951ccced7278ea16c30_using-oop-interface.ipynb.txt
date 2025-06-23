@@ -1,0 +1,37 @@
+```python
+    # Python program to demonstrate the use of Object Oriented Programming (OOP)
+
+    # Creating a base class
+    class Vehicle:
+        def __init__(self, brand, model, year):
+            self.brand = brand
+            self.model = model
+            self.year = year
+
+        def display(self):
+            print(f"{self.year} {self.brand} {self.model}")
+
+    # Creating a subclass
+    class Car(Vehicle):
+        def __init__(self, brand, model, year, color):
+            super().__init__(brand, model, year)
+            self.color = color
+
+        def display(self):
+            super().display()
+            print(f"Color: {self.color}")
+
+    # Creating an object of the Car class
+    my_car = Car("Tesla", "Model S", 2020, "Red")
+    my_car.display()
+    ```
+
+    ### Explanation:
+    In this example, we first define a base class `Vehicle` with attributes `brand`, `model`, and `year`. We then define a subclass `Car` that inherits from `Vehicle` and adds an additional attribute `color`.
+
+    The `display` method in the `Vehicle` class is overridden to print the vehicle's details. The `display` method in the `Car` class is also overridden to print the car's details.
+
+    Finally, we create an object `my_car` of the `Car` class and call the `display` method to print the details of the car.
+
+    This is a simple example of Object Oriented Programming (OOP).
+    ```

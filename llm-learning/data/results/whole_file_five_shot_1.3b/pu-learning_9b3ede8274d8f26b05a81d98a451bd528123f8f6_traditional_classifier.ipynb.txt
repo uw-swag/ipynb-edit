@@ -1,0 +1,47 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "merge data processing into one note and update the existing notebooks accordingly"
+    Original Code Cells:
+    '''
+    import matplotlib.pyplot as plt
+    %matplotlib inline 
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import cross_val_score
+    from sklearn.model_selection import train_test_split
+    from sklearn import datasets
+    import random
+    import time
+
+    df = pd.read_parquet('gs://music-reco-c4de1.appspot.com/user_track_df.parquet', engine='pyarrow')
+    df.head()
+    df.info()
+    df.describe()
+    df.duplicated().any()
+    df.isnull().values.any()
+    df.eq(0).sum()
+    songs = df['song_id'].unique()
+    len(songs) ## return 19827 unique songs
+    users = df['user_id'].unique()
+    len(users) ## return 983357 unique users
+
+    #define number of rows and columns for subplots
+    nrow=8
+    ncol=2
+
+    # make a list of all columns
+    df_list = [df['duration_ms'], df['tempo'], df['popularity'], df['loudness'],
+              df['key'], df['danceability'], df['energy'], df['mode'], df['speechiness'],
+              df['acousticness'], df['instrumentalness'], df['liveness'], df['valence'],
+              df['time_signature'], df['explicit'], df['listen_count']]
+    fig, axes = plt.subplots(nrow, ncol)
+
+    # plot counter
+    count=0
+    for r in range(nrow):
+        for c in range(ncol):
+            df_list[count].plot.box(ax=axes[r,c], figsize=(15,20))
+            count+=1
+
+    #sum groupby

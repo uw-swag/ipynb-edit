@@ -1,0 +1,38 @@
+def record_audio():
+    # synchronization and trigger sources are the default,
+    # which is the module itself
+    in2.reset()
+    in2.start()
+    in2.trigger()
+    print ('Recording started')
+    # wait for data
+    while (in2.status_run()): pass
+    print ('Recording complete')
+    data = in2.data(N)
+    return data[1:] #Remove first sample as it maybe zero
+def display_audio(audio_data,sr = 3000): #default sample rate 3 Ksps
+    return ipd.Audio(audio_data, rate=sr) # load a NumPy array
+def plot_audio(audio_data):
+    # show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+    plt.plot(audio_data_returned)
+    plt.show()
+def save_audio(audio_data, file='float_wave_test_raw.wav', sr = 3000): #default sample rate 3 Ksps
+    wavfile.write(file, sr, audio_data)
+audio_data_returned = record_audio()
+save_audio(audio_data_returned, sr = 3000)
+
+samplerate, generator = wavfile.read(audio_file)
+features = np.array([], dtype=np.int16) #Reset features
+features = np.concatenate((features, generator), axis=0)
+
+#Reset the runner
+runner = None
+runner = ImpulseRunner(modelfile)
+model_info = runner.init()
+res = runner.classify(features[:window_size].tolist())
+
+#Show the classification key that has the highest confidence index
+best_label = max(res['result']['classification'], key=lambda key: res['result']['classification'][key])
+confidence = res['result']['classification'][best_label]
+print(best_label,"{:.2%}".format(confidence))
+res

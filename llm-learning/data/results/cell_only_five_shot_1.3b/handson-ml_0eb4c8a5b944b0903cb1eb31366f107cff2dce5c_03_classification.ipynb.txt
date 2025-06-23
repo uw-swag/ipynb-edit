@@ -1,0 +1,32 @@
+```python
+    from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
+
+    class FutureEncoders(object):
+        def __init__(self):
+            self.ordinal_encoders = {}
+            self.one_hot_encoders = {}
+
+        def fit(self, X, y=None):
+            for col in X.columns:
+                if X[col].dtype == 'object':
+                    self.ordinal_encoders[col] = OrdinalEncoder()
+                    self.one_hot_encoders[col] = OneHotEncoder()
+                    X[col] = self.ordinal_encoders[col].fit_transform(X[col].values.reshape(-1, 1))
+                    X[col] = self.one_hot_encoders[col].fit_transform(X[col].values.reshape(-1, 1))
+            return self
+
+        def transform(self, X):
+            for col in X.columns:
+                if col in self.ordinal_encoders:
+                    X[col] = self.ordinal_encoders[col].transform(X[col].values.reshape(-1, 1))
+                if col in self.one_hot_encoders:
+                    X[col] = self.one_hot_encoders[col].transform(X[col].values.reshape(-1, 1))
+            return X
+
+        def fit_transform(self, X, y=None):
+            self.fit(X)
+            return self.transform(X)
+    ```
+    This code defines a class `FutureEncoders` that encodes categorical variables using `OrdinalEncoder` and `OneHotEncoder`. The `fit` method fits the encoders to the training data, and the `transform` method transforms the data. The `fit_transform` method fits and transforms the data in a single step.
+
+    Please note that this code is a simplification and may not work as expected in all cases. For example, it assumes that the categorical variables are the last columns in the dataframe, which may not be the case in real-world scenarios. Also, it does not

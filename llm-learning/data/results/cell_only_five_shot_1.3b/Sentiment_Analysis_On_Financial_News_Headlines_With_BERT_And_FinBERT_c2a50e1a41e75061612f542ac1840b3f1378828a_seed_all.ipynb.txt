@@ -1,0 +1,57 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    def seed_all(df):
+        np.random.seed(42)
+        random_state = np.random.randint(0, 100, size=1)
+        df['random_state'] = random_state
+        return df
+
+    def main():
+        df = pd.read_csv('data.csv')
+        df = seed_all(df)
+        df.to_csv('data_with_seed.csv', index=False)
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Rename 01_Self-Defined_Functions/seed_all.ipynb to 01_Self-Defined_Functions_Classes/seed_all.ipynb"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    class SeedAll:
+        def __init__(self, df):
+            self.df = df
+            self.random_state = np.random.randint(0, 100, size=1)
+
+        def seed_df(self):
+            self.df['random_state'] = self.random_state
+            return self.df
+
+        def main(self):
+            df = self.df
+           

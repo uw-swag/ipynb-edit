@@ -1,0 +1,10 @@
+```
+    def featureNormalization(ft):
+        seizures = ft['seizure'].copy()
+        scaler = preprocessing.StandardScaler()
+        scaled_ft = scaler.fit_transform(ft.iloc[:, ft.shape[1]-1])
+        norm_ft = pd.DataFrame(scaled_ft, columns=ft.columns)
+        norm_ft['seizure'] = seizures
+        return norm_ft
+    ```
+    This function normalizes the features in the input dataframe `ft`. The StandardScaler from the preprocessing module is used to standardize the features. The function returns a new dataframe with the normalized features.

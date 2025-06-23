@@ -1,0 +1,63 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Rerun trading + charts"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import random
+from datetime import datetime
+import time
+import resource
+import pickle
+import os
+import pdb
+
+import numpy as np
+import pandas as pd
+
+import keras
+from keras.models import Model, load_model
+from keras.layers import Input, Dense, Dropout
+from keras.optimizers import Adam
+from keras.initializers import glorot_uniform
+from keras.regularizers import l2
+import keras.backend as K
+
+import backtrader as bt
+import backtrader.feeds as btfeeds
+
+import plotly
+import plotly.graph_objects as go
+
+from IPython.display import clear_output, display, HTML
+
+from matplotlib import pyplot as plt
+import seaborn as sns
+
+# set seeds for reproducibility
+# np.random.uniform(0,10000) 4465
+random.seed(4465)
+np.random.seed(4465)
+#tf.random.set_seed(4465)
+
+<\Cell_0>
+<Cell_1>
+# show memory usage (some versions of TensorFlow gave memory issues)
+def sizeof_fmt(num, suffix='B'):
+    """given memory as int format as memory units eg KB"""
+    for unit in ['', 'K', 'M', 'G', 'T', 'P', 'E', 'Z']:
+        if abs(num) < 1024.0:
+            return "%3.1f %s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f %s%s" % (num, 'Y', suffix)
+
+def memusage():
+    """print memory usage"""
+    return sizeof_fmt(int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss))
+
+memusage()
+
+<\Cell_1>
+<Cell_2>

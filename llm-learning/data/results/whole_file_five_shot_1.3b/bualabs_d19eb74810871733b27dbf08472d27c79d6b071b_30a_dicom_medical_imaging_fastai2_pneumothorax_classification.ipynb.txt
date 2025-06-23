@@ -1,0 +1,46 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from statsmodels.tsa.arima.model import ARIMA
+    import statsmodels.graphics as smg
+    from pmdarima.arima import auto_arima
+    from datetime import datetime
+    from pandas.plotting import register_matplotlib_converters
+
+    # Registering converters for matplotlib
+    register_matplotlib_converters()
+
+    # Loading the dataset, converting the attribute to date and creating a time series (ts)
+    base = pd.read_csv('AirPassengers.csv')
+    dateparse = lambda dates: datetime.strptime(dates, '%Y-%m')
+    base = pd.read_csv(
+        'AirPassengers.csv', parse_dates = ['Month'],index_col = 'Month', 
+        date_parser = dateparse
+    )
+    ts = base['#Passengers']
+
+    # Visualizing the complete time series
+    plt.plot(ts)
+
+    # Creating the ARIMA model with parameters p=2, q=1, d=2, training and visualizing the results
+    model = ARIMA(ts, order=(2, 1, 2), freq=ts.index.inferred_freq)
+    model_fit = model.fit()
+    model_fit.summary()
+
+    # Forecasting for the next 12 months
+    forecast = model_fit.forecast(steps = 12)[0]
+    forecast
+
+    # Plotting the time series with the forecast added
+    ax = ts.plot()
+    smg.tsaplots.plot_predict(
+        model_fit,'1960-01-01', '1970-01-01', 
+        ax = ax, plot_insample = True
+    )
+
+    # Implementing auto_arima for parameter discovery
+    model_auto = auto_arima(ts, m = 12, seasonal = True, trace = False)
+    model_auto.summary()
+
+    # Warning below

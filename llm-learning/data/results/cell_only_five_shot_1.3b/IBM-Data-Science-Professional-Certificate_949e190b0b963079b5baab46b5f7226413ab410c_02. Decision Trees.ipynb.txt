@@ -1,0 +1,38 @@
+```python
+    # Notice: You might need to uncomment and install the pydotplus and graphviz libraries if you have not installed these before
+#!conda install -c conda-forge pydotplus -y
+#!conda install -c conda-forge python-graphviz -y
+from  io import StringIO
+import pydotplus
+import matplotlib.image as mpimg
+from sklearn import tree
+%matplotlib inline 
+
+# Load the iris dataset as an example
+from sklearn.datasets import load_iris
+iris = load_iris()
+
+# Create a DecisionTreeClassifier
+clf = tree.DecisionTreeClassifier()
+
+# Train the model using the training sets
+clf = clf.fit(iris.data, iris.target)
+
+# Visualize the trained model
+dot_data = StringIO()
+filename = "iris.png"
+feature_names = iris.feature_names
+
+# Draw the decision tree
+tree.export_graphviz(clf, out_file=dot_data, 
+                         feature_names=feature_names,  
+                         class_names=iris.target_names,
+                         filled=True, rounded=True,  
+                         special_characters=True)
+graph = pydotplus.graph_from_dot_data(dot_data.getvalue())  
+graph.write_png(filename)
+
+# Display the image
+img = mpimg.imread(filename)
+display(img)
+    ```

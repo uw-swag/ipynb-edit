@@ -1,0 +1,37 @@
+
+    '''
+    ## Drop columns that aren't useful for ML
+    df = df.drop(["PID", "Order"], axis=1)
+
+    ## Drop columns that leak info about the final sale
+    df = df.drop(["Mo Sold", "Sale Condition", "Sale Type", "Yr Sold"], axis=1)
+
+    ## Convert nominal/categorical numerical data which contains values that
+    ## don't directly correlate to the target value, into numerical values that do correlate to the target
+
+    ## For these two, check for negative values, they need to go away
+
+    ## The 'Year Remod/Add' & 'Year Built' columns to calculate the years after the house
+    ## was built until it was remodeled
+    df['years_until_remod'] = df['Year Remod/Add'] - df['Year Built']
+
+    ## Similar to the above transformation... Yr Sold would provide better information if we altered it
+    ## to the age of the house when sold.
+    df['age_when_sold'] = df['Yr Sold'] - df['Year Built']
+    df = df.drop(['Yr Sold', 'Year Built'], axis=1)
+
+    ## Print the columns
+    print(df.columns)
+
+    ## 1: All columns: Drop any with 5% or more missing values for now.
+    ## 2: Text columns: Drop any with 1 or more missing values for now.
+    ## 3: Numerical columns: For columns with missing values, fill in with the most common value in that column
+
+    ## Verify there are no missing values in the DataFrame
+    print(df.isnull().sum())
+
+    ## The following columns can be dropped as they are not useful for machine learning
+    ## I will comment that I am thinking that Mo Sold & Yr Sold might be valuable for converting the
+    ## sale price into an inflationary adjusted value.  For now I'm going to leave that alone.
+    cols_drop = ['Order', 'PID', 'Mo Sold', 'Yr Sold']
+    df = df.drop(cols_drop, axis=1

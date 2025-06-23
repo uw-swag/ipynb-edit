@@ -1,0 +1,44 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import confusion_matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Load the dataset
+    df = pd.read_csv('forestfires.csv')
+
+    # Preprocess the data
+    df = df.dropna()
+    df['month'] = df['month'].map({'jan':1, 'feb':2, 'mar':3, 'apr':4, 'may':5, 'jun':6, 'jul':7, 'aug':8, 'sep':9, 'oct':10, 'nov':11, 'dec':12})
+    df['size_category'] = df['size_category'].map({'small':0, 'large':1})
+
+    # Split the data into features and target variable
+    X = df.drop('size_category', axis=1)
+    y = df['size_category']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the classifier
+    rfc.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = rfc.predict(X_test)
+
+    # Evaluate the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+
+    # Create a confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    # Visualize the confusion matrix
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm

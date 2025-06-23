@@ -1,0 +1,55 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add 'LunarLander' notebook"
+    Original Code Cells:
+    '''
+    class Agent:
+        """abstract base class for agents"""
+
+        def __init__(self, state_size, action_size, filename="model",
+                     *args, **kwargs):
+            self.state_size = state_size
+            self.action_size = action_size
+            self.filename = filename
+            self.timestep = 0
+            self.save_interval = 10
+
+            raise NotImplementedError
+
+        def build_model(self, *args, **kwargs):
+            """build the relevant model"""
+            raise NotImplementedError
+
+        def reset(self):
+            """reset agent for start of episode"""
+            self.timestep = 0
+
+        def increment_time(self):
+            """increment timestep counter"""
+            self.timestep += 1
+
+        def remember(self, *args, **kwargs):
+            """store the states and rewards needed to fit the model"""
+            raise NotImplementedError
+
+        def train(self, *args, **kwargs):
+            """train the model on experience stored by remember"""
+            raise NotImplementedError
+
+        def act(self, *args, **kwargs):
+            """pick an action using model"""
+            raise NotImplementedError
+
+        def save_score(self):
+            """save score of each episode"""
+            self.results.append(self.timestep)
+
+        def score_episode(self, episode_num, n_episodes):
+            """output results and save"""
+            self.save_score()
+            avglen = min(len(self.results), self.save_interval)
+            formatstr = "{} episode {}: {}/{}, score: {}, {}-episode avg: {:.1f} Memory: {}        "
+            print(formatstr.format(time.strftime("%H:%M:%S"), len(self.results),
+                               episode_num+1, n_episodes, self.timestep, avglen,
+                               sum(self.

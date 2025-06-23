@@ -1,0 +1,33 @@
+```python
+    ## This code cell will not be shown in the HTML version of this notebook
+    # import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.optimize import minimize
+
+    # define the function to be optimized
+    def func(x):
+        return x**2 + 10*np.sin(x)
+
+    # define the derivative of the function
+    def func_der(x):
+        return 2*x + 10*np.cos(x)
+
+    # define the initial guess
+    x0 = np.array([-10])
+
+    # use scipy's minimize function to find the minimum
+    result = minimize(func, x0, method='BFGS', jac=func_der)
+
+    # print the result
+    print('The minimum occurs at:', result.x)
+
+    # plot the function and the minimum
+    x = np.linspace(-10, 10, 400)
+    y = func(x)
+    plt.plot(x, y, label='f(x) = x^2 + 10*sin(x)')
+    plt.scatter(result.x, func(result.x), color='red', label='minimum')
+    plt.legend()
+    plt.show()
+    ```
+    This code cell will not be shown in the HTML version of this notebook. It uses the `scipy.optimize.minimize` function to find the minimum of a function. The function to be optimized is a simple quadratic function, and the derivative of the function is also provided. The initial guess for the optimization is set to `x0 = [-10]`. The result is then printed and plotted.

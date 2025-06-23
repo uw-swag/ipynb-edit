@@ -1,0 +1,31 @@
+```
+    import os
+    import shutil
+
+    # Get the list of all subdirectories in the current directory
+    subdirs = [d for d in os.listdir('.') if os.path.isdir(d)]
+
+    # Iterate over each subdirectory
+    for subdir in subdirs:
+        # Get the list of all files in the current subdirectory
+        files = os.listdir(subdir)
+
+        # Iterate over each file
+        for file in files:
+            # If the file is a python file
+            if file.endswith('.py'):
+                # Get the full path of the file
+                file_path = os.path.join(subdir, file)
+
+                # Open the file
+                with open(file_path, 'r') as f:
+                    # Read the file
+                    content = f.read()
+
+                # Write the content to a new file
+                with open('all_files.py', 'a') as f:
+                    f.write(content)
+
+    # Now, all the python files in the current directory and all its subdirectories
+    # are in the 'all_files.py' file.
+    ```

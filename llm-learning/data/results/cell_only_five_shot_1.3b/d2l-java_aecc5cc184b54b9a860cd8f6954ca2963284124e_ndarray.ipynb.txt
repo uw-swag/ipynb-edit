@@ -1,0 +1,40 @@
+```python
+    # Add colab support for d2l-java
+    import sys
+    sys.path.insert(0, '/content/drive/My Drive/Colab Notebooks/d2l-java')
+    import d2l
+    from d2l import torch as d2l
+    from torch import nn
+    from torch.nn import functional as F
+
+    # Create a simple sequential model
+    class MLP(d2l.Module):
+        def __init__(self, num_outputs):
+            super(MLP, self).__init__()
+            self.linear = d2l.Linear(10, num_outputs)
+
+        def forward(self, x):
+            return self.linear(x)
+
+    # Create a model instance
+    model = MLP(num_outputs=10)
+
+    # Create a dummy input
+    x = d2l.ones(10)
+
+    # Forward propagation
+    y = model(x)
+
+    # Print the output
+    print(y)
+    ```
+
+    This code adds colab support for the d2l-java library. It imports the necessary libraries and creates a simple MLP model. The model is then used to create a dummy input and perform forward propagation. The output is then printed.
+
+    Please note that you need to have the d2l-java library installed in your Colab environment. You can install it using pip:
+
+    ```python
+    pip install d2l-java
+    ```
+
+    Also, please ensure that you have the necessary permissions to access the Colab environment.

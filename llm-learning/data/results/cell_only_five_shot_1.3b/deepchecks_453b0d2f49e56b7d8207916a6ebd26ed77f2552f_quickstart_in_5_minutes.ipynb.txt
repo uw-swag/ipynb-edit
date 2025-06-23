@@ -1,0 +1,37 @@
+```
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+    # Loading the iris dataset
+    iris = pd.read_csv('https://raw.githubusercontent.com/mwaskom/seaborn-data/master/iris.csv')
+
+    # Splitting the data into training and testing sets
+    X = iris.drop('species', axis=1)
+    y = iris['species']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Training the model
+    rfc = RandomForestClassifier(random_state=42)
+    rfc.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = rfc.predict(X_test)
+
+    # Evaluating the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_pred))
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred))
+
+    # Plotting the feature importances
+    feature_importances = pd.DataFrame(rfc.feature_importances_, index = X_train.columns, columns=['importance']).sort_values('importance', ascending=False)
+    feature_importances.plot(kind='bar', figsize=(12,6))
+    plt.show()
+    ```

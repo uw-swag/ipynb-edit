@@ -1,0 +1,44 @@
+```
+    # glass identification dataset
+    import pandas as pd
+    file = './data/glass.data'
+    col_names = ['id','ri','na','mg','al','si','k','ca','ba','fe','glass_type']
+    glass = pd.read_csv(file, names=col_names, index_col='id')
+    glass['assorted'] = glass.glass_type.map({1:0, 2:0, 3:0, 4:0, 5:1, 6:1, 7:1})
+
+    # Reading the first 5 entries of the DataFrame
+    glass.head()
+
+    # scatter plot using Matplotlib
+    plt.scatter(glass.al, glass.ri)
+
+    # fit a linear regression model
+    from sklearn.linear_model import LinearRegression
+    import numpy as np
+    linreg = LinearRegression()
+    feature_cols = ['al']
+    X = glass[feature_cols]
+    y = glass.ri
+    linreg.fit(X, y)
+
+    # look at the coefficients to get the equation for the line
+    print(linreg.intercept_)
+    print(linreg.coef_)
+
+    # make predictions for arbitrary points
+    print(linreg.predict(np.array([1]).reshape(-1,1)))
+    print(linreg.predict(np.array([2]).reshape(-1,1)))
+    print(linreg.predict(np.array([3]).reshape(-1,1)))
+
+    # or you could make predictions for all values of X, and then plot those predictions connected by a line
+    ri_pred = linreg.predict(X)
+    plt.plot(glass.al, ri_pred, color='red')
+
+    # put the plots together
+    plt.scatter(glass.al, glass.ri)
+    plt.plot(glass.al, ri_pred, color='red')
+
+    # compute prediction for al=2
+    print(linreg.intercept_ + linreg.coef_ * 2)
+
+    # compute prediction for al

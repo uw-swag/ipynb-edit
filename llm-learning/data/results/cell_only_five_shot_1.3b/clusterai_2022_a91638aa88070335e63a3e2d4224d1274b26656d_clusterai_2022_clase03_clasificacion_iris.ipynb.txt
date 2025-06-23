@@ -1,0 +1,35 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Clase 03: Colab + Iris dataset"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn import datasets
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+    iris = datasets.load_iris()
+    df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+    X = df.iloc[:, :-1].values
+    y = df.iloc[:, -1].values
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+    clf = LogisticRegression(random_state=1)
+    clf.fit(X_train, y_train)
+    y_pred = clf.predict(X_test)
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+    '''
+    ]
+
+    ### Response:
+    La clase 03 de Colab se centra en el uso de la biblioteca de datos Iris para el análisis de datos y la implementación de un modelo de clasificación logística para predecir la especies de iris en base a las características de las flores.
+
+    El código proporcionado es un ejemplo de cómo realizar un análisis de datos y un modelo de clasificación en Python utilizando la biblioteca Scikit-learn.
+
+    El código carga el dataset Iris y lo divide en características (X) y etiquetas (y). Luego, se divide el dataset en un conjunto de entrenamiento y uno de prueba, y se crea un modelo de clasificación logística.
+
+    Finalmente, se entrenan los modelos y se calculan las precisiones de las predicciones.
+
+    El resultado de

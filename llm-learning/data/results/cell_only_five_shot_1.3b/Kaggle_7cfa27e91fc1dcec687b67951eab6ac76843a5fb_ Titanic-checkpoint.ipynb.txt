@@ -1,0 +1,32 @@
+
+    ## Feature Induction: Sex
+
+    ### Code Changes:
+
+    #### Adding a new column to the dataset:
+
+    ```python
+    df['Sex'] = df['Sex'].astype('category').cat.codes
+    ```
+
+    #### Displaying the new column:
+
+    ```python
+    df['Sex'].value_counts()
+    ```
+
+    #### Checking the new column:
+
+    ```python
+    df['Sex'].describe()
+    ```
+
+    #### Saving the new column:
+
+    ```python
+    df.to_csv('processed_data.csv', index=False)
+    ```
+
+    ### Explanation:
+
+    The new column 'Sex' was added to the dataset. The 'Sex' column was originally a categorical variable, but it was converted to a numerical variable for the purpose of this analysis. The numerical variable represents the sex of the individuals in the dataset. The value_counts() function was used to check the distribution of the 'Sex' column, and the descirbe() function was used to check the statistical details of the 'Sex' column. The new column was then saved to a new csv file for future use.

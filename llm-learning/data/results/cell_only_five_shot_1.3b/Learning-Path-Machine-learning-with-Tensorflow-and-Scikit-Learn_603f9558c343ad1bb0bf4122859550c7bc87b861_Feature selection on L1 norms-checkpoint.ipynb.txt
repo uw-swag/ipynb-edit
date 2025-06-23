@@ -1,0 +1,41 @@
+
+    '''
+    # specify parameters
+    TOP_K=2
+    RECOMMEND_SEEN=True
+    # options are 'jaccard', 'lift' or '' to skip and use item cooccurrence directly
+    SIMILARITY='jaccard'
+
+    import pandas as pd
+    import numpy as np
+    import heapq
+    import os
+    import pyspark.sql.functions as F
+    import sys
+    import pyspark
+    from pyspark.sql.window import Window
+    from pyspark.sql.types import StructType, StructField, StringType, Row, ArrayType, IntegerType, FloatType
+
+    from pyspark.sql import SparkSession
+    from pysarplus import SARPlus
+
+    print("System version: {}".format(sys.version))
+    print("Pandas version: {}".format(pd.__version__))
+    print("PySpark version: {}".format(pyspark.__version__))
+    SUBMIT_ARGS = "--packages eisber:sarplus:0.2.2 pyspark-shell"
+    os.environ["PYSPARK_SUBMIT_ARGS"] = SUBMIT_ARGS
+
+    spark = SparkSession \
+        .builder \
+        .appName("SAR pySpark") \
+        .master("local[*]") \
+        .config("memory", "4G") \
+        .config("spark.sql.shuffle.partitions", "2") \
+        .config("spark.sql.crossJoin.enabled", True) \
+        .config("spark.ui.enabled", False) \
+        .getOrCreate()
+    df = spark.createDataFrame(pdf_train).withColumn("type", F.lit(1))
+    df_test = spark.createDataFrame(pdf_test).withColumn("type", F.lit(0))
+    df.toPandas()
+    model = SARPlus(spark, col_user='customerID', col_item='itemID', col_rating='rating')
+    model.fit(df, similarity_type=SIMILARITY

@@ -1,0 +1,39 @@
+```python
+    import openai
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    openai.api_key = token
+
+    models = openai.Model.list()
+    print(len(models.data))
+    print(models.data[0].id)
+
+    completion = openai.Completion.create(model="ada", prompt="Hello world")
+    print(completion)
+    print(completion.choices[0].text)
+
+    messages = [{"role": "user", "content": "Hello World"}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=0, 
+        request_timeout=3.0,
+    )
+    print(response.choices[0].message["content"])
+
+    image_resp = openai.Image.create(prompt="cute puppy in stripe ninja suit, super realistic", n=4, size="256x256")
+    for image in image_resp.data:
+        display(Image(url=image.url))
+
+    def get_completion(prompt, model="gpt-3.5-turbo"):
+        messages = [{"role": "user", "content": prompt}]
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            temperature=0, # this is the degree of randomness of the model's output
+        )
+        return response.choices[0].message["content"]
+
+    resp = get_completion("Explain why Thailand is such as good place to retire.")
+    print(resp)
+    ```

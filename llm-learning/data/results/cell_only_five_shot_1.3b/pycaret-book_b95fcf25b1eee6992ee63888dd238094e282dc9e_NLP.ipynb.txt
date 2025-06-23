@@ -1,0 +1,56 @@
+```python
+    import pandas as pd 
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+from wordcloud import WordCloud
+from spacy.lang.en.stop_words import STOP_WORDS
+from pycaret import nlp
+from pycaret import classification
+mpl.rcParams['figure.dpi'] = 300
+
+# Load the dataset
+df = pd.read_csv('your_data.csv')
+
+# Preprocess the data
+df['text'] = df['text'].apply(lambda x: x.lower())
+df['text'] = df['text'].apply(lambda x: ' '.join([word for word in x.split() if word not in STOP_WORDS]))
+
+# Create a wordcloud
+wordcloud = WordCloud(width = 800, height = 800, 
+                background_color ='white', 
+                stopwords = STOP_WORDS, 
+                min_font_size = 10).generate(df['text'].str.cat(sep=" "))
+
+# Plot the wordcloud
+plt.figure(figsize = (8, 8), facecolor = None) 
+plt.imshow(wordcloud)
+plt.axis("off") 
+plt.tight_layout(pad = 0)
+plt.show()
+
+# Create a PyCaret Classification model
+clf = classification.setup(df, target = 'target_column', session_id=123)
+
+# Compare models
+classification.compare_models()
+
+# Tune model
+model = classification.tune_model()
+
+# Predict
+predictions = classification.predict_model(model, data = df)
+
+# Evaluate model
+classification.evaluate_model(predictions)
+
+# Save model
+classification.save_model(model, 'your_model_name')
+
+# Load model
+loaded_model = classification.load_model('your_model_name')
+
+# Predict on new data
+new_data = pd.read_csv('new_data.csv')
+predictions_new = classification.predict_model(loaded_model, data = new_data)
+
+    

@@ -1,0 +1,48 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Example/tracing tutorial (#1242)").getOrCreate()
+
+    # Load the data
+    df = spark.read.json("data.json")
+
+    # Trace the dataframe
+    df.select(col("*")).show()
+
+    # Trace the schema
+    df.select(df["*"]).show()
+
+    # Trace the first few rows
+    df.select(df.head(1)).show()
+
+    # Trace the last few rows
+    df.select(df.last(1)).show()
+
+    # Trace the count of rows
+    df.select(df.count()).show()
+
+    # Trace the count of distinct rows
+    df.select(df.distinct().count()).show()
+
+    # Trace the count of non-null rows
+    df.select(df.where(col("column_name") is not None).count()).show()
+
+    # Trace the count of null rows
+    df.select(df.where(col("column_name") is None).count()).show()
+
+    # Trace the count of distinct values in a column
+    df.select(df["column_name"].distinct().count()).show()
+
+    # Trace the count of distinct values in a column grouped by another column
+    df.select(df["column_name"].distinct().groupBy(df["another_column"]).count()).show()
+
+    # Trace the count of distinct values in a column grouped by a function
+    df.select(df["column_name"].distinct().groupBy(lambda x: x % 2).count()).show()
+
+    # Trace the count of distinct values in a column grouped by a function and another column
+    df.select(df["column_name"].distinct().groupBy(lambda x: x % 2, df["another_column"]).count()).show()
+
+    # Trace the count of distinct values in a column grouped by a function and another column, and another function
+   

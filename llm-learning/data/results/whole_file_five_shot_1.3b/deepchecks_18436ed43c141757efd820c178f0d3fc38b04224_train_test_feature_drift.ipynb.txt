@@ -1,0 +1,54 @@
+```markdown
+    ## Examples
+
+    ### Code
+    ```python
+    # Import packages
+    from __future__ import print_function
+    import json
+    from sklearn.preprocessing import MultiLabelBinarizer
+    import numpy as np
+    import tensorflow as tf
+
+    # this code can work with either tf.VERSION = '1.3.0' or tf.VERSION = '0.12.1', functions may change for other versions
+    print(tf.VERSION)
+    ```
+
+    ### Output
+    The output of the code is printed to the console.
+
+    ### Description
+    This code imports necessary packages and sets the TensorFlow version.
+
+    ### Code
+    ```python
+    # Load JSON file into dictionary
+    filepath = "student_vectors_n_task_10_n_limit_10000.json"
+    student_vectors = json.load(open(filepath))
+
+    # Examine a case with second attempt
+    for j in student_vectors['V0D6D2D5O7']:
+        if(j['qual_id'] == '1zsCldT4p8.set2.JiTh5Wk0bD'):
+            print(j)
+    ```
+
+    ### Output
+    The output of the code is printed to the console.
+
+    ### Description
+    This code loads a JSON file into a Python dictionary, then examines a specific case with a second attempt.
+
+    ### Code
+    ```python
+    # Collect all qual_ids, ccssm_labels, task_ids in separate lists
+    all_qual_ids = []
+    all_ccssm_labels = []
+    all_task_ids = []
+    for i in student_vectors:
+        for j in student_vectors[i]:
+            all_qual_ids.append(j['qual_id'])
+            all_ccssm_labels.append(j['ccssm'])
+            all_task_ids.append(j['task_id'])
+
+    # Make a set of unique values from the above lists
+    unique_ids = set(all_qual_ids)

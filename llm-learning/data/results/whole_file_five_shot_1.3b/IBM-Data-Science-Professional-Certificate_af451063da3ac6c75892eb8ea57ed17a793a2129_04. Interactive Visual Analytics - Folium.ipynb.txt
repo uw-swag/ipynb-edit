@@ -1,0 +1,36 @@
+```python
+    # Define the function to calculate the distance and draw the line
+    def distance_and_line(destination_coordinates):
+        # Calculate the distance between the chosen destination and the launch site
+        distance_to_destination = calculate_distance(launch_site_lat, launch_site_long, destination_coordinates[0], destination_coordinates[1])
+
+        # Define the distance marker
+        distance_marker = folium.Marker(
+            destination_coordinates,
+            icon=DivIcon(
+                icon_size=(20,20),
+                icon_anchor=(0,0),
+                html='<div style="font-size: 12; color:#ff5c33;"><b>%s</b></div>' % "{:10.2f} KM".format(distance_to_destination),
+            )
+        )
+
+        # Define the distance line
+        distance_line=folium.PolyLine(
+            locations=[launch_site_coordinates, destination_coordinates],
+            weight=1
+        )
+
+        # Add the distance marker and line to the map
+        site_map.add_child(distance_marker)
+        site_map.add_child(distance_line)
+
+    # Add distance markers and lines for closest city, railway and highway
+    distance_and_line(closest_city_coordinates)
+    distance_and_line(closest_railway_coordinates)
+    distance_and_line(closest_highway_coordinates)
+
+    # Show the map
+    site_map
+
+    # End of function
+    ```

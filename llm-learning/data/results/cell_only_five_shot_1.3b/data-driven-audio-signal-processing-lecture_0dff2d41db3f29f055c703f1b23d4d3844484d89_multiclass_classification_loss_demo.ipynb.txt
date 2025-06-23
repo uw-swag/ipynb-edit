@@ -1,0 +1,43 @@
+```python
+    import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+
+from tensorflow.keras.utils import to_categorical
+from tensorflow.keras.layers import Input, Dense, Dropout
+from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import EarlyStopping
+N = 2000  # total number of examples
+C = 3  # number of classes
+
+X, Y = make_classification(n_samples=N,
+                           n_classes=C,
+                           n_clusters_per_class=1,
+                           n_features=2,
+                           n_redundant=0,
+                           n_informative=2,
+                           random_state=42)
+
+Y1h = to_categorical(Y, C)
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y1h, test_size=0.2)
+stop_early = EarlyStopping(monitor='val_accuracy', patience=5)
+
+def train_model(loss):
+    
+    model = dnn_model()
+    model.compile(loss=loss, optimizer="adam", metrics=["accuracy"])
+    history = model.fit(X_train, Y_train, validation_data=(X_test, Y_test), epochs=100, batch_size=32)
+    
+    return model, history
+
+
+model_mse, history_mse = train_model('mse')
+model_mae, history_mae = train_model('mae')
+model_crossentropy, history_crossentropy = train_model('categorical_crossentropy')
+
+```

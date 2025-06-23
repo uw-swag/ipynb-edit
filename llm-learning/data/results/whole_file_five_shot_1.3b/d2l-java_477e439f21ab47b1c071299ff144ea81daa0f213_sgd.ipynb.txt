@@ -1,0 +1,41 @@
+```python
+    # Upgrade to djl 0.13.0 (#176)
+
+    # Import the necessary libraries
+    %load ../utils/djl-imports
+    %load ../utils/plot-utils
+    %load ../utils/Functions.java
+    %load ../utils/GradDescUtils.java
+
+    # Create a new instance of NDManager
+    NDManager manager = NDManager.newBaseManager();
+
+    # Sample once from a normal distribution
+    public float getRandomNormal(float mean, float sd) {
+        return manager.randomNormal(mean, sd, new Shape(1), DataType.FLOAT32, Device.defaultDevice()).getFloat();
+    }
+
+    # Define the learning rate and the objective function
+    float eta = 0.01f;
+    Supplier<Float> lr = () -> 1f; // Constant Learning Rate
+
+    BiFunction<Float, Float, Float> f = (x1, x2) -> x1 * x1 + 2 * x2 * x2; // Objective
+
+    BiFunction<Float, Float, Float[]> gradf = (x1, x2) -> new Float[]{2 * x1, 4 * x2}; // Gradient
+
+    # Define the SGD update function
+    Function<Float[], Float[]> sgd = (state) -> {
+        Float x1 = state[0];
+        Float x2 = state[1];
+        Float s1 = state[2];
+        Float s2 = state[3];
+
+        Float[] g = gradf.apply(x1, x2);
+        Float g1 = g[0];
+        Float g2 = g[1];
+
+        g1 += getRandomNormal(0f, 0.1f);
+        g2 += getRandomNormal(0f, 0.1f);
+        Float etaT = eta * lr.get();
+        return new Float[]{x1 - etaT * g1, x2 - etaT * g2, 0f, 0f};
+    };

@@ -1,0 +1,35 @@
+
+    Here's a refactored version of your code. I've moved the utilities into a separate subpackage, and split the utilities into generic and material utilities.
+
+    ```java
+    // Original code
+    public void trainingChapter6(ArrayDataset trainIter, ArrayDataset testIter,
+                                 int numEpochs, Trainer trainer){
+
+        double avgTrainTimePerEpoch = 0;
+        Map<String, double[]> evaluatorMetrics = new HashMap<>();
+
+        trainer.setMetrics(new Metrics());
+
+        EasyTrain.fit(trainer, numEpochs, trainIter, testIter);
+
+        Metrics metrics = trainer.getMetrics();
+
+        trainer.getEvaluators().stream()
+                .forEach(evaluator -> {
+                    evaluatorMetrics.put("train_epoch_" + evaluator.getName(), metrics.getMetric("train_epoch_" + evaluator.getName()).stream()
+                            .mapToDouble(x -> x.getValue().doubleValue()).toArray());
+                    evaluatorMetrics.put("validate_epoch_" + evaluator.getName(), metrics.getMetric("validate_epoch_" + evaluator.getName()).stream()
+                            .mapToDouble(x -> x.getValue().doubleValue()).toArray());
+                });
+
+        avgTrainTimePerEpoch = metrics.mean("epoch");
+
+        trainLoss = evaluatorMetrics.get("train_epoch_SoftmaxCrossEntropyLoss");
+        trainAccuracy = evaluatorMetrics.get("train_epoch_Accuracy");
+        testAccuracy = evaluatorMetrics.get("validate_epoch_Accuracy");
+
+        System.out.printf("loss %.3f," , trainLoss[numEpochs-1]);
+        System.out.printf(" train acc %.3f," , trainAccuracy[numEpochs-1]);
+        System.out.printf(" test acc %.3f\n" , testAccuracy[numEpochs-1]);
+        System.out.printf("%.1f examples/sec \n", trainIter.size() / (avgTrainTimePerEpoch

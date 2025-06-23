@@ -1,0 +1,10 @@
+from evidently import ColumnMapping
+
+suite = TestSuite(tests=[TestNumberOfColumns(
+    gt=1,
+    data_integrity_metric=DataIntegrityMetrics(),
+),
+                         TestNumberOfDriftedFeatures(),
+                        ])
+
+suite.run(reference_data=pd.DataFrame([{'a': 1, 'b': 2}]), current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping())

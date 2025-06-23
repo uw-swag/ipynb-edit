@@ -1,0 +1,30 @@
+
+The code you provided is a plotting script in Python using matplotlib and numpy. The issue is that the array indices are being casted as floats for Python 3.6, which is causing an error.
+
+The error is occurring because the `gradient` array is being used as an index to access the elements of the `x` array. In Python 3.6, the array indices are being casted as floats, which is causing the error.
+
+To fix this, you need to ensure that the array indices are integers. You can do this by using the `np.int32` or `np.int64` function to cast the array indices to integers.
+
+Here is the corrected code:
+
+```python
+fig = plt.figure(figsize=(10, 6))
+ax = fig.gca()
+x = np.linspace(-1, 1, 200)
+hz = 10
+cost = np.sin(hz*x)*np.exp(-x)
+ax.plot(x, cost)
+ax.set_ylabel('Cost')
+ax.set_xlabel('Some Parameter')
+n_iterations = 500
+cmap = plt.get_cmap('coolwarm')
+c_norm = colors.Normalize(vmin=0, vmax=n_iterations)
+scalar_map = cmx.ScalarMappable(norm=c_norm, cmap=cmap)
+init_p = 120#np.random.randint(len(x)*0.2, len(x)*0.8)
+learning_rate = 1.0
+for iter_i in range(n_iterations):
+    init_p -= learning_rate * np.int32(gradient[init_p])
+    ax.plot(x[np.int32(init_p)], cost[np.int32(init_p)], 'ro', alpha=(iter_i + 1) / n_iterations, color=scalar_map.to_rgba(iter_i))
+```
+
+In this corrected code, the array indices are being casted to integers using the `np.int32` function, which should resolve the error.

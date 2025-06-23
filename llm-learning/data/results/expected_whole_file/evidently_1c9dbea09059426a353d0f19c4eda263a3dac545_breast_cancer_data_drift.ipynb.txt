@@ -1,0 +1,31 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+<\Cell_1>
+<Cell_2>
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+<\Cell_2>
+<Cell_3>
+bcancer_frame.head()
+<\Cell_3>
+<Cell_4>
+bcancer_frame_reference = bcancer_frame[:280]
+bcancer_frame_recent = bcancer_frame[280:]
+<\Cell_4>
+<Cell_5>
+bcancer_data_drift = Dashboard(bcancer_frame_reference,bcancer_frame_recent, column_mapping = None, tabs=[DriftTab])
+<\Cell_5>
+<Cell_6>
+bcancer_data_drift.show()
+<\Cell_6>
+<Cell_7>
+bcancer_data_drift.save('reports/bcancer_data_drift_report.html')
+<\Cell_7>

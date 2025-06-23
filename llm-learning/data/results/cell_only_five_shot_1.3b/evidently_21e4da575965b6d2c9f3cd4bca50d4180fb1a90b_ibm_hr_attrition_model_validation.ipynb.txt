@@ -1,0 +1,48 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    df = pd.read_csv('hr_attrition.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Drop the missing values
+    df = df.dropna()
+
+    # Check the distribution of the target variable
+    sns.countplot(df['Attrition'])
+    plt.show()
+
+    # Split the dataset into training and testing sets
+    X = df.drop('Attrition', axis=1)
+    y = df['Attrition']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a logistic regression model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Substitute an example for the HR attrition analysis
+    # Replace the 'Attrition' column with the new data
+    df.loc[df['Attrition'] == 'Yes', 'Attrition'] = 1
+    df.loc[df['Attrition'] == 'No', 'Attrition'] = 0
+
+    # Check the distribution of the target variable after substitution
+    sns.countplot(df['Attrition'])
+    plt.show()
+    ```
+    This code will replace the 'Attrition' column in the dataset with 1 if the employee is likely to leave the company and 0 if they are likely to stay. The distribution of the target variable will be updated after the substitution.

@@ -1,0 +1,28 @@
+```
+    # Adding files via upload
+    from werkzeug.utils import secure_filename
+
+    # Set the upload folder
+    app.config['UPLOAD_FOLDER'] = '/path/to/upload/folder'
+
+    # Set the allowed file types
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+    # Function to check if the file is allowed
+    def allowed_file(filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+    # Route to upload file
+    @app.route('/upload', methods=['POST'])
+    def upload_file():
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return 'File uploaded successfully'
+        else:
+            return 'Invalid file type'
+    ```

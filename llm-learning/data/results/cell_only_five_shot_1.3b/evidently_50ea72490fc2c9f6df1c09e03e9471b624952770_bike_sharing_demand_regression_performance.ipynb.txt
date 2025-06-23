@@ -1,0 +1,62 @@
+```python
+    import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import RegressionPerformanceProfileSection
+
+column_mapping = {}
+
+column_mapping['target'] = target
+column_mapping['prediction'] = 'prediction'
+
+column_mapping['numerical_features'] = numerical_features
+column_mapping['categorical_features'] = categorical_features
+
+    # Add options for configuring pipeline components
+    pipeline_components = {
+        'feature_extractor': {
+            'type': 'PandasColumnSelector',
+            'features': column_mapping['numerical_features'] + column_mapping['categorical_features']
+        },
+        'estimator': {
+            'type': 'RandomForestRegressor',
+            'params': {
+                'n_estimators': 100,
+                'random_state': 42
+            }
+        },
+        'target_extractor': {
+            'type': 'ColumnValueExtractor',
+            'column': column_mapping['target']
+        }
+    }
+
+    # Add verbosity settings for tabs
+    verbosity = {
+        'regression_performance': {
+            'type': 'RegressionPerformanceTab',
+            'params': {
+                'show_distribution': True,
+                'show_correlation': True,
+                'show_pdp': True,
+                'show_hist': True,
+                'show_csi': True,
+                'show_feature_importance': True,
+                'show_prediction_distribution': True,
+                'show_roc_auc': True,
+                'show_lift': True,
+                'show_auc_pr': True,
+                'show_auc_roc': True,
+                'show_mcc': True,
+                'show_log_loss': True,
+                'show_log_loss_normalized': True,
+                'show_log_loss_per

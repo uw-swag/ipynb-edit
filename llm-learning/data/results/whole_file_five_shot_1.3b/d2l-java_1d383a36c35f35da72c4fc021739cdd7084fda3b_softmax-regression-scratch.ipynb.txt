@@ -1,0 +1,44 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "fix typo and function call style of sum (#67)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+// %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+%maven ai.djl:api:0.8.0
+%maven ai.djl:basicdataset:0.8.0
+%maven org.slf4j:slf4j-api:1.7.26
+%maven org.slf4j:slf4j-simple:1.7.26
+    
+%maven ai.djl.mxnet:mxnet-engine:0.8.0
+%maven ai.djl.mxnet:mxnet-native-auto:1.7.0-backport
+<\Cell_0>
+<Cell_1>
+import ai.djl.Device;
+import ai.djl.ndarray.*;
+import ai.djl.ndarray.types.*;
+import ai.djl.ndarray.index.*;
+import ai.djl.training.dataset.*;
+import ai.djl.training.GradientCollector;
+import ai.djl.engine.Engine;
+<\Cell_1>
+<Cell_2>
+%load ../utils/plot-utils.ipynb
+%load ../utils/Training.java
+%load ../utils/FashionMnistUtils.java
+<\Cell_2>
+<Cell_3>
+import ai.djl.basicdataset.*;
+
+int batchSize = 256;
+boolean randomShuffle = true;
+
+// get training and validation dataset
+ArrayDataset trainingSet = FashionMnistUtils.getDataset(Dataset.Usage.TRAIN, batchSize, randomShuffle);
+ArrayDataset validationSet = FashionMnistUtils.getDataset(Dataset.Usage.TEST, batchSize, false);
+<\Cell_3>
+<Cell_4>
+int numInputs = 784;
+int numOutputs = 10;

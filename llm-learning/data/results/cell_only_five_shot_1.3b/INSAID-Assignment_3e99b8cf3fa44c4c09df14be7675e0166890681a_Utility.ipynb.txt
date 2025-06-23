@@ -1,0 +1,41 @@
+```python
+    from sklearn.linear_model import LinearRegression
+    from sklearn.cluster import KMeans
+    from sklearn.preprocessing import StandardScaler
+    import pandas as pd
+    import numpy as np
+
+    class RegressionClustering:
+        def __init__(self, model='linear_regression'):
+            self.model = model
+            self.regression = LinearRegression()
+            self.clustering = KMeans()
+            self.scaler = StandardScaler()
+
+        def fit(self, X, y):
+            X = self.scaler.fit_transform(X)
+            if self.model == 'linear_regression':
+                self.regression.fit(X, y)
+            elif self.model == 'kmeans':
+                self.clustering.fit(X)
+
+        def predict(self, X):
+            X = self.scaler.transform(X)
+            if self.model == 'linear_regression':
+                return self.regression.predict(X)
+            elif self.model == 'kmeans':
+                return self.clustering.predict(X)
+
+        def score(self, X, y):
+            if self.model == 'linear_regression':
+                return self.regression.score(X, y)
+            elif self.model == 'kmeans':
+                return self.clustering.inertia_
+
+    # Example usage:
+    X = pd.DataFrame(np.random.rand(100, 3))
+    y = pd.DataFrame(np.random.rand(100, 1))
+    reg_clust = RegressionClustering(model='kmeans')
+    reg_clust.fit(X, y)
+    print(reg_clust.score(X, y))
+    ```

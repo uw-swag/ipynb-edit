@@ -1,0 +1,17 @@
+```
+    plt.figure(figsize=(20,10))
+    sns.barplot(data=pd.DataFrame(data.tournament.value_counts()[:10]).reset_index(),x='tournament', y='index', orient='h')
+    plt.xlabel("Count")
+    plt.ylabel("Type of Tournament")
+    plt.figure(figsize=(10,5))
+    sns.distplot(data['home_score'],kde=False,bins=30, color='g', label='Home Score')
+    sns.distplot(data['away_score'], kde=False, bins=30, color='r', label='Away Score')
+    plt.legend()
+    plt.xlabel("Score")
+    plt.ylabel("Frequency")
+    plt.xlim(0,100) # adjusting for scaling
+    plt.ylim(0,50) # adjusting for scaling
+    plt.xticks(np.arange(0, 101, 10)) # adjusting for xticks
+    plt.yticks(np.arange(0, 51, 10)) # adjusting for xticks
+    plt.show()
+    ```

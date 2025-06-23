@@ -1,0 +1,30 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import LatentDirichletAllocation
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Text preprocessing
+    df['processed_text'] = df['your_text_column'].apply(lambda x: preprocess_text(x))
+
+    # TF-IDF vectorization
+    vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, stop_words='english')
+    tfidf = vectorizer.fit_transform(df['processed_text'])
+
+    # LDA topic modeling
+    lda = LatentDirichletAllocation(n_components=10, max_iter=5, learning_method='online', learning_offset=50, random_state=0)
+    lda.fit(tfidf)
+
+    # Save the model
+    joblib.dump(lda, 'lda_model.pkl')
+
+    # Add new features
+    df['topic_counts'] = df['processed_text'].apply(lambda x: count_topics(x, lda))
+    df['average_topic_score'] = df['topic_counts'].apply(lambda x: average_topic_score(x, lda))
+
+    # Save the updated dataframe
+    df.to_csv('updated_data.csv', index=False)
+    ```
+    This code is a major update to NLP-based feature engineering. It uses TF-IDF for vectorization, and LDA for topic modeling. The new features added are 'topic_counts' and 'average_topic_score'. The model is then saved and the updated dataframe is saved as 'updated_data.csv'.

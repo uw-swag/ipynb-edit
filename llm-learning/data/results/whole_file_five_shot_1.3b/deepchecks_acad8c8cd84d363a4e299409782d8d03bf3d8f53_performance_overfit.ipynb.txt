@@ -1,0 +1,44 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Renaming MLChecks to deepchecks (#133)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from mlchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from mlchecks.checks import TrainValidationDifferenceOverfit
+    import pandas as pd
+    %matplotlib inline
+    %load_ext autoreload
+    %autoreload 2
+    <\Cell_0>
+    <Cell_1>
+    from sklearn.model_selection import train_test_split
+    <\Cell_1>
+    <Cell_2>
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(
+            X, Y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=iris.feature_names,
+            label='target')
+    val_ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+            features=iris.feature_names,
+            label='target')
+    clf.fit(X_train, y_train)
+    <\Cell_2>
+    <Cell_3>
+    TrainValidationDifferenceOverfit().run(train_ds, val_ds, clf)
+    <\Cell_3>
+    <Cell_4>
+    from sklearn.metrics import make_scorer
+    <\Cell_4>
+    <Cell_5>
+    TrainValidationDifferenceOverfit(alternative_metrics={'Accuracy': 'accuracy', 'Always 0.5': lambda x,y,z: 0.5}).

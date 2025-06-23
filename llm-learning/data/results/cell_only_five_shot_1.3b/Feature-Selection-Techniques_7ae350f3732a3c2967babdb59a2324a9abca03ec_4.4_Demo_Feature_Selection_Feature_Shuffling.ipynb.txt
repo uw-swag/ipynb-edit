@@ -1,0 +1,29 @@
+```python
+    import pandas as pd
+import numpy as np
+# import seaborn as sns
+# import matplotlib.pyplot as plt
+import os
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import SelectFromModel
+from sklearn.ensemble import RandomForestClassifier
+# plt.style.use('seaborn-colorblind')
+# %matplotlib inline
+from feature_selection import feature_shuffle
+
+from sklearn.datasets import load_breast_cancer
+data = load_breast_cancer()
+data = pd.DataFrame(np.c_[data['data'], data['target']],
+                  columns= np.append(data['feature_names'], ['target']))
+data.head(5)
+X_train, X_test, y_train, y_test = train_test_split(data.drop(labels=['target'], axis=1), 
+                                                    data.target, test_size=0.2,
+                                                    random_state=0)
+X_train.shape, X_test.shape
+auc_drop, selected_features = feature_shuffle.feature_shuffle_rf(X_train=X_train,
+                                                                 y_train=y_train,
+                                                                 random_state=0)
+#  we select features that have auc_drop > 0
+auc_drop
+selected_features
+    ```

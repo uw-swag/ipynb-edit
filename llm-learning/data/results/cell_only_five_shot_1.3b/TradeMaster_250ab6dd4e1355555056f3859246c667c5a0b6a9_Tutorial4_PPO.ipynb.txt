@@ -1,0 +1,30 @@
+```python
+    # Update PPO tutorial
+
+    # Import necessary libraries
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    import torch.nn.functional as F
+    import os
+    import os.path as osp
+    import numpy as np
+    from ppo import build_trainer, PPOConfig
+
+    # Set device
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Set work directory
+    ROOT = os.path.abspath(os.path.join(__file__, '..', '..'))
+    work_dir = os.path.join(ROOT, 'work_dir')
+
+    if not os.path.exists(work_dir):
+        os.makedirs(work_dir)
+
+    # Load configuration
+    cfg = PPOConfig.load(osp.join(work_dir, 'config.yaml'))
+    cfg.dump(osp.join(work_dir, osp.basename(args.config)))
+
+    # Build trainer
+    trainer = build_trainer(cfg, default_args=dict(dataset=dataset, device=device))
+    ```

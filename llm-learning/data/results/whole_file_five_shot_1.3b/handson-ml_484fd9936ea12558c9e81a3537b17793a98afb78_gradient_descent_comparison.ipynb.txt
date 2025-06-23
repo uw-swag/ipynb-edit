@@ -1,0 +1,46 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added colorbar to cost plot"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from __future__ import print_function, division, unicode_literals
+import numpy as np
+
+%matplotlib nbagg
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+<\Cell_0>
+<Cell_1>
+m = 100
+X = 2*np.random.rand(m, 1)
+X_b = np.c_[np.ones((m, 1)), X]
+y = 4 + 3*X + np.random.rand(m, 1)
+<\Cell_1>
+<Cell_2>
+def batch_gradient_descent():
+    n_iterations = 1000
+    learning_rate = 0.05
+    thetas = np.random.randn(2, 1)
+    thetas_path = [thetas]
+    for i in range(n_iterations):
+        gradients = 2*X_b.T.dot(X_b.dot(thetas) - y)/m
+        thetas = thetas - learning_rate*gradients
+        thetas_path.append(thetas)
+
+    return thetas_path
+<\Cell_2>
+<Cell_3>
+def stochastic_gradient_descent():
+    n_epochs = 50
+    t0, t1 = 5, 50
+    thetas = np.random.randn(2, 1)
+    thetas_path = [thetas]
+    for epoch in range(n_epochs):
+        for i in range(m):
+            random_index = np.random.randint(m)
+            xi = X_b[random_index:random_index+1]
+            yi = y[random_index:random_index+1]
+            gradients = 2*xi.T.dot(xi.dot(thetas) - yi)
+            eta = learning_schedule(epoch*m

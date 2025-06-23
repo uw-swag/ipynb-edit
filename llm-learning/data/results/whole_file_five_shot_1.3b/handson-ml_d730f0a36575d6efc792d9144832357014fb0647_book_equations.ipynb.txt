@@ -1,0 +1,48 @@
+```python
+    <Cell_0>
+    # Point notebooks to handson-ml2, improve save_fig and add Colab link
+    import sys
+    sys.path.append('../../handson-ml2/')
+    import mlrefined_libraries
+    import mlrefined_libraries.math_optimization_library as optlib
+    import mlrefined_libraries.nonlinear_superlearn_library as nonlib
+    import mlrefined_libraries.unsupervised_library as unlib
+
+    # demos for this notebook
+    regress_plotter = nonlib.nonlinear_regression_demos
+    static_plotter = optlib.static_plotter.Visualizer()
+    optimizers = optlib.optimizers
+
+    basic_runner = nonlib.basic_runner
+    datapath = '../../mlrefined_datasets/unsuperlearn_datasets/'
+
+    # import autograd functionality to bulid function's properly for optimizers
+    import autograd.numpy as np
+    import numpy as npo
+
+    # import timer
+    from datetime import datetime 
+    import copy
+
+    # this is needed to compensate for %matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib notebook
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+
+    %load_ext autoreload
+    %autoreload 2
+
+    # Add Colab link
+    from google.colab import drive
+    drive.mount('/content/drive')
+    print('Successfully mounted drive.')
+
+    # Improve save_fig
+    def save_fig(fig, fig_id, tight_layout=True, fig_extension="png", resolution=300):
+        path = os.path.join(os.getcwd(), f"{fig_id}.{fig_extension}")
+        if tight_layout:
+            plt.tight_layout()
+        plt.savefig(path, format=fig_extension, d

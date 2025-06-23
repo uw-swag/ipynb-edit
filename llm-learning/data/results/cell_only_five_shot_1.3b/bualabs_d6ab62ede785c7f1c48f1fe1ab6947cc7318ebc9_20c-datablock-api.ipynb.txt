@@ -1,0 +1,21 @@
+```python
+    from fastbook import *
+    from fastai.vision.all import *
+
+    # Define the data block
+    dblock = DataBlock(
+        blocks=(ImageBlock, LabelBlock), 
+        get_items=get_image_files, 
+        splitter=RandomSplitter(valid_pct=0.2, seed=42),
+        get_y=parent_label,
+        item_tfms=Resize(224),
+        batch_tfms=aug_transforms(min_scale=0.75, max_scale=1.0, rotations=15, max_warp=0, p=0.8),
+        batch_size=32
+    )
+
+    # Create the data loaders
+    dls = dblock.dataloaders(path)
+    learn = Learner(dls, model, loss_func, metrics=metrics)
+    learn.fine_tune(n_epochs=5)
+    ```
+    This code block is used to create a data block for fastai library. The data block is used to load and preprocess the data. The data block is then used to create a learner, which is a model that can be trained. The learner is then fine-tuned for 5 epochs.

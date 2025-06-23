@@ -1,0 +1,22 @@
+```python
+    import torch
+
+    # Assuming you have a model and a loss function
+    model = ...
+    loss_fn = ...
+
+    # Assuming you have a gradient
+    grad = ...
+
+    # Compute the gradient with respect to the weights
+    model.zero_grad()
+    output = model(input)
+    loss = loss_fn(output, target)
+    loss.backward()
+
+    # Compute the gradient with respect to the weights from the last layer
+    # This is the gradient from backpropagation from different category
+    last_layer_grad = model.layers[-1].grad
+
+    # You can now use last_layer_grad to train your model
+    ```

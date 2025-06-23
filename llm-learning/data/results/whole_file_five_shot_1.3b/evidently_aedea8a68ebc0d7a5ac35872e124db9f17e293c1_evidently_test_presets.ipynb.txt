@@ -1,0 +1,32 @@
+
+    The provided code cells are updating the sample notebooks to remove future warnings. Future warnings are warnings that are not relevant to the current version of the code. However, the code itself is not changing the future warnings, it's just removing them.
+
+    Here's the updated code:
+
+    ```python
+    try:
+        import evidently
+    except:
+        !pip install git+https://github.com/evidentlyai/evidently.git
+
+    import pandas as pd
+    import numpy as np
+
+    from sklearn import datasets, ensemble, model_selection
+
+    from evidently import ColumnMapping
+    from evidently.test_suite import TestSuite
+
+    from evidently.test_preset import NoTargetPerformanceTestPreset
+    from evidently.test_preset import DataQualityTestPreset
+    from evidently.test_preset import DataStabilityTestPreset
+    from evidently.test_preset import DataDriftTestPreset
+    from evidently.test_preset import RegressionTestPreset
+    from evidently.test_preset import MulticlassClassificationTestPreset
+    from evidently.test_preset import BinaryClassificationTestPreset
+    from evidently.test_preset import BinaryClassificationTopKTestPreset
+
+    #... rest of the code
+    ```
+
+    This code will install the `evidently` package if it's not already installed, and then import the necessary libraries and presets.

@@ -1,0 +1,26 @@
+```python
+    def RandomForest(X_train, y_train, X_test, y_test, results):
+        clf = RandomForestClassifier(n_estimators=100)
+        rf_ind = clf.fit(X_train, y_train).predict(X_test)
+        results.loc['Random Forest', :] = classificationPerformanceIndexes (y_test, rf_ind)
+
+    def RandomForest_Kfold(X, kf, cols, results):
+        f = pd.DataFrame(columns = cols)
+        clf = RandomForestClassifier(n_estimators=100)
+        for train, test in kf.split(X):
+            X_train, y_train = X.loc[train,:], X.loc[train,'seizure']
+            X_test, y_test = X.loc[test,:], X.loc[test,'seizure']
+            rf_ind = clf.fit(X_train, y_train).predict(X_test)
+            f.loc[f.shape[0], :] = classificationPerformanceIndexes (y_test, rf_ind)
+        results.loc['Random Forest Kfold', :] = np.array(f.mean(axis=0))
+
+    def main(X, y, kf, cols, results):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=456)
+
+        SVM(X_train, y_train, X_test, y_test, results)
+        SVM_Kfold(X, kf, cols, results)
+        KNN(X_train, y_train, X_test, y_test, 3, results)
+        KNN_Kfold(X, 3, kf, cols, results)
+        NaiveBayes(X_train, y_train, X_test, y_test, results)
+        NaiveBayes_Kfold(X, kf, cols, results)
+        DecisionTrees(X

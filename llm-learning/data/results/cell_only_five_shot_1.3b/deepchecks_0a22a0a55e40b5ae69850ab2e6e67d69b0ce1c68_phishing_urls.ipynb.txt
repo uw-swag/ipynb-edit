@@ -1,0 +1,12 @@
+```python
+    import pytest
+    from integration_suite import IntegrationSuite
+
+    @pytest.mark.usefixtures("integration_suite")
+    class TestIntegrationSuite:
+
+        def test_run(self, integration_suite: IntegrationSuite):
+            test_dataset = df  # Assuming df is your DataFrame
+            integration_suite.run(test_dataset=test_dataset)
+    ```
+    This code adds a test case to the `TestIntegrationSuite` class. The test case is a pytest fixture that uses the `integration_suite` fixture to run the `run` method of the `IntegrationSuite` class. The `test_dataset` parameter is a fixture that is used to pass a DataFrame to the `run` method.

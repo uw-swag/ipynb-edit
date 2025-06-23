@@ -1,0 +1,59 @@
+
+    '''
+    Commit Message: "Rerun NYC PAYROLL"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import os
+import gc
+import warnings
+warnings.filterwarnings("ignore")
+
+import re
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import matplotlib
+from wordcloud import WordCloud
+#matplotlib.rc['font.size'] = 9.0
+matplotlib.rc('font', size=20)
+matplotlib.rc('axes', titlesize=20)
+matplotlib.rc('axes', labelsize=20)
+matplotlib.rc('xtick', labelsize=20)
+matplotlib.rc('ytick', labelsize=20)
+matplotlib.rc('legend', fontsize=20)
+matplotlib.rc('figure', titlesize=20)
+import seaborn as sns
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+data = pd.read_csv('data/survey_2014.csv')
+data.shape
+<\Cell_1>
+<Cell_2>
+data.sample(10)
+<\Cell_2>
+<Cell_3>
+data.nunique()
+<\Cell_3>
+<Cell_4>
+gender_clean = {
+    "female":"Female",
+    "male":"Male",
+    "Male":"Male",
+    "male-ish":"Male",
+    "maile":"Male",
+    "trans-female":"Female",
+    "cis female":"Female",
+    "f":"Female",
+    "m":"Male",
+    "M":"Male",
+    "something kinda male?":"Male",
+    "cis male":"Male",
+    "woman":"Female",
+    "mal":"Male",
+    "male (cis)":"Male",
+    "ostensibly male, unsure what that really means":"Male",
+    "female (trans)":"Female",
+    "que

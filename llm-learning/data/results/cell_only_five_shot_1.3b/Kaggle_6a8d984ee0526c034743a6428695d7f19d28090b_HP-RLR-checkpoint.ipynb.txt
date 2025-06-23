@@ -1,0 +1,54 @@
+```
+    #Lasso Regression
+    from sklearn.linear_model import Lasso
+
+    lasso = Lasso(alpha=0.1)
+    lasso.fit(X, Y)
+    coef = lasso.coef_
+    #Lasso Coefficients
+    lasso_coef = pd.Series(coef, index=X.columns)
+    lasso_coef.plot(kind='bar', title='Lasso Coefficients')
+    plt.ylabel('Coefficient')
+    plt.show()
+
+    #Ridge Regression
+    from sklearn.linear_model import Ridge
+
+    ridge = Ridge(alpha=0.1)
+    ridge.fit(X, Y)
+    coef = ridge.coef_
+    #Ridge Coefficients
+    ridge_coef = pd.Series(coef, index=X.columns)
+    ridge_coef.plot(kind='bar', title='Ridge Coefficients')
+    plt.ylabel('Coefficient')
+    plt.show()
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Feature Importance"
+    Original Code Cells:
+    '''
+    #Feature Importance
+    from sklearn.ensemble import RandomForestRegressor
+
+    rf = RandomForestRegressor(n_estimators=100)
+    rf.fit(X, Y)
+
+    feature_importances = pd.DataFrame(rf.feature_importances_,
+                                       index = X.columns,
+                                       columns=['importance']).sort_values('importance', ascending=False)
+
+    feature_importances.plot(kind='bar', figsize=(12,6))
+    plt.ylabel('Importance')
+    plt.title('Feature Importances')
+    plt.show()
+    '''
+    ]
+
+    ### Response:
+    ```
+    #Feature Importance
+    from sklearn.ensemble import RandomForestRegressor
+
+    rf = RandomForestRegressor(n_estimators=100)
+    r

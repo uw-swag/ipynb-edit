@@ -1,0 +1,48 @@
+```
+    [
+    Commit Message: "Examples Update (#591)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import SimpleModelComparison
+from deepchecks.base import Dataset
+<\Cell_0>
+<Cell_1>
+np.random.seed(42)
+
+iris = load_iris(as_frame=True)
+x = iris.data
+y = iris.target
+x_train, x_test, y_train, y_test = train_test_split(
+    x, y, test_size=0.33, random_state=42)
+train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                   features=iris.feature_names,
+                   label='target')
+test_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                 features=iris.feature_names,
+                 label='target')
+clf = AdaBoostClassifier()
+clf.fit(x_train, y_train)
+<\Cell_1>
+<Cell_2>
+check = SimpleModelComparison(simple_model_type='random')
+check.run(train_ds, test_ds, clf)
+<\Cell_2>
+<Cell_3>
+check = SimpleModelComparison(simple_model_type='constant')
+check.run(train_ds, test_ds, clf)
+<\Cell_3>
+<Cell_4>
+check = SimpleModelComparison(simple_model_type='tree').add_condition_gain_not_less_than(0.2)
+check.run(train_ds, test_ds, clf)
+<\Cell_4>
+
+    '''
+    ]
+    ```
+    The examples provided in the commit message are examples of how to use the `SimpleModelComparison` check in

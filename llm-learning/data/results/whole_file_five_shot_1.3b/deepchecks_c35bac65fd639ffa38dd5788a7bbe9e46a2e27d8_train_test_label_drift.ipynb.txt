@@ -1,0 +1,49 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing KNN, Naive Bayes, Linear Regression, Multivariate Linear Regression and Clustering solutions"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import PolynomialFeatures
+    from sklearn.cluster import KMeans
+<\Cell_0>
+<Cell_1>
+    # Load the dataset
+    # Assume that the dataset is in csv format and is named 'data.csv'
+    data = pd.read_csv('data.csv')
+<\Cell_1>
+<Cell_2>
+    # KNN
+    X = data.iloc[:, :-1].values
+    y = data.iloc[:, -1].values
+
+    knn = KNeighborsClassifier(n_neighbors=5)
+    knn.fit(X, y)
+
+    # Naive Bayes
+    gnb = GaussianNB()
+    gnb.fit(X, y)
+
+    # Linear Regression
+    X_poly = PolynomialFeatures(degree=2).fit_transform(X)
+    lin_reg = LinearRegression()
+    lin_reg.fit(X_poly, y)
+
+    # Multivariate Linear Regression
+    X_poly = PolynomialFeatures(degree=3).fit_transform(X)
+    lin_reg_multi = LinearRegression()
+    lin_reg_multi.fit(X_poly, y)
+
+    # Clustering
+    kmeans = KMeans(n_clusters=3, random_state=0)
+    kmeans.fit(X)
+<\Cell_2>
+<Cell_3>
+    # Print the results
+    print("KNN: ", knn.score(X, y))
+    print("Naive Bayes: ", gnb.score(X, y))
+    print("Linear Regression: ", lin

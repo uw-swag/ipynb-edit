@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "run on ferguson event on server"
+    Original Code Cells:
+    '''
+    import boto3
+    from botocore.exceptions import NoCredentialsError
+
+    def get_s3_file(bucket_name, file_name):
+        s3 = boto3.client('s3')
+        try:
+            s3.download_file(bucket_name, file_name, file_name)
+            print("File downloaded successfully")
+            return True
+        except FileNotFoundError:
+            print("The file was not found")
+            return False
+        except NoCredentialsError:
+            print("Credentials not available")
+            return False
+
+    get_s3_file('mybucket', 'myfile.txt')
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a Python script that uses the Boto3 library to download a file from an Amazon S3 bucket. The script is designed to run on a server, specifically on the Ferguson event.
+
+    Here's a brief explanation of the code:
+
+    - The `boto3` library is used to interact with Amazon S3.
+    - The `get_s3_file` function is defined to download a file from an S3 bucket.
+    - The function takes two parameters: the name of the bucket and the name of the file to download.
+    - The function attempts to download the file from the S3 bucket.
+    - If the file is successfully downloaded, it prints a success message and returns True.
+    - If the file cannot be found, it prints a failure message and returns False.
+    - If credentials are not available, it prints a failure message and returns False.
+    - Finally, the function is called with the name of the bucket and the name of the file to download, and the result is printed.
+
+    This script can be run on a server, specifically on the Ferguson event, to download a file from an Amazon S3 bucket.

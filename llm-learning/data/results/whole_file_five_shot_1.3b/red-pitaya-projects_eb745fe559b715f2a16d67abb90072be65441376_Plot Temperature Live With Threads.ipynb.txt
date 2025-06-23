@@ -1,0 +1,54 @@
+```python
+    # Updated temperature notebooks
+
+    # Import necessary libraries
+    %matplotlib notebook
+    import matplotlib
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    from matplotlib.animation import FuncAnimation
+    from IPython.display import display, clear_output
+    from datetime import datetime, date
+    import time
+    import pandas as pd
+    import ipywidgets as widgets
+    import threading
+
+    # Define the filename
+    filename = str(date.today()) + " temperature data.csv"
+
+    # Read the data from the file
+    headers = ["Temperature (oC)","Date"]
+    try:
+        df = pd.read_csv(filename,names=headers,skiprows = 1)
+    except:
+        df = pd.DataFrame() #Create an empty data frame to append to later
+
+    # Display the data
+    df
+
+    # Function to collect data
+    def collect_data():
+        while True:
+            global df
+            clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+            current_temp = !xadc_get_value_temp
+            temp_value = float(current_temp[0][:5])
+            clear_output(wait=True)
+            display('Collecting temperatures. '+ str(len(df.index)) +' value(s) recorded.')
+            clean_data_table['Temperature (oC)'] = [temp_value]
+            clean_data_table['Date'] = [datetime.now()]
+            df = df.append(clean_data_table)
+            time.sleep(1)
+
+    # Start the data collection thread
+    t1=threading.Thread(target=collect_data)
+    t1.start()
+
+    # Function to animate the data
+    def animate(i):
+        global df
+        clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+        current_temp = !xadc_get_value_temp
+        temp_value = float(current_

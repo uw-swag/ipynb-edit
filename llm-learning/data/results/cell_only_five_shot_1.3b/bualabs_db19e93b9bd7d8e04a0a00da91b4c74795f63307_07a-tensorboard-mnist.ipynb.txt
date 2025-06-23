@@ -1,0 +1,15 @@
+```python
+    from fastai import *
+    from fastai.vision import *
+    from fastai.metrics import accuracy
+
+    from fastai.callbacks.tensorboard import *
+    proj_id = '07a-tensorboard-mnist'
+    tboard_path = Path('data/tensorboard/' + proj_id)
+    learner.callback_fns.append(partial(LearnerTensorboardWriter, 
+                                        base_dir=tboard_path, 
+                                        name='LearnerTensorboardWriter'))
+    print(f"tensorboard --logdir={tboard_path}")
+    # ! rm -rf $tboard_path
+    # !kill 3366
+    ```

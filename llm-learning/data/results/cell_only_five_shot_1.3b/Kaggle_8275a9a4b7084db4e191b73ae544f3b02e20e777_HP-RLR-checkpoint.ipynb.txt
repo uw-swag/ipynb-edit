@@ -1,0 +1,48 @@
+```python
+    # Imports
+    import numpy as np
+    import pandas as pd
+    from scipy.stats import skew
+    from scipy.stats.stats import pearsonr
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    pd.options.display.max_columns = 50
+    sns.set_style('whitegrid')
+    %matplotlib inline
+
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.linear_model import LinearRegression, Ridge, RidgeCV, LassoCV, LassoLarsCV, ElasticNet, Lasso
+    from sklearn.cross_validation import cross_val_score
+    import xgboost as xgb
+    print("Minimum Error for Ridge Model: ", minimum_error)
+    print("Minimum Error for Lasso Model: ", minimum_error_lasso)
+    #Picking up Ridge Model
+    ridgeReg = Ridge()
+    ridgeReg.fit(X,Y)
+    coef = pd.Series(ridgeReg.coef_, index = X.columns)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "95% using Lasso"
+    Original Code Cells:
+    '''
+    #Imports
+    import numpy as np
+    import pandas as pd
+    from scipy.stats import skew
+    from scipy.stats.stats import pearsonr
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    pd.options.display.max_columns = 50
+    sns.set_style('whitegrid')
+    %matplotlib inline
+
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.linear_model import LinearRegression, Ridge, RidgeCV, LassoCV, LassoLarsCV, ElasticNet, Lasso
+    from sklearn.cross_validation import cross_val_score
+    import xgboost as xgb
+    print("Minimum Error for Ridge Model: ", minimum_error)
+    print("Min

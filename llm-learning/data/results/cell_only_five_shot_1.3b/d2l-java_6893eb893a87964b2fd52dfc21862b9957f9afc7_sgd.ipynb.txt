@@ -1,0 +1,40 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    # Define a simple neural network
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.fc1 = nn.Linear(10, 10)
+            self.fc2 = nn.Linear(10, 1)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = self.fc2(x)
+            return x
+
+    # Create a simple dataset
+    x_train = torch.randn(100, 10)
+    y_train = x_train.sum(1) + 0.1 * torch.randn(100, 1)
+
+    # Create a model and a loss function
+    model = Net()
+    criterion = nn.MSELoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.01)
+
+    # Train the model
+    for epoch in range(100):
+        optimizer.zero_grad()
+        output = model(x_train)
+        loss = criterion(output, y_train)
+        loss.backward()
+        optimizer.step()
+
+    # Test the model
+    x_test = torch.randn(10, 10)
+    output = model(x_test)
+    print(output)
+    ```
+    This is a simple example of a neural network using stochastic gradient descent (SGD) in PyTorch. The model is a simple neural network with one hidden layer, and the loss function is mean squared error. The model is trained for 100 epochs, and then the model is tested on a new dataset.

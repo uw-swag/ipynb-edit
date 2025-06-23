@@ -1,0 +1,60 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Generate some data
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x) + np.random.normal(0, 0.1, 100)
+
+    # Initialize the weights
+    weights = np.ones(100)
+
+    # Initialize the memory
+    memory = np.zeros((100, 100))
+
+    # Elman network
+    for t in range(100):
+        # Forward pass
+        y_pred = np.dot(weights, x)
+
+        # Compute the gradient
+        grad = np.dot(memory, x**2)
+
+        # Update the weights
+        weights -= 0.01 * grad
+
+        # Update the memory
+        memory = np.dot(np.diag(np.exp(y_pred)), memory)
+
+    # Plot the results
+    plt.plot(x, y, label='True')
+    plt.plot(x, y_pred, label='Predicted')
+    plt.legend()
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "finish elman, gradients problem"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Generate some data
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x) + np.random.normal(0, 0.1, 100)
+
+    # Initialize the weights
+    weights = np.ones(100)
+
+    # Initialize the memory
+    memory = np.zeros((100, 100))
+
+    # Elman network
+    for t in range(100):
+        # Forward pass
+        y_pred = np.dot(weights, x)
+
+        # Compute the gradient
+        grad = np.dot(memory, x**2

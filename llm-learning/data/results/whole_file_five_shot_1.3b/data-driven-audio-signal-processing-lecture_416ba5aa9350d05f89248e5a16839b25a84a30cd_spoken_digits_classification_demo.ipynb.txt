@@ -1,0 +1,55 @@
+
+    '''
+    Commit Message: "Added DNN classification examples"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import glob
+import soundfile as sf
+import matplotlib.pyplot as plt
+import numpy as np
+from librosa.feature import mfcc
+
+import os
+<\Cell_0>
+<Cell_1>
+path = '../data/free-spoken-digit-dataset/recordings/'  # path to dataset
+<\Cell_1>
+<Cell_2>
+def load_examples(path):
+    
+    X = list()
+    Y = list()
+    
+    audiofiles = glob.glob(path, recursive=True)
+    for filepath in audiofiles:
+        x, fs = sf.read(filepath)
+        x = x / np.max(np.abs(x))
+        X.append(x)
+        Y.append(int(os.path.basename(filepath)[0]))
+    
+    return X, Y, fs
+
+# load examples
+X, Y, fs = load_examples(path + '*.wav')
+
+# determine maximum length of the examples
+lengths = [len(x) for x in X]
+N = np.max(lengths)
+
+# append zeros to examples to equalize lengths
+X = [np.concatenate((sample, np.zeros(N - len(sample)))) for sample in X]
+X = np.array(X)
+Y = np.array(Y)
+<\Cell_2>
+<Cell_3>
+print('Total number of examples: {}'.format(len(X)))
+print('Number of samples per example: {}'.format(N))
+<\Cell_3>
+<Cell_4>
+MFCC = [mfcc(y=sample, sr=fs, htk=True) for sample in X]
+MFCC = np.array(MFCC)
+MFCC = MFCC.reshape((-1, np.prod(MFCC.shape[1:])))
+
+print('Total number of examples: {}'.format(MFCC.shape[0]))
+print('Dimension of feature vectors: {}

@@ -1,0 +1,14 @@
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_ci=True,
+                   naming_prefix=MODEL_ID,
+                   project_number='45373616427',
+                   deployment_framework='github-actions',
+                   provisioning_framework='terraform',
+                   source_repo_type='github',
+                   source_repo_name='srastatter/AutoMLOps-repo-test',
+                   workload_identity_pool='automlops-test-pool',
+                   workload_identity_provider='automlops-test-provider',
+                   workload_identity_service_account='amo-wif-test-github@automlops-sandbox.iam.gserviceaccount.com',
+                   schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)

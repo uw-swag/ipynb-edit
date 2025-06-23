@@ -1,0 +1,47 @@
+
+    '''
+    Commit Message: "Created using Colaboratory"
+    Original Code Cells:
+    '''
+    import torch
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    torch.manual_seed(42)
+    np.random.seed(42)
+
+    n = 8000000
+
+    x = torch.linspace(0., 8., n)
+    y = -0.5*x + 2 + torch.normal(mean=torch.zeros(n), std=1)
+
+    indices = np.random.choice(n, size=2000, replace=False)
+
+    fig, ax = plt.subplots()
+    plt.title("Clinical Trial")
+    plt.xlabel("Drug dosage (mL)")
+    plt.ylabel("Forgetfulness")
+    _ = ax.scatter(x[indices], y[indices], alpha=0.1)
+
+    def regression(my_x, my_m, my_b):
+        return my_m*my_x + my_b
+
+    m = torch.tensor([0.9]).requires_grad_()
+    b = torch.tensor([0.1]).requires_grad_()
+
+    fig, ax = plt.subplots()
+
+    ax.scatter(x[indices], y[indices], alpha=0.1)
+
+    x_min, x_max = ax.get_xlim()
+    y_min = regression(x_min, m, b)
+    y_max = regression(x_max, m, b)
+
+    plt.ylabel('b = {}'.format('%.3g' % b.item()))
+    plt.xlabel('m = {}'.format('%.3g' % m.item()))
+
+    ax.set_xlim([x_min, x_max])
+    _ = ax.plot([x_min, x_max], [y_min, y_max], c='C01')
+
+    batch_size = 32
+    batch_

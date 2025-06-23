@@ -1,0 +1,9 @@
+#Reading data. Input the path to the files instead of "../input".
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+for i in features_f:
+    if i not in X_test.columns:
+        X_test[i] = 0
+        print(i)
+X = X_train[features_f]
+Xt = X_test[features_f]

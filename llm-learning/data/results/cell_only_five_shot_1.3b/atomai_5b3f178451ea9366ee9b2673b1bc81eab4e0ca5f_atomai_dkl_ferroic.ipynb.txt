@@ -1,0 +1,35 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.gaussian_process import GaussianProcessRegressor
+    from sklearn.gaussian_process.kernels import RBF, WhiteKernel
+
+    # Generate some data
+    np.random.seed(0)
+    n_samples = 100
+    X = np.linspace(0, 1, n_samples).reshape(-1, 1)
+    y = np.sin(X).reshape(-1, 1)
+
+    # Define the Gaussian Process model
+    kernel = RBF(length_scale=1.0, length_scale_bounds=(1e-2, 1e3)) \
+        + WhiteKernel(noise_level=1, noise_level_bounds=(1e-10, 1e+1))
+    gpr = GaussianProcessRegressor(kernel=kernel, alpha=0.0)
+
+    # Fit the model
+    gpr.fit(X, y.ravel())
+
+    # Make predictions
+    X_test = np.linspace(0, 1, 200).reshape(-1, 1)
+    y_pred, sigma = gpr.predict(X_test, return_std=True)
+
+    # Plot the results
+    plt.figure(figsize=(8, 6))
+    plt.plot(X, y, 'r.', markersize=10)
+    plt.plot(X_test, y_pred, 'b-', linewidth=2)
+    plt.fill(np.concatenate([X_test, X_test[::-1]]),
+             np.concatenate([y_pred - 1.9600 * sigma, (y_pred + 1.9600 * sigma)[::-1]]),
+             alpha=0.2, fc='b', ec='None')
+    plt.xlim(0, 1)
+    plt.ylim(-2, 2)
+    plt.xlabel('$x$', fontsize=16

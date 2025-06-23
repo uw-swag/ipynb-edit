@@ -1,0 +1,70 @@
+```python
+    import sqlite3
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('nominations.db')
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Create a table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS CreatingRelationsinSQLite (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            email TEXT,
+            position TEXT,
+            department TEXT,
+            date_of_birth TEXT,
+            date_of_hire TEXT,
+            salary INTEGER,
+            department_id INTEGER,
+            FOREIGN KEY(department_id) REFERENCES Departments(id)
+        )
+    ''')
+
+    # Commit the changes and close the connection
+    conn.commit()
+    conn.close()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new column 'salary' to the 'CreatingRelationsinSQLite' table"
+    Original Code Cells:
+    '''
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS CreatingRelationsinSQLite (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            email TEXT,
+            position TEXT,
+            department TEXT,
+            date_of_birth TEXT,
+            date_of_hire TEXT,
+            department_id INTEGER,
+            FOREIGN KEY(department_id) REFERENCES Departments(id)
+        )
+    ''')
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import sqlite3
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('nominations.db')
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Add a new column 'salary' to the 'CreatingRelationsinSQLite' table
+    cursor.execute('''
+        ALTER TABLE CreatingRelationsinSQLite
+        ADD COLUMN salary INTEGER;
+    ''')
+
+    # Commit the changes and close the connection
+    conn.commit()

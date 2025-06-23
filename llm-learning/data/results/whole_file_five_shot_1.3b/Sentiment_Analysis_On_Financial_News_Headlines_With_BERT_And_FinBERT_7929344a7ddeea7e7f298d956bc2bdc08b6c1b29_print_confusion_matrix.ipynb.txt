@@ -1,0 +1,42 @@
+```python
+    # 01_Self-Defined_Functions/print_confusion_matrix.ipynb
+    def print_confusion_matrix(y_true, y_pred):
+        from sklearn.metrics import confusion_matrix
+        import seaborn as sns
+        import matplotlib.pyplot as plt
+
+        # Compute confusion matrix
+        cm = confusion_matrix(y_true, y_pred)
+
+        # Plot confusion matrix
+        plt.figure(figsize=(10,7))
+        sns.heatmap(cm, annot=True, fmt="d")
+        plt.title('Confusion Matrix')
+        plt.ylabel('True label')
+        plt.xlabel('Predicted label')
+        plt.show()
+    ```
+
+    # 01_Self-Defined_Functions_Classes/print_confusion_matrix.ipynb
+    ```python
+    class PrintConfusionMatrix:
+        def __init__(self, y_true, y_pred):
+            self.y_true = y_true
+            self.y_pred = y_pred
+
+        def print_confusion_matrix(self):
+            from sklearn.metrics import confusion_matrix
+            import seaborn as sns
+            import matplotlib.pyplot as plt
+
+            # Compute confusion matrix
+            cm = confusion_matrix(self.y_true, self.y_pred)
+
+            # Plot confusion matrix
+            plt.figure(figsize=(10,7))
+            sns.heatmap(cm, annot=True, fmt="d")
+            plt.title('Confusion Matrix')
+            plt.ylabel('True label')
+            plt.xlabel('Predicted label')
+            plt.show()
+    ```

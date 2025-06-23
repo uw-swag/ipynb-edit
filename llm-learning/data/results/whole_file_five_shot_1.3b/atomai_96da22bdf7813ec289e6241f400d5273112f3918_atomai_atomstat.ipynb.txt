@@ -1,0 +1,42 @@
+```
+    Bump to version 0.5.1
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+    !pip install atomai
+    <\Cell_0>
+    <Cell_1>
+    import atomai as aoi
+    import numpy as np
+    <\Cell_1>
+    <Cell_2>
+    download_link_model = 'https://drive.google.com/uc?id=1pe7kFnqUtX8zTmB5w14du-VjnQNjZwWf'
+    download_link_img = 'https://drive.google.com/uc?id=1peHF1lvpOKlOSMjREB2aSscyolrQQhoh'
+    !gdown -q $download_link_model -O 'trained_weights.tar'
+    !gdown -q $download_link_img -O 'test_img.npy'
+    <\Cell_2>
+    <Cell_3>
+    # Path to file with trained weights
+    model_dict_path = '/content/trained_weights.tar'
+    # load the weights into the model skeleton
+    model = aoi.load_model(model_dict_path)
+    <\Cell_3>
+    <Cell_4>
+    # Load experimental data
+    expdata = np.load('test_img.npy')
+    # Get NN output with coordinates and classes
+    nn_input, (nn_output, coordinates) = aoi.atomnet.predictor(
+        model, use_gpu=False).run(expdata)
+    <\Cell_4>
+    <Cell_5>
+    imstack = aoi.atomstat.imlocal(nn_output, coordinates, window_size=32, coord_class=1)
+    <\Cell_5>
+    <Cell_6>
+    imstack.pca_scree_plot(plot_results=True);
+    <\Cell_6>
+    <Cell_7>
+    pca_results = imstack.imblock_pca(4, plot_results=True)
+    <\Cell_7>
+    <Cell_8>
+    ica_results

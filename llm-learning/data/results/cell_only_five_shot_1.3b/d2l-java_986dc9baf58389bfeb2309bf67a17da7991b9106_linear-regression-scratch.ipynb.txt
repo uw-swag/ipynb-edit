@@ -1,0 +1,35 @@
+```
+    class DataPoints {
+    private NDArray X, y;
+    public DataPoints(NDArray X, NDArray y) {
+        this.X = X;
+        this.y = y;
+    }
+    
+    public NDArray getX() {
+        return X;
+    }
+    
+    public NDArray getY() {
+        return y;
+    }
+}
+
+// Generate y = X w + b + noise
+public DataPoints syntheticData(NDManager manager, NDArray w, float b, int numExamples) {
+    NDArray X = manager.randomNormal(new Shape(numExamples, w.size()));
+    NDArray y = X.dot(w).add(b);
+    // Add noise
+    y = y.add(manager.randomNormal(0, 0.01f, y.getShape(), DataType.FLOAT32));
+    return new DataPoints(X, y);
+}
+
+NDManager manager = NDManager.newBaseManager();
+
+NDArray trueW = manager.create(new float[]{2, -3.4f});
+float trueB = 4.2f;
+
+DataPoints dp = syntheticData(manager, trueW, trueB, 1000);
+NDArray features = dp.getX();
+NDArray labels = dp.getY();
+    ```

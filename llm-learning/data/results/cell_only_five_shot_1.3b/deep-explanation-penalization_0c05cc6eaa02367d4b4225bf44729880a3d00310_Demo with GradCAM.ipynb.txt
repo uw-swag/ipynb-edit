@@ -1,0 +1,23 @@
+```python
+    import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class DilatedSegmentation(nn.Module):
+    def __init__(self, in_channels, out_channels, kernel_size, dilation):
+        super(DilatedSegmentation, self).__init__()
+        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size, padding=dilation, dilation=dilation)
+
+    def forward(self, x):
+        return F.relu(self.conv(x))
+    
+# Example usage:
+model = DilatedSegmentation(3, 1, 3, 2)
+input = torch.randn(1, 3, 200, 200)
+output = model(input)
+print(output.shape)
+    ```
+
+    This code defines a new class `DilatedSegmentation` that extends the `nn.Module` class in PyTorch. The `__init__` method initializes a convolutional layer with a dilation factor. The `forward` method applies the ReLU activation function to the output of the convolutional layer.
+
+    The `DilatedSegmentation` class is then used to create an instance of this class, and the output of the forward pass is printed.

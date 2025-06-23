@@ -1,0 +1,34 @@
+```python
+    import ai.djl.*;
+    import ai.djl.ndarray.NDArray;
+    import ai.djl.ndarray.NDManager;
+    import ai.djl.ndarray.index.NDIndex;
+    import ai.djl.nn.Block;
+    import ai.djl.nn.convolutional.Conv2d;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.DefaultTrainingConfig;
+    import ai.djl.training.Trainer;
+    import ai.djl.training.TrainingConfig;
+    import ai.djl.nn.ParameterList;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+
+    NDManager manager = NDManager.newBaseManager();
+    NDArray X = manager.randomUniform(0f, 1.0f, new Shape(1, 1, 8, 8));
+
+    Block block = Conv2d.builder()
+                .setKernelShape(new Shape(3, 3))
+                .optPadding(new Shape(1, 1))
+                .setFilters(1)
+                .build();
+
+    TrainingConfig config = new DefaultTrainingConfig(Loss.l2Loss());
+    Model model = Model.newInstance("conv2D");
+    model.setBlock(block);
+
+    Trainer trainer = model.newTrainer(config);
+    trainer.initialize(X.getShape());
+
+    NDArray yHat = trainer.forward(new NDList(X)).singletonOrThrow();
+    System.out.println(yHat.getShape().slice(2));
+    ```

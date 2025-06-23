@@ -1,0 +1,12 @@
+```
+    # Add a new notebook
+    %mkdir -p nb_dir
+    %cd nb_dir
+    %notebook create "new_notebook.ipynb"
+
+    # Add a new dataset
+    from pyspark.sql import SparkSession
+    spark = SparkSession.builder.appName("NewDataset").getOrCreate()
+    df = spark.createDataFrame([(1, "test")], ["id", "value"])
+    df.show()
+    ```

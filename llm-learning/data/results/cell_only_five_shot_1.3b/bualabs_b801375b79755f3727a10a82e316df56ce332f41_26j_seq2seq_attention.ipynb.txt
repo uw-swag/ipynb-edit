@@ -1,0 +1,13 @@
+```python
+    # Fix error because of bidirectional double weight size.
+    # The error is due to the fact that the weight size is being calculated twice.
+    # This is causing the weight size to be double, which is not correct.
+    # The weight size is calculated as the square root of the sum of the squared weights.
+    # The weight size should be calculated as the square root of the sum of the squared weights divided by 2.
+    # This is because the weight size is a measure of the importance of a feature in the model,
+    # and the importance of a feature is a function of its weight size.
+    # Therefore, the weight size should be divided by 2 to correct for the double weight size.
+
+    # Fix the error in the weight size calculation
+    weight_size = np.sqrt(np.sum(np.square(weights))) / 2
+    ```

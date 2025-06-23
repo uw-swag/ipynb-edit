@@ -1,0 +1,45 @@
+```python
+    # NLP Feature Engineering Pipeline Ready for Spark/RDD
+
+    # Common Libraries
+    import re
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Main NLP libraries
+    import nltk
+    import gensim
+    from gensim.models import Word2Vec
+    import gensim.downloader as api
+
+    pd.set_option('display.float_format', lambda x: '%.5f' % x)
+
+    # File Location and Filename
+    file_location = "../data/full_data/analytics_ready/"
+    filename = "text_data.json"
+
+    # Loading Data
+    num_records_to_load = 1000
+    df = pd.read_json(file_location + filename, nrows=num_records_to_load, orient="records", lines=True)
+
+    # Data Summary
+    df.info()
+    df.target_ufc_bool.value_counts()
+
+    # Corpus Creation
+    corpus = df.review_text
+    text_target = df[['target_ufc_bool', 'review_text']]
+    Q_corpus = df[df["target_ufc_bool"] == "True"]["review_text"]
+    NQ_corpus = df[df["target_ufc_bool"] == "False"]["review_text"]
+
+    print(f'Corpus Size: Total:{corpus.size}, Quality:{Q_corpus.size}, Not Quality:{NQ_corpus.size}')
+
+    # Text Preprocessing
+    def preprocess_text(text, run_stemm=False, run_lemm=False, remove_num=True, stopwords=None):
+        # Text cleaning
+        text = re.sub(r'\n', ' ', text)
+        text = re.sub(r'\r', ' ', text)
+        text = re.sub(r'\\', ' ', text)
+        text = re.sub

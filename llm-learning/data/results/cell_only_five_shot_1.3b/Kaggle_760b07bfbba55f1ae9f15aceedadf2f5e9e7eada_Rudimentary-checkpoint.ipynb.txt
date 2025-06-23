@@ -1,0 +1,32 @@
+```
+    # Import necessary libraries
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    import numpy as np
+    import sqlite3
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('/Users/sominwadhwa/database.sqlite')
+
+    # Query the database
+    cur = conn.cursor()
+
+    # Read the data from the database
+    countries = pd.read_sql_query("SELECT id,name from Country",conn)
+    matches = pd.read_sql_query("SELECT * from Match", conn)
+    leagues = pd.read_sql_query("SELECT * from League",conn)
+    teams = pd.read_sql_query("SELECT * from Team",conn)
+
+    # Filter the countries based on major leagues
+    major_league_countries = ['England','France','Germany','Italy','Spain']
+    countries = countries[countries.name.isin(major_league_countries)]
+
+    # Display the filtered countries
+    print(countries)
+
+    # Close the connection to the database
+    conn.close()
+    ```
+
+    This code will filter the countries based on the major leagues and display the filtered countries.

@@ -1,0 +1,99 @@
+<Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+trained_model_folder = '../models/trained_models'
+init_model_folder = '../models/init_models'
+trained_list = os.listdir(trained_model_folder)
+<\Cell_1>
+<Cell_2>
+init_models = os.listdir(init_model_folder)
+init_model =torch.load(join(init_model_folder, init_models[0]))
+init_comp_model =torch.load(join(init_model_folder, init_models[1]))
+<\Cell_2>
+<Cell_3>
+
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) # filenames in the directory
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in tqdm(fnames) if "decoy" in fname] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+<\Cell_3>
+<Cell_4>
+# sanity check: weights should be trained, comp weights should be trained if train both is turned on
+
+# def weights_equivalent(mod1_weights, mod2_weights, names):
+#     total_dis =0
+#     for layer_name in names:
+#         total_dis +=(mod1_weights[weight_layer] -mod1_weights[weight_layer] ).abs().sum()
+#     return bool((total_dis !=0).item())
+# weight_layers = init_model.state_dict().keys()
+
+# for i in range(len(results)):
+#     if not (weights_equivalent(init_model.state_dict(), results.iloc[i]['model_weights'][weight_layer] , weight_layers)):
+#         break
+#     if results.iloc[i]['train_both']:
+#         if not (weights_equivalent(init_comp_model.state_dict(), results.iloc[i]['model_weights'][weight_layer] , weight_layers)):
+#             break
+# print("All good")
+<\Cell_4>
+<Cell_5>
+results.keys()
+<\Cell_5>
+<Cell_6>
+results["final_acc"] = [max(x) for x in results["accs_test"]]
+results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+
+<\Cell_6>
+<Cell_7>
+results[[ 'signal_strength', 'final_acc','accs_test', 'final_cd' ]].sort_values(by=['final_acc'])
+<\Cell_7>
+<Cell_8>
+import torch
+<\Cell_8>
+<Cell_9>
+torch.zeros(1).data
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>
+<Cell_11>
+f, axes = plt.subplots(2, 1, figsize=(7, 7), sharex=True)
+for idx,div in enumerate(results["explanation_divergence"]):
+    label = ""
+    color = 'b'
+    linestyle = 'solid'
+    if results.loc[idx]["sparse_signal"]:
+        label+="Sparse "
+        linestyle = 'dashed'
+    if results.loc[idx]["train_both"]:
+        color ='r'
+        label+="Both  "
+    label+= 'S: '+str(results.loc[idx]["signal_strength"])
+    axes[0].plot(div, label = label, c= color,linestyle = linestyle)
+    axes[1].plot(results["accs_test"][idx], label = label, c= color,linestyle = linestyle)
+ 
+
+axes[1].set_ylabel("Test loss")
+axes[0].set_ylabel("Explanation divergence on training")
+axes[1].set_ylim((70,100))
+plt.tight_layout()
+plt.legend();
+<\Cell_11>

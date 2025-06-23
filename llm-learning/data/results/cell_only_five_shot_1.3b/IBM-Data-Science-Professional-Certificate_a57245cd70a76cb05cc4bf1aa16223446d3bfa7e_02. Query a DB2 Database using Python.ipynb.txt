@@ -1,0 +1,39 @@
+```python
+    import ibm_db
+
+    # Establish the connection
+    try:
+        connection = ibm_db.connect("DATABASE={{YOUR_DATABASE}};HOSTNAME={{YOUR_HOST}};PORT={{YOUR_PORT}};SECURITY={{YOUR_SECURITY}}", "", "")
+        print("Connected to database")
+    except:
+        print("Failed to connect to database")
+
+    # Create a cursor
+    cursor = connection.cursor()
+
+    # Execute a query
+    cursor.execute("SELECT * FROM {{YOUR_TABLE}}")
+
+    # Fetch all the rows
+    rows = cursor.fetchall()
+
+    # Print the rows
+    for row in rows:
+        print(row)
+
+    # Close the cursor and connection
+    cursor.close()
+    connection.close()
+    ```
+
+    This script connects to a DB2 database using Python and executes a SELECT query on a specified table. The results are then printed to the console.
+
+    Please replace `{{YOUR_DATABASE}}`, `{{YOUR_HOST}}`, `{{YOUR_PORT}}`, and `{{YOUR_SECURITY}}` with your actual database details. Also, replace `{{YOUR_TABLE}}` with the name of the table you want to query.
+
+    Note: This script requires the `ibm_db` package. You can install it using pip:
+
+    ```
+    pip install ibm_db
+    ```
+
+    Also, please ensure that the database user has the necessary permissions to execute the SELECT query.

@@ -1,0 +1,35 @@
+```python
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    # Load the phishing dataset
+    from deepchecks.datasets.classification.phishing import load_data
+    phishing_dataset = load_data(as_train_test=False, data_format='DataFrame')
+
+    # Run the DataDuplicates check
+    DataDuplicates().run(phishing_dataset)
+
+    # Run the DataDuplicates check with specific columns
+    DataDuplicates(columns=["entropy", "numParams"]).run(phishing_dataset)
+
+    # Run the DataDuplicates check with specific columns to ignore
+    DataDuplicates(ignore_columns=["scrape_date"], n_to_show=10).run(phishing_dataset)
+
+    # Add a condition to the DataDuplicates check
+    check = DataDuplicates()
+    check.add_condition_ratio_not_greater_than(0)
+    result = check.run(phishing_dataset)
+    result.show(show_additional_outputs=False)
+    ```
+
+    This code is a demonstration of how to use the DataDuplicates check in DeepChecks. The check is used to find duplicate rows in the dataset. The duplicates are then displayed in a table format.
+
+    The `DataDuplicates` class is a part of the DeepChecks library, which is a Python library for data validation and quality checks. It can be used to find duplicate rows in a dataset.
+
+    The `DataDuplicates` class has several methods that can be used to customize the check. For example, you can specify the columns to check for duplicates, ignore certain columns, and set a condition for the ratio of duplicates to total rows.
+
+    The `run` method of the `DataDuplicates` class is used to perform the check on the dataset. The result of the check is an object of the `Result` class, which can be used to display the results of the check.
+
+    The `show` method of the `Result` class is used

@@ -1,0 +1,19 @@
+import pandas as pd
+
+from evidently.v2.metrics import DataIntegrityMetrics
+from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests.data_integrity import TestNumberOfColumns
+from evidently.v2.tests.data_drift import TestNumberOfDriftedFeatures
+from evidently import ColumnMapping
+from datetime import datetime
+
+suite = TestSuite(tests=[TestNumberOfColumns(
+    NumberRange(left_side_threshold=1),
+    data_integrity_metric=DataIntegrityMetrics(),
+),
+                         TestNumberOfDriftedFeatures(),
+                        ])
+
+suite.run(reference_data=pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}]), current_data=pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}]), column_mapping=ColumnMapping(datetime="c"))

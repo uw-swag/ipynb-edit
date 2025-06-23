@@ -1,0 +1,26 @@
+
+The code you provided is splitting the VisionData and removing formatters. The VisionData is a class in DeepChecks that is used to load and manage datasets for vision-related tasks. The formatters are used to format the data before it is used in the model.
+
+The code is splitting the VisionData into training and testing sets. The `load_dataset` function is used to load the dataset, and the `train=False` parameter is used to load the test set. The `batch_size` parameter is used to specify the number of samples to be loaded in each batch.
+
+The `load_model` function is used to load the model.
+
+The code is then using the `validate_formatters` function to validate the formatters. This function checks if the formatters are correctly applied to the data.
+
+The formatters are applied to the data in the following order:
+
+1. The `label_formatter` is applied to the labels.
+2. The `image_formatter` is applied to the images.
+3. The `pred_formatter` is applied to the predictions.
+
+The `yolo_prediction_formatter` function is used to modify the predictions from the yolo format to the format expected by the `pred_formatter`.
+
+The `pil_image_formatter` function is used to convert the images from PIL format to numpy arrays.
+
+The `validate_formatters` function is used to validate the formatters again.
+
+The code is then validating the formatters again to ensure they are working correctly.
+
+The final step is to train the model using the training data and validate it using the test data.
+
+Please note that the code provided is a simplified example and may not work as expected in all scenarios. It is recommended to run the code in a controlled environment to ensure it works as expected.

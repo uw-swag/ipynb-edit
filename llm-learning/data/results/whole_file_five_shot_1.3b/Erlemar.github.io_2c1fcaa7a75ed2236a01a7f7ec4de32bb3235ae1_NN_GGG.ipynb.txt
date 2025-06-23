@@ -1,0 +1,47 @@
+
+<Cell_0>
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import TensorBoard
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelBinarizer
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import os
+import shutil
+import pickle
+import h5py
+import cv2
+import random
+import warnings
+warnings.filterwarnings('ignore')
+<\Cell_0>
+<Cell_1>
+# Loading the data
+data = pickle.load(open('boston_housing_clean.pickle', "rb" ))
+boston_data = data['dataframe']
+X = boston_data.drop('MEDV', axis=1)
+y = boston_data.MEDV
+<\Cell_1>
+<Cell_2>
+# Splitting the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+<\Cell_2>
+<Cell_3>
+# Building the neural network
+model = Sequential()
+model.add(Dense(10, input_dim=X_train.shape[1], activation='relu'))
+model.add(Dense(1, activation='linear'))
+
+model.compile(loss='mean_squared_error', optimizer='adam', metrics=['mse', 'mae'])
+<\Cell_3>
+<Cell_4>
+# Training the model
+model.fit(X_train, y_train, epochs=100, batch_size=32, verbose=1)

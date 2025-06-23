@@ -1,0 +1,44 @@
+```python
+    # Synchronization and trigger sources are the default,
+# which is the module itself
+in2.reset()
+in2.start()
+in2.trigger()
+# wait for data
+while (in2.status_run()): pass
+print ('Recording complete')
+data = in2.data(N)
+sr = 3000 # sample rate 3 Ksps
+ipd.Audio(data, rate=sr) # load a NumPy array
+# show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+
+plt.plot(data)
+plt.show()
+write("float_wave_test_raw.wav", sr, data)
+# Install requests via: `pip3 install requests`
+import requests
+import os
+from app_key import * #Import personal keys for the Edge Impulse project
+
+# Add the files you want to upload to Edge Impulse
+files = [
+    'float_wave_test_raw.wav']
+# # Replace the label with your own.
+label = 'audio-test'
+# Upload the file to Edge Impulse using the API, and print the response.
+res = requests.post(url='https://ingestion.edgeimpulse.com/api/training/files',
+                    headers={
+                        'x-label': label,
+                        'x-api-key': api_key,
+                    },
+                    # Creating the data payload for the request.
+                    files=(('data', (os.path.basename(i), open(
+                        i, 'rb'), 'audio/wav')) for i in files)
+                    )
+
+if (res.status_code == 200):
+    print('Uploaded file(s) to Edge Impulse\n', res.status_code, res.content)
+else:
+    print('Failed to upload file(s) to Edge Impulse\n',
+          res.status_code, res.content)
+    ```

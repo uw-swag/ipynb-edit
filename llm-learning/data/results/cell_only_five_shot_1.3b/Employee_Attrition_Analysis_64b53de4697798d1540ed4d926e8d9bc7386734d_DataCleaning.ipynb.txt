@@ -1,0 +1,21 @@
+```python
+    #prepare for RDS connection
+    !pip install pymysql
+    # dependencies
+    import pandas as pd
+    import pymysql
+    from getpass import getpass
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    # import dataset from RDS
+    secret = getpass('Enter the secret value: ')
+
+    conn = pymysql.connect(
+        host = 'ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com',
+        port=3306,
+        user = 'attritionProject',
+        passwd = secret,
+        db = 'your_database_name',
+        charset = 'utf8mb4',
+        cursorclass = pymysql.cursors.DictCursor
+    )
+    ```

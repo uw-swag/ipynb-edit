@@ -1,0 +1,67 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Code Update (#300)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# load data
+data = pd.read_csv('data.csv')
+
+# preprocess data
+le = LabelEncoder()
+data['column_name'] = le.fit_transform(data['column_name'])
+
+# save processed data
+data.to_csv('processed_data.csv', index=False)
+<\Cell_0>
+<Cell_1>
+# load processed data
+processed_data = pd.read_csv('processed_data.csv')
+<\Cell_1>
+<Cell_2>
+# check for missing values
+missing_values = processed_data.isnull().sum()
+<\Cell_2>
+<Cell_3>
+# check for duplicates
+duplicates = processed_data.duplicated().sum()
+<\Cell_3>
+<Cell_4>
+# check for outliers
+outliers = processed_data.describe(include='std').transpose()
+<\Cell_4>
+<Cell_5>
+# check for categorical variables
+categorical_variables = processed_data.select_dtypes(include=['object']).columns
+<\Cell_5>
+<Cell_6>
+# check for numerical variables
+numerical_variables = processed_data.select_dtypes(include=['int64', 'float64']).columns
+<\Cell_6>
+<Cell_7>
+# check for correlation
+correlation = processed_data.corr()
+<\Cell_7>
+
+    '''
+    ]
+
+    ### Response:
+    
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Code Update (#301)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# load data
+data = pd.read_csv('data.csv')
+
+# preprocess data

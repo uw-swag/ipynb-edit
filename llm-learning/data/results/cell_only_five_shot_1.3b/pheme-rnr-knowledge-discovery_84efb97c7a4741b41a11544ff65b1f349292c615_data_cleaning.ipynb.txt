@@ -1,0 +1,26 @@
+
+    The code you provided is a Jupyter notebook that performs data cleaning on a dataset. The dataset is a CSV file that contains tabular tweet data from a PHEME event. The cleaning process includes removing rows with boolean False values in the hashtags_count column, removing rows with NoneType in the retweet_count column, and converting datetime strings to timestamps.
+
+    The function `agg_event_data` is used to aggregate tabular tweet data from a PHEME event into aggregated thread-level data. The aggregated data is then saved to a CSV file in the "data" directory.
+
+    The code also includes a print statement to display the first five rows of the aggregated data.
+
+    The data cleaning process is performed in the following steps:
+
+    1. Load the dataset.
+    2. Remove rows with boolean False values in the hashtags_count column.
+    3. Remove rows with NoneType in the retweet_count column.
+    4. Convert datetime strings to timestamps.
+    5. Aggregate the data into thread-level data.
+    6. Save the aggregated data to a CSV file.
+    7. Print the first five rows of the aggregated data.
+
+    The function `agg_event_data` takes a DataFrame `df` and an optional parameter `limit`. If `limit` is provided, it returns the first `limit` rows of the DataFrame. Otherwise, it returns the entire DataFrame.
+
+    The function `bool_prop` is a helper function that calculates the proportion of True values in a column.
+
+    The function `f` is a helper function that calculates various statistics for each row in the DataFrame. It returns a Series with the first response date, last response date, and variance of response dates.
+
+    The function `agg_event_data` groups the DataFrame by "thread" and applies the helper functions to each group. It then merges the aggregated DataFrame with the source DataFrame and non-source DataFrame.
+
+    The final DataFrame is returned by the function.

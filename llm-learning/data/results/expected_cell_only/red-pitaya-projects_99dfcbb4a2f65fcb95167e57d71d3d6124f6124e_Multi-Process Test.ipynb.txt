@@ -1,0 +1,27 @@
+import concurrent.futures
+import time
+import multiprocessing
+
+my_data = 0
+
+def do_something(seconds):
+    global my_data
+    print('Sleeping {} second(s)...'.format(seconds))
+    time.sleep(seconds)
+    print("my_data: " + str(my_data))
+    my_data = my_data + 1
+    return 'Done Sleeping...{}'.format(seconds)
+start = time.perf_counter()
+
+with concurrent.futures.ProcessPoolExecutor() as executor:
+    secs = [5, 4, 3, 2, 1]
+    results = executor.map(do_something, secs)
+
+    for result in results:
+        print(result)
+
+finish = time.perf_counter()
+time_taken = round(finish-start, 2)
+
+print("my_data: " + str(my_data))
+print('Finished in {} second(s)'.format(time_taken))

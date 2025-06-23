@@ -1,0 +1,62 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#619)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.checks import DatasetsSizeComparison
+
+check = DatasetsSizeComparison().add_condition_test_size_not_smaller_than(1000)
+check
+<\Cell_0>
+<Cell_1>
+from deepchecks import Dataset
+import pandas as pd
+# Dummy data
+train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+condition_results = check.conditions_decision(check.run(train_dataset, test_dataset))
+condition_results
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import train_test_leakage
+
+suite = train_test_leakage()
+suite
+<\Cell_2>
+<Cell_3>
+# Access check by id
+check = suite[2]
+# Remove condition by id
+check.remove_condition(0)
+
+suite
+<\Cell_3>
+<Cell_4>
+# Re-add the condition with new parameter
+check.add_condition_feature_pps_difference_not_greater_than(0.01)
+
+suite
+<\Cell_4>
+<Cell_5>
+from deepchecks import Suite
+
+# Using suite to run check & condition
+suite = Suite('Suite for Condition',
+    check
+)
+
+suite.run(train_dataset, test_dataset)
+<\Cell_5>
+<Cell_6>
+from deepchecks import ConditionResult, ConditionCategory
+
+# Our parameters for the condition
+low_threshold = 0.3
+high_threshold = 0.7
+
+# Create the condition function for check `DatasetsSizeComparison`
+def custom_condition(value: dict): 
+    ratio = value['Test'] / value['Train']
+    if low_threshold

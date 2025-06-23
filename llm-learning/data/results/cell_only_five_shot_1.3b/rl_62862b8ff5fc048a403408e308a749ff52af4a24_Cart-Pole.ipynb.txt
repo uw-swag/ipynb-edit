@@ -1,0 +1,51 @@
+```python
+    # 1) make data, acceleration toward trend, starts a little off
+    # 2) add random perturbation
+    # 3) make that series the acceleration so acceleration is random around a trend
+    # 4) make data with that acceleration
+    # 5) make data with that acceleration and add random noise
+
+    startindex = 100
+    amplitude = 1
+    stockprice = startindex + amplitude
+    trend = 0.001
+    forcemult = 0.0001
+    stocktrend = 0.0
+
+    trendindex = startindex
+    trendseries = []
+    stockseries = []
+    date = []
+    for i in range(1000):
+        acceleration = trendindex - stockprice
+        stocktrend = stocktrend + acceleration * forcemult
+        stockprice *= (1+stocktrend)
+        stockseries.append(stockprice)
+
+        trendseries.append(trendindex)
+        date.append(i)
+        trendindex *= (1 + trend)
+
+    trendseries = pd.DataFrame({'dateindex': date, 'trend' : trendseries, 'stock': stockseries})
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(y=trendseries['trend'], x=trendseries['dateindex'],))
+    fig.add_trace(go.Scatter(y=trendseries['stock'], x=trendseries['dateindex'],))
+
+    fig.show()
+
+    # 6) make data with that acceleration and add random noise
+
+    noise = np.random.normal(0, 0.01, 1000)
+    stockprice_noise = stockprice + noise
+
+    trendindex_noise = trendindex
+    trendseries_noise = []
+    stockseries_noise = []
+    date_noise = []
+    for i in range(1000):
+        acceleration_noise = trendindex_noise - stockprice_noise
+        stocktrend_noise = stocktrend + acceleration_noise * forcemult
+        stockprice_noise *= (1+stocktrend_noise)
+        stockseries_noise.append(stockprice_noise)
+

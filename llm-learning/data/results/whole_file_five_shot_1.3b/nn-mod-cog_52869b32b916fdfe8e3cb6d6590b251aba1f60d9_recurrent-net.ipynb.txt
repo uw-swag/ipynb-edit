@@ -1,0 +1,32 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Elman network
+    def elman_network(x, w, u, b):
+        h = np.tanh(np.dot(w, x) + u + b)
+        y = np.dot(w, h)
+        return y, h
+
+    # Gradients
+    def gradients(x, w, u, b):
+        y, h = elman_network(x, w, u, b)
+        grad_w = np.outer(w, h)
+        grad_u = u
+        grad_b = b
+        return grad_w, grad_u, grad_b
+
+    # Training
+    def train(x, w, u, b, lr, n_iter):
+        for _ in range(n_iter):
+            grad_w, grad_u, grad_b = gradients(x, w, u, b)
+            w -= lr * grad_w
+            u -= lr * grad_u
+            b -= lr * grad_b
+        return w, u, b
+
+    # Test
+    def test(x, w, u, b):
+        y, _ = elman_network(x, w, u, b)
+        return y
+    ```

@@ -1,0 +1,14 @@
+```python
+    # Assuming df is your DataFrame and 'string' is the column you want to check
+    outlier_threshold = 300
+    df['string_length'] = df['string'].apply(len)
+    outliers = df[df['string_length'] > outlier_threshold]
+    print(f"Outliers in 'string' column: {outliers}")
+    ```
+
+    ### Explanation:
+    This code snippet checks the length of each string in the 'string' column of your DataFrame. If the length of a string exceeds the outlier_threshold (which is 300 in this case), it's considered an outlier and printed.
+
+    Please replace 'string' and 'string_length' with your actual column name and the column you want to check.
+
+    Also, you may need to adjust the outlier_threshold based on your specific needs.

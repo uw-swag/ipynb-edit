@@ -1,0 +1,38 @@
+```
+    <Cell_0>
+import pandas as pd
+
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+from mlchecks import CheckSuite, ConditionResult, ConditionCategory, Dataset
+from mlchecks.checks import *
+
+def condition_exc(r):
+    raise Exception('Failed because I need an example')
+
+data = {
+    'col1': ['', '#@$', 'Nan!', '#nan', '<NaN>'],
+    'col2': ['gabbay', 'GABBAY!!!', 'is', '...', '?Gabbay?'],
+    'col3': [1, 's', 'a', 'b', 'c'],
+    'col4': ['a', 'a', 'a', 'a', 'a']
+}
+
+dataset = Dataset(pd.DataFrame(data=data))
+suite = CheckSuite('My Single Suite',
+    IsSingleValue(),
+    MixedNulls().add_condition_different_nulls_not_more_than(3),
+    StringMismatch().add_condition_no_variants(),
+    StringMismatch().add_condition_ratio_variants_not_more_than(0.35),
+    MixedTypes().add_condition_rare_type_ratio_not_less_than(0.4),
+    MixedTypes().add_condition_rare_type_ratio_not_less_than(0.1),
+    RareFormatDetection().add_condition('fail example', condition_exc)
+)
+suite
+<\Cell_1>
+<Cell_2>
+result = suite.run(validation_dataset=dataset)
+result
+<\Cell_2>
+```

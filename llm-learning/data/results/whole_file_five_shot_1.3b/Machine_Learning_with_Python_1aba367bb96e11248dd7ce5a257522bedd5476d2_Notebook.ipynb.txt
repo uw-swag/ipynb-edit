@@ -1,0 +1,34 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.metrics.pairwise import cosine_similarity
+    from scipy import sparse
+
+    # Loading the data
+    ratings = pd.read_csv('ratings.csv')
+    movies = pd.read_csv('movies.csv')
+
+    # Merging the data
+    df = pd.merge(movies, ratings)
+
+    # Creating a sparse matrix
+    movie_matrix = df.pivot_table(index='userId',columns='title',values='rating')
+    movie_matrix_sparse = sparse.csr_matrix(movie_matrix.values)
+
+    # Calculating the cosine similarity
+    cosine_sim = cosine_similarity(movie_matrix_sparse)
+
+    # Function to get recommendations
+    def get_recommendations(title, cosine_sim=cosine_sim):
+        idx = df.index[df['title'] == title].tolist()[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:16]
+        movie_indices = [i[0] for i in sim_scores]
+        return df['title'].iloc[movie_indices]
+
+    # Getting recommendations
+    movies_recommended = get_recommendations('Titanic')
+    print(movies_recommended)
+    ```
+    This script uses collaborative filtering to recommend movies based on the user's previous ratings. The 'Titanic' movie is used as an example. You can replace it with any movie title you want to get recommendations for.

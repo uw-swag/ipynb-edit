@@ -1,0 +1,36 @@
+```python
+    import os
+    from os.path import join
+    import sys
+    import numpy as np
+    import pandas as pd
+    from matplotlib import pyplot as plt
+
+    import tensorflow as tf
+
+    %matplotlib notebook
+    #%matplotlib inline
+
+    models_data_folder = "/Users/amartinelli/Documents/models/"
+
+    # LeNet
+    def LeNet(x_train, y_train, x_test, y_test, num_classes):
+        # Convolution 1
+        conv1_W = tf.Variable(tf.truncated_normal([5, 5, 1, 6], stddev=0.1))
+        conv1_b = tf.Variable(tf.zeros([6]))
+        conv1   = tf.nn.conv2d(x_train, conv1_W, strides=[1, 1, 1, 1], padding='VALID') + conv1_b
+        # Activation 1
+        conv1 = tf.nn.relu(conv1)
+
+        # Max Pooling 1
+        conv1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='VALID')
+
+        # Convolution 2
+        conv2_W = tf.Variable(tf.truncated_normal([5, 5, 6, 16], stddev=0.1))
+        conv2_b = tf.Variable(tf.zeros([16]))
+        conv2   = tf.nn.conv2d(conv1, conv2_W, strides=[1, 1, 1, 1], padding='VALID') + conv2_b
+        # Activation 2
+        conv2 = tf.nn.relu(conv2)
+
+        # Max Pooling 2
+        conv2 = tf.nn.max_pool(conv2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1

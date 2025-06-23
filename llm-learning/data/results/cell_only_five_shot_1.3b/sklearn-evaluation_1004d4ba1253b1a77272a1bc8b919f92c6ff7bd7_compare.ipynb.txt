@@ -1,0 +1,26 @@
+```python
+    # Initialise le chemin du dossier contenant les fichiers à tester
+    data_folder = Path.cwd() / 'datasets'
+
+    # Initialise l'indice du fichier sélectionné
+    j=-1
+
+    # Vérifie la présence du dossier 'datasets', liste les fichiers CSV qu'il
+    # contient et récupère le choix utilisateur
+    if not data_folder.is_dir():
+        raise FileNotFoundError(f'Le dossier {data_folder} n\'existe pas.')
+    else:
+        csv_files = [x for x in list(data_folder.glob('*.csv')) if x.is_file()]
+        if len(csv_files) != 0:
+            print('Fichiers disponibles pour le test :')
+            for i, file in enumerate(csv_files):
+                print(f'{i} | {file.parts[-1]}')
+        else:
+            raise FileNotFoundError(
+                'Il n\'y a pas de fichiers CSV à tester dans votre dossier.')
+    
+    while j not in range(0, len(csv_files)):
+        j = int(input('Indiquez le numéro du fichier à tester.'))
+
+    print(f'\nVous avez choisi le fichier \'{csv_files[j].parts[-1]}\'.')
+    ```

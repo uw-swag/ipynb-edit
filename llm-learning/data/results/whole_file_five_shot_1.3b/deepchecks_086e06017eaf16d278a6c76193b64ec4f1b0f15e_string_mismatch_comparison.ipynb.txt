@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    comparison = StringMismatchComparison()
+    result = comparison.run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+
+    print(result)
+    ```
+
+    The code above will run the StringMismatchComparison check on the two dataframes, and print the result. The result will show the number of mismatched strings, the percentage of mismatched strings, and the actual mismatched strings.

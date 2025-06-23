@@ -1,0 +1,27 @@
+
+Here is the updated code:
+
+```python
+per_column_stattest = {x: 'wasserstein' for x in ['age', 'education-num']}
+
+for column in ['sex', 'class']:
+    per_column_stattest[column] = 'z'
+
+for column in ['workclass', 'education']:
+    per_column_stattest[column] = 'kl_div'
+
+for column in [ 'relationship', 'race',  'native-country']:
+    per_column_stattest[column] = 'jensenshannon'
+
+for column in ['fnlwgt','hours-per-week']:
+    per_column_stattest[column] = 'anderson'
+
+for column in ['capital-gain','capital-loss']:
+    per_column_stattest[column] = 'cramer_von_mises'
+
+for column in ['occupation', 'marital-status']:
+    per_column_stattest[column] = 'g_test'
+
+```
+
+This code is adding the statistical tests to the `per_column_stattest` dictionary. The keys are the column names, and the values are the statistical tests.

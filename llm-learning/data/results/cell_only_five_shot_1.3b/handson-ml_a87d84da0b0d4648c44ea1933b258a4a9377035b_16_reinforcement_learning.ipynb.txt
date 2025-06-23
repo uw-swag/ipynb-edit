@@ -1,0 +1,33 @@
+
+The `tf.contrib.layers.variance_scaling_initializer` has been moved to `tf.variance_scaling_initializer`. This change is made to ensure consistency with the rest of the TensorFlow codebase.
+
+In the code you provided, the `variance_scaling_initializer` is used to initialize the weights of the neural network. However, the `variance_scaling_initializer` is not used in the provided code.
+
+If you want to use the `variance_scaling_initializer`, you should replace the `variance_scaling_initializer` with `tf.variance_scaling_initializer()`.
+
+Here is the updated code:
+
+```python
+import tensorflow as tf
+
+# 1. Specify the network architecture
+n_inputs = 4  # == env.observation_space.shape[0]
+n_hidden = 4  # it's a simple task, we don't need more than this
+n_outputs = 1 # only outputs the probability of accelerating left
+initializer = tf.variance_scaling_initializer()
+
+# 2. Build the neural network
+X = tf.placeholder(tf.float32, shape=[None, n_inputs])
+hidden = tf.layers.dense(X, n_hidden, activation=tf.nn.elu,
+                         kernel_initializer=initializer)
+outputs = tf.layers.dense(hidden, n_outputs, activation=tf.nn.sigmoid,
+                          kernel_initializer=initializer)
+
+# 3. Select a random action based on the estimated probabilities
+p_left_and_right = tf.concat(axis=1, values=[outputs, 1 - outputs])
+action = tf.multinomial(tf.log(p_left_and_right), num_samples=1)
+
+init = tf.global_variables_initializer()
+```
+
+Please note that the `variance_scaling_initializer` is a more recent addition to TensorFlow, and it's not available in the older versions. Therefore, you might need to upgrade your TensorFlow version if you're

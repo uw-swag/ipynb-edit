@@ -1,0 +1,84 @@
+```
+    [
+    Commit Message: "Add link to docs"
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+
+<\Cell_1>
+<Cell_2>
+
+<\Cell_2>
+<Cell_3>
+# ! pip install openai
+<\Cell_3>
+<Cell_4>
+
+<\Cell_4>
+<Cell_5>
+
+<\Cell_5>
+<Cell_6>
+
+<\Cell_6>
+<Cell_7>
+import openai
+import os
+from getpass import getpass
+
+token = getpass('Enter OPENAI_API_KEY here: ')
+# print ('token is', token)
+
+openai.api_key = token
+<\Cell_7>
+<Cell_8>
+
+<\Cell_8>
+<Cell_9>
+# https://github.com/openai/openai-python
+
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>
+<Cell_11>
+
+# list models
+models = openai.Model.list()
+
+# print(models.data)    
+<\Cell_11>
+<Cell_12>
+# print the first model's id
+print(len(models.data))
+print(models.data[0].id)
+
+<\Cell_12>
+<Cell_13>
+
+# create a completion
+completion = openai.Completion.create(model="ada", prompt="Hello world")
+
+<\Cell_13>
+<Cell_14>
+
+print(completion)
+<\Cell_14>
+<Cell_15>
+# print the completion
+print(completion.choices[0].text)
+<\Cell_15>
+<Cell_16>
+# print the completion
+print(completion.choices[0].text)
+<\Cell_16>
+<Cell_17>
+
+<\Cell_17>
+<Cell_18>
+
+<\Cell_18>
+<Cell_19>

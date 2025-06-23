@@ -1,0 +1,41 @@
+import os
+from os.path import join as oj
+import sys, time
+# sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+%matplotlib inline
+
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+results["Test Accuracy"] = [x.item() for x in results["test_acc"]] 
+results["Val Accuracy"] = [(max(x)) for x in results["accs_val"]] 
+results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+results["final_test_loss"] = [min(x) for x in results["losses_val"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+
+concise_out = results[['signal_strength', 'Val Accuracy', 'bias', 'Test Accuracy']].groupby(by = ['bias','signal_strength']).mean()
+concise_out
+fig, axs = plt.subplots(ncols = 3, figsize = (15,5))
+sns.lineplot(x ='signal_strength' , y='Test Accuracy', data = results[results.bias == "Decoy"] , ax = axs[0] );
+sns.lineplot(x ='signal_strength' , y='Test Accuracy', data = results[results.bias == "bias"]   , ax = axs[1]);
+sns.lineplot(x ='signal_strength' , y='Test Accuracy', data = results[results.bias == "Genderbias"]   , ax = axs[2]);
+axs[0].set_title("Decoy")
+axs[1].set_title("Article")
+axs[2].set_title("Genderbias")
+plt.ylim(50, 85)
+# fig.set_xlabel("Regularization strength")
+axs[0].set_ylabel("Test Accuracy")
+# fig.set_title("Regularizing with cd explanations");
+

@@ -1,0 +1,58 @@
+
+    '''
+    [
+    Commit Message: "Making progress in answering business questions"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%matplotlib inline
+import psycopg2
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+import security as s
+
+
+# cur = conn.cursor() 
+<\Cell_0>
+<Cell_1>
+def run_query(query):
+    with psycopg2.connect(dbname='chinook', user=s.credentials['user'], 
+                          host=s.credentials['host'], password=s.credentials['password']) as conn:
+        
+        return pd.read_sql_query(query, conn)
+
+def run_command(command):
+    with psycopg2.connect(dbname='chinook', user=s.credentials['user'], 
+                          host=s.credentials['host'], password=s.credentials['password']) as conn:
+        
+        conn.isolation_level = None # tells PostgreSQL to autocommit any changes
+        conn.execute(command)
+
+def show_tables():
+    query = "select table_name, table_type from information_schema.tables \
+                where table_type = 'BASE TABLE' AND table_schema = 'public';"
+    return run_query(query)
+    
+def show_columns(tablename):
+    query =  """select column_name from information_schema.columns where
+                table_name='{tn}'""".format(tn = tablename)
+    return run_query(query) 
+
+tables = show_tables()
+tables
+<\Cell_1>
+<Cell_2>
+query = '''
+WITH usa_tracks_sold AS
+   (
+    SELECT il.* FROM invoice_line il
+    INNER JOIN invoice i on il.invoice_id = i.invoice_id
+    INNER JOIN customer c on i.customer_id = c.customer_id
+    WHERE c.country = 'USA'
+   )
+
+SELECT
+    g.name genre,
+    count(uts.invoice

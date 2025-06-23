@@ -1,0 +1,42 @@
+```python
+    # Adding new conditions
+    if condition1:
+        # Do something
+    elif condition2:
+        # Do something else
+    else:
+        # Do something else
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "removed unused imports; (#139)"
+    Original Code Cells:
+    '''
+    import os
+    import sys
+    from pyspark.ml import PipelineModel
+    from pyspark.ml.feature import FeatureHasher
+    import papermill as pm
+    import scrapbook as sb
+    from reco_utils.common.spark_utils import start_or_get_spark
+    from reco_utils.common.notebook_utils import is_databricks
+    from reco_utils.dataset.criteo import load_spark_df
+    from reco_utils.dataset.spark_splitters import spark_random_split
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Removing unused imports
+    del os
+    del sys
+    del PipelineModel
+    del FeatureHasher
+    del pm
+    del sb
+    del start_or_get_spark
+    del is_databricks
+    del load_spark_df
+    del spark_random_split
+    ```

@@ -1,0 +1,45 @@
+```python
+    %run ../common/import_all.py
+
+    from mpl_toolkits.mplot3d import Axes3D
+    from matplotlib import cm
+
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+    x = np.arange(0, 10, 0.1)
+    y = np.sin(x)
+
+    plt.plot(x, y)
+    plt.xlabel('x')
+    plt.ylabel('sin(x)')
+    plt.title('Sine function', fontweight='bold', fontsize=16)
+    plt.show();
+
+    x = np.array([i for i in range(-100, 100)])
+    y = np.array([i for i in range(-100, 100)])
+    x, y = np.meshgrid(x, y)
+
+    def f(x, y):
+        return x**2 + y**2
+
+    fig = plt.figure()
+    ax = fig.gca(projection='3d')
+    parabola = ax.plot_surface(x, y, f(x, y), cmap=cm.RdPu)
+    plt.xlabel('x')
+    plt.ylabel('y')
+
+    plt.show();
+
+    data = {'a': 10, 'b': 20, 'c': 15, 'd': 25}
+
+    plt.bar([i for i in range(len(data.keys()))], data.values())   # does not read str xtics directly, have to set xticks
+    plt.xticks([i for i in range(len(data.keys()))], data.keys())
+    plt.show();
+
+    x = np.linspace(0, 1, 100)
+    plt.semilogy(x, np.exp(x))
+
+    plt.show();

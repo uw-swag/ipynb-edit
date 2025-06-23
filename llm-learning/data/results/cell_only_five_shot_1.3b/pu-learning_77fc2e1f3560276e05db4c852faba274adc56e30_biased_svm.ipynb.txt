@@ -1,0 +1,45 @@
+```python
+    from sklearn.svm import SVC
+    from utils import f1_prime
+
+    train_xs, train_ys, train_ss, train_es = train
+    valid_xs, valid_ys, valid_ss, valid_es = valid
+
+    best_f1_prime = -1.0
+    best_clf = None
+    for class_weight_pos in np.arange(0.5, 1.0, 0.05):
+        class_weight = {
+            0: 1.0 - class_weight_pos,
+            1: class_weight_pos,
+        }
+
+        clf = SVC(class_weight=class_weight, random_state=0, probability=True).fit(train_xs, train_ss)
+
+        valid_ss_hat = clf.predict(valid_xs)
+
+        f1_prime_ = f1_prime(valid_ss, valid_ss_hat)
+        if f1_prime_ > best_f1_prime:
+            print(f"The best classifier is updated: class weight is {class_weight}.")
+            best_f1_prime = f1_prime_
+            best_clf = clf
+
+    # Now, let's allow the user to change the class weight
+    new_class_weight = {0: 1.0, 1: 0.5}  # example: change class weight to 1.0 for class 0 and 0.5 for class 1
+    clf.class_weight = new_class_weight
+    clf.fit(train_xs, train_ss)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add user interface for changing class weight"
+    Original Code Cells:
+    '''
+    from sklearn.svm import SVC
+    from utils import f1_prime
+
+    train_xs, train_ys, train_ss, train_es = train
+    valid_xs, valid_ys, valid_ss, valid_es = valid
+
+    best_f1_prime = -1.0
+    best_clf = None
+    for class_weight_pos in

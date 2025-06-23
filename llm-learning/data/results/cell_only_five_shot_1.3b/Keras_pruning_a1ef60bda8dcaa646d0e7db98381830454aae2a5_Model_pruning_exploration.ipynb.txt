@@ -1,0 +1,39 @@
+
+    '''
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+    from keras.datasets import mnist
+    from keras.models import Sequential
+    from keras.layers import Dense 
+    from sklearn.model_selection import train_test_split
+    (x_train, y_train) , (x_test, y_test) = mnist.load_data()
+    print(f'x_train shape = {x_train.shape}\nx_test shape = {x_test.shape}\ny_train shape = {y_train.shape}\ny_test shape = {y_test.shape}')
+    fig = plt.figure()
+    for i in range(9):
+        plt.subplot(3,3,i+1)
+        plt.tight_layout()
+        plt.imshow(x_train[i], cmap='gray')
+        plt.title(f'Digit: {y_train[i]}')
+
+    plt.show()
+    x_train = x_train.reshape(60000, 784)
+    x_test = x_test.reshape(10000, 784)
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+
+    # Scaling/normalizing the data to help with the training.
+    x_train /= 255
+    x_test /= 255
+
+
+    print("Train matrix shape", x_train.shape)
+    print("Test matrix shape", x_test.shape)
+    model = Sequential()
+
+    # Building the layers.
+    model.add(Dense(units=512, input_dim=784, activation='relu'))
+    model.add(Dense(units=512, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+
+    # Compiling the model.
+    model.compile(optimizer='adam', loss='sp

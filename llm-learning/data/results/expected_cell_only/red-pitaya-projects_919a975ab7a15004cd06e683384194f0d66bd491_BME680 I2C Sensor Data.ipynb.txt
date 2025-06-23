@@ -1,0 +1,10 @@
+import time
+import bme680
+import threading
+#The bme680 board has a primady and alternate I2C address
+sensor = bme680.BME680()
+#Print each initial reading
+for name in dir(sensor.data):
+    value = getattr(sensor.data, name)
+    if not name.startswith('_'):
+        print('{}: {}'.format(name, value))

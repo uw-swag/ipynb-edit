@@ -1,0 +1,945 @@
+<Cell_0>
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+<\Cell_0>
+<Cell_1>
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+<\Cell_1>
+<Cell_2>
+!pip3 install google-cloud-automlops --user
+<\Cell_2>
+<Cell_3>
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+<\Cell_3>
+<Cell_4>
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+<\Cell_4>
+<Cell_5>
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+<\Cell_5>
+<Cell_6>
+! gcloud config set project $PROJECT_ID
+<\Cell_6>
+<Cell_7>
+import random
+import string
+
+import matplotlib.pyplot as plt
+import pandas as pd
+from google.cloud import bigquery
+from sklearn.metrics import (mean_absolute_error,
+                             mean_absolute_percentage_error,
+                             mean_squared_error)
+%matplotlib inline
+
+import warnings
+warnings.filterwarnings('ignore')
+
+SALES_TABLE = 'training_data_table'
+
+# Construct a BigQuery client object.
+bq_client = bigquery.Client(project=PROJECT_ID)
+dataset_id = 'demandforecasting'
+<\Cell_7>
+<Cell_8>
+query = f'''
+CREATE SCHEMA IF NOT EXISTS `{PROJECT_ID}.{dataset_id}`
+OPTIONS(
+  location="us"
+  )
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_8>
+<Cell_9>
+query = '''
+SELECT * FROM `looker-private-demo.retail.transaction_detail`
+'''
+query_job = bq_client.query(query)
+<\Cell_9>
+<Cell_10>
+query_job.to_dataframe()
+<\Cell_10>
+<Cell_11>
+query = f'''
+CREATE OR REPLACE VIEW {dataset_id}.important_fields AS
+(
+    SELECT transaction_timestamp,line_items from `looker-private-demo.retail.transaction_detail` WHERE store_id = 10
+)   
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_11>
+<Cell_12>
+query = f'''
+SELECT * FROM {dataset_id}.important_fields
+'''
+query_job = bq_client.query(query)
+query_job.to_dataframe()
+<\Cell_12>
+<Cell_13>
+query = f'''
+CREATE OR REPLACE VIEW {dataset_id}.data_after_converting_timestamp_to_date AS
+(
+    SELECT EXTRACT(DATE FROM transaction_timestamp AT TIME ZONE "UTC") AS date,line_items from {dataset_id}.important_fields
+)   
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_13>
+<Cell_14>
+query = f'''
+SELECT * FROM {dataset_id}.data_after_converting_timestamp_to_date
+'''
+query_job = bq_client.query(query)
+query_job.to_dataframe()
+<\Cell_14>
+<Cell_15>
+df_intermediary = query_job.to_dataframe()
+<\Cell_15>
+<Cell_16>
+df_intermediary.dtypes
+<\Cell_16>
+<Cell_17>
+query = f'''
+CREATE OR REPLACE VIEW {dataset_id}.split_array_of_structs AS
+ 
+(SELECT date,line_items
+FROM {dataset_id}.data_after_converting_timestamp_to_date, UNNEST(line_items) AS line_items)
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_17>
+<Cell_18>
+query = f'''
+SELECT * FROM {dataset_id}.split_array_of_structs
+'''
+query_job = bq_client.query(query)
+query_job.to_dataframe()
+<\Cell_18>
+<Cell_19>
+query = f'''
+CREATE OR REPLACE VIEW {dataset_id}.splitting_struct_columns AS
+ 
+(SELECT date,line_items.product_id as product_id
+FROM {dataset_id}.split_array_of_structs)
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_19>
+<Cell_20>
+query = f'''
+SELECT * FROM {dataset_id}.splitting_struct_columns 
+'''
+query_job = bq_client.query(query)
+query_job.to_dataframe()
+<\Cell_20>
+<Cell_21>
+query = f'''
+CREATE OR REPLACE VIEW {dataset_id}.sales_count_per_date AS
+ 
+(SELECT date,product_id,COUNT(*) as sales_count
+FROM {dataset_id}.splitting_struct_columns GROUP BY date,product_id)
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_21>
+<Cell_22>
+query = f'''
+SELECT * FROM {dataset_id}.sales_count_per_date
+'''
+query_job = bq_client.query(query)
+query_job.to_dataframe()
+<\Cell_22>
+<Cell_23>
+query = f'''
+CREATE OR REPLACE VIEW {dataset_id}.top_five_products AS (
+    WITH topsellingitems AS(
+         SELECT 
+            product_id,
+            sum(sales_count) sum_sales
+        FROM
+            `{dataset_id}.sales_count_per_date` 
+        GROUP BY 
+            product_id
+        ORDER BY sum_sales DESC
+        LIMIT 5 #Top N
+    )
+    SELECT 
+        date,
+        product_id,
+        sales_count
+    FROM
+        `{dataset_id}.sales_count_per_date` 
+    WHERE
+        product_id IN (SELECT product_id FROM topsellingitems)
+    )
+'''
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_23>
+<Cell_24>
+query = f'''
+SELECT * FROM {dataset_id}.top_five_products
+'''
+query_job = bq_client.query(query)
+query_job.to_dataframe()
+<\Cell_24>
+<Cell_25>
+df = query_job.to_dataframe()
+print(df)
+<\Cell_25>
+<Cell_26>
+df.dtypes
+<\Cell_26>
+<Cell_27>
+df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+<\Cell_27>
+<Cell_28>
+query = f'''
+SELECT MIN(DATE) AS min_date FROM {dataset_id}.top_five_products
+'''
+query_job = bq_client.query(query)
+min_date = query_job.to_dataframe()
+min_date
+<\Cell_28>
+<Cell_29>
+query = f'''
+SELECT MAX(DATE) AS max_date FROM {dataset_id}.top_five_products
+'''
+query_job = bq_client.query(query)
+max_date = query_job.to_dataframe()
+max_date
+<\Cell_29>
+<Cell_30>
+dates = pd.date_range(start=str(min_date.values[0][0]), end=str(max_date.values[0][0])).to_frame()
+<\Cell_30>
+<Cell_31>
+dates.info()
+<\Cell_31>
+<Cell_32>
+df.loc[df['product_id'] == 20552].sort_values(by=['date'])
+<\Cell_32>
+<Cell_33>
+df1 = (
+    pd.merge(
+        df.loc[df['product_id'] == 20552],
+        dates,
+        left_on='date',
+        right_on=0,
+        how='outer',
+    )
+    .sort_values(by=['date'])
+    .drop(columns=0)
+)  # merging dates dataframe with product_id matching rows
+df1['product_id'] = 20552  # product_id will be null so making it the specified values
+df1.reset_index(inplace=True, drop=True)  # making index to start from 0
+df1 = df1.fillna(0)  # for sales_count making null values as 0
+df1['sales_count'] = df1['sales_count'].astype(
+    'int'
+)  # convert sales_count column to integer
+print('data after converting for a product with product_id 20552')
+print(df1)
+
+df2 = (
+    pd.merge(
+        df.loc[df['product_id'] == 13596],
+        dates,
+        left_on='date',
+        right_on=0,
+        how='outer',
+    )
+    .sort_values(by=['date'])
+    .drop(columns=0)
+)  # merging dates dataframe with product_id matching rows
+df2['product_id'] = 13596  # product_id will be null so making it the specified values
+df2.reset_index(inplace=True, drop=True)  # making index to start from 0
+df2 = df2.fillna(0)  # for sales_count making null values as 0
+df2['sales_count'] = df2['sales_count'].astype(
+    'int'
+)  # convert sales_count column to integer
+print(df2)
+
+df3 = (
+    pd.merge(
+        df.loc[df['product_id'] == 23641],
+        dates,
+        left_on='date',
+        right_on=0,
+        how='outer',
+    )
+    .sort_values(by=['date'])
+    .drop(columns=0)
+)  # merging dates dataframe with product_id matching rows
+df3['product_id'] = 23641  # product_id will be null so making it the specified values
+df3.reset_index(inplace=True, drop=True)  # making index to start from 0
+df3 = df3.fillna(0)  # for sales_count making null values as 0
+df3['sales_count'] = df3['sales_count'].astype(
+    'int'
+)  # convert sales_count column to integer
+print(df3)
+
+df4 = (
+    pd.merge(
+        df.loc[df['product_id'] == 28305],
+        dates,
+        left_on='date',
+        right_on=0,
+        how='outer',
+    )
+    .sort_values(by=['date'])
+    .drop(columns=0)
+)  # merging dates dataframe with product_id matching rows
+df4['product_id'] = 28305  # product_id will be null so making it the specified values
+df4.reset_index(inplace=True, drop=True)  # making index to start from 0
+df4 = df4.fillna(0)  # for sales_count making null values as 0
+df4['sales_count'] = df4['sales_count'].astype(
+    'int'
+)  # convert sales_count column to integer
+print(df4)
+
+df5 = (
+    pd.merge(
+        df.loc[df['product_id'] == 20547],
+        dates,
+        left_on='date',
+        right_on=0,
+        how='outer',
+    )
+    .sort_values(by=['date'])
+    .drop(columns=0)
+)  # merging dates dataframe with product_id matching rows
+df5['product_id'] = 20547  # product_id will be null so making it the specified values
+df5.reset_index(inplace=True, drop=True)  # making index to start from 0
+df5 = df5.fillna(0)  # for sales_count making null values as 0
+df5['sales_count'] = df5['sales_count'].astype(
+    'int'
+)  # convert sales_count column to integer
+print(df5)
+<\Cell_33>
+<Cell_34>
+pdList = [df1, df2, df3, df4, df5]  # List of your dataframes
+new_df = pd.concat(pdList)
+new_df
+<\Cell_34>
+<Cell_35>
+new_df.reset_index(inplace=True, drop=True)
+print(new_df)
+<\Cell_35>
+<Cell_36>
+query = f'''
+SELECT DISTINCT product_id from {dataset_id}.top_five_products
+'''
+query_job = bq_client.query(query)
+<\Cell_36>
+<Cell_37>
+query_job.to_dataframe()
+<\Cell_37>
+<Cell_38>
+plt.plot(
+    new_df.loc[new_df['product_id'] == 20552]['date'],
+    new_df.loc[new_df['product_id'] == 20552]['sales_count'],
+)
+plt.xticks(rotation='vertical')
+<\Cell_38>
+<Cell_39>
+plt.plot(
+    new_df.loc[new_df['product_id'] == 20547]['date'],
+    new_df.loc[new_df['product_id'] == 20547]['sales_count'],
+)
+plt.xticks(rotation='vertical')
+<\Cell_39>
+<Cell_40>
+plt.plot(
+    new_df.loc[new_df['product_id'] == 28305]['date'],
+    new_df.loc[new_df['product_id'] == 28305]['sales_count'],
+)
+plt.xticks(rotation='vertical')
+<\Cell_40>
+<Cell_41>
+plt.plot(
+    new_df.loc[new_df['product_id'] == 23641]['date'],
+    new_df.loc[new_df['product_id'] == 23641]['sales_count'],
+)
+plt.xticks(rotation='vertical')
+<\Cell_41>
+<Cell_42>
+plt.plot(
+    new_df.loc[new_df['product_id'] == 13596]['date'],
+    new_df.loc[new_df['product_id'] == 13596]['sales_count'],
+)
+plt.xticks(rotation='vertical')
+<\Cell_42>
+<Cell_43>
+new_df.dtypes
+<\Cell_43>
+<Cell_44>
+job_config = bigquery.LoadJobConfig(
+    # Specify a (partial) schema. All columns are always written to the
+    # table. The schema is used to assist in data type definitions.
+    schema=[
+        bigquery.SchemaField('product_id', bigquery.enums.SqlTypeNames.INTEGER),
+        bigquery.SchemaField('date', bigquery.enums.SqlTypeNames.DATE),
+        bigquery.SchemaField('sales_count', bigquery.enums.SqlTypeNames.INTEGER),
+    ],
+    # Optionally, set the write disposition. BigQuery appends loaded rows
+    # to an existing table by default, but with WRITE_TRUNCATE write
+    # disposition it replaces the table with the loaded data.
+    write_disposition='WRITE_TRUNCATE',
+)
+
+# save the dataframe to a table in the created dataset
+job = bq_client.load_table_from_dataframe(
+    new_df,
+    f'{PROJECT_ID}.{dataset_id}.{SALES_TABLE}',
+    job_config=job_config,
+)  # Make an API request.
+job.result()  # Wait for the job to complete.
+<\Cell_44>
+<Cell_45>
+# select the date-range and item-id(top 5) for training-data and create a table for the same
+TRAININGDATA_STARTDATE = '2022-01-01'
+TRAININGDATA_ENDDATE = '2023-01-01'
+query = f'''
+CREATE OR REPLACE TABLE {PROJECT_ID}.{dataset_id}.training_data AS (
+    SELECT
+        *
+    FROM
+        `{dataset_id}.{SALES_TABLE}`
+    WHERE
+        date BETWEEN '{TRAININGDATA_STARTDATE}' AND '{TRAININGDATA_ENDDATE}'
+        );
+'''
+# execute the query (as it is a create query, there won't be any tabular output)
+query_job = bq_client.query(query)
+print(query_job.result())
+<\Cell_45>
+<Cell_46>
+df_historical = new_df[
+    (new_df['date'] >= pd.to_datetime(TRAININGDATA_STARTDATE))
+    & (new_df['date'] <= pd.to_datetime(TRAININGDATA_ENDDATE))
+].copy()
+df_historical
+<\Cell_46>
+<Cell_47>
+# Train an ARIMA model on the created dataset
+query = f'''
+CREATE OR REPLACE MODEL `{PROJECT_ID}.{dataset_id}.arima_model`
+
+OPTIONS(
+  MODEL_TYPE='ARIMA_PLUS',
+  TIME_SERIES_TIMESTAMP_COL='date',
+  TIME_SERIES_DATA_COL='sales_count',
+  TIME_SERIES_ID_COL='product_id',
+  SEASONALITIES=['DAILY','WEEKLY','MONTHLY','QUARTERLY','YEARLY'],
+  DATA_FREQUENCY='DAILY',
+  model_registry='vertex_ai') AS
+
+SELECT
+    date,
+    product_id,
+    sales_count
+FROM
+  `{dataset_id}.training_data`
+'''
+job = bq_client.query(query)
+job.result()
+<\Cell_47>
+<Cell_48>
+query = f'''DECLARE HORIZON STRING DEFAULT "90"; #number of values to forecast
+DECLARE CONFIDENCE_LEVEL STRING DEFAULT "0.90"; ## required confidence level
+
+EXECUTE IMMEDIATE format("""
+    SELECT
+      * , 
+      ROUND(forecast_value) AS forecast_value_rnd,
+      ROUND(forecast_value) - standard_error AS prediction_interval_lower_bound_rnd,
+      ROUND(forecast_value) - standard_error AS confidence_interval_lower_bound_rnd,
+      ROUND(forecast_value) + standard_error AS prediction_interval_upper_bound_rnd,
+      ROUND(forecast_value) + standard_error AS confidence_interval_upper_bound_rnd
+    FROM
+      ML.FORECAST(MODEL {dataset_id}.arima_model,
+                  STRUCT(%s AS horizon,
+                         %s AS confidence_level)
+                 )
+    """,HORIZON,CONFIDENCE_LEVEL)'''
+job = bq_client.query(query)
+dfforecast = job.to_dataframe()
+<\Cell_48>
+<Cell_49>
+dfforecast.head()
+<\Cell_49>
+<Cell_50>
+print(f'Number of rows: {dfforecast.shape[0]}')
+<\Cell_50>
+<Cell_51>
+df_historical.sort_values(by=['product_id', 'date'], inplace=True)
+dfforecast.sort_values(by=['product_id', 'forecast_timestamp'], inplace=True)
+
+# Select the actual data to plot against the forecasted data
+day_diff = (new_df['date'] - pd.to_datetime(TRAININGDATA_ENDDATE)).dt.days
+df_actual_90d = new_df[new_df['product_id'].isin(dfforecast['product_id'].unique())][
+    (day_diff > 0) & (day_diff <= 90)
+].copy()
+df_actual_90d.shape
+<\Cell_51>
+<Cell_52>
+def plot_hist_forecast(
+    historical, forecast, actual, hist_start='', hist_end='', title=''
+):
+    if hist_start != '':
+        historical = historical[
+            historical['date'] >= pd.to_datetime(hist_start, format='%Y-%m-%d')
+        ].copy()
+    if hist_end != '':
+        historical = historical[
+            historical['date'] <= pd.to_datetime(hist_end, format='%Y-%m-%d')
+        ].copy()
+
+    plt.figure(figsize=(15, 4))
+    plt.plot(historical['date'], historical['sales_count'], label='historical')
+    # Plot the forecast data
+    plt.plot(
+        forecast['forecast_timestamp'],
+        forecast['forecast_value_rnd'],
+        label='forecast',
+        linestyle='--',
+    )
+    # Plot the actual data
+    plt.plot(actual['date'], actual['sales_count'], label='actual')
+    # plot the confidence interval
+    confidence_level = forecast['confidence_level'].iloc[0] * 100
+    low_CI = forecast['confidence_interval_lower_bound_rnd']
+    upper_CI = forecast['confidence_interval_upper_bound_rnd']
+
+    # Shade the confidence interval
+    plt.fill_between(
+        forecast['forecast_timestamp'],
+        low_CI,
+        upper_CI,
+        color='#539caf',
+        alpha=0.4,
+        label=f'{confidence_level} confidence interval',
+    )
+    plt.legend()
+    plt.title(title)
+    plt.show()
+    return
+
+
+product_id_list = dfforecast['product_id'].unique()
+for i in product_id_list:
+    print('Product_id : ', i)
+    plot_hist_forecast(
+        df_historical[df_historical['product_id'] == i],
+        dfforecast[dfforecast['product_id'] == i],
+        df_actual_90d[df_actual_90d['product_id'] == i],
+        hist_start='2023-02-01',
+        title=i,
+    )
+<\Cell_52>
+<Cell_53>
+query = f'''
+SELECT
+  *
+FROM 
+  ML.ARIMA_COEFFICIENTS(MODEL {dataset_id}.arima_model)
+'''
+query_job = bq_client.query(query)
+<\Cell_53>
+<Cell_54>
+query_job.to_dataframe()
+<\Cell_54>
+<Cell_55>
+query = f'''
+SELECT
+  *
+FROM
+  ML.EVALUATE(MODEL {dataset_id}.arima_model)
+'''
+query_job = bq_client.query(query)
+<\Cell_55>
+<Cell_56>
+query_job.to_dataframe()
+<\Cell_56>
+<Cell_57>
+df_actual_90d.sort_values(by=['product_id', 'date'], inplace=True)
+df_actual_90d.reset_index(drop=True, inplace=True)
+dfforecast.sort_values(by=['product_id', 'forecast_timestamp'], inplace=True)
+dfforecast.reset_index(drop=True, inplace=True)
+<\Cell_57>
+<Cell_58>
+errors = {'product_id': [], 'MAE': [], 'MAPE': [], 'MSE': [], 'RMSE': []}
+for i in product_id_list:
+    mae = mean_absolute_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+    )
+    mape = mean_absolute_percentage_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+    )
+
+    mse = mean_squared_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+        squared=True,
+    )
+
+    rmse = mean_squared_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+        squared=False,
+    )
+
+    errors['product_id'].append(i)
+    errors['MAE'].append(mae)
+    errors['MAPE'].append(mape)
+    errors['MSE'].append(mse)
+    errors['RMSE'].append(rmse)
+errors = pd.DataFrame(errors)
+errors
+<\Cell_58>
+<Cell_59>
+from AutoMLOps import AutoMLOps
+<\Cell_59>
+<Cell_60>
+!pip3 install kfp
+<\Cell_60>
+<Cell_61>
+from kfp.v2 import dsl
+from kfp.v2.dsl import Artifact, Dataset, Metrics, Output
+<\Cell_61>
+<Cell_62>
+AutoMLOps.clear_cache()
+<\Cell_62>
+<Cell_63>
+@AutoMLOps.component
+def prepare_sales_table(
+    dataset_id: str,
+    project_id: str,
+    sales_table: str
+):
+    """Custom component that prepares the sales table.
+
+    Args:
+        dataset_id: Destination BigQuery dataset.
+        project_id: The project ID.
+        sales_table: Source BigQuery table.
+    """
+    import datetime
+    
+    import pandas as pd
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    def merge_dataframes(base_df, dates_df, product_id):
+        ''' Zero-fill dates with no product purchases'''
+        dataframe = (
+            pd.merge(
+                base_df.loc[base_df['product_id'] == product_id],
+                dates_df,
+                left_on='date',
+                right_on=0,
+                how='outer',
+            )
+            .sort_values(by=['date'])
+            .drop(columns=0)
+        )  # merging dates dataframe with product_id matching rows
+        dataframe['product_id'] = product_id  # product_id will be null so making it the specified values
+        dataframe.reset_index(inplace=True, drop=True)  # making index to start from 0
+        dataframe = dataframe.fillna(0)  # for sales_count making null values as 0
+        dataframe['sales_count'] = dataframe['sales_count'].astype(
+            'int'
+        )
+        return dataframe
+
+    query = f'''
+    SELECT * FROM {dataset_id}.top_five_products
+    '''
+    query_job = bq_client.query(query)
+    df = query_job.to_dataframe()
+    
+    df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
+    end_time = datetime.datetime.now().strftime('%Y-%m-%d')
+    start_time = '2018-08-14' # min date
+    dates = pd.date_range(start=start_time, end=end_time).to_frame()
+    
+    product_dataframes = []
+    for product_id in df['product_id'].unique():
+        product_dataframes.append(merge_dataframes(df, dates, product_id))
+    
+    full_df = pd.concat(product_dataframes)
+    full_df.reset_index(inplace=True, drop=True)
+
+    job_config = bigquery.LoadJobConfig(
+        schema=[
+            bigquery.SchemaField('product_id', bigquery.enums.SqlTypeNames.INTEGER),
+            bigquery.SchemaField('date', bigquery.enums.SqlTypeNames.DATE),
+            bigquery.SchemaField('sales_count', bigquery.enums.SqlTypeNames.INTEGER),
+        ],
+        write_disposition='WRITE_TRUNCATE'
+    )
+    # save the dataframe to a table in the created dataset
+    job = bq_client.load_table_from_dataframe(
+        full_df,
+        f'{project_id}.{dataset_id}.{sales_table}',
+        job_config=job_config)
+    job.result()
+<\Cell_63>
+<Cell_64>
+@AutoMLOps.component
+def create_training_dataset(
+    dataset_id: str,
+    project_id: str,
+    sales_table: str,
+    year_range: int
+):
+    """Custom component that creates training data, ranging from today to N year(s) ago.
+
+    Args:
+        dataset_id: Destination BigQuery dataset.
+        project_id: The project ID.
+        sales_table: Source BigQuery table.
+        year_range: Number of years to train the model on.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    query = f'''
+    CREATE OR REPLACE TABLE {project_id}.{dataset_id}.training_data AS (
+        SELECT
+            *
+        FROM
+            `{dataset_id}.{sales_table}`
+        WHERE
+            date BETWEEN DATE_ADD(CURRENT_DATE(), INTERVAL -{year_range} YEAR) AND CURRENT_DATE()
+            );
+    '''
+    query_job = bq_client.query(query)
+    print(query_job.result())
+<\Cell_64>
+<Cell_65>
+@AutoMLOps.component
+def train_model(
+    dataset_id: str,
+    model_name: str,
+    model_type: str,
+    project_id: str
+):
+    """Train an ARIMA model on the training dataset.
+
+    Args:
+        dataset_id: Destination BigQuery dataset.
+        model_name: Name for the model.
+        model_type: The column which are the labels.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    query = f'''
+    CREATE OR REPLACE MODEL `{project_id}.{dataset_id}.{model_name}`
+
+    OPTIONS(
+      MODEL_TYPE='{model_type}',
+      TIME_SERIES_TIMESTAMP_COL='date',
+      TIME_SERIES_DATA_COL='sales_count',
+      TIME_SERIES_ID_COL='product_id',
+      SEASONALITIES=['DAILY','WEEKLY','MONTHLY','QUARTERLY','YEARLY'],
+      DATA_FREQUENCY='DAILY',
+      model_registry='vertex_ai') AS
+
+    SELECT
+        date,
+        product_id,
+        sales_count
+    FROM
+      `{dataset_id}.training_data`
+    '''
+    query_job = bq_client.query(query)
+    print(query_job.result())
+<\Cell_65>
+<Cell_66>
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-bigquery', 
+        'pandas',
+        'pyarrow',
+        'db_dtypes'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/evaluate_model.yaml')
+def evaluate_model(
+    dataset_id: str,
+    metrics: Output[Metrics],
+    model_name: str,
+    project_id: str
+):
+    """Evaluate the trained ARIMA model.
+
+    Args:
+        dataset_id: Destination BigQuery dataset.
+        model_name: Name for the model.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    query = f'''
+    SELECT
+      *
+    FROM
+      ML.EVALUATE(MODEL {dataset_id}.{model_name})
+    '''
+    query_job = bq_client.query(query)
+    results = query_job.result().to_dataframe()
+
+    for _, row in results.iterrows():
+        for m in ['log_likelihood', 'AIC', 'variance']:
+            metrics.log_metric(f'''Product id: {row['product_id']} | Metric: {m}''', row[m])
+<\Cell_66>
+<Cell_67>
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-bigquery'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/forecast.yaml')
+def forecast(
+    bq_forecast_table: Output[Dataset],
+    confidence_lvl: float,
+    dashboard: Output[Artifact],
+    dataset_id: str,
+    forecast_horizon: int,
+    project_id: str
+):
+    """Custom component that runs a forecast for a given horizon period.
+
+    Args:
+        bq_forecast_table: Full uri of the BQ table forecast results.
+        confidence_lvl: Required confidence level.
+        dashboard: URL of the Looker dashboard.
+        dataset_id: Destination BigQuery dataset.
+        forecast_horizon: Number of days forward to forecast.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    query = f'''DECLARE HORIZON STRING DEFAULT "{forecast_horizon}";
+    DECLARE CONFIDENCE_LEVEL STRING DEFAULT "{confidence_lvl}";
+
+    EXECUTE IMMEDIATE format("""
+        CREATE OR REPLACE VIEW {dataset_id}.arima_forecast AS (
+        SELECT
+          * , 
+          ROUND(forecast_value) AS forecast_value_rnd,
+          ROUND(forecast_value) - standard_error AS prediction_interval_lower_bound_rnd,
+          ROUND(forecast_value) - standard_error AS confidence_interval_lower_bound_rnd,
+          ROUND(forecast_value) + standard_error AS prediction_interval_upper_bound_rnd,
+          ROUND(forecast_value) + standard_error AS confidence_interval_upper_bound_rnd
+        FROM
+          ML.FORECAST(MODEL {dataset_id}.arima_model,
+                      STRUCT(%s AS horizon,
+                             %s AS confidence_level)
+                     )
+        )
+        """,HORIZON,CONFIDENCE_LEVEL)'''
+    job = bq_client.query(query)
+    bq_forecast_table.uri = f'bq://{project_id}.{dataset_id}.arima_forecast'
+    dashboard.uri = 'https://lookerstudio.google.com/reporting/526d02a9-37f5-404a-87a4-148343e1cc49'
+<\Cell_67>
+<Cell_68>
+@AutoMLOps.pipeline(
+    name='bqml-automlops-retail-forecasting',
+    description='This is an example of retail demand forecasting using AutoMLOps and BQML.')
+def pipeline(confidence_lvl: float,
+             dataset_id: str,
+             forecast_horizon: int,
+             machine_type: str,
+             model_name: str,
+             model_type: str,
+             project_id: str,
+             sales_table: str,
+             year_range: int):
+    
+    prepare_sales_table_task = prepare_sales_table(
+        dataset_id=dataset_id,
+        project_id=project_id,
+        sales_table=sales_table)        
+
+    create_training_dataset_task = create_training_dataset(
+        dataset_id=dataset_id,
+        project_id=project_id,
+        sales_table=sales_table,
+        year_range=year_range).after(prepare_sales_table_task)
+
+    train_model_task = train_model(
+        dataset_id=dataset_id,
+        model_name=model_name,
+        model_type=model_type,
+        project_id=project_id).after(create_training_dataset_task)
+
+    evaluate_model_task = evaluate_model(
+        dataset_id=dataset_id,
+        model_name=model_name,
+        project_id=project_id).after(train_model_task)
+    
+    forecast_task = forecast(
+        confidence_lvl=confidence_lvl,
+        dataset_id=dataset_id,
+        forecast_horizon=forecast_horizon,
+        project_id=project_id).after(evaluate_model_task)
+<\Cell_68>
+<Cell_69>
+pipeline_params = {
+    'confidence_lvl': 0.90,
+    'dataset_id': dataset_id,
+    'forecast_horizon': 90,
+    'machine_type': 'n1-standard-4',
+    'model_name': 'arima_model',
+    'model_type': 'ARIMA_PLUS',
+    'project_id': PROJECT_ID,
+    'sales_table': SALES_TABLE,
+    'year_range': 1
+}
+<\Cell_69>
+<Cell_70>
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=False,
+                   schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)
+<\Cell_70>
+<Cell_71>
+AutoMLOps.go(project_id=PROJECT_ID,
+             pipeline_params=pipeline_params,
+             run_local=False,
+             schedule_pattern='59 11 * * 0'
+)
+<\Cell_71>
+<Cell_72>
+
+<\Cell_72>

@@ -1,0 +1,47 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Creating a DataFrame
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500],
+        'D': [1000, 2000, 3000, 4000, 5000]
+    })
+
+    # Validating the DataFrame
+    def validate_df(df):
+        # Checking if the DataFrame is not empty
+        if df.empty:
+            return "DataFrame is empty"
+
+        # Checking if the DataFrame has a header
+        if df.columns.empty:
+            return "DataFrame has no header"
+
+        # Checking if the DataFrame has the correct number of columns
+        if len(df.columns) != 4:
+            return "DataFrame has the wrong number of columns"
+
+        # Checking if the DataFrame has the correct data types
+        for col in df.columns:
+            if not pd.api.types.is_numeric_dtype(df[col]):
+                return f"Column {col} is not numeric"
+
+        # Checking if the DataFrame has no duplicate rows
+        if df.duplicated().any():
+            return "DataFrame has duplicate rows"
+
+        # Checking if the DataFrame has no missing values
+        if df.isnull().any().any():
+            return "DataFrame has missing values"
+
+        # If all checks pass, the DataFrame is valid
+        return "DataFrame is valid"
+
+    # Testing the function
+    print(validate_df(df))
+    ```
+    This Python code will validate the DataFrame `df`. It checks if the DataFrame is not empty, has a header, has the correct number of columns, and if the data types are numeric. It also checks if the DataFrame has no duplicate rows, no missing values

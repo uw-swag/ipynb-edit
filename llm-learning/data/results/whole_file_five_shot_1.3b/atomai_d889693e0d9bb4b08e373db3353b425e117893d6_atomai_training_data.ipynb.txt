@@ -1,0 +1,50 @@
+```python
+    <Cell_0>
+    %run ../../../common_functions/import_all.py
+
+    from common_functions.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+
+    from sklearn.cluster import KMeans
+    from sklearn.preprocessing import scale
+
+    from common_functions.kmeans_helpers import (retrieve_cluster_points, 
+                                             compute_wcss, 
+                                             compute_gap_statistic, 
+                                             evaluate_gap_statistic_best_k)
+
+    dataset = '../../datasets/oldfaithful.txt'
+
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+    <\Cell_0>
+    <Cell_1>
+    # Let's read the Old Faithful dataset into a Pandas Dataframe, choosing the columns
+
+    data = pd.read_csv(dataset, delimiter=' ')[['eruptions', 'waiting']]
+
+    data.head()
+    <\Cell_1>
+    <Cell_2>
+    scaled_data = scale(data)
+    <\Cell_2>
+    <Cell_3>
+    data.plot.scatter('eruptions', 'waiting')
+    plt.title('Scatter of the data in the "old faithful" dataset')
+    plt.show();
+    <\Cell_3>
+    <Cell_4>
+    thumb_k = np.sqrt(data.shape[0]/2)
+    print(' * Rule of thumb asserts optimal k =', round(thumb_k, 2))
+    <\Cell_4>
+    <Cell_5>
+    k_range = range(1, 21)            # range of K (decide arbitrarily how many Ks to test)
+    inertia_k = dict()                # inertia for each k
+    wcss_k = dict()                   # WCSS for each k
+    p_k = dict()                      # percentage of variance explained for each k
+
+    # Loop over the value of K
+    for k in k_range:
+        print('k = ', k)
+    
+        # Fit

@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Code Update (#534)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    df = pd.read_csv('model.csv')
+    df.head()
+    df.rename(columns={'Unnamed: 0':'id'},inplace=True)
+    df.columns
+    dfc = df.copy()
+    y = dfc['classifier_val']
+    X = dfc.drop(['classifier_val','id'],axis=1)
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler().fit(X_train)
+    X_train = scaler.transform(X_train) 
+    X_test = scaler.transform(X_test) 
+    dfc['classifier_val'].value_counts()
+    from imblearn.combine import SMOTETomek
+    from collections import Counter
+
+    os=SMOTETomek(1)
+    X_train_os,y_train_os=os.fit_sample(X_train,y_train)
+    print("The number of classes before fit {}".format(Counter(y_train)))
+    print("The number of classes after fit {}".format(Counter(y_train_os)))
+
+    X_train = X_train_os
+    y_train = y_train_os
+    from sklearn.ensemble import RandomForestClassifier 
+    rf = RandomForestClassifier()
+    rf.get_params() # hyperParameter list
+    # RandomizedSearchCV for find the most suited model
+    from sklearn.model_selection import RandomizedSearchCV
+    # Number of trees in random forest
+    n_estimators = [int(x) for

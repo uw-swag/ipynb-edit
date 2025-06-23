@@ -1,0 +1,21 @@
+```python
+    from sklearn.linear_model import LogisticRegression
+
+    # Create a Logistic Regression object
+    logreg = LogisticRegression(C=1e9, solver='liblinear')
+
+    # Train the model
+    logreg.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = logreg.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+    # Model Precision
+    print("Precision:",metrics.precision_score(y_test, y_pred))
+
+    # Model Recall
+    print("Recall:",metrics.recall_score(y_test, y_pred))
+    ```

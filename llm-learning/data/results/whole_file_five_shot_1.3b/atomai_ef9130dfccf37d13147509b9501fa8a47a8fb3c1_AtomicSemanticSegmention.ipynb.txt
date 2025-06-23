@@ -1,0 +1,42 @@
+```
+    Commit Message: "Update download links"
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install git+https://github.com/pycroscopy/atomai # install the latest version from source
+<\Cell_0>
+<Cell_1>
+import atomai as aoi
+import numpy as np
+import matplotlib.pyplot as plt
+<\Cell_1>
+<Cell_2>
+download_link1 =  'https://www.dropbox.com/s/q961z099trfqioj/ferroics-exp-small-m.npz?dl=0'
+download_link2 =  'https://www.dropbox.com/s/w7j12xchjd0at77/lbfo_expdata.npy?dl=0'
+
+!wget -q $download_link1 -O 'training_data.npy'
+!wget -q $download_link2 -O 'validation_data.npy'
+
+# Load train/test data (this is a simple dataset generated just from a single image)
+dataset = np.load('training_data.npy')
+images = dataset['X_train']
+labels = dataset['y_train']
+images_test = dataset['X_test']
+labels_test = dataset['y_test']
+# Load validation data (data from different experiment)
+expdata = np.load("validation_data.npy")
+<\Cell_2>
+<Cell_3>
+print(images.shape, labels.shape)
+print(images_test.shape, labels_test.shape)
+<\Cell_3>
+<Cell_4>
+n = 5 # number of images to plot
+
+n = n + 1
+fig = plt.figure( figsize=(30, 8))
+for i in range(1, n):   
+    ax = fig.add_subplot(2, n, i)
+    ax.imshow(images[i-1,0,:,:], cmap='gray')
+    ax.set_title('Augmented image ' + str(i))
+    ax.grid(alpha = 0.5)

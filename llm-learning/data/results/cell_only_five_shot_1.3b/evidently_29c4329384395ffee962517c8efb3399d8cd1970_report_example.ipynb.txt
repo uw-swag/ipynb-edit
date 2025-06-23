@@ -1,0 +1,45 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from evidently.plotting import Plot
+
+    # Create a plot object
+    plot = Plot(metrics=[DataDriftMetrics()])
+
+    # Generate a plot
+    plot.run(reference_data=ref, current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+
+    # Show the plot
+    plt.show()
+
+    # Create a heatmap
+    sns.heatmap(curr.iloc[:2000, 3:5].corr(), annot=True)
+    plt.show()
+
+    # Create a scatter plot
+    sns.scatterplot(x='education-num', y='preds', hue='target', data=curr.iloc[:2000])
+    plt.show()
+
+    # Create a histogram
+    sns.histplot(data=curr.iloc[:2000, 12], bins=20)
+    plt.show()
+
+    # Create a bar plot
+    sns.countplot(x='education-num', data=curr.iloc[:2000])
+    plt.show()
+
+    # Create a box plot
+    sns.boxplot(x='education-num', y='preds', data=curr.iloc[:2000])
+    plt.show()
+
+    # Create a violin plot
+    sns.violinplot(x='education-num', y='preds', data=curr.iloc[:2000])
+    plt.show()
+
+    # Create a line plot
+    sns.lineplot(x='education-num', y='preds', data=curr.iloc[:2000])
+    plt.show()
+
+    # Create a bar plot
+    sns.countplot(x='education-num', hue='target', data=curr.iloc[:2000])
+    plt.show

@@ -1,0 +1,40 @@
+```python
+    #load data
+content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+#set column mapping for Evidently Profile
+data_columns = ColumnMapping()
+data_columns.numerical_features = ['weathersit', 'temp', 'atemp', 'hum', 'windspeed']
+data_columns.categorical_features = ['holiday', 'workingday']
+
+#log into MLflow
+client = MlflowClient()
+
+#set experiment
+mlflow.set_experiment('Data Drift Evaluation with Evidently')
+
+#start new run
+for date in experiment_batches:
+    with mlflow.start_run() as run: #inside brackets run_name='test'
+        
+        # Log parameters
+        mlflow.log_param("begin", date[0])
+        mlflow.log_param("end", date[1])
+
+        # Log metrics
+        metrics = eval_drift(raw_data.loc[reference_dates[0]:reference_dates[1]], 
+                             raw_data.loc[date[0]:date[1]], 
+                             column_mapping=data_columns)
+        for feature in metrics:
+            mlflow.log_metric(feature[0], round(feature[1], 3))
+
+        print(run.info)
+
+    '''
+
+    ### Explanation:
+    The code is a Python script that uses the MLflow library to log metrics and parameters for a machine learning experiment. The script loads a dataset from a UCI Machine Learning Repository, applies a column mapping to the data, and then evaluates data drift using the `eval_drift` function. The script also logs the metrics and parameters for each batch of dates.
+
+    The `eval_drift` function is a custom function that

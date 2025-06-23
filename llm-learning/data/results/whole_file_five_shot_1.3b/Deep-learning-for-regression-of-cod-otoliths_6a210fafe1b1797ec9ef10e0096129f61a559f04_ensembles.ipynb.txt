@@ -1,0 +1,53 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Summary statistics
+    print(df.describe())
+
+    # Correlation matrix
+    corr = df.corr()
+    sns.heatmap(corr, annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Boxplot for each feature
+    df.boxplot(rot=90)
+    plt.show()
+
+    # Histogram for each feature
+    df.hist(bins=50, figsize=(20,15))
+    plt.show()
+
+    # Standardize the data
+    scaler = StandardScaler()
+    df_scaled = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    # PCA
+    pca = PCA(n_components=2)
+    principalComponents = pca.fit_transform(df_scaled)
+    principalDf = pd.DataFrame(data = principalComponents, columns = ['principal component 1', 'principal component 2'])
+
+    # KMeans Clustering
+    kmeans = KMeans(n_clusters=3, random_state=0)
+    kmeans.fit(principalDf)
+    labels = kmeans.labels_
+
+    # Adding labels to the dataframe
+    principalDf['cluster'] = labels
+
+    # Visualizing the clusters
+    plt.scatter(principalDf['principal component 1'], principalDf['principal component 2'], c=principalDf['cluster'], cmap='viridis')
+    plt.xlabel('Principal Component 1')
+   

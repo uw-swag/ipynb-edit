@@ -1,0 +1,11 @@
+```
+    def get_learner(databunch):
+        learner = cnn_learner(databunch, models.resnet34, 
+                              pretrained=True, ps=ps, wd=1e-1, 
+                              metrics=accuracy, callback_fns=ShowGraph)
+        learner.unfreeze()
+        return learner
+
+    ```
+
+    In the code above, `ps` is a parameter that is not defined in the original code. It seems to be a parameter for the `Pretrained` class in the fast.ai library. The `ps` parameter is used to specify the proportion of the pretrained model to use. The `Pretrained` class is used to load a pre-trained model. The `ps` parameter is used to specify the proportion of the pretrained model to use.

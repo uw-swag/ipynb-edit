@@ -1,0 +1,39 @@
+```python
+    import numpy as np
+
+    # Forward pass
+    def forward_pass(input_data, weights, bias):
+        z = np.dot(input_data, weights) + bias
+        a = np.tanh(z)
+        return a
+
+    # Backward pass
+    def backprop(input_data, weights, bias, target):
+        m = input_data.shape[0]
+
+        # Compute gradients
+        dz = (1 - np.power(forward_pass(input_data, weights, bias), 2))
+        da = dz * (1 - np.power(forward_pass(input_data, weights, bias), 2))
+
+        # Compute gradients for weights and bias
+        dweights = np.dot(input_data.T, da) / m
+        dbias = np.sum(da, axis=0) / m
+
+        return dweights, dbias
+
+    # Initialize weights and bias
+    weights = np.random.randn(2, 1)
+    bias = np.random.randn(1)
+
+    # Training data
+    input_data = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    target_output = np.array([[0], [1], [1], [0]])
+
+    # Training loop
+    for epoch in range(10000):
+        dweights, dbias = backprop(input_data, weights, bias, target_output)
+        weights -= dweights
+        bias -= dbias
+
+    print(weights, bias)
+    ```

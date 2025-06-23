@@ -1,0 +1,29 @@
+```python
+    # encode car as 0 and truck as 1
+    y = y.replace(['car', 'truck'], [0, 1])
+
+    # define X and y
+    X = df.drop('type', axis=1)
+    y = df['type']
+
+    # instantiate a DecisionTreeRegressor (with random_state=1)
+    dt = DecisionTreeRegressor(random_state=1)
+
+    # use leave-one-out cross-validation (LOOCV) to estimate the RMSE for this model
+    scores = cross_val_score(dt, X, y, cv=LOOCV)
+    print("RMSE: %f" % np.sqrt(np.mean(scores)))
+
+    # read the testing data
+    X_test = pd.read_csv('test.csv')
+
+    # use fitted model to make predictions on testing data
+    y_pred = dt.predict(X_test)
+
+    # calculate RMSE
+    rmse = np.sqrt(mean_squared_error(y_test, y_pred))
+    print("RMSE: %f" % rmse)
+
+    # calculate RMSE for your own tree!
+    # you can replace the code above with your own tree model
+    # and calculate the RMSE as above
+    ```

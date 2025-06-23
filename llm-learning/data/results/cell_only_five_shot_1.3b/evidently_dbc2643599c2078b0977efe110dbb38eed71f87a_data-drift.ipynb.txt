@@ -1,0 +1,44 @@
+```python
+    import mlflow
+    import mlflow.sklearn
+
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+    # Create MLflow tracking server
+    mlflow.start_run()
+
+    # Create a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100)
+
+    # Train the model
+    clf.fit(X_train, y_train)
+
+    # Evaluate the model
+    mlflow.log_metric("accuracy", clf.score(X_test, y_test))
+
+    # Log the model
+    mlflow.sklearn.log_model(clf, "model")
+
+    # End the run
+    mlflow.end_run()
+    ```
+
+    This script uses the MLflow library to log metrics, parameters, and artifacts during the model training and evaluation process. The script also uses the `mlflow.sklearn.log_model` function to log the trained model.
+
+    Please note that you need to have the MLflow installed in your environment. If not, you can install it using pip:
+
+    ```bash
+    pip install mlflow
+    ```
+
+    Also, please note that the MLflow tracking server is started in the script. If you want to start it outside of the script, you can use the `mlflow.start_run` function.

@@ -1,0 +1,20 @@
+```python
+    # solution using recursion
+    def flat_list(a_list):
+        # this stores the new, flattened list
+        flattened_list = []
+        # go through all elements of the given list (if any)
+        for elem in a_list:
+            # if the element is a list itself, we need to flatten it
+            # by calling flat_list again (this is the recursive part)
+            if type(elem) == list:
+                # as flat_list always returns as list (might be empty)
+                # we add these elements to our flattened list by extending it
+                flattened_list.extend(flat_list(elem))
+            else:
+                # if elem is a normal (non-list) element, we just add it to
+                # the flattened list normally with append
+                flattened_list.append(elem)
+        return flattened_list
+    ```
+    This function uses recursion to flatten a nested list. It checks if an element is a list, and if it is, it calls itself to flatten the sublist. If the element is not a list, it simply appends the element to the flattened list.

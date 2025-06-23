@@ -1,0 +1,20 @@
+
+The code you provided is a part of a Jupyter notebook and it's about removing a label from a dataset. The label_name is a parameter that is used in the Dataset constructor to specify the name of the label column. If you want to remove it, you can simply remove the label_name parameter from the Dataset constructor. Here's how you can do it:
+
+```python
+from deepchecks import Dataset
+
+# Remove label_name from dataset constructor
+ds_train = Dataset(df_train.drop(label_col, axis=1), label_name=None, cat_features=[], set_index_from_dataframe_index=False)
+ds_test =  Dataset(df_test.drop(label_col, axis=1), label_name=None, cat_features=[])
+```
+
+In this code, the label_name parameter is set to None, which means that the label column will not be included in the dataset. The cat_features parameter is also set to an empty list, which means that the categorical features will not be included in the dataset.
+
+After these changes, you can run the suite as before:
+
+```python
+customized_suite.run(ds_train, ds_test, rf_clf)
+```
+
+This will run the suite with the updated dataset, and the suite will not include the label column in the performance report.

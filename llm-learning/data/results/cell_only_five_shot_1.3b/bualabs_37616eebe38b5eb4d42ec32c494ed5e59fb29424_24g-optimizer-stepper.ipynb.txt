@@ -1,0 +1,23 @@
+```python
+    from fastai import *
+    from fastai.vision import *
+    from fastai.metrics import accuracy
+
+    path = untar_data(URLs.PETS)
+    path_images = path/'images'
+    filenames = get_image_files(path_images)
+    batchsize = 64
+    np.random.seed(0)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+    databunch = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=224, bs=batchsize).normalize(imagenet_stats)
+    learner = cnn_learner(databunch, models.resnet34, metrics=accuracy)
+    learner.unfreeze()
+    learner.lr_find()
+    learner.recorder.plot()
+    learner.fit_one_cycle(1, max_lr=slice(1e-6,1e-4))
+    ```
+
+    This code is a base class for an optimizer in the fastai library. The optimizer is used to adjust the learning rate during the training process. The `lr_find` method is used to find the optimal learning rate, and the `fit_one_cycle` method is used to train the model.

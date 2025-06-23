@@ -1,0 +1,34 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from datetime import datetime, timedelta
+
+    # Assuming you have a pandas DataFrame df with a 'date' column
+    df['date'] = pd.to_datetime(df['date'])
+
+    # Create a new column 'time_of_day' to extract the time of day from the 'date' column
+    df['time_of_day'] = df['date'].dt.hour
+
+    # Create a new column 'time_of_week' to extract the time of week from the 'date' column
+    df['time_of_week'] = df['date'].dt.weekday()
+
+    # Create a new column 'time_of_month' to extract the time of month from the 'date' column
+    df['time_of_month'] = df['date'].dt.month
+
+    # Create a new column 'time_of_year' to extract the time of year from the 'date' column
+    df['time_of_year'] = df['date'].dt.year
+
+    # Create a new column 'time_of_decade' to extract the time of decade from the 'date' column
+    df['time_of_decade'] = df['date'].dt.year // 10 * 10
+
+    # Create a new column 'time_of_century' to extract the time of century from the 'date' column
+    df['time_of_century'] = df['date'].dt.year // 100 * 100
+
+    # Create a new column 'time_of_millennium' to extract the time of millennium from the 'date' column
+    df['time_of_millennium'] = df['date'].dt.year // 1000 * 1000
+
+    # Create a new column 'time_of_birthday' to extract the time of birthday from the 'date' column
+    df['time_of_birthday'] = (df['date'].dt.month == df['date'].dt.day)
+
+    # Create a new column 'time_of_holiday' to extract the time of holiday from the 'date' column
+    df['time

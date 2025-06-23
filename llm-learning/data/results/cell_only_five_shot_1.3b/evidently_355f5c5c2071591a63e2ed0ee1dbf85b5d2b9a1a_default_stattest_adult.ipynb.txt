@@ -1,0 +1,32 @@
+
+    Here is the updated code with the Jupyter notebook metadata moved to the front matter of the cells. This is to ensure that the notebook is interpreted correctly by the Jupyter notebook server.
+
+    ```python
+    %matplotlib inline
+    import pandas as pd
+    import numpy as np
+    from sklearn.datasets import fetch_openml
+    from evidently import ColumnMapping
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs import DataDriftTab
+
+    # Your original code here
+
+    data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+    data_drift_dashboard.calculate(df.sample(1000, random_state=0), 
+                                   df.sample(1000, random_state=10), column_mapping=column_mapping)
+    data_drift_dashboard.show()
+
+    data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+    data_drift_dashboard.calculate(df[df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=0), 
+                                   df[~df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=10), column_mapping=column_mapping)
+    data_drift_dashboard.show()
+
+    data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+    data_drift_dashboard.calculate(df.sample(30000, random_state=0), 
+                                   df.sample(30000, random_state=10), column_mapping=column_mapping)
+    data_drift_dashboard.show()
+
+    data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+    data_drift_dashboard.calculate(df[df.relationship.isin(['Husband', 'Wife'])].sample(30000, random_state=0, replace=True), 
+                                   df[~

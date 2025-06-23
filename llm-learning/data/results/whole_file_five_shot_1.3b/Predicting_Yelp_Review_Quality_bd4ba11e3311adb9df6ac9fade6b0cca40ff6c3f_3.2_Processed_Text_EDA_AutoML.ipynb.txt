@@ -1,0 +1,48 @@
+```python
+    # Import necessary libraries
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.stem import WordNetLemmatizer
+    from gensim.models import Word2Vec
+    from nltk.tokenize import word_tokenize
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import LatentDirichletAllocation
+    import re
+    import pandas as pd
+    import numpy as np
+    import boto3
+
+    # Download necessary nltk data
+    nltk.download('punkt')
+    nltk.download('wordnet')
+    nltk.download('stopwords')
+
+    # Preprocess the text data
+    def preprocess_text(text):
+        # Lowercase
+        text = text.lower()
+        # Remove punctuation
+        text = re.sub(r'[^\w\s]', '', text)
+        # Remove stopwords
+        stop_words = set(stopwords.words('english'))
+        text = ' '.join([word for word in word_tokenize(text) if word not in stop_words])
+        # Lemmatize
+        lemmatizer = WordNetLemmatizer()
+        text = ' '.join([lemmatizer.lemmatize(word) for word in word_tokenize(text)])
+        return text
+
+    # Process the text data
+    processed_text = df['processed_text'].apply(preprocess_text)
+
+    # Create a TF-IDF vectorizer
+    vectorizer = TfidfVectorizer(max_features=1000)
+    X = vectorizer.fit_transform(processed_text).toarray()
+
+    # Use gensim's Word2Vec to create word embeddings
+    word2vec = Word2Vec(processed_text, min_count=1)
+
+    # Use sklearn's LatentDirichletAllocation to create topic models
+    lda = LatentDirichletAllocation(n_components=5)
+    lda.fit(X)
+
+    # Save the models

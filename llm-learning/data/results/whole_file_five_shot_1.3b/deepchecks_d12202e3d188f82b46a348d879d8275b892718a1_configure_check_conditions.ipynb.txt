@@ -1,0 +1,33 @@
+```
+    # Fixes to dataset creation logic (#279)
+
+    from deepchecks.checks import DatasetsSizeComparison
+
+    check = DatasetsSizeComparison().add_condition_test_size_not_smaller_than(1000)
+    check
+    ```
+
+    # Fixes to dataset creation logic (#279)
+
+    from deepchecks import Dataset
+    import pandas as pd
+
+    # Dummy data
+    train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+    test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+    result = check.conditions_decision(check.run(train_dataset, test_dataset))
+    result.value
+    ```
+
+    # Fixes to dataset creation logic (#279)
+
+    from deepchecks import Suite
+
+    # Using suite to run check & condition
+    suite = Suite('Suite for Condition',
+        check
+    )
+
+    suite.run(train_dataset, test_dataset)
+    ```

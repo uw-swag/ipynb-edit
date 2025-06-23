@@ -1,0 +1,32 @@
+```python
+    from nltk.tokenize import word_tokenize
+    from nltk.tag import pos_tag
+
+    # Tokenize the sentences
+    sent_tokenized = [word_tokenize(sent) for sent in sents]
+
+    # Tag the sentences
+    pos_tag_sents = [pos_tag(sent) for sent in sent_tokenized]
+
+    # Print the tagged sentences
+    for i, sent in enumerate(pos_tag_sents):
+        print(f"Sentence {i+1}: {sent}")
+    ```
+
+    This code first tokenizes the sentences using the `word_tokenize` function from the NLTK library, which splits the sentences into words. Then, it tags the sentences using the `pos_tag` function from the NLTK library, which assigns part-of-speech tags to the words. Finally, it prints the tagged sentences.
+
+    Please note that you need to have the NLTK library installed in your Python environment. You can install it using pip:
+
+    ```
+    pip install nltk
+    ```
+
+    Also, you need to download the Punkt tokenizer and the averaged_perceptron_tagger from NLTK's downloadable corpora. You can do this with the following commands:
+
+    ```python
+    import nltk
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    ```
+
+    Please replace `sents` with your actual sentences.

@@ -1,0 +1,20 @@
+```python
+    import deepchecks
+from deepchecks.checks import StringMismatch
+import pandas as pd
+
+data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+df = pd.DataFrame(data=data)
+
+# Run the StringMismatch check
+r = StringMismatch().run(df)
+
+# Add conditions to the check
+c = StringMismatch().add_condition_no_variants()
+
+# Decide the conditions
+decision = c.conditions_decision(r)
+
+# Print the decision
+print(decision)
+```

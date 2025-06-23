@@ -1,0 +1,14 @@
+```python
+    # Define the column mapping
+    column_mapping = {
+        "column1": "new_column1",
+        "column2": "new_column2",
+        # Add more columns as needed
+    }
+
+    # Refactor the code to use the column mapping
+    bcancer_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab, CatTargetDriftTab])
+    bcancer_data_and_target_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=column_mapping)
+    ```
+
+    In the refactored code, we have renamed the columns in the `column_mapping` dictionary to `new_column1` and `new_column2`. This is a simple example of how to refactor code to use a new set of column names. In a real-world application, you would likely use a more sophisticated method to map columns, such as a function that takes a list of old column names and returns a list of new column names.

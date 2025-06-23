@@ -1,0 +1,23 @@
+```python
+    # Add check context (#700)
+    # Check if the context is available
+    if not hasattr(context, 'check_context'):
+        raise ValueError("The context does not have a 'check_context' attribute.")
+
+    # Check if the context is a dictionary
+    if not isinstance(context, dict):
+        raise TypeError("The context should be a dictionary.")
+
+    # Check if the context contains a key 'check_context'
+    if 'check_context' not in context:
+        raise KeyError("The context does not contain a 'check_context' key.")
+
+    # Check if the value of the 'check_context' key is a function
+    if not callable(context['check_context']):
+        raise TypeError("The value of the 'check_context' key should be a function.")
+
+    # Call the function
+    context['check_context']()
+    ```
+
+    This code checks if the context contains a 'check_context' key and if its value is a function. If not, it raises an error.

@@ -1,0 +1,45 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.feature_selection import RFE
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Data preprocessing
+    df.dropna(inplace=True)
+    df.drop(columns=['InvoiceNo'], axis=1, inplace=True)
+    df['Date'] = pd.to_datetime(df['Date'])
+    df['Month'] = df['Date'].dt.month
+    df['Year'] = df['Date'].dt.year
+    df.drop(columns=['Date'], axis=1, inplace=True)
+
+    # Feature Engineering
+    df['TotalSpend'] = df['Quantity'] * df['UnitPrice']
+
+    # Data Splitting
+    X = df.drop(columns=['TotalSpend', 'Quantity', 'UnitPrice'])
+    y = df['TotalSpend']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature Selection
+    rfe = RFE(estimator=GradientBoostingClassifier(), n_features_to_select=5)
+    rfe = rfe.fit(X_train, y_train)
+
+    # Model Training
+    model = GradientBoostingClassifier()
+    model.fit(X_train, y_train)
+
+    # Model Evaluation
+    y_pred = model.predict(X_test)
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Feature Importance
+    importance = pd.DataFrame(rfe.support

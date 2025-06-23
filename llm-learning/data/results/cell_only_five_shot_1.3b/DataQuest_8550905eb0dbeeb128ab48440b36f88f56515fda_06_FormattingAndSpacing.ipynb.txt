@@ -1,0 +1,18 @@
+```python
+    import keras
+    from keras.models import Sequential
+    from keras.layers import Dense
+
+    # Sequential model
+    model = Sequential()
+    model.add(Dense(64, activation='relu', input_dim=100))
+    model.add(Dense(10, activation='softmax'))
+    model.compile(loss='categorical_crossentropy',
+                  optimizer='sgd',
+                  metrics=['accuracy'])
+
+    # Fit the model
+    data = ... # your data here
+    labels = ... # your labels here
+    model.fit(data, labels, epochs=5, batch_size=32)
+    ```

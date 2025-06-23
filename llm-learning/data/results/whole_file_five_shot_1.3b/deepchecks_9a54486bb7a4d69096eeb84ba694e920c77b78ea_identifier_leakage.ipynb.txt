@@ -1,0 +1,25 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+
+    np.random.seed(42)
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.05 + df['x2']
+    df['x5'] = df['x2']*121 + 0.01 * df['x1']
+    df['label'] = df['x5'].apply(lambda x: 0 if x < 0 else 1)
+
+    dataset = Dataset(df, label='label', index_name='x1', datetime_name='x2')
+
+    IdentifierLeakage().run(dataset)
+
+    my_check = IdentifierLeakage(ppscore_params={'sample': 10})
+    my_check.run(dataset=dataset)
+    ```
+
+    The code above is a simple example of how to use the IdentifierLeakage check in Deepchecks. The first cell generates a random DataFrame with some random data, and then creates a Dataset object from it. The second cell runs the IdentifierLeakage check on the dataset. The third cell runs the IdentifierLeakage check with a specific parameters.
+
+    Please note that the IdentifierLeakage check is a part of the methodology module in Deepchecks, and it's not a standalone check. It's a part of the Deepchecks framework and should be used in conjunction with other checks.

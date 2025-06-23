@@ -1,0 +1,27 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "removing useless git LFS"
+    Original Code Cells:
+    '''
+    import os
+    import git
+    import pandas as pd
+
+    repo = git.Repo(".", search_parent_directories=True)
+    lfs_files = [f for f in repo.lfs_objects]
+
+    for file in lfs_files:
+        os.remove(file.path)
+    ```
+    '''
+    ]
+
+    ### Response:
+    The code provided is used to remove the large file storage (LFS) from a git repository. It first fetches all the large file storage objects in the repository, then it removes these files from the repository.
+
+    However, it's important to note that removing LFS files is not recommended as it can lead to data loss. It's better to use LFS only if you're using Git LFS on a specific project.
+
+    Also, the code provided is a simple example and might not work in all scenarios. It assumes that the repository is located in the same directory as the script, and that the repository is a Git repository.
+
+    If you're using a different method to manage large files, you might need to adjust the code to fit your specific needs.

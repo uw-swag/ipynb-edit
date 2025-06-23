@@ -1,0 +1,43 @@
+
+    The commit message "Update the mxnet-native version" is updating the mxnet-native version. This could be a part of a larger project or a specific task related to mxnet-native.
+
+    The original code cells are:
+
+    '''
+    <Cell_0>
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.7.0-SNAPSHOT
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    %maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+    <\Cell_0>
+    <Cell_1>
+    %load ../utils/plot-utils.ipynb
+    <\Cell_1>
+    <Cell_2>
+    import ai.djl.*;
+    import ai.djl.engine.*;
+    import ai.djl.ndarray.*;
+    import ai.djl.nn.*;
+    import ai.djl.training.*;
+    <\Cell_2>
+    <Cell_3>
+    NDManager manager = NDManager.newBaseManager();
+    NDArray x = manager.arange(-8.0f, 8.0f, 0.1f);
+    x.attachGradient();
+    NDArray y = Activation.relu(x);
+
+    // Converting the data into float arrays to render them in a plot.
+    int xLength = (int) x.size();
+    int yLength = (int) y.size();
+
+    float[] X = new float[xLength];
+    float[] Y = new float[yLength];
+
+    X = x.toFloatArray();
+    Y = y.toFloatArray();
+
+    Table data = Table.create("Data").addColumns(
+        FloatColumn

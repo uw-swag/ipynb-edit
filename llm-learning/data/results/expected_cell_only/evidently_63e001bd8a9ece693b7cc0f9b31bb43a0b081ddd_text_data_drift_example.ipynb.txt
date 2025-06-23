@@ -1,0 +1,171 @@
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+from evidently.options.data_drift import DataDriftOptions
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import DataDriftTab
+# IMDB reviews
+
+imdb_5k_data = pd.read_csv("https://raw.githubusercontent.com/SangamSwadiK/test_dataset/main/cleaned_imdb_data_5000_rows.csv")
+imdb_5k_data.head()
+# amazon product review data of Gen3EcoDot 
+
+eco_dot_data = pd.read_csv("https://raw.githubusercontent.com/SangamSwadiK/test_dataset/main/eco_data.csv", squeeze=True)
+eco_dot_data.head()
+## Run this to experiment with the dataset with various ways of embedding (average over records / sum of records etc ...)
+# !wget http://nlp.stanford.edu/data/glove.6B.zip -P /content/test/
+# !unzip  /content/test/glove.6B.zip -d /content/test/
+# Load glove vector from vector file
+def load_glove_model(File):
+  """ Loads the keyed vectors from a given text file
+  Args:
+    File: text file which contains the vectors
+  Returns:
+    Dictionary: map containing the key:vector pair
+  """
+  glove_model = {}
+  with open(File,'r') as f:
+      for line in f:
+          split_line = line.split()
+          word = split_line[0]
+          embedding = np.array(split_line[1:], dtype=np.float64)
+          glove_model[word] = embedding
+      return glove_model
+# We load 50 dimension vector here
+glove_vec = load_glove_model("/content/test/glove.6B.50d.txt")
+## Perform train test split on imdb data
+train_df, test_df, y_train, y_test = train_test_split(imdb_5k_data.review, imdb_5k_data.sentiment, test_size=0.50, random_state=42)
+def get_sentence_vector(dataframe):
+  """Get a sentece vector for each text/record by averaging based on counts for each text record
+  Args:
+    dataframe: the dataframe containing the text data
+  returns:
+    array: a matrix of sentence vectors for each record in the dataframe
+  """
+  tmp_arr = []
+  for row in dataframe.values:
+    tmp = np.zeros(50,)
+    for word in row:
+      try:
+        tmp += glove_vec[word]
+      except KeyError:
+        tmp+= np.zeros(50,)
+    tmp = tmp/len(row.split(" "))
+    tmp_arr.append(tmp.tolist())
+
+  return tmp_arr
+train_matrix =  get_sentence_vector(train_df)
+train_df_converted = pd.DataFrame(np.array(train_matrix), index = train_df.index)
+train_df_converted.head()
+## Get the sentence vectors for test dataframe
+test_matrix =  get_sentence_vector(test_df)
+test_df_converted = pd.DataFrame(np.array(test_matrix), index = test_df.index)
+test_df_converted.head()
+# Get sentence vector for echo dot
+eco_dot_matrix = get_sentence_vector(eco_dot_data)
+ecodot_review_df_converted = pd.DataFrame(np.array(eco_dot_matrix), index = eco_dot_data.index)
+ecodot_review_df_converted.head()
+# Data Drift between imdb5k train and test 
+options = DataDriftOptions(
+  num_features_stattest ="wasserstein"
+) 
+
+data_drift = TestSuite(tests=[
+   TestNumberOfDriftedColumns(options = options),
+   TestShareOfDriftedColumns(options = options)
+])
+
+
+data_drift.run(
+               reference_data = train_df_converted, 
+               current_data = test_df_converted
+               )
+data_drift
+#Data Drift dashboard between train and test split
+
+imdb_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1)])
+
+imdb_data_drift_dashboard.calculate(
+                                     reference_data = train_df_converted, 
+                                     current_data = test_df_converted
+                                    )
+imdb_data_drift_dashboard.show()
+# Data Drift between imdb5k train and test 
+options = DataDriftOptions(
+  num_features_stattest ="wasserstein"
+) 
+
+data_drift = TestSuite(tests=[
+   TestNumberOfDriftedColumns(options = options),
+   TestShareOfDriftedColumns(options = options)
+])
+
+
+data_drift.run(
+               reference_data = train_df_converted, 
+               current_data = test_df_converted.loc[y_test[ y_test == 'positive'].index.tolist()]
+               )
+data_drift
+
+imdb_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1)])
+
+imdb_data_drift_dashboard.calculate(
+                                     reference_data = train_df_converted, 
+                                     current_data = test_df_converted.loc[y_test[ y_test == 'positive'].index.tolist()]
+                                    )
+imdb_data_drift_dashboard.show()
+# The current batch  has only records with only positive sentiment.
+# Here we can see that few embedding features have drifted out of 50.
+# Therefore even though its from the same dataset, we can detect drift based on some threshold (eg: 50% of embedding features = 25 features, if they have drifted)
+# Data Drift between imdb5k train Eco-dot
+
+options = DataDriftOptions(
+  num_features_stattest ="wasserstein"
+) 
+
+data_drift = TestSuite(tests=[
+   TestNumberOfDriftedColumns(options = options),
+   TestShareOfDriftedColumns(options = options)
+])
+ 
+data_drift.run(
+               reference_data = train_df_converted, 
+               current_data = ecodot_review_df_converted
+               )
+data_drift
+#Data Drift dashboard between IMDB train and Eco-dot reviews
+
+imdb_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1)])
+
+imdb_data_drift_dashboard.calculate(
+                                     reference_data = train_df_converted, 
+                                     current_data = ecodot_review_df_converted
+                                    )
+imdb_data_drift_dashboard.show()
+## It can be seen from the above that all 50 features from the embedding are of different distributions
+## Hence, drift is detected
+#Sample histogram plot for a drifted feature
+f = plt.figure(figsize=(10,5))
+ax1 = f.add_subplot(121)
+ax2 = f.add_subplot(122)
+ax1.hist(train_df_converted[43].tolist(), edgecolor = 'k')
+ax2.hist(ecodot_review_df_converted[43].tolist(), edgecolor = 'k')
+ax1.set_title("Feature 43 from training data")
+ax2.set_title("Feature 43 from unseen data")
+ax1.set_xlabel('Feature 43')
+ax1.set_ylabel('distribution/ frequency')
+ax2.set_xlabel('Feature 43')
+ax2.set_ylabel('distribution/ frequency')
+plt.show()
+### Datasets Credits:
+### IMDB and echodot reviews : https://www.kaggle.com/

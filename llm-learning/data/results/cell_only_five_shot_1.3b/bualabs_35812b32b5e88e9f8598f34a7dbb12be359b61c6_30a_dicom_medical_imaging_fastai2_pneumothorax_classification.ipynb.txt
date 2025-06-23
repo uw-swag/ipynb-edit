@@ -1,0 +1,13 @@
+```python
+    # Adding new training loop to compare normal and weighted loss function
+    # In this example, we'll use a simple training loop where we train a model with a normal loss function and a weighted loss function
+    # The weights are determined by the number of times the model predicts the correct class
+
+    # Normal Loss Function
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Weighted Loss Function
+    weights = {0: 1, 1: 2}  # Weights for class 0 and class 1
+    model.compile(loss=weighted_loss, optimizer='adam', metrics=['accuracy'], loss_weights=weights)
+    ```
+    This is a simple example and in a real-world scenario, you would likely use a more sophisticated method to determine the weights.

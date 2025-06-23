@@ -1,0 +1,32 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.impute import SimpleImputer
+
+    # Create a sample DataFrame
+    df = pd.DataFrame({
+        'A': [1, 2, np.nan, 4, 5],
+        'B': [np.nan, 2, 3, np.nan, 5],
+        'C': [1, 2, 3, 4, np.nan]
+    })
+
+    # Create an instance of the SimpleImputer class
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+
+    # Fit and transform the DataFrame
+    df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Print the imputed DataFrame
+    print(df_imputed)
+    ```
+
+    The above code will replace the null values in the DataFrame with the mean of the column.
+
+    Please note that the `SimpleImputer` class from `sklearn.impute` library is used to handle missing values. The `missing_values` parameter is set to `np.nan` to indicate that the missing values are represented as `NaN` in the DataFrame. The `strategy` parameter is set to `'mean'` to indicate that the mean of the column values should be used to fill the missing values.
+
+    The `fit_transform` method is used to fit the imputer and transform the DataFrame, respectively. The result is a new DataFrame where the missing values have been replaced with the mean of the column.
+
+    The `pd.DataFrame` function is used to create a new DataFrame from the imputed values. The `columns` parameter is set to `df.columns` to ensure that the column names of the original DataFrame are preserved in the new DataFrame.
+
+    Finally, the imputed DataFrame is printed to the console.

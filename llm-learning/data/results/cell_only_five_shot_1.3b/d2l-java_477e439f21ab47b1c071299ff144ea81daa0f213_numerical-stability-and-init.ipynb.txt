@@ -1,0 +1,57 @@
+```python
+    import djl
+    from djl.nn import Hyperparameter
+    from djl.nn import Module
+    from djl.nn import Sequential
+    from djl.training import Trainer, TrainingConfig
+    from djl.training.loss import Loss
+    from djl.training.optimizer import Optimizer
+
+    # Upgrade to djl 0.13.0
+    # This is a breaking change from djl 0.12.0.
+    # Please check the release notes for more details: https://docs.djl.ai/0.13/upgrade_0.13.0/
+
+    # Create a new instance of the Trainer
+    trainer = Trainer(
+        Module(
+            Sequential(
+                Hyperparameter("batch_size", "int", 32),
+                Hyperparameter("learning_rate", "float", 0.01),
+                # ... other hyperparameters
+            )
+        ),
+        TrainingConfig(
+            Loss.softmax_cross_entropy_with_logits(),
+            Optimizer.sgd(),
+            ["batch_size", "learning_rate"],
+        ),
+    )
+
+    # Train the model
+    trainer.train(
+        # ... your training data
+    )
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Update to djl 0.13.0 (#176)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import djl
+    from djl.nn import Hyperparameter
+    from djl.nn import Module
+    from djl.nn import Sequential
+    from djl.training import Trainer, TrainingConfig
+    from djl.training.loss import Loss
+    from djl.training.optimizer import Optimizer
+
+    # Upgrade to djl 0.13.0
+    # This is a breaking change from djl 0.12.0.
+    # Please check the release notes for more details: https://docs.djl.

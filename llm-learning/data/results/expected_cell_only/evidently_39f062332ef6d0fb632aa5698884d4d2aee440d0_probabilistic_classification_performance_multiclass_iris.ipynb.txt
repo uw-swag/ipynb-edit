@@ -1,0 +1,7 @@
+from evidently.report import Report
+from evidently.metrics import ClassificationQualityMetric
+
+# bcancer_column_mapping.pos_label = 'malignant'
+report = Report(metrics=[ClassificationQualityMetric()])
+report.run(current_data=merged_test_data, reference_data=merged_train_data, column_mapping=iris_column_mapping)
+report

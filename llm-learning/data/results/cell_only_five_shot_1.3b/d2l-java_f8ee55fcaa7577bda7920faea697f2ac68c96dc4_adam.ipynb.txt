@@ -1,0 +1,40 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.model_selection import train_test_split,cross_validate,GridSearchCV
+    from sklearn import metrics
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.pipeline import Pipeline
+    from sklearn.impute import SimpleImputer
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+    from sklearn.model_selection import cross_val_score
+    import pickle
+
+    # Load the dataset
+    data = pd.read_csv('diabetes.csv')
+
+    # Preprocess the data
+    # Fill missing values
+    data.fillna(data.median(), inplace=True)
+
+    # Define the preprocessing steps
+    numeric_features = ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    categorical_features = ['sex', 'bp_cat', 'smoker', 'alcohol', 'diet', 'phys_med', 'asthma', 'other_disease', 'family_med', 'cancer_sick', 'copd', 'diabetes']
+
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())])
+
+    categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))])
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, numeric_features),
+            ('cat', categorical_transformer, categorical

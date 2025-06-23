@@ -1,0 +1,29 @@
+DATASET = "./data/train.csv"
+df = pd.read_csv(DATASET)
+df.info()
+df['room_type'].value_counts().plot(kind = 'bar', color=['red', 'green', 'blue'], figsize = (8, 6))
+plt.title('Bar Chart for Room Type Distribution', fontsize = 20)
+plt.xlabel('Room Type')
+plt.ylabel('Number of entries')
+plt.show()
+print('Number of entries for "Entire home/apartment": {}'.format(max(df['room_type'].value_counts())))
+# In order to plot numerical data we have to clean 'price' column by remove '$' symbol in each row
+def remove_dollar(row):
+    if row[0] == '$':
+        return row[1:]
+    return row
+
+df['price'] = df['price'].apply(lambda row: float(remove_dollar(row).replace(',','')))
+# Calculate mean price for each month
+mean_prices = []
+months = ['February', 'March', 'April']
+for month in months:
+    mean_prices.append(np.mean(df.loc[df['month'] == month]['price']))
+# Plot price fluctuation over the 3 months
+plot = plt.plot(months, mean_prices)
+plt.xlabel('Month')
+plt.ylabel('Price $')
+plt.title('Mean Price Fluctuation over February, March and April')
+plt.show()
+for i, month in enumerate(months):
+    print("Mean price in month {}: ${:.2f}".format(month, mean_prices[i]))

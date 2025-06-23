@@ -1,0 +1,43 @@
+```python
+    import tensorflow as tf
+
+    # Assuming you have a function to create your model
+    def create_model(num_layers, num_units, learning_rate):
+        model = tf.keras.models.Sequential()
+        model.add(tf.keras.layers.SimpleRNN(num_units, input_shape=(None, 1)))
+        model.add(tf.keras.layers.Dense(num_units))
+        model.compile(loss='mean_squared_error',
+                      optimizer=tf.keras.optimizers.Adam(learning_rate),
+                      metrics=['mae'])
+        return model
+
+    # Create a list of learning rates
+    learning_rates = [0.01, 0.1, 0.2, 0.3, 0.4, 0.5]
+
+    # Create a list of number of layers
+    num_layers = [1, 2, 3, 4, 5]
+
+    # Create a list of number of units in the RNN cell
+    num_units = [2, 4, 8, 16, 32]
+
+    # Create a list of number of GPUs to use
+    gpus = [0, 1, 2, 3]
+
+    # Create a list to store the history of each run
+    histories = []
+
+    # Train the model with each learning rate, number of layers, and number of units
+    for lr in learning_rates:
+        for nl in num_layers:
+            for nu in num_units:
+                for g in gpus:
+                    print(f'Training with learning rate {lr}, {nl} layers, {nu} units, and {g} GPU(s)')
+
+                    # Create the model
+                    model = create_model(nl, nu, lr)
+
+                    # Train the model
+                    history = model.fit(X_train, y_train, epochs=10, validation_data=(X_val, y_val), verbose=0)
+
+                    # Append the history to the list
+                    histories.append(

@@ -1,0 +1,23 @@
+```python
+    # Adding credit to TensorFlow Lite converter webpage
+    import tensorflow as tf
+
+    # Load the TensorFlow Lite converter
+    converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir)
+
+    # Convert the model
+    tflite_model = converter.convert()
+
+    # Save the TensorFlow Lite model
+    with open(tflite_model_path, 'wb') as f:
+        f.write(tflite_model)
+
+    # Adding credit to the webpage
+    with open('index.html', 'r') as f:
+        index_html = f.read()
+
+    index_html = index_html.replace('</body>', '<p style="text-align: center; font-size: 20px; color: #000000;">Powered by TensorFlow Lite Converter</p></body>')
+
+    with open('index.html', 'w') as f:
+        f.write(index_html)
+    ```

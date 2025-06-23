@@ -1,0 +1,14 @@
+```
+    SequentialBlock net = new SequentialBlock();
+    net.add(Blocks.batchFlattenBlock(784));
+    net.add(new Linear.Builder().setUnits(256).build());
+    net.add(new Activation.ReLU());
+    net.add(new Dropout.Builder().optProbability(dropout1).build());
+    net.add(new Linear.Builder().setUnits(256).build());
+    net.add(new Activation.ReLU());
+    net.add(new Dropout.Builder().optProbability(dropout2).build());
+    net.add(new Linear.Builder().setUnits(10).build());
+    net.setInitializer(new NormalInitializer(0.01f));
+    ```
+
+    The code is now clear and includes a minor fix to the output. The output is now correctly formatted and the dropout probabilities are now being correctly set.

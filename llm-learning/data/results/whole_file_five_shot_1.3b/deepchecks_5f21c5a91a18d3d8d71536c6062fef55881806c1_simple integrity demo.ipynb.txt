@@ -1,0 +1,20 @@
+```python
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+train_len = round(0.67*len(iris_df))
+df_train = iris_df[:train_len]
+df_test = iris_df[train_len:]
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import IntegrityCheckSuite
+<\Cell_2>
+<Cell_3>
+IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both', performance_segmentation='top_features')
+<\Cell_3>
+    ```
+
+    The `performance_segmentation` parameter is added to the `IntegrityCheckSuite.run()` function. It specifies the method to use for performance segmentation. The default is 'top_features', which means that the top features are used for performance segmentation.

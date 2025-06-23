@@ -1,0 +1,39 @@
+```python
+    import pandas as pd
+    import sqlalchemy
+    from sqlalchemy import create_engine
+
+    # Create a connection to the database
+    engine = create_engine('postgresql://username:password@localhost:5432/mydatabase')
+
+    # Read the data from the CSV file
+    data = pd.read_csv('my_data.csv')
+
+    # Write the data to the database
+    data.to_sql('my_table', engine, if_exists='replace', index=False)
+
+    # Read the data from the database
+    sql_query = "SELECT * FROM my_table"
+    df = pd.read_sql_query(sql_query, engine)
+    ```
+
+    This code will connect to a PostgreSQL database, read a CSV file, and then write the data to a table in the database. It will also read the data from the database and print it to the console.
+
+    Please replace 'postgresql://username:password@localhost:5432/mydatabase' with your actual database connection string, and 'my_data.csv' with the path to your actual CSV file.
+
+    Also, make sure that the 'my_table' table exists in the database before you run this code. If it doesn't, you can create it using the following SQL command:
+
+    ```sql
+    CREATE TABLE my_table (
+        id SERIAL PRIMARY KEY,
+        column1 VARCHAR(255),
+        column2 INT,
+        ...
+    );
+    ```
+
+    Replace 'column1', 'column2', etc. with the actual column names in your CSV file.
+
+    This code assumes that your CSV file has a header row. If it doesn't, you can use the `header=None` parameter in the `read_csv` function to skip the header row.
+
+    Also, this code doesn't handle errors. In a production environment, you should add error handling code to deal with any issues that might occur when connecting to the database or writing to the database.

@@ -1,0 +1,89 @@
+<Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+%matplotlib inline
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from os.path import join as oj
+import torch.utils.data as utils
+from torchvision import datasets, transforms
+import numpy as np
+import os
+import sys
+pd.set_option('precision', 3)
+<\Cell_0>
+<Cell_1>
+save_path = "../results_for_export"
+trained_model_folder = '../models/MNIST'
+fnames = [oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+results['final_acc'] = [max(x) for x in results['accs_test']] 
+# results = results[results.method!= "ExpectedGrad"]
+<\Cell_1>
+<Cell_2>
+results['final_acc'] = [max(x) for x in results['accs_test']] 
+results['final_acc_train'] = [max(x) for x in results['accs_train']]
+results['final_cd'] = [x[-1] for x in results['cd']]
+results['final_test_loss'] = [min(x) for x in results['losses_test']]
+results['final_train_loss'] = [min(x) for x in results['losses_train']]
+
+<\Cell_2>
+<Cell_3>
+results = results[results.dataset == "Color"]
+# results = results[results.dataset == "Decoy"]
+
+<\Cell_3>
+<Cell_4>
+
+
+results.reset_index(drop=True, inplace=True)
+results_save = results[['regularizer_rate','final_acc','final_acc_train','final_test_loss', 'final_cd', 'method', 'dataset', ]].sort_values(by = ['regularizer_rate'])
+<\Cell_4>
+<Cell_5>
+concise_results = results_save.groupby(by = ['dataset', 'method','regularizer_rate']).mean()
+concise_results.columns = ['Test accuracy', 'Train accuracy', 'Test loss' , 'CD',]
+# with open(oj(save_path, "color_mnist.text"), 'w') as f:
+#           f.write(concise_results.to_latex())
+concise_results
+<\Cell_5>
+<Cell_6>
+concise_results
+<\Cell_6>
+<Cell_7>
+plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results_save[results_save.method == 'CDEP'],label="CDEP",legend = "brief"  );
+plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results_save[results_save.method == 'Grad'], label="RRR" );
+plot = sns.lineplot(x ='regularizer_rate' , y='final_acc', data = results_save[results_save.method == 'EGradients'], label="Expected Gradients");
+plot.set(xscale="log")
+#plot.set(yscale="log")
+
+plot.set_xlabel("Regularization strength")
+plot.set_ylabel("Test Accuracy")
+plot.set_title("");
+fig  = plot.get_figure()
+fig.tight_layout()
+# fig.savefig(oj(save_path,"ColorMNIST_results"))
+plt.show()
+<\Cell_7>
+<Cell_8>
+
+<\Cell_8>

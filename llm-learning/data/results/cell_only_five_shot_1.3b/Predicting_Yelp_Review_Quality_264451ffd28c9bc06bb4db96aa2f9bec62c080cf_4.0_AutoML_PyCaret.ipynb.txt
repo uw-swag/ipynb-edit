@@ -1,0 +1,50 @@
+
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.stem import WordNetLemmatizer
+    from nltk.tokenize import word_tokenize
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Tokenization
+    nltk.download('punkt')
+    nltk.download('wordnet')
+    nltk.download('stopwords')
+
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+
+    def preprocess_text(text):
+        word_tokens = word_tokenize(text)
+        filtered_text = [lemmatizer.lemmatize(w) for w in word_tokens if not w in stop_words]
+        return " ".join(filtered_text)
+
+    # Vectorization
+    vectorizer = TfidfVectorizer(max_features=2000)
+
+    # Applying the vectorizer
+    X = vectorizer.fit_transform(df['text'])
+
+    # Converting sparse matrix to dense matrix
+    X = X.toarray()
+
+    # Adding the target variable
+    df['target'] = df['label']
+
+    # Splitting the data
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, df['target'], test_size=0.2)
+
+    # Training the model
+    from sklearn.ensemble import RandomForestClassifier
+    model = RandomForestClassifier(n_estimators=100)
+    model.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    from sklearn.metrics import accuracy_score, confusion_matrix
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print("Confusion Matrix:", confusion_matrix(y_test, y_pred))
+
+    # Feature

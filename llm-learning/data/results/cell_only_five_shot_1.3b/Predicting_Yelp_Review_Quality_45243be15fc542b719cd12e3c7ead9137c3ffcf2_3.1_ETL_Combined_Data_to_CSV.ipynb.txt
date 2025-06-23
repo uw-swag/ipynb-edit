@@ -1,0 +1,25 @@
+```python
+    import psycopg2
+    from sqlalchemy import create_engine
+
+    # Establish a connection to the database
+    db_endpoint = "localhost:5432"
+    db_name = "yelp_2021_db"
+    db_password = "password"
+
+    engine = create_engine(f"postgresql://{db_endpoint}/{db_name}")
+
+    # Execute a query
+    query = "SELECT * FROM reviews"
+    df = pd.read_sql_query(query, engine)
+
+    # Process the data
+    # ...
+    # Here you can add your data processing steps
+    # ...
+
+    # Save the processed data to a new database
+    df.to_sql('processed_reviews', engine, if_exists='replace')
+
+    print("Data processing and modeling complete.")
+    ```

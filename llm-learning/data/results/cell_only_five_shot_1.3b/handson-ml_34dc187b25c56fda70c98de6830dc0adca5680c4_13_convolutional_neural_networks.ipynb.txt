@@ -1,0 +1,32 @@
+
+The code you provided is a TensorFlow code snippet that uses the `max_pool` function to downsample an image. The bug in your code is that you are using the `load_sample_images` function to load the image data, but this function is not designed to return a numpy array. Instead, it returns a dictionary-like object that contains the image data as a list of numpy arrays.
+
+To fix the bug, you should use the `load_sample_images` function to load the image data, and then convert the data to a numpy array. Here is the corrected code:
+
+```python
+from sklearn.datasets import load_sample_images
+import numpy as np
+
+dataset = np.array(load_sample_images().images, dtype=np.float32)
+batch_size, height, width, channels = dataset.shape
+
+filters = np.zeros(shape=(7, 7, channels, 2), dtype=np.float32)
+filters[:, 3, :, 0] = 1  # vertical line
+filters[3, :, :, 1] = 1  # horizontal line
+
+X = tf.placeholder(tf.float32, shape=(None, height, width, channels))
+max_pool = tf.nn.max_pool(X, ksize=[1, 2, 2, 1], strides=[1,2,2,1], padding="VALID")
+
+with tf.Session() as sess:
+    output = sess.run(max_pool, feed_dict={X: dataset})
+
+plot_color_image(dataset[0])
+save_fig("china_original")
+plt.show()
+    
+plot_color_image(output[0])
+save_fig("china_max_pool")
+plt.show()
+```
+
+In this corrected code, `load_sample_images().images` is used to load the image data, and then `np.array` is used to convert the data to a numpy array.

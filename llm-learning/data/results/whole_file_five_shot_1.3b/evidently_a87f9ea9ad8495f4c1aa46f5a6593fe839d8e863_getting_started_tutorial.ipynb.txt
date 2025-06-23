@@ -1,0 +1,29 @@
+```
+    The code you provided is a Python script that uses the Evidently library to analyze the stability of data and the drift of target variables in a dataset. The script uses the DataStabilityTestPreset and NumTargetDrift metrics, and the TestSuite to run these tests.
+
+    However, the code you provided is not complete and does not include the rework of the TargetDriftPreset. The rework of the TargetDriftPreset is not clear from the code you provided.
+
+    If you want to rework the TargetDriftPreset, you would need to define a new class that inherits from the TargetDriftPreset class and override the necessary methods. Here is an example of how you might do this:
+
+    ```python
+    from evidently.report import Report
+    from evidently.metric_preset import DataDriftPreset
+    from evidently.metric_preset import NumTargetDrift
+    from evidently.test_suite import TestSuite
+    from evidently.test_preset import DataStabilityTestPreset
+    from evidently.tests import *
+
+    class MyTargetDriftPreset(TargetDriftPreset):
+        def calculate_drift(self, reference_data: pd.DataFrame, current_data: pd.DataFrame) -> pd.DataFrame:
+            # Your custom logic to calculate the drift
+            pass
+
+    # Use your custom preset
+    drift_report = Report(metrics=[MyTargetDriftPreset(), NumTargetDrift()])
+    ```
+
+    Please note that the above code is just an example and may not work as expected. You would need to replace the `calculate_drift` method with your own logic to calculate the drift.
+
+    Also, the `TestSuite` and `TestNumberOfColumnsWithNulls`, `TestNumberOfRowsWithNulls`, `TestNumberOfConstantColumns`, `TestNumberOfDuplicatedRows`, `TestNumberOfDuplicatedColumns`, `TestColumnsType`, `TestNumberOfDriftedColumns` are not defined in the provided code. You would need to define these tests or replace them with your own.
+
+    Finally, the `tests.run(reference_data=reference, current_data=current)` line is not complete

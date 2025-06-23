@@ -1,0 +1,25 @@
+```python
+    reuse_vars = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES,
+                               scope="hidden[123]") # regular expression
+    reuse_vars_dict = dict([(var.op.name, var) for var in reuse_vars])
+    restore_saver = tf.train.Saver(reuse_vars_dict) # to restore layers 1-3
+
+    init = tf.global_variables_initializer()
+    saver = tf.train.Saver()
+
+    with tf.Session() as sess:
+        init.run()
+        restore_saver.restore(sess, "./my_model_final.ckpt")
+
+        for epoch in range(n_epochs):
+            for iteration in range(mnist.train.num_examples // batch_size):
+                X_batch, y_batch = mnist.train.next_batch(batch_size)
+                sess.run(training_op, feed_dict={X: X_batch, y: y_batch})
+            accuracy_val = accuracy.eval(feed_dict={X: mnist.test.images,
+                                                y: mnist.test.labels})
+            print(epoch, "Test accuracy:", accuracy_val)
+
+        save_path = saver.save(sess, "./my_new_model_final.ckpt")
+    ```
+
+    This code is used to restore the variables from the previous session. The variables that were not used in the current session are restored. The variables that were used in the previous session are not restored, as they are not in the `reuse_vars_dict`.

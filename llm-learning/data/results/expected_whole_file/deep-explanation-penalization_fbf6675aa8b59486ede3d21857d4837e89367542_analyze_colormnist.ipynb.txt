@@ -1,0 +1,60 @@
+<Cell_0>
+
+import sys
+import numpy as np
+
+import pickle as pkl
+import torch
+from os.path import join as oj
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+import os
+from os.path import join as oj
+import torch.utils.data as utils
+import sys, time
+import pickle as pkl
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+pd.set_option('precision', 3)
+<\Cell_0>
+<Cell_1>
+save_path = "../results_for_export"
+x_train = np.load(oj("../data/ColorMNIST", "train_x.npy"))/255.0
+y_train = np.load(oj("../data/ColorMNIST", "train_y.npy"))
+x_test = np.load(oj("../data/ColorMNIST", "test_x.npy"))/255.0
+y_test = np.load(oj("../data/ColorMNIST", "test_y.npy"))
+<\Cell_1>
+<Cell_2>
+fig, axes = plt.subplots(nrows= 2, figsize = (20, 4))
+indices = []
+for i in range(10):
+    indices.append(np.where(y_train ==i)[0][0])
+ex_imgs = np.hstack(x_train[np.asarray(indices)].swapaxes(1,3).swapaxes(1,2)) 
+axes[0].imshow(ex_imgs);
+axes[0].set_ylabel("Training", fontsize = 25)
+indices = []
+for i in range(10):
+    indices.append(np.where(y_test ==i)[0][0])
+ex_imgs = np.hstack(x_test[np.asarray(indices)].swapaxes(1,3).swapaxes(1,2)) 
+axes[1].imshow(ex_imgs);
+axes[1].set_xticks([])
+axes[1].set_yticks([])
+axes[0].set_xticks([])
+axes[0].set_yticks([])
+axes[1].set_ylabel("Test", fontsize = 25)
+# fig.savefig(oj(save_path, "ColorMNIST_examples"))
+
+<\Cell_2>
+<Cell_3>
+trained_model_folder = '../models/ColorMNIST_test' #the models are saved in this folder
+fnames = [oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+results['acc_dev'] = [max(x) for x in results.accs_dev]
+<\Cell_3>
+<Cell_4>
+results[['regularizer_rate','acc_dev','acc_test',]]
+<\Cell_4>

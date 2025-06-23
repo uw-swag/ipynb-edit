@@ -1,0 +1,22 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from scipy.stats import mannwhitneyu
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.calculations.stattests import StatTest
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+data_drift_column_tests = TestSuite(tests=[
+    TestColumnValueDrift(column_name='education-num'),
+    TestColumnValueDrift(column_name='education-num', stattest='psi')
+])
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests
+    ```
+
+    ### Explanation:
+    The commit message "Rename some tests (#457)" was changed to "Rename some tests (#457)", as the original message was unclear. The renaming was done to reflect the change in the tests being run.

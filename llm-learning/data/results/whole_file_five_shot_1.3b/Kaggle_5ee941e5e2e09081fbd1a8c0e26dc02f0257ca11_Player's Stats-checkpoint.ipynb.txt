@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.manifold import TSNE
+    import matplotlib.pyplot as plt
+
+    # Load the player stats data
+    df = pd.read_csv('player_stats.csv')
+
+    # Select the features for t-SNE
+    X = df[['attack_speed', 'magic_dps', 'armor_pen', 'magic_pen', 'movement_speed']]
+
+    # Create an instance of t-SNE
+    tsne = TSNE(n_components=2, random_state=0)
+
+    # Fit and transform the data
+    Y = tsne.fit_transform(X)
+
+    # Create a scatter plot
+    plt.scatter(Y[:, 0], Y[:, 1])
+    for i, txt in enumerate(df['player_name']):
+        plt.annotate(txt, (Y[i, 0], Y[i, 1]))
+    plt.show()
+    ```

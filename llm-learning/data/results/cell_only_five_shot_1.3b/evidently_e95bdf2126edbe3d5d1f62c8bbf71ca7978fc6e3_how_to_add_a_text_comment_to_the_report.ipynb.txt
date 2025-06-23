@@ -1,0 +1,22 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Text data
+    df['text_data'] = df['your_text_column']
+
+    # Vectorize the text data
+    vectorizer = TfidfVectorizer(stop_words='english')
+    text_vectors = vectorizer.fit_transform(df['text_data'])
+
+    # Compute the cosine similarity matrix
+    cosine_sim = cosine_similarity(text_vectors, text_vectors)
+
+    # Save the similarity matrix to a file
+    pd.DataFrame(cosine_sim).to_csv('cosine_similarity.csv')
+    ```

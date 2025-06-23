@@ -1,0 +1,49 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.decomposition import PCA
+
+    # Generate some example data
+    np.random.seed(0)
+    X = np.random.randn(100, 2)
+
+    # Perform PCA
+    pca = PCA(n_components=2)
+    X_pca = pca.fit_transform(X)
+
+    # Plot the data
+    plt.figure(figsize=(8, 6))
+    plt.scatter(X_pca[:, 0], X_pca[:, 1])
+    plt.xlabel('First Principal Component')
+    plt.ylabel('Second Principal Component')
+    plt.title('2D PCA')
+    plt.show()
+    <\Cell_0>
+
+    <Cell_1>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.decomposition import PCA
+
+    # Generate some example data
+    np.random.seed(0)
+    X = np.random.randn(100, 3)
+
+    # Perform PCA
+    pca = PCA(n_components=3)
+    X_pca = pca.fit_transform(X)
+
+    # Plot the data
+    fig = plt.figure(figsize=(8, 6))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(X_pca[:, 0], X_pca[:, 1], X_pca[:, 2])
+    ax.set_xlabel('First Principal Component')
+    ax.set_ylabel('Second Principal Component')
+    ax.set_zlabel('Third Principal Component')
+    ax.set_title('3D PCA')
+    plt.show()
+    <\Cell_1>
+    ```
+
+    The above code will generate a 2D and 3D scatter plot of the first two and three principal components of the

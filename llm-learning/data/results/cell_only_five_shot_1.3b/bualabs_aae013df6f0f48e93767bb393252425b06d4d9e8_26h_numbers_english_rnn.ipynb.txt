@@ -1,0 +1,44 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to predict on unseen data."
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Predicting on unseen data
+    unseen_data = pd.read_csv('unseen_data.csv')
+    unseen_data.drop(columns=['id'], inplace=True)
+    unseen_data['age'] = unseen_data['age'].apply(lambda x : round(x))
+    unseen_data['bmi'] = unseen_data['bmi'].apply(lambda bmi_value: bmi_value if 12 < bmi_value < 60 else np.nan)
+    unseen_data.sort_values(['gender', 'age'], inplace=True) 
+    unseen_data.reset_index(drop=True, inplace=True)
+    unseen_data['bmi'].ffill(inplace=True)
+
+    prediction = pipeline.predict(unseen_data)
+
+    # Adding the prediction to the unseen data
+    unseen_data['stroke'] = prediction
+
+    # Saving the unseen data
+    unseen_data.to_csv('unseen_data_predicted.csv', index=False)
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to predict on unseen data and save the result"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Predicting on unseen data and saving the result
+    unseen_data = pd.read_csv('unseen_data.csv')
+    unseen_data.drop(columns=['id'], inplace=True)
+    unseen_data['age'] = unseen_data['age'].apply(lambda x : round(x))
+    unseen_data['bmi'] = unseen_data['bmi'].apply(lambda bmi_value: bmi_value if 12 < bmi_value < 60 else np.nan)
+    unseen_data.sort_values(['gender', 'age'], inplace=

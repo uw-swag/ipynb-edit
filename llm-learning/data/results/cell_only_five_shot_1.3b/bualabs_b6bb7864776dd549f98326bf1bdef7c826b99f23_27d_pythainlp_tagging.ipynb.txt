@@ -1,0 +1,24 @@
+```python
+    from nltk.tokenize import word_tokenize
+    from nltk.corpus import stopwords
+
+    # Define custom stopwords
+    custom_stopwords = set(stopwords.words('english'))
+    custom_stopwords.update(["ไทย", "บาง", "แก้ว", "เป็น", "สุนัข", "ประเภท", "สปิตซ์", "สายพันธุ์", "หนึ่ง", "ที่", "มี", "ถิ่น", "ใน", "ประเทศ", "ไทย"])
+
+    # Tokenize the sentences
+    sents = [word_tokenize(sent) for sent in texts]
+
+    # Remove custom stopwords
+    sents = [[word for word in sent if word not in custom_stopwords] for sent in sents]
+
+    sents
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added custom dict to word tokenizer"
+    Original Code Cells:
+    '''
+    texts = ["ไทยบางแก้วเป็นสุนัขประเภทสปิตซ์สายพันธุ์หนึ่งที่มีถิ่นกำเนิดในประเทศไทย",
+         "ไท�

@@ -1,0 +1,78 @@
+```python
+    import naas
+    from naas.drivers import H2O
+
+    # Initialize H2O
+    H2O.init()
+
+    # Create a new H2O frame
+    df = H2O.create_frame(data=my_data)
+
+    # Print the H2O frame
+    print(df)
+
+    # Save the H2O frame to a CSV file
+    df.save(path="my_data.csv")
+
+    # Load the H2O frame from a CSV file
+    df = H2O.import_file(path="my_data.csv")
+
+    # Print the H2O frame
+    print(df)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "support additional commands by integrating pandas"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import pandas as pd
+
+    # Read a CSV file
+    df = pd.read_csv('my_data.csv')
+
+    # Print the DataFrame
+    print(df)
+
+    # Save the DataFrame to a CSV file
+    df.to_csv('my_data.csv', index=False)
+
+    # Read a JSON file
+    df = pd.read_json('my_data.json')
+
+    # Print the DataFrame
+    print(df)
+
+    # Save the DataFrame to a JSON file
+    df.to_json('my_data.json', orient='records')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "support additional commands by integrating numpy"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+
+    # Create a numpy array
+    arr = np.array([1, 2, 3, 4, 5])
+
+    # Print the numpy array
+    print(arr)
+
+    # Create a numpy array of zeros
+    arr = np.zeros((3, 3))
+
+    # Print

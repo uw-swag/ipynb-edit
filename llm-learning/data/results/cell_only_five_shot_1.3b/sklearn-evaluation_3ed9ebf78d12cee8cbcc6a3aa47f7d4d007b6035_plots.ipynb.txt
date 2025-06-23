@@ -1,0 +1,17 @@
+```python
+    from sklearn.metrics import plot_confusion_matrix
+    import matplotlib.pyplot as plt
+    from sklearn import datasets
+
+    # Load iris dataset
+    iris = datasets.load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Create a confusion matrix
+    cm = plot_confusion_matrix(clf, X, y, display_labels=iris.target_names, xticks_rotation='vertical')
+
+    # Save the confusion matrix as a png image
+    plt.savefig('confusion_matrix.png')
+    plt.show()
+    ```

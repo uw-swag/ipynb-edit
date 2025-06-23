@@ -1,0 +1,53 @@
+```
+    # Run the MLflow UI
+    !mlflow ui
+
+    # Run the code
+    import mlflow
+    import mlflow.sklearn
+
+    # Load the model
+    model = mlflow.sklearn.load_model('models:/my_model')
+
+    # Run the code
+    result = model.score(X_test, y_test)
+    print(f'Model score: {result}')
+
+    # Run the code
+    result = model.predict(X_test)
+    print(f'Model prediction: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test)
+    print(f'Model evaluation: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['accuracy'])
+    print(f'Model accuracy: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['precision', 'recall'])
+    print(f'Model precision, recall: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['auc'])
+    print(f'Model AUC: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['logloss'])
+    print(f'Model LogLoss: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['mse'])
+    print(f'Model MSE: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['mae'])
+    print(f'Model MAE: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['r2'])
+    print(f'Model R2: {result}')
+
+    # Run the code
+    result = model.evaluate(X_test, y_test, metrics=['logloss

@@ -1,0 +1,37 @@
+```python
+    import tensorflow as tf
+    from tensorflow.python.layers import core as layers_core
+
+    global_variables_initializer = tf.global_variables_initializer()
+
+    with tf.Session() as sess:
+        sess.run(global_variables_initializer)
+
+        cursor = 0
+        it_i = 0
+        while True:
+            Xs, Ys = [], []
+            for batch_i in range(batch_size):
+                if (cursor + sequence_length) >= len(txt) - sequence_length - 1:
+                    cursor = 0
+                Xs.append([encoder[ch]
+                           for ch in txt[cursor:cursor + sequence_length]])
+                Ys.append([encoder[ch]
+                           for ch in txt[cursor + 1: cursor + sequence_length + 1]])
+
+                cursor = (cursor + sequence_length)
+            Xs = np.array(Xs).astype(np.int32)
+            Ys = np.array(Ys).astype(np.int32)
+
+            loss_val, _ = sess.run([mean_loss, updates],
+                                   feed_dict={X: Xs, Y: Ys})
+            print(it_i, loss_val)
+
+            if it_i % 500 == 0:
+                p = sess.run([Y_pred], feed_dict={X: Xs})[0]
+                preds = [decoder[p_i] for p_i in p]
+                print("".join(preds).split('\n'))
+
+            it_i += 1
+
+    ```

@@ -1,0 +1,17 @@
+```
+    ## This cell is to move notebooks into folders
+    import os
+    import shutil
+
+    # Define the path to the notebooks
+    notebook_path = "../content/notebooks/"
+
+    # Get a list of all notebook files
+    notebook_files = [f for f in os.listdir(notebook_path) if f.endswith(".ipynb")]
+
+    # Move each notebook to its respective folder
+    for file in notebook_files:
+        shutil.move(os.path.join(notebook_path, file), os.path.join(notebook_path, file.split("-")[0] + ".ipynb"))
+    ```
+    ## End of cell
+    ```

@@ -1,0 +1,44 @@
+regression_perfomance = Report(metrics=[RegressionPreset()], options={"render": {"raw_data": True}})
+regression_perfomance.run(current_data=reference, reference_data=None, column_mapping=column_mapping)
+regression_perfomance = Report(metrics=[RegressionPreset()], options={"render": {"raw_data": True}})
+regression_perfomance.run(current_data=current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'], 
+                          reference_data=reference,
+                          column_mapping=column_mapping)
+
+regression_perfomance.show()
+target_drift = Report(metrics=[TargetDriftPreset()], options={"render": {"raw_data": True}})
+target_drift.run(current_data=current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'],
+                 reference_data=reference,
+                 column_mapping=column_mapping)
+
+target_drift.show()
+regression_perfomance = Report(metrics=[RegressionPreset()], options={"render": {"raw_data": True}})
+regression_perfomance.run(current_data=current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                          reference_data=reference,
+                          column_mapping=column_mapping)
+
+regression_perfomance.show()
+target_drift = Report(metrics=[TargetDriftPreset()], options={"render": {"raw_data": True}})
+target_drift.run(current_data=current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'],
+                 reference_data=reference,
+                 column_mapping=column_mapping)
+
+target_drift.show()
+regression_perfomance = Report(metrics=[RegressionPreset()], options={"render": {"raw_data": True}})
+regression_perfomance.run(current_data=current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                          reference_data=reference,
+                          column_mapping=column_mapping)
+
+regression_perfomance.show()
+target_drift = Report(metrics=[TargetDriftPreset()], options={"render": {"raw_data": True}})
+target_drift.run(current_data=current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'],
+                 reference_data=reference,
+                 column_mapping=column_mapping)
+
+target_drift.show()
+data_drift = Report(metrics = [DataDriftPreset()], options={"render": {"raw_data": True}})
+data_drift.run(current_data = current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'],
+               reference_data = reference,
+               column_mapping=column_mapping)
+
+data_drift.show()

@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update tutorial descriptions"
+    Original Code Cells:
+    '''
+<\Cell_0>
+<Cell_1>
+import os
+import sys
+from pathlib import Path
+import warnings
+warnings.filterwarnings("ignore")
+
+ROOT = os.path.dirname(os.path.abspath("."))
+sys.path.append(ROOT)
+
+import torch
+import argparse
+import os.path as osp
+from mmcv import Config
+from trademaster.utils import replace_cfg_vals
+from trademaster.nets.builder import build_net
+from trademaster.environments.builder import build_environment
+from trademaster.optimizers.builder import build_optimizer
+from trademaster.losses.builder import build_loss
+from trademaster.trainers.builder import build_trainer
+from trademaster.transition.builder import build_transition
+from trademaster.utils import plot
+<\Cell_0>
+<Cell_1>
+cfg.dump(osp.join(ROOT, cfg.work_dir, osp.basename(args.config)))
+<\Cell_1>
+<Cell_2>
+trainer.train_and_valid()
+<\Cell_2>
+<Cell_3>
+plot(trainer.test_environment.save_asset_memoey(),alg="DDQN")
+<\Cell_3>
+<Cell_4>
+<Cell_5>
+trainer.test()
+<\Cell_5>
+<Cell_6>
+<Cell_7>
+<Cell_8>
+plot(trainer.test_environment.save_asset_memoey(),alg="DDQN")
+<\Cell_8>
+<Cell_9>
+<Cell_10>
+<Cell_10>
+<Cell_11>
+<Cell_11>
+<Cell_12>
+<Cell_13>
+<Cell_14>
+plot(trainer.test_environment.save_asset_memoey(),alg="DDQN")
+<\Cell_14>
+<Cell_15>
+<Cell_16>

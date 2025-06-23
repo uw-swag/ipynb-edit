@@ -1,0 +1,29 @@
+```python
+    import unittest
+    from your_module import YourClass
+
+    class TestYourClass(unittest.TestCase):
+
+        def setUp(self):
+            self.your_object = YourClass()
+
+        def test_your_method(self):
+            result = self.your_object.your_method()
+            self.assertEqual(result, expected_result)
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+    In the above code, replace `YourClass` with the name of the class you're testing, and `your_method` with the name of the method you're testing. Replace `expected_result` with the expected result of the method.
+
+    This code will create a new test case for your class and method, and run it. If the method returns the expected result, the test will pass. If it doesn't, the test will fail.
+
+    The `setUp` method is a special method that is run before every test. It's where you set up any variables or objects that you'll need for your tests.
+
+    The `test_your_method` method is the method you're testing. Replace `your_method` with the name of the method you're testing.
+
+    The `assertEqual` method is used to check if the result of the method call is equal to the expected result. If it is, the test passes. If it's not, the test fails.
+
+    The `if __name__ == '__main__': unittest.main()` line is used to run the tests. If this line is run, it will run all the tests. If it's not, the tests will not run.
+
+    This is a basic example of a unit test. You can add more tests to your code to make it more robust.

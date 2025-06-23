@@ -1,0 +1,30 @@
+
+    To upgrade the notebook to TensorFlow 1.0.0, you need to replace the import statements and the code with the ones for TensorFlow 1.0.0. Here is the updated code:
+
+```python
+import tensorflow as tf
+from sklearn.svm import SVC, LinearSVC
+from sklearn.linear_model import SGDClassifier
+from sklearn.datasets import make_moons
+from sklearn.preprocessing import StandardScaler
+
+X, y = make_moons(n_samples=100, noise=0.15, random_state=42)
+
+C = 5
+alpha = 1 / (C * len(X))
+
+sgd_clf = SGDClassifier(loss="hinge", learning_rate="constant", eta0=0.001, alpha=alpha, n_iter=100000, random_state=42)
+svm_clf = SVC(kernel="linear", C=C)
+lin_clf = LinearSVC(loss="hinge", C=C)
+
+X_scaled = StandardScaler().fit_transform(X)
+sgd_clf.fit(X_scaled, y)
+svm_clf.fit(X_scaled, y)
+lin_clf.fit(X_scaled, y)
+
+print("SGDClassifier(alpha={}):     ".format(sgd_clf.alpha), sgd_clf.intercept_, sgd_clf.coef_)
+print("SVC:                         ", svm_clf.intercept_, svm_clf.coef_)
+print("LinearSVC:                   ", lin_clf.intercept_, lin_clf.coef_)
+```
+
+Please note that the code above is a simple example and may not work as expected. TensorFlow 1.0.0 is a newer version and may have different APIs and functionalities. You may need to adjust the code to fit the new TensorFlow 1.0.0 version.

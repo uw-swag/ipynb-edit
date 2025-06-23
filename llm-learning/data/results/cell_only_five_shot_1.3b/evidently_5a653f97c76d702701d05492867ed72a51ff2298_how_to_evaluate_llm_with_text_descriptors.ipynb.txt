@@ -1,0 +1,36 @@
+
+    Here are some examples of custom descriptors, semantic similarity, and how to remove a TextOverviewPreset.
+
+    **Custom Descriptors:**
+
+    You can create your own descriptors by inheriting from the `BaseDescriptor` class. Here's an example of a custom descriptor for text:
+
+    ```python
+    from evidently.description import BaseDescriptor
+
+    class MyTextDescriptor(BaseDescriptor):
+        def compute(self, data: pd.DataFrame) -> pd.DataFrame:
+            # Your custom computation goes here
+            pass
+    ```
+
+    **Semantic Similarity:**
+
+    Semantic similarity can be computed using the `TextSemanticSimilarity` descriptor. Here's an example:
+
+    ```python
+    from evidently.description import TextSemanticSimilarity
+
+    similarity = TextSemanticSimilarity(text1='text1', text2='text2')
+    similarity.compute(data)
+    ```
+
+    **Removing a TextOverviewPreset:**
+
+    The `TextOverviewPreset` is a preset that provides a basic overview of the text data. You can remove it by setting its `enabled` parameter to `False`.
+
+    ```python
+    text_overview_preset = TextOverviewPreset(enabled=False)
+    ```
+
+    Please note that these are just examples. The actual implementation of these features will depend on your specific use case and the libraries you're using.

@@ -1,0 +1,8 @@
+drift_report = Report(metrics=[
+    ColumnDriftMetric(column_name=TextLength(display_name="TextLength").for_column("Review_Text")),
+    ColumnDriftMetric(column_name=TriggerWordsPresence(words_list=['blouse', 'shirt'], display_name="Review about Blouses").for_column("Review_Text")),
+
+])
+
+drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+drift_report

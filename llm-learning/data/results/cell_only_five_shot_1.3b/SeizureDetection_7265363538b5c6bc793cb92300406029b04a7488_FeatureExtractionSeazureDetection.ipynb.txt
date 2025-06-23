@@ -1,0 +1,26 @@
+```
+    from sklearn.model_selection import KFold
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, matthews_corrcoef
+
+    def SVM(train_dat, train_ind, test_dat, test_ind, results):
+        svm = SVC(probability=True)
+        svm.fit(train_dat, train_ind)
+        pred = svm.predict(test_dat)
+        accuracy = accuracy_score(test_ind, pred)
+        precision = precision_score(test_ind, pred)
+        recall = recall_score(test_ind, pred)
+        f1 = f1_score(test_ind, pred)
+        mcc = matthews_corrcoef(test_ind, pred)
+        results = results.append(pd.Series([accuracy, precision, recall, f1, mcc], index=perfInd), ignore_index=True)
+
+    def SVM_Kfold(smote_features, kf, perfInd, results):
+        for train_index, test_index in kf.split(smote_features):
+            svm = SVC(probability=True)
+            svm.fit(smote_features.iloc[train_index], smote_features.iloc[train_index]['seizure'].values)
+            pred = svm.predict(smote_features.iloc[test_index])
+            accuracy = accuracy_score(smote_features.iloc[test_index]['seizure'].values, pred)
+            precision = precision_score(smote_features.iloc[test_index]['seizure'].values, pred)
+            recall = recall_score(smote_features.iloc[test_index]['seizure'].values, pred)
+            f1 = f1_score(smote_features.iloc[test_index]['seizure'].values, pred)
+            mcc = matthews_corrcoef(smote_features.iloc[test_index]['seizure'].values, pred)
+            results = results.append(pd.Series([accuracy

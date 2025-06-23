@@ -1,0 +1,25 @@
+```python
+    import plotly.graph_objs as go
+    import plotly.offline as py
+    from plotly.subplots import make_subplots
+
+    # Create a new figure
+    fig = go.Figure()
+
+    # Add traces
+    fig.add_trace(go.Scatter(x=data_india_rest['Average Cost for two'], y=data_india_rest['Aggregate rating'],
+                             text=data_india['Text'], mode='markers',
+                             marker=dict(size=10, color=data_india_rest['Aggregate rating'],
+                                         colorscale='Viridis', showscale=True,
+                                         maxdisplayed=2500, opacity=0.7),
+                             hoverinfo='text+x+y'))
+
+    # Set layout
+    fig.update_layout(title='Average Cost for two vs Aggregate Rating',
+                      xaxis_title='Average Cost for two',
+                      yaxis_title='Aggregate Rating',
+                      showlegend=False)
+
+    # Plot and show the figure
+    fig.show()
+    ```

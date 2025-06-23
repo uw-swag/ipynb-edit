@@ -1,0 +1,14 @@
+```python
+    # Remove the nbextension
+    nbextensions = get_config().get('Notebook', {}).get('nbextensions', [])
+    for ext in nbextensions:
+        if ext.get('section', '') == 'tree' and ext.get('enabled', False):
+            for nbext in nbextensions:
+                if nbext.get('section', '') == 'tree' and nbext.get('enabled', False) and nbext.get('path', '') == 'nbextension-tree-syntax':
+                    nbextensions.remove(nbext)
+                    break
+
+    # Show the updated cells
+    data_integrity_column_tests.show(mode='inline')
+    data_integrity_column_tests.show(mode='inline')
+    ```

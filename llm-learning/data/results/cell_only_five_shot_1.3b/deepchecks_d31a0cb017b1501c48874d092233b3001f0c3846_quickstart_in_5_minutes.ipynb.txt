@@ -1,0 +1,25 @@
+
+    The code you provided is a refactoring of a DeepChecks VisionData class. The DeepChecks library is a Python library for data validation and visualization. It provides a VisionData class that is used to load and manage datasets for vision tasks.
+
+    The refactoring is done to improve the readability and maintainability of the code. Here are the changes:
+
+    1. The `num_classes` parameter is explicitly declared, which is not the case in the original code. This parameter is used to specify the number of classes in the dataset. It's not inferred automatically, so it's explicitly declared.
+
+    2. The `label_transformer` parameter is also explicitly declared, which is not the case in the original code. This parameter is used to transform the labels in the dataset. It's not inferred automatically, so it's explicitly declared.
+
+    3. The `VisionData` class is imported from the `deepchecks.vision` module, which is not the case in the original code. This import statement is used to import the `VisionData` class from the `deepchecks.vision` module.
+
+    4. The `DetectionLabelFormatter` class is imported from the `deepchecks.vision.utils` module, which is not the case in the original code. This import statement is used to import the `DetectionLabelFormatter` class from the `deepchecks.vision.utils` module.
+
+    Here is the refactored code:
+
+    ```python
+    from deepchecks.vision import VisionData
+    from deepchecks.vision.utils import DetectionLabelFormatter
+
+    # The num_classes is explicitly declared to aid computation, but would be inferred automatically otherwise.
+    train_ds = VisionData(coco_train_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+    test_ds = VisionData(coco_test_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+    ```
+
+    The refactoring is done to improve the readability and maintainability of the code.

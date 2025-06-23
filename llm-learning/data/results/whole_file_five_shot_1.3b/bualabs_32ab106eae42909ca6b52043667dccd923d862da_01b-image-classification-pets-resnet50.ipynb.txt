@@ -1,0 +1,55 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Tune hyperparameters to improve accuracy"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.PETS)
+path_images = path/'images'
+filenames = get_image_files(path_images)
+<\Cell_2>
+<Cell_3>
+batchsize = 64
+np.random.seed(0)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+databunch = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=299, bs=batchsize).normalize(imagenet_stats)
+<\Cell_3>
+<Cell_4>
+learner = cnn_learner(databunch, models.resnet50, metrics=accuracy)
+<\Cell_4>
+<Cell_5>
+learner.fit_one_cycle(8)
+<\Cell_5>
+<Cell_6>
+learner.save('resnet50-1')
+<\Cell_6>
+<Cell_7>
+# learner.load('resnet50-1')
+<\Cell_7>
+<Cell_8>
+learner.lr_find()
+learner.recorder.plot()
+<\Cell_8>
+<Cell_9>
+learner.unfreeze()
+learner.fit_one_cycle(3, max_lr=slice(1e-6,1e-4))
+<\Cell_9>
+<Cell_10>
+learner.save('resnet50-2')
+<\Cell_10>
+<Cell

@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Update live plotting with serial data"
+    Original Code Cells:
+    '''
+<Cell_0>
+%ls /dev/ttyACM*
+<\Cell_0>
+<Cell_1>
+%matplotlib notebook
+import serial
+import time
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import pandas as pd
+import numpy as np
+from datetime import datetime, date
+
+portPath = "/dev/ttyACM0"       # Must match value shown on Arduino IDE
+baud = 115200
+timeout = 5
+
+def read_serial_data(serial):
+    """
+    Given a list of serial lines (data). Removes all characters.
+    Returns the cleaned list of lists of digits.
+    """
+    return serial.flushInput()
+<\Cell_1>
+<Cell_2>
+serial_data = read_serial_data(serial)
+clean_data =  clean_serial_data(serial_data)
+clean_data_table = [clean_data]
+clean_data_table = pd.DataFrame([sub.split(",") for sub in clean_data])
+clean_data_table['Date'] = [datetime.now()]
+clean_data_table.columns = headers
+df = df.append(clean_data_table)
+<\Cell_2>
+<Cell_3>
+df.to_csv(filename,names=headers)
+<\Cell_3>
+<Cell_4>
+df.to_csv(filename,names=headers)
+<\Cell_4>
+<Cell_5>
+df.to_csv(filename,names=headers)
+<\Cell_5>
+<Cell_6>
+df.to_csv(filename,names=headers)
+<\Cell_6>
+<Cell_7>
+df.to_csv(filename,names=headers)
+<\Cell_7>
+<Cell_8>
+df.to_csv(filename,names=headers)
+<\Cell_8>
+<Cell_9>
+df.to_csv

@@ -1,0 +1,51 @@
+```python
+    # file: model_training.py
+    from utilities.gtsrb_loader.get_folderpath import get_folderpath
+    from keras.models import load_model
+    from utilities.gtsrb_loader.load_data import load_data
+    from keras.utils import plot_model
+
+    import numpy as np
+    import pandas as pd
+    import os
+    import seaborn as sns
+
+    # from cs231n
+    import matplotlib.pyplot as plt
+    import matplotlib.patches as patches
+
+    from __future__ import print_function
+
+    # This is a bit of magic to make matplotlib figures appear inline in the notebook
+    # rather than in a new window.
+    %matplotlib inline
+    plt.rcParams['figure.figsize'] = (10.0, 8.0) # set default size of plots
+    plt.rcParams['image.interpolation'] = 'nearest'
+    plt.rcParams['image.cmap'] = 'gray'
+
+    %load_ext autoreload
+    %autoreload 2
+
+    # file: main.py
+    from model_training import *
+
+    if __name__ == '__main__':
+        # Load data
+        path = get_folderpath(subset='test', original_images=False)
+        X_test, y_test = load_data(path)
+
+        # Normalize data
+        X_test = np.array(X_test, dtype=np.float32) / 255
+
+        # One-hot encode labels
+        unique_classes = len(np.unique(y_test))
+        y_test = np.eye(unique_classes)[np.array(y_test, dtype=int)]
+
+        # Load model
+        model = load_model('/data_on_server/Nets/trained/localization/2017-07-12_localization.h5')
+
+        # Make predictions
+        y_pred = model.predict(X_test)
+
+        # Convert predictions to integers
+        y_pred_int =

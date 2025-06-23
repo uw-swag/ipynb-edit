@@ -1,0 +1,42 @@
+```
+    # Load the dataset
+    wine = pd.read_csv('winequality-red.csv',sep=';')
+
+    # Preprocess data
+    bins = (2, 6.5, 8)
+    group_names = ['bad','good']
+    wine['quality'] = pd.cut(wine['quality'],bins = bins, labels = group_names)
+    wine['quality'].unique()
+
+    # Separate the dataset as response variable and feature variables
+    X = wine.drop('quality', axis = 1)
+    y = wine['quality']
+
+    # Train and test the splitting of data
+    X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+
+    # Applying standard scalling to get an optimum result
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Applying Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=200)
+    rfc.fit(X_train,y_train)
+    pred_rfc=rfc.predict(X_test)
+
+    # Testing the model
+    print(classification_report(y_test,pred_rfc))
+    print(confusion_matrix(y_test,pred_rfc))
+
+    # Applying MLP Classifier
+    mlpc = MLPClassifier(hidden_layer_sizes=(20,20,20),max_iter=50000)
+    mlpc.fit(X_train,y_train)
+    pred_mlpc=mlpc.predict(X_test)
+
+    # Testing the model
+    print(classification_report(y_test,pred_mlpc))
+    print(confusion_matrix(y_test,pred_mlpc))
+
+    # Test the Random Forest Classifier (the best) on a new wine
+    Xnew = [[7.3,0.58,0.00,2.0,

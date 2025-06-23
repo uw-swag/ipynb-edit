@@ -1,0 +1,6 @@
+data_drift_profile = Profile(sections=[DataDriftProfileSection()], options=[options])
+data_drift_profile.calculate(ref_data.sample(1000, random_state=0), 
+                                          prod_data.sample(1000, random_state=0), 
+                                          column_mapping=column_mapping)
+data_drift_profile.json()
+

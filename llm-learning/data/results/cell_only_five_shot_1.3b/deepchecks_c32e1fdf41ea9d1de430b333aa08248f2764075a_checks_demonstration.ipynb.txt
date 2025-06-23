@@ -1,0 +1,18 @@
+```
+    # Checking the demonstration
+    if not os.path.exists(DATASETS_BASEDIR):
+        print("Set DATASETS_BASEDIR to your local folder that contains all required datasets")
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), DATASETS_BASEDIR)
+    LENDINGCLUB_DATASET_BASEDIR = os.path.join(DATASETS_BASEDIR, 'Lending Club')
+    KKBOX_DATASET_BASEDIR = os.path.join(DATASETS_BASEDIR, 'kkbox')
+    df_train = pd.read_csv(os.path.join(LENDINGCLUB_DATASET_BASEDIR, 'train.csv'))
+    df_train.issue_d = pd.to_datetime(df_train.issue_d)
+    df_val = pd.read_csv(os.path.join(LENDINGCLUB_DATASET_BASEDIR, 'test.csv'))
+    df_val.issue_d = pd.to_datetime(df_val.issue_d)
+    lending_club_model = joblib.load(os.path.join(LENDINGCLUB_DATASET_BASEDIR, 'model.joblib'))
+    ```
+    The code above is a demonstration of how to load a dataset and a model from a local directory. The demonstration checks if the DATASETS_BASEDIR environment variable is set, and if it's not, it raises a FileNotFoundError. The demonstration then loads the training and validation datasets, and the lending club model.
+
+    The demonstration is self-sustainable because it ensures that the necessary datasets and model are available in the local directory, and it handles the loading of these resources in a way that is safe and error-free.
+
+    For more information about the demonstration, you can refer to the comments in the code.

@@ -1,0 +1,43 @@
+```python
+    # Set dataset, model and evaluation parameters
+    DATA_PATH = unzip_url(Urls.fridge_objects_path, exist_ok=True)
+
+    # DNN configuration and learning parameters
+    EPOCHS_HEAD = 4
+    EPOCHS_BODY = 12
+    LEARNING_RATE = 10 * 1e-4
+    DROPOUT_RATE = 0.5
+    BATCH_SIZE = 16
+    ARCHITECTURE = models.resnet18
+    IM_SIZE = 300
+
+    # For ensemble model definition
+    total_models = 6
+    history_all = []
+    val_data = load_array(model_path+'valid_data.bc')
+    val_labels = load_array(model_path+'valid_labels.bc')
+    batches = vgg.get_batches(train_path, 
+                      gen=image.ImageDataGenerator(
+                            rotation_range=10,
+                            width_shift_range=0.1,
+                            height_shift_range=0.1,
+                            shear_range=0.1,
+                            zoom_range=0.1,
+                            horizontal_flip=True), 
+                      batch_size=batch_size)
+    for i_mod in range(total_models):
+        coverage = 1
+        no_of_epochs = 4
+        batch_size = 20
+        history = []
+        vgg = Vgg16()
+        
+        vgg.finetune(batches)
+        vgg.model.optimizer.lr = 0.0001
+        vgg.model.optimizer.momentum = 0.9
+
+        latest_weights_filename = None
+        for epoch in range(no_of_epochs):
+            print(f"Running epoch: {epoch}")
+            history.append(vgg.fit(batches, (val_data, val_labels), nb_epoch=1, coverage=coverage).history)
+            latest_weights_filename = f"ft_bn_ens{i_mod}_v{(history[-1]['val_loss'][

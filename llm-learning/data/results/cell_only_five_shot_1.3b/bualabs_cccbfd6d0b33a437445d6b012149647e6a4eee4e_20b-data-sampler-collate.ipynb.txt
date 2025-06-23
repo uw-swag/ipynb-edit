@@ -1,0 +1,36 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+
+    # Create a sample dataframe
+    df = pd.DataFrame({
+        'A': np.random.randn(100),
+        'B': np.random.randn(100),
+        'C': np.random.randn(100),
+        'D': np.random.randn(100),
+        'E': np.random.randn(100)
+    })
+
+    # Create a sample dataframe for the collated notebook
+    df_collate = pd.DataFrame({
+        'A': np.random.randn(100),
+        'B': np.random.randn(100),
+        'C': np.random.randn(100),
+        'D': np.random.randn(100),
+        'E': np.random.randn(100)
+    })
+
+    # Split the dataframe into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df, df['A'], test_size=0.2, random_state=42)
+
+    # Create a data sampler
+    data_sampler = DataSampler(X_train, y_train)
+
+    # Collate the notebook
+    collated_notebook = CollateNotebook(data_sampler)
+
+    # Print the collated notebook
+    print(collated_notebook)
+    ```
+    This code creates a sample dataframe, a data sampler, and a collated notebook. The data sampler is a simple class that takes a dataframe and a target column, and provides a method to sample data. The collated notebook is a more complex class that takes a data sampler and provides a method to collate the data.

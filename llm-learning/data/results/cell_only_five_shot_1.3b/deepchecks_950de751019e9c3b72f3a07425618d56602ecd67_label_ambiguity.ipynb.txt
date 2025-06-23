@@ -1,0 +1,44 @@
+```python
+    import re
+
+    def fix_colab_notebook_links(text):
+        # Replace colab links with notebook links
+        notebook_url_pattern = re.compile(r'https://colab\.research\.google\.com/github/\S+/blob/\S+/(\S+)')
+        notebook_url_replacement = r'https://colab.research.google.com/github/\1'
+        colab_url_pattern = re.compile(r'https://colab\.research\.google\.com/github/\S+/(\S+)')
+        colab_url_replacement = r'https://colab.research.google.com/github/\1'
+
+        text = re.sub(notebook_url_pattern, notebook_url_replacement, text)
+        text = re.sub(colab_url_pattern, colab_url_replacement, text)
+
+        return text
+
+    # Test the function
+    test_text = """
+    Here is a Colab link: https://colab.research.google.com/github/my_username/my_notebook
+    And here is a Colab link: https://colab.research.google.com/github/some_username/some_notebook
+    """
+    print(fix_colab_notebook_links(test_text))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding missing imports (#310)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import tensorflow as tf
+    import keras
+    import sklearn
+    import statsmodels
+    import statsmodels.api as sm
+    import statsmodels.formula.api as smf
+    import statsmodels.stats.api as stats
+    import statsmodels.stats.weightstats as weightstats
+    import statsmodels.stats.multicomp as multcomp
+    import scipy.stats as stats
+    import scipy.optimize as optimize
+    import

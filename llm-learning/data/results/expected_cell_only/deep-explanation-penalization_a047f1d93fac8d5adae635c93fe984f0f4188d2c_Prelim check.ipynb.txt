@@ -1,0 +1,42 @@
+os.listdir("../models")
+import torchvision.models as models
+
+model = models.vgg16(pretrained=True).to(device)
+model.classifier[-1] = nn.Linear(4096, 2)
+model.load_state_dict(torch.load('../models/08381244612463687553.pt'))
+model = model.to(device)
+dataloaders.keys()
+img_list = img_dataset.imgs
+file_names = [x[0] for x in img_list]
+start_patch_ind = file_names.index('../../../../datasets/ISIC/not_cancer/ISIC_0000557.jpg')
+end_patch_ind = file_names.index('../../../../datasets/ISIC/not_cancer/ISIC_0009867.jpg')
+patch_indice = np.arange(start_patch_ind,end_patch_ind+1)
+start_ruler_ind = file_names.index('../../../../datasets/ISIC/cancer/ISIC_0012099.jpg')
+end_ruler_ind = file_names.index('../../../../datasets/ISIC/cancer/ISIC_0014559.jpg')
+ruler_indice = np.arange(start_ruler_ind,end_ruler_ind+1)
+filter_idx = np.concatenate((patch_indice, ruler_indice))
+val_filtered_only_bad = Subset(img_dataset, list(filter(lambda x: x in filter_idx, val_dataset.indices)) )
+val_filtered_all = Subset(img_dataset, list(filter(lambda x: x not in filter_idx, val_dataset.indices)) )
+val_filtered_ruler = Subset(img_dataset, list(filter(lambda x: x not in ruler_indice, val_dataset.indices)) )
+val_filtered_patches = Subset(img_dataset, list(filter(lambda x: x not in patch_indice, val_dataset.indices)) )
+# y_all_filtered, y_hat_filtered = eval_model_on(val_filtered_all)
+# sens_spec_dic["Filtered (All)"]= get_auc_curve(y_all_filtered, y_hat_filtered)
+# y_ruler, y_hat_ruler = eval_model_on(val_filtered_ruler)
+# sens_spec_dic["Filtered (Ruler)"]= get_auc_curve(y_ruler, y_hat_ruler)
+y_patches, y_hat_patches = eval_model_on(val_filtered_patches)
+sens_spec_dic["Filtered (Patches)"]=get_auc_curve(y_patches, y_hat_patches)
+auc_dic = {
+   'All' : roc_auc_score(y_hat_all, y_all), 
+#    'Filtered (All)' : roc_auc_score(y_hat_filtered, y_all_filtered), 
+#    'Filtered (Ruler)' : roc_auc_score(y_hat_ruler, y_ruler), 
+   'Filtered (Patches)' : roc_auc_score(y_hat_patches, y_patches), 
+}
+fig, ax = plt.subplots()
+for key in sens_spec_dic.keys():
+    ax.plot(sens_spec_dic[key][0], sens_spec_dic[key][1], label = key + " "+ "{:2.2f}".format(auc_dic[key]))
+ax.set_ylabel("Specificity");
+ax.set_xlabel("Sensitivity");
+fig.legend(loc=10)
+fig.suptitle("Malignant tumor classification - no patches in training")
+fig.savefig(oj(save_path, "Vanilla_skincancer_excluded_in_training"))
+

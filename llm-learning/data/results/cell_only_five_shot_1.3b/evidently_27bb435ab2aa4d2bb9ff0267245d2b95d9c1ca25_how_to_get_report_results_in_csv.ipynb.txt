@@ -1,0 +1,73 @@
+```python
+    from sklearn.preprocessing import LabelEncoder
+
+    # Assuming that the 'classification' column is the target variable
+    target = 'classification'
+
+    # Convert the target variable to numeric values
+    le = LabelEncoder()
+    data[target] = le.fit_transform(data[target])
+
+    # Check the updated data
+    data.head()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Fix docs and example on normalization column mapping (#802)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from sklearn.preprocessing import MinMaxScaler
+
+    # Assuming that the 'column_to_normalize' column is the column to normalize
+    column_to_normalize = 'column_to_normalize'
+
+    # Create a scaler object
+    scaler = MinMaxScaler()
+
+    # Fit and transform the data
+    data[column_to_normalize] = scaler.fit_transform(data[column_to_normalize].values.reshape(-1, 1))
+
+    # Check the updated data
+    data.head()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Fix docs and example on one-hot encoding column mapping (#803)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from sklearn.preprocessing import OneHotEncoder
+
+    # Assuming that the 'column_to_encode' column is the column to encode
+    column_to_encode = 'column_to_encode'
+
+    # Create a encoder object
+    encoder = OneHotEncoder()
+
+    # Fit and transform the data
+    data = pd.get_dummies(data, columns=[column_to_encode])
+
+    # Check the updated data
+    data.head()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Fix docs and example on feature selection (#804)"
+    Original Code Cells:
+    '''
+    
+   

@@ -1,0 +1,47 @@
+```
+    [
+    Commit Message: "Progress bar (#188)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+np.random.seed(42)
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+<\Cell_0>
+<Cell_1>
+# filter sklearn warning about all same label when playing with dataset structure
+from sklearn.exceptions import UndefinedMetricWarning
+import warnings
+warnings.filterwarnings('ignore', category=UndefinedMetricWarning) 
+<\Cell_1>
+<Cell_2>
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+label_col = 'target'
+df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+<\Cell_2>
+<Cell_3>
+rf_clf = RandomForestClassifier()
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+<\Cell_3>
+<Cell_4>
+from deepchecks import Dataset
+<\Cell_4>
+<Cell_5>
+# We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+
+ds_train = Dataset(df_train, label=label_col, cat_features=[])
+ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+<\Cell_5>
+<Cell_6>
+from deepchecks.suites import overall_check_suite
+<\Cell_6>
+<Cell_7>
+OverallSuite = overall_check_suite()
+<\Cell_7>
+<Cell_8>
+# set check_datasets_policy to 'both' so that for single dataset checks (e.g. some of the integrity checks),
+#

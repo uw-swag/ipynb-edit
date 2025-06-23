@@ -1,0 +1,12 @@
+```python
+    import re
+
+    class ColumnRegExpMetric:
+        def __init__(self, column, pattern):
+            self.column = column
+            self.pattern = pattern
+
+        def __call__(self, dataframe):
+            return dataframe[self.column].apply(lambda x: bool(re.search(self.pattern, x)))
+    ```
+    In this code, we define a new class `ColumnRegExpMetric` that takes a column name and a regular expression pattern as arguments. The `__call__` method returns a boolean Series where each element is True if the corresponding element in the column matches the regular expression pattern, and False otherwise.

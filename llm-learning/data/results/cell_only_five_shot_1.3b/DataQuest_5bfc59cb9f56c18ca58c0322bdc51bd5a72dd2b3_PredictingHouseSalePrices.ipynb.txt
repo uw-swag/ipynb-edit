@@ -1,0 +1,57 @@
+
+    ## Predicting House Sale Prices
+    ## 3/5 in progress
+
+    ## Step 1: Data Preparation
+
+    ## We start by importing the necessary libraries and loading the dataset.
+
+    ```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error
+
+    def transform_features(df):
+        train = df.iloc[:1460].copy()
+        test = df.iloc[1460:].copy()
+        return train, test
+
+    def select_features():
+        return ['Gr Liv Area'], 'SalePrice'
+
+    def train_and_test(train, test, train_features, target):
+        lr = LinearRegression()
+        lr.fit(train[train_features],train[target])
+        predict = lr.predict(test[train_features])
+        mse = mean_squared_error(test[target],predict)
+        RMSE = np.sqrt(mse)
+        return RMSE
+
+    train, test = transform_features(data)
+    train_features, target = select_features()
+    RMSE = train_and_test(train, test, train_features, target)
+    RMSE
+    ```
+
+    ## Step 2: Data Cleaning
+
+    ## We start by checking for missing values in the dataset.
+
+    ```python
+    missing = train.isnull().sum()
+    print(missing[missing>0])
+    ```
+
+    ## Step 3: Feature Engineering
+
+    ## We create new features that better capture the information.
+
+    ```python
+    # The 'Year Remod/Add' & 'Year Built' columns to calculate the years after the house
+    # was built until it was remodeled
+    years_until_remod = train['Year Remod/Add'] - train['Year Built']
+
+    # Similar to the above transformation... Yr Sold would provide better information if we altered it
+    #

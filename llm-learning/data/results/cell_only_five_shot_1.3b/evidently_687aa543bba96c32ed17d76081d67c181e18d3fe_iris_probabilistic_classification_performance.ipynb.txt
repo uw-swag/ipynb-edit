@@ -1,0 +1,43 @@
+```python
+    # Refactoring the column_mapping
+    iris_column_mapping = {
+        'sepal_length': 'sepal_length',
+        'sepal_width': 'sepal_width',
+        'petal_length': 'petal_length',
+        'petal_width': 'petal_width',
+        'species': 'species'
+    }
+
+    # Refactoring the Dashboard
+    class Dashboard:
+        def __init__(self, tabs):
+            self.tabs = tabs
+
+        def calculate(self, reference, production, column_mapping):
+            for tab in self.tabs:
+                tab.calculate(reference, production, column_mapping)
+
+        def show(self):
+            for tab in self.tabs:
+                tab.show()
+
+    # Refactoring the Profile
+    class Profile:
+        def __init__(self, sections):
+            self.sections = sections
+
+        def calculate(self, reference, production, column_mapping):
+            for section in self.sections:
+                section.calculate(reference, production, column_mapping)
+    ```
+
+    ### Explanation:
+    The code provided is a refactoring of the column_mapping and Dashboard/Profile classes. The refactoring is done to improve the readability and maintainability of the code.
+
+    The original code is a Dashboard and Profile class that are used for probabilistic classification of Iris flowers. The column_mapping is a dictionary that maps the original column names in the data to the new column names in the data.
+
+    The refactoring is done by creating new classes for the Dashboard and Profile, with the original classes being replaced with the new ones. The new classes have the same functionality as the original classes, but with more descriptive and readable names.
+
+    The refactoring also includes a dictionary for the column_mapping, which is now a parameter of the calculate method in the Dashboard and Profile classes. This makes the code more flexible and easier to understand, as the column_mapping can be changed without modifying the Dashboard or Profile classes.
+
+    The refactoring also includes a dictionary for the column_mapping, which is now a parameter of the calculate method in the Dashboard and Profile classes. This

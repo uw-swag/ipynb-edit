@@ -1,0 +1,23 @@
+```python
+    import pytest
+    from your_module import your_function
+
+    @pytest.mark.parametrize(
+        "input_value, expected_result",
+        [
+            (1, 1),
+            (2, 3),
+            (3, 6),
+            (4, 10),
+        ],
+    )
+    def test_your_function(input_value, expected_result):
+        assert your_function(input_value) == expected_result
+
+    def test_your_function_with_preset():
+        assert your_function(3) == 6
+
+    if __name__ == "__main__":
+        pytest.main()
+    ```
+    In the above code, we have added two test cases. The first one tests the function with a simple input and expected output. The second one tests the function with a preset value.

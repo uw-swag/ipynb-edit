@@ -1,0 +1,55 @@
+```python
+    ## Example 1: Using the `fit` method
+
+    # Import the necessary libraries
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+
+    # Create a RandomForestClassifier
+    clf = RandomForestClassifier(n_estimators=100)
+
+    # Fit the model to the training data
+    clf.fit(X_train, y_train)
+
+    # Predict the labels of the test set
+    y_pred = clf.predict(X_test)
+
+    ## Example 2: Using the `predict` method
+
+    # Import the necessary libraries
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Create a RandomForestClassifier
+    clf = RandomForestClassifier(n_estimators=100)
+
+    # Fit the model to the training data
+    clf.fit(iris.data, iris.target)
+
+    # Predict the labels of a new set of data
+    y_pred = clf.predict(iris.data)
+
+    ## Example 3: Using the `predict_proba` method
+
+    # Import the necessary libraries
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Create a RandomForestClassifier
+    clf = RandomForestClassifier(n_estimators=100)
+
+    # Fit the model to the training data
+    cl

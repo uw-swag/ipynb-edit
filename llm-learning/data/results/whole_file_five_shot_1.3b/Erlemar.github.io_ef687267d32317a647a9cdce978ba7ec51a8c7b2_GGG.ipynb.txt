@@ -1,0 +1,53 @@
+```
+    ## Code: autogen.agentchat
+
+    ## Description:
+    This module is used to generate a chatbot assistant.
+
+    ## Properties:
+    - `name`: The name of the assistant.
+    - `system_message`: The initial message to be sent to the assistant.
+    - `oai_config`: Configuration for the OpenAI API.
+
+    ## Methods:
+    - `initiate_chat(assistant, problem)`: Initiate a new chat with the assistant.
+    - `reset()`: Reset the assistant's state.
+
+    ## Events:
+    - `on_message(message)`: This event is triggered when a message is received.
+    - `on_response(response)`: This event is triggered when a response is received.
+    - `on_conversation_end()`: This event is triggered when the conversation ends.
+
+    ## Examples:
+    ```python
+    from flaml import oai
+    from flaml.autogen.agentchat import AssistantAgent
+
+    oai.ChatCompletion.start_logging()
+
+    assistant = AssistantAgent(
+        name="assistant", 
+        system_message="You are a helpful assistant.",
+        oai_config={
+            "request_timeout": 600,
+            "seed": 42,
+            "config_list": config_list,
+        }
+    )
+
+    assistant.initiate_chat(problem="What is the capital of France?")
+    ```
+    This will start a new chat with the assistant, asking the user to provide a question. The assistant will then answer the question.
+
+    ## Note:
+    This module is a part of the Flaml library, which is a machine learning library for Python.
+    ```
+    ## Code: autogen.agentchat.contrib.math_user_proxy_agent
+
+    ## Description:
+    This module is used to generate a chatbot assistant that can generate math problems.
+
+    ## Properties:
+    - `name`: The name of the assistant.
+    - `human_input_mode`: The mode in which the assistant will ask for human input.
+    - `code_execution

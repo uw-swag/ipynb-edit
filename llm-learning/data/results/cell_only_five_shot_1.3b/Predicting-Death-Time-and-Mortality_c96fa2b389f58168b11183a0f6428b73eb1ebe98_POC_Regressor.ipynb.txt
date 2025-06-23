@@ -1,0 +1,67 @@
+```python
+    from google.cloud import storage
+
+    def upload_blob(bucket_name, source_file_name, destination_blob_name):
+        """Uploads a file to the bucket."""
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(destination_blob_name)
+
+        blob.upload_from_filename(source_file_name)
+
+        print(
+            "File {} uploaded to {}.".format(
+                source_file_name, destination_blob_name
+            )
+        )
+
+    # Example usage:
+    upload_blob('my_bucket', 'local/path/to/my/file.txt', 'my_destination_blob')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add files via download"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from google.cloud import storage
+
+    def download_blob(bucket_name, source_blob_name, destination_file_name):
+        """Downloads a blob from the bucket."""
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(source_blob_name)
+        blob.download_to_filename(destination_file_name)
+
+        print(
+            "Blob {} downloaded to {}.".format(
+                source_blob_name, destination_file_name
+            )
+        )
+
+    # Example usage:
+    download_blob('my_bucket', 'my_source_blob', 'local/path/to/my/file.txt')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add files via list"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from google.cloud import storage
+
+    def list_blobs(bucket_name):
+        """Lists all the blobs in the bucket."""
+        storage_client = storage.Client

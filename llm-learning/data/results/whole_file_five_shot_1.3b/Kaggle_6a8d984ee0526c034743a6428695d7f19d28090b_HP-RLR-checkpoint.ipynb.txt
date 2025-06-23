@@ -1,0 +1,52 @@
+```
+    #Lasso Regression
+    from sklearn.linear_model import Lasso
+
+    #Train Lasso Regression
+    lasso = Lasso(alpha=0.1)
+    lasso.fit(X, Y)
+
+    #Predicting the Test set results
+    y_pred = lasso.predict(X_test)
+
+    #Evaluating the Algorithm
+    print('Mean Absolute Error:', metrics.mean_absolute_error(Y, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(Y, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Y, y_pred)))
+
+    #Ridge Regression
+    from sklearn.linear_model import Ridge
+
+    #Train Ridge Regression
+    ridge = Ridge(alpha=0.1)
+    ridge.fit(X, Y)
+
+    #Predicting the Test set results
+    y_pred = ridge.predict(X_test)
+
+    #Evaluating the Algorithm
+    print('Mean Absolute Error:', metrics.mean_absolute_error(Y, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(Y, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Y, y_pred)))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Lasso & Ridge Regression with GridSearchCV"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#Imports
+import numpy as np
+import pandas as pd
+from scipy.stats import skew
+from scipy.stats.stats import pearsonr
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
+pd.options.display.max_columns = 50
+sns.set_style('whitegrid')
+%matplotlib inline
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear

@@ -1,0 +1,47 @@
+```python
+    import numpy as np
+    from scipy.io import wavfile
+    from scipy.signal import stft
+    from sklearn.preprocessing import StandardScaler
+
+    # Load audio file
+    rate, data = wavfile.read('audio.wav')
+
+    # Compute STFT
+    f, t, Zxx = stft(data, fs=rate, nperseg=1024, noverlap=512)
+
+    # Compute Zxx magnitude
+    Zxx_magnitude = np.abs(Zxx)
+
+    # Compute Zxx phase
+    Zxx_phase = np.angle(Zxx)
+
+    # Normalize Zxx_magnitude
+    Zxx_magnitude = StandardScaler().fit_transform(Zxx_magnitude.reshape(-1, 1))
+
+    # Compute formant frequencies
+    # This is a simple example and may not work well for all audio files
+    # You may need to adjust the parameters or use a more sophisticated method
+    # For example, you can use a machine learning model to predict the formant frequencies
+    # based on the spectrogram
+    # Note: This is a complex task and may require a good understanding of audio signal processing
+    # and machine learning
+    # You may need to use a library like librosa for this task
+
+    # Compute formant estimates
+    # This is a simple example and may not work well for all audio files
+    # You may need to adjust the parameters or use a more sophisticated method
+    # For example, you can use a machine learning model to predict the formant estimates
+    # based on the spectrogram
+    # Note: This is a complex task and may require a good understanding of audio signal processing
+    # and machine learning
+    # You may need to use a library like librosa for this task
+
+    # Plot spectrogram
+    import matplotlib.pyplot as plt
+    plt.pcolormesh(t, f, Zxx_magnitude)
+    plt.title('Spectrogram')
+    plt.ylabel('Frequency [Hz]')
+    plt.xlabel('Time [s]')
+    plt.show()
+    

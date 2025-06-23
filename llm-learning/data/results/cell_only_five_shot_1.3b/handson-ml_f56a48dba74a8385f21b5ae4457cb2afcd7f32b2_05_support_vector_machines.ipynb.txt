@@ -1,0 +1,29 @@
+
+    The commit message "Replace n_iter with max_iter in SGDClassifier" is a change in the SGDClassifier's parameters. The original code was using `n_iter` to denote the number of iterations, but in the updated code, it's using `max_iter`.
+
+    Here's the updated code:
+
+    ```python
+    from sklearn.linear_model import SGDClassifier
+
+    sgd_clf = SGDClassifier(loss="hinge", alpha = 0.017, max_iter = 50, random_state=42)
+    sgd_clf.fit(X, y.ravel())
+
+    m = len(X)
+    t = y * 2 - 1  # -1 if t==0, +1 if t==1
+    X_b = np.c_[np.ones((m, 1)), X]  # Add bias input x0=1
+    X_b_t = X_b * t
+    sgd_theta = np.r_[sgd_clf.intercept_[0], sgd_clf.coef_[0]]
+    print(sgd_theta)
+    support_vectors_idx = (X_b_t.dot(sgd_theta) < 1).ravel()
+    sgd_clf.support_vectors_ = X[support_vectors_idx]
+    sgd_clf.C = C
+
+    plt.figure(figsize=(5.5,3.2))
+    plt.plot(X[:, 0][yr==1], X[:, 1][yr==1], "g^")
+    plt.plot(X[:, 0][yr==0], X[:, 1][yr==0], "bs")
+    plot_svc_decision_boundary(sgd_clf, 4, 6)
+    plt.xlabel("Petal length", fontsize=14)
+    plt.ylabel("Petal width", fontsize=14)
+    plt.title("SGDClassifier", fontsize=14)
+    plt.

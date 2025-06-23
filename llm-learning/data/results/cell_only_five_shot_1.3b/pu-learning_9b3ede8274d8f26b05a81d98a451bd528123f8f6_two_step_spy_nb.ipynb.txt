@@ -1,0 +1,58 @@
+
+    Here's how you can merge the data processing and existing notebooks:
+
+1. First, you need to import the necessary libraries:
+
+```python
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import f1_score
+```
+
+2. Then, you can load your data:
+
+```python
+from sar import load_sar
+
+train, valid, test = load_sar()
+train_x, _, train_s = train
+```
+
+3. Set the seed for reproducibility:
+
+```python
+np.random.seed(0)
+```
+
+4. Prepare the data for the logistic regression model:
+
+```python
+labeled_data_idx = np.where(train_s == 1)[0]
+n_spy = round(len(labeled_data_idx) * 0.1)
+
+spy_data_idx = np.random.choice(labeled_data_idx, n_spy, replace=False)
+spy = np.zeros_like(train_s)
+spy[spy_data_idx] = 1
+
+train_s_ = train_s & (1 - spy)
+```
+
+5. Fit the logistic regression model:
+
+```python
+_clf = LogisticRegression(random_state=0).fit(train_x, train_s_)
+train_s__prob_hat = _clf.predict_proba(train_x)[:, 1]
+threshold = train_s__prob_hat[spy.astype(bool)].min()
+```
+
+6. Prepare the data for the Naive Bayes model:
+
+```python
+data_idx_p = labeled_data_idx
+x_p = train_x[data_idx_p]
+y_p = np.ones(len(x_p), dtype=np.int32)
+
+data_idx_n = np.where(train_s__prob_hat < threshold)[0]
+x_n = train_x[data_idx_n]
+y_n = np.zeros(

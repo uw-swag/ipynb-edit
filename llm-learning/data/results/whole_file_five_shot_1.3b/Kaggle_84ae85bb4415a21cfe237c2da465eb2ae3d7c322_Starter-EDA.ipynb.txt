@@ -1,0 +1,46 @@
+
+    '''
+    Commit Message: "Rerun NYC Payroll EDA"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn3, venn3_circles
+import matplotlib
+#matplotlib.rc['font.size'] = 9.0
+matplotlib.rc('font', size=20)
+matplotlib.rc('axes', titlesize=20)
+matplotlib.rc('axes', labelsize=20)
+matplotlib.rc('xtick', labelsize=20)
+matplotlib.rc('ytick', labelsize=20)
+matplotlib.rc('legend', fontsize=20)
+matplotlib.rc('figure', titlesize=20)
+import seaborn as sns
+
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+data = pd.read_csv("data/citywide-payroll-data-fiscal-year.csv")
+data.sample(10)
+<\Cell_1>
+<Cell_2>
+data = data.drop(['Last Name','First Name'], axis=1)
+data['Total Pay'] = data['Regular Gross Paid'] + data['Total OT Paid']
+<\Cell_2>
+<Cell_3>
+data['Fiscal Year'] = data['Fiscal Year'].astype(str)
+plt.figure(figsize=(8,5))
+g = sns.FacetGrid(data, hue='Fiscal Year', size=10, hue_order=['2014',
+                                                              '2015',
+                                                              '2016','2017'], palette="Paired")
+g.map(sns.kdeplot, "Total Pay", shade=True)
+g.add_legend()
+<\Cell_3>
+<Cell_4>
+data['Pay Basis'].unique()
+<\Cell_4>
+<Cell_5>
+data_per_

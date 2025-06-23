@@ -1,0 +1,27 @@
+```
+    headers = ["Co2","Date & Time"]
+    pd_data_new_row.to_csv(filename,names=headers)
+    df = pd.read_csv(filename,names=headers,skiprows = 1)
+    df
+    dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+    df.get_value(0, 'Date & Time')
+    dateparse(df.get_value(0, 'Date & Time'))
+    df = pd.read_csv(filename, parse_dates=['Date & Time'], date_parser=dateparse,index_col=0)
+    df
+    type(df.get_value(0, 'Co2'))
+    df.get_value(0, 'Co2')
+    type(df.get_value(0, 'Date & Time'))
+    df.get_value(0, 'Date & Time')
+    ```
+
+    The code above is used to read the data from a CSV file, and it includes the following steps:
+
+    1. It creates a list of headers for the CSV file.
+    2. It writes the data to a new CSV file using the headers.
+    3. It reads the data from the new CSV file using the headers.
+    4. It parses the 'Date & Time' column to datetime format.
+    5. It reads the data from the new CSV file using the parsed 'Date & Time' column.
+    6. It checks the data type of the 'Co2' column.
+    7. It checks the data type of the 'Date & Time' column.
+
+    The final output of the code is the data read from the CSV file, and the parsed 'Date & Time' column, and the 'Co2' column.

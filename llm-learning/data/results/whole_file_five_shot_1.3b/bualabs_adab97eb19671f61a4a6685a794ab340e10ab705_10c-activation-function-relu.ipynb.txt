@@ -1,0 +1,57 @@
+```python
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    import torch
+    import matplotlib.pyplot as plt
+    <\Cell_1>
+    <Cell_2>
+    x = torch.arange(-10., 10., 0.01)
+    <\Cell_2>
+    <Cell_3>
+    x
+    <\Cell_3>
+    <Cell_4>
+    activation = torch.nn.Hardtanh(0., 2.)
+    y1 = activation(x)
+    <\Cell_4>
+    <Cell_5>
+    y1
+    <\Cell_5>
+    <Cell_6>
+    plt.ylim(top=2.0, bottom=-0.5)
+    plt.xlim(right=2.0, left=-2.0)
+    plt.legend(['Hardtanh'], loc='upper left')
+    plt.grid()
+
+    plt.plot(x.numpy(), y1.numpy())
+    plt.show()
+    <\Cell_6>
+    <Cell_7>
+    activation = torch.nn.ReLU()
+    y3 = activation(x)
+    <\Cell_7>
+    <Cell_8>
+    y3
+    <\Cell_8>
+    <Cell_9>
+    plt.ylim(top=2.0, bottom=-0.5)
+    plt.xlim(right=2.0, left=-2.0)
+    plt.legend(['ReLU'], loc='upper left')
+    plt.grid()
+
+    plt.plot(x.numpy(), y3.numpy())
+    plt.show()
+    <\Cell_9>
+    <Cell_10>
+    activation = torch.nn.Tanh()
+    y4 = activation(x)
+    <\Cell_10>
+    <Cell_11>
+    y4
+    <\Cell_11>
+    <Cell_12>
+    pl

@@ -1,0 +1,42 @@
+```
+    # To support both python 2 and python 3
+    from __future__ import division, print_function, unicode_literals
+
+    # Common imports
+    import numpy as np
+    import numpy.random as rnd
+    import os
+
+    # to make this notebook's output stable across runs
+    rnd.seed(42)
+
+    # To plot pretty figures
+    %matplotlib inline
+    import matplotlib
+    import matplotlib.pyplot as plt
+    plt.rcParams['axes.labelsize'] = 14
+    plt.rcParams['xtick.labelsize'] = 12
+    plt.rcParams['ytick.labelsize'] = 12
+
+    # Where to save the figures
+    PROJECT_ROOT_DIR = "."
+    CHAPTER_ID = "svm"
+
+    def save_fig(fig_id, tight_layout=True):
+        path = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID, fig_id + ".png")
+        print("Saving figure", fig_id)
+        if tight_layout:
+            plt.tight_layout()
+        plt.savefig(path, format='png', dpi=300)
+
+    X_outliers = np.array([[3.4, 1.3], [3.2, 0.8]])
+    y_outliers = np.array([0, 0])
+    Xo1 = np.concatenate([X, X_outliers[:1]], axis=0)
+    yo1 = np.concatenate([y, y_outliers[:1]], axis=0)
+    Xo2 = np.concatenate([X, X_outliers[1:]], axis=0)
+    yo2 = np.concatenate([y, y_outliers[1:]], axis=0)
+
+    svm_clf2 = SVC(kernel="linear", C=10**9)#float("inf"))
+    svm_clf2.fit(Xo2, yo2)
+
+    pl

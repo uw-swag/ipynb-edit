@@ -1,0 +1,50 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    df = pd.read_csv('device_data.csv')
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Check the distribution of the target variable
+    sns.countplot(df['Device'])
+    plt.show()
+
+    # Split the dataset into features and target variable
+    X = df.drop('Device', axis=1)
+    y = df['Device']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a logistic regression model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Plot a confusion matrix
+    sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d')
+    plt.show()
+
+    # Check the feature importance
+    feature_importance = pd.DataFrame(model.coef_[0], X.columns, columns=['importance']).sort_values('importance', ascending=False)
+    print(feature_importance)
+
+    # Plot the feature importance
+    feature_importance.plot(kind='bar', figsize=(10,6))
+    plt.show()
+    ```
+    This script will load a dataset, check for missing values, check

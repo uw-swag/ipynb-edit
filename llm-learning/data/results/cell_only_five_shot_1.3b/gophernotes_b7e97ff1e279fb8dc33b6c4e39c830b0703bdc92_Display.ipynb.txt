@@ -1,0 +1,64 @@
+```go
+    package display
+
+    import (
+        "image"
+        "io"
+    )
+
+    // Renderer is the interface that wraps the Render method.
+    // This method is used to render data in a specific MIME type.
+    type Renderer interface {
+        Render() (Data, error)
+    }
+
+    // SimpleRenderer is the interface that wraps the Render method.
+    // This method is used to render data in a single MIME type.
+    type SimpleRenderer interface {
+        Render() (MIMEMap, error)
+    }
+
+    // HTMLer is the interface that wraps the HTML method.
+    // This method is used to render data in HTML format.
+    type HTMLer interface {
+        HTML() string
+    }
+
+    // JavaScripter is the interface that wraps the JavaScript method.
+    // This method is used to render data in JavaScript format.
+    type JavaScripter interface {
+        JavaScript() string
+    }
+
+    // JPEGer is the interface that wraps the JPEG method.
+    // This method is used to render data in JPEG format.
+    type JPEGer interface {
+        JPEG() []byte
+    }
+
+    // JSONer is the interface that wraps the JSON method.
+    // This method is used to render data in JSON format.
+    type JSONer interface {
+        JSON() map[string]interface{}
+    }
+
+    // Latexer is the interface that wraps the Latex method.
+    // This method is used to render data in LaTeX format.
+    type Latexer interface {
+        Latex() string
+    }
+
+    // Markdowner is the interface that wraps the Markdown method.
+    // This method is used to render data in Markdown format.
+    type Markdowner interface {
+        Markdown() string
+    }
+
+    // PNGer is the interface that wraps the PNG method.
+    // This method is used to render data in PNG format.
+    type PNGer interface {
+        PNG() []byte
+    }
+
+    // PDFer is the interface that wraps the PDF method.
+    // This

@@ -1,0 +1,36 @@
+```python
+    from sklearn.metrics import classification_report
+    from sklearn.metrics import confusion_matrix
+
+    # Predicting the Test set results
+    y_pred = rf_clf.predict(df_test.drop(label_col, axis=1))
+
+    # Creating a confusion matrix
+    cm = confusion_matrix(df_test[label_col], y_pred)
+
+    # Creating a classification report
+    cr = classification_report(df_test[label_col], y_pred)
+
+    # Printing the confusion matrix
+    print("Confusion Matrix: \n", cm)
+
+    # Printing the classification report
+    print("Classification Report: \n", cr)
+
+    # Checking for rare formatting
+    rare_formats = [i for i in df_test[label_col].unique() if cm[i, i] < sum(cm[i, :]) * 0.1]
+    rare_formats_in_test = [i for i in rare_formats if i in df_test[label_col].values]
+    rare_formats_in_pred = [i for i in rare_formats if i in y_pred]
+
+    if len(rare_formats_in_test) > 0:
+        print("Rare formats in test: ", rare_formats_in_test)
+    if len(rare_formats_in_pred) > 0:
+        print("Rare formats in prediction: ", rare_formats_in_pred)
+
+    # Checking for rare formatting in the training set
+    rare_formats_in_train = [i for i in df_train[label_col].unique() if cm[i, i] < sum(cm[i, :]) * 0.1]
+    rare_formats_in_train = [i for i in rare_formats_in_train if i in df_train[label_col].values]
+
+    if len(rare_formats_in_train) > 0:
+        print("Rare formats in training: ", rare_formats_in_train)
+    ```

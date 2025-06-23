@@ -1,0 +1,37 @@
+```python
+    # Import required libraries
+    import pandas as pd
+    import dash
+    import dash_html_components as html
+    import dash_core_components as dcc
+    from dash.dependencies import Input, Output
+    from jupyter_dash import JupyterDash
+    import plotly.graph_objects as go
+
+    # Create a dash application
+    app = JupyterDash(__name__)
+
+    # Read the airline data into pandas dataframe
+    airline_data =  pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/airline_data.csv', 
+                                encoding = "ISO-8859-1",
+                                dtype={'Div1Airport': str, 'Div1TailNum': str, 
+                                       'Div2Airport': str, 'Div2TailNum': str})
+
+    # To do
+    # Get the layout of the application and adjust it.
+    # Create an outer division using html.Div and add title to the dashboard using html.H1 component
+    # Add a html.Div and core input text component
+    # Finally, add graph component.
+
+
+    # add callback decorator
+
+    # Add computation to callback function and return graph
+    def get_graph(entered_year):
+
+        return fig
+
+    # Run the app
+    if __name__ == '__main__':
+        app.run_server(mode='jupyterlab')
+    ```

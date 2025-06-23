@@ -1,0 +1,41 @@
+```python
+    # Add more unittests
+
+    import unittest
+
+    class TestModel(unittest.TestCase):
+
+        def test_model_fit(self):
+            model = RandomForestRegressor(random_state=0)
+            model.fit(ref_data[features], ref_data[target])
+            self.assertIsNotNone(model)
+
+        def test_model_predict(self):
+            model = RandomForestRegressor(random_state=0)
+            model.fit(ref_data[features], ref_data[target])
+            predictions = model.predict(ref_data[features])
+            self.assertEqual(len(predictions), len(ref_data))
+
+        def test_dashboard_calculate(self):
+            dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=1)])
+            dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+            self.assertIsNotNone(dashboard)
+
+        def test_dashboard_show(self):
+            dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=1)])
+            dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+            dashboard.show()
+            self.assertIsNotNone(dashboard)
+
+        def test_profile_calculate(self):
+            bike_regression_performance_profile = Profile(sections=[RegressionPerformanceProfileSection()])
+            bike_regression_performance_profile.calculate(ref_data, prod_data, column_mapping=column_mapping)
+            self.assertIsNotNone(bike_regression_performance_profile)
+
+        def test_profile_json(self):
+            bike_regression_performance_profile = Profile(sections=[RegressionPerformanceProfileSection()])
+            bike_regression_performance_profile.calculate(ref_data, prod_data, column_mapping=column_mapping)
+            regression_profile = bike_regression_performance_profile.json()
+            self.assertIsNotNone(regression_profile)
+
+    if __name__

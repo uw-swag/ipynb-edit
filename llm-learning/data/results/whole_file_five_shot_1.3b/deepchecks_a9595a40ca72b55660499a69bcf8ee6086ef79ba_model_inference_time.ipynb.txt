@@ -1,0 +1,35 @@
+```
+    [
+    Commit Message: "fixing docs (#898)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.datasets import load_iris
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import train_test_split
+
+from deepchecks.tabular import Dataset
+from deepchecks.tabular.checks.methodology import ModelInferenceTime
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, features=iris.feature_names, label='target')
+test_ds = Dataset(test, features=iris.feature_names, label='target')
+
+clf = AdaBoostClassifier().fit(train_ds.data[train_ds.features], train_ds.data[train_ds.label_name])
+<\Cell_1>
+<Cell_2>
+check = ModelInferenceTime()
+check.run(test_ds, clf)
+<\Cell_2>
+<Cell_3>
+check = ModelInferenceTime().add_condition_inference_time_is_not_greater_than(0.00001)
+check.run(test_ds, clf)
+<\Cell_3>
+
+    '''
+    ]
+    ```
+    The commit message "fixing docs (#898)" is a fix for a specific issue in the documentation. The issue is related to the use of the AdaBoostClassifier in the deepchecks library, which is not correctly implemented. The fix involves correcting the way the AdaBoostClassifier is used in the documentation.

@@ -1,0 +1,15 @@
+```python
+    # Remove CollabDataBunch from_df item_name and fix to_csv columns with no index
+
+    # Fix to_csv columns with no index
+    dataframe_movies.reset_index(drop=True, inplace=True)
+
+    # Remove CollabDataBunch from_df item_name
+    databunch = CollabDataBunch.from_df(dataframe_rating_movie, 
+                                        seed=42, valid_pct=0.1)
+
+    # Save the updated dataframe_movies to a csv file
+    dataframe_movies.to_csv('movie_master.tsv', sep = '\t')
+
+    # Now, you can use the updated dataframe_movies for further processing
+    ```

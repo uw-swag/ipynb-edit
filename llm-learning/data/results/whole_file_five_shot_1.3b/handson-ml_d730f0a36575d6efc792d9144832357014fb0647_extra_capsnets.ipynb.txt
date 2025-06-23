@@ -1,0 +1,36 @@
+```
+    ## This code cell will not be shown in the HTML version of this notebook
+    # imports from custom library
+    import sys
+    sys.path.append('../../')
+    from mlrefined_libraries import math_optimization_library as optlib
+    from mlrefined_libraries import nonlinear_superlearn_library as nonlib
+    from mlrefined_libraries import unsupervised_library as unlib
+
+    # demos for this notebook
+    regress_plotter = nonlib.nonlinear_regression_demos
+    static_plotter = optlib.static_plotter.Visualizer()
+    optimizers = optlib.optimizers
+
+    basic_runner = nonlib.basic_runner
+    datapath = '../../mlrefined_datasets/unsuperlearn_datasets/'
+
+    # import autograd functionality to bulid function's properly for optimizers
+    import autograd.numpy as np
+    import numpy as npo
+
+    # import timer
+    from datetime import datetime 
+    import copy
+
+    # this is needed to compensate for %matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib notebook
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+
+    %load_ext autoreload
+    %autoreload 2
+    ```

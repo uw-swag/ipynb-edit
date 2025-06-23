@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+import pandas as pd
+
+from deepchecks import Dataset
+from deepchecks.checks import TrainTestFeatureDrift
+import pprint
+%load_ext autoreload
+%autoreload 2
+
+# Assuming you have a pandas DataFrame named 'df'
+df = pd.DataFrame(np.random.rand(100, 4), columns=list('ABCD'))
+
+# Create a DeepChecks Dataset from the DataFrame
+dataset = Dataset(df, label='A')
+
+# Create a TrainTestFeatureDrift check
+check = TrainTestFeatureDrift(train_data=df.iloc[:80], test_data=df.iloc[80:])
+
+# Run the check
+result = check.run()
+
+# Print the result
+pprint.pprint(result)
+
+# Save the result to a file
+result.save_to_file('drift_report.json')
+
+# Load the result from a file
+loaded_result = Dataset.load_from_file('drift_report.json')
+
+# Print the loaded result
+pprint.pprint(loaded_result)
+    ```

@@ -1,0 +1,43 @@
+```python
+    # Importing necessary libraries
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Split the dataset into features and target variable
+    X = df.drop('target_variable', axis=1)
+    y = df['target_variable']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature Scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Training the KNN model on the training set
+    classifier = KNeighborsClassifier(n_neighbors=5, metric='minkowski', p=2)
+    classifier.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluating the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(f'Accuracy: {accuracy_score(y_test, y_pred)}')
+
+    # Visualizing the results
+    sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='g')
+    plt.show()
+    ```
+    Please replace 'your_dataset.csv' and 'target_variable' with your actual dataset and target variable.

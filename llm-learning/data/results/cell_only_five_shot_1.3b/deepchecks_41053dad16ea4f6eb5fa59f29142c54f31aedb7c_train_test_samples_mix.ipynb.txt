@@ -1,0 +1,33 @@
+```python
+    # Update dataset properties
+    ### Instruction:
+    [
+    Commit Message: "Update dataset properties (#249)"
+    Original Code Cells:
+    '''
+    iris = load_iris(return_X_y=False, as_frame=True)
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=iris.feature_names,
+            label='target')
+
+test_df = pd.concat([X_test, y_test], axis=1)
+bad_test = test_df.append(train_dataset.data.iloc[[0, 1, 1, 2, 3, 4]], ignore_index=True)
+                    
+test_dataset = Dataset(bad_test, 
+            features=iris.feature_names,
+            label='target')
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already up-to-date. The `train_dataset` and `test_dataset` are created with the correct data and features. The `bad_test` dataframe is appended to the `test_dataset` dataframe, which is not a good practice as it can lead to data leakage.
+
+    The `Dataset` class is used to create a custom dataset class that can be used to load and preprocess data. The `load_iris` function is used to load the iris dataset, and the `train_test_split` function is used to split the data into a training set and a test set.
+
+    The `pd.concat` function is used to concatenate the training data and labels into a single dataframe, and the `Dataset` class is used to create a custom dataset class that can be used to load and preprocess data.
+
+    The `load_iris` function is used to load the iris dataset, and the `train_test_split` function is used to split the data into a training set

@@ -1,0 +1,18 @@
+```
+    # Adding lime files
+    import lime
+    from lime import lime_image
+    from lime.lime_image import LimeImageExplainer
+
+    # Load the image
+    img = load_img(path.join(DATA_PATH, 'fridge_objects', 'fridge_objects_000001.jpg'))
+
+    # Create a lime explainer
+    explainer = LimeImageExplainer(feature_names='*')
+
+    # Explain the image
+    exp = explainer.explain_instance(img, classifier.predict)
+
+    # Save the explanation
+    exp.save_to_file(path.join(OUTPUT_PATH, 'fridge_objects_000001_lime.png'))
+    ```

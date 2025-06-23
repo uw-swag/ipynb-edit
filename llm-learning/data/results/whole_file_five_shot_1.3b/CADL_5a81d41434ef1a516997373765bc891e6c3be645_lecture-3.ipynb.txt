@@ -1,0 +1,54 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    data = pd.read_csv("./data/pima-data.csv")
+    <\Cell_1>
+    <Cell_2>
+    data.shape
+    <\Cell_2>
+    <Cell_3>
+    data.head(5)
+    <\Cell_3>
+    <Cell_4>
+    data.isnull().values.any()
+    <\Cell_4>
+    <Cell_5>
+    def plot_correlated(data, size=11):
+        """
+        Function to show plot of correlation between the data columns
+        data : the data from pandas Dataframe
+        size : the horizontal and vertical size of the plot
+        
+        Result : blue - cyan - yellow - red -darkred = less to more correlated columns = 0 ---- 1 
+        """
+        corr = data.corr()
+        fig, ax = plt.subplots(figsize=(size, size))
+        ax.matshow(corr)
+        plt.xticks(range(len(corr.columns)), corr.columns)
+        plt.yticks(range(len(corr.columns)), corr.columns)
+    <\Cell_5>
+    <Cell_6>
+    plot_correlated(data)
+    <\Cell_6>
+    <Cell_7>
+    data.corr()
+    <\Cell_7>
+    <Cell_8>
+    del data['thickness']
+    <\Cell_8>
+    <Cell_9>
+    data.head(5)
+    <\Cell_9>
+    <Cell_10>
+    plot_correlated(data)
+    <\Cell_10>
+    <Cell_11>
+    data.to_csv('pima_data_session3.csv')
+    <\Cell_11>
+    ```

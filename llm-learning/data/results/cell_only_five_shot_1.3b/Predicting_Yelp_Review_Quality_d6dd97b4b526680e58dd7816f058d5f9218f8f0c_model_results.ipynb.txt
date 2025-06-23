@@ -1,0 +1,44 @@
+```python
+    # Import necessary libraries
+    import boto3
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Split the dataset into features and target variable
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature Scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the model
+    classifier = RandomForestClassifier(n_estimators=20, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # Save the model to an S3 bucket
+    s3 = boto3.resource('s3')
+    s3.meta.client.upload_file('model.pkl', 'mybucket', 'model.pkl')
+    ```
+    This script uses the RandomForestClassifier from sklearn to train a model on a dataset, then it saves the trained model to an S3 bucket.
+
+    Please replace 'data.csv' and 'target' with your actual dataset and target variable. Also, replace 'mybucket' and 'model.pkl' with your actual S3 bucket name and model filename respectively.
+
+    Also, make sure that you have the necessary permissions to read from

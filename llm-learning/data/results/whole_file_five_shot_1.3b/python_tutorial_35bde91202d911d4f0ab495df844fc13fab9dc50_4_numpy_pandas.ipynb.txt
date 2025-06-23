@@ -1,0 +1,55 @@
+```python
+    # import the library with its standard abbreviation
+    import numpy as np
+
+    # create a vector with 3 dimensions from a list
+    a = np.array([1., -2., 0.])
+    print(a)
+
+    # create a 2x3 matrix from nested lists
+    M = np.array([[1., 2., 3.], [4., 5., 6.]])
+    print(M)
+
+    # multiply all elements in the matrix by 3
+    print(3*M)
+
+    # multiply the matrix M with the vector a
+    print(np.dot(M, a))
+
+    # multiply the matrix M with its transpose
+    print(np.dot(M, M.T))
+
+    # elementwise multiplication
+    print(M*M)
+
+    # make sure the dimensions always line up, otherwise you'll get an error like this
+    print(np.dot(M, M))
+
+    # check the shape of a matrix or vector (e.g. to investigate errors like the one above)
+    print(M.shape)
+
+    # create a 3 dimensional identity matrix
+    print(np.eye(3))
+
+    # create a 3x2 matrix with zeros
+    print(np.zeros((3, 2)))
+
+    # np.random provides different options to create random data
+    # create a 4x4 matrix with random, normally distributed values
+    R = np.random.randn(4, 4)
+    print(R)
+
+    # indexing of matrices works similar to indexing lists
+    # remember: indexing starts at 0 and the last element is exclusive
+    print(R[:2, :])
+
+    # all rows starting at the 3rd row with all columns
+    print(R[2:, :])
+
+    # column 2 and 4
+    print(R[:, [1, 3]])
+
+    # column 3 - notice the shape of the returned array, i.e., it's a proper column vector (shape: (4, 1))
+    print(R[:, [2]])
+
+    # column 3 but as a flat

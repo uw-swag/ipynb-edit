@@ -1,0 +1,41 @@
+```python
+    import torch
+
+    # Define a simple model
+    class Model(torch.nn.Module):
+        def __init__(self):
+            super(Model, self).__init__()
+            self.linear = torch.nn.Linear(1, 1)
+
+        def forward(self, x):
+            return self.linear(x)
+
+    # Define a simple MSE cost function
+    def mse_cost(yhat, y):
+        return torch.nn.functional.mse_loss(yhat, y)
+
+    # Initialize the model and optimizer
+    model = Model()
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+    # Training loop
+    epochs = 100
+    for epoch in range(epochs):
+        optimizer.zero_grad()
+
+        # Forward pass
+        yhat = model(x)
+
+        # Compute the cost
+        cost = mse_cost(yhat, y)
+
+        # Backward pass and update weights
+        cost.backward()
+        optimizer.step()
+
+        print('Epoch {}, cost {}'.format(epoch, cost.item()))
+
+        # Reset gradients to zero
+        optimizer.zero_grad()
+    ```
+    This code creates a simple linear model and trains it using the mean squared error cost function. The model's weights and bias are updated in each epoch using automatic differentiation.

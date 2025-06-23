@@ -1,0 +1,50 @@
+
+    ### Instruction:
+    [
+    Commit Message:" add more details to the notebook"
+
+Original Code Cells:
+'''
+<Cell_0>
+import matplotlib.pyplot as plt
+import numpy as np
+import tensorflow as tf
+from libs.datasets import MNIST
+from libs.utils import montage
+from libs import gif
+import IPython.display as ipyd
+plt.style.use('ggplot')
+from IPython.core.display import HTML
+HTML("""<style> .rendered_html code { 
+    padding: 2px 4px;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+} </style>""")
+<\Cell_0>
+<Cell_1>
+ds = MNIST()
+<\Cell_1>
+<Cell_2>
+imgs = ds.X[:100].reshape((-1, 28, 28))
+plt.imshow(montage(imgs), cmap='gray')
+<\Cell_2>
+<Cell_3>
+mean_img = np.mean(ds.X, axis=0)
+plt.imshow(mean_img.reshape((28, 28)), cmap='gray')
+<\Cell_3>
+<Cell_4>
+std_img = np.std(ds.X, axis=0)
+plt.imshow(std_img.reshape((28, 28)), cmap='gray')
+<\Cell_4>
+<Cell_5>
+dimensions = [512, 256, 128, 64]
+<\Cell_5>
+<Cell_6>
+X = tf.placeholder(tf.float32, [None, n_features])
+<\Cell_6>
+<Cell_7>
+Y = tf.placeholder(tf.float32, [None, n_output])
+<\Cell_7>
+<Cell_8>
+cost = tf.reduce_

@@ -1,0 +1,48 @@
+```python
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.MNIST)
+<\Cell_2>
+<Cell_3>
+batchsize = 1280
+np.random.seed(0)
+transform = get_transforms(do_flip=False)
+
+databunch = ImageDataBunch.from_folder(path, train='training', 
+                                       valid_pct=0.2, size=28, 
+                                       ds_tfms=transform, bs=batchsize, 
+                                       num_workers=8).normalize()
+<\Cell_3>
+<Cell_4>
+# learner = cnn_learner(databunch, models.resnet18, 
+#                       pretrained=False, 
+#                       metrics=accuracy, callback_fns=ShowGraph)
+<\Cell_4>
+<Cell_5>
+learner = cnn_learner(databunch, models.resnet18, 
+                      pretrained=False, 
+                      metrics=accuracy, callback_fns=ShowGraph)
+learner.fit(8, lr=0.9)
+<\Cell_5>
+<Cell_6>
+learner = cnn_learner(databunch, models.resnet18, 
+                      pretrained=False, 
+                      metrics=accuracy, callback_fns=ShowGraph)
+learner.fit(8, lr=0.000001)
+<\Cell_6>
+<Cell_7>
+learner = cnn_learner(databunch, models.resnet18, 
+                      pretrained=False, 
+                      metrics=accuracy, callback_fns=ShowGraph)
+learner.fit(1, lr=0.003)
+<\Cell_7>
+<

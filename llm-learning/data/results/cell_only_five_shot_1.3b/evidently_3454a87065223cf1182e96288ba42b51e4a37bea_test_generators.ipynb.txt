@@ -1,0 +1,30 @@
+
+    The code you've provided is a test suite for the `TestColumnNANShare` test, which is used to check the distribution of missing values in a column. The suite is set to run on the `current_data` and `reference_data`, and then it shows the results.
+
+    The suite is reworked to include null values tests. The `generate_column_tests` function is used to generate the tests for the `TestColumnNANShare` test. The `TestColumnNANShare` test is run with different conditions to check the distribution of missing values in different columns.
+
+    The conditions for the tests are specified in the `parameters` dictionary. For example, `{"lt": 0.5}` means that the test will be run only for columns with a missing value rate less than 0.5.
+
+    The `columns` parameter can be set to "all" to generate tests for all columns, or it can be set to a comma-separated list of column names to generate tests for only those columns.
+
+    Here's the modified code:
+
+    ```python
+    from evidently.tests.base_test import generate_column_tests
+
+    from evidently.tests import TestColumnNANShare
+
+    suite = TestSuite(tests=[generate_column_tests(TestColumnNANShare)])
+    suite.run(current_data=current_data, reference_data=reference_data)
+    suite.show()
+
+    suite = TestSuite(tests=[generate_column_tests(TestColumnNANShare, columns="all", parameters={"lt": 0.5})])
+    suite.run(current_data=current_data, reference_data=reference_data)
+    suite.show()
+
+    suite = TestSuite(tests=[generate_column_tests(TestColumnNANShare, columns="cat", parameters={"lt": 0.1})])
+    suite.run(current_data=current_data, reference_data=reference_data)
+    suite.show()
+    ```
+
+    This code will generate and run tests for the `TestColumnNANShare` test for all columns, for columns with a missing value rate less than 0.5, and for columns with a missing value rate less than 

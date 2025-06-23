@@ -1,0 +1,46 @@
+```
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+    # Load the data
+    query = '''
+        SELECT *
+        FROM test4
+        LIMIT 10000
+        ;
+        '''
+    df = load_dataframe_from_yelp_2(query)
+    df['business_categories'] = df['business_categories'].apply(lambda x: x.split(', '))
+
+    # Split the data into features and target
+    X = df.drop('stars', axis=1)
+    y = df['stars']
+
+    # Create a random forest classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the classifier
+    clf.fit(X, y)
+
+    # Make predictions
+    y_pred = clf.predict(X)
+
+    # Calculate metrics
+    accuracy = accuracy_score(y, y_pred)
+    precision = precision_score(y, y_pred, average='weighted')
+    recall = recall_score(y, y_pred, average='weighted')
+    f1 = f1_score(y, y_pred, average='weighted')
+    roc_auc = roc_auc_score(y, y_pred)
+
+    print(f'Accuracy: {accuracy}')
+    print(f'Precision: {precision}')
+    print(f'Recall: {recall}')
+    print(f'F1 Score: {f1}')
+    print(f'ROC AUC Score: {roc_auc}')
+    ```
+
+    The above code will load the data, split it into features and target, create a random forest classifier, train it, make predictions, and calculate the metrics. The metrics are then printed.
+
+    Please note that the `load_dataframe_from_yelp_2` function is not defined

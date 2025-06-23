@@ -1,0 +1,49 @@
+```
+    # .github/workflows/links-checks.yml
+    name: Links Checks
+    on:
+      push:
+        branches:
+          - main
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+          - name: Set up Python
+            uses: actions/setup-python@v2
+            with:
+              python-version: 3.8
+          - name: Install dependencies
+            run: |
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+          - name: Run links-checks
+            run: python links-checks.py
+    ```
+    This is a GitHub action that runs the `links-checks.py` script in the `main` branch of the repository. The script is expected to be in the root directory of the repository.
+
+    The `links-checks.py` script is a simple Python script that checks for broken links in the repository. It uses the `requests` library to send HTTP requests to the URLs in the repository and checks the response status code. If a URL returns a 200 status code, the link is considered to be active.
+
+    The `links-checks.py` script is expected to be in the root directory of the repository.
+
+    The `links-checks.py` script is run on every push to the `main` branch.
+
+    The GitHub action is configured to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub action is set to run on every push to the `main` branch.
+
+    The GitHub

@@ -1,0 +1,19 @@
+```python
+    import pandas as pd
+import plotly.graph_objs as go
+
+# Assuming df is your DataFrame
+df = pd.DataFrame(...)
+
+# Line chart
+trace1 = go.Scatter(x=df.index, y=df['column1'], mode='lines', name='Line')
+layout1 = go.Layout(title='Line Chart', xaxis={'title': 'Index'}, yaxis={'title': 'Value'})
+fig1 = go.Figure(data=[trace1], layout=layout1)
+fig1.show()
+
+# Pie chart
+trace2 = go.Pie(labels=df['column2'], values=df['column2'], name='Pie')
+layout2 = go.Layout(title='Pie Chart')
+fig2 = go.Figure(data=[trace2], layout=layout2)
+fig2.show()
+    ```

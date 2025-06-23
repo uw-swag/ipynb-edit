@@ -1,0 +1,17 @@
+```python
+    from collections import deque
+
+    replay_memory_size = 500000
+    replay_memory = deque([], maxlen=replay_memory_size)
+
+    def sample_memories(batch_size):
+        indices = np.random.permutation(len(replay_memory))[:batch_size]
+        cols = [[], [], [], [], []] # state, action, reward, next_state, continue
+        for idx in indices:
+            memory = replay_memory[idx]
+            for col, value in zip(cols, memory):
+                col.append(value)
+        cols = [np.array(col) for col in cols]
+        return cols[0], cols[1], cols[2].reshape(-1, 1), cols[3], cols[4].reshape(-1, 1)
+
+    ```

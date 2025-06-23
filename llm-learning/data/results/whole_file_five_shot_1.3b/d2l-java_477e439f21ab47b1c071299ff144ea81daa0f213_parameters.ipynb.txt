@@ -1,0 +1,43 @@
+
+    '''
+    [
+    Commit Message: "Upgrade to djl 0.13.0 (#176)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%load ../utils/djl-imports
+<\Cell_0>
+<Cell_1>
+NDManager manager = NDManager.newBaseManager();
+
+NDArray x = manager.randomUniform(0, 1, new Shape(2, 4));
+
+Model model = Model.newInstance("lin-reg");
+
+SequentialBlock net = new SequentialBlock();
+
+net.add(Linear.builder().setUnits(8).build());
+net.add(Activation.reluBlock());
+net.add(Linear.builder().setUnits(1).build());
+net.add(Activation.reluBlock());
+
+net.setInitializer(new NormalInitializer(), Parameter.Type.WEIGHT);
+net.initialize(manager, DataType.FLOAT32, x.getShape());
+
+model.setBlock(net);
+
+Predictor<NDList, NDList> predictor = model.newPredictor(new NoopTranslator());
+System.out.println(predictor.predict(new NDList(x)).singletonOrThrow());
+
+// Check that the parameters are the same
+NDArray shared1 = net.getChildren().valueAt(2)
+    .getParameters().valueAt(0).getArray();
+NDArray shared2 = net.getChildren().valueAt(3)
+    .getParameters().valueAt(0).getArray();
+shared1.eq(shared2);
+<\Cell_1>
+<Cell_2>
+<\Cell_2>
+
+    '''
+    ]

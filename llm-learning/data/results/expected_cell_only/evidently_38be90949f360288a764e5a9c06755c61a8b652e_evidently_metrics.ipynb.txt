@@ -1,0 +1,153 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.options import DataDriftOptions, ColorOptions
+from evidently.report import Report
+
+from evidently.metrics import ColumnDriftMetric, DataDriftTable, DatasetDriftMetric
+
+from evidently.metrics import (ColumnDistributionMetric, ColumnQuantileMetric, ColumnCorrelationsMetric,
+    ColumnValueListMetric, ColumnValueRangeMetric, DatasetCorrelationsMetric)
+
+from evidently.metrics import (ColumnRegExpMetric, ColumnSummaryMetric, ColumnMissingValuesMetric,
+    DatasetSummaryMetric, DatasetMissingValuesMetric)
+
+from evidently.metrics import (ClassificationQuality, ClassificationClassBalance, ClassificationConfusionMatrix,
+    ClassificationQualityByClass, ClassificationClassSeparationPlot, ProbabilityDistribution, ClassificationRocCurve,
+    ClassificationPRCurve, ClassificationPRTable, ClassificationQualityByFeatureTable)
+
+from evidently.metrics import (RegressionQualityMetric, RegressionPredictedVsActualScatter, 
+    RegressionPredictedVsActualPlot, RegressionErrorPlot, RegressionAbsPercentageErrorPlot, 
+    RegressionErrorDistribution, RegressionErrorNormality, RegressionTopErrorMetric, RegressionErrorBiasTable)
+#Dataset for binary probabilistic classifcation
+bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+bcancer = bcancer_data.frame
+
+bcancer['target'] = [bcancer_data.target_names[x] for x in bcancer.target]
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+bcancer_ref['benign'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_ref['malignant'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 0]
+
+bcancer_cur['benign'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_cur['malignant'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 0]
+#Dataset for regression
+housing_data = datasets.fetch_california_housing(as_frame='auto')
+housing = housing_data.frame
+
+housing.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+housing['prediction'] = housing_data['target'].values + np.random.normal(0, 3, housing.shape[0])
+
+housing_ref = housing.sample(n=5000, replace=False)
+housing_cur = housing.sample(n=5000, replace=False)
+#dataset-level metrics
+data_drift_dataset_report = Report(metrics=[
+    DatasetDriftMetric(),
+    DataDriftTable(),    
+])
+
+data_drift_dataset_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_report
+#column-level metrics
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnDriftMetric('education'),   
+])
+
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_report
+#dataset-level metrics
+
+data_quality_dataset_report = Report(metrics=[
+    DatasetCorrelationsMetric(),
+    
+])
+
+data_quality_dataset_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_quality_dataset_report
+#column-level metrics
+data_quality_column_report = Report(metrics=[
+    ColumnDistributionMetric(column_name="education"), 
+    ColumnQuantileMetric(column_name="education-num", quantile=0.75), 
+    ColumnCorrelationsMetric(column_name="education"),
+    ColumnValueListMetric(column_name="relationship", values=["Husband", "Unmarried"]), 
+    ColumnValueRangeMetric(column_name="age", left=10, right=20),
+    
+])
+
+data_quality_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_quality_column_report
+#dataset-level metrics
+data_integrity_dataset_report = Report(metrics=[
+    DatasetSummaryMetric(),
+    DatasetMissingValuesMetric()
+    
+])
+
+data_integrity_dataset_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_dataset_report
+#column-level metrics
+data_integrity_column_report = Report(metrics=[
+    ColumnRegExpMetric(column_name="relationship", reg_exp=r".*child.*"),
+    ColumnSummaryMetric(column_name="age"),
+    ColumnMissingValuesMetric(column_name="education")
+    
+])
+
+data_integrity_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_column_report
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = 'target'
+bcancer_column_mapping.prediction = ['malignant', 'benign']
+bcancer_column_mapping.numerical_features = bcancer_data.feature_names
+bcancer_column_mapping.pos_label = 'malignant'
+classification_report = Report(metrics=[
+    ClassificationQuality(),
+    ClassificationClassBalance(),
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass(),
+    ClassificationClassSeparationPlot(),
+    ProbabilityDistribution(),
+    ClassificationRocCurve(),
+    ClassificationPRCurve(),
+    ClassificationPRTable(),
+    ClassificationQualityByFeatureTable(columns=['mean area', 'fractal dimension error'])
+    
+])
+
+classification_report.run(reference_data=bcancer_ref, current_data=bcancer_cur, column_mapping=bcancer_column_mapping)
+classification_report
+regression_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionPredictedVsActualScatter(),
+    RegressionPredictedVsActualPlot(),
+    RegressionErrorPlot(),
+    RegressionAbsPercentageErrorPlot(),
+    RegressionErrorDistribution(),
+    RegressionErrorNormality(),
+    RegressionTopErrorMetric(),
+    RegressionErrorBiasTable(columns=['MedInc', 'AveRooms']),
+    
+])
+
+regression_report.run(reference_data=housing_ref, current_data=housing_cur)
+regression_report
+#options
+stat_test_option = DataDriftOptions(all_features_stattest='psi')
+color_option = ColorOptions
+
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnDriftMetric('age', options=stat_test_option),
+])
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+
+data_drift_column_report

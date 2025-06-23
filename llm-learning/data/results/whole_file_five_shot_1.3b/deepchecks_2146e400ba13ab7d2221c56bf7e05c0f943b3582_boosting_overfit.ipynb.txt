@@ -1,0 +1,51 @@
+```
+    # Fixing the issue of overfitting in the AdaBoost model.
+    # The overfitting issue can be fixed by using a simpler model or by using regularization techniques.
+    # In this case, we will use a simpler model, which is a decision tree.
+
+    from sklearn.tree import DecisionTreeClassifier
+
+    clf = DecisionTreeClassifier()
+    clf.fit(train_df.drop('target', axis=1), train_df['target'])
+
+    # Evaluate the model
+    print(f"Validation accuracy: {clf.score(val_df.drop('target', axis=1), val_df['target'])}")
+    ```
+    '''
+
+    ### End Instruction:
+    [
+    Commit Message: "fix overfitting issue in AdaBoost model (#81)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from sklearn.tree import DecisionTreeClassifier
+
+    clf = DecisionTreeClassifier()
+    clf.fit(train_df.drop('target', axis=1), train_df['target'])
+
+    # Evaluate the model
+    print(f"Validation accuracy: {clf.score(val_df.drop('target', axis=1), val_df['target'])}")
+    ```
+    '''
+
+    ### End Instruction:
+    [
+    Commit Message: "Implementing Gradient Boosting for overfitting issue (#82)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from sklearn.ensemble import GradientBoostingClassifier
+
+    clf = GradientBoostingClassifier()
+    clf.fit(train_df.drop('target', axis=1), train_df['target'])
+
+    # Evaluate the model
+    print(f"Validation accuracy: {clf.score(val_df.drop('target', axis=1), val_df['target'])}")
+    ```
+    '''
+
+    ### End Instruction:
+    [
+    Commit Message: "Implementing Gradient Boosting for overfitting issue (#83)"
+    Original Code Cells:

@@ -1,0 +1,226 @@
+#!pip install evidently[llm]
+import pandas as pd
+import numpy as np
+import requests
+from datetime import datetime, timedelta
+from io import BytesIO
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+from evidently.metric_preset import TextEvals
+from evidently.descriptors import *
+from evidently.metrics import *
+from evidently.tests import *
+from evidently.ui.workspace.cloud import CloudWorkspace
+from evidently.ui.dashboards import DashboardPanelTestSuite
+from evidently.ui.dashboards import PanelValue
+from evidently.ui.dashboards import ReportFilter
+from evidently.ui.dashboards import TestFilter
+from evidently.ui.dashboards import TestSuitePanelType
+from evidently.renderers.html_widgets import WidgetSize
+response = requests.get("https://raw.githubusercontent.com/evidentlyai/evidently/main/examples/how_to_questions/chat_df.csv")
+csv_content = BytesIO(response.content)
+assistant_logs = pd.read_csv(csv_content, index_col=0, parse_dates=['start_time', 'end_time'])
+assistant_logs.index = assistant_logs.start_time
+assistant_logs.index.rename('index', inplace=True)
+pd.set_option('display.max_colwidth', None)
+assistant_logs.head(3)
+ws = CloudWorkspace(token="YOUR_TOKEN", 
+                    url="https://app.evidently.cloud")
+project = ws.create_project("My project title", team_id="YOUR_TEAM_ID")
+project.description = "My project description"
+project.save()
+column_mapping = ColumnMapping(
+    datetime='start_time',
+    datetime_features=['end_time'],
+    text_features=['question', 'response'],
+    categorical_features=['organization', 'model_ID', 'region', 'environment', 'feedback'],
+)
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response",
+              descriptors=[
+                  TextLength(),
+                  ]
+              )
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response",
+              descriptors=[
+                  TextLength(),
+                  ]
+              )
+])
+
+text_evals_report.run(reference_data=assistant_logs[:50],
+                      current_data=assistant_logs[50:100],
+                      column_mapping=column_mapping)
+text_evals_report
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response",
+              descriptors=[
+                  IncludesWords(
+                      words_list=['salary', 'benefits', 'payroll'],
+                      display_name="Mention Compensation")
+            ]
+        ),
+        ]
+)
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+            Sentiment(),
+        ]
+    ),
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+            HuggingFaceToxicityModel(),
+            HuggingFaceModel(
+                model="SamLowe/roberta-base-go_emotions",
+                params={"label": "neutral"},
+                display_name="Response Neutrality"),
+        ]
+    ),
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+## import os
+
+## os.environ["OPENAI_API_KEY"] = "YOUR KEY"
+conciseness_prompt = """
+Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+
+A concise response should:
+- Provide the necessary information without unnecessary details or repetition.
+- Be brief yet comprehensive enough to address the query.
+- Use simple and direct language to convey the message effectively.
+
+Please evaluate the following chatbot response for conciseness.
+
+response: REPLACE
+
+Use the following categories for conciseness evaluation:
+CONCISE if the response is concise and to the point
+VERBOSE if the response is overly detailed or contains unnecessary information
+UNKNOWN if the information provided is not sufficient to make a clear determination
+
+Return a category only
+"""
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        OpenAIPrompting(prompt=conciseness_prompt,
+                        prompt_replace_string="REPLACE",
+                        model="gpt-3.5-turbo-instruct",
+                        feature_type="cat",
+                        display_name="Response Conciseness"),
+    ])
+])
+
+report.run(reference_data= None,
+           current_data= assistant_logs[:10],
+           column_mapping=column_mapping)
+
+report
+data_report = Report(metrics=[
+   ColumnSummaryMetric(column_name="feedback"),
+   ]
+)
+
+data_report.run(reference_data=None, current_data=assistant_logs[:100], column_mapping=column_mapping)
+data_report
+text_evals_report = Report(metrics=[
+    ColumnSummaryMetric(
+        column_name=SemanticSimilarity(
+            display_name="Response-Question Similarity"
+        )
+        .on(["response", "question"])
+    )
+])
+
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:100],
+                      column_mapping=column_mapping)
+text_evals_report
+text_evals_report.datasets()[1]
+text_evals_report.as_dict()[]
+text_evals_report.json()
+text_evals_report.save_html("report.html")
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+            Sentiment(),
+            TextLength(),
+            IncludesWords(words_list=['salary', 'benefits', 'payroll'],
+                          display_name="Mention Compensation")
+
+        ],
+    ),
+    ColumnSummaryMetric(column_name="feedback"),
+    ColumnSummaryMetric(column_name="region"),
+    ColumnSummaryMetric(column_name="organization"),
+    ColumnSummaryMetric(column_name="model_ID"),
+    ColumnSummaryMetric(column_name="environment"),
+])
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[:50],
+                      column_mapping=column_mapping)
+project.id
+ws.add_report(project.id, text_evals_report, include_data=True)
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[50:100],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[100:150],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[150:200],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+text_evals_report.run(reference_data=None,
+                      current_data=assistant_logs[200:250],
+                      column_mapping=column_mapping)
+ws.add_report(project.id, text_evals_report)
+test_suite = TestSuite(tests=[
+    TestColumnValueMean(column_name = Sentiment().on("response"), gte=0),
+    TestColumnValueMin(column_name = TextLength().on("response"), gt=0),
+    TestColumnValueMax(column_name = TextLength().on("response"), lte=2000),
+    TestColumnValueMean(column_name = TextLength().on("response"), gt=500),
+])
+for i in range(5):
+    test_suite.run(
+        reference_data=None,
+        current_data=assistant_logs.iloc[50 * i : 50 * (i + 1), :],
+        column_mapping=column_mapping,
+        timestamp=datetime.now() + timedelta(hours=i)
+    )
+    ws.add_test_suite(project.id, test_suite)
+#project = ws.get_project("YOUR_PROJECT_ID")
+project.dashboard.add_panel(
+    DashboardPanelTestSuite(
+        title="Test results",
+        filter=ReportFilter(metadata_values={}, tag_values=[], include_test_suites=True),
+        size=WidgetSize.FULL,
+        panel_type=TestSuitePanelType.DETAILED,
+    ),
+    tab="Tests"
+)
+project.save()
+

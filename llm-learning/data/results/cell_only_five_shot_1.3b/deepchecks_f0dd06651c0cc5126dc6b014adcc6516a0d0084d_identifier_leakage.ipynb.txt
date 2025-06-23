@@ -1,0 +1,35 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from deepchecks.tabular.checks.methodology import *
+from deepchecks.tabular.base import Dataset
+
+# Split many files in core and base
+
+# Split the data into train and test sets
+train, test = data.split(0.8)
+
+# Create a Dataset object for the train data
+train_dataset = Dataset(train, label='target')
+
+# Create a Dataset object for the test data
+test_dataset = Dataset(test, label='target')
+
+# Perform checks on the train and test datasets
+train_dataset.run_checks()
+test_dataset.run_checks()
+
+# Visualize the results
+train_dataset.show_report()
+test_dataset.show_report()
+
+# Save the results
+train_dataset.save_report('train_report.html')
+test_dataset.save_report('test_report.html')
+
+# This code splits the data into a training set and a testing set, creates a Dataset object for each, 
+# runs the checks on the datasets, and then visualizes and saves the results.
+
+```

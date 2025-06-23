@@ -1,0 +1,19 @@
+```
+    # Configuration parameters
+    model_file_path = "./models/ED--epoch-30--loss-0.07385.pth"  
+    data_path = Path("data", "all_data")
+    use_cuda = True
+    img_crop_size = 224
+    split = "validation"
+    batch_size = 4
+    seed = 42
+
+    # Deleting notebooks
+    import os
+    import shutil
+    notebooks_path = Path("notebooks")
+    for file in os.listdir(notebooks_path):
+        if file.endswith(".ipynb"):
+            file_path = notebooks_path / file
+            shutil.rmtree(file_path)
+    ```

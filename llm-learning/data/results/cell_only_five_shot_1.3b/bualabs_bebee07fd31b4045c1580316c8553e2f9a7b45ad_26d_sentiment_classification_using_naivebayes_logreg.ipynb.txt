@@ -1,0 +1,16 @@
+```python
+    from sklearn.linear_model import LogisticRegression
+
+    # Adding solver='liblinear', max_iter=10000 to LogisticRegression
+    m = LogisticRegression(C=0.1, dual=True, solver='liblinear', max_iter=10000)
+    m.fit(trn_term_doc, y.items.astype(int))
+    preds = m.predict(val_term_doc)
+
+    (preds == val_y).mean()
+
+    m = LogisticRegression(C=0.1, dual=True, solver='liblinear', max_iter=10000)
+    m.fit(trn_term_doc.sign(), y.items.astype(int))
+    preds = m.predict(val_term_doc.sign())
+
+    (preds == val_y).mean()
+    ```

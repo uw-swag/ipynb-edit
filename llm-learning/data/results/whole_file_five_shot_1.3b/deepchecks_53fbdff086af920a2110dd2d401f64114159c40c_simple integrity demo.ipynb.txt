@@ -1,0 +1,46 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67 * len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    from deepchecks.suites import IntegrityCheckSuite
+
+    IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new chapter to the notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+train_len = round(0.67*len(iris_df))
+df_train = iris_df[:train_len]
+df_test = iris_df[train_len:]
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import IntegrityCheckSuite
+<\Cell_2>
+<Cell_3>
+IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+<\Cell_3>
+<Cell_4>
+# Adding a new chapter
+<\Cell_4>
+<Cell_5>
+df_new_chapter = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6]})
+<\Cell_5>
+<Cell_6>
+# Now, let's add this new chapter to the notebook
+<\Cell_6>
+<Cell_7>
+import nbformat

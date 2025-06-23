@@ -1,0 +1,35 @@
+
+The code you provided is a part of a larger code for a working with data sources course. It's a SQLite database management system, and it includes creating a table, inserting data, querying data, and dropping and renaming tables. 
+
+However, the code you provided is not complete. It seems to be missing the part where it creates a table for movies and actors, and a table to link movies and actors. 
+
+Here's the complete code:
+
+```python
+import sqlite3
+import pandas as pd
+
+conn = sqlite3.connect('nominations.db')
+
+# ... rest of the code ...
+
+create_movies_table = '''CREATE TABLE movies
+    (id INTEGER PRIMARY KEY,
+    movie TEXT);'''
+
+create_actors_table = '''CREATE TABLE actors
+    (id INTEGER PRIMARY KEY,
+    actor TEXT);'''
+
+create_movies_actors_table = '''CREATE TABLE movies_actors
+    (id INTEGER PRIMARY KEY,
+    movie_id INTEGER REFERENCES movies(id),
+    actor_id INTEGER REFERENCES actors(id));'''
+
+conn.execute(create_movies_table)
+conn.execute(create_actors_table)
+conn.execute(create_movies_actors_table)
+conn.close()
+```
+
+This code will create three tables: movies, actors, and movies_actors. The movies_actors table will link movies and actors together.

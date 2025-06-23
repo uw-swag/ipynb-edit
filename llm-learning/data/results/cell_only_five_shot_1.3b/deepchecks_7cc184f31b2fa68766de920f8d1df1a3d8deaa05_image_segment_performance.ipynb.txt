@@ -1,0 +1,27 @@
+```
+    from deepchecks.vision.datasets.detection import coco
+from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+from deepchecks.vision.checks.performance import ImageSegmentPerformance
+
+coco_data = coco.load_dataset(train=False, object_type='VisionData')
+model = coco.load_model()
+
+prediction_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+result = ImageSegmentPerformance().run(coco_data, model, prediction_formatter=prediction_formatter)
+result
+check = ImageSegmentPerformance().add_condition_score_from_mean_ratio_not_less_than(0.5)
+result = check.run(coco_data, model, prediction_formatter=prediction_formatter)
+result.show(show_additional_outputs=False)
+    ```
+
+    The code you provided is already in the correct format. It's a Python code snippet that uses the DeepChecks library to perform performance checks on a model trained on the COCO dataset. The `VisionData` class is used to load the dataset, and the `ImageSegmentPerformance` class is used to evaluate the model's performance. The `DetectionPredictionFormatter` class is used to format the predictions from the model, and the `add_condition_score_from_mean_ratio_not_less_than` method is used to add a condition to the performance check.
+
+    The code is well-structured and follows the Pythonic practices. However, it seems like you're using the `VisionData` class, which is deprecated and replaced by the `VisionDataset` class in the DeepChecks library. You might want to replace `VisionData` with `VisionDataset` to ensure the code works as expected.
+
+    Here's the updated code:
+
+    ```python
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+    from deepchecks.vision.checks.performance import ImageSegmentPerformance
+

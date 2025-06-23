@@ -1,0 +1,110 @@
+<Cell_0>
+import pandas as pd
+
+from datetime import datetime
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.tabs import ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import ProbClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+<\Cell_1>
+<Cell_2>
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+<\Cell_2>
+<Cell_3>
+bcancer_frame['target'] = bcancer.target
+<\Cell_3>
+<Cell_4>
+bcancer_frame.head()
+<\Cell_4>
+<Cell_5>
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+<\Cell_5>
+<Cell_6>
+train_data, test_data = model_selection.train_test_split(bcancer_frame, random_state=0)
+<\Cell_6>
+<Cell_7>
+model = ensemble.RandomForestClassifier(random_state=0)
+<\Cell_7>
+<Cell_8>
+model.fit(train_data[features], train_data.target)
+<\Cell_8>
+<Cell_9>
+# make a data frame with predictions for each class
+
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = bcancer.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = bcancer.target_names
+<\Cell_9>
+<Cell_10>
+train_probas.head()
+<\Cell_10>
+<Cell_11>
+# get labels for target: [0, 1, 0, 2] -> ['setosa', 'versicolor', 'setosa', 'virginica']
+
+train_data['target'] = [bcancer.target_names[x] for x in train_data['target']]
+test_data['target'] = [bcancer.target_names[x] for x in test_data['target']]
+<\Cell_11>
+<Cell_12>
+# merge train and test data with predictions
+
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+<\Cell_12>
+<Cell_13>
+merged_train_data.head()
+<\Cell_13>
+<Cell_14>
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = bcancer.target_names.tolist()
+bcancer_column_mapping.numerical_features = numerical_features
+<\Cell_14>
+<Cell_15>
+bcancer_model_performance_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=1)])
+bcancer_model_performance_dashboard.calculate(merged_train_data, merged_test_data, 
+                                              column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_15>
+<Cell_16>
+# bcancer_model_performance_dashboard.save('bcancer_model_performance.html')
+<\Cell_16>
+<Cell_17>
+bcancer_model_performance_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=0)])
+bcancer_model_performance_dashboard.calculate(merged_train_data, merged_test_data, 
+                                              column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_17>
+<Cell_18>
+# bcancer_model_performance_dashboard.save('bcancer_model_performance.html')
+<\Cell_18>
+<Cell_19>
+bcancer_classification_performance_profile = Profile(sections=[ProbClassificationPerformanceProfileSection()])
+<\Cell_19>
+<Cell_20>
+bcancer_classification_performance_profile.calculate(merged_train_data, merged_test_data, 
+                                                     column_mapping = bcancer_column_mapping)
+<\Cell_20>
+<Cell_21>
+bcancer_classification_performance_profile.json() 
+<\Cell_21>
+<Cell_22>
+
+<\Cell_22>

@@ -1,0 +1,42 @@
+```
+    import re
+
+    # pat = Pattern
+    pat = "^The.*Thailand$"
+
+    # strs = Strings
+    strs = ["The list ranks completed buildings in Thailand", 
+        "The tallest building in Thailand.", 
+        "Weather in Thailand", 
+        "They recently visited Chiang Mai, Thailand"]
+
+    [re.search(pat, s) for s in strs]
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.search("Taiwan", str)
+    print(x)
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.findall("la", str)
+    print(x)
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.findall("Th.", str)
+    print(x)
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.findall("Japan", str)
+    print(x)
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.split("\s", str)
+    print(x)
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.sub("\s", "0", str)
+    print(x)
+
+    str = "This list of tallest buildings in Thailand ranks skyscrapers in Thailand by height."
+    x = re.sub("\s", "0", str, 2)
+    print(x)
+    ```

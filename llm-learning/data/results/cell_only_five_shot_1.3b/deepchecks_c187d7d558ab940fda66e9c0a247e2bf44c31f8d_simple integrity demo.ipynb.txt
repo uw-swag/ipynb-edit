@@ -1,0 +1,76 @@
+```python
+    from check_suite import CheckSuite
+
+    # Create a CheckSuite object
+    check_suite = CheckSuite()
+
+    # Add a test case to the CheckSuite
+    check_suite.add_test_case("test_flattening", "flattening_function")
+
+    # Run the CheckSuite
+    check_suite.run()
+
+    # Print the results
+    print(check_suite.get_results())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding 'check_suite' module; (#124)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # check_suite.py
+
+    class CheckSuite:
+        def __init__(self):
+            self.results = {}
+
+        def add_test_case(self, test_case_name, function_name):
+            self.results[test_case_name] = function_name
+
+        def run(self):
+            for test_case_name, function_name in self.results.items():
+                print(f"Running test case: {test_case_name}")
+                result = function_name()
+                print(f"Test case result: {result}")
+
+        def get_results(self):
+            return self.results
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding 'unittest' module; (#123)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # unittest.py
+
+    import unittest
+
+    class TestFlatteningFunction(unittest.TestCase):
+        def test_flattening(self):
+            # Add your test cases here
+            pass
+
+        def test_recovering(self):
+            # Add your test cases here
+            pass
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding 'unittest' module; (#122)"
+    Original Code Cells:
+    '''

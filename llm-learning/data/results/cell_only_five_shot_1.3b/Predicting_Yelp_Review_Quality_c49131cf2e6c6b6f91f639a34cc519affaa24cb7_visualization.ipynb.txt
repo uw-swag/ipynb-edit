@@ -1,0 +1,45 @@
+```python
+    # Duplicate record problem
+    # Duplicate records are not allowed in a database.
+    # This problem arises when you try to insert a record that already exists in the database.
+
+    # Here is an example of how to handle this problem in Python using SQLAlchemy:
+
+    from sqlalchemy import create_engine, MetaData, Table, select, insert
+    from sqlalchemy.orm import sessionmaker
+
+    # Create an engine that will connect to the database
+    engine = create_engine('sqlite:///mydatabase.db')
+
+    # Create a configured "Session" class
+    Session = sessionmaker(bind=engine)
+
+    # Create a session
+    session = Session()
+
+    # Define the table
+    table = Table('mytable', MetaData(), autoload_with=engine)
+
+    # Insert a new record
+    new_record = table.insert().values(name="John Doe", age=30)
+
+    # Execute the statement
+    session.execute(new_record)
+
+    # Try to insert a duplicate record
+    duplicate_record = table.insert().values(name="John Doe", age=30)
+
+    # Execute the statement
+    try:
+        session.execute(duplicate_record)
+    except Exception as e:
+        print("Duplicate record found:", e)
+
+    # Commit the transaction
+    session.commit()
+
+    # Close the session
+    session.close()
+    ```
+
+    This code will print "Duplicate record found" if a duplicate record is attempted to be inserted.

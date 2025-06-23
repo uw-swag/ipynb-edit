@@ -1,0 +1,41 @@
+```
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+    import seaborn as sns
+    from pycaret.datasets import get_data
+    from pycaret.regression import *
+    mpl.rcParams['figure.dpi'] = 300
+
+    data = get_data('insurance')
+    data.info()
+
+    numeric = ['age', 'bmi', 'children', 'charges']
+
+    data[numeric].hist(bins=20, figsize = (12,8))
+    plt.show()
+
+    categorical = ['smoker', 'sex', 'region']
+    color = ['C0', 'C1', 'C2', 'C3']
+
+    fig, axes = plt.subplots(2, 2, figsize = (12,10))
+    axes[1,1].set_axis_off()
+
+    for ax, col in zip(axes.flatten(), categorical) :
+        data[col].value_counts().plot(kind = 'bar', ax = ax, color = color)
+        ax.set_xlabel(col)
+
+    fig, axes = plt.subplots(2, 2, figsize=(12,8))
+    axes[1,1].set_axis_off()
+
+    for ax, col in zip(axes.flatten(), categorical):
+        sns.histplot(data, x='charges', hue=col, multiple='stack', ax=ax)
+    plt.show()
+
+    cols =  ['age', 'sex', 'bmi', 'children', 'smoker', 'region']
+
+    records = [
+       [30, 'male', 20, 0, 'no', 'southeast'],
+       [30, 'male', 20, 0, 'yes', 'southeast'],
+       [30, 'male', 35, 0, 'yes', 'southeast'],
+       [70, 'male', 35, 0

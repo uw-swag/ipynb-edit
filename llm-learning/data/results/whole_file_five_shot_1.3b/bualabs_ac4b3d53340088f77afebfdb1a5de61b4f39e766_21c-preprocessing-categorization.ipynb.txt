@@ -1,0 +1,30 @@
+```
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    <\Cell_1>
+    <Cell_2>
+    df = pd.DataFrame({'Name': ["Mister A", "Mister B", "Mister C", "Mister D", "Mister E", "Mister F"], 
+                       'Age': [22, 33, 30, 31, 42, 51], 
+                       'Degree': ["Bachelor", "Master", "Master", "Bachelor", "Doctor", None], 
+                       'Shirt': ["Red", "Blue", "Green", "Blue", None, "Blue"], 
+                       })
+    df
+    <\Cell_2>
+    <Cell_3>
+    df = pd.get_dummies(df, columns=['Shirt'], dummy_na=True)
+    df
+    <\Cell_3>
+    <Cell_4>
+    df["Degree"] = df["Degree"].map({'Bachelor': 0, 'Master': 1, "Doctor": 2})
+    df
+    <\Cell_4>
+    <Cell_5>
+
+    <\Cell_5>
+    ```

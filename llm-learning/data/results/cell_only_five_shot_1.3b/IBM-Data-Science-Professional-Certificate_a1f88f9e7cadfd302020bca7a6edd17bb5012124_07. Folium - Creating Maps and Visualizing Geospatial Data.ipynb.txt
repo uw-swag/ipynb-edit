@@ -1,0 +1,48 @@
+```python
+    import folium
+
+    # Create a map
+    m = folium.Map(location=[45.5236, -122.6750], zoom_start=13)
+
+    # Add a circle marker to represent a business
+    folium.CircleMarker(
+        location=[45.5236, -122.6750],
+        radius=5,
+        color='blue',
+        fill=True,
+        fill_color='blue'
+    ).add_to(m)
+
+    # Add a polygon to represent a city
+    folium.Polygon(
+        location=[
+            [45.5236, -122.6750],
+            [45.5236, -122.675],
+            [45.524, -122.675],
+            [45.524, -122.674]
+        ],
+        color='red',
+        fill=True,
+        fill_color='red'
+    ).add_to(m)
+
+    # Add a polygon to represent a country
+    folium.Polygon(
+        location=[
+            [45.5236, -122.6750],
+            [45.5236, -122.675],
+            [45.5236, -122.675],
+            [45.5236, -122.675]
+        ],
+        color='green',
+        fill=True,
+        fill_color='green'
+    ).add_to(m)
+
+    # Add a polygon to represent a state
+    folium.Polygon(
+        location=[
+            [45.5236, -122.6750],
+            [45.5236, -122.675],
+            [45.5236, -122.675],
+            [45.5236, -122.675

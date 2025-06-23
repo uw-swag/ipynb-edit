@@ -1,0 +1,13 @@
+```python
+    from sklearn.compose import ColumnTransformer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OrdinalEncoder
+    from sklearn.tree import DecisionTreeClassifier
+
+    from deepchecks import Dataset
+    from deepchecks.checks import TrainTestFeatureDrift
+
+    check = TrainTestFeatureDrift()
+    result = check.run(train_dataset=train_dataset, test_dataset=test_dataset, model=model)
+    result
+    ```

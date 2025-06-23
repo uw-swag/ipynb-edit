@@ -1,0 +1,31 @@
+```python
+    from sklearn.metrics import roc_curve, auc
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Assuming you have a function `predict_proba` that returns the probability of the positive class
+    y_score = model.predict_proba(X_test)
+
+    # Compute ROC curve and area under the curve
+    fpr, tpr, _ = roc_curve(y_test, y_score[:, 1])
+    roc_auc = auc(fpr, tpr)
+
+    # Plot ROC curve
+    plt.figure()
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic')
+    plt.legend(loc="lower right")
+    plt.show()
+    ```
+    This code will generate a ROC curve and calculate the area under the curve. The ROC curve is a plot of the true positive rate (TPR) against the false positive rate (FPR) at different threshold settings. The area under the curve (AUC) is a measure of the model's performance.
+
+    The code is assuming that you have a model `model` that can predict probabilities of the positive class. The `predict_proba` function is a method of the model that returns the probability of the positive class for each instance. The `roc_curve` function is a function that computes the ROC curve, and the `auc` function is a function that computes the area under the ROC curve.
+
+    The code then plots the ROC curve, and finally shows the plot.
+
+    The

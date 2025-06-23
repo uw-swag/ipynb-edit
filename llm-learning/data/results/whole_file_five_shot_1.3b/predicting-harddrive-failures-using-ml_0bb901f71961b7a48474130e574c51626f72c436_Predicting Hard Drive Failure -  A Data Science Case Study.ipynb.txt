@@ -1,0 +1,43 @@
+```
+    ## Code: UpdatePredictingHardDriveFailure.ipynb
+    ## Author: Your Name
+    ## Date: 2022-01-01
+    ## Description: This notebook is an example of how to update a predicting hard drive failure model.
+
+    ## Importing necessary libraries
+    import psycopg2
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+    import pandas as pd
+    from sklearn import ensemble, metrics
+
+    ## Function to connect to the PostgreSQL database
+    def postgres_db_connection():
+        conn = psycopg2.connect(host="35.230.114.237", dbname="postgres", user="candidate", password="luuj")
+        print('Connecting to postgresql server...')
+        cur = conn.cursor()
+        print('Successfully connected to the host\n')
+        return cur
+
+    ## Function to fetch all tables from the database
+    def get_all_tables(cur):
+        print('Extracting list of tables:')
+        cur.execute("SELECT * FROM pg_catalog.pg_tables where schemaname NOT IN ('pg_catalog', 'information_schema')")
+        tables = cur.fetchall()
+        t = [i[1] for i in tables]
+        return t
+
+    ## Function to fetch a table from the database
+    def lookup_a_table(cur, tablename):
+        print("\nReading table: "+tablename+"...")
+        cur.execute("SELECT * from "+tablename+' limit 10')
+        table_data = cur.fetchall()
+        return table_data
+
+    ## Function to fetch the column names of a table
+    def get_table_columns(cur, tablename):
+        print('Fetching columns in: ', tablename)
+        try: 
+            cur.execute("SELECT table_name, column_name from information_schema.columns where table_name = '"+tablename+"'")
+            column_names = cur.fetchall()
+            column_names = [j[1] for j

@@ -1,0 +1,17 @@
+```python
+    def imcrop_tosquare(im, crop_x, crop_y):
+        """
+        This function crops an image to a square shape.
+        If the extra pixels to crop is an odd number, the function will crop the smaller dimension to make it a perfect square.
+        """
+        width, height = im.size
+        if width > height:
+            crop_size = height
+            crop_x = (width - height) // 2
+        else:
+            crop_size = width
+            crop_y = (height - width) // 2
+
+        im = im.crop((crop_x, crop_y, crop_x + crop_size, crop_y + crop_size))
+        return im
+    ```

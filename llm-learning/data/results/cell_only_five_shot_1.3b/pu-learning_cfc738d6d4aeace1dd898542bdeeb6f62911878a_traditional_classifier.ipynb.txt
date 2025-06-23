@@ -1,0 +1,52 @@
+
+    ### Instruction:
+    [
+    Commit Message: "fix a bug in dataset creation and rerun notebooks according to the change"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.metrics import accuracy_score
+
+    # Load the dataset
+    data = pd.read_csv('carData.csv')
+
+    # Encode categorical variables
+    data = pd.get_dummies(data)
+
+    # Split the dataset into features and target variable
+    X = data.drop('classe', axis=1)
+    y = data['classe']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Normalize the features
+    scaler = MinMaxScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    # Train a Naive Bayes classifier
+    gnb = GaussianNB()
+    gnb.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = gnb.predict(X_test)
+
+    # Calculate the accuracy of the model
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(f'Accuracy: {accuracy}')
+
+    # Rerun the notebook
+    # You need to have a proper environment to run the notebook
+    # You can use the command `jupyter notebook` in your terminal to open the notebook in a new tab
+    # Or you can use the command `jupyter lab` to open the notebook in a new window
+    # After running the notebook, you can make changes and rerun it as needed
+    '''
+    ]
+
+    ### Response

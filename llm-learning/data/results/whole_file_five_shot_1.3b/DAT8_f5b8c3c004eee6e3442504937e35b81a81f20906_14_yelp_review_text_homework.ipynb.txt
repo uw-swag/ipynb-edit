@@ -1,0 +1,16 @@
+```python
+    class Solution:
+        def findMaxLength(self, nums: List[int]) -> int:
+            if not nums:
+                return 0
+            max_length = 0
+            current_sum = 0
+            num_dict = {0: -1}
+            for i in range(len(nums)):
+                current_sum += nums[i]
+                if current_sum not in num_dict:
+                    num_dict[current_sum] = i
+                else:
+                    max_length = max(max_length, i - num_dict[current_sum])
+            return max_length
+    ```

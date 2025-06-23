@@ -1,0 +1,46 @@
+
+    '''
+    Commit Message: "Add choropleth map to visualize population density and earthquake magnitude"
+
+    Original Code Cells:
+    '''
+    <Cell_14>
+
+    # Create a base map
+    m_5 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    # create a map
+    Choropleth(geo_data=prefectures.geometry.__geo_interface__, data=stats.density, key_on='feature.id', 
+               fill_color='BuPu', 
+               legend_name='population density and earthquake magnitude').add_to(m_5)
+
+    earthquakes['marker_color'] = pd.cut(earthquakes['Magnitude'], bins=4, 
+                                         labels=['yellow', 'orange', 'red', 'purple'])
+
+    # Add a map to visualize earthquake depth
+    for idx, e in earthquakes.iterrows():    
+        Circle(location=[e['Latitude'], e['Longitude']], 
+               popup=("{} ({})").format(e['Magnitude'],e['DateTime'].year),
+               radius=e['Magnitude']**5.5,           
+               color=e['marker_color']).add_to(m_5)
+
+    embed_map(m_5, 'm_5.html')
+<\Cell_14>
+<Cell_15>
+
+<\Cell_15>
+
+    '''
+    Commit Message: "Add choropleth map to visualize population density and earthquake magnitude"
+
+    Original Code Cells:
+    '''
+    <Cell_15>
+
+    # Create a base map
+    m_6 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    # create a map
+    Choropleth(geo_data=prefectures.geometry.__geo_interface__, data=stats.density, key_on='feature.id', 
+               fill_color='BuPu', 
+               legend

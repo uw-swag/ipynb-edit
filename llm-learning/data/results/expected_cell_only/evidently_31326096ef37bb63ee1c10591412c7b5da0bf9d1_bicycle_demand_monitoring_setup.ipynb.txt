@@ -1,0 +1,15 @@
+from evidently.core import ColumnType
+from evidently.calculations.stattests import StatTest, register_stattest
+
+def _anderson_stat_test(reference_data: pd.Series, current_data: pd.Series, feature_type: ColumnType, threshold: float):
+    p_value = anderson_ksamp([reference_data, current_data])[2]
+    return p_value, p_value < threshold
+
+anderson_stat_test = StatTest(
+    name="anderson",
+    display_name="Anderson test (p_value)",
+    allowed_feature_types=[ColumnType.Numerical]
+)
+
+register_stattest(anderson_stat_test, default_impl=_anderson_stat_test)
+# options = DataDriftOptions(feature_stattest_func=anderson_stat_test, all_features_threshold=0.9, nbinsx=20)

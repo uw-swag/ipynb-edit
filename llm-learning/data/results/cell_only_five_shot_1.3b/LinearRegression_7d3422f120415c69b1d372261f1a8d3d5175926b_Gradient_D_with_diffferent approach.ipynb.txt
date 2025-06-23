@@ -1,0 +1,33 @@
+
+    The code provided is a function that uses gradient descent to fit a line to a set of data points. The function `gradient_descent_func` is defined to perform the gradient descent on the cost function. The function `buildModel_func` is then used to build a model using the gradient descent function.
+
+    The original code has a lot of redundant code. The `gradient_descent_func` function is defined with a lot of parameters, but only a few lines of code are used to calculate the cost function and perform the gradient descent. The `buildModel_func` function is also defined with a lot of parameters, but only a few lines of code are used to build a model using the gradient descent function.
+
+    The redundant code can be removed by defining the cost function and gradient function in a separate function, and then using these functions in the `gradient_descent_func` and `buildModel_func` functions.
+
+    Here is the revised code:
+
+    ```python
+    def calculate_cost_func(X, Y, c, m):
+        # calculate the cost function
+        return np.sum((Y - (m * X + c)) ** 2)
+
+    def log_gradient_func(X, Y, c, m):
+        # calculate the gradient of the cost function
+        d_c = 2 * np.sum((Y - (m * X + c)))
+        d_m = 2 * np.sum((Y - (m * X + c)) * X)
+        return d_c, d_m
+
+    def gradient_descent_func(X_train, Y_train, alpha=0.00001, ep=0.0001, max_iter=1000000):
+        iteration = 0
+        converged = True
+
+        m = np.random.randn()
+        c = np.random.randn()
+        cost = calculate_cost_func(X_train, Y_train, c, m)
+
+        while converged:
+            d_c, d_m = log_gradient_func(X_train, Y_train, c, m)
+            temp0 = c - alpha * d_c
+            temp1 = m - alpha * d_m
+            c =

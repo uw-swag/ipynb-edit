@@ -1,0 +1,59 @@
+```
+    ### ConversationSummaryBufferMemory
+
+    The `ConversationSummaryBufferMemory` is a memory object that is used to store the conversation context. It is used in the `ConversationSummary` class to store the conversation context and predict the next message.
+
+    Here is an example of how to use the `ConversationSummaryBufferMemory`:
+
+    ```python
+    from langchain.memory import ConversationSummaryBufferMemory
+
+    memory = ConversationSummaryBufferMemory(
+        llm=llm,
+        max_token_limit=50,
+    )
+
+    memory.save_context(
+        {"input": "Hello"},
+        {"output": "What's up"},
+    )
+
+    memory.save_context(
+        {"input": "Not much, just hanging"},
+        {"output": "Cool"},
+    )
+
+    memory.save_context(
+        {"input": "What is on the schedule today?"},
+        {"output": f"{news}"},
+    )
+
+    conversation.predict(input="What would be a good demo to show?")
+    ```
+
+    The `save_context` method is used to save the conversation context. The first parameter is the input to the system, and the second parameter is the expected output.
+
+    The `predict` method is used to predict the next message based on the conversation context.
+
+    The `llm` parameter is the language model that will be used to predict the next message.
+
+    The `max_token_limit` parameter is the maximum number of tokens that the system can use in the conversation context.
+
+    The `ConversationSummaryBufferMemory` is a memory object that is used to store the conversation context. It is used in the `ConversationSummary` class to store the conversation context and predict the next message.
+
+    Here is an example of how to use the `ConversationSummaryBufferMemory`:
+
+    ```python
+    from langchain.memory import ConversationSummaryBufferMemory
+
+    memory = ConversationSummaryBufferMemory(
+        llm=llm,
+        max_token_limit=50,
+    )
+
+    memory.save_context(
+        {"input": "Hello"},
+        {"output": "What's up"},
+    )
+
+    memory

@@ -1,0 +1,38 @@
+```
+    # Multiple Linear Regression
+
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn import linear_model
+    import matplotlib.pyplot as plt
+
+    # Reading the dataset
+    df = pd.read_csv("FuelConsumption.csv")
+
+    # Taking a look at the dataset
+    df.head()
+
+    # Preparing the data
+    cdf = df[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_CITY','FUELCONSUMPTION_HWY','FUELCONSUMPTION_COMB','CO2EMISSIONS']]
+    cdf.head()
+
+    # Plotting the data
+    plt.scatter(cdf.ENGINESIZE, cdf.CO2EMISSIONS,  color='blue')
+    plt.xlabel("Engine size")
+    plt.ylabel("Emission")
+    plt.show()
+
+    # Multiple Linear Regression
+    regr = linear_model.LinearRegression()
+    x = np.asanyarray(cdf[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB']])
+    y = np.asanyarray(cdf[['CO2EMISSIONS']])
+    regr.fit (x, y)
+    print ('Coefficients: ', regr.coef_)
+
+    # Predicting the results
+    y_ = regr.predict(test[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB']])
+    x = np.asanyarray(test[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB']])
+    y = np.asanyarray(test[['CO2EMISSIONS']])
+    print("Residual sum of squares: %.2f"% np.mean((y_ - y) ** 2))
+    print('Variance score: %.2f' % regr.score(x,

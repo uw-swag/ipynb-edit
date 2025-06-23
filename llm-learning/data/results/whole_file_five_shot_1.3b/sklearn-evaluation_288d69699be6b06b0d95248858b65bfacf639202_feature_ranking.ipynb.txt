@@ -1,0 +1,35 @@
+```
+    # Convert notebooks to myst format
+    # Re-organize sections
+
+    ## Import necessary libraries
+    import matplotlib
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris as load_data
+    from sklearn.datasets import make_classification
+    from sklearn_evaluation.plot import Rank1D, Rank2D
+
+    ## Set matplotlib parameters
+    matplotlib.rcParams["figure.figsize"] = (7, 7)
+    matplotlib.rcParams["font.size"] = 18
+
+    ## Load data
+    X, y = load_data(return_X_y=True)
+
+    ## Define features
+    features = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+
+    ## Create Rank1D object
+    rank1d = Rank1D(features=features)
+
+    ## Calculate ranks for Rank1D
+    rank1d.feature_ranks(X)
+
+    ## Create Rank2D object
+    rank2d = Rank2D(features=features)
+
+    ## Calculate ranks for Rank2D
+    rank2d.feature_ranks(X)
+    ```

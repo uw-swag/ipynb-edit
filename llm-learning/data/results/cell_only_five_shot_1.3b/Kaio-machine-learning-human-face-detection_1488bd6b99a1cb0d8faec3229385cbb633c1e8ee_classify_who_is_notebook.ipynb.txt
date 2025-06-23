@@ -1,0 +1,17 @@
+```python
+    # Treinamento com 10 usuários finalizado, falta mais 2 usuários para fechar o treinamento
+    ## Criando um novo usuário
+    novo_usuario = Usuario(nome="Novo Usuario", email="novo@usuario.com", senha="senha123")
+    novo_usuario.save()
+
+    ## Criando um novo treinamento
+    novo_treinamento = Treinamento(usuario=novo_usuario, data="2022-01-01", tempo="1h30m")
+    novo_treinamento.save()
+
+    ## Adicionando mais 2 usuários ao treinamento
+    for i in range(2):
+        novo_usuario = Usuario(nome=f"Novo Usuario {i+1}", email=f"novo{i+1}@usuario.com", senha="senha123")
+        novo_usuario.save()
+        novo_treinamento.usuarios.add(novo_usuario)
+        novo_treinamento.save()
+    ```

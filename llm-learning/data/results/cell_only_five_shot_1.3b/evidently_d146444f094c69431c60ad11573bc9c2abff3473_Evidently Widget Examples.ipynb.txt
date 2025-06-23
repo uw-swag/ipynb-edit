@@ -1,0 +1,52 @@
+```python
+    import pandas as pd
+    from dash import Dash
+    from dash.dependencies import Input, Output
+    from dash.html import Div
+    from dash.dcc import Graph
+    from dash.exceptions import PreventUpdate
+    import plotly.express as px
+    import numpy as np
+
+    # Assuming you have a DataFrame named 'df'
+    df = pd.read_csv('your_data.csv')
+
+    # Create a Dash instance
+    app = Dash(__name__)
+
+    # Define the layout of the dashboard
+    app.layout = html.Div([
+        html.H1('Data Profiling Dashboard'),
+        html.Div(id='data-profiling-output'),
+        dcc.Graph(id='data-profiling-graph'),
+    ])
+
+    # Define the callback function for the data profiling output
+    @app.callback(
+        Output('data-profiling-output', 'children'),
+        [Input('data-profiling-graph', 'clickData')]
+    )
+    def display_output(clickData):
+        if clickData is not None:
+            # Get the row index from the clickData
+            row_index = clickData['points'][0]['y']
+            # Get the data for the selected row
+            selected_data = df.iloc[row_index]
+            # Convert the selected data to a string
+            selected_data_str = selected_data.to_string()
+            return selected_data_str
+        else:
+            raise PreventUpdate
+
+    # Define the callback function for the data profiling graph
+    @app.callback(
+        Output('data-profiling-graph', 'figure'),
+        [Input('data-profiling-output', 'children')]
+    )
+    def display_graph(selected_data):
+        if selected_data is not None:
+            # Convert the selected data to a DataFrame
+            selected_data_df = pd.read_csv(io.StringIO(selected_data))
+            # Generate a profile report for the DataFrame
+            profile_report = pd.get_profiler(df)
+            # Convert

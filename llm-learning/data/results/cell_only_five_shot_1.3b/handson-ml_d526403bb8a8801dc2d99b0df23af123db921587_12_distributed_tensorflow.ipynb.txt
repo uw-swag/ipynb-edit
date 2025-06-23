@@ -1,0 +1,24 @@
+
+    The code you've provided is a TensorFlow 1.0.0 upgrade of a previous code. It's a simple example of how to use TensorFlow 1.0.0's new features and improvements.
+
+    Here's a brief explanation of the code:
+
+    1. The code first imports the necessary libraries and modules.
+
+    2. It then defines a function `read_and_push_instance` that reads a CSV file, decodes the data, and enqueues the data in the `instance_queue`.
+
+    3. The `filename_queue` is a FIFO queue that is used to read the CSV file.
+
+    4. The `instance_queue` is a RandomShuffleQueue that is used to enqueue the data from the CSV file.
+
+    5. The `read_and_enqueue_ops` list is created by calling the `read_and_push_instance` function five times.
+
+    6. The `queue_runner` is created to enqueue the data from the `read_and_enqueue_ops` list.
+
+    7. The code then enters a while loop that runs until the `Coordinator` object `coord` is stopped.
+
+    8. Inside the while loop, the code runs the TensorFlow operations and prints the minibatch instances and targets.
+
+    9. If an `OutOfRangeError` is raised, the code prints "No more training instances".
+
+    This code is a simple example of how to use TensorFlow 1.0.0's new features and improvements.

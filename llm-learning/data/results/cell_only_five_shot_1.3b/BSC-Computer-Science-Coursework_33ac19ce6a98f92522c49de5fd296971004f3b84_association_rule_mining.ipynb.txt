@@ -1,0 +1,27 @@
+```python
+    import pandas as pd
+    from mlxtend.frequent_patterns import apriori, association_rules
+
+    # Assuming df is your DataFrame and it has transactions in a list of lists format
+    df = pd.DataFrame({
+        'Transaction': [
+            ['Milk', 'Bread', 'Bread', 'Bread', 'Milk', 'Bread'],
+            ['Milk', 'Bread', 'Bread', 'Bread', 'Milk', 'Bread'],
+            ['Milk', 'Bread', 'Bread', 'Bread', 'Milk', 'Bread'],
+            ['Milk', 'Bread', 'Bread', 'Bread', 'Milk', 'Bread'],
+            ['Milk', 'Bread', 'Bread', 'Bread', 'Milk', 'Bread'],
+            ['Milk', 'Bread', 'Bread', 'Bread', 'Milk', 'Bread']
+        ]
+    })
+
+    # Convert the transactions list into a DataFrame
+    df = pd.get_dummies(df)
+
+    # Use the apriori function from mlxtend to find the association rules
+    frequent_itemsets = apriori(df, min_support=0.07, use_colnames=True)
+
+    # Generate the association rules
+    rules = association_rules(frequent_itemsets, metric="lift", min_threshold=1)
+
+    print(rules)
+    ```

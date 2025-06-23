@@ -1,0 +1,51 @@
+```
+    <Cell_0>
+    #!pip install yfinance
+    #!pip install pandas
+    <\Cell_0>
+    <Cell_1>
+    import yfinance as yf
+    import pandas as pd
+    <\Cell_1>
+    <Cell_2>
+    apple = yf.Ticker("AAPL")
+    <\Cell_2>
+    <Cell_3>
+    apple_info=apple.info
+    apple_info
+    <\Cell_3>
+    <Cell_4>
+    apple_info['country']
+    <\Cell_4>
+    <Cell_5>
+    apple_share_price_data = apple.history(period="max")
+    <\Cell_5>
+    <Cell_6>
+    apple_share_price_data.head()
+    <\Cell_6>
+    <Cell_7>
+    apple_share_price_data.reset_index(inplace=True)
+    <\Cell_7>
+    <Cell_8>
+    apple_share_price_data.plot(x="Date", y="Open")
+    <\Cell_8>
+    <Cell_9>
+    apple.dividends
+    <\Cell_9>
+    <Cell_10>
+    apple.dividends.plot()
+    <\Cell_10>
+    <Cell_11>
+    amd = yf.Ticker('AMD')
+    <\Cell_11>
+    <Cell_12>
+    amd.info['country']
+    <\Cell_12>
+    <Cell_13>
+    amd.info['sector']
+    <\Cell_13>
+    <Cell_14>
+    amd.history(period="max")['Volume'].max()
+    <\Cell_14>
+    ```
+    '''

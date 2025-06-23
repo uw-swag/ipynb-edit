@@ -1,0 +1,36 @@
+```
+    from redpitaya.overlay.mercury import mercury as FPGA
+    overlay = FPGA()
+    singleInput = FPGA.analog_in(0)
+    print(singleInput.read())
+    print('Measured voltage on Analog input pin 0 is {:.2f} V'.format(singleInput.read()))
+    chn = 4
+    channels = [FPGA.analog_in(ch) for ch in range(chn)]
+
+    for ch in range(chn):
+        print('{:.2f} V'.format(channels[ch].read()))
+    import time
+
+    from bokeh.io import push_notebook, show, output_notebook
+    from bokeh.models import HoverTool, Range1d
+    from bokeh.plotting import figure
+    from bokeh.resources import INLINE 
+    output_notebook(resources=INLINE)
+    colors = ('red', 'blue', 'green', 'orange')
+    hover = HoverTool(mode = 'vline', tooltips=[("T", "@x"), ("V", "@y")])
+    tools = "pan,wheel_zoom,box_zoom,reset,crosshair"
+    p = figure(plot_height=400, plot_width=900, title="XADC log", toolbar_location="above", tools=(tools, hover))
+    p.xaxis.axis_label='time [s]'
+    p.y_range=Range1d(0, 2)
+    p.yaxis.axis_label='voltage [V]'
+
+    # get and explicit handle to update the next show cell with
+    target = show(p, notebook_handle=True)
+    T = 0.01 # sampling period
+    x=[]
+    y=[ [], [], [], [] ]
+
+    r = [p.line(x, y[ch], line_width=1, line_alpha=0.7, color=colors[ch], legend="AI "+str(ch)) for ch in range(chn)]
+
+    # take 60 samples while simultaneously plotting the plot
+    for

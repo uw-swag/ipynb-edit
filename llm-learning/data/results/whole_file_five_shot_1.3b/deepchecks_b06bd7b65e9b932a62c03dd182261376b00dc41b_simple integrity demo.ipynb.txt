@@ -1,0 +1,20 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    # Load the iris dataset
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+
+    # Calculate the length of the training set
+    train_len = round(0.67 * len(iris_df))
+
+    # Split the dataset into training and testing sets
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    # Import the deepchecks suite for data integrity check
+    from deepchecks.suites import integrity_check_suite
+
+    # Run the data integrity check suite on the training and testing sets
+    integrity_check_suite().run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```

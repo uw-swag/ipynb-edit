@@ -1,0 +1,37 @@
+```python
+    import tensorflow as tf
+    from six.moves import urllib
+    import ssl
+
+    ssl._create_default_https_context = ssl._create_unverified_context
+
+    f, _ = urllib.request.urlretrieve('https://www.gutenberg.org/cache/epub/11/pg11.txt', 'alice.txt')
+
+    with open(f, 'r') as fp:
+        txt = fp.read()
+
+    # Let's create a name scope for the operations to clean things up in our graph
+    with tf.name_scope('reslice'):
+        sequence_length = 10000  # Define your sequence length here
+
+        # Split the text into sequences of sequence_length
+        Xs = [tf.squeeze(seq, [1]) for seq in tf.split(1, sequence_length, txt)]
+
+        # Now, you can use Xs as a TensorFlow operation
+        # You can also use tf.train.sequence_example_reader to read the data
+        # and tf.decode_raw to decode the raw data
+        # You can also use tf.reshape to reshape the data
+        # and tf.cast to cast the data to the appropriate type
+        # You can also use tf.slice to slice the data
+        # and tf.pack to pack the data into a Tensor
+        # And you can use tf.concat to concatenate the data
+        # and tf.transpose to transpose the data
+        # and tf.cast to cast the data to the appropriate type
+        # And you can use tf.slice to slice the data
+        # and tf.pack to pack the data into a Tensor
+        # And you can use tf.concat to concatenate the data
+        # and tf.transpose to transpose the data
+        # and tf.cast to cast the data to the appropriate type
+        # And you can use tf.slice to slice the data
+        # and tf.pack to pack the data into a Tensor
+        # And you can use tf.concat to concatenate the data

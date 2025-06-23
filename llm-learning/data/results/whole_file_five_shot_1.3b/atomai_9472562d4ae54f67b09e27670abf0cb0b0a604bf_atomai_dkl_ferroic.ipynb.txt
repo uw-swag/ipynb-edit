@@ -1,0 +1,47 @@
+```
+    [
+    Commit Message: "Updated via Colaboratory"
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install --upgrade torch==1.8.0 torchvision==0.9.0
+!pip install -q atomai
+<\Cell_0>
+<Cell_1>
+!nvidia-smi
+<\Cell_1>
+<Cell_2>
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from scipy.spatial import cKDTree
+import atomai as aoi
+<\Cell_2>
+<Cell_3>
+dataset_all = aoi.utils.datasets.stem_smbfo(download=True)
+<\Cell_3>
+<Cell_4>
+dataset_all.keys()
+<\Cell_4>
+<Cell_5>
+dataset = dataset_all["Sm_10_0"]
+
+main_img = dataset["main_image"]
+Pxy = dataset["Pxy"]
+xy_com = dataset["xy_COM"]
+xy_atms = dataset['xy_atms']
+
+_, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(14, 4.5))
+ax1.imshow(main_img, cmap="gray", origin="lower")
+ax2.scatter(xy_com[:, 1], xy_com[:, 0], s=4, c=Pxy[:, 0], cmap='RdBu', vmin=-4, vmax=4)
+ax3.scatter(xy_com[:, 1], xy_com[:, 0], s=4, c=Pxy[:, 1], cmap='RdBu', vmin=-4, vmax=4)
+ax2.set_title("$P_x$")
+ax3.set_title("$P_y$")
+plt.show()
+<\Cell_5>
+<Cell_6>
+patch_size = 42
+
+# get stack of image patches centered on atoms
+imgstack,

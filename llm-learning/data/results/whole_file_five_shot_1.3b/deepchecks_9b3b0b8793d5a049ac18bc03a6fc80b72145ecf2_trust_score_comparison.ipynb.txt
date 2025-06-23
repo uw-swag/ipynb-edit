@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    from deepchecks import Dataset
+
+    df = load_breast_cancer(as_frame=True).frame
+    label = 'target'
+
+    train_df, test_df = train_test_split(df, test_size=0.33, random_state=0)
+    train = Dataset(train_df, label=label)
+    test = Dataset(test_df, label=label)
+
+    clf = AdaBoostClassifier()
+    features = train_df.drop(label, axis=1)
+    target = train_df[label]
+    clf.fit(features, target)
+
+    from deepchecks.checks import TrustScoreComparison
+
+    TrustScoreComparison(min_test_samples=100).run(train, test, clf)
+    ```
+    This code is for the Deepchecks library, which is a Python library for data quality checks. It's used to check the quality of the data before training a model.

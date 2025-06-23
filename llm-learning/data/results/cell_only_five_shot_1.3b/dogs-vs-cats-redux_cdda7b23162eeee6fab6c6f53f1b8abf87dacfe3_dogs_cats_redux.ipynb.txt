@@ -1,0 +1,48 @@
+```python
+    # Set dataset, model and evaluation parameters
+    DATA_PATH = unzip_url(Urls.fridge_objects_path, exist_ok=True)
+
+    # DNN configuration and learning parameters
+    EPOCHS_HEAD = 4
+    EPOCHS_BODY = 12
+    LEARNING_RATE = 10 * 1e-4
+    DROPOUT_RATE = 0.5
+    BATCH_SIZE = 16
+    ARCHITECTURE = models.resnet18
+    IM_SIZE = 300
+
+    # Import necessary modules
+    from utils import *
+    from vgg16 import Vgg16
+
+    # Instantiate plotting tool
+    %matplotlib inline
+
+    # Set constants
+    batch_size=32
+    no_of_epochs=1
+
+    # Finetune the model
+    batches = vgg.get_batches(train_path, batch_size=batch_size)
+    val_batches = vgg.get_batches(valid_path, batch_size=batch_size)
+    vgg.finetune(batches)
+
+    # Set learning rate
+    vgg.model.optimizer.lr = 0.0001
+    coverage = 1
+    vgg.model.load_weights(results_path+'ft1.1.h5')
+
+    # Run for each epoch
+    for epoch in range(no_of_epochs):
+        print(f"Running epoch: {epoch}")
+        vgg.fit(batches, val_batches, nb_epoch=1, coverage=coverage)
+
+    # Test the model
+    batches, preds = vgg.test(test_path, batch_size = batch_size)
+    filenames = batches.filenames
+    print(preds[:5])
+    print(filenames[:5])
+    from PIL import Image
+    Image.open(test_path + filenames[2])
+    save_array(results_path + 'test_preds.dat', preds)
+    save_array(results_path

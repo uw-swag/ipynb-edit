@@ -1,0 +1,37 @@
+```python
+    def recommend_movies(user_id, top_k):
+        """
+        Recommend movies for a given user.
+
+        Args:
+            user_id (int): The id of the user.
+            top_k (int): The number of top recommendations to return.
+
+        Returns:
+            list: A list of movie ids.
+        """
+        # Get the cross join of all user-item pairs and score them.
+        users = train.select('UserId').distinct()
+        items = train.select('MovieId').distinct()
+        user_item = users.crossJoin(items)
+        dfs_pred = model.transform(user_item)
+
+        # Remove seen items.
+        dfs_pred_exclude_train = dfs_pred.alias("pred").join(
+            train.alias("train"),
+            (dfs_pred['UserId'] == train['UserId']) & (dfs_pred['MovieId'] == train['MovieId']),
+            how='outer'
+        )
+
+        # Select top k movies
+        top_all = dfs_pred_exclude_train.filter(dfs_pred_exclude_train["train.Rating"].isNull()) \
+            .select('pred.' + 'UserId', 'pred.' + 'MovieId', 'pred.' + "prediction") \
+            .orderBy('prediction', ascending=False) \
+            .limit(top_k)
+
+        # Get the movie ids
+        movie_ids = top_all.select('MovieId').collect()
+
+        return [movie_id[0] for movie_id in movie_ids]
+    ```
+    This function now returns a list of movie ids, which can be used to fetch the corresponding movie details.

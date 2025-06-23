@@ -1,0 +1,23 @@
+```
+    # create 4 dummy variables and show 5 random rows
+    pd.get_dummies(bikes.season, prefix='season').sample(n=5, random_state=1)
+
+    # create 4 dummy variables, then exclude the first
+    pd.get_dummies(bikes.season, prefix='season').iloc[:, 1:].sample(n=5, random_state=1)
+
+    # create a DataFrame with the 3 dummy variable columns
+    season_dummies = pd.get_dummies(bikes.season, prefix='season').iloc[:, 1:]
+
+    # concatenate the original DataFrame and the dummy DataFrame (axis=0 means rows, axis=1 means columns)
+    bikes = pd.concat([bikes, season_dummies], axis=1)
+
+    # show 5 random rows
+    bikes.sample(n=5, random_state=1)
+
+    # hour as a categorical feature
+    hour_dummies = pd.get_dummies(bikes.hour, prefix='hour').iloc[:, 1:]
+    bikes = pd.concat([bikes, hour_dummies], axis=1)
+
+    ```
+
+    This code is used to create dummy variables for the 'season' and 'hour' columns in the 'bikes' DataFrame. The dummy variables are then concatenated with the original DataFrame to create a new DataFrame. The new DataFrame is then displayed with 5 random rows.

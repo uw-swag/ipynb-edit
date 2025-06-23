@@ -1,0 +1,20 @@
+```python
+    def train_nn(model, train_loader, valid_loader, criterion, optimizer, n_epochs, device):
+        """
+        Function to train a neural network
+        """
+        train_losses, valid_losses = [], []
+        
+        for epoch in range(n_epochs):
+            train_loss = train_function(model, train_loader, criterion, optimizer, device)
+            valid_loss = valid_function(model, valid_loader, criterion, device)
+            
+            train_losses.append(train_loss)
+            valid_losses.append(valid_loss)
+            
+            if valid_loss < best_valid_loss:
+                best_valid_loss = valid_loss
+                best_model = model.state_dict()
+        
+        return train_losses, valid_losses, best_model
+    ```

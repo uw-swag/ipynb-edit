@@ -1,0 +1,15 @@
+```
+    from deepchecks import Dataset
+
+    # Assuming df_train and df_test are pandas dataframes and label_col is the name of the label column
+    ds_train = Dataset(df_train, label=label_col, cat_features=[], use_index=False, date=None)
+    ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+    ```
+
+    The `cat_features` parameter is used to specify the categorical features in the dataset. If you want to use this dataset for a model that requires categorical features, you should include them in this parameter.
+
+    The `use_index` parameter is used to specify whether the dataset should use the index as a feature. If you want to use the index as a feature, you should set this parameter to `True`.
+
+    The `date` parameter is used to specify the date column in the dataset. If you have a date column in your dataset, you should include it in this parameter.
+
+    Please note that the `cat_features` parameter is not used in the current version of Deepchecks. It is still available in the version 0.10.0.

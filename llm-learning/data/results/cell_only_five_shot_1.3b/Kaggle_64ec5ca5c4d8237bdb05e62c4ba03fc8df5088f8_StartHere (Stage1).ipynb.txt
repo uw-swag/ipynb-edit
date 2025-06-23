@@ -1,0 +1,44 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocessing the data
+    # This step depends on the specifics of your dataset.
+    # For example, you might need to handle missing values,
+    # normalize numerical data, or convert categorical data to numerical.
+
+    # Split the data into features and target variable
+    X = df.drop('target_variable', axis=1)
+    y = df['target_variable']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+    # Save the model for future use
+    import joblib
+    joblib.dump(model, 'model.pkl')
+    ```
+    This is a rudimentary example of a machine learning model using linear regression. The model is trained on a dataset, and then it's used to make predictions on unseen data. The model's performance is evaluated using various metrics. Finally, the model is saved for future use.
+
+    Please note that this is a very basic example. In a real-world scenario, you would need to perform more

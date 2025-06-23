@@ -1,0 +1,20 @@
+```python
+    import pandas as pd
+    from sklearn.impute import SimpleImputer
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Define the imputer
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+
+    # Fit and transform the data
+    df_imputed = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Check if there are any missing values in the imputed data
+    if df_imputed.isnull().values.any():
+        print("There are missing values in the imputed data.")
+    else:
+        print("There are no missing values in the imputed data.")
+    ```
+    This code uses the `SimpleImputer` class from the `sklearn.impute` module to fill missing values in the data. The `strategy` parameter is set to 'mean' to fill missing values with the mean of the column. The imputed data is then saved to a new DataFrame. The code also checks if there are any missing values in the imputed data.

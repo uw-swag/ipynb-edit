@@ -1,0 +1,43 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.model_selection import train_test_split
+
+    # Load data
+    df = pd.read_csv('data/stock_data.csv')
+
+    # Preprocess data
+    df['Date'] = pd.to_datetime(df['Date'])
+    df.set_index('Date', inplace=True)
+
+    # Create features
+    df['Open_Previous'] = df['Open'].shift(1)
+    df['High_Previous'] = df['High'].shift(1)
+    df['Low_Previous'] = df['Low'].shift(1)
+    df['Close_Previous'] = df['Close'].shift(1)
+
+    # Drop NA values
+    df.dropna(inplace=True)
+
+    # Split data
+    X = df.drop(['Open', 'High', 'Low', 'Close'], axis=1)
+    y = df['Close']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train model
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+
+    # Predict
+    predictions = model.predict(X_test)
+
+    # Plotting
+    plt.figure(figsize=(10, 5))
+    plt.plot(y_test, label='Actual')
+    plt.plot(predictions, label='Predicted')
+    plt.legend()
+    plt.show()
+    <\Cell_0>
+    ```

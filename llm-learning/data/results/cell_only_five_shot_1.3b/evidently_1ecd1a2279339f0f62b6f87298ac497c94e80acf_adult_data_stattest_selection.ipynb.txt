@@ -1,0 +1,41 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from scipy import stats
+
+    # Create a sample dataframe
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500]
+    })
+
+    # Perform a t-test
+    t_test_result = stats.ttest_1samp(df['A'], df['A'].mean())
+
+    # Print the t-test result
+    print(f"T-test result: {t_test_result}")
+
+    # Perform a Wilcoxon signed-rank test
+    wilcoxon_test_result = stats.wilcoxon(df['A'], df['A'].rank(method='first'))
+
+    # Print the Wilcoxon signed-rank test result
+    print(f"Wilcoxon signed-rank test result: {wilcoxon_test_result}")
+
+    # Perform a Kruskal-Wallis test
+    kruskal_test_result = stats.kruskal(df['A'], df['A'])
+
+    # Print the Kruskal-Wallis test result
+    print(f"Kruskal-Wallis test result: {kruskal_test_result}")
+
+    # Perform a Friedman test
+    friedman_test_result = stats.friedmanchisquare(*[df[col] for col in df.columns])
+
+    # Print the Friedman test result
+    print(f"Friedman test result: {friedman_test_result}")
+
+    # Perform a Mann-Whitney U test
+    mann_whitney_test_result = stats.mannwhitneyu(df['A'], df['A'])
+
+    # Print the Mann-Whitney U test result
+    print(f"Mann-Whitney

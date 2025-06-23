@@ -1,0 +1,84 @@
+```go
+    package display
+
+    import (
+        "image"
+        "io"
+    )
+
+    const (
+        MIMETypeHTML       = "text/html"
+        MIMETypeJavaScript = "application/javascript"
+        MIMETypeJPEG       = "image/jpeg"
+        MIMETypeJSON       = "application/json"
+        MIMETypeLatex      = "text/latex"
+        MIMETypeMarkdown   = "text/markdown"
+        MIMETypePNG        = "image/png"
+        MIMETypePDF        = "application/pdf"
+        MIMETypeSVG        = "image/svg+xml"
+    )
+
+    type MIMEMap map[string]interface{}
+
+    type Data struct {
+        Data      MIMEMap
+        Metadata  MIMEMap
+        Transient MIMEMap
+    }
+
+    func Any(mimeType string, data interface{}) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func Auto(data interface{}) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func HTML(html string) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func JSON(json map[string]interface{}) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func JavaScript(javascript string) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func JPEG(jpeg []byte) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func Image(img image.Image) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func Latex(latex string) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func Markdown(markdown string) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func Math(latex string) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func PDF(pdf []byte) Data {
+        // TODO: implement
+        return Data{}
+    }
+
+    func PNG(

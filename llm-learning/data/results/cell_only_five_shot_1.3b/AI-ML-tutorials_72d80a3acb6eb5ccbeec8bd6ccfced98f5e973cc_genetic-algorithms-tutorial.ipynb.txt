@@ -1,0 +1,26 @@
+```python
+    import os
+    import shutil
+
+    # Get the list of all subdirectories in the current directory
+    subdirs = [d for d in os.listdir('.') if os.path.isdir(d)]
+
+    # Iterate over each subdirectory
+    for subdir in subdirs:
+        # Get the list of all files in the current subdirectory
+        files = [f for f in os.listdir(subdir) if os.path.isfile(f)]
+
+        # Iterate over each file in the current subdirectory
+        for file in files:
+            # If the file is a python file, concatenate it with the current file
+            if file.endswith('.py'):
+                with open(file, 'r') as f:
+                    data = f.read()
+                with open('all_files.py', 'a') as f:
+                    f.write(data)
+
+        # Move the current subdirectory to the 'all_files' directory
+        shutil.move(subdir, 'all_files')
+
+    print('All files have been concatenated and moved to the "all_files" directory.')
+    ```

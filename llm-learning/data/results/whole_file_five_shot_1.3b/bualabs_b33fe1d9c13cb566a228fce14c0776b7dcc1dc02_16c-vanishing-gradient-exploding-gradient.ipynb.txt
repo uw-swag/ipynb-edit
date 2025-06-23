@@ -1,0 +1,40 @@
+```python
+    # Importing torch, math
+    import torch, math
+
+    # Creating tensors x and a
+    x = torch.randn(100, 100)
+    a = torch.randn(100, 100) * 0.01
+
+    # Printing mean and standard deviation of x
+    print(f'Mean of x: {x.mean()}, Standard Deviation of x: {x.std()}')
+
+    # Printing mean and standard deviation of a
+    print(f'Mean of a: {a.mean()}, Standard Deviation of a: {a.std()}')
+
+    # Loop 50 times
+    for i in range(50):
+        x = x @ a 
+        print(f'Mean of x after {i+1} iterations: {x.mean()}, Standard Deviation of x after {i+1} iterations: {x.std()}')
+
+    # Creating another tensor x and a
+    x = torch.randn(100, 100)
+    a = torch.randn(100, 100) 
+
+    # Printing mean and standard deviation of x
+    print(f'Mean of x: {x.mean()}, Standard Deviation of x: {x.std()}')
+
+    # Printing mean and standard deviation of a
+    print(f'Mean of a: {a.mean()}, Standard Deviation of a: {a.std()}')
+
+    # Loop 50 times
+    for i in range(50):
+        x = x @ a 
+        print(f'Mean of x after {i+1} iterations: {x.mean()}, Standard Deviation of x after {i+1} iterations: {x.std()}')
+
+    # Creating another tensor x and a
+    x = torch.randn(100, 100)
+    a = torch.randn(100, 100) * math.sqrt(1./100.)
+
+    # Printing mean and standard deviation of x
+    print(f

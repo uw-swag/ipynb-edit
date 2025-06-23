@@ -1,0 +1,50 @@
+
+    '''
+    [
+    Commit Message: "EDA of Olympic DataSet"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np                                          # Implement multi-dimensional array and matrices
+import pandas as pd                                         # For data manipulation and analysis
+import pandas_profiling
+import matplotlib.pyplot as plt                             # Plotting library for Python programming language and it's numerical mathematics extension NumPy
+import seaborn as sns                                       # Provides a high level interface for drawing attractive and informative statistical graphics
+%matplotlib inline
+sns.set()
+
+from subprocess import check_output
+<\Cell_0>
+<Cell_1>
+olympic = pd.read_csv("https://raw.githubusercontent.com/insaid2018/Term-1/master/Data/Projects/summer%20olympics.csv")
+<\Cell_1>
+<Cell_2>
+olympic.shape
+<\Cell_2>
+<Cell_3>
+olympic.head()
+<\Cell_3>
+<Cell_4>
+olympic.info()
+<\Cell_4>
+<Cell_5>
+olympic.describe(include='all')
+<\Cell_5>
+<Cell_6>
+profile = pandas_profiling.ProfileReport(olympic)
+profile.to_file(outputfile="olympic_data_before_preprocessing.html")
+<\Cell_6>
+<Cell_7>
+# Dropping duplicates
+olympic.drop_duplicates()
+<\Cell_7>
+<Cell_8>
+olympic.groupby(['Year','Sport'])['Medal'].count()
+<\Cell_8>
+<Cell_9>
+#How many events do we have thus far, in Olympics
+print("There are {} unique sports thus far, in Olympics". format(olympic["Sport"].nunique()))
+<\Cell_9>
+<Cell_10>
+#Not all of the above sports were part of Olympics starting 1896. 
+#Let us find out which year the

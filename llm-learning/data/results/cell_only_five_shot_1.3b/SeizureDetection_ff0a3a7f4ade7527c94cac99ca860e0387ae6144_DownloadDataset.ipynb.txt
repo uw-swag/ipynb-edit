@@ -1,0 +1,30 @@
+
+    ## Majority Class Undersampling
+    ## Majority Class Undersampling is a type of undersampling where we remove the majority class samples from the dataset.
+    ## This is done to reduce the number of samples in the minority class.
+
+    ## Here is a simple implementation of majority class undersampling in Python using pandas:
+
+    ```python
+    import pandas as pd
+
+    # Assuming df is your DataFrame and 'class' is the column with your target variable
+    df_majority = df[df['class']==0]
+    df_minority = df[df['class']==1]
+
+    # Upsample minority class
+    df_minority_upsampled = resample(df_minority, 
+                                 replace=True,     # with replacement
+                                 n_samples=df_majority.shape[0],    # to match majority class
+                                 random_state=123) # reproducible results
+
+    # Combine majority class with upsampled minority class
+    df_upsampled = pd.concat([df_majority, df_minority_upsampled])
+
+    # Check the new class counts
+    df_upsampled.groupby('class').count()
+    ```
+
+    ## This code will undersample the majority class to match the number of samples in the minority class.
+
+    ## Please note that this is a simple implementation and may not work well for all datasets. The choice of undersampling method depends on the specific characteristics of your dataset.

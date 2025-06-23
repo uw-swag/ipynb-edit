@@ -1,0 +1,54 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented feature selection using Recursive Feature Elimination"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.feature_selection import RFECV
+from sklearn.linear_model import LogisticRegression
+
+# Create a Logistic Regression model
+lr = LogisticRegression()
+
+# Create a RFECV object
+rfecv = RFECV(estimator=lr, step=1, cv=5)
+
+# Fit the model
+rfecv.fit(numeric_cars_normalized[training_features], numeric_cars_normalized['price'])
+
+# Print the number of features selected
+print("Optimal number of features : %d" % rfecv.n_features_)
+
+# Print the selected features
+print("Selected features : %s" % training_features[rfecv.support_])
+<\Cell_0>
+<Cell_1>
+# Now, we can use the selected features to train our model
+
+# Create a new DataFrame with only the selected features
+selected_features_df = numeric_cars_normalized[training_features[rfecv.support_]]
+
+# Fit the model
+lr.fit(selected_features_df, numeric_cars_normalized['price'])
+
+# Print the coefficients of the selected features
+print(lr.coef_)
+<\Cell_1>
+<Cell_2>
+# Now, we can use the selected features to train our model
+
+# Create a new DataFrame with only the selected features
+selected_features_df = numeric_cars_normalized[training_features[rfecv.support_]]
+
+# Fit the model
+lr.fit(selected_features_df, numeric_cars_normalized['price'])
+
+# Print the coefficients of the selected features
+print(lr.coef_)
+<\Cell_2>
+<Cell_3>
+# Now, we can use the selected features to train our model
+
+# Create a new DataFrame with only the selected features
+selected_features_df = numeric_cars_normalized[training_features[rfecv

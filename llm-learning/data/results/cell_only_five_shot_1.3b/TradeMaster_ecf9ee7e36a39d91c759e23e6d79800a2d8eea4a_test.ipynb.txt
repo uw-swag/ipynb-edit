@@ -1,0 +1,43 @@
+```python
+    from deeptrader.strategy import Strategy
+    from deeptrader.indicator import *
+    from deeptrader.data import DataManager
+    from deeptrader.exchange import ExchangeManager
+    from deeptrader.portfolio import Portfolio
+    from deeptrader.strategy import TradingViewStrategy
+
+    class SimpleANN(Strategy):
+        def __init__(self, data, exchange, portfolio):
+            super().__init__(data, exchange, portfolio)
+
+            # Define the indicators
+            self.close_price = ClosePrice(data)
+            self.sma = SimpleMovingAverage(data, 10)
+            self.rsi = RelativeStrengthIndex(data)
+
+            # Define the trading rules
+            self.buy_rule = (self.close_price > self.sma) & (self.rsi > 70)
+            self.sell_rule = (self.close_price < self.sma) & (self.rsi < 30)
+
+        def on_bar(self, bar):
+            if self.buy_rule(bar):
+                self.enter_long()
+            elif self.sell_rule(bar):
+                self.enter_short()
+
+        def on_trade(self, trade):
+            if trade.is_buy_order:
+                self.portfolio.add_money(trade.order_price * trade.order_volume)
+            elif trade.is_sell_order:
+                self.portfolio.add_money(-trade.order_price * trade.order_volume)
+
+        def on_cancel(self, order):
+            if order.is_buy_order:
+                self.portfolio.add_money(-order.order_price * order.order_volume)
+            elif order.is_sell_order:
+                self.portfolio.add_money(order.order_price * order.order_volume)
+
+        def on_end(self):
+            self.portfolio.value_at_risk()
+    ```
+    This code defines a simple ANN (Artificial Neural Network) strategy in Deeptrader, a

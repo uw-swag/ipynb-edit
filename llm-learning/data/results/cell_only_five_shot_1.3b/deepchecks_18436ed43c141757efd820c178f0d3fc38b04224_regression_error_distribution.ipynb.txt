@@ -1,0 +1,49 @@
+```python
+    # Import necessary libraries to get started
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+    import seaborn as sns
+    sns.set()
+
+    # Import the dataset
+    data = pd.read_csv("eeg_data.csv")
+
+    # data exploration
+    data.head()
+
+    # define inputs as X and outputs as y
+    X = data.drop('63', axis=1)
+    y = data['63']
+
+    # verify that outputs are selected correctly
+    y.head()
+
+    #import sklearn's model selection and split the data set into %80 training and %20 test
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.20)
+
+    #import SVC and perform linear SVM on the training dataset
+    from sklearn.svm import SVC
+    svclassifier = SVC(kernel='linear')
+    svclassifier.fit(X_train, y_train)
+
+    #apply the trained SVM on the test dataset
+    y_pred = svclassifier.predict(X_test)
+
+    # output the predicted values
+    y_pred
+
+    # import relevant metrics and print the confusion matrix and classification report
+    from sklearn.metrics import classification_report, confusion_matrix
+    print(confusion_matrix(y_test,y_pred))
+    print(classification_report(y_test,y_pred))
+    ```
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a complete example of how to use Python and scikit-learn to perform a linear Support Vector Machine (SVM) on a dataset. This code imports the necessary libraries, loads the dataset, performs some initial data exploration, defines the inputs and outputs, splits the data into a training set and a test set, trains the SVM on the training data, makes predictions on the test data, prints the confusion matrix and classification report.
+
+    However, the code

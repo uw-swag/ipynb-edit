@@ -1,0 +1,17 @@
+
+    The code you provided is for creating a confusion matrix report using the Deepchecks library in Python. However, the code you provided is not complete and does not run. It is missing the part where the model is trained and the data is loaded.
+
+    Here is a complete example of how to create a confusion matrix report:
+
+    ```python
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.checks.performance import ConfusionMatrixReport
+
+    yolo = coco.load_model(pretrained=True)
+    train_ds = coco.load_dataset(object_type='VisionData')
+
+    check = ConfusionMatrixReport(categories_to_display=20)
+    check.run(train_ds, yolo)
+    ```
+
+    This code will create a confusion matrix report for the model trained on the COCO dataset. The `categories_to_display` parameter is set to 20, which means it will display the top 20 confusion matrix categories.

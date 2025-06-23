@@ -1,0 +1,22 @@
+```python
+    import numpy as np
+
+    # Define a function to calculate the derivative of the bias
+    def derivative_of_bias(y_true, y_pred):
+        # Calculate the mean squared error
+        mse = np.mean((y_true - y_pred)**2)
+
+        # Calculate the derivative of the bias
+        derivative_bias = -2 * np.mean(y_true - y_pred)
+
+        return mse, derivative_bias
+
+    # Test the function
+    y_true = np.array([1, 2, 3, 4, 5])
+    y_pred = np.array([1.1, 1.9, 3.2, 3.8, 4.9])
+
+    mse, derivative_bias = derivative_of_bias(y_true, y_pred)
+
+    print(f"Mean Squared Error: {mse}")
+    print(f"Derivative of Bias: {derivative_bias}")
+    ```

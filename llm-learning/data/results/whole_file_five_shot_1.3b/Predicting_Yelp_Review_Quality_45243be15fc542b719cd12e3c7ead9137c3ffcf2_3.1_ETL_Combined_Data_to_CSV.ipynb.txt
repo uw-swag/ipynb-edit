@@ -1,0 +1,49 @@
+
+    [
+    Commit Message: "ETL Process Complete. Ready For Modeling."
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import tempfile
+    import numpy as np
+    import pandas as pd
+    # Connecting to Postgres RDS on AWS
+    from sqlalchemy import create_engine
+    from sqlalchemy.dialects import postgresql
+
+    pd.set_option('display.float_format', lambda x: '%.5f' % x)
+    pd.set_option("display.max_columns", 200)
+    pd.set_option("display.max_rows", 200)
+<\Cell_0>
+<Cell_1>
+db_endpoint = None
+db_name = "yelp_2021_db"
+db_password = None
+<\Cell_1>
+<Cell_2>
+engine = create_engine(f"postgresql+psycopg2://postgres:{db_password}@{db_endpoint}/{db_name}")
+<\Cell_2>
+<Cell_3>
+train_query = "SELECT * FROM text_combined_train"
+test_query = "SELECT * FROM text_combined_test"
+<\Cell_3>
+<Cell_4>
+train = read_sql_tmpfile(train_query, engine, datatypes)
+train = train.replace({'target_clf': {'t': True, 'f': False}})
+<\Cell_4>
+<Cell_5>
+train.info(verbose=True)
+<\Cell_5>
+<Cell_6>
+train.memory_usage(deep=True)
+<\Cell_6>
+<Cell_7>
+test = read_sql_tmpfile(test_query, engine, datatypes)
+test = test.replace({'target_clf': {'t': True, 'f': False}})
+<\Cell_7>
+<Cell_8>
+test.info(verbose=True)
+<\Cell_8>
+<Cell_9>
+test.memory_usage(deep=True)
+<\Cell_

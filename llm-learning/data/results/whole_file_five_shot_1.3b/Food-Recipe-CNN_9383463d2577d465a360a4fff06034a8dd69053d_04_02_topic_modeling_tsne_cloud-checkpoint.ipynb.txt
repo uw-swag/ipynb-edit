@@ -1,0 +1,63 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add tutorias folder with IrisFlower.ipynb"
+    Original Code Cells:
+    '''
+    <Cell_0>
+! pip install psutil
+<\Cell_0>
+<Cell_1>
+import csv
+
+from gensim import corpora, models
+import gensim
+<\Cell_1>
+<Cell_2>
+def get_recipe_names():
+    recipe_names = []
+    skip_first = True # col name
+    chef_file = '/input/chefkoch_rezepte_analysis_cleannames.csv'
+    with open(chef_file, 'r') as f:
+        chefkoch = csv.reader(f)
+        for row in chefkoch:
+            if skip_first:
+                skip_first = False
+                continue
+            try:
+                recipe_names.append(row[-1])
+            except: 
+                continue 
+    return(recipe_names)
+<\Cell_2>
+<Cell_3>
+recipe_names = get_recipe_names()
+print(len(recipe_names)) # Anzahl aller Rezeptnamen
+<\Cell_3>
+<Cell_4>
+import logging
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
+<\Cell_4>
+<Cell_5>
+import os
+import argparse
+import time
+import lda
+import numpy as np
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.manifold import TSNE
+import bokeh.plotting as bp
+from bokeh.plotting import save
+from bokeh.models import HoverTool
+<\Cell_5>
+<Cell_6>
+# unpack
+n_topics = 40
+n_iter = 500
+n_top_words = 4
+threshold = 0
+
+# train an LDA model
+
+cvectorizer = CountVectorizer(min_df=1)
+cvz = cvectorizer.fit

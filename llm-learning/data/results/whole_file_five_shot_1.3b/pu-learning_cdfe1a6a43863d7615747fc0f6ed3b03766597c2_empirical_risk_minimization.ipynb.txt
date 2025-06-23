@@ -1,0 +1,62 @@
+```
+    [
+    Commit Message: "Update the notebook to learn a classifier based on empirical risk minimization"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    <\Cell_0>
+    <Cell_1>
+    from scar import load_scar
+    x, y, s = load_scar()
+    <\Cell_1>
+    <Cell_2>
+    from sklearn.linear_model import LogisticRegression
+
+    from scar import C
+
+    x_new = []
+    y_new = []
+    sample_weight = []
+
+    x_l, x_u = [], []
+    for x_i, s_i in zip(x, s):
+        if s_i == 1:
+            x_l.append(x_i)
+        else:
+            x_u.append(x_i)
+
+    x_new.extend(x_u[:])
+    y_new.extend([0] * len(x_u))
+    sample_weight.extend([1.0] * len(x_u))
+
+    for x_l_i in x_l:
+        # use a labeled data as positive
+        x_new.append(x_l_i)
+        y_new.append(1)
+        w_p = 1 / C
+        sample_weight.append(w_p)
+
+        # use a labeled data as negative
+        x_new.append(x_l_i)
+        y_new.append(0)
+        w_n = 1 - 1 / C
+        sample_weight.append(w_n)
+
+    clf = LogisticRegression(random_state=0).fit(x_new, y_new, sample_weight=sample_weight)
+
+    y_hat = clf.predict(x)
+    ```
+    '''
+    ]
+
+    ### Response:
+    ```
+    [
+    Commit Message: "Update the notebook to learn a classifier based on empirical risk minimization"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as p

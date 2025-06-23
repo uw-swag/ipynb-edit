@@ -1,0 +1,54 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Implemented service UI (#631)"
+    Original Code Cells:
+    '''
+    import tkinter as tk
+    from tkinter import messagebox
+
+    root = tk.Tk()
+    root.geometry("200x100")
+    root.title("Service UI")
+
+    def show_message():
+        messagebox.showinfo("Message", "Service is running")
+
+    button = tk.Button(root, text="Show Message", command=show_message)
+    button.pack()
+
+    root.mainloop()
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a simple Python script that uses the Tkinter library to create a simple GUI application. The application creates a button and when the button is clicked, it shows a message box with the text "Service is running".
+
+    However, the code you provided is incomplete and does not provide a complete solution. It only creates a simple GUI application with a button and a message box. If you want to implement a service UI, you would need to add more code to handle the service logic, error handling, and user interface.
+
+    Here is a basic example of how you might implement a service UI in Python:
+
+    ```python
+    import threading
+    import time
+    from tkinter import messagebox
+
+    def service_loop():
+        while True:
+            time.sleep(1)  # simulate a service
+            messagebox.showinfo("Service", "Service is running")
+
+    def main():
+        # create a thread for the service loop
+        service_thread = threading.Thread(target=service_loop)
+        service_thread.start()
+
+        # main loop
+        root = tk.Tk()
+        root.mainloop()
+
+    if __name__ == "__main__":
+        main()
+    ```
+
+    This code creates a new thread for the service loop, and then enters the main event loop of the Tkinter application. The service loop sleeps for one second and shows a message box, simulating a service.

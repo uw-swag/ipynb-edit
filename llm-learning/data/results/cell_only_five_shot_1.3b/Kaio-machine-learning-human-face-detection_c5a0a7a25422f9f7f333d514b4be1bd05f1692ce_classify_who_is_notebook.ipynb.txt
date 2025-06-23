@@ -1,0 +1,42 @@
+```python
+    # server.py
+    from django.http import HttpResponse
+    from django.views.decorators.csrf import csrf_exempt
+    from kaio import Kaio
+
+    kaio = Kaio()
+
+    @csrf_exempt
+    def handle_request(request):
+        if request.method == 'POST':
+            data = request.POST.get('data')
+            if data:
+                result = kaio.learn(data)
+                return HttpResponse(result)
+            else:
+                return HttpResponse('No data provided')
+        else:
+            return HttpResponse('Invalid request method')
+
+    def save_data(request):
+        if request.method == 'POST':
+            data = request.POST.get('data')
+            if data:
+                kaio.save(data)
+                return HttpResponse('Data saved')
+            else:
+                return HttpResponse('No data provided')
+        else:
+            return HttpResponse('Invalid request method')
+    ```
+
+    ### Response:
+    O código acima é um servidor Django que utiliza o Kaio para realizar as requisiç�es de aprendizagem e salvar os dados. O Kaio é um pacote de aprendizado de máquina criado pela equipe do Django.
+
+    O método `handle_request` é responsável por receber as requisiç�es de aprendizagem e realizar as operaç�es necessárias. O método `save_data` é responsável por salvar os dados recebidos.
+
+    O Kaio é otimizado para mostrar feedback sobre as operaç�es que ele está executando. Isso é feito através de uma mensagem de feedback que é enviada para o usuário quando uma operação é concluída.
+
+    Note que, como o Kaio é um pacote de aprendizado de máquina, ele não é necessário para salvar os dados. O método `save_data` é apenas para demonstrar como o Kaio pode ser utilizado para salvar os dados.
+
+    O Kaio

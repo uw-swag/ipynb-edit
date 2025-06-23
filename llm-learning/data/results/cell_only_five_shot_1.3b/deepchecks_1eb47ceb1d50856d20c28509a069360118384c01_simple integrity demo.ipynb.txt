@@ -1,0 +1,43 @@
+```python
+    ## Model Inference Time Check
+
+    ## Description
+    The model inference time check is a tool that measures the time it takes for the model to make predictions. This is a crucial step in the model training process, as it helps in ensuring that the model is not overfitting and is performing well on unseen data.
+
+    ## Steps
+    1. **Model Training**: The model is trained on the training data.
+    2. **Model Inference**: The model makes predictions on the test data.
+    3. **Time Measurement**: The time taken for the model inference is measured.
+
+    ## Metrics
+    The model inference time check uses the following metrics:
+    - **Average Inference Time**: The average time taken for the model to make predictions on the test data.
+    - **Standard Deviation of Inference Time**: The standard deviation of the time taken for the model to make predictions on the test data.
+
+    ## Implementation
+    ```python
+    import time
+
+    def model_inference_time_check(model, X_test, y_test):
+        start_time = time.time()
+        y_pred = model.predict(X_test)
+        end_time = time.time()
+        inference_time = end_time - start_time
+        return inference_time
+
+    ## Usage
+    ## Assuming `model` is your trained model and `X_test` and `y_test` are your test data
+    inference_time = model_inference_time_check(model, X_test, y_test)
+    print(f"Average Inference Time: {inference_time} seconds")
+    ```
+
+    ## Conclusion
+    The model inference time check is a crucial step in the model training process. By measuring the time taken for the model to make predictions, we can ensure that the model is not overfitting and is performing well on unseen data.
+
+    ```
+    ## References
+    - [Model Inference Time Check](https://www.researchgate.net/publication/320542910_Model_Inference_Time_Check)
+    ```
+    '''
+    }
+    ```

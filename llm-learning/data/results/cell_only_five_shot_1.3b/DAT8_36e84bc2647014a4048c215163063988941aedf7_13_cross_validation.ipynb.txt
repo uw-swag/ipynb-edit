@@ -1,0 +1,19 @@
+```python
+    import nbformat as nbf
+    from nbconvert.preprocessors import ExecutePreprocessor
+
+    # Load the notebook
+    nb = nbf.read('notebook.ipynb', as_version=4)
+
+    # Replace all nbviewer links with github links
+    for cell in nb.cells:
+        if 'nbviewer.jupyter.org' in cell['source']:
+            cell['source'] = cell['source'].replace('nbviewer.jupyter.org', 'github.com')
+
+    # Execute the notebook
+    ep = ExecutePreprocessor(timeout=-1)
+    nb, _ = ep.preprocess(nb, {'metadata': {'path': '.'}})
+
+    # Save the notebook
+    nbf.write(nb, 'notebook.ipynb')
+    ```

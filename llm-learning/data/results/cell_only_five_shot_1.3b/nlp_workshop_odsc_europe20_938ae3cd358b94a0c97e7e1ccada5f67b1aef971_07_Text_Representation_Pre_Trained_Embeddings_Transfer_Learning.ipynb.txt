@@ -1,0 +1,46 @@
+```
+    ## Text Representation Learning
+
+    Text representation learning is the process of converting text into a form that can be used for further processing. This is often done by converting the text into a numerical form, which can then be used for further processing.
+
+    There are several types of text representation learning, including:
+
+    1. **Word Embeddings**: This is a type of text representation where each word in the text is represented as a vector in a high-dimensional space. The vectors are learned from the text data.
+
+    2. **Character Embeddings**: In this method, each character in the text is represented as a vector. The vectors are learned from the text data.
+
+    3. **Transformer-based Models**: These models use a type of architecture called the Transformer, which is a type of model that uses self-attention mechanisms. The text is transformed into a form that can be processed by the model.
+
+    ## Example: Word Embeddings
+
+    Let's consider a simple example of word embeddings. We will use the GloVe word embeddings, which are pre-trained on a large corpus of text.
+
+    ```python
+    from gensim.models import KeyedVectors
+
+    # Load the GloVe word embeddings
+    glove_vectors = KeyedVectors.load_word2vec_format('glove.6B.100d.txt.w2v', binary=False)
+
+    # Get the vector for a word
+    word = 'computer'
+    vector = glove_vectors[word]
+
+    # Print the vector
+    print(vector)
+    ```
+
+    ## Example: Transformer-based Models
+
+    Let's consider a simple example of a transformer-based model. We will use the Transformer model from the Transformers library in PyTorch.
+
+    ```python
+    from transformers import TransformerModel, AutoTokenizer
+
+    # Initialize the tokenizer
+    tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
+
+    # Initialize the model
+    model = TransformerModel.from_pretrained('bert-base-uncased')
+
+    # Tokenize the text
+    inputs =

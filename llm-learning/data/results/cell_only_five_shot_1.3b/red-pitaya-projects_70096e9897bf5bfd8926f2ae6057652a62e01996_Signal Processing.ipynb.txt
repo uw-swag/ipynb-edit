@@ -1,0 +1,44 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.signal import find_peaks
+    from scipy.io import wavfile
+
+    # Load a sample audio file
+    sample_rate, data = wavfile.read('sample.wav')
+
+    # Plot the original audio signal
+    plt.figure(figsize=(10, 5))
+    plt.plot(data)
+    plt.title('Original Audio Signal')
+    plt.show()
+
+    # Perform a simple peak detection
+    peaks, _ = find_peaks(data, height=0)
+    plt.figure(figsize=(10, 5))
+    plt.plot(data)
+    plt.plot(peaks, data[peaks], 'ro')
+    plt.title('Peak Detection')
+    plt.show()
+
+    # Perform a simple frequency detection
+    peaks, _ = find_peaks(data, height=0, distance=50)
+    plt.figure(figsize=(10, 5))
+    plt.plot(data)
+    plt.plot(peaks, data[peaks], 'ro')
+    plt.title('Frequency Detection')
+    plt.show()
+
+    # Perform a simple band-pass filter
+    b, a = signal.butter(2, [10, 20], btype='band')
+    filtered_data = signal.filtfilt(b, a, data)
+    plt.figure(figsize=(10, 5))
+    plt.plot(data)
+    plt.plot(filtered_data, 'r')
+    plt.title('Band-Pass Filter')
+    plt.show()
+    ```
+
+    This code demonstrates the use of signal processing techniques to analyze an audio signal. It loads an audio file, plots the original signal, performs a simple peak detection, a frequency detection, and a band-pass filter.
+
+    Note: The `scipy.signal.find_peaks` function is used to find peaks in the audio signal. The

@@ -1,0 +1,40 @@
+```
+    df = pd.read_csv(path/'adult.csv')
+    dep_var = 'salary'
+    cat_names = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race']
+    cont_names = ['age', 'fnlwgt', 'education-num']
+    procs = [FillMissing, Categorify, Normalize]
+    test = TabularList.from_df(df.iloc[800:1000].copy(), path=path, cat_names=cat_names, cont_names=cont_names)
+
+    test = TabularList.from_df(df.iloc[800:1000].copy(), path=path, cat_names=cat_names, cont_names=cont_names)
+    databunch = (TabularList.from_df(df, path=path, cat_names=cat_names, cont_names=cont_names, procs=procs)
+                           .split_by_idx(list(range(800,1000)))
+                           .label_from_df(cols=dep_var)
+                           .add_test(test)
+                           .databunch())
+    learner = tabular_learner(data, layers=[200,500,200], metrics=accuracy, callback_fns=ShowGraph).to_fp16()
+
+    learner.fit_one_cycle(1, 3e-3)
+    row = df.iloc[5]
+    row
+    learn.predict(row)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new column to the dataframe"
+    Original Code:
+    '''
+    df['new_column'] = 'new_value'
+    '''
+    ]
+
+    ### Response:
+    df['new_column'] = 'new_value'
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new column to the dataframe and running all cells"
+    Original Code:
+    '''
+    df['new_column'] = '

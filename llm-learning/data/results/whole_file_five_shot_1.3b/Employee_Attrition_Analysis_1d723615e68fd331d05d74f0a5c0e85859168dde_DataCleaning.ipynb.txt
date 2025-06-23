@@ -1,0 +1,45 @@
+```
+    <Cell_0>
+    # RDS connection string
+    rds_conn_string = "postgresql://attritionProject:{0}@ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com:5432/ogdataset"
+    <\Cell_0>
+    <Cell_1>
+    # dependencies
+    import pandas as pd
+    import psycopg2
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    <\Cell_1>
+    <Cell_2>
+    # PostgreSQL connection
+    conn = psycopg2.connect(
+        dbname="ogdataset",
+        user="attritionProject",
+        password=secret,
+        host="ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        port="5432"
+    )
+    <\Cell_2>
+    <Cell_3>
+    # read in csv
+    file_path = "../resources/IBM_employee_data.csv"
+    attrition_df = pd.read_csv(file_path)
+    attrition_df.head()
+    <\Cell_3>
+    <Cell_4>
+    # determine if any missing values and data types for columns
+    attrition_df.info()
+    <\Cell_4>
+    <Cell_5>
+    # column names
+    attrition_df.columns
+    <\Cell_5>
+    <Cell_6>
+    # ambiguous/unnecessary columns - only going to keep MonthlyIncome
+    attrition_df[["DailyRate", "HourlyRate", "MonthlyIncome", "MonthlyRate", "StandardHours", "Over18"]]
+    <\Cell_6>
+    <Cell_7>
+    # these columns are either unique identifiers, ambiguous or constant thru each column
+    columns_to_drop = ["DailyRate", "HourlyRate", "MonthlyRate", "StandardHours", "EmployeeCount", 
+                       "Employee

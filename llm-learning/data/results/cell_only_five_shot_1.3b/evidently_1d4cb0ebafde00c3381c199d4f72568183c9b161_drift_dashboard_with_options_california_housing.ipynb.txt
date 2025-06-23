@@ -1,0 +1,24 @@
+```
+    import numpy as np
+from scipy.stats import anderson_ksamp
+from evidently.options import DataDriftOptions
+from evidently.analyzers.stattests import StatTest
+
+    class MyDataDriftAnalyzer(StatTest):
+        def calculate(self, reference: np.ndarray, candidate: np.ndarray) -> dict:
+            result = super().calculate(reference, candidate)
+            # Remove metrics dependence from analyzers
+            del result['metrics_dependence']
+            return result
+
+    data_drift_options = DataDriftOptions(
+        drift_threshold=0.01,
+        drift_metric='mean_absolute_error',
+        statistical_test=MyDataDriftAnalyzer()
+    )
+
+    data_drift_options.fit(reference_data)
+    data_drift_options.score(candidate_data)
+    ```
+
+    This code will remove the 'metrics_dependence' key from the result dictionary, which is a key in the StatTest class. This is a simple example of how to remove a key from a dictionary in Python.

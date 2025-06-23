@@ -1,0 +1,68 @@
+```python
+    import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from helpers.data import summary
+from helpers import constants as C
+
+# Load the data
+df = pd.read_csv('data.csv')
+
+# Use the `summary` function to get a summary of the data
+summary(df)
+
+# Plot the data
+sns.pairplot(df)
+plt.show()
+
+# Save the plot
+plt.savefig('pairplot.png')
+
+# Use the `summary` function to get a summary of the data after cleaning
+summary(df)
+
+# Plot the cleaned data
+sns.pairplot(df)
+plt.show()
+
+# Save the plot
+plt.savefig('pairplot_cleaned.png')
+
+# Use the `summary` function to get a summary of the data after transformation
+summary(df)
+
+# Plot the transformed data
+sns.pairplot(df)
+plt.show()
+
+# Save the plot
+plt.savefig('pairplot_transformed.png')
+
+# Use the `summary` function to get a summary of the data after feature selection
+summary(df)
+
+# Plot the selected features
+sns.pairplot(df[['feature1', 'feature2', 'feature3']])
+plt.show()
+
+# Save the plot
+plt.savefig('pairplot_selected.png')
+
+# Use the `summary` function to get a summary of the data after model training
+summary(df)
+
+# Plot the model's predictions
+sns.pairplot(df[['feature1', 'feature2', 'feature3']])
+plt.scatter(df['feature1'], df['feature3'], c=df['target'])
+plt.show()
+
+# Save the plot
+plt.savefig('pairplot_predictions.png')
+
+# Use the `summary` function to get a summary of the data after model evaluation
+summary(df)
+
+# Plot the model's evaluation
+sns.pairplot(df[['feature1', 'feature2', 'feature3']])
+plt.scatter(df['

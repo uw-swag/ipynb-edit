@@ -1,0 +1,46 @@
+import pandas as pd
+
+from sklearn import datasets, model_selection, linear_model, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.tabs import ClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import ClassificationPerformanceProfileSection
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+iris = datasets.load_iris()
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+iris_frame['target'] = iris.target
+train_data, test_data = model_selection.train_test_split(iris_frame, random_state=0)
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = iris.feature_names
+categorical_features = []
+
+features = numerical_features + categorical_features
+model = neighbors.KNeighborsClassifier(n_neighbors=1)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+iris_column_mapping = ColumnMapping()
+
+iris_column_mapping.target = target
+iris_column_mapping.prediction = prediction
+iris_column_mapping.numerical_features = numerical_features
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=1)])
+iris_model_performance_dashboard.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()
+# iris_model_performance_dashboard.save('iris_model_performance.html')
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=0)])
+iris_model_performance_dashboard.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()
+# iris_model_performance_dashboard.save('iris_model_performance.html')
+iris_classification_performance_profile = Profile(sections=[ClassificationPerformanceProfileSection()])
+iris_classification_performance_profile.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+iris_classification_performance_profile.json() 

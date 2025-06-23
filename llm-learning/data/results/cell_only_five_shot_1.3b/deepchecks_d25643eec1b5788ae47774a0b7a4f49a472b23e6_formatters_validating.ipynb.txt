@@ -1,0 +1,17 @@
+```python
+    import unittest
+    from your_module import your_function
+
+    class TestYourFunction(unittest.TestCase):
+
+        def test_input_type(self):
+            self.assertIsInstance(your_function(1), int)
+
+        def test_output_range(self):
+            self.assertGreaterEqual(your_function(1), 0)
+            self.assertLessEqual(your_function(1), 100)
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+    This code will test the function `your_function` with different types of inputs to ensure it behaves as expected. The test checks if the function returns an integer and if the output is within a certain range.

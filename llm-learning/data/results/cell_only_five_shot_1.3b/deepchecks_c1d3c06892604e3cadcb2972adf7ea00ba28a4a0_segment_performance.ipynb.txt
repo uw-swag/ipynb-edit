@@ -1,0 +1,40 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.svm import SVC
+    from sklearn.metrics import roc_curve,roc_auc_score
+    from xgboost import XGBClassifier
+    from lightgbm import LGBMClassifier
+
+    # Loading the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Data preprocessing
+    # Here you can perform data cleaning, data transformation, feature selection, etc.
+
+    # Splitting the dataset into training and testing sets
+    X = df.drop('target_column', axis=1)
+    y = df['target_column']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Model training
+    models = [LogisticRegression(), RandomForestClassifier(), KNeighborsClassifier(), DecisionTreeClassifier(), SVC(), XGBClassifier(), LGBMClassifier()]
+    model_names = ['Logistic Regression', 'Random Forest', 'KNN', 'Decision Tree', 'SVM', 'XGBoost', 'LightGBM']
+    for model, name in zip(models, model_names):
+        model.fit(X_train, y_train)
+        y_pred = model.predict

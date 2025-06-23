@@ -1,0 +1,18 @@
+trained_model_folder = '../models/trained_models'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'annot' in fname]) 
+# other models were trained badly
+
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+
+results = results[results.which_adversarial == "annotated"]
+results = results.drop(columns = ['model_weights']) # don't want this because too big
+my_results = results[results.num_iters ==5]
+my_results.columns
+my_results[[ 'Test Accuracy', 'final_cd','final_train_loss', 'final_test_loss', 'signal_strength' ]].groupby(by = ['signal_strength']).mean()
+plot = sns.scatterplot(x ='signal_strength' , y='Test Accuracy', data = my_results);
+
+plot.set_title("Regularizing with cd explanations");
+

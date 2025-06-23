@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Static drift in TV model (#163)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # The TV model is a type of model that is used to predict future values based on past values. It's a form of time series forecasting.
+
+    # Here's a simple example of how you might implement a static drift in a TV model. This is a simplified example and may not be suitable for all types of time series data.
+
+    # We'll use a simple exponential moving average (EMA) to simulate the static drift.
+
+    import numpy as np
+
+    # Assume we have a time series data
+    time_series = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+    # Initialize a list to store the EMA values
+    ema_values = []
+
+    # Calculate the EMA for each value in the time series
+    for value in time_series:
+        ema_value = (value - ema_values[-1] if ema_values else value) * 0.1 + ema_values[-1] if ema_values else value
+        ema_values.append(ema_value)
+
+    # Now we have a time series with a static drift
+    drifted_time_series = time_series - ema_values
+
+    # You can now use the drifted_time_series for your TV model
+
+    # For example, you can use it to predict the next value in the time series
+    next_value = drifted_time_series[-1] * 0.9 + drifted_time_series[-2] * 0.1
+
+    # And so on...
+
+    # Please note that this is a very simplified example and may not be suitable for all types of time series data.
+
+    # Also, the EMA is a simple moving average and may not be the best method for dynamic time series forecasting.
+
+    # In a real-world scenario, you would likely use a more sophisticated method for calculating the EMA, such as a weighted moving average or

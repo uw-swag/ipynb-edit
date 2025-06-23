@@ -1,0 +1,38 @@
+```
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.metrics import mean_squared_error, r2_score
+    from sklearn.preprocessing import StandardScaler
+
+    # Adding deep learning
+    X = df.drop(['target'], axis=1)
+    y = df['target']
+
+    # Encoding categorical variables
+    le = LabelEncoder()
+    for col in cat_cols:
+        X[col] = le.fit_transform(X[col])
+
+    X.rename(columns = {'ORDER_AMOUNT': 'target'}, inplace = True)
+
+    # Splitting the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Training the models
+    regressor_models = [(RandomForestRegressor(), 'Random Forest'), (XGBRegressor(), 'XGBoost')]
+    df_compare = pd.DataFrame(columns=['Regressor', 'Model', 'MSE', 'RMSE', 'R2'])
+
+    for model in regressor_models:
+        try:
+            ans = hyperparam(model[0], X_train, y_train, X_test, y_test)
+            df_compare = pd.concat([df_compare, pd.DataFrame([[ans[1], ans[0], ans[2], ans[3], ans[4]]], columns = ['Regressor', 'Model', 'MSE', 'RMSE', 'R2'])])
+        except Exception as e:
+            pass
+
+    sns.barplot(x = 'Model', y = 'MSE', data = df_compare, palette = 'magma')
+    plt.xticks(rotation = 90)
+    plt.xlabel('Model')
+    plt.ylabel('MSE')
+    plt.title('MSE of all models')
+    plt.show()
+    ```

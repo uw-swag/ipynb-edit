@@ -1,0 +1,41 @@
+```
+    from sklearn.datasets import load_iris
+    from sklearn.cross_validation import train_test_split
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn import metrics
+
+    # read in the iris data
+    iris = load_iris()
+
+    # create X (features) and y (response)
+    X = iris.data
+    y = iris.target
+
+    # use train/test split with different random_state values
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=4)
+
+    # check classification accuracy of KNN with K=5
+    knn = KNeighborsClassifier(n_neighbors=5)
+    knn.fit(X_train, y_train)
+    y_pred = knn.predict(X_test)
+    print metrics.accuracy_score(y_test, y_pred)
+
+    # simulate splitting a dataset of 25 observations into 5 folds
+    from sklearn.cross_validation import KFold
+    kf = KFold(25, n_folds=5, shuffle=False)
+
+    # print the contents of each training and testing set
+    print '{} {:^61} {}'.format('Iteration', 'Training set observations', 'Testing set observations')
+    for iteration, data in enumerate(kf, start=1):
+        print '{:^9} {} {:^25}'.format(iteration, data[0], data[1])
+
+    # 10-fold cross-validation with K=5 for KNN (the n_neighbors parameter)
+    knn = KNeighborsClassifier(n_neighbors=5)
+    scores = cross_val_score(knn, X, y, cv=10, scoring='accuracy')
+    print scores
+
+    # use average accuracy as an estimate of out-of-sample accuracy
+    print scores.mean()
+
+    # search for an optimal value of K for KNN
+    k_range = range(1, 

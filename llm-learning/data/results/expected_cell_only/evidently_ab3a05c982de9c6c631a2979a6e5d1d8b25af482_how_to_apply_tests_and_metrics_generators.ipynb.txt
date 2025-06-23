@@ -1,0 +1,65 @@
+import numpy as np
+from sklearn.datasets import fetch_openml
+
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+data.frame['target'] = data.frame['education-num']
+data.frame['preds'] = data.frame['education-num'].values + np.random.normal(0, 6, data.frame.shape[0])
+reference_data = data.frame[:20000]
+current_data = data.frame[20000:]
+from evidently.tests import TestColumnQuantile
+from evidently.test_suite import TestSuite
+
+
+suite = TestSuite(tests=[
+    TestColumnQuantile(column_name="education-num", quantile=quantile) for quantile in [0.5, 0.9, 0.99]
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+from evidently.tests import TestColumnValueMin
+
+
+# test that values in specified columns are positive (greater than zero condition)
+suite = TestSuite(tests=[
+    TestColumnValueMin(column_name=column_name, gt=0) for column_name in ["age", "fnlwgt", "education-num"]
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+from evidently.tests.base_test import generate_column_tests
+
+from evidently.tests import TestColumnShareOfMissingValues
+
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues)])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite.show()
+# set condition for all generated tests and specify that we want to generate tests for all columns explicitly
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="all", parameters={"lt": 0.5})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnValueMin, columns="num")])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="cat", parameters={"lt": 0.1})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnValueMin, columns=["age", "fnlwgt", "education-num"], parameters={"gt": 0})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+from evidently.metrics import ColumnValueRangeMetric
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.report import Report
+
+report = Report(
+    metrics=[
+        generate_column_metrics(
+            ColumnValueRangeMetric,
+            columns="num",
+            parameters={"left": 0, "right": 10}
+        )
+    ]
+)
+report.run(current_data=current_data, reference_data=reference_data)
+report
+

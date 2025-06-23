@@ -1,0 +1,22 @@
+```python
+    import sys
+
+    if sys.platform == "emscripten":
+        import micropip
+        await micropip.install('mat3ra-api-examples', deps=False)
+        from utils.jupyterlite import install_packages
+        await install_packages("create_interface_with_min_strain_zsl.ipynb", "../../config.yml")
+
+    from utils.jupyterlite import get_materials
+
+    materials = get_materials()
+    substrate = materials[SUBSTRATE_INDEX]
+
+    try:
+        film = materials[FILM_INDEX]
+    except IndexError:
+        print("Film material not found. Re-using substrate material as film.")
+        film = substrate
+
+    # Rest of the code...
+    ```

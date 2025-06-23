@@ -1,0 +1,16 @@
+from evidently.tests import TestColumnValueMin
+
+
+# test that values in specified columns are positive (greater than zero condition)
+suite = TestSuite(tests=[
+    TestColumnValueMin(column_name=column_name, gt=0) for column_name in ["age", "fnlwgt", "education-num"]
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnValueMin, columns="num")])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnValueMin, columns=["age", "fnlwgt", "education-num"], parameters={"gt": 0})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite

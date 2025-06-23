@@ -1,0 +1,281 @@
+<Cell_0>
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+<\Cell_0>
+<Cell_1>
+!pip install google-cloud-aiplatform google-cloud-bigquery --upgrade --user
+<\Cell_1>
+<Cell_2>
+# Automatically restart kernel after installs so that your environment can access the new packages
+# import IPython
+
+# app = IPython.Application.instance()
+# app.kernel.do_shutdown(True)
+<\Cell_2>
+<Cell_3>
+# from google.colab import auth
+# auth.authenticate_user()
+<\Cell_3>
+<Cell_4>
+PROJECT_ID = "<your-project-id>"  # @param {type:"string"}
+
+# Set the project id
+! gcloud config set project {PROJECT_ID}
+<\Cell_4>
+<Cell_5>
+import random
+import string
+
+# Generate a uuid of a specifed length(default=8)
+def generate_uuid(length: int = 8) -> str:
+    return "".join(random.choices(string.ascii_lowercase + string.digits, k=length))
+
+UUID = generate_uuid()
+<\Cell_5>
+<Cell_6>
+BUCKET_NAME = "<your_bucket_name>"  # @param {type:"string"}
+BUCKET_URI = f"gs://{BUCKET_NAME}"
+REGION = "us-central1"  # @param {type: "string"}
+<\Cell_6>
+<Cell_7>
+if BUCKET_NAME == "" or BUCKET_NAME is None or BUCKET_NAME == "[your-bucket-name]":
+    BUCKET_NAME = "vertex-" + UUID
+    BUCKET_URI = f"gs://{BUCKET_NAME}"
+<\Cell_7>
+<Cell_8>
+! gsutil mb -l $REGION -p $PROJECT_ID $BUCKET_URI
+<\Cell_8>
+<Cell_9>
+! gsutil ls -al $BUCKET_URI
+<\Cell_9>
+<Cell_10>
+# import vertexai
+
+# PROJECT_ID = "[your-project-id]"  # @param {type:"string"}
+# vertexai.init(project=PROJECT_ID, location="us-central1")
+<\Cell_10>
+<Cell_11>
+from typing import Union
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+from vertexai.preview.language_models import TextGenerationModel
+from google.cloud import aiplatform
+from google.cloud import bigquery
+<\Cell_11>
+<Cell_12>
+def run_bq_query(sql: str) -> Union[str, pd.DataFrame]:
+    """
+    Run a BigQuery query and return the job ID or result as a DataFrame
+    Args:
+        sql: SQL query, as a string, to execute in BigQuery
+    Returns:
+        df: DataFrame of results from query,  or error, if any
+    """
+
+    bq_client = bigquery.Client()
+
+    # Try dry run before executing query to catch any errors
+    job_config = bigquery.QueryJobConfig(dry_run=True, use_query_cache=False)
+    bq_client.query(sql, job_config=job_config)
+
+    # If dry run succeeds without errors, proceed to run query
+    job_config = bigquery.QueryJobConfig()
+    client_result = bq_client.query(sql, job_config=job_config)
+
+    job_id = client_result.job_id
+
+    # Wait for query/job to finish running. then get & return data frame
+    df = client_result.result().to_arrow().to_pandas()
+    print(f"Finished job_id: {job_id}")
+    return df
+<\Cell_12>
+<Cell_13>
+df = run_bq_query("""SELECT
+    CONCAT(q.title, q.body) as input_text,
+    a.body AS output_text
+FROM
+    `bigquery-public-data.stackoverflow.posts_questions` q
+JOIN
+    `bigquery-public-data.stackoverflow.posts_answers` a
+ON
+    q.accepted_answer_id = a.id
+WHERE
+    q.accepted_answer_id IS NOT NULL AND
+    REGEXP_CONTAINS(q.tags, "python") AND
+    a.creation_date >= "2020-01-01"
+LIMIT
+    10000
+""")
+
+df.head()
+<\Cell_13>
+<Cell_14>
+df['input_text'][10]
+<\Cell_14>
+<Cell_15>
+df['output_text'][10]
+<\Cell_15>
+<Cell_16>
+print(len(df))
+<\Cell_16>
+<Cell_17>
+train, evaluation = train_test_split(df, test_size=0.2)
+print(len(train))
+<\Cell_17>
+<Cell_18>
+tune_jsonl = train.to_json(orient='records', lines=True)
+
+print(f"Length: {len(tune_jsonl)}")
+
+print(tune_jsonl[0:100])
+<\Cell_18>
+<Cell_19>
+training_data_filename = "tune_data_stack_overflow_python_qa.jsonl"
+
+with open(training_data_filename, "w") as f:
+    f.write(df_jsonl)
+<\Cell_19>
+<Cell_20>
+! gsutil cp $training_data_filename $BUCKET_URI
+<\Cell_20>
+<Cell_21>
+! gsutil ls -al $BUCKET_URI
+<\Cell_21>
+<Cell_22>
+TRAINING_DATA_URI = f"{BUCKET_URI}/{training_data_filename}"
+<\Cell_22>
+<Cell_23>
+MODEL_NAME= f"genai-workshop-tuned-model-{UUID}"
+<\Cell_23>
+<Cell_24>
+def tuned_model(
+    project_id: str,
+    location: str,
+    training_data: str,
+    model_display_name: str,
+    train_steps = 100,
+):
+
+    """Prompt-tune a new model, based on a prompt-response data.
+
+    "training_data" can be either the GCS URI of a file formatted in JSONL format
+    (for example: training_data=f'gs://{bucket}/{filename}.jsonl'), or a pandas
+    DataFrame. Each training example should be JSONL record with two keys, for
+    example:
+      {
+        "input_text": <input prompt>,
+        "output_text": <associated output>
+      },
+    or the pandas DataFame should contain two columns:
+      ['input_text', 'output_text']
+    with rows for each training example.
+
+    Args:
+      project_id: GCP Project ID, used to initialize aiplatform
+      location: GCP Region, used to initialize aiplatform
+      training_data: GCS URI of training file or pandas dataframe of training data
+      train_steps: Number of training steps to use when tuning the model.
+    """
+
+    aiplatform.init(project=project_id, location=location)
+    model = TextGenerationModel.from_pretrained("text-bison@001")
+
+    model.tune_model(
+        training_data=training_data,
+        model_display_name=model_display_name,
+        train_steps=train_steps,
+        # Tuning can only happen in the "europe-west4" location
+        tuning_job_location="europe-west4",
+        # Model can only be deployed in the "us-central1" location
+        tuned_model_location="us-central1",
+    )
+
+    # Test the tuned model:
+    print(model.predict("Can you provide me with a Python implementation of BERT with Tensorflow? Example: "))
+
+    return model
+<\Cell_24>
+<Cell_25>
+# This will start the tuning job and output a URL where you can monitor the pipeline execution.
+model = tuned_model(PROJECT_ID, REGION, TRAINING_DATA_URI, MODEL_NAME)
+<\Cell_25>
+<Cell_26>
+def list_tuned_models(project_id, location):
+
+    aiplatform.init(project=project_id, location=location)
+    model = TextGenerationModel.from_pretrained("text-bison@001")
+    tuned_model_names = model.list_tuned_model_names()
+    print(tuned_model_names)
+<\Cell_26>
+<Cell_27>
+list_tuned_models(PROJECT_ID, REGION)
+<\Cell_27>
+<Cell_28>
+def fetch_model(project_id, location):
+
+    aiplatform.init(project=project_id, location=location)
+    model = TextGenerationModel.from_pretrained("text-bison@001")
+    list_tuned_models = model.list_tuned_model_names()
+    tuned_model = list_tuned_models[0]
+
+    return tuned_model
+<\Cell_28>
+<Cell_29>
+deployed_model = fetch_model(PROJECT_ID, REGION)
+deployed_model = TextGenerationModel.get_tuned_model(deployed_model)
+<\Cell_29>
+<Cell_30>
+PROMPT = """
+How can I store my TensorFlow checkpoint on Google Cloud Storage?
+
+Python example:
+
+"""
+<\Cell_30>
+<Cell_31>
+print(deployed_model.predict(PROMPT))
+<\Cell_31>
+<Cell_32>
+# !pip install sequence-evaluate sentence-transformers --upgrade --user
+<\Cell_32>
+<Cell_33>
+from seq_eval import SeqEval
+evaluator = SeqEval()
+<\Cell_33>
+<Cell_34>
+evaluation = evaluation.head(10) # you can change the number of rows you want to use
+evaluation_question = evaluation["input_text"]
+evaluation_answer = evaluation["output_text"]
+<\Cell_34>
+<Cell_35>
+candidates = []
+
+for i in evaluation_question:
+    response = deployed_model.predict(i)
+    candidates.append(response.text)
+
+len(candidates)
+<\Cell_35>
+<Cell_36>
+references = evaluation_answer.tolist()
+
+len(references)
+<\Cell_36>
+<Cell_37>
+scores = evaluator.evaluate(candidates, references, verbose=False)
+print(scores)
+<\Cell_37>

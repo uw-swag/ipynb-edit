@@ -1,0 +1,36 @@
+```python
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow import optimizers
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+
+    model = keras.Sequential([
+        keras.layers.Dense(19, input_shape=(20,), activation='relu'),
+        keras.layers.Dense(300, activation='relu'),
+        keras.layers.Dense(250, activation='relu'),
+        keras.layers.Dense(200, activation='relu'),
+        keras.layers.Dense(150, activation='relu'),
+        keras.layers.Dense(100, activation='relu'),
+        keras.layers.Dense(50, activation='relu'),
+        keras.layers.Dense(45, activation='relu'),
+        keras.layers.Dense(30, activation='relu'),
+        keras.layers.Dense(20, activation='relu'),
+        keras.layers.Dense(15, activation='relu'),
+        keras.layers.Dense(6, activation='sigmoid')
+    ])
+
+    model.fit(X_train, y_train, epochs=20, batch_size=64, validation_split=0.2)
+    Actual_class = np.argmax(model.predict(checking_values))
+    print(Actual_class)
+    prakruti_percentages = []
+    for probs in Predicted_data:
+        percentages = [prob * 100 for prob in probs]
+        prakruti_percentages.append(percentages)
+    print(prakruti_percentages)
+
+    # Print the results
+    for i, percentages in enumerate(prakruti_percentages):
+        print("Sample", i + 1, "Prakruti Percentages:")
+        for j, prakruti_type in

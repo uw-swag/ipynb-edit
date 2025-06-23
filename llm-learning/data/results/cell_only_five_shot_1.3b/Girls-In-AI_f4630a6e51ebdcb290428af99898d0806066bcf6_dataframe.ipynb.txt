@@ -1,0 +1,19 @@
+```python
+    import pandas as pd
+
+    # Assuming you have a DataFrame df with columns 'A', 'B', 'C'
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': ['a', 'b', 'c', 'd', 'e'],
+        'C': ['good', 'bad', 'good', 'bad', 'good']
+    })
+
+    # Print the DataFrame
+    print(df)
+
+    # Add a new column 'D' to the DataFrame
+    df['D'] = df['A'] + df['B'].apply(lambda x: len(str(x)))
+
+    # Print the DataFrame again
+    print(df)
+    ```

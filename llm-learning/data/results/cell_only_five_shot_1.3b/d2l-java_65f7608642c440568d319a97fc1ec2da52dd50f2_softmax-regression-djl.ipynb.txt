@@ -1,0 +1,24 @@
+```java
+    // get training and validation dataset
+    RandomAccessDataset trainingSet = FashionMnistUtils.getDataset(Dataset.Usage.TRAIN, batchSize, randomShuffle);
+    RandomAccessDataset validationSet = FashionMnistUtils.getDataset(Dataset.Usage.TEST, batchSize, false);
+    trainer.initialize(new Shape(1, 28 * 28)); // input images are 28 x 28
+
+    // define the model
+    Model model = new Model(trainingSet, validationSet);
+
+    // define the training parameters
+    TrainingParameters parameters = new TrainingParameters(batchSize, randomShuffle);
+
+    // train the model
+    model.fit(parameters, new ProgressBar());
+
+    // save the model
+    model.save(modelFile);
+    ```
+
+    The code above is a simple example of how to train a linear regression model using the AI/DL library in Java. The model is trained on the FashionMnist dataset, and the trained model is saved to a file.
+
+    Please note that the code above assumes that you have a `FashionMnistUtils` class that provides methods to get the training and validation datasets, and a `Model` class that represents the linear regression model. The `ProgressBar` class is used to display a progress bar during the training process.
+
+    Also, please note that the code above is a simple example and may not work as expected. You may need to adjust the code to fit your specific needs.

@@ -1,0 +1,71 @@
+```python
+    ## Moving examples into docs
+
+    ### Overview
+
+    This section provides examples of how to use the AutoGluon library in a variety of scenarios.
+
+    ### Installation
+
+    To install AutoGluon, you can use pip:
+
+    ```python
+    pip install autogluon
+    ```
+
+    ### Importing the Library
+
+    After installation, you can import the library in your Python script:
+
+    ```python
+    from autogluon import TabularPredictor
+    ```
+
+    ### Loading a Dataset
+
+    AutoGluon supports a variety of datasets, including CSV, Parquet, and more. Here's how you can load a dataset:
+
+    ```python
+    df = TabularPredictor.load_data('path/to/your/data.csv')
+    ```
+
+    ### Training a Model
+
+    You can train a model using the `fit` method:
+
+    ```python
+    predictor = TabularPredictor.fit(df, label='target_column')
+    ```
+
+    ### Deploying a Model
+
+    After training, you can deploy the model to a server:
+
+    ```python
+    predictor.deploy(initial_instance_count=1, instance_type='ml.m5.xlarge')
+    ```
+
+    ### Predicting with a Model
+
+    You can use the `predict` method to make predictions:
+
+    ```python
+    predictions = predictor.predict(df)
+    ```
+
+    ### Evaluating a Model
+
+    You can evaluate the model's performance using the `evaluate` method:
+
+    ```python
+    evaluator = TabularPredictor.evaluate(df, label='target_column')
+    evaluator.plot()
+    ```
+
+    ### Hyperparameter Tuning
+
+    AutoGluon supports hyperparameter tuning. You can specify a list of hyperparameters to tune, and AutoGluon will use a grid search to find the best hyperparameters:
+
+    ```python
+    predictor = TabularPredictor.fit(df, label='target_column', hyperparameters={
+        '

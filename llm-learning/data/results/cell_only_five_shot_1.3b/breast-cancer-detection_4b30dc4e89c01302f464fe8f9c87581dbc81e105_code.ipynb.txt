@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "feat: Add new feature"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    import sklearn
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn import metrics
+    dataset = load_breast_cancer()
+
+    # Put data in a pandas DataFrame
+    df_breast_cancer = pd.DataFrame(dataset.data, columns=dataset.feature_names)
+    # Add target and class to DataFrame
+    df_breast_cancer['target'] = dataset.target
+    df_breast_cancer['class'] = dataset.target_names[dataset.target]
+    # Show 10 random samples
+    df_breast_cancer.sample(n=10)
+    print(f'Number of features: {num_features}')
+
+    assert num_features == 30
+    print(f'Benign count: {num_benign}. Malignant count: {num_malignant}')
+
+    assert num_benign == 357
+    assert num_malignant == 212
+    # Store input and labels
+    x = dataset.data
+    y = dataset.target
+
+    print(f'x: {x.shape}. y: {y.shape}')
+
+    # YOUR CODE HERE
+    print(f'x_train: {x_train.shape}. y_train: {y_train.shape}')
+    print(f'x_test: {x_test.shape}. y_test: {y_test.shape}')
+
+    assert x_train.shape == (426, 30)
+    assert y_train.shape == (426, )
+    assert x_test.shape == (143, 30)
+    assert

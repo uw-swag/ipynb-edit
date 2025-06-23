@@ -1,0 +1,116 @@
+<Cell_0>
+%matplotlib inline
+from sklearn_model_eval import plots
+from sklearn_model_eval import tables
+
+import numpy as np
+from sklearn import svm, datasets
+from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import label_binarize
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.datasets import make_classification
+from sklearn.ensemble import ExtraTreesClassifier
+<\Cell_0>
+<Cell_1>
+# import some data to play with
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# Split the data into a training set and a test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
+# Run classifier, using a model that is too regularized (C too low) to see
+# the impact on the results
+classifier = svm.SVC(kernel='linear', C=0.01)
+y_pred = classifier.fit(X_train, y_train).predict(X_test)
+<\Cell_1>
+<Cell_2>
+plots.confusion_matrix_(y_test, y_pred, target_names=iris.target_names)
+<\Cell_2>
+<Cell_3>
+plots.confusion_matrix_(y_test, y_pred, target_names=iris.target_names, normalize=True)
+<\Cell_3>
+<Cell_4>
+# Import some data to play with
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# Add noisy features to make the problem harder
+random_state = np.random.RandomState(0)
+n_samples, n_features = X.shape
+X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
+
+# shuffle and split training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
+                                                    random_state=0)
+
+# Learn to predict each class against the other
+classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
+                                 random_state=random_state))
+y_score = classifier.fit(X_train, y_train).decision_function(X_test)
+<\Cell_4>
+<Cell_5>
+#Plot ROC curve for a multi-class classifier
+plots.roc(y_test, y_score)
+<\Cell_5>
+<Cell_6>
+#Or plot a curve for a single class
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2])
+plots.roc(y_test_bin[:,2], y_score[:,2])
+<\Cell_6>
+<Cell_7>
+# Import some data to play with
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# Add noisy features to make the problem harder
+random_state = np.random.RandomState(0)
+n_samples, n_features = X.shape
+X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
+
+# shuffle and split training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
+                                                    random_state=random_state)
+
+# Learn to predict each class against the other
+classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
+                                 random_state=random_state))
+y_score = classifier.fit(X_train, y_train).decision_function(X_test)
+<\Cell_7>
+<Cell_8>
+plots.precision_recall(y_test, y_score)
+<\Cell_8>
+<Cell_9>
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2])
+plots.precision_recall(y_test_bin[:,0], y_score[:,0])
+<\Cell_9>
+<Cell_10>
+# Build a classification task using 3 informative features
+X, y = make_classification(n_samples=1000,
+                           n_features=10,
+                           n_informative=3,
+                           n_redundant=0,
+                           n_repeated=0,
+                           n_classes=2,
+                           random_state=0,
+                           shuffle=False)
+
+# Build a forest and compute the feature importances
+forest = ExtraTreesClassifier(n_estimators=250,
+                              random_state=0)
+
+forest = forest.fit(X, y)
+feature_list = map(lambda x: 'Feature '+str(x), range(10))
+<\Cell_10>
+<Cell_11>
+plots.feature_importance(forest, feature_list)
+<\Cell_11>
+<Cell_12>
+print tables.feature_importances(forest, feature_list, format='grid')
+<\Cell_12>
+<Cell_13>
+
+<\Cell_13>

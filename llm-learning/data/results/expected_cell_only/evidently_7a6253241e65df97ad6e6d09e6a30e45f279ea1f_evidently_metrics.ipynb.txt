@@ -1,0 +1,64 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+from sklearn import ensemble
+from sklearn import model_selection
+
+from evidently import ColumnMapping
+from evidently.options import ColorOptions
+from evidently.report import Report
+
+from evidently.metrics import ColumnDriftMetric
+from evidently.metrics import DataDriftTable
+from evidently.metrics import DatasetDriftMetric
+from evidently.metrics import ColumnCategoryMetric
+from evidently.metrics import ColumnDistributionMetric
+from evidently.metrics import ColumnValuePlot
+from evidently.metrics import ColumnQuantileMetric
+from evidently.metrics import ColumnCorrelationsMetric
+from evidently.metrics import ColumnValueListMetric
+from evidently.metrics import ColumnValueRangeMetric
+from evidently.metrics import DatasetCorrelationsMetric
+from evidently.metrics import ColumnRegExpMetric
+from evidently.metrics import ColumnSummaryMetric
+from evidently.metrics import ColumnMissingValuesMetric
+from evidently.metrics import DatasetSummaryMetric
+from evidently.metrics import DatasetMissingValuesMetric
+from evidently.metrics import ConflictTargetMetric
+from evidently.metrics import ConflictPredictionMetric
+from evidently.metrics import ClassificationQualityMetric
+from evidently.metrics import ClassificationClassBalance
+from evidently.metrics import ClassificationConfusionMatrix
+from evidently.metrics import ClassificationQualityByClass
+from evidently.metrics import ClassificationClassSeparationPlot
+from evidently.metrics import ClassificationProbDistribution
+from evidently.metrics import ClassificationRocCurve
+from evidently.metrics import ClassificationPRCurve
+from evidently.metrics import ClassificationPRTable
+from evidently.metrics import ClassificationQualityByFeatureTable
+from evidently.metrics import ClassificationDummyMetric
+from evidently.metrics import RegressionQualityMetric
+from evidently.metrics import RegressionPredictedVsActualScatter
+from evidently.metrics import RegressionPredictedVsActualPlot
+from evidently.metrics import RegressionErrorPlot
+from evidently.metrics import RegressionAbsPercentageErrorPlot
+from evidently.metrics import RegressionErrorDistribution
+from evidently.metrics import RegressionErrorNormality
+from evidently.metrics import RegressionTopErrorMetric
+from evidently.metrics import RegressionErrorBiasTable
+from evidently.metrics import RegressionDummyMetric
+#from evidently.metrics import EmbeddingsDriftMetric
+#column-level metrics
+data_quality_column_report = Report(metrics=[
+    ColumnDistributionMetric(column_name="education"), 
+    ColumnQuantileMetric(column_name="education-num", quantile=0.75), 
+    ColumnCorrelationsMetric(column_name="education"),
+    ColumnValueListMetric(column_name="relationship", values=["Husband", "Unmarried"]), 
+    ColumnValueRangeMetric(column_name="age", left=10, right=20),
+    ColumnCategoryMetric(column_name='education', category='Some-college'),
+    
+])
+
+data_quality_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_quality_column_report

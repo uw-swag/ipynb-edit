@@ -1,0 +1,39 @@
+#Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.feature_selection import SelectFromModel
+from sklearn.linear_model import LogisticRegression
+from sklearn import svm
+import xgboost as xgb
+from sklearn.ensemble import VotingClassifier
+from sklearn.naive_bayes import GaussianNB
+clf = RandomForestClassifier(n_estimators=20, n_jobs=-1, criterion = 'gini', max_features = 'sqrt',
+                             min_samples_split=2, min_weight_fraction_leaf=0.0,
+                             max_leaf_nodes=40, max_depth=100)
+
+calibrated_clf = CalibratedClassifierCV(clf, method='sigmoid', cv=5)
+log_reg = LogisticRegression(C = 1, tol = 0.0001, solver='newton-cg', multi_class='multinomial')
+gnb = GaussianNB()
+calibrated_clf1 = CalibratedClassifierCV(RandomForestClassifier())
+log_reg1 = LogisticRegression()
+gnb1 = GaussianNB()
+Vclf1 = VotingClassifier(estimators=[('LR', log_reg1), ('CRF', calibrated_clf1),
+                                     ('GNB', gnb1)], voting='hard')
+Vclf = VotingClassifier(estimators=[('LR', log_reg), ('CRF', calibrated_clf),
+                                     ('GNB', gnb)], voting='soft', weights=[1,1,1])
+hard_predict = le.inverse_transform(Vclf1.fit(X, Y_train).predict(Xt))
+soft_predict = le.inverse_transform(Vclf.fit(X, Y_train).predict(Xt))
+#Let's see the differences:
+for i in range(len(hard_predict)):
+    if hard_predict[i] != soft_predict[i]:
+        print(i, hard_predict[i], soft_predict[i])
+submission = pd.DataFrame({'id':test_id, 'type':hard_predict})
+submission.to_csv('GGG_submission3.csv', index=False)

@@ -1,0 +1,32 @@
+```
+    #1. A few correct labels at random
+    correct = np.where(val_expected_labels==val_expected_labels)[0]
+    print(f"Found {len(correct)} correct labels")
+    idx = permutation(correct)[:n_view]
+    plots_idx(idx, val_predicted_labels[idx])
+
+    #2. A few incorrect labels at random
+    incorrect = np.where(val_expected_labels!=val_expected_labels)[0]
+    print(f"Found {len(incorrect)} incorrect labels")
+    idx = permutation(incorrect)[:n_view]
+    plots_idx(idx, val_predicted_labels[idx])
+
+    #3. A few correct and incorrect labels at random
+    correct_incorrect = np.where(val_expected_labels==val_expected_labels)!=np.where(val_expected_labels!=val_expected_labels))[0]
+    print(f"Found {len(correct_incorrect)} correct and incorrect labels")
+    idx = permutation(correct_incorrect)[:n_view]
+    plots_idx(idx, val_predicted_labels[idx])
+
+    #4. A few correct labels and incorrect labels at random
+    correct_incorrect = np.where(val_expected_labels==val_expected_labels)[0]
+    incorrect = np.where(val_expected_labels!=val_expected_labels)[0]
+    print(f"Found {len(correct_incorrect)} correct labels and {len(incorrect)} incorrect labels")
+    idx = permutation(correct_incorrect)[:n_view]
+    plots_idx(idx, val_predicted_labels[idx])
+
+    #5. A few correct labels and incorrect labels at random
+    correct = np.where(val_expected_labels==val_expected_labels)[0]
+    incorrect = np.where(val_expected_labels!=val_expected_labels)[0]
+    print(f"Found {len(correct)} correct labels and {len(incorrect)} incorrect labels")
+    idx = permutation(correct)[:n_view]
+    plots_idx

@@ -1,0 +1,58 @@
+```python
+    from google.colab import files
+    uploaded = files.upload()
+
+    for fn in uploaded:
+        print('File name:', fn)
+        with open(fn, 'wb') as f:
+            f.write(uploaded[fn])
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented VAE"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from torch.utils.data import DataLoader
+    from torchvision import datasets, transforms
+    from torchvision.utils import save_image
+
+    class VAE(nn.Module):
+        def __init__(self):
+            super(VAE, self).__init__()
+            self.encoder = nn.Sequential(
+                nn.Linear(784, 400),
+                nn.ReLU(),
+                nn.Linear(400, 20)
+            )
+            self.decoder = nn.Sequential(
+                nn.Linear(20, 400),
+                nn.ReLU(),
+                nn.Linear(400, 784),
+                nn.Sigmoid()
+            )
+
+        def reparameterize(self, mu, logvar):
+            std = logvar.mul(0.5).exp_()
+            esp = torch.randn(*mu.size())
+            z = mu + std * esp
+            return z
+
+        def forward(self, x):
+            h = self.encoder(x)
+            mu, logvar = torch.chunk(h, 2, dim=1)
+            z = self.reparameterize(mu, logvar)
+            return self.decoder(z), mu, logvar
+
+    vae = VAE()
+    vae.train()
+
+    optimizer = optim.Adam(vae.parameters(), lr=1e-3)
+    criterion = nn.BCELoss()
+
+    def train(epoch):
+       

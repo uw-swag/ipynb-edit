@@ -1,0 +1,54 @@
+```python
+    # Updated after more training data tests
+    from redpitaya.overlay.mercury import mercury as overlay
+    import IPython.display as ipd
+    import matplotlib.pyplot as plt
+
+    # Audio processing requirements
+    import numpy as np
+    from scipy.io.wavfile import write
+
+    # Edge Impulse requirements
+    import json
+    import time, hmac, hashlib
+    import requests
+    import re, socket
+    import math
+
+    fpga = overlay()
+
+    in2 = fpga.osc(1, 1.0)
+    in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+    in2.trigger_pre  = 0
+    in2.trigger_post = in2.buffer_size
+    in2.trig_src = 0
+
+    def record_audio():
+        in2.reset()
+        in2.start()
+        in2.trigger()
+        while (in2.status_run()): pass
+        data = in2.data(in2.buffer_size)
+        return data
+
+    audio_data_returned = record_audio()
+
+    def display_audio(audio_data, sr = 3000):
+        return ipd.Audio(audio_data, rate=sr)
+
+    python_display_audio = display_audio(audio_data_returned, sr = 3000)
+
+    def plot_audio(audio_data):
+        plt.plot(audio_data)
+        plt.show()
+
+    plot_audio(audio_data_returned)
+
+    def save_audio(audio_data, file, sr = 3000):
+        write("float_wave_test_raw.wav", sr, audio_data)
+
+    files = ['float_wave_test_raw.wav']
+    file = files[0]
+    save_audio(audio_data_returned, file, sr = 3000)
+
+    def upload_audio2edge_impulse(files, label = 'red-pit

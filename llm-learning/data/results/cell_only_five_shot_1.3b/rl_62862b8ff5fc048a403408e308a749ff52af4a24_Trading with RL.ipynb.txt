@@ -1,0 +1,30 @@
+```python
+    import preprocessing as pre
+    import pandas as pd
+    import numpy as np
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import permutation_test_score
+    import matplotlib.pyplot as plt
+    from sklearn import metrics
+    import plotly.express as px
+    from sklearn import preprocessing
+
+    neuro = pd.read_excel("Neuropsy.xlsx", na_values='.').dropna()
+    neuro['ID']='id_'+neuro['ID'].astype(str)
+    neuro.rename(columns={'ID':'id'}, inplace=True)
+    neuro['subtype'] = neuro.apply(lambda x: pre.categorize_subtypes(x['inat'], x['hyper']), axis=1)
+    neuro['is_inat'] = neuro['subtype'].apply(lambda x: 0 if x=='hyper' else 1)
+    neuro['is_hyper'] = neuro['subtype'].apply(lambda x: 0 if x=='inat' else 1)
+    neuro.reset_index(drop=True, inplace = True)
+    neuro.Gender.value_counts()
+
+    eeg = pre.process_all_excel_files()
+    eeg['fft_abs_power'] = eeg['fft_abs_power'].astype(float)
+    eeg['id'] = eeg['id'].astype(int)
+    eeg['id'] ='id_'+eeg['id'].astype(str)
+    eeg = eeg[['id', 'brain_oscillation','electrode', 'fft_abs_power']]
+    print(eeg.shape)
+    eeg.head(5)
+    eeg = eeg.loc[(eeg['brain_oscillation'] != 'HighBeta') & (eeg['brain_oscillation'] != 'HighGamma') & (eeg['brain_

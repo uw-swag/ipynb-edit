@@ -1,0 +1,47 @@
+
+    '''
+    Commit Message: "Add mean, var to agg features"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from lib.util import fetch_thread
+<\Cell_0>
+<Cell_1>
+Z, y = fetch_thread("germanwings-crash")
+Z.describe()
+<\Cell_1>
+<Cell_2>
+from scipy.stats import pearsonr
+
+corr = Z.apply(lambda x: pearsonr(x, y), axis=0, result_type='expand')\
+    .T \
+    .rename(columns={0: "coef", 1: "pval"}) \
+    .sort_values(by=["coef"], ascending=False)
+
+plt.figure(figsize=(15,9))
+plt.title("Correlation Between Features and Rumor Label (Germanwings Crash)")
+
+labels = [index + " (p = %.2f)" % round(row.pval, 2) for index, row in corr.iterrows()]
+ax = sns.barplot(y=labels, x=corr.coef, palette="Set2")
+ax.set(xlabel="Pearson Correlation Coefficient", ylabel="Feature")
+
+offset = 0.01
+i = 0
+for index, row in corr.iterrows():
+    ax.text(row.coef + (offset if row.coef > 0 else -offset), i, round(row.coef, 2), 
+            color="black",
+            ha="center",
+            fontsize='small')
+    i += 1
+<\Cell_2>
+<Cell_3>
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(Z,y)
+
+coefs = pd.DataFrame(model.coef_, columns=["coef"], index=Z.columns).sort_values(by=["

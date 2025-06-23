@@ -1,0 +1,29 @@
+```python
+    # Adding repository files
+    # This is a sample code to add repository files
+
+    # Import necessary libraries
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'source_directory'
+    dest_dir = 'destination_directory'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Iterate over each file
+    for file in files:
+        # Construct the full source and destination paths
+        source_path = os.path.join(source_dir, file)
+        dest_path = os.path.join(dest_dir, file)
+
+        # Check if the file is a directory
+        if os.path.isdir(source_path):
+            # If it is a directory, create the destination directory
+            os.makedirs(dest_path, exist_ok=True)
+        else:
+            # If it is not a directory, copy the file to the destination directory
+            shutil.copy2(source_path, dest_path)
+    ```

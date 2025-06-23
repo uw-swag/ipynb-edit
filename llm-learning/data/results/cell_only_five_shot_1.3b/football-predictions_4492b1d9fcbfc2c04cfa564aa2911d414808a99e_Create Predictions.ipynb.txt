@@ -1,0 +1,43 @@
+```python
+    import numpy as np
+import random
+import os
+import csv
+import pandas as pd
+from scrapers import *
+from keras.models import load_model
+from sklearn.preprocessing import StandardScaler
+
+DATA_PATH = 'data/'
+
+# Set random seed for reproducibility
+np.random.seed(42)
+random.seed(42)
+os.environ['PYTHONHASHSEED'] = str(42)
+
+# Load data
+df_ema = pd.read_csv(os.path.join(DATA_PATH, 'season1920_data.csv'))
+
+# Create a new row
+def create_row(home_team, away_team, home_odds, draw_odds, away_odds, matchweek):
+    # First get last result data
+    home_goals_scored, home_goals_against = get_last_result(home_team)
+    home_result = get_result(home_goals_scored, home_goals_against)
+    home_points = get_points(home_goals_scored, home_goals_against)
+    
+    away_goals_scored, away_goals_against = get_last_result(away_team)
+    away_result = get_result(away_goals_scored, away_goals_against)
+    away_points = get_points(away_goals_scored, away_goals_against)
+    
+    # Combine this with team data we already have, I created a csv
+    # using existing functions without scaling.   
+    with open(os.path.join(DATA_PATH, 'season1920_data.csv')) as f:
+        reader = csv.reader(f)
+        next(reader, None)
+        for row in reader:
+            if home_team == row[3]:
+                htp = (int(row[12]) + home_points) / matchweek
+                hm1 = home_result
+                hm2 = row[17]
+                hm3 = row[18]
+                htgd = (float(row[

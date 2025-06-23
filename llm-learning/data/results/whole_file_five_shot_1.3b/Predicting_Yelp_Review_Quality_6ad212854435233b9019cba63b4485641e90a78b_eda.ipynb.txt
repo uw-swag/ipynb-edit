@@ -1,0 +1,56 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+<\Cell_0>
+<Cell_1>
+def clean_data(df):
+    """
+    Cleans the dataframe by handling missing values,
+    duplicates, and outliers.
+
+    Args:
+        df (DataFrame): Dataframe to clean.
+
+    Returns:
+        DataFrame: Cleaned dataframe.
+    """
+    # Handle missing values
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Handle duplicates
+    df.drop_duplicates(keep='first', inplace=True)
+
+    # Handle outliers
+    for column in df.columns:
+        if df[column].dtype != 'O':
+            q1 = df[column].quantile(0.25)
+            q3 = df[column].quantile(0.75)
+            iqr = q3 - q1
+            lower_bound = q1 - (iqr * 1.5)
+            upper_bound = q3 + (iqr * 1.5)
+            df = df[df[column] > lower_bound]
+            df = df[df[column] < upper_bound]
+
+    # Standardize numerical features
+    num_cols = df.select_dtypes(include=['int64', 'float64']).columns
+    scaler = StandardScaler()
+    df[num_cols] = scaler.fit_transform(df[num_cols])
+
+    return df
+<\Cell_1>
+<Cell_2>
+df_cleaned = clean_data(df)
+<\Cell_2>
+<Cell_3>
+df

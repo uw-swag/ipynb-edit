@@ -1,0 +1,44 @@
+
+    ## Fixing Colab & Notebook Links
+
+    ### Colab
+
+    - In the Colab notebook, you can use the following code to fix the links:
+
+    ```python
+    import re
+    import urllib.parse
+
+    def fix_colab_links(text):
+        # Replace colab links with a temporary placeholder
+        text = re.sub(r'https://colab.research.google.com/github/[^/]+/([^/]+)', 'https://colab.research.google.com/github/TEMP_REPO/TEMP_NOTEBOOK', text)
+
+        # Replace temporary placeholder with actual links
+        text = re.sub(r'https://colab.research.google.com/github/TEMP_REPO/TEMP_NOTEBOOK', 'https://colab.research.google.com/github/TEMP_REPO/TEMP_NOTEBOOK', text)
+
+        return text
+
+    # Apply the function to the notebook cells
+    notebook_cells = notebook.cells.values()
+    for cell in notebook_cells:
+        if 'text/markdown' in cell['metadata'].get('content_type', ''):
+            cell['source'] = fix_colab_links(cell['source'])
+
+    # Save the notebook
+    notebook.update()
+    ```
+
+    ### Notebook
+
+    - In the Jupyter notebook, you can use the following code to fix the links:
+
+    ```python
+    import re
+    import urllib.parse
+
+    def fix_notebook_links(text):
+        # Replace notebook links with a temporary placeholder
+        text = re.sub(r'http[s]?://[^/]+/notebooks/[^/]+', 'http://notebook.example.com/TEMP_NOTEBOOK', text)
+
+        # Replace temporary placeholder with actual links
+        text = re.sub(r'http[s]?://notebook.example.com/TEMP_NOTEBOOK', 'http://notebook.example.com/TEMP_NOTEBOOK',

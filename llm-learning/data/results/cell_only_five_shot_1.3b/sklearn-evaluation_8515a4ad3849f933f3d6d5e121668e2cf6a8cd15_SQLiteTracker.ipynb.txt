@@ -1,0 +1,57 @@
+```
+    ## SQLiteTracker API Documentation
+
+    The `SQLiteTracker` class is a utility class that is used to manage the tracking of experiments in a SQLite database.
+
+    ### Constructor
+
+    The constructor of the `SQLiteTracker` class takes a string argument that is the path to the SQLite database file. If the file does not exist, it will be created.
+
+    ```python
+    from sklearn_evaluation.manage.SQLiteTracker import SQLiteTracker
+    ```
+
+    ### Methods
+
+    - `new()`: This method is used to create a new experiment. It returns a unique identifier for the experiment.
+
+    ```python
+    uuid = tracker.new()
+    ```
+
+    - `update(uuid, metrics)`: This method is used to update the metrics of an existing experiment. The `metrics` argument should be a dictionary that contains the metrics to be updated.
+
+    ```python
+    tracker.update(uuid, {'accuracy': 0.85})
+    ```
+
+    - `comment(uuid, comment)`: This method is used to add a comment to an existing experiment. The `comment` argument should be a string that contains the comment to be added.
+
+    ```python
+    tracker.comment(uuid, 'My experiment')
+    ```
+
+    - `get_all()`: This method is used to get all the experiments from the database. It returns a list of dictionaries, where each dictionary contains the metrics of an experiment.
+
+    ```python
+    experiments = tracker.get_all()
+    ```
+
+    - `get(uuid)`: This method is used to get the metrics of an existing experiment. It returns a dictionary that contains the metrics of the experiment.
+
+    ```python
+    experiment = tracker.get(uuid)
+    ```
+
+    - `delete(uuid)`: This method is used to delete an existing experiment from the database.
+
+    ```python
+    tracker.delete(uuid)
+    ```
+
+    ### Example
+
+    Here is an example of how to use the `SQLiteTracker` class:
+
+    ```python
+    from sklearn_evaluation.manage.SQLiteTracker import SQL

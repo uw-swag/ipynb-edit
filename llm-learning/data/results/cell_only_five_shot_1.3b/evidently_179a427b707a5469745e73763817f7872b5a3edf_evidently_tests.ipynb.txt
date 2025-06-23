@@ -1,0 +1,35 @@
+
+The code you provided is for a binary classification problem using the breast cancer dataset from sklearn. The code is updating the reference and current datasets with prediction probabilities. The updated code is also running a suite of tests on the dataset to check for quality issues.
+
+Here's the updated code:
+
+```python
+# Dataset for Binary Probabilistic Classification
+bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+bcancer_ref['prediction'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_cur['prediction'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+
+#dataset-level tests
+data_quality_dataset_tests = TestSuite(tests=[
+    TestTargetPredictionCorrelation(),
+    TestHighlyCorrelatedColumns(),
+    TestTargetFeaturesCorrelations(),
+    TestPredictionFeaturesCorrelations(),
+    TestCorrelationChanges(),
+])
+
+data_quality_dataset_tests.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+data_quality_dataset_tests
+```
+
+In this updated code, the `model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]` line is adding a new column to the reference and current datasets, `prediction`, which contains the probability of the target variable being 1.
+
+The `data_quality_dataset_tests.run(reference_data=bcancer_ref, current_data=bcancer_cur)` line is running

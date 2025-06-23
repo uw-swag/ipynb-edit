@@ -1,0 +1,44 @@
+
+    Here are the code cells from the original commit message:
+
+    ```python
+    # code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir(os.path.join('..', 'notebook_format'))
+    from formats import load_style
+    load_style(plot_style = False)
+    os.chdir(path)
+
+    # 1. magic for inline plot
+    # 2. magic to print version
+    # 3. magic so that the notebook will reload external python modules
+    # 4. magic to enable retina (high resolution) plots
+    # https://gist.github.com/minrk/3301035
+    %matplotlib inline
+    %load_ext watermark
+    %load_ext autoreload
+    %autoreload 2
+    %config InlineBackend.figure_format = 'retina'
+
+    import matplotlib.pyplot as plt
+
+    %watermark -a 'Ethen' -d -t -v -p h2o,matplotlib
+    # Load the H2O library and start up the H2O cluter locally on your machine
+    import h2o
+
+    # Number of threads, nthreads = -1, means use all cores on your machine
+    # max_mem_size is the maximum memory (in GB) to allocate to H2O
+    h2o.init(nthreads = -1, max_mem_size = 8)
+    filepath = 'https://raw.githubusercontent.com/h2oai/app-consumer-loan/master/data/loan.csv'
+    data = h2o.import_file(filepath)
+    print('dimension:', data.shape)
+    data.head(6)
+    # encode the binary repsonse as a factor
+    label_col = 'bad_loan'
+    data[label_col] = data[label_col].asfactor()
+
+    # this is an optional step that checks the factor level
+    data[label_col].levels

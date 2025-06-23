@@ -1,0 +1,59 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+    import plotly.graph_objs as go
+    import pandas as pd
+    import numpy as np
+
+    # Sample Data
+    df = pd.DataFrame({
+        'x': np.random.randn(100).cumsum(),
+        'y': np.random.randn(100).cumsum()
+    })
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': [
+                    go.Scatter(
+                        x=df['x'],
+                        y=df['y'],
+                        mode='lines',
+                        marker={
+                            'size': 12,
+                            'color': 'rgba(54, 162, 235, 0.8)',  # color value should be a valid color name or RGB value
+                            'line': {
+                                'width': 2,
+                                'color': 'rgb(255, 255, 255)'
+                            }
+                        }
+                    )
+                ],
+                'layout': go.Layout(
+                    title='Example Graph',
+                    xaxis={'title': 'X-axis'},
+                    yaxis={'title': 'Y-axis'},
+                    colorway=["#FF0000", "#00FF00", "#0000FF"]  # color scheme
+                )
+            }
+        ),
+        dcc.Interval(
+            id='interval-component',
+            interval=1*1000,  # in milliseconds
+            n_intervals=0
+        )
+    ])
+
+    @app.callback(
+        Output('example-graph', 'figure'),
+        [Input('interval-component', 'n_intervals')]
+    )
+    def update_graph(n):
+        global df
+        df = pd.DataFrame({
+            'x': np.random.randn(

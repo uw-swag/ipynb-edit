@@ -1,0 +1,20 @@
+```python
+    from imblearn.under_sampling import majority_class
+
+    # Load your dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Separate features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Initialize the Majority class undersampling
+    undersampling = majority_class(random_state=0)
+
+    # Fit and transform the data
+    X_res, y_res = undersampling.fit_resample(X, y)
+
+    # Check the new class distribution
+    print(y_res.value_counts())
+    ```
+    This code will perform majority class undersampling on your dataset. The majority class is the class that appears most frequently in the dataset. The undersampling process will then remove instances from the majority class to balance the dataset.

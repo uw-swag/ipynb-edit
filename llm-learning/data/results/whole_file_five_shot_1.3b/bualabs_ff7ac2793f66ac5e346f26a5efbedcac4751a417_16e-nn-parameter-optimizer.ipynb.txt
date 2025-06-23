@@ -1,0 +1,46 @@
+```python
+    class Model(nn.Module):
+        def __init__(self, n_in, nh, n_out):
+            super().__init__()
+            self.layers = [nn.Linear(n_in, nh), nn.ReLU(), nn.Linear(nh, n_out)]        
+        def __call__(self, x):
+            for l in self.layers:
+                x = l(x)
+            return x
+
+    def get_model():
+        loss_func = F.cross_entropy
+        model = Model(m, nh, c.numpy())
+        return model, loss_func
+
+    def fit():
+        losses, metrics = [], []
+        for e in range(epoch):
+            for xb, yb in train_dl:
+                yhatb = model(xb)
+                loss = loss_func(yhatb, yb)
+                acc = accuracy(yhatb, yb)
+                losses.append(loss.item())
+                metrics.append(acc.item())
+                loss.backward()
+                with torch.no_grad():
+                    for l in model.layers:
+                        if hasattr(l, 'weight'):
+                            l.weight -= l.weight.grad * lr
+                            l.bias   -= l.bias.grad * lr 
+                            l.weight.grad.zero_()
+                            l.bias.grad.zero_()       
+
+        plot_metrics(losses, metrics)
+
+    def plot_metrics(losses, metrics):
+        x = torch.arange(len(losses)).numpy()
+        fig,ax = plt.subplots(figsize=(9, 9))
+        ax.grid(True)
+        ax.plot(x, losses, label="Loss")
+        ax.plot(x, metrics, label="Accuracy")
+        ax.legend(loc='upper right')
+
+    model, loss_func = get_model()
+    fit()
+    ```

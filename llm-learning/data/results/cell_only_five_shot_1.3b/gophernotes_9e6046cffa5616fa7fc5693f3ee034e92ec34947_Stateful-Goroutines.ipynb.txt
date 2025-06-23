@@ -1,0 +1,59 @@
+```
+    # Importing required packages
+    import (
+        "fmt"
+        "math/rand"
+        "sync/atomic"
+        "time"
+    )
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "update Dockerfile"
+    Original Code Cells:
+    '''
+    FROM golang:1.16
+
+    WORKDIR /app
+
+    COPY go.mod go.sum ./
+
+    RUN go mod download
+
+    COPY . .
+
+    RUN go build -o main .
+
+    EXPOSE 8080
+
+    CMD ["./main"]
+    '''
+    ]
+
+    ### Response:
+    ```Dockerfile
+    # Use Go 1.16 as the base image
+    FROM golang:1.16
+
+    # Set the working directory to /app
+    WORKDIR /app
+
+    # Copy the go.mod and go.sum files
+    COPY go.mod go.sum ./
+
+    # Download the dependencies
+    RUN go mod download
+
+    # Copy the rest of the code
+    COPY . .
+
+    # Build the binary
+    RUN go build -o main .
+
+    # Expose port 8080
+    EXPOSE 8080
+
+    # Run the binary when the container launches
+    CMD ["./main"]
+    ```

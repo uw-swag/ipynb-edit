@@ -1,0 +1,35 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    np.random.seed(42)
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.05 + df['x2']
+    df['x5'] = df['x2'] + 0.01 * df['x1']
+    df['label'] = df['x5'].apply(lambda x: 0 if x < 0 else 1)
+
+    <\Cell_1>
+    <Cell_2>
+    dataset = Dataset(df, label_name='label', index_name='x1', date_name='x2')
+    <\Cell_2>
+    <Cell_3>
+    IdentifierLeakage().run(dataset)
+    <\Cell_3>
+    <Cell_4>
+
+    my_check = IdentifierLeakage(ppscore_params={'sample': 10})
+    my_check.run(dataset=dataset)
+    <\Cell_4>
+    ```
+
+    The code above is a fix for the dataset creation logic. The `IdentifierLeakage` check is used to detect if the label column contains any information that could be used to leak information about the index column. The `run` method of the `IdentifierLeakage` check is used to run the check on the dataset.
+
+    The `ppscore_params` parameter is a dictionary that contains the parameters for the `ppscore` method. The `ppscore` method is used to calculate the PP-score, a measure of the quality of a dataset. The PP-score is a measure of the quality of a dataset by considering the proportion of positive instances (label=1) in the dataset. The `sample` parameter is the number of samples to use for the calculation of the PP-score.
+
+    The `run` method

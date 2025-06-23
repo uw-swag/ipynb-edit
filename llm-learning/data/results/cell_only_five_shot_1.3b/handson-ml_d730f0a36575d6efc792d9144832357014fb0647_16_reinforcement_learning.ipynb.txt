@@ -1,0 +1,46 @@
+```python
+    # imports
+    import tensorflow as tf
+    from handson_ml.image import download_data
+    from handson_ml.image.lenet import LeNet
+    from handson_ml.image.vis_utils import plot_image
+    from handson_ml.image.paint_image import paint_image
+    from handson_ml.image.draw_solution import draw_solution
+
+    # Download the data
+    data = download_data(dataset_name="mandrill_256", cache_dir='.')
+
+    # Load the data
+    X, y = data.load_data(target_size=(28, 28))
+
+    # Reshape the data
+    X = X.reshape(-1, 28, 28, 1)
+
+    # Normalize the data
+    X = X.astype('float32') / 255
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create the model
+    model = LeNet(width=28, height=28, channels=1, classes=10)
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # Train the model
+    history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=10, batch_size=64)
+
+    # Save the figure
+    save_fig('mandrill_net')
+
+    # Plot the training results
+    plt.plot(history.history['loss'], label='train loss')
+    plt.plot(history.history['val_loss'], label='val loss')
+    plt.title('Loss')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+    plt.show()
+
+    # Plot

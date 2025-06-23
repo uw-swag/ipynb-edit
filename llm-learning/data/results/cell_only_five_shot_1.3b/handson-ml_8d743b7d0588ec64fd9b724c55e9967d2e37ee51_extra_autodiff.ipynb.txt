@@ -1,0 +1,56 @@
+```python
+    ## Automatic Differentiation in PyTorch
+
+    ## Automatic Differentiation (AD) is a powerful technique used in machine learning to compute gradients.
+
+    ## PyTorch provides a module called `torch.autograd` that provides support for automatic differentiation.
+
+    ## Here is an example of how to use it:
+
+    ```python
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    # Define a simple neural network
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.fc1 = nn.Linear(10, 5)
+            self.fc2 = nn.Linear(5, 1)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = self.fc2(x)
+            return x
+
+    net = Net()
+
+    # Define a loss function and an optimizer
+    criterion = nn.MSELoss()
+    optimizer = optim.SGD(net.parameters(), lr=0.01)
+
+    # Forward pass: compute predicted y by passing x to the model
+    y_pred = net(x)
+
+    # Compute the loss
+    loss = criterion(y_pred, y)
+
+    # Zero the gradients before running the backward pass.
+    optimizer.zero_grad()
+
+    # Backward pass: compute gradient of the loss with respect to all the learnable parameters of the model
+    loss.backward()
+
+    # Update the weights using gradient descent
+    optimizer.step()
+
+    ## Automatic Differentiation in PyTorch
+
+    ## In the above example, we used PyTorch's automatic differentiation (AD) to compute the gradients.
+
+    ## The `loss.backward()` function computes the gradient of the loss with respect to the model's parameters.
+
+    ## The `optimizer.step()` function updates the model's parameters based on the computed gradients.
+
+    ## This is a basic example of how to use AD in

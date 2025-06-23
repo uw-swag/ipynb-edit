@@ -1,0 +1,33 @@
+```
+    ## This code cell will not be shown in the HTML version of this notebook
+    ## Points to handson-ml2, improves save_fig and adds Colab link
+
+    ## To support both python 2 and python 3
+    from __future__ import absolute_import, division, print_function, unicode_literals
+
+    ## Imports
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from handson_ml2.core.handson import run_gradient_descent
+    from handson_ml2.data_prep.synthetic import make_data
+    from handson_ml2.evaluation.evaluate import evaluate_relu_net
+    from handson_ml2.neural_nets.sequential import Sequential
+    from handson_ml2.neural_nets.layers import Dense
+    from handson_ml2.neural_nets.activation import relu
+
+    ## Load data
+    X_train, y_train, X_test, y_test = make_data()
+
+    ## Run gradient descent
+    n_iterations = 1000
+    learning_rate = 0.01
+    run_gradient_descent(X_train, y_train, X_test, y_test, n_iterations, learning_rate,
+                         Dense(1, activation=relu), print_every=10)
+
+    ## Save figure
+    plt.savefig('gradient_descent.png')
+
+    ## Add Colab link
+    from google.colab import files
+    files.download('gradient_descent.png')
+    ```

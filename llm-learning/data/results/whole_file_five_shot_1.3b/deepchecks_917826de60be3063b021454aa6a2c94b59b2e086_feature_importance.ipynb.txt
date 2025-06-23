@@ -1,0 +1,52 @@
+```python
+    # Simplify display (#49)
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    import numpy as np
+
+    from mlchecks import *
+    from mlchecks.checks.overview.feature_importance import feature_importance
+
+    # Simplify display (#49)
+    iris = load_iris()
+    iris.feature_names.append("label")
+
+    df = pd.DataFrame(np.insert(iris.data, 4, iris.target, axis=1), columns=iris.feature_names)
+
+    dataset = Dataset(df, label="label")
+
+    # Simplify display (#49)
+    from sklearn.ensemble import RandomForestClassifier
+
+    multi_class_classifier = RandomForestClassifier()
+    X = iris.data
+    Y = iris.target
+    multi_class_classifier.fit(X, Y)
+
+    # Simplify display (#49)
+    x = feature_importance(dataset, multi_class_classifier)
+
+    # Simplify display (#49)
+    iris = load_iris()
+
+    idx = iris.target != 2
+    data = iris.data[idx]
+    target = iris.target[idx]
+    iris.feature_names.append("label")
+
+    df = pd.DataFrame(np.insert(data, 4, target, axis=1), columns=iris.feature_names)
+
+    binary_dataset = Dataset(df, label="label")
+
+    # Simplify display (#49)
+    from sklearn.ensemble import RandomForestClassifier
+    from mlchecks.checks.overview.feature_importance import *
+
+    clf = RandomForestClassifier()
+    idx = iris.target != 2
+    X = iris.data[idx]
+    Y = iris.target[idx]
+    clf.fit(X, Y)
+
+    # Simplify display (#49)
+    x = feature_importance

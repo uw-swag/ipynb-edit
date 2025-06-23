@@ -1,0 +1,14 @@
+```python
+    from deepchecks import Dataset
+
+    # Create a dataset from the training data
+    ds_train = Dataset(df_train, label=label_col, cat_features=[], use_index=False, date=None)
+
+    # Create a dataset from the test data
+    ds_test = Dataset(df_test, label=label_col, cat_features=[])
+
+    # Run the custom suite on the model and the datasets
+    new_custom_suite.run(model=rf_clf, train_dataset=ds_train, test_dataset=ds_test, check_datasets_policy='test')
+    ```
+
+    This code will run the custom suite on the model `rf_clf` with the training and test datasets. The `check_datasets_policy` parameter is set to 'test' to ensure that the test dataset is used for testing purposes.

@@ -1,0 +1,46 @@
+```
+    [
+    Commit Message: "Bump up version"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %maven ai.djl:api:0.5.1
+    %maven org.slf4j:slf4j-api:1.7.27
+    %maven org.slf4j:slf4j-simple:1.7.27
+
+    // See https://github.com/awslabs/djl/blob/master/mxnet/mxnet-engine/README.md
+    // for more MXNet library selection options
+    %maven ai.djl.mxnet:mxnet-engine:0.5.1
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-b
+    <\Cell_0>
+    <Cell_1>
+    %loadFromPOM
+    <dependency>
+        <groupId>tech.tablesaw</groupId>
+        <artifactId>tablesaw-jsplot</artifactId>
+        <version>0.39.0</version>
+    </dependency>
+    <\Cell_1>
+    <Cell_2>
+    %load ../utils/plot-utils.ipynb
+    %load ../utils/StopWatch.java
+    <\Cell_2>
+    <Cell_3>
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.ndarray.index.*;
+
+    import java.util.*;
+    import java.util.stream.*;
+    <\Cell_3>
+    <Cell_4>
+    int n = 10000;
+    NDManager manager = NDManager.newBaseManager();
+    var a = manager.ones(new Shape(n));
+    var b = manager.ones(new Shape(n));
+    <\Cell_4>
+    <Cell_5>
+    var c = manager.zeros(new Shape(n));
+    StopWatch stopWatch = new StopWatch();
+    for (int i = 0; i < n; i++) {
+        c.set(new NDIndex

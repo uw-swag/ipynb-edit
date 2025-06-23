@@ -1,0 +1,53 @@
+```
+    # Load the data
+    train_DF = pd.read_csv('train.csv')
+    test_DF = pd.read_csv('test.csv')
+
+    # Drop rows with missing values
+    train_DF.dropna(inplace=True)
+    test_DF.dropna(inplace=True)
+
+    # Check for duplicates
+    if train_DF.duplicated().sum() > 0:
+        train_DF.drop_duplicates(inplace=True)
+
+    # Check for missing values
+    if train_DF.isnull().sum().sum() > 0:
+        train_DF.dropna(inplace=True)
+
+    # Check for outliers
+    for col in train_DF.columns:
+        plt.figure(figsize=(10,4))
+        plt.title(f'Skewness for {col}')
+        skew(train_DF[col])
+        plt.show()
+
+    # Check for correlation
+    plt.figure(figsize=(10,8))
+    sns.heatmap(train_DF.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Feature Engineering
+    # ...
+
+    # Model Training
+    # Random Forest Regressor
+    rf = RandomForestRegressor(n_estimators=100, random_state=42)
+    rf.fit(train_DF.drop(['target'], axis=1), train_DF['target'])
+
+    # Model Evaluation
+    cross_val_score(rf, train_DF.drop(['target'], axis=1), train_DF['target'], cv=5)
+
+    # Prediction
+    predictions = rf.predict(test_DF.drop(['target'], axis=1))
+
+    # Save the predictions
+    submission = pd.DataFrame({'Id': test_DF['Id'], 'target': predictions})
+    submission.to_csv('submission.csv', index=False)
+    ```
+
+    '''
+    Commit Message: "Updated Accuracy Data"
+    Original Code Cells:
+    '''
+    #

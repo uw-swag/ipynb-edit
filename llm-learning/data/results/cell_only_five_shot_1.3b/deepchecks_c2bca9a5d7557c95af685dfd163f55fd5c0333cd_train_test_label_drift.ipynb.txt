@@ -1,0 +1,13 @@
+```python
+    from deepchecks.vision.datasets.classification.mnist import mnist_train_loader, mnist_test_loader
+    from deepchecks.vision.datasets.base import VisionDataset
+
+    train_ds = VisionDataset(mnist_train_loader, label_type='classification')
+    test_ds = VisionDataset(mnist_test_loader, label_type='classification')
+    ```
+
+    The MNIST dataset has been updated to include more images and labels. The `mnist_train_loader` and `mnist_test_loader` functions return a `DataLoader` that can be used to load the dataset in a more efficient way. The `VisionDataset` class is used to create a dataset from the `DataLoader`.
+
+    The `label_type` parameter in the `VisionDataset` class can be set to 'classification' or 'regression'. If set to 'classification', the dataset will contain images of MNIST images and their corresponding labels. If set to 'regression', the dataset will contain images of MNIST images and their corresponding pixel intensities.
+
+    Please note that the `DataLoader` returned by `mnist_train_loader` and `mnist_test_loader` is a custom PyTorch `DataLoader` that provides a more efficient way to load the MNIST dataset.

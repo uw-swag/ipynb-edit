@@ -1,0 +1,27 @@
+```python
+    from evidently.tests import TestFeatureValueMin
+
+    # test that values in specified columns are positive (greater than zero condition)
+    suite = TestSuite(tests=[
+        TestFeatureValueMin(column_name=column_name, gt=0) for column_name in ["age", "fnlwgt", "education-num"]
+    ])
+
+    suite.run(current_data=current_data, reference_data=reference_data)
+    suite
+
+    # test that values in specified columns are positive (greater than zero condition)
+    suite = TestSuite(tests=[
+        TestFeatureValueMin(column_name=column_name, gt=0, parameters={"column_name": column_name}) 
+        for column_name in ["age", "fnlwgt", "education-num"]
+    ])
+
+    suite.run(current_data=current_data, reference_data=reference_data)
+
+    # test that values in specified columns are positive (greater than zero condition)
+    suite = TestSuite(tests=[
+        TestFeatureValueMin(column_name=column_name, gt=0, parameters={"column_name": column_name, "gt": 0}) 
+        for column_name in ["age", "fnlwgt", "education-num"]
+    ])
+
+    suite.run(current_data=current_data, reference_data=reference_data)
+    ```

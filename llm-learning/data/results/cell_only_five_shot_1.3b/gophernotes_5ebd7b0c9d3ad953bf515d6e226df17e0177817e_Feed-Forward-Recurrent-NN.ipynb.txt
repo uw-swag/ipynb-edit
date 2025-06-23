@@ -1,0 +1,45 @@
+
+Here's a new example and new install docs:
+
+**Example:**
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+
+	"github.com/goml/gobrain"
+)
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+
+	patterns := [][]float64{
+		{0, 0}, {0},
+		{0, 1}, {1},
+		{1, 0}, {1},
+		{1, 1}, {0},
+	}
+
+	ff := &gobrain.FeedForward{}
+	ff.Init(2, 2, 1)
+	ff.Train(patterns, 1000, 0.6, 0.4, true)
+	ff.Test(patterns)
+	ff.SetContexts(1, nil)
+}
+```
+
+**Installation:**
+
+You can install the `goml/gobrain` package using the following command:
+
+```bash
+go get github.com/goml/gobrain
+```
+
+This will download and install the package to your local Go workspace.
+
+Please note that the `goml/gobrain` package is a simple implementation of a feedforward neural network, and it's not suitable for complex tasks. For more complex tasks, you might want to consider using a more advanced library or package.

@@ -1,0 +1,27 @@
+```python
+    #@title Collaborative Filtering
+
+    # Collaborative Filtering is a method used by recommendation systems to make predictions about the interests of a user by collecting preferences from many users.
+
+    # Here, we will use the popular collaborative filtering algorithm called "User-User" or "Item-Item" Collaborative Filtering.
+
+    # Import necessary libraries
+    import pandas as pd
+    from surprise import KNNWithMeans
+    from surprise import Dataset
+    from surprise import accuracy
+    from surprise.model_selection import train_test_split
+
+    # Load the movielens-100k dataset
+    data = Dataset.load_builtin('ml-100k')
+
+    # Use user-based collaborative filtering
+    algo = KNNWithMeans(k=50, sim_options={'name': 'pearson_baseline', 'user_based': True})
+
+    # Run 5-fold cross-validation and train the model
+    cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+
+    # Predict a rating for a user-item pair
+    # Predict a rating for a user
+    algo.fit(data.buil
+    '''

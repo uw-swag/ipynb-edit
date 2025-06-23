@@ -1,0 +1,80 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from scipy.stats import skew
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+train = train.fillna(train.mean())
+test = test.fillna(test.mean())
+for col in train.columns.drop('Loan_Status'):
+    if train[col].dtype != 'object':
+        if skew(train[col]) > 0.75:
+            train[col] = np.log1p(train[col])
+        pass
+    else:
+        dummies = pd.get_dummies(train[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        train.drop(col, axis=1, inplace=True)
+        train = train.join(dummies)
+        
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+        pass
+    else:
+        dummies = pd.get_dummies(test[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        test.drop(col, axis=1, inplace=True)
+        test = test.join(dummies)
+from sklearn.preprocessing import LabelEncoder
+X_train = train.drop('Loan_Status', axis=1)
+le = LabelEncoder()
+Y_train = le.fit_transform(train.Loan_Status.values)
+X_test = test
+#Estimating feature importance.
+clf = RandomForestClassifier(n_estimators=200)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+print('Feature ranking:')
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]],
+                                      clf.feature_importances_[indices[f]]))
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, Y_train, test_size=0.20, random_state=36)
+clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, criterion = 'gini')
+calibrated_clf = CalibratedClassifierCV(clf, method='isotonic', cv=5)
+calibrated_clf.fit(X, Y_train)
+y_submit = calibrated_clf.predict_proba(Xt)
+submission = pd.DataFrame({'Loan_ID':test_id,
+                           'Loan_Status':le.inverse_transform([1 if y_submit[i][0] < 0.5 else 0 for i in range(len(Xt))])})
+submission.to_csv('Loan.csv', index=False)
+rain.drop(['Loan_ID'], axis=1, inplace=True)
+test_id = test.Loan_ID
+test.drop(['Loan_ID'], axis=1, inplace=True)
+clf = RandomForestClassifier(n_estimators=200)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+print('Feature ranking:')
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]],
+                                      clf.feature_importances_[indices[f]]))
+best_features = X_train.columns[indices[0:6]]
+X = X_train[best_features]
+Xt = X_test[best_features]
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, Y_train, test_size=0.20, random_state=36)
+clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, criterion = 'gini')
+
+calibrated_clf = CalibratedClassifierCV(clf, method='isotonic', cv=5)
+calibrated_clf.fit(Xtrain, ytrain)
+y_val = calibrated_clf.predict_proba(Xtest)
+y_f = [1 if y_val[i][0] < 0.5 else 0 for i in range(len(ytest))]
+sum(y_f == ytest) / len(ytest)

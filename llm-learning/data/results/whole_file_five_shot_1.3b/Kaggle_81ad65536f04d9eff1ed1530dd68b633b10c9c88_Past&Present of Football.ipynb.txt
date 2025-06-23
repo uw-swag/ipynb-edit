@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding more data to the dataset"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+
+import matplotlib.pyplot as plt
+import matplotlib
+import seaborn as sns
+
+matplotlib.rc('font', size=20)
+matplotlib.rc('axes', titlesize=20)
+matplotlib.rc('axes', labelsize=20)
+matplotlib.rc('xtick', labelsize=20)
+matplotlib.rc('ytick', labelsize=20)
+matplotlib.rc('legend', fontsize=20)
+matplotlib.rc('figure', titlesize=20)
+
+%matplotlib inline
+sns.set_style("whitegrid")
+np.random.seed(42)
+<\Cell_0>
+<Cell_1>
+def winner(row):
+    if row['home_score'] > row['away_score']: return row['home_team'] 
+    elif row['home_score'] < row['away_score']: return row['away_team']
+    else: return 'DRAW'
+
+def lose(row):
+    if row['home_score'] > row['away_score']: return row['away_team'] 
+    elif row['home_score'] < row['away_score']: return row['home_team']
+    else: return 'DRAW'
+<\Cell_1>
+<Cell_2>
+data = pd.read_csv("results.csv", parse_dates=['date'])
+data.sample(5)
+<\Cell_2>
+<Cell_3>
+plt.figure(figsize=(20,10))
+sns.barplot(data=pd.DataFrame(data.tournament.value_counts()[:10]).reset_index(),x='tournament', y='index', orient='h')
+plt.xlabel("Count")
+plt.xticks([i for i in range(500, 17000

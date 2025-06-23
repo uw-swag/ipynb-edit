@@ -1,0 +1,52 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add AvgStatsCallback to measure accuracy."
+    Original Code Cells:
+    '''
+    <Cell_0>
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+import torch
+from torch import tensor
+from torch.nn import *
+import torch.nn.functional as F
+from torch.utils.data import *
+from fastai import datasets
+from fastai.metrics import accuracy
+from fastai.basic_data import *
+from fastai.basic_train import *
+import pickle, gzip, math, torch, re
+from IPython.core.debugger import set_trace
+import matplotlib.pyplot as plt
+from functools import partial
+<\Cell_1>
+<Cell_2>
+class Dataset(Dataset):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+    def __len__(self):
+        return len(self.x)
+    def __getitem__(self, i):
+        return self.x[i], self.y[i]
+<\Cell_2>
+<Cell_3>
+MNIST_URL='http://deeplearning.net/data/mnist/mnist.pkl'
+<\Cell_3>
+<Cell_4>
+def get_data():
+    path = datasets.download_data(MNIST_URL, ext='.gz')
+    with gzip.open(path, 'rb') as f:
+        ((x_train, y_train), (x_valid, y_valid), _) = pickle.load(f, encoding='latin-1')
+    return map(tensor, (x_train, y_train, x_valid, y_valid))
+<\Cell_4>
+<Cell_5>
+x_train, y_train, x_valid, y_valid = get_data()
+<\Cell_5>
+<Cell_6>
+def normalize(x, m, s): 
+    return (x-m)/s
+<\Cell

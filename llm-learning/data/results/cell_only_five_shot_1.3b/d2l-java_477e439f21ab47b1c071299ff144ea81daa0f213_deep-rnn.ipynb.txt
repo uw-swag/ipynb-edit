@@ -1,0 +1,46 @@
+```python
+    import deeplearning as dl
+    import deeplearning.nn as nn
+    import deeplearning.optim as optim
+    import deeplearning.training as training
+
+    manager = dl.NDManager.newBaseManager(dl.Functions.tryGpu(0))
+    vocabSize = vocab.length()
+    numHiddens = 256
+    numLayers = 2
+    device = dl.Functions.tryGpu(0)
+
+    lstmLayer = nn.LSTM.builder() \
+        .setNumLayers(numLayers) \
+        .setStateSize(numHiddens) \
+        .optReturnState(True) \
+        .optBatchFirst(False) \
+        .build()
+
+    rnnModel = nn.RNNModel(lstmLayer, vocabSize)
+
+    # Define the model
+    model = rnnModel
+
+    # Define the loss function
+    criterion = nn.CrossEntropyLoss()
+
+    # Define the optimizer
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    # Define the training function
+    def train(model, criterion, optimizer, X_train, y_train):
+        model.train()
+        for batch in training.batched(X_train, y_train, batch_size=64):
+            inputs, targets = batch
+            inputs, targets = inputs.to(device), targets.to(device)
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            loss.backward()
+            optimizer.step()
+
+    # Train the model
+    for epoch in range(numEpochs):
+        train(model, criterion, optimizer, X_train, y_train)
+    ```

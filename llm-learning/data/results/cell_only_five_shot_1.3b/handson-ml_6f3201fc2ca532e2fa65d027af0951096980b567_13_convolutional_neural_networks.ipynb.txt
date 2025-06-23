@@ -1,0 +1,27 @@
+
+The code you provided is using the Keras library to load the MNIST dataset. The `read_data_sets()` function is deprecated and replaced with `mnist = input_data.read_data_sets("/tmp/data/")`. This function is used to load the MNIST dataset, which is a set of 70,000 small images of digits handwritten by high school students and employees of the US Census Bureau. The images are labeled over the years.
+
+The `load_class_names()` function is used to load the class names for the ImageNet dataset, which is a large dataset of thousands of images labeled with the names of the corresponding classes.
+
+The `load_class_names()` function uses the `read_data_sets()` function to load the class names from a file. The file is located in the "datasets/inception" directory.
+
+The `load_class_names()` function uses the `open()` function to open the file, and the `decode()` function to decode the file content as a string. The `CLASS_NAME_REGEX` regular expression is used to find all matches in the file content.
+
+The `CLASS_NAME_REGEX` regular expression matches a line of the file that starts with a number followed by a space and then any number of characters. The `findall()` function is used to find all matches in the file content.
+
+The `load_class_names()` function returns the class names found in the file.
+
+The `load_class_names()` function is used in the following code:
+
+```python
+import re
+
+CLASS_NAME_REGEX = re.compile(r"^n\d+\s+(.*)\s*$", re.M | re.U)
+
+def load_class_names():
+    with open(os.path.join("datasets", "inception", "imagenet_class_names.txt"), "rb") as f:
+        content = f.read().decode("utf-8")
+        return CLASS_NAME_REGEX.findall(content)
+```
+
+The `load_class_names()` function is used to load the class names from the ImageNet dataset.

@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from scipy.stats import anderson_ksamp
+    from sklearn import datasets, ensemble, model_selection
+    from evidently import ColumnMapping
+    from evidently.calculations.stattests import StatTest
+    from evidently.options import DataDriftOptions
+    from evidently.test_suite import TestSuite
+    from evidently.tests import *
+
+    #Dataset for Data Quality and Integrity
+    adult_data = datasets.fetch_openml(name='adult', version=2, as_frame='auto')
+    adult = adult_data.frame
+
+    adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+    adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+    adult_cur.iloc[:2000, 3:5] = np.nan
+
+    stat_test_option = DataDriftOptions(all_features_stattest='psi')
+
+    data_drift_column_tests = TestSuite(tests=[
+        TestFeatureValueDrift(column_name='education-num'),
+        TestFeatureValueDrift(column_name='education-num', options=stat_test_option)
+    ])
+
+    data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+
+    data_drift_dataset_tests = TestSuite(tests=[
+        TestShareOfDriftedFeatures(options=stat_test_option),    
+    ])
+
+    data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+
+    per_feature_stattest = {x: 'wasserstein' for x in ['age', 'fnlwgt', 'education-num', 
+                                                       'capital-gain', 'capital-loss', 'hours-per-week']}
+    for column in ['sex', 'class

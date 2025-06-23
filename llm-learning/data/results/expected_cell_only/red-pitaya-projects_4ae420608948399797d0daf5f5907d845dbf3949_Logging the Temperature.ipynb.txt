@@ -1,0 +1,38 @@
+from subprocess import run, PIPE
+monitor_ams_output = run(["monitor","-ams"], stdout=PIPE).stdout
+temp_value = float(monitor_ams_output.split(maxsplit=8)[7])
+temp_value
+import time
+from IPython.display import display, clear_output
+
+temp_list = [temp_value] #Store the values here
+minutes = 1 # Time to record the temerature values
+rate = 5 # Record every 15 seconds
+
+t_end = time.time() + minutes * 60
+timer = int(t_end-time.time())
+recorded_this_step = False
+
+while time.time() < t_end:
+    monitor_ams_output = run(["monitor","-ams"], stdout=PIPE).stdout
+    temp_value = float(monitor_ams_output.split(maxsplit=8)[7])
+    #Add a temperature to the list every 15 seconds
+    if (timer % rate==0 and recorded_this_step==False):
+        temp_list.append(temp_value)
+        recorded_this_step=True
+    else:
+        recorded_this_step = False
+    
+    clear_output(wait=True)
+    display('Collecting temperatures. Time left: '+str(timer)+' Seconds. '+str(len(temp_list)) + ' value(s) recorded.')
+    timer = int(t_end-time.time())
+    time.sleep(0.5)
+#temp_list.append(temp_value)
+
+clear_output(wait=True)
+display('Collecting temperature finished ' + str(len(temp_list)) + ' values recorded.')
+monitor_ams_output = run(["monitor","-ams"], stdout=PIPE).stdout
+temp_value = float(monitor_ams_output.split(maxsplit=8)[7])
+temp_list = np.append(temp_list,temp_value)
+len(temp_list)
+temp_list

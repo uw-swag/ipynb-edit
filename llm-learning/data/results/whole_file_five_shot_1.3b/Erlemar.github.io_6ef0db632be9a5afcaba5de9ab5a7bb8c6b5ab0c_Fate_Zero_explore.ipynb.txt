@@ -1,0 +1,58 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "Improve readability of code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import nltk
+from nltk.tokenize import RegexpTokenizer
+from nltk.text import Text
+from nltk.util import ngrams
+from nltk.stem.wordnet import WordNetLemmatizer
+import spacy
+en_stop = spacy.en.STOPWORDS
+nlp = spacy.load('en')
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.ticker as ticker
+%matplotlib inline
+from cycler import cycler
+
+import re
+import os
+#from IPython.core.interactiveshell import InteractiveShell
+#InteractiveShell.ast_node_interactivity = "all"
+from scipy.misc import imread
+from collections import Counter, defaultdict
+<\Cell_0>
+<Cell_1>
+#Get the list of files.
+fate_folder = 'Data various/Fate_Zero/'
+files = [os.path.join(fate_folder, f) for f in sorted(os.listdir(fate_folder)) if str(f).endswith('txt')]
+files
+<\Cell_1>
+<Cell_2>
+#Let's see how does the text looks like.
+open(files[1], 'r', encoding='UTF-8').read()[:1000]
+<\Cell_2>
+<Cell_3>
+#I'll also need a tokenized text.
+text_sentences = list(read_files())
+text_sentences[1][:10]
+<\Cell_3>
+<Cell_4>
+#I'll also need a tokenized text.
+text_tokens_lists = []
+tokenizer = RegexpTokenizer(r'\w+')
+lemma = WordNetLemmatizer()
+for j in text_sentences:
+    tokens = tokenizer.tokenize(j.lower())
+    stopped_tokens = [i for i in

@@ -1,0 +1,47 @@
+```python
+    # Mount Google Drive
+    from google.colab import drive
+    drive.mount('/content/gdrive')
+
+    # Import necessary libraries
+    import os
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+    # Load data
+    df = pd.read_csv('/content/gdrive/My Drive/Colab Notebooks/data.csv')
+
+    # Preprocess data
+    df.dropna(inplace=True)
+    df.drop(columns=['Unnamed: 3', 'Unnamed: 4', 'Unnamed: 5'], inplace=True)
+
+    # Create heatmap for correlation between features
+    plt.figure(figsize=(12,10))
+    sns.heatmap(df.corr(), annot=True, cmap='magma')
+    plt.title('Correlation Heatmap', fontsize=20)
+
+    # Split data into train and test sets
+    X = df['Text']
+    y = df['Label']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train the Naive Bayes model
+    mnb = MultinomialNB()
+    mnb.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred = mnb.predict(X_test)
+
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+    print("Accuracy:", accuracy)
+
+    # Display confusion matrix and classification report
+    conf_matrix = confusion_matrix(y_test, y_pred)
+    print("Confusion Matrix:\n", conf_matrix)
+    class_report =

@@ -1,0 +1,58 @@
+```
+    [
+    Commit Message: "fixing docs (#898)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from deepchecks.tabular.datasets.classification import iris
+
+    train_dataset, test_dataset = iris.load_data()
+    model = iris.load_fitted_model()
+    <\Cell_0>
+    <Cell_1>
+    from deepchecks.tabular.checks import ModelErrorAnalysis
+
+    result = ModelErrorAnalysis().add_condition_segments_performance_relative_difference_not_greater_than(\
+                                ).run(train_dataset, test_dataset, model)
+    <\Cell_1>
+    <Cell_2>
+    result
+    <\Cell_2>
+    <Cell_3>
+    # and value can be observed
+    result.value
+    <\Cell_3>
+    <Cell_4>
+    from deepchecks.core import CheckResult
+
+    help(CheckResult.to_json)
+    <\Cell_4>
+    <Cell_5>
+    # get output JSON
+    serialized_output = result.to_json()
+    <\Cell_5>
+    <Cell_6>
+    import json
+
+    # note - conditions_table key exists only if there are conditions that were defined on check
+    json.loads(serialized_output).keys()
+    <\Cell_6>
+    <Cell_7>
+    json.loads(serialized_output)
+    <\Cell_7>
+    <Cell_8>
+    CheckResult.display_from_json(serialized_output)
+    <\Cell_8>
+    <Cell_9>
+    from deepchecks.tabular.suites import full_suite
+
+    suite = full_suite()
+    <\Cell_9>
+    <Cell_10>
+    suite_result = suite.run(train_dataset=train_dataset, test_dataset=test_dataset, model=model)
+    suite_json = suite_result.to_json()
+    <\Cell_10>
+    <Cell_11>
+    from deepchecks.core import SuiteResult
+
+    help(SuiteResult.to_json)

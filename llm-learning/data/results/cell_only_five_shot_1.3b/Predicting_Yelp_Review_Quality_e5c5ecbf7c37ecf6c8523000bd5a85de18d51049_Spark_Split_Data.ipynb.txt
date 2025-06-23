@@ -1,0 +1,12 @@
+```python
+    import pandas as pd
+
+    # Assuming df is your DataFrame and 'text' is the column you want to split
+    df['is_text'] = df['text'].apply(lambda x: 'text' if pd.notnull(x) else 'non-text')
+
+    # Split the data into working and holdout sets
+    working_set = df[df['is_text'] == 'text']
+    holdout_set = df[df['is_text'] == 'non-text']
+
+    # Now you can use the working_set and holdout_set for further analysis
+    ```

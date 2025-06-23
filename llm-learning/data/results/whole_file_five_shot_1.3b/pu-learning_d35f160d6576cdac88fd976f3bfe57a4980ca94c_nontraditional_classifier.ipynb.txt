@@ -1,0 +1,53 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    <\Cell_0>
+    <Cell_1>
+    from sklearn.linear_model import LogisticRegression
+
+    train_x, train_y, train_s = train
+
+    clf = LogisticRegression(random_state=0).fit(train_x, train_s)
+    <\Cell_1>
+    <Cell_2>
+    test_x, test_y, test_s = test
+
+    test_s_hat = clf.predict(test_x)
+    test_s_prob_hat = clf.predict_proba(test_x)[:, 1]
+    <\Cell_2>
+    <Cell_3>
+    from sklearn.metrics import f1_score
+
+    f1_score(test_s, test_s_hat)
+    <\Cell_3>
+    <Cell_4>
+    from utils import plot_x_s, plot_x_s_proba
+
+    plot_x_s(test_x, test_s)
+    plot_x_s(test_x, test_s_hat)
+    plot_x_s_proba(test_x, test_s_prob_hat)
+    <\Cell_4>
+    <Cell_5>
+    from sklearn.metrics import classification_report
+
+    print(classification_report(test_s, test_s_hat))
+    <\Cell_5>
+    <Cell_6>
+    from sklearn.metrics import confusion_matrix
+
+    print(confusion_matrix(test_s, test_s_hat))
+    <\Cell_6>
+    <Cell_7>
+    from sklearn.metrics import roc_auc_score
+
+    print(roc_auc_score(test_s, test_s_prob_hat))
+    <\Cell_7>
+    <Cell_8>
+    from sklearn.metrics import precision_score
+
+    print(precision_score(test_s, test_s_hat))
+    <

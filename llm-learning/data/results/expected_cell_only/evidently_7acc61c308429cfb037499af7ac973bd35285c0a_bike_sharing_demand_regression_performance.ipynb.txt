@@ -1,0 +1,33 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, NumTargetDriftTab, RegressionPerformanceTab
+raw_data = pd.read_csv('Bike-Sharing-Dataset/day.csv', header = 0, sep = ',', parse_dates=['dteday'])
+ref_data = raw_data[:120]
+prod_data = raw_data[120:150]
+ref_data
+target = 'cnt'
+datetime = 'dteday'
+
+numerical_features = ['mnth', 'temp', 'atemp', 'hum', 'windspeed']
+categorical_features = ['season', 'holiday', 'weekday', 'workingday', 'weathersit',]
+
+features = numerical_features + categorical_features
+model = RandomForestRegressor(random_state = 0)
+model.fit(ref_data[features], ref_data[target])
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+column_mapping = {}
+
+column_mapping['target'] = target
+column_mapping['prediction'] = 'prediction'
+column_mapping['datetime'] = datetime
+
+column_mapping['numerical_features'] = numerical_features
+column_mapping['categorical_features'] = categorical_features
+dashboard = Dashboard(ref_data, prod_data, column_mapping=column_mapping, tabs=[RegressionPerformanceTab])
+dashboard.show()
+dashboard.save('regression_perfomance_mnth.html')

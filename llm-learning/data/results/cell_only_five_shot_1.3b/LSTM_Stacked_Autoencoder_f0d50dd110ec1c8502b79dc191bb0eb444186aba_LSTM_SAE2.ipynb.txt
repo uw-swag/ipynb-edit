@@ -1,0 +1,51 @@
+```python
+    def Output():
+        global mean_list, mean_list2
+        # Sum all window size units
+        mean_list = [0 for i in range(len(df))]
+        for i in range(len(window_list)):
+            for j in range(20):
+                mean_list[i+j] += pred[i][j]
+
+        # Calculate average
+        mean_list2= []
+        count = 19
+        for i in range(len(mean_list)):
+            if i < 20:
+                mean_list2.append(mean_list[i] / (i+1))
+            elif i >=20 and (i <= len(mean_list)-20):
+                mean_list2.append(mean_list[i] / 20)
+            else:
+                mean_list2.append(mean_list[i] / count)
+                count -= 1
+    
+    # Check Output MAE
+    def Check_MAE(idx):
+        global total_mae, total_mae2
+        total_mae = 0
+        total_mae2 = 0
+        stock_price = list(df["Close"])
+        for i in range(len(window_list)):
+            mae = np.abs(stock_price[i] - window_list[idx][i])
+            total_mae += mae
+        total_mae2 = total_mae / len(window_list[idx])*100
+        return total_mae2
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add price data"
+    Original Code Cells:
+    '''
+    def Output():
+    global mean_list, mean_list2
+    # Sum all window size units
+    mean_list = [0 for i in range(len(df))]
+    for i in range(len(window_list)):
+        for j in range(20):
+            mean_list[i+j] += pred[i][j]
+
+    # Calculate average
+    mean_list2= []
+    count = 19
+    for i in range(len(mean_list)):

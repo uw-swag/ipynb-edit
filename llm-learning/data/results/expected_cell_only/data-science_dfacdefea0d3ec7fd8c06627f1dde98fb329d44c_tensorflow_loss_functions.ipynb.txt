@@ -1,0 +1,63 @@
+y_true = [[0., 1.], [0., 0.]]
+y_pred = [[1., 1.], [0., 0.]]
+# Using 'auto'/'sum_over_batch_size' reduction type.
+p = tf.keras.losses.Poisson()
+p(y_true, y_pred).numpy()
+
+y_true = [[0, 1], [0, 0]]
+y_pred = [[0.6, 0.4], [0.4, 0.6]]
+# Using 'auto'/'sum_over_batch_size' reduction type.
+kl = tf.keras.losses.KLDivergence()
+kl(y_true, y_pred).numpy()
+
+y_true = [[0., 1.], [0., 0.]]
+y_pred = [[1., 1.], [1., 0.]]
+# Using 'auto'/'sum_over_batch_size' reduction type.
+mse = tf.keras.losses.MeanSquaredError()
+mse(y_true, y_pred).numpy()
+tf.keras.losses.mean_squared_error
+y_true = [[0., 1.], [0., 0.]]
+y_pred = [[1., 1.], [1., 0.]]
+# Using 'auto'/'sum_over_batch_size' reduction type.
+mae = tf.keras.losses.MeanAbsoluteError()
+mae(y_true, y_pred).numpy()
+y_true = [[2., 1.], [2., 3.]]
+y_pred = [[1., 1.], [1., 0.]]
+# Using 'auto'/'sum_over_batch_size' reduction type.
+mape = tf.keras.losses.MeanAbsolutePercentageError()
+mape(y_true, y_pred).numpy()
+
+y_true = [[0., 1.], [0., 0.]]
+y_pred = [[1., 1.], [1., 0.]]
+# Using 'auto'/'sum_over_batch_size' reduction type.
+msle = tf.keras.losses.MeanSquaredLogarithmicError()
+msle(y_true, y_pred).numpy()
+
+
+
+
+y_true = [[0., 1.], [0., 0.]]
+y_pred = [[0.5, 0.4], [0.4, 0.5]]
+
+# Using 'auto'/'sum_over_batch_size' reduction type.
+h_loss = tf.keras.losses.Hinge()
+h_loss(y_true, y_pred).numpy()
+y_true = [[0., 1.], [0., 0.]]
+y_pred = [[0.6, 0.4], [0.4, 0.6]]
+
+# Using 'auto'/'sum_over_batch_size' reduction type.  
+h = tf.keras.losses.SquaredHinge()
+h(y_true, y_pred).numpy()
+y_true = np.random.choice([-1, 1], size=(2, 3))
+y_pred = np.random.random(size=(2, 3))
+loss = tf.keras.losses.squared_hinge(y_true, y_pred)
+assert loss.shape == (2,)
+assert np.array_equal(
+     loss.numpy(),
+     np.mean(np.square(np.maximum(1. - y_true * y_pred, 0.)), axis=-1))
+y_true = [[0, 1], [0, 0]]
+y_pred = [[0.5, 0.4], [0.4, 0.5]]
+
+# Using 'auto'/'sum_over_batch_size' reduction type.
+h = tf.keras.losses.CategoricalHinge()
+h(y_true, y_pred).numpy()

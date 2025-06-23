@@ -1,0 +1,25 @@
+```python
+    <Cell_0>
+import pandas as pd
+import numpy as np
+from deepchecks.checks.overview import ColumnsInfo
+from deepchecks.base import Dataset
+<\Cell_0>
+<Cell_1>
+num_fe = np.random.rand(500)
+cat_fe = np.random.randint(3, size=500)
+num_col = np.random.rand(500)
+date = range(1635693229, 1635693729)
+index = range(500)
+data = {'index': index, 'date': date, 'a': cat_fe, 'b': num_fe, 'c': num_col, 'label': cat_fe}
+df = pd.DataFrame.from_dict(data)
+
+dataset = Dataset(df, label_name='label', datetime_name='date', index_name='index', features=['a', 'b'])
+<\Cell_1>
+<Cell_2>
+check = ColumnsInfo()
+<\Cell_2>
+<Cell_3>
+check.run(dataset=dataset)
+<\Cell_3>
+```

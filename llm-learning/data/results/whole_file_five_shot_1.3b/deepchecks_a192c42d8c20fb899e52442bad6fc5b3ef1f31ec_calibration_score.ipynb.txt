@@ -1,0 +1,68 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#511)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+
+iris = load_iris(as_frame=True)
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+clf = Pipeline(steps=[("scaler", StandardScaler()), ("model", RandomForestClassifier())])
+clf.fit(X_train, y_train)
+<\Cell_0>
+<Cell_1>
+y_pred = clf.predict(X_test)
+print(confusion_matrix(y_test, y_pred))
+print(accuracy_score(y_test, y_pred))
+<\Cell_1>
+<Cell_2>
+check = CalibrationScore()
+check.run(ds, clf)
+<\Cell_2>
+<Cell_3>
+check = CalibrationScore()
+check.run(ds, clf)
+<\Cell_3>
+<Cell_4>
+check = CalibrationScore()
+check.run(ds, clf)
+<\Cell_4>
+<Cell_5>
+check = CalibrationScore()
+check.run(ds, clf)
+<\Cell_5>
+<Cell_6>
+check = CalibrationScore()
+check.run(ds, clf)
+<\Cell_6>
+
+    '''
+    ]
+
+    ### Response:
+    
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#512)"
+    Original Code Cells:
+    '''
+    <

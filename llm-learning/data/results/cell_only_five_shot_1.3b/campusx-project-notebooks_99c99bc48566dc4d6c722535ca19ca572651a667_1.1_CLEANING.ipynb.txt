@@ -1,0 +1,43 @@
+```
+    from ast import literal_eval
+
+    import pandas as pd
+    from pandas import DataFrame
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    df = pd.read_csv('data/flats.csv')
+    print(df.shape)
+    df.head(3)
+    drop_rows = df[df['nearbyLocations'].str.startswith('[') == False].index
+    df.iloc[drop_rows]
+    df.drop(drop_rows, inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    df.info()
+    df.isnull().sum()
+    plt.figure(figsize=(20, 10))
+    sns.heatmap(df.isnull(), cbar=False, yticklabels='')
+    plt.show()
+
+    drop_rows = []
+    temp = df[(df['price'].isnull() == True) | (df['price'] == 'Price on Request')]
+    temp
+    drop_rows += temp.index.tolist()
+    df.drop(index=drop_rows, inplace=True)
+    df.shape
+    plt.figure(figsize=(20, 10))
+    sns.heatmap(df.isnull(), cbar=False, yticklabels='')
+    plt.show()
+
+    for_literal_eval = ['nearbyLocations', 'furnishDetails', 'features', 'rating']
+
+    for col in for_literal_eval:
+        df[col] = df[col].fillna('[]')
+        df[col] = df[col].apply(literal_eval)
+
+    df.loc[[12, 90]].T
+    df['link'] = df['link'].str.replace('https://www.99acres.com/', '', regex=False)
+    df['link'][0]
+    df['society'].sample(10)
+    df['price'].str.split(' ').str.get(-1).

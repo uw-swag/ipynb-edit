@@ -1,0 +1,20 @@
+```
+    # Update presets
+    presets = {
+        "dataset_drift": {
+            "threshold": 0.4
+        }
+    }
+
+    # Update data drift parameters
+    data_drift = {
+        "dataset_drift": {
+            "threshold": 0.4
+        }
+    }
+
+    # Run the report
+    report = Report(metrics=[DatasetDriftMetric(**data_drift)])
+    report.run(current_data=current_data, reference_data=reference_data)
+    report
+    ```

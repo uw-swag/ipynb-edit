@@ -1,0 +1,29 @@
+```python
+    import wandb
+
+    # Initialize a new run
+    wandb.init(project="your_project_name", entity="your_entity_name")
+
+    # Log a parameter (key-value pair)
+    wandb.log({"param1": 0.1, "param2": 0.2})
+
+    # Log a metric; metrics can be updated throughout the run
+    wandb.log({"loss": 0.15})
+
+    # Log a figure
+    import matplotlib.pyplot as plt
+    plt.plot([1, 2, 3])
+    plt.savefig("example.png")
+    wandb.log({"example_graph": wandb.Image("example.png")})
+
+    # Close the wandb run
+    wandb.finish()
+    ```
+
+    This code will log parameters, metrics, and images to your W&B project. You can view these logs in the W&B interface.
+
+    Please replace "your_project_name" and "your_entity_name" with your actual project and entity name.
+
+    Also, make sure to install the W&B library by running `pip install wandb` in your terminal.
+
+    Note: W&B is a great tool for logging experiments, but it's not free. You can use it for free for small projects, but for larger ones, you'll need to upgrade to a paid plan.

@@ -1,0 +1,21 @@
+```python
+    # Assuming you have a trained model named 'model'
+    # And you want to evaluate it on the test set
+
+    # Predict the test set
+    y_pred = model.predict(X_test)
+
+    # Calculate the accuracy of the model
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f'Accuracy: {accuracy}')
+
+    # Calculate the F1 score of the model
+    f1 = f1_score(y_test, y_pred)
+    print(f'F1 Score: {f1}')
+
+    # Plot the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    sns.heatmap(cm, annot=True, fmt='d')
+    plt.title('Confusion Matrix')
+    plt.show()
+    ```

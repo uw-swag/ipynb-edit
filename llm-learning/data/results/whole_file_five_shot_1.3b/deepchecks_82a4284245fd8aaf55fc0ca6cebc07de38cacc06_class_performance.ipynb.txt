@@ -1,0 +1,34 @@
+```python
+    <Cell_0>
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import precision_score, make_scorer
+
+from deepchecks.checks import ClassPerformance
+from deepchecks.base import Dataset
+
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label_name="target")
+test_ds = Dataset(test, label_name="target")
+
+clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+<\Cell_1>
+<Cell_2>
+check = ClassPerformance()
+check.run(test_ds, clf)
+<\Cell_2>
+<Cell_3>
+scorers = {
+    "precision": make_scorer(precision_score, average=None, zero_division=0),
+}
+
+check = ClassPerformance(alternative_scorers=scorers)
+check.run(test_ds, clf)
+<\Cell_3>
+
+    ```

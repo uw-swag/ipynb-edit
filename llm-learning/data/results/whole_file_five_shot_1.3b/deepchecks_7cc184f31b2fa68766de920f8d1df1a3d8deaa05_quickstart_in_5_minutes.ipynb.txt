@@ -1,0 +1,33 @@
+
+    The code you provided is splitting the VisionData and removing formatters. The VisionData class in DeepChecks is used to load and preprocess data for deep learning models. It's a wrapper around PyTorch DataLoader, which is used to load the dataset.
+
+    The formatters are used to transform the data before it's passed to the model. They are used to format the data for display or to save it. In your code, you're using DetectionLabelFormatter and ImageFormatter to format the labels and images.
+
+    The VisionData class also accepts a num_classes parameter, which is used to determine the number of classes in the dataset. This is necessary because the model needs to know the number of classes to generate predictions.
+
+    The formatters are also used to format the predictions from the model. In your code, you're using DetectionPredictionFormatter to format the predictions.
+
+    The last part of your code is using the TrainTestLabelDrift check to analyze the label drift in the training and testing datasets.
+
+    If you want to split the VisionData and remove the formatters, you can simply remove the lines that import and use the VisionData and VisionData.label_formatter, VisionData.image_formatter, and VisionData.prediction_formatter.
+
+    However, please note that the formatters and the num_classes are not directly used in the VisionData class. They are used to format the data and generate predictions.
+
+    Here's the code without the formatters:
+
+    ```python
+    from deepchecks.vision.datasets.detection import coco
+
+    import torch
+    device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
+
+    yolo = coco.load_model(pretrained=True, device=device)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    from deepchecks.vision import VisionData
+
+    train_ds = VisionData(coco_train_loader)
+    test_ds = VisionData(coco_test_loader)
+    

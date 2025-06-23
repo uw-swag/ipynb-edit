@@ -1,0 +1,43 @@
+
+    # You can add files via upload in Jupyter notebook by using the following code.
+    # This code will allow you to upload a file and then display it.
+
+    from IPython.display import FileUpload
+    upload = FileUpload()
+    display(upload)
+
+    # After uploading the file, you can use the following code to display the file.
+    # This code will display the file as a dataframe.
+
+    import pandas as pd
+    uploaded_data = pd.read_csv(upload.value[0])
+    display(uploaded_data.head())
+
+    # You can also use the following code to display the file as a plot.
+    # This code will display the file as a plot.
+
+    import matplotlib.pyplot as plt
+    plt.plot(uploaded_data)
+    plt.show()
+
+    # You can also use the following code to display the file as a table.
+    # This code will display the file as a table.
+
+    from IPython.display import display
+    display(uploaded_data)
+
+    # You can also use the following code to display the file as a chart.
+    # This code will display the file as a chart.
+
+    import plotly.express as px
+    px.line(uploaded_data)
+    px.show()
+
+    # You can also use the following code to display the file as a map.
+    # This code will display the file as a map.
+
+    import geopandas as gpd
+    gpd.read_file(upload.value[0])
+    gpd.plotting.plot_geopandas_object(gpd.read_file(upload.value[0]))
+
+Please note that the above code is a basic example and may not work for all types of files. The code will only work for files that can be read by pandas, matplotlib, plotly, and geopandas.

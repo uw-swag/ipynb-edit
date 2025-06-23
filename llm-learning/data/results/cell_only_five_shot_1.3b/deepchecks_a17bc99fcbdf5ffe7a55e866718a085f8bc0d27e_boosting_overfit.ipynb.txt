@@ -1,0 +1,45 @@
+```python
+    import plotly.graph_objects as go
+
+    # Create a new figure
+    fig = go.Figure()
+
+    # Add traces
+    fig.add_trace(go.Scatter(x=df['date'], y=df['value'], mode='lines', name='Value'))
+    fig.add_trace(go.Scatter(x=df['date'], y=df['value_2'], mode='lines', name='Value 2'))
+
+    # Set layout
+    fig.update_layout(title='Line plot with overfit',
+                      xaxis_title='Date',
+                      yaxis_title='Value',
+                      autosize=False,
+                      width=1000,
+                      height=500)
+
+    # Show the plot
+    fig.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "boosting overfit + unused features to plotly (#281)"
+    Original Code Cells:
+    '''
+    df = pd.read_csv('data.csv')
+    df['date'] = pd.to_datetime(df['date'])
+    df.set_index('date', inplace=True)
+    df.sort_index(inplace=True)
+    df.drop(['unused_feature_1', 'unused_feature_2'], axis=1, inplace=True)
+    df.dropna(inplace=True)
+    df['value_2'] = df['value'] * 2
+    df['value_3'] = df['value'] * 3
+    df['value_4'] = df['value'] * 4
+    df.drop(['value'], axis=1, inplace=True)
+    df.to_csv('processed_data.csv')
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a basic example of how to use Plotly to create a line plot with overfit. The code reads a CSV file, drops unused features, and creates new features based on the existing ones. It then saves the processed data to a new CSV file.
+
+    However, the code you provided is not complete. It only drops unused features and creates

@@ -1,0 +1,11 @@
+```
+    df = pd.DataFrame([s_date, s_email]).T
+    df.columns = ['date', 'email']
+    df.sort_values(by='date', inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    df.sort_values(by='email', inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    ```
+
+    ### Explanation:
+    The code above prioritizes the columns according to the 'date' and 'email' columns. The 'date' column is prioritized because it is the first column to be sorted, and the 'email' column is prioritized because it is the second column to be sorted. The sorted DataFrame is then reset and sorted again to ensure the prioritized columns are in the correct order.

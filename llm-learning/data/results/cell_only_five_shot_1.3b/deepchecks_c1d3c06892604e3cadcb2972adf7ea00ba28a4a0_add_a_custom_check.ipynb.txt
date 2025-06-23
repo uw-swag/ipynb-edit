@@ -1,0 +1,35 @@
+```python
+    # Example 1:
+    # Suppose we have a pandas DataFrame df with columns 'A', 'B', 'C'
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500]
+    })
+
+    # We can use the groupby() function to group the DataFrame by 'A' and 'B' columns
+    # and then apply a function to each group.
+    df_grouped = df.groupby(['A', 'B']).apply(lambda x: x['C'].sum())
+
+    # The result is a new DataFrame where each row is a group of 'A' and 'B' values
+    # and the 'C' values are the sum of the 'C' values in the corresponding group.
+    print(df_grouped)
+
+    # Example 2:
+    # Suppose we have a pandas DataFrame df with columns 'A', 'B', 'C'
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500]
+    })
+
+    # We can use the groupby() function to group the DataFrame by 'A' and 'B' columns
+    # and then apply a function to each group.
+    df_grouped = df.groupby(['A', 'B']).apply(lambda x: x['C'].mean())
+
+    # The result is a new DataFrame where each row is a group of 'A' and 'B' values
+    # and the 'C' values are the mean of the 'C' values in the corresponding group.
+    print(df_grouped)
+
+    # Example 3:
+    # Suppose we have a pandas DataFrame df with columns '

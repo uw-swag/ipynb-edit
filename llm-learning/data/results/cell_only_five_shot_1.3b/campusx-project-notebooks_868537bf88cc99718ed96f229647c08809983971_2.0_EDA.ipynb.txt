@@ -1,0 +1,68 @@
+```
+    # Add new_notebooks/2.0_EDA.ipynb
+    # ➕ Add new_notebooks/2.0_EDA.ipynb
+    # ➕ Adding new_notebooks/2.0_EDA.ipynb
+    # ➕ Adding Exploratory Data Analysis (EDA) to the project
+
+    ## 2.0 EDA
+
+    ### 2.1 Importing Libraries
+    Import necessary libraries for the EDA.
+
+    ```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+    from sklearn.feature_selection import SelectKBest, chi2
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+    import pickle
+    ```
+
+    ### 2.2 Loading Data
+    Load the dataset.
+
+    ```python
+    df = pd.read_csv('model.csv')
+    ```
+
+    ### 2.3 Data Understanding
+    Perform basic data analysis.
+
+    ```python
+    df.head()
+    df.info()
+    df.describe()
+    ```
+
+    ### 2.4 Data Visualization
+    Visualize the data.
+
+    ```python
+    sns.pairplot(df)
+    sns.heatmap(df.corr())
+    ```
+
+    ### 2.5 Feature Selection
+    Select the most relevant features.
+
+    ```python
+    X = df.drop(['is_spam','id'],axis=1)
+    y = df['is_spam']
+    ```
+
+    ### 2.6 Model Training
+    Train a model.
+
+    ```python
+    rfc = RandomForestClassifier()
+    rfc.fit(X, y)
+    ```
+
+    ### 2.7 Model Evaluation
+    Evaluate the model.
+
+    ```python

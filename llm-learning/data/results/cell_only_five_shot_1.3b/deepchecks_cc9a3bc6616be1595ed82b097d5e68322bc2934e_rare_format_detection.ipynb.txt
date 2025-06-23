@@ -1,0 +1,36 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new check for rare format detection in DeepChecks"
+    Original Code Cells:
+    '''
+    from datetime import datetime
+import numpy as np
+import pandas as pd
+from deepchecks import Dataset
+from deepchecks.checks.integrity.rare_format_detection import RareFormatDetection
+
+pd.set_option('display.max_columns', None)
+np.random.seed(42)
+datelist = pd.date_range(start=datetime.strptime('2021-11-10', '%Y-%m-%d'), periods=200, freq='D', normalize=True)
+s_date = pd.Series([d.strftime('%Y-%m-%d') for d in datelist], name='date')
+
+emaillist = [''.join(np.random.choice(a=list('abcdefghijklmnopqrstuvwxyz'), p=[1/26]*26, size=np.random.choice(a=[6,7,8], p=[0.2, 0.5, 0.3]))) + '@gmail.com' for x in range(200)]
+s_email = pd.Series(emaillist, name='email')
+
+df = pd.DataFrame([s_date, s_email]).T
+df.head()
+ds = Dataset(df)
+check = RareFormatDetection()
+
+check.run(dataset=ds)
+# Change dates to different format:
+df['date'].loc[0:2] = [datetime.strptime(d, '%Y-%m-%d').strftime('%Y-%b-%d') for d in df['date'].loc[0:2]]
+
+# Change emails to have mistakes in format
+df['email'].loc[[0,1]] = ['myname@gmail.com1', 'myname@gmail.co']
+df.head()
+ds = Dataset(df)
+check = RareFormatDetection()
+
+check.run

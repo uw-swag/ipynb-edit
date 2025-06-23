@@ -1,0 +1,31 @@
+```python
+    from sklearn.linear_model import SGDRegressor
+    from sklearn.cluster import KMeans
+    from sklearn.preprocessing import MinMaxScaler
+    import numpy as np
+
+    class RegressionModel:
+        def __init__(self, loss='squared_loss', penalty='l1', alpha=0.0001, max_iter=1000, tol=1e-3, random_state=1909, eta0=0.0001):
+            self.model = SGDRegressor(loss=loss, penalty=penalty, alpha=alpha, max_iter=max_iter, tol=tol, random_state=random_state, eta0=eta0)
+
+        def fit(self, X, y):
+            X = MinMaxScaler().fit_transform(X)
+            self.model.fit(X, y)
+
+        def predict(self, X):
+            X = MinMaxScaler().transform(X)
+            return self.model.predict(X)
+
+    class ClusteringModel:
+        def __init__(self, n_clusters):
+            self.model = KMeans(n_clusters=n_clusters)
+
+        def fit(self, X):
+            X = MinMaxScaler().fit_transform(X)
+            self.model.fit(X)
+
+        def predict(self, X):
+            X = MinMaxScaler().transform(X)
+            return self.model.predict(X)
+    ```
+    This code defines two classes, `RegressionModel` and `ClusteringModel`, which are used to create and use regression and clustering models respectively. The `RegressionModel` class uses the `SGDRegressor` class from `sklearn.linear_model` to create a regression model, and the `ClusteringModel` class uses the `KMeans` class from `sklearn.cluster` to create a clustering model. The `fit` and `predict` methods of these classes scale the input data and then fit the model to the data, and then make predictions.

@@ -1,0 +1,11 @@
+```java
+    // Defining block specifying kernel and stride
+    Block block = Pool.maxPool2dBlock(new Shape(3, 3), new Shape(3, 3));
+    block.initialize(manager, DataType.FLOAT32, new Shape(1,1,4,4));
+
+    ParameterStore parameterStore = new ParameterStore(manager, false);
+
+    block.forward(parameterStore, new NDList(X), true).singletonOrThrow();
+    ```
+
+    The code is refactored and cleaned up. The original code is now more readable and follows the Java naming conventions.

@@ -1,0 +1,57 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added function to save and load data."
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+def save_data(data, filename):
+    with open(filename, 'wb') as f:
+        pickle.dump(data, f)
+<\Cell_1>
+<Cell_2>
+def load_data(filename):
+    with open(filename, 'rb') as f:
+        return pickle.load(f)
+<\Cell_2>
+<Cell_3>
+# Testing the functions
+data = {'key': 'value'}
+save_data(data, 'data.pkl')
+loaded_data = load_data('data.pkl')
+loaded_data
+<\Cell_3>
+<Cell_4>
+# Testing with a different data structure
+data = [1, 2, 3, 4, 5]
+save_data(data, 'data.pkl')
+loaded_data = load_data('data.pkl')
+loaded_data
+<\Cell_4>
+<Cell_5>
+# Testing with a different file
+save_data({'key': 'value'}, 'new_data.pkl')
+loaded_data = load_data('new_data.pkl')
+loaded_data
+<\Cell_5>
+<Cell_6>
+# Testing with a non-picklable data structure
+data = pd.DataFrame({'key': ['value']})
+save_data(data, 'data.pkl')
+loaded_data = load_data('data.pkl')
+loaded_data
+<\Cell_6>
+<Cell_7>
+# Testing with a non-existing file
+load_data('non_existing_file.pkl')
+<\Cell_7>
+<Cell_8>
+# Testing with a file that does not exist
+load_data('non_existing_file.pkl')
+<\Cell_8>
+<Cell_9>
+# Testing with a file that is not a picklable data structure
+save_data({'key':

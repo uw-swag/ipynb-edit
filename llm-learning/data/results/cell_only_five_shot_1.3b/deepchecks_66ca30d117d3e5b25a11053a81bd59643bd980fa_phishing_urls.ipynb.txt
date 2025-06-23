@@ -1,0 +1,40 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Mean Mode, Median"
+    Original Code Cells:
+    '''
+    import numpy as np; import pandas as pd; import sklearn; import deepchecks; 
+pd.set_option('display.max_columns', 45); np.random.seed(42);
+from typing import List
+import pandas as pd
+import sklearn
+
+class UrlDatasetProcessor:
+    
+    def _cols_to_scale(self, df: pd.DataFrame) -> List[object]:
+        return [
+            i
+            for i, x in df.dtypes.items()
+            if pd.api.types.is_numeric_dtype(x) and i != 'target'
+        ]
+    
+    def _shared_preprocess(self, df: pd.DataFrame) -> pd.DataFrame:
+        df = df.copy()
+        df['scrape_date'] = pd.to_datetime(df['scrape_date'], format="%Y-%m-%d")
+        df = df.set_index(keys='scrape_date', drop=True)
+        df = df.drop(['month', 'has_ip', 'urlIsLive'], axis=1)
+        df = pd.get_dummies(df, columns=['ext'])
+        return df
+    
+    def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        df = self._shared_preprocess(df)
+        self.scaler = sklearn.preprocessing.StandardScaler()
+        self.scale_cols = self._cols_to_scale(df)
+        df[self.scale_cols] = self.scaler.fit_transform(df[self.scale_cols])
+        return df
+    
+    def transform(self, df: pd.DataFrame) -> pd.DataFrame:
+        df = self._shared_preprocess(df)
+        try:
+            df[self.scale_cols] = self.scaler.transform(df[self.scale

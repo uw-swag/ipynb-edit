@@ -1,0 +1,50 @@
+```
+    # Corrected parts of eda.py
+
+    from sklearn.decomposition import PCA
+    import myprint
+
+    ottawa_threads = agg_event_data(ottawashooting)
+
+    # Save CSV file in /data directory
+    ottawa_threads.to_csv("data/pheme-rnr-dataset/ottawashooting_threads.csv")
+
+    # import math
+    # Print the first five rows
+    ottawa_threads.head()
+
+    def myprint(*obj, time=10):
+        if myprint.t < time:
+            print(*obj)
+
+    def convertTrueFalseTo01(X):
+        X[X == True] = 1.0
+        X[X == False] = 0.0
+        X[X == 'False'] = 0.0
+        X[X == 'True'] = 1.0
+        return X.astype(float)
+
+    def standardize_cols(X, mu=None, sigma=None):
+        # Standardize each column with mean 0 and variance 1
+        n_rows, n_cols = X.shape
+
+        if mu is None:
+            mu = np.mean(X, axis=0)
+
+        if sigma is None:
+            sigma = np.std(X, axis=0)
+            sigma[sigma < 1e-8] = 1.
+
+        return (X - mu) / sigma, mu, sigma
+
+    ottawa_threads_values = ottawa_threads.values
+    n, d = ottawa_threads_values.shape
+    ottawa_threads_values = convertTrueFalseTo01(ottawa_threads_values[:, 1:d])
+    n, d = ottawa_threads_values.shape
+
+    myprint.t = 0
+    for i in range(d):
+        print(ottawa_threads_values[0, i])
+    for i in range(n):
+        for j in range(d):
+            if type(ottawa_threads_values[i,

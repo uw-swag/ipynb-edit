@@ -1,0 +1,66 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.metrics import ClassificationQualityByClass 
+from evidently.metrics import ClassificationQualityMetric 
+from evidently.metrics import ColumnCorrelationsMetric 
+from evidently.metrics import ColumnSummaryMetric 
+from evidently.metrics import  DataDriftTable
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.report import Report
+<\Cell_0>
+<Cell_1>
+#Dataset for Binary Probabilistic Classifcation
+bcancer_data = datasets.load_breast_cancer(as_frame=True)
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+bcancer_label_ref = bcancer_ref.copy(deep=True)
+bcancer_label_cur = bcancer_cur.copy(deep=True)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+bcancer_ref['prediction'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_cur['prediction'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+<\Cell_1>
+<Cell_2>
+performance_report = Report(metrics=[
+    DataDriftTable(),
+    generate_column_metrics(ColumnSummaryMetric),
+    generate_column_metrics(ColumnCorrelationsMetric),
+    ClassificationQualityMetric(),
+    ClassificationQualityByClass(),
+])
+
+performance_report.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+
+performance_report.show(mode='inline')
+<\Cell_2>
+<Cell_3>
+# you can generate dataframe for the whole report as well as for a single metric only 
+# dataframe for a single metric:
+drift_table_df = performance_report.as_dataframe("DataDriftTable")
+drift_table_df
+<\Cell_3>
+<Cell_4>
+# you can generate dataframe for a whole report as well as for a single metric only 
+# dataframe for the whole report (in this case you receive a dict of dataframes)
+report_df = performance_report.as_dataframe()
+report_df
+<\Cell_4>
+<Cell_5>
+# for a dataset-level metrics you always get a signle dataframe as a result
+quality_by_class_table_df = performance_report.as_dataframe("ClassificationQualityByClass")
+quality_by_class_table_df
+<\Cell_5>
+<Cell_6>
+# for a number of same column-level metrics we try to do concatenation so that you can also get a single dataframe as a result
+summary_table_df = performance_report.as_dataframe("ColumnSummaryMetric")
+summary_table_df
+<\Cell_6>

@@ -1,0 +1,43 @@
+
+    '''
+    def read_and_store_data (dataset_folder, sample_rate, channels) :
+        initial_path = os.getcwd()
+        os.chdir(dataset_folder)
+    
+        patients = [d for d in os.listdir() if os.path.isdir(d) and d.startswith('chb')]
+        patients.sort()
+        arr = np.array([], dtype=np.float64).reshape(0, len(channels))
+        for p in patients:
+            os.chdir(p)
+            print('Reading data of patient', p)
+            
+            # for each patient specify the edf files and the seizure files
+            edf = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('edf')]
+            edf.sort()
+            seizures = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('seizures')]
+            seizures.sort()
+            for e in tqdm(edf):
+                sigbufs = readEdfFile(e, channels)
+                if seizures and seizures[0].startswith(e):
+                    (start, length) = get_seizure_period(seizures[0])
+                    for i in range(start*sample_rate, (start+length)*sample_rate+1): sigbufs[i][len(channels)-1] = 1.0
+                    seizures.pop(0)
+            arr = np.concatenate([arr, sigbufs])
+            os.chdir('..')
+        os.chdir(initial_path)
+    
+        df = pd.DataFrame(arr, columns = channels)
+        df.reset_index(drop = True, inplace = True)
+        return df
+    '''
+    }
+
+    ### Instruction:
+    [
+    Commit Message: "Add softmax function"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+<\Cell_0>
+<Cell_1>

@@ -1,0 +1,44 @@
+```python
+    # All imports and setups 
+    %run ../../common/import_all.py
+
+    import sys
+    sys.path.append('../../')
+
+    import statsmodels.api as sm
+
+    from common.setup_notebook import *
+
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+    # Load dataset
+    dataset = sm.datasets.get_rdataset('Fare', 'mlbench').data
+    dataset.head()
+
+    # Preprocess the data
+    dataset['Fare'] = pd.to_numeric(dataset['Fare'], errors='coerce')
+    dataset = dataset.dropna()
+
+    # Fit an OLS model
+    fit_result = sm.OLS(dataset['Survived'], dataset['Fare']).fit()
+    fit_result.summary()
+
+    # Plot the results
+    plt.scatter(dataset['Fare'], dataset['Survived'])
+    plt.xlabel('Fare')
+    plt.ylabel('Survived')
+    plt.show()
+
+    # Plot the residuals
+    plt.scatter(fit_result.resid, dataset['Fare'])
+    plt.xlabel('Residuals')
+    plt.ylabel('Fare')
+    plt.show()
+
+    # Plot the influence plot
+    fig, ax = plt.subplots(figsize=(12,8))
+    fig = sm.graphics.influence_plot(fit_result, ax=ax, criterion="cooks")
+    plt.show()
+    ```

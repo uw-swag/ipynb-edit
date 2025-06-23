@@ -1,0 +1,26 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.linalg import solve
+    <\Cell_0>
+    <Cell_1>
+    # Linear system of equations
+    # x + 2y = 1
+    # 3x - y = 2
+    A = np.array([[1, 2], [3, -1]])
+    b = np.array([1, 2])
+    x = solve(A, b)
+    print(f"The solution is x = {x[0]}, y = {x[1]}")
+    <\Cell_1>
+    <Cell_2>
+    # Plotting the solution
+    x = np.linspace(-10, 10, 400)
+    y = (x - 2) / 3
+    plt.plot(x, y, label='y = (x - 2) / 3')
+    plt.plot(x, x, label='y = x')
+    plt.legend()
+    plt.grid()
+    plt.show()
+    <\Cell_2>
+    ```

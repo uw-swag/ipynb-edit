@@ -1,0 +1,54 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#427)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.checks import DatasetsSizeComparison
+
+check = DatasetsSizeComparison().add_condition_test_size_not_smaller_than(1000)
+check
+<\Cell_0>
+<Cell_1>
+from deepchecks import Dataset
+import pandas as pd
+# Dummy data
+train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+condition_results = check.conditions_decision(check.run(train_dataset, test_dataset))
+condition_results
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import train_test_leakage
+
+suite = train_test_leakage()
+suite
+<\Cell_2>
+<Cell_3>
+# Access check by id
+check = suite[2]
+# Remove condition by id
+check.remove_condition(0)
+
+suite
+<\Cell_3>
+<Cell_4>
+# Re-add the condition with new parameter
+check.add_condition_feature_pps_difference_not_greater_than(0.01)
+
+suite
+<\Cell_4>
+<Cell_5>
+from deepchecks.checks import DatasetsSizeComparison
+from deepchecks import Dataset
+import pandas as pd
+
+# We'll use dummy data for the purpose of this demonstration
+train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+result = DatasetsSizeComparison().run(train_dataset, test_dataset)
+result.value
+<\Cell_5

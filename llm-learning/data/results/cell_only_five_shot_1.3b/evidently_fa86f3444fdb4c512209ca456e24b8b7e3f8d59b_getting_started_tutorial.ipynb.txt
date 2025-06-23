@@ -1,0 +1,40 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.preprocessing import StandardScaler
+
+    # Create a simple dataset for classification
+    X = np.array([[1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8], [8, 9], [9, 10]])
+    y = np.array([0, 0, 0, 0, 1, 1, 1, 1, 1, 1])
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train a logistic regression model
+    log_reg = LogisticRegression()
+    log_reg.fit(X_train, y_train)
+
+    # Train a decision tree model
+    tree = DecisionTreeClassifier()
+    tree.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred_log_reg = log_reg.predict(X_test)
+    y_pred_tree = tree.predict(X_test)
+
+    # Evaluate the models
+    print("Logistic Regression Accuracy: ", accuracy_score(y_test, y_pred_log_reg))
+    print("Decision Tree Accuracy: ", accuracy_score(y_test, y_pred_tree))
+
+    # Create a simple dataset for regression
+    X = np.array([[1, 2], [2, 3], [3, 

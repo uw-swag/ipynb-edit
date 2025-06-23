@@ -1,0 +1,45 @@
+```python
+    class Regularization:
+        def __init__(self, lambda_param):
+            self.lambda_param = lambda_param
+
+        def L1(self, weights):
+            return np.sum(np.abs(weights)) * self.lambda_param
+
+        def L2(self, weights):
+            return np.sum(weights ** 2) * self.lambda_param
+
+        def Ridge(self, weights):
+            return self.L2(weights) + self.L1(weights)
+
+        def Lasso(self, weights):
+            return self.L1(weights)
+
+        def ElasticNet(self, weights):
+            return self.L1(weights) + self.L2(weights)
+
+        def custom_loss(self, weights, y, y_pred):
+            return np.sum((y - y_pred) ** 2) + self.L1(weights)
+
+        def custom_grad(self, weights, y, y_pred):
+            return 2 * (y_pred - y)
+
+        def custom_hess(self, weights, y, y_pred):
+            return 2 * np.diag(y_pred - y)
+
+        def custom_hess_diag(self, weights, y, y_pred):
+            return 2 * (y_pred - y)
+
+        def custom_hess_off_diag(self, weights, y, y_pred):
+            return 2 * np.diag(y_pred - y)
+
+        def custom_hess_sym(self, weights, y, y_pred):
+            return 2 * np.diag(y_pred - y)
+
+        def custom_hess_off_diag_sym(self, weights, y, y_pred):
+            return 2 * np.diag(y_pred - y)
+
+        def custom_hess_jac(self, weights, y, y_pred):
+            return 2 * np.diag(y_pred - y)
+
+        def custom_hess_jac_diag(self, weights, y, y_pred):

@@ -1,0 +1,39 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.TabPanel(label='Tab 1', children=[
+            html.Div('This is Tab 1 content.')
+        ]),
+        dcc.TabPanel(label='Tab 2', children=[
+            html.Div('This is Tab 2 content.')
+        ]),
+        dcc.TabPanel(label='Tab 3', children=[
+            html.Div('This is Tab 3 content.')
+        ])
+    ])
+
+    if __name__ == '__main__':
+        app.run_server(debug=True, port=8050)
+    ```
+
+    ### Explanation:
+    The code above is a simple example of using Dash with tabs. The `verbose_level` parameter is used to set the level of verbosity for the Dashboard. The `include_widgets` parameter is used to include widgets in the Dashboard.
+
+    The `verbose_level` parameter can be set to a number from 0 to 4, where:
+
+    0: No output.
+    1: Warnings and errors.
+    2: Info, warnings, and errors.
+    3: Debug, info, warnings, and errors.
+    4: Debug, info, warnings, errors, and tracebacks.
+
+    The `include_widgets` parameter is a boolean that determines whether to include widgets in the Dashboard.
+
+    In this example, the `verbose_level` is set to 2, which means that the Dashboard will display warnings and errors. The `include_widgets` is set to True, which means that the Dashboard will include widgets in the tabs.
+
+    Please note that the `verbose_level` and `include_widgets` parameters are optional and can be set to their default values (0 and False, respectively) if not specified.

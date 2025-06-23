@@ -1,0 +1,34 @@
+```python
+    # Parameters for the ZSL algorithm
+    # as defined in: https://pymatgen.org/pymatgen.analysis.interfaces.html#pymatgen.analysis.interfaces.zsl.ZSLGenerator
+    ZSL_GENERATOR_PARAMS = {
+        "MAX_AREA": 400,
+        "MAX_AREA_TOL": 0.09,
+        "MAX_LENGTH_TOL": 0.03,
+        "MAX_ANGLE_TOL": 0.01,
+        # Strains within this tolerance are considered equal
+        "STRAIN_TOL": 10e-6,
+    }
+
+
+    INTERFACE_PARAMS = {
+        "SUBSTRATE_INDEX": 0,
+        "LAYER_INDEX": 1,
+        "SUBSTRATE_MILLER": (1, 1, 1),
+        "SUBSTRATE_THICKNESS": 1,
+        "LAYER_MILLER": (0, 0, 1),
+        "LAYER_THICKNESS": 1,
+        "DISPLACEMENT_X": 0.0,
+        "DISPLACEMENT_Y": 0.0,
+        "DISPLACEMENT_Z": 3.0,
+    }
+
+    PLOT_SETTINGS = {
+        "X_MIN": 0.01,  # percentage
+        "X_MAX": 100,  # percentage
+        "Y_MIN": 1,  # number of atoms
+        "Y_MAX": 1000,  # number of atoms
+        "X_SCALE": "log",
+        "Y_SCALE": "log",
+    }
+    ```

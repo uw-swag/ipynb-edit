@@ -1,0 +1,33 @@
+```python
+    import tensorflow as tf
+    print(tf.__version__)
+    ```
+    This code will print the version of TensorFlow that is currently installed.
+
+    If you want to upgrade your notebooks to TensorFlow 1.0.0, you can use the following code:
+
+    ```python
+    import tensorflow as tf
+    print(tf.__version__)
+
+    # Check if TensorFlow 1.0.0 is installed
+    try:
+        __ = tf. __version__
+    except ValueError:
+        print("TensorFlow 1.0.0 is not installed.")
+    else:
+        print("TensorFlow 1.0.0 is installed.")
+
+    # Upgrade TensorFlow
+    try:
+        __ = tf.__version__
+    except ValueError:
+        print("TensorFlow 1.0.0 is not installed. Attempting to install...")
+        !pip install tensorflow==1.0.0
+        print("TensorFlow 1.0.0 installed.")
+    else:
+        print("TensorFlow 1.0.0 is installed.")
+    ```
+    This code will first check if TensorFlow 1.0.0 is installed, and if not, it will attempt to install it. After the installation, it will check if TensorFlow 1.0.0 is installed again to confirm that it has been successfully installed.
+
+    Please note that you need to run this code in a Jupyter notebook or a Python script. Also, please make sure you have the necessary permissions to install packages.

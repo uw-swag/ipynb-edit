@@ -1,0 +1,134 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection, NumTargetDriftProfileSection
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+ca = fetch_california_housing(as_frame=True)
+<\Cell_2>
+<Cell_3>
+ca_frame = ca.frame
+<\Cell_3>
+<Cell_4>
+ca_frame.head()
+<\Cell_4>
+<Cell_5>
+target = 'MedHouseVal'
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+<\Cell_5>
+<Cell_6>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.numerical_features = numerical_features
+<\Cell_6>
+<Cell_7>
+ref_data_sample = ca_frame[:15000].sample(1000, random_state=0)
+prod_data_sample = ca_frame[15000:].sample(1000, random_state=0)
+<\Cell_7>
+<Cell_8>
+ca_target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab(verbose_level=1)])
+<\Cell_8>
+<Cell_9>
+ca_target_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_9>
+<Cell_10>
+ca_target_drift_dashboard.show()
+<\Cell_10>
+<Cell_11>
+# ca_target_drift_dashboard.save('ca_target_drift.html')
+<\Cell_11>
+<Cell_12>
+ca_target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab(verbose_level=0)])
+<\Cell_12>
+<Cell_13>
+ca_target_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_13>
+<Cell_14>
+ca_target_drift_dashboard.show()
+<\Cell_14>
+<Cell_15>
+# ca_target_drift_dashboard.save('ca_target_drift.html')
+<\Cell_15>
+<Cell_16>
+ca_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1)])
+<\Cell_16>
+<Cell_17>
+ca_data_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_17>
+<Cell_18>
+ca_data_drift_dashboard.show()
+<\Cell_18>
+<Cell_19>
+# ca_data_drift_dashboard.save('ca_data_drift.html')
+<\Cell_19>
+<Cell_20>
+ca_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=0)])
+<\Cell_20>
+<Cell_21>
+ca_data_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_21>
+<Cell_22>
+ca_data_drift_dashboard.show()
+<\Cell_22>
+<Cell_23>
+# ca_data_drift_dashboard.save('ca_data_drift.html')
+<\Cell_23>
+<Cell_24>
+ca_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1), 
+                                                     NumTargetDriftTab(verbose_level=1)])
+<\Cell_24>
+<Cell_25>
+ca_data_and_target_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_25>
+<Cell_26>
+ca_data_and_target_drift_dashboard.show()
+<\Cell_26>
+<Cell_27>
+# ca_data_and_target_drift_dashboard.save('ca_data_and_target_drift.html')
+<\Cell_27>
+<Cell_28>
+ca_target_drift_profile = Profile(sections=[NumTargetDriftProfileSection()])
+<\Cell_28>
+<Cell_29>
+ca_target_drift_profile.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_29>
+<Cell_30>
+ca_target_drift_profile.json()
+<\Cell_30>
+<Cell_31>
+ca_data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+<\Cell_31>
+<Cell_32>
+ca_data_drift_profile.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_32>
+<Cell_33>
+ca_data_drift_profile.json()
+<\Cell_33>
+<Cell_34>
+ca_data_and_target_drift_profile = Profile(sections=[DataDriftProfileSection(), NumTargetDriftProfileSection()])
+<\Cell_34>
+<Cell_35>
+ca_data_and_target_drift_profile.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+<\Cell_35>
+<Cell_36>
+ca_data_and_target_drift_profile.json()
+<\Cell_36>
+<Cell_37>
+
+<\Cell_37>

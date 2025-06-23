@@ -1,0 +1,22 @@
+```python
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.callbacks import EarlyStopping
+
+    # define the keras model
+    model = Sequential()
+    model.add(Dense(12, input_dim=8, activation='relu'))
+    model.add(Dense(8, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # define the early stopping
+    early_stopping = EarlyStopping(monitor='val_loss', patience=5)
+
+    # fit the model
+    history = model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=100, callbacks=[early_stopping])
+    ```
+
+    The above code is a simple example of a Keras model with an early stopping condition. The model is a sequential model with two hidden layers, and the early stopping condition is set to stop training when the validation loss has not improved for 5 epochs.
+
+    Please note that you need to replace `X_train`, `y_train`, `X_test`, and `y_test` with your actual data.

@@ -1,0 +1,23 @@
+```
+    from logger import *
+    import time
+    logger.setLevel('DEBUG')
+
+    def test_function():
+        logger.info('example function logging')
+
+    test_function()
+
+    def progressBar(progress, total, length=40, prefix='Progress:', suffix='Complete', decimals=1, bar_char='#'):
+        percent = ("{0:." + str(decimals) + "f}").format(100 * (progress / float(total)))
+        filled_length = int(length * progress / total)
+        bar = '█' * filled_length + '-' * (length - filled_length)
+        logger.info('\r' + prefix + bar + ' ' + percent + '% ' + suffix)
+
+    for i in range(100):
+        progressBar(i, 100-1, length=40, prefix='sample progress bar')
+        time.sleep(0.1)
+
+    logger.info('done')
+    ```
+    This code is a simple example of a progress bar logger. It logs the progress of a task and the completion status. The progress bar is updated every 0.1 seconds.

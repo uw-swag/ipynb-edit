@@ -1,0 +1,57 @@
+```
+    The code seems to be mostly correct, but there are a few potential issues:
+
+    1. The code seems to be missing the training and validation loops.
+    2. The code seems to be missing the testing loop.
+    3. The code seems to be missing the training and validation functions.
+    4. The code seems to be missing the test function.
+
+    I've added the missing parts to the code.
+
+    Please review the code and make necessary changes.
+
+    ### Instruction:
+    [
+    Commit Message: "add missing functions"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import warnings
+warnings.filterwarnings("ignore")
+
+import sys
+from pathlib import Path
+import os
+import torch
+
+ROOT = str(Path(__file__).resolve().parents[2])
+sys.path.append(ROOT)
+
+import argparse
+import os.path as osp
+from mmcv import Config
+from trademaster.utils import replace_cfg_vals
+from trademaster.nets.builder import build_net
+from trademaster.environments.builder import build_environment
+from trademaster.datasets.builder import build_dataset
+from trademaster.agents.builder import build_agent
+from trademaster.optimizers.builder import build_optimizer
+from trademaster.losses.builder import build_loss
+from trademaster.trainers.builder import build_trainer
+from trademaster.transition.builder import build_transition
+from collections import Counter
+<\Cell_0>
+<Cell_1>
+def parse_args():
+    parser = argparse.ArgumentParser(description='Download Alpaca Datasets')
+    parser.add_argument("--config", default=osp.join(ROOT, "configs", "order_execution",
+                                                     "order_execution_BTC_eteo_eteo_adam_mse.py"),
+                        help="download datasets config file path")
+    parser.add_argument("--task_name", type=str, default="train")
+    args = parser.parse_args()
+    return args
+
+args = parse_args()
+
+cfg = Config.fromfile(args.config)
+task_name = args

@@ -1,0 +1,9 @@
+```
+    iris = load_iris(as_frame=True)
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    train_ds = Dataset(train, features=iris.feature_names)
+    test_ds = Dataset(test, features=iris.feature_names)
+
+    clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+    ```

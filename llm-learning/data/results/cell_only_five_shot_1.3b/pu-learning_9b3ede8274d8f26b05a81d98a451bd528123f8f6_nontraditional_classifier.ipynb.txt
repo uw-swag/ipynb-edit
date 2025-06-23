@@ -1,0 +1,33 @@
+```
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    from sklearn.linear_model import LogisticRegression
+
+    train_x, train_y, train_s = train
+
+    clf = LogisticRegression(random_state=0).fit(train_x, train_s)
+    test_x, test_y, test_s = test
+
+    test_s_hat = clf.predict(test_x)
+    test_s_prob_hat = clf.predict_proba(test_x)[:, 1]
+    from sklearn.metrics import f1_score
+
+    f1_score(test_s, test_s_hat)
+    plot_x_s(test_x, test_s)
+    plot_x_s(test_x, test_s_hat)
+    plot_x_s_proba(test_x, test_s_prob_hat)
+
+    ## Merge data processing into one note and update the existing notebooks accordingly
+    ## The data processing code is already present in the original notebook.
+    ## The notebook is updated to include the new code and to reflect the changes made.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    ## The existing notebooks are not directly updated, but a new notebook is created with the updated code.
+    #

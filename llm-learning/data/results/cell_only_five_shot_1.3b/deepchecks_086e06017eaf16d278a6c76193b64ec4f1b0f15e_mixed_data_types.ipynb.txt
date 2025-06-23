@@ -1,0 +1,25 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
+
+    # Load the data
+    df = pd.read_csv('full_data_set_long.csv')
+
+    # Preprocessing
+    # Fill missing values
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Convert categorical variables to numerical
+    df = pd.get_dummies(df)
+
+    # Standardize numerical variables
+    scaler = StandardScaler()
+    df = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    # Save the preprocessed data
+    df.to_csv('preprocessing_5_tableau_ready_table.ipynb', index=False)
+    ```
+    This script will load your data, preprocess it, and save it in a new CSV file. The preprocessing includes filling missing values with the mean of the column, converting categorical variables to numerical, and standardizing numerical variables.

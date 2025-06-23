@@ -1,0 +1,44 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#496)"
+    Original Code Cells:
+    '''
+    # Read all PDB Entries
+    pdb = MmtfReader.readSequenceFile(path, sc)
+
+    # Save a non-redundant subset using Pisces filter (R. Dunbrack)
+    sequenceIdentity = 20                                          
+    resolution = 2.0                                               
+    pdb = pdb.filter(pisces(sequenceIdentity, resolution))         
+
+    # Extract interacting groups
+    cutoffDistance = 3.0                                           
+    finder = groupInteractionExtractor("ZN", cutoffDistance)       
+    interactions = finder.getDataset(pdb)
+    # Get first protein
+    exampleProtein = interactions.first()
+
+    # Display protein structure with zinc
+    view = py3Dmol.view(query='pdb:%s'%proteinId, 
+                        width = 200, 
+                        height = 200)
+    chA = {'atom':'ZN'}
+    view.setStyle({'cartoon': {'color':'spectrum', 'opacity':0.7}})
+    view.setStyle(chA,{'cartoon': {'color':'spectrum'}})
+    view.addSurface(py3Dmol.VDW,{'opacity':0.9,'color':'white'},chA)
+    view.show()
+    interactions.filter("element2 != 'C'").groupBy("residue2").count().sort("count", ascending=False).show(10)
+    sc.stop()
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a Python script that uses the Pisces filter to extract interacting groups from a PDB sequence, and then displays the first protein in the set. The script also uses the py3Dmol library to display the protein structure with zinc.
+
+    The README file is currently empty. You can add a brief description of the project, its purpose, and any other relevant information here. For example:
+
+    ```
+    # Project Title
+    A brief description of

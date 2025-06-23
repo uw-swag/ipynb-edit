@@ -1,0 +1,50 @@
+```
+    ## Tutorial for Classification and Feature Selection by FRUPS
+
+    ### Introduction
+
+    Feature selection and classification are critical steps in the machine learning process. In this tutorial, we will walk you through the process of classification and feature selection using the FRUPS (Feature Ranking Under the Pairwise Selection Strategy) algorithm.
+
+    ### Prerequisites
+
+    Before we start, you should have a basic understanding of machine learning and programming. You should also have a dataset that you are working with.
+
+    ### What is FRUPS?
+
+    FRUPS is a feature selection method that ranks features based on their importance in a model. It uses a pairwise selection strategy to rank features. The pairwise selection strategy ranks features based on their correlation with the target variable. The correlation is calculated using a method called Pearson correlation.
+
+    ### Classification with FRUPS
+
+    Let's assume we have a dataset `df` with features `X` and target `y`. We can use the FRUPS algorithm to classify the data.
+
+    ```python
+    from sklearn.feature_selection import FRUPS
+
+    # Initialize the FRUPS algorithm
+    frups = FRUPS(n_features_to_select=10)
+
+    # Fit the algorithm to the data
+    frups.fit(X, y)
+
+    # Get the selected features
+    selected_features = frups.support_
+
+    # Get the ranking of the features
+    ranking = frups.ranking_
+    ```
+
+    ### Feature Selection with FRUPS
+
+    FRUPS can also be used for feature selection. Let's say we have a dataset `df` with features `X` and target `y`. We can use the FRUPS algorithm to select the features.
+
+    ```python
+    from sklearn.feature_selection import FRUPS
+
+    # Initialize the FRUPS algorithm
+    frups = FRUPS(n_features_to_select=10, mode='s')
+
+    # Fit the algorithm to the data
+    frups.fit(X, y)
+
+    # Get the selected features
+    selected_features = X.columns[frups.support_

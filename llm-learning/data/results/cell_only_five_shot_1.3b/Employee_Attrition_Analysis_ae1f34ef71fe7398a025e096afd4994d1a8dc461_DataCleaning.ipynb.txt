@@ -1,0 +1,43 @@
+```
+    # dependencies
+    import pandas as pd
+    import sqlalchemy
+    from sqlalchemy import create_engine
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+    from getpass import getpass
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    engine.connect()
+
+    # read in csv
+    file_path = "../resources/IBM_employee_data.csv"
+    attrition_df = pd.read_csv(file_path)
+    attrition_df.head()
+
+    # ambiguous/unnecessary columns - only going to keep MonthlyIncome
+    attrition_df[["DailyRate", "HourlyRate", "MonthlyIncome", "MonthlyRate", "StandardHours", "Over18"]]
+
+    columns_to_drop = ["DailyRate", "HourlyRate", "MonthlyRate", "StandardHours", "EmployeeCount", 
+                       "EmployeeNumber", "Over18"]
+
+    ranking_system_col = ["JobInvolvement", "JobLevel", "JobSatisfaction", "WorkLifeBalance", 
+                          "RelationshipSatisfaction", "EnvironmentSatisfaction", "StockOptionLevel",
+                         "Education", "PerformanceRating"]
+
+    # Create a OneHotEncoder instance
+    enc = OneHotEncoder(sparse=False)
+
+    # Fit and transform the OneHotEncoder using the categorical variable list
+    encode_df = pd.Data

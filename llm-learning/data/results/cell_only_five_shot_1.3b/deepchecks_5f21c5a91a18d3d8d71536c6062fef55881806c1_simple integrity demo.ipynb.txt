@@ -1,0 +1,20 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.cluster import KMeans
+
+    # Assuming df is your DataFrame and it has a column named 'text'
+    df = pd.read_csv('your_data.csv')
+
+    # Vectorize the text data
+    vectorizer = TfidfVectorizer(stop_words='english')
+    X = vectorizer.fit_transform(df['text'])
+
+    # Perform KMeans clustering
+    kmeans = KMeans(n_clusters=2, random_state=0).fit(X)
+
+    # Add the cluster labels to the DataFrame
+    df['cluster'] = kmeans.labels_
+
+    # Now you can use the 'cluster' column to perform further analysis
+    ```

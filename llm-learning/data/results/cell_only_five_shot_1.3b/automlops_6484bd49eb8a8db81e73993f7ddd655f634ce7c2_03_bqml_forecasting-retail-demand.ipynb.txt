@@ -1,0 +1,65 @@
+```python
+    import kfp
+    from kfp import components
+    from kfp import dsl
+
+    @dsl.pipeline(name='My Pipeline', description='A sample pipeline')
+    def my_pipeline():
+        pass
+
+    # Register the component
+    my_component = components.func_to_component(my_function)
+    my_component.save('my_function.tar.gz')
+
+    # Submit the pipeline
+    client = kfp.Client()
+    pipeline_id = client.create_pipeline_run(
+        pipeline_name='my_pipeline',
+        parameters={'my_param': 'my_value'}
+    ).id
+
+    # Monitor the pipeline run
+    while True:
+        time.sleep(60)
+        pipeline_run = client.get_pipeline_run(pipeline_id)
+        if pipeline_run.status.state == 'SUCCEEDED':
+            break
+        print(f'Pipeline run in progress: {pipeline_run.status.conditions}')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "examples updates with kfp2+"
+    Original Code Cells:
+    '''
+    !pip3 install kfp
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import kfp
+    from kfp import components
+    from kfp import dsl
+
+    @dsl.pipeline(name='My Pipeline', description='A sample pipeline')
+    def my_pipeline():
+        pass
+
+    # Register the component
+    my_component = components.func_to_component(my_function)
+    my_component.save('my_function.tar.gz')
+
+    # Submit the pipeline
+    client = kfp.Client()
+    pipeline_id = client.create_pipeline_run(
+        pipeline_name='my_pipeline',
+        parameters={'my_param': 'my_value'}
+    ).id
+
+    # Monitor the pipeline run
+    while True:
+        time.sleep(60)
+        pipeline_run = client.get_pipeline_run(pipeline_id)
+       

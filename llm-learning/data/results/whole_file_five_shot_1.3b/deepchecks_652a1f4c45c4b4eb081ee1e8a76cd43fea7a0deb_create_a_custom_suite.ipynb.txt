@@ -1,0 +1,34 @@
+```
+    ## Overview
+    This Jupyter notebook provides an example of how to use the DeepChecks library to create a suite of checks for model performance. The suite includes checks for model information, performance report, confusion matrix report, and simple model comparison.
+
+    ## How to Use
+    1. Import the necessary libraries:
+    ```python
+    from deepchecks.checks import *
+    from deepchecks import Suite
+    from sklearn.metrics import precision_score, recall_score
+    ```
+    2. Create a suite with the desired checks. The suite's name is 'Simple Suite For Model Performance', and it includes the ModelInfo check, PerformanceReport, ConfusionMatrixReport, and SimpleModelComparison checks.
+    ```python
+    new_custom_suite = Suite('Simple Suite For Model Performance',
+        ModelInfo(),
+        PerformanceReport().add_condition_train_test_performance_degradation_ratio_not_greater_than(threshold=0.15),
+        ConfusionMatrixReport(),
+        SimpleModelComparison(simple_model_type='constant').add_condition_ratio_not_less_than(0.9)
+    )
+    ```
+    3. Run the suite on a model. The suite will run on the model and generate a report with the results.
+    ```python
+    new_custom_suite.run(model=rf_clf, train_dataset=ds_train, test_dataset=ds_test)
+    ```
+
+    ## Customization
+    The suite can be customized by removing checks or adding new ones. For example, to remove a check, you can use the `remove` method. To add a new check with a condition, you can use the `add` method. You can also update the suite's name or conditions.
+
+    ## How to Use Customized Suite
+    To use a customized suite, you can follow the same steps as above, but with the customized suite as the model.
+
+    ## How to Use Customized Suite for Train-Test Leakage
+    The suite can also be used to detect train-test leakage. For this, you can use the `train_test_leakage` function. This function will return a suite with checks for train-test leakage.
+

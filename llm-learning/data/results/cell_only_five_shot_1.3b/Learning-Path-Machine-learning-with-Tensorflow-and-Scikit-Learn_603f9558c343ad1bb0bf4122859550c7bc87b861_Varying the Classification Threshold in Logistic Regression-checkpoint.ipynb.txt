@@ -1,0 +1,33 @@
+```python
+    # Module 03: Code files added
+
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.neighbors import KNeighborsRegressor
+    from itertools import combinations
+
+    # Function to scale features
+    def scale_0_1(ser, minimum=None, maximum=None):
+        if minimum is not None:
+            pass
+        else:
+            minimum = ser.min()
+            maximum = ser.max()
+        return (ser-minimum).div(maximum-minimum)
+
+    # Function to normalize features
+    def normalize_features(df):
+        max_aggregate = df[["aggregate_%d" % i for i in range(1, 13)]].max().max()
+        min_aggregate = df[["aggregate_%d" % i for i in range(1, 13)]].min().min()
+        df[["aggregate_%d" % i for i in range(1, 13)]] = scale_0_1(df[["aggregate_%d" % i for i in range(1, 13)]], min_aggregate, max_aggregate)
+
+        max_weekly = df[["daily_usage_%d" % i for i in range(1, 8)]].max().max()
+        min_weekly = df[["daily_usage_%d" % i for i in range(1, 8)]].min().min()
+        df[["daily_usage_%d" % i for i in range(1, 8)]] = scale_0_1(df[["daily_usage_%d" % i for i in range(1, 8)]], min_weekly, max_weekly)
+
+        df['area'] = scale_0_1(df['area'])
+        df['num_rooms'] = scale_0_1(df['num_rooms'])
+        df['total_occupants'] = scale_0_1(df['total_occupants'])
+       

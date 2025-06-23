@@ -1,0 +1,13 @@
+```python
+    # Warning: Duplicated columns in the data drift report.
+    # This warning is triggered when the same column is present in the data
+    # set and the report. This can be due to a discrepancy in the data
+    # source or the data processing steps.
+
+    # Check for duplicated columns in the data set
+    duplicated_columns = [col for col in df.columns if df[col].nunique() == 1]
+
+    # If there are duplicated columns, remove them from the data set
+    if duplicated_columns:
+        df = df.drop(duplicated_columns, axis=1)
+    ```

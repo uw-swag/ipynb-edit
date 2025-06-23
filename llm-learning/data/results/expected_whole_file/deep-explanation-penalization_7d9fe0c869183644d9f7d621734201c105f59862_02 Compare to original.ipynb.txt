@@ -1,0 +1,176 @@
+<Cell_0>
+# load models
+# compare how much divergence between model 1 trained and original model for all
+<\Cell_0>
+<Cell_1>
+%matplotlib inline
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+sys.path.append('../../acd')
+sys.path.append('../../acd/visualization')
+sys.path.append('../../acd/acd/util')
+sys.path.append('../../acd/acd/scores')
+sys.path.append('../../acd/acd/agglomeration')
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+from copy import deepcopy
+from model import LSTMSentiment
+import matplotlib.pyplot as plt
+from os.path import isdir
+import viz_1d as viz
+import tiling_1d as tiling
+import agg_1d as agg
+import cd
+import score_funcs
+import dsets
+from dsets.sst import dset
+from dsets.sst.model import LSTMSentiment
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+from torchtext import data
+from torchtext import datasets
+from tqdm import tqdm_notebook, tqdm 
+import pickle
+<\Cell_1>
+<Cell_2>
+sst_pkl = pickle.load(open('../../acd/dsets/sst/sst.pkl', 'rb'))
+np.random.seed(42)
+<\Cell_2>
+<Cell_3>
+
+vector_cache = os.path.join(os.getcwd(), '../data/.vector_cache/input_vectors.pt')
+word_vectors ='glove.6B.300d'
+batch_size=  50
+
+<\Cell_3>
+<Cell_4>
+trained_model_folder = '../models/trained_models'
+init_model_folder = '../models/init_models'
+trained_list = os.listdir(trained_model_folder)
+<\Cell_4>
+<Cell_5>
+init_models = os.listdir(init_model_folder)
+init_model =torch.load(join(init_model_folder, init_models[0]))
+init_comp_model =torch.load(join(init_model_folder, init_models[1]))
+<\Cell_5>
+<Cell_6>
+
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) # filenames in the directory
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in tqdm_notebook(fnames) ] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+<\Cell_6>
+<Cell_7>
+# load test set
+
+inputs = data.Field(lower= True)
+answers = data.Field(sequential=False, unk_token=None)
+
+train, dev, test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label != 'neutral')
+
+inputs.build_vocab(train, dev, test)
+<\Cell_7>
+<Cell_8>
+if word_vectors:
+    if os.path.isfile(vector_cache):
+        inputs.vocab.vectors = torch.load(vector_cache)
+    else:
+        inputs.vocab.load_vectors(word_vectors)
+        makedirs(os.path.dirname(vector_cache))
+        torch.save(inputs.vocab.vectors,vector_cache)
+answers.build_vocab(train)
+train_iter, dev_iter, test_iter = data.BucketIterator.splits(
+    (train, dev, test), batch_size=batch_size, device=torch.device(0))
+<\Cell_8>
+<Cell_9>
+trained_model = deepcopy(init_model)
+trained_model.load_state_dict(results['model_weights'][0])
+<\Cell_9>
+<Cell_10>
+print(calulcate_divergence(init_model, init_comp_model, dev)) #divergence between the two original models
+<\Cell_10>
+<Cell_11>
+divergence_comp = []
+trained_model = deepcopy(init_model)
+for i in tqdm_notebook(range(len(results))):
+    trained_model.load_state_dict(results['comp_model_weights'][i])
+    divergence_comp.append(calc_expl_divergence(trained_model, init_model, dev))
+results['divergence_comp'] = divergence_comp    
+<\Cell_11>
+<Cell_12>
+divergence = []
+trained_model = deepcopy(init_model)
+for i in tqdm_notebook(range(len(results))):
+    trained_model.load_state_dict(results['model_weights'][i])
+    divergence.append(calc_expl_divergence(trained_model, init_comp_model, dev))
+results['divergence'] = divergence    
+<\Cell_12>
+<Cell_13>
+results.keys()
+<\Cell_13>
+<Cell_14>
+results['divergence'] = divergence
+results["final_acc"] = [x[-1] for x in results["accs_test"]]
+results["final_cd"] = [x[-1] for x in results["explanation_divergence"]]
+results[['train_both','sparse_signal', 'signal_strength', 'final_acc', 'final_cd', 'divergence','divergence_comp' ]].sort_values(by=['divergence'])
+<\Cell_14>
+<Cell_15>
+def kl_divergence(in1, in2):
+    a= (in1-in2)
+    b = (torch.log(in1) - torch.log(in2))
+
+    return (a*b).sum(dim=1).cpu().detach().numpy()
+def softmax(scores):
+    return torch.nn.functional.softmax(torch.stack((scores[0].view(-1),scores[1].view(-1)), 1), dim = 1)
+criterion = nn.CrossEntropyLoss()
+def calc_expl_divergence(model1, model2, dataset):
+    ''' calculate explanation divergence between two models on the given dataset. Return'''
+    len_data = len(dev)
+    
+    expl_penalty = np.zeros((len_data))
+    is_correct = np.zeros((2, len_data))
+    num_reps = 5
+
+    model1.eval()
+    model2.eval()
+    with torch.no_grad():
+
+        cur_idx = 0
+        for dev_batch_idx, dev_batch in enumerate(dev_iter):
+            
+            batch_length, batch_num = dev_batch.text.shape
+            answer1 = model1(dev_batch)
+            answer2 = model2(dev_batch)
+            
+            for i in range(num_reps):
+                start = np.random.randint(batch_length-1)
+                stop = start + np.random.randint(batch_length-start)
+                expl_penalty[cur_idx:cur_idx+batch_num] +=(cd.cd_penalty(dev_batch, model1, model2, start, stop)).cpu().numpy()
+                
+            is_correct[0, cur_idx:cur_idx+batch_num]=(((torch.max(answer1, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data))).cpu().numpy()
+            is_correct[1, cur_idx:cur_idx+batch_num]=(((torch.max(answer2, 1)[1].view(dev_batch.label.size()).data == dev_batch.label.data))).cpu().numpy()
+            cur_idx+=batch_num
+        expl_penalty /=num_reps
+        one_wrong_idx = np.where(is_correct.mean(axis=0) ==0.5)[0]
+        both_correct_idx =np.where(is_correct.mean(axis=0) ==1)[0]
+        both_wrong_idx =np.where(is_correct.mean(axis=0) ==0)[0]
+        return expl_penalty.mean()#, expl_div[both_correct_idx].mean(), expl_div[one_wrong_idx].mean(), expl_div[both_wrong_idx].mean()
+
+<\Cell_15>
+<Cell_16>
+
+<\Cell_16>

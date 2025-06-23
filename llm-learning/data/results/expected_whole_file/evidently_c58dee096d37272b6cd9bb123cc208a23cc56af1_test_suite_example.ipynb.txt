@@ -1,0 +1,109 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from evidently.v2.metrics import DataIntegrityMetrics
+from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests import TestNumberOfColumns
+from evidently.v2.tests import TestNumberOfDriftedFeatures
+from evidently.v2.tests import TestValueMAE, TestValueMeanError
+<\Cell_1>
+<Cell_2>
+# from evidently import ColumnMapping
+# from evidently.v2.suite.base_suite import Suite
+
+# suite = Suite()
+# suite.add_metrics(DataIntegrityMetrics())
+# suite.add_tests(TestNumberOfColumns(NumberRange(exact=3)))
+
+# suite.run_calculate(InputData(reference_data=None, current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping()))
+# suite.run_checks()
+<\Cell_2>
+<Cell_3>
+from evidently import ColumnMapping
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+suite = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    # TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+<\Cell_3>
+<Cell_4>
+suite_with_reference = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite_with_reference.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+<\Cell_4>
+<Cell_5>
+suite
+<\Cell_5>
+<Cell_6>
+suite_with_reference
+<\Cell_6>
+<Cell_7>
+suite.show(mode="inline")
+<\Cell_7>
+<Cell_8>
+suite_with_reference.show(mode="inline")
+<\Cell_8>
+<Cell_9>
+suite.save_html("example.html")
+<\Cell_9>
+<Cell_10>
+suite_with_reference.save_html("example_with_reference.html")
+<\Cell_10>
+<Cell_11>
+suite.json()
+<\Cell_11>
+<Cell_12>
+suite_with_reference.json()
+<\Cell_12>
+<Cell_13>
+suite.save_json("example.json")
+<\Cell_13>

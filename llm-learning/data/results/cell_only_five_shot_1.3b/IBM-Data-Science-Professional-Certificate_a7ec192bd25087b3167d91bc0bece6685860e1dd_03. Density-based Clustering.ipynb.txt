@@ -1,0 +1,32 @@
+```python
+    # Importing necessary libraries
+    from sklearn.cluster import DBSCAN
+    from sklearn.preprocessing import StandardScaler
+
+    # Standardizing the features
+    X = StandardScaler().fit_transform(db.data)
+
+    # Creating a DBSCAN object
+    dbscan = DBSCAN(eps=0.3, min_samples=10)
+
+    # Fitting the model
+    dbscan.fit(X)
+
+    # Getting the labels
+    labels = dbscan.labels_
+
+    # Creating a boolean mask for the core samples
+    core_samples_mask = labels != -1
+
+    # Getting the number of clusters
+    n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
+
+    # Printing the number of clusters
+    print('Estimated number of clusters: %d' % n_clusters_)
+
+    # Printing the labels
+    print('Labels: ', labels)
+
+    # Printing the core sample mask
+    print('Core sample mask: ', core_samples_mask)
+    ```

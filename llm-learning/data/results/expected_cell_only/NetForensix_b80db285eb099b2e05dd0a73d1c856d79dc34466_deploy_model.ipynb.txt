@@ -1,0 +1,27 @@
+from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import joblib
+from sklearn.preprocessing import LabelEncoder
+df = pd.read_csv('final_with_19.csv')
+df['target'].value_counts()
+en = LabelEncoder()
+df['target'] = en.fit_transform(df['target'])
+df['target'].value_counts()
+target = df['target']
+features = df.drop(['target'], axis =1)
+
+# Split data into training and testing sets using 80/20 ratio
+trainX, testX, trainY, testY = train_test_split(features, target, test_size=.30, random_state=30)
+
+model = RandomForestClassifier(max_depth=None,min_samples_leaf=1,min_samples_split=2,n_estimators=150)
+
+model.fit(trainX, trainY)
+predictions = model.predict(testX)
+
+score = accuracy_score(testY,predictions)
+
+score
+# Assuming you have a trained model named 'model'
+joblib.dump(model, 'saved_model.pkl')

@@ -1,0 +1,41 @@
+```
+    <Cell_0>
+    ! pip install geopandas
+    ! pip install kaggle --upgrade
+    <\Cell_0>
+    <Cell_1>
+    config_path = '/content/drive'
+    dataset = 'alexisbcook/geospatial-learn-course-data'
+    data_path = '/content/datasets/' + dataset
+    <\Cell_1>
+    <Cell_2>
+    from google.colab import drive
+    drive.mount(config_path)
+    <\Cell_2>
+    <Cell_3>
+    !kaggle config set -n path -v "{config_path}/My Drive"
+    <\Cell_3>
+    <Cell_4>
+    !kaggle datasets download {dataset} -p "{data_path}" --unzip
+    <\Cell_4>
+    <Cell_5>
+    import geopandas as gpd
+    <\Cell_5>
+    <Cell_6>
+    <\Cell_6>
+    <Cell_7>
+    <\Cell_7>
+    <Cell_8>
+    <\Cell_8>
+    <Cell_9>
+    loans_filepath = data_path + "/kiva_loans/kiva_loans/kiva_loans.shp"
+
+    world_loans = gpd.read_file(loans_filepath)
+    <\Cell_9>
+    <Cell_10>
+    world_loans.plot()
+    <\Cell_10>
+    <Cell_11>
+    <\Cell_11>
+    ```
+    Please note that the code above is a sample and may not work as expected if the environment variables are not set correctly. The 'kaggle' and 'geopandas' libraries need to be installed in the same environment where the code is running.

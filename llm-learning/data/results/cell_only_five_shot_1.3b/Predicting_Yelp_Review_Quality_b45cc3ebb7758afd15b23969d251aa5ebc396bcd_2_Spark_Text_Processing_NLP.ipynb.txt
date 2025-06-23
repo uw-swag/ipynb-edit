@@ -1,0 +1,46 @@
+```
+    # Major update of NLP based feature engineering.
+    # 1. Removed unnecessary columns.
+    # 2. Converted 'review_date' column to TimestampType.
+    # 3. Converted 'review_text' column to ArrayType.
+
+    from pyspark.sql.functions import udf, col, to_timestamp
+    from pyspark.sql.types import TimestampType, ArrayType
+
+    # 1. Removing unnecessary columns
+    df_text = df_text.select('review_id', 'review_date', 'review_text', 'star_rating')
+
+    # 2. Converting 'review_date' column to TimestampType
+    df_text = df_text.withColumn('review_date', to_timestamp(col('review_date'), format='yyyy-MM-dd HH:mm:ss'))
+
+    # 3. Converting 'review_text' column to ArrayType
+    df_text = df_text.withColumn('review_text', F.array(col('review_text')))
+
+    df_text.printSchema()
+    df_text.show(5)
+    df_text.count()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding NLP based feature engineering."
+    Original Code Cells:
+    '''
+    import pyspark as ps
+from pyspark.sql import functions as F
+from pyspark.sql.types import TimestampType, ArrayType
+spark = (ps.sql.SparkSession.builder
+        .appName("NLP")
+        .master('local[4]')
+        .getOrCreate()
+        )
+
+sc = spark.sparkContext
+spark
+data_location = "/home/jovyan/work/Documents/Data_Science_Projects/Yelp_Reviews/data/full_data/analytics_ready/"
+filename = "text_data.json"
+df_non_text = spark.read.json(data_location + filename)
+df_non_text.createOrReplaceTempView("df_text")
+df_text.printSchema()
+df_text.show(5)
+df

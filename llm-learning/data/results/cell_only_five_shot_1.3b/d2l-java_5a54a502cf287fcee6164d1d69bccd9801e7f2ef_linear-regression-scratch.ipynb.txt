@@ -1,0 +1,41 @@
+
+    Here's a refactoring of the `sgd` method. I've moved the gradient calculation and update to a separate method `updateParams`. This refactoring is based on the principle of separation of concerns, which is a key principle in object-oriented programming.
+
+    The refactored code is as follows:
+
+```java
+public void sgd(NDList params, float lr, int batchSize) {
+    for (int i = 0; i < params.size(); i++) {
+        NDArray param = params.get(i);
+        // Update param
+        // param = param - param.gradient * lr / batchSize
+        params.set(i, param.sub(param.getGradient().mul(lr).div(batchSize)));
+        // Close Gradient
+        param.getGradient().close();
+    }
+}
+
+public void updateParams(NDList params, float lr, int batchSize) {
+    for (int i = 0; i < params.size(); i++) {
+        NDArray param = params.get(i);
+        param.attachGradient();
+        try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+            NDArray l = squaredLoss(linreg(param, params.get(0), params.get(1)), y);
+            gc.backward(l);
+            sgd(params, lr, batchSize);
+        }
+        param.getGradient().close();
+    }
+}
+
+float lr = 0.03f;  // Learning rate
+int numEpochs = 3;  // Number of iterations
+
+for (int epoch = 0; epoch < numEpochs; epoch++) {
+    for (Batch batch : dataset.getData(manager)) {
+        NDArray X = batch.getData().head();
+        NDArray y = batch.getLabels().head();
+        
+        try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+            NDArray l = squaredLoss(linreg(X, params.get(0), params.get(1)), y);
+            gc.backward(

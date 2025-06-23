@@ -1,0 +1,48 @@
+```R
+    #@title Univariate Linear Regression
+    #@markdown This is a simple implementation of univariate linear regression in R.
+
+    #@param {type:"slider", start:1, end:10, step:1} x_values 
+    #@param {type:"slider", start:1, end:10, step:0.1} m 
+    #@param {type:"slider", start:-10, end:10, step:0.1} b 
+
+    x_values <- as.numeric(x_values) # Input: x-values
+    m <- as.numeric(m) # Input: slope
+    b <- as.numeric(b) # Input: y-intercept
+
+    # Generate the linear regression model
+    model <- function(x, m, b) {
+      return(m * x + b)
+    }
+
+    # Calculate the mean squared error
+    mse <- function(x, y, m, b) {
+      return(mean((y - model(x, m, b))^2))
+    }
+
+    # Fit the model
+    fit <- function(x, y, alpha) {
+      m <- 0
+      b <- 0
+      iters <- 1000
+
+      for(i in 1:iters) {
+        grad_m <- sum((model(x, m, b) - y) * x) / length(x)
+        grad_b <- sum(model(x, m, b) - y) / length(x)
+
+        m <- m - alpha * grad_m
+        b <- b - alpha * grad_b
+      }
+
+      return(list(m = m, b = b, mse = mse(x, y, m, b)))
+    }
+
+    # Generate some example data
+    set.seed(1)
+    x <- runif(100)
+    y <- x * m + b + rnorm(100)
+
+    # Fit the model
+    result <- fit(x, y, 0.01)
+
+   

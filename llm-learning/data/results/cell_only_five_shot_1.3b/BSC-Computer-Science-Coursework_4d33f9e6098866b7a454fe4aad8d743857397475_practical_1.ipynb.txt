@@ -1,0 +1,42 @@
+```python
+    #@title <b><font color="red" size="+3">←</font><font color="black" size="+3"> Let's ROCK!</font></b>
+    #@markdown **After starting this block, you will need to scroll down page and upload a pixel square photo into which the whole human head fits. Neural network works best on images where people are directly facing the camera. Example:**
+
+    #@markdown ![example](https://github.com/tg-bomze/Face-Depixelizer/raw/master/example.jpg)
+
+    #@markdown *You can crop the photo [HERE](https://www.iloveimg.com/crop-image)*
+
+    #@markdown ---
+    import torch
+    import torchvision
+    from pathlib import Path
+    if not Path("PULSE.py").exists():
+      if Path("pulse").exists():
+        %cd /content/pulse
+      else:
+        !git clone https://github.com/adamian98/pulse
+        %cd /content/pulse
+        !mkdir input/
+        toPIL = torchvision.transforms.ToPILImage()
+        toTensor = torchvision.transforms.ToTensor()
+        from bicubic import BicubicDownSample
+        D = BicubicDownSample(factor=1)
+
+    import os
+    from io import BytesIO
+    import matplotlib.pyplot as plt
+    import matplotlib.image as mpimg
+    from PIL import Image
+    from PULSE import PULSE
+    from google.colab import files
+    from bicubic import BicubicDownSample
+    from IPython import display
+    from IPython.display import display
+    from IPython.display import clear_output
+    import numpy as np
+    from drive import open_url
+    from mpl_toolkits.axes_grid1 import ImageGrid
+    %matplotlib inline
+
+    #@markdown ## Basic settings:
+    #@markdown ##### *If you have already uploaded a photo and just want to

@@ -1,0 +1,14 @@
+```python
+    from sklearn.decomposition import LatentDirichletAllocation
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    vectorizer = CountVectorizer(max_df=0.95, min_df=2, stop_words='english')
+    dtm = vectorizer.fit_transform(df['text'])
+
+    lda = LatentDirichletAllocation(n_components=10, max_iter=5, learning_method='online', learning_offset=50, random_state=0)
+    lda.fit(dtm)
+
+    for idx, topic in enumerate(lda.components_):
+        print(f"Top 10 words for Topic #{idx}")
+        print([vectorizer.get_feature_names()[i] for i in topic.argsort()[-10:]])
+    ```

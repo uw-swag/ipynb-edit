@@ -1,0 +1,11 @@
+```python
+    # Check for mixed types of data
+    if df.dtypes.nunique() == 1:
+        mixed_nulls = df.isnull().sum()
+        if mixed_nulls.sum() > 0:
+            print("Mixed types of data found with nulls")
+        else:
+            print("No mixed types of data found with nulls")
+    else:
+        print("Mixed types of data found")
+    ```

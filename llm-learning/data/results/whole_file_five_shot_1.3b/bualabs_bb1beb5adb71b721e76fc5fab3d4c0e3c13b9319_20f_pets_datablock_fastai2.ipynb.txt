@@ -1,0 +1,47 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+
+    # Loading dataset
+    data = pd.read_csv('insurance.csv', names=['Reclaims','Kronor'])
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(data.iloc[:, :-1], data.iloc[:, -1], test_size=0.2, random_state=0)
+
+    # Defining the model
+    class simple_linear_regression(object):
+        def __init__(self):
+            self.b0 = None
+            self.b1 = None
+
+        def fit(self, train):
+            self.b0, self.b1 = self.coefficients(train)
+
+        def predict(self, test):
+            predictions = []
+            for row in test:
+                ypred = self.b0 + self.b1 * row
+                predictions.append(ypred)
+            return predictions
+
+        def coefficients(self, dataset):
+            x = dataset.iloc[:,0]
+            y = dataset.iloc[:,1]
+            x_mean, y_mean = self.mean(x), self.mean(y)
+            b1 = self.covariance(x, x_mean, y, y_mean) / self.variance(x, x_mean)
+            b0 = y_mean - b1 * x_mean
+            return [b0, b1]
+
+        def covariance(self, x, mean_x, y, mean_y):
+            covar = 0.0
+            for i in range(len(x)):
+                covar += (x.iloc[i] - mean_x) * (y.iloc[i] - mean_y)
+            return covar
+
+        def variance(self, values, mean):
+            return sum([(x-mean)**2 for x in values])
+
+        def mean(self, values):
+            return sum(values) / float(len

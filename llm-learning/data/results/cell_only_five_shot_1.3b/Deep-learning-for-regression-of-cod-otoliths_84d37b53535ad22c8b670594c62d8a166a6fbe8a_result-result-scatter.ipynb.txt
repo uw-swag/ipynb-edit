@@ -1,0 +1,38 @@
+```python
+    # Import necessary libraries
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Compute Pearson correlation
+    pearson_correlation = data.corr(method='pearson')
+
+    # Compute Spearman correlation
+    spearman_correlation = data.corr(method='spearman')
+
+    # Create a mask for the upper triangle
+    mask = np.triu(np.ones_like(pearson_correlation, dtype=bool))
+
+    # Set up the matplotlib figure
+    f, ax = plt.subplots(figsize=(11, 9))
+
+    # Generate a custom diverging colormap
+    cmap = sns.diverging_palette(230, 20, as_cmap=True)
+
+    # Draw the heatmap with the mask and correct aspect ratio
+    sns.heatmap(pearson_correlation, mask=mask, cmap=cmap, vmax=.3, center=0,
+                square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+    plt.title('Pearson Correlation Heatmap')
+    plt.show()
+
+    # Do the same for Spearman correlation
+    f, ax = plt.subplots(figsize=(11, 9))
+    cmap = sns.diverging_palette(230, 20, as_cmap=True)
+    sns.heatmap(spearman_correlation, mask=mask, cmap=cmap, vmax=.3, center=0,
+                square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+    plt.title('Spearman Correlation Heatmap')
+    plt.show()
+    ```
+
+    This code will generate two heatmaps: one for Pearson correlation and one for Spearman correlation. The Pearson correlation is a measure of the linear correlation between two variables, while the Spearman correlation is a non-parametric measure of the

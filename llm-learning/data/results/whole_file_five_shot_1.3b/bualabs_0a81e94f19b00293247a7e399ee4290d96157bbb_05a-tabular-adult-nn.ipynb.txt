@@ -1,0 +1,56 @@
+```
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.text import *
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.PUBMED_URL)
+path
+<\Cell_2>
+<Cell_3>
+path.ls()
+<\Cell_3>
+<Cell_4>
+dataframe = pd.read_csv(path/'pubmed.csv')
+<\Cell_4>
+<Cell_5>
+dataframe.head()
+<\Cell_5>
+<Cell_6>
+dataframe.describe(include='all')
+<\Cell_6>
+<Cell_7>
+textlist_test = TextList.from_df(dataframe.iloc[800:1000].copy(), 
+                           path=path, 
+                           text_cols='abstract')
+<\Cell_7>
+<Cell_8>
+databunch = (TextList.from_df(dataframe, path=path, 
+                                 text_cols='abstract')
+                           .split_by_idx(list(range(800,1000)))
+                           .label_from_df(cols='pubmed_id')
+                           .add_test(textlist_test)
+                           .databunch())
+<\Cell_8>
+<Cell_9>
+databunch.show_batch(rows=10)
+<\Cell_9>
+<Cell_10>
+databunch.classes
+<\Cell_10>
+<Cell_11>
+learner = text_classifier_learner(databunch, 
+                                  layers=[100, 50], 
+                                  metrics=accuracy, 
+                                  callback_fns=ShowGraph)
+<\Cell_11>
+<Cell_12>
+learner.fit_one_cycle(1, 2e-1)
+<\Cell_12>
+<Cell_13>
+lear

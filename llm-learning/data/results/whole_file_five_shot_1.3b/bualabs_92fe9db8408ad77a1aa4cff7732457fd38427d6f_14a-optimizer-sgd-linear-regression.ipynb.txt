@@ -1,0 +1,58 @@
+```python
+    %matplotlib inline
+    import matplotlib.pyplot as plt
+
+    n = 30
+    x = torch.ones(n, 2)
+    x[:,0] = torch.arange(n, out=torch.FloatTensor())
+    x[:10]
+
+    y = (2. * x[:, 0]) + 5.
+    y
+
+    plt.scatter(x[:,0], y)
+
+    noise = (torch.rand_like(y) * 10.) - 5.
+    noise
+
+    y = y + noise
+    y
+
+    plt.scatter(x[:,0], y)
+
+    a = tensor([-2., 4.])
+
+    yhat = x @ a
+    yhat
+
+    plt.scatter(x[:,0], y, label="y")
+    plt.scatter(x[:,0], yhat, label="yhat")
+    plt.legend(loc='upper right')
+
+    loss = mse(yhat, y)
+    loss
+
+    a = torch.nn.Parameter(a)
+    a
+
+    def update():
+        yhat = x @ a
+        loss = mse(yhat, y)
+        loss.backward()
+        with torch.no_grad():
+            if i % 10 == 0: print(f"loss={loss}, a={a.data}, a.grad={a.grad}")
+            a.sub_(lr * a.grad)        
+            a.grad.zero_()
+
+    lr = 1e-4
+    for i in range(100):
+        update()
+
+    yhat = x@a
+
+    plt.scatter(x[:,0], y, label="y")
+    plt.scatter(x[:,0], yhat, label="yhat")
+    plt.legend(loc='upper right')
+
+    a
+    ```

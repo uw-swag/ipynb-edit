@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+
+from deepchecks.vision.base import VisionData
+from deepchecks.vision.checks.performance import MeanAveragePrecisionReport
+from deepchecks.vision.datasets.detection import coco
+
+    # Split the dataset into core and base
+    train_data, test_data = train_data.split(0.8)
+
+    # Create a VisionData object for the core dataset
+    core_data = VisionData(train=train_data, test=test_data, transform=transform)
+
+    # Create a VisionData object for the base dataset
+    base_data = VisionData(train=train_data, test=test_data, transform=transform)
+
+    # Create a MeanAveragePrecisionReport for the core dataset
+    core_report = MeanAveragePrecisionReport()
+
+    # Create a MeanAveragePrecisionReport for the base dataset
+    base_report = MeanAveragePrecisionReport()
+
+    # Run the reports on the datasets
+    core_report.run(core_data)
+    base_report.run(base_data)
+
+    # Compare the results
+    if core_report.score > base_report.score:
+        print("The core dataset has a higher mean average precision.")
+    elif core_report.score < base_report.score:
+        print("The base dataset has a higher mean average precision.")
+    else:
+        print("The mean average precision of both datasets is the same.")
+    ```

@@ -1,0 +1,34 @@
+```python
+    import torch
+
+    class MultiscaleObjectDetection:
+        def __init__(self, backbone, neck, rpn, roi, classifier):
+            self.backbone = backbone
+            self.neck = neck
+            self.rpn = rpn
+            self.roi = roi
+            self.classifier = classifier
+
+        def forward(self, x):
+            x = self.backbone(x)
+            x = self.neck(x)
+            anchors, labels, regressors = self.rpn(x)
+            rois = self.roi(anchors, labels)
+            outputs = self.classifier(rois)
+            return outputs
+
+    # Testing
+    def test_multiscale_object_detection():
+        backbone = torch.nn.Sequential(torch.nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1),
+                                       torch.nn.ReLU(),
+                                       torch.nn.MaxPool2d(kernel_size=2, stride=2))
+        neck = torch.nn.Sequential(torch.nn.Conv2d(64, 128, kernel_size=1, stride=1, padding=0),
+                                   torch.nn.ReLU(),
+                                   torch.nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
+                                   torch.nn.ReLU(),
+                                   torch.nn.MaxPool2d(kernel_size=2, stride=2))
+        rpn = torch.nn.Sequential(torch.nn.Conv2d(256, 512, kernel_size=3, stride=1, padding=1),
+                                  torch.nn.ReLU(),
+                                  torch.nn.Conv2d(512, 1024, kernel_size=3, stride=1, padding=1),
+                                  torch.nn.ReLU(),
+                                  torch.nn.Conv2d(10

@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update kaggle digits and readme"
+    Original Code Cells:
+    '''
+    from sklearn.neural_network import MLPClassifier, BernoulliRBM
+from sklearn import linear_model, datasets, metrics
+from sklearn.pipeline import Pipeline
+from sklearn import manifold, decomposition, ensemble
+from sklearn import discriminant_analysis, random_projection
+from sklearn.model_selection import train_test_split
+import tensorflow as tf
+
+import keras as ks
+from keras.models import Sequential, load_model, Model
+from keras.preprocessing import sequence
+from keras.optimizers import SGD, RMSprop
+from keras.layers import Dense, Dropout, LSTM
+from keras.layers import Activation, Flatten, Input, BatchNormalization
+from keras.layers import Conv1D, MaxPooling1D, Conv2D, MaxPooling2D
+from keras.layers.embeddings import Embedding
+def cnn_mc_model():
+    model_input = Input(shape=(28, 28, 1))
+    x = BatchNormalization()(model_input)
+    
+    x = Conv2D(28, (5, 5), activation='relu', border_mode='same')(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = Dropout(0.25)(x)
+    
+    x = Conv2D(56, (5, 5), activation='relu')(x)
+    x = MaxPooling2D(strides=(2, 2))(x)
+    x = Dropout(0.25)(x)
+    
+#    x = Conv2D(112, (5, 5), activation='relu')(x)
+#    x = Conv2D(112, (5, 5), activation='relu')(x)
+#    x = MaxPooling2D(pool_size=(1, 1))(x)

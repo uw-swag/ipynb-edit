@@ -1,0 +1,94 @@
+%matplotlib notebook
+import serial
+import time
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import pandas as pd
+import numpy as np
+from datetime import datetime, date
+
+ 
+portPath = "/dev/ttyACM0"       # Must match value shown on Arduino IDE
+baud = 115200                   # Must match Arduino baud rate
+timeout = 5                     # Seconds
+filename = str(date.today()) + " data.csv"
+max_num_readings = 8
+num_signals = 1
+ 
+ 
+ 
+def create_serial_obj(portPath, baud_rate, tout):
+    """
+    Given the port path, baud rate, and timeout value, creates and returns a pyserial object.
+    """
+    return serial.Serial(portPath, baud_rate, timeout = tout)
+headers = ["PM 0.3","PM 0.5","PM 1.0","PM 2.5","PM 5.0","PM 10.0","Temp","Pressure","Humidity","CO2",
+           "BME680 VOC","QM9 VOC","MiCS5524 VOC","CCS811 VOC","Date"]
+try:
+    dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+    df = pd.read_csv(filename, parse_dates=['Date'], date_parser=dateparse,index_col=0)
+    df
+except:
+    df = pd.DataFrame() #Create an empty data frame to append to later
+def animate(i):
+    global df
+    global plt
+    global serial_obj
+    
+    serial_data = read_serial_data(serial_obj)
+    clean_data =  clean_serial_data(serial_data)
+    clean_data_table = [clean_data]
+    clean_data_table = pd.DataFrame([sub.split(",") for sub in clean_data])
+    clean_data_table['Date'] = [datetime.now()]
+    clean_data_table.columns = headers
+    df = df.append(clean_data_table)
+    
+    x = df['Date']
+    y1 = df['PM 0.3']
+    y2 = df['PM 0.5']
+    y3 = df['PM 1.0']
+    y4 = df['PM 2.5']
+    y5 = df['PM 5.0']
+    y6 = df['PM 10.0']
+
+    # plot
+    plt.cla()
+    plt.plot(x,y1, label='PM 0.3')
+    plt.plot(x,y2, label='PM 0.5')
+    plt.plot(x,y3, label='PM 1.0')
+    plt.plot(x,y4, label='PM 2.5')
+    plt.plot(x,y5, label='PM 5.0')
+    plt.plot(x,y6, label='PM 10.0')
+
+    plt.legend()
+    # beautify the x-labels
+    plt.gcf().autofmt_xdate()
+    plt.xlabel('Time')
+    plt.ylabel('Particulate matter (µm)')
+    plt.title("Indoor Air Quality")
+    #plt.ylim(ymin=0,ymax=85)
+
+ani = FuncAnimation(plt.gcf(), animate,interval=1000)
+
+plt.show()
+serial_data = read_serial_data(serial_obj)
+clean_data =  clean_serial_data(serial_data)
+clean_data_table = [clean_data]
+clean_data_table = pd.DataFrame([sub.split(",") for sub in clean_data])
+clean_data_table['Date'] = [datetime.now()]
+clean_data_table.columns = headers
+df = df.append(clean_data_table)
+animate(1)
+try:
+    df[headers] #Make sure the DataFrame is in the correct order
+    df.to_csv(filename,names=headers)
+except:
+    df = pd.DataFrame() #Create an empty data frame to append to later
+
+df[headers] #Make sure the DataFrame is in the correct order
+df.to_csv(filename,names=headers)
+df
+df = pd.DataFrame()
+df
+df

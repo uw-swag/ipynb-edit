@@ -1,0 +1,71 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets, model_selection, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import ClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import ClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+iris = datasets.load_iris()
+<\Cell_1>
+<Cell_2>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_2>
+<Cell_3>
+reference, production, y_train, y_test = model_selection.train_test_split(iris_frame, 
+                                                                          iris.target, 
+                                                                          random_state=0)
+<\Cell_3>
+<Cell_4>
+model = neighbors.KNeighborsClassifier(n_neighbors=1)
+<\Cell_4>
+<Cell_5>
+model.fit(reference, y_train)
+<\Cell_5>
+<Cell_6>
+train_predictions = model.predict(reference)
+test_predictions = model.predict(production)
+<\Cell_6>
+<Cell_7>
+reference['target'] = y_train
+reference['prediction'] = train_predictions
+
+production['target'] = y_test
+production['prediction'] = test_predictions
+<\Cell_7>
+<Cell_8>
+reference.target = reference.target.apply(lambda x: iris.target_names[x])
+reference.prediction = reference.prediction.apply(lambda x: iris.target_names[x])
+
+production.target = production.target.apply(lambda x: iris.target_names[x])
+production.prediction = production.prediction.apply(lambda x: iris.target_names[x])
+<\Cell_8>
+<Cell_9>
+iris_column_mapping = {}
+
+iris_column_mapping['target'] = 'target'
+iris_column_mapping['prediction'] = 'prediction'
+iris_column_mapping['numerical_features'] = iris.feature_names
+<\Cell_9>
+<Cell_10>
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab()])
+iris_model_performance_dashboard.calculate(reference, production, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()
+<\Cell_10>
+<Cell_11>
+#iris_model_performance_dashboard.save('iris_classification_performance.html')
+<\Cell_11>
+<Cell_12>
+iris_classification_performance_profile = Profile(sections=[ClassificationPerformanceProfileSection()])
+iris_classification_performance_profile.calculate(reference, production, column_mapping = iris_column_mapping)
+<\Cell_12>
+<Cell_13>
+iris_classification_performance_profile.json() 
+<\Cell_13>
+<Cell_14>
+
+<\Cell_14>

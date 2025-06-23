@@ -1,0 +1,48 @@
+```python
+    from azureml.core import Workspace, Dataset
+
+    # Load the workspace from the saved config file
+    ws = Workspace.from_config()
+
+    # Create a new dataset from your local file
+    dataset = Dataset.from_local_file("path_to_your_file.csv")
+
+    # Register the dataset
+    dataset = dataset.register(workspace=ws,
+                               name="your_dataset_name",
+                               description="Your dataset description",
+                               tags={'format': 'CSV'},
+                               create_new_version=True)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new notebook"
+    Original Code:
+    '''
+    ### Response:
+    Here is an example of how you can add a new notebook to your Azure Machine Learning workspace.
+
+    ```python
+    from azureml.core import Workspace, Dataset, Experiment
+
+    # Load the workspace from the saved config file
+    ws = Workspace.from_config()
+
+    # Create a new experiment
+    experiment = Experiment(workspace=ws, name="my_experiment")
+
+    # Create a new notebook
+    notebook = experiment.create_notebook_instance(instance_name='my_notebook',
+                                                  notebook_name='my_notebook',
+                                                  storage_connection_string=ws.get_connection_string(name='my_notebook_connection'))
+
+    # Upload a local file to the notebook
+    notebook.upload_file('path_to_your_file.ipynb', 'my_notebook')
+    ```
+
+    This code will create a new notebook instance in your Azure Machine Learning workspace, upload a local file to the notebook, and then start the notebook instance.
+
+    Please replace `'path_to_your_file.ipynb'` with the path to your notebook file, and `'my_notebook'` with the name of your notebook.
+
+    Also, make sure you have the necessary permissions to create and upload notebooks to your Azure Machine Learning workspace.

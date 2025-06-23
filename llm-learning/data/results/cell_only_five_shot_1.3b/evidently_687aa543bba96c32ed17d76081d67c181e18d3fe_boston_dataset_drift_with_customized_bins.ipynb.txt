@@ -1,0 +1,14 @@
+```python
+    # Refactoring the column_mapping
+    column_mapping = {
+        'column1': 'target',
+        'column2': 'data',
+        # add more columns as needed
+    }
+
+    # Apply the refactoring
+    boston_data_and_target_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], column_mapping)
+    boston_target_and_data_drift_profile.calculate(boston_frame[:200], boston_frame[200:], column_mapping)
+    ```
+
+    The refactored code above creates a dictionary `column_mapping` that maps the original column names to the new target and data column names. The `calculate` method of the dashboard and profile is then called with this dictionary as an argument, which applies the refactoring.

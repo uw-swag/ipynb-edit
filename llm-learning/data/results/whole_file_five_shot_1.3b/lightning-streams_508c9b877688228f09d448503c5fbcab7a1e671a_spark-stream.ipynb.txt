@@ -1,0 +1,12 @@
+```python
+    import pyspark.sql.functions as F
+
+    # Add new reference
+    df_new = spark.sql("SELECT * FROM df")
+
+    # Perform some operations on the new reference
+    df_new = df_new.withColumn("new_column", F.col("old_column") + 1)
+
+    # Show the new reference
+    df_new.show()
+    ```

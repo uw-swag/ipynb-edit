@@ -1,0 +1,53 @@
+
+    ## Export csv
+
+    Vdf.to_csv('V.csv')
+
+<\Cell_18>
+<Cell_19>
+#%%time
+# use DeepRLAgent
+# play a bunch of games computer v. computer and update V function approximator
+
+START_EXPLORATION_RATE = 0.04
+NUM_GAMES = 9999
+verbose = False
+
+V_hist_columns=['0','1','2','3','4','5','6','7','8','val']
+V_hist = pd.DataFrame(columns=V_hist_columns)
+
+best_metric=None
+best_model=None
+
+# V_model = build_ols_model(input_size = INPUT_DIM,
+#                            n_hidden_layers=3, 
+#                            largest_layer_size=128,
+#                            activation='tanh',
+#                            reg_penalty=0.0,
+#                            dropout=0.0,
+#                            verbose=True)        
+
+# load best previous model
+V_model = load_model('model')
+    
+def play_game(V,
+              board_size=BOARD_SIZE,
+              exploration_rate=START_EXPLORATION_RATE,
+              train=True,
+              evaluate=False,
+              game_counter=0,
+              verbose=verbose):
+
+    # linear epsilon decay
+    exploration_rate = (1 - game_counter/NUM_GAMES) * START_EXPLORATION_RATE
+
+    if game_counter % 100 == 0 and game_counter:
+        print("%s: Finished %6d Games, Draws in last 100 games: %d" % (time.strftime("%H:%M:%S"), game_counter, draw_count))
+        draw_counts.append(draw_count)
+        draw_count = 0
+        evaluate = True
+    else:
+        evaluate = False
+
+    winner = play_game(V_model, V_hist, exploration_rate=exploration_rate, train=True, evaluate=evaluate,
+                       game_counter=game_

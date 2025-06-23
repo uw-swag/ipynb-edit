@@ -1,0 +1,114 @@
+!pip uninstall -q -y sqlalchemy pyarrow ipython-sql pandas-gbq
+%%capture
+!pip install -q dvc==3.25.0 dvclive==3.0.1 evidently==0.4.5 pandas==1.5.3
+!mkdir raw_data && \
+ cd raw_data && \
+ wget https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip && \
+ unzip bike+sharing+dataset.zip
+import pandas as pd
+df = pd.read_csv("raw_data/day.csv", header=0, sep=',', parse_dates=['dteday'])
+df.head()
+from evidently.pipeline.column_mapping import ColumnMapping
+data_columns = ColumnMapping()
+data_columns.numerical_features = ['weathersit', 'temp', 'atemp', 'hum', 'windspeed']
+data_columns.categorical_features = ['holiday', 'workingday']
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+def eval_drift(reference, production, column_mapping):
+    data_drift_report = Report(metrics=[DataDriftPreset()])
+    data_drift_report.run(
+        reference_data=reference, current_data=production, column_mapping=column_mapping
+    )
+    report = data_drift_report.as_dict()
+
+    drifts = []
+
+    for feature in (
+        column_mapping.numerical_features + column_mapping.categorical_features
+    ):
+        drifts.append(
+            (
+                feature,
+                report["metrics"][1]["result"]["drift_by_columns"][feature][
+                    "drift_score"
+                ],
+            )
+        )
+
+    return drifts
+
+#set reference dates
+reference_dates = ('2011-01-01 00:00:00','2011-01-28 23:00:00')
+
+#set experiment batches dates
+experiment_batches = [
+    ('2011-01-01 00:00:00','2011-01-29 23:00:00'),
+    ('2011-01-29 00:00:00','2011-02-07 23:00:00'),
+    ('2011-02-07 00:00:00','2011-02-14 23:00:00'),
+    ('2011-02-15 00:00:00','2011-02-21 23:00:00'),
+]
+!git config --global user.email "you@example.com"
+!git config --global user.name "Your Name"
+from dvclive import Live
+# Setup a git repo with dvc
+
+%cd /content
+!rm -rf experiments && mkdir experiments
+%cd experiments
+
+!git init
+!git add .gitignore
+!git commit -m "Init repo"
+!dvc init
+!git commit -m "Init DVC"
+with Live(report="notebook") as live:
+    for date in experiment_batches:
+        live.log_param("begin", date[0])
+        live.log_param("end", date[1])
+
+        metrics = eval_drift(
+            df.loc[df.dteday.between(reference_dates[0], reference_dates[1])],
+            df.loc[df.dteday.between(date[0], date[1])],
+            column_mapping=data_columns,
+        )
+
+        for feature in metrics:
+            live.log_metric(feature[0], round(feature[1], 3))
+
+        live.next_step()
+!dvc plots show
+import IPython
+IPython.display.HTML(filename='dvc_plots/index.html')
+# Setup a git repo with dvc
+
+%cd /content
+!rm -rf experiments && mkdir experiments
+%cd experiments
+
+!git init
+!git add .gitignore
+!git commit -m "Init repo"
+!dvc init
+!git commit -m "Init DVC"
+from dvclive import Live
+
+for step, date in enumerate(experiment_batches):
+    with Live() as live:
+        live.log_param("step", step)
+        live.log_param("begin", date[0])
+        live.log_param("end", date[1])
+
+        metrics = eval_drift(
+            df.loc[df.dteday.between(reference_dates[0], reference_dates[1])],
+            df.loc[df.dteday.between(date[0], date[1])],
+            column_mapping=data_columns,
+        )
+
+        for feature in metrics:
+            live.log_metric(feature[0], round(feature[1], 3))
+
+import dvc.api
+
+pd.DataFrame(dvc.api.exp_show())
+!dvc exp show
+

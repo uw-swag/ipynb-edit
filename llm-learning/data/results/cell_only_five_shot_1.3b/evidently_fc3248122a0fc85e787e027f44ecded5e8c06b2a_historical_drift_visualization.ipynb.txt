@@ -1,0 +1,8 @@
+```python
+    content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+        raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'])
+    ```
+
+    ### Explanation:
+    The code above is updating the link to the bike dataset from the UCI Machine Learning Repository. The dataset is a bike sharing system dataset, which is a part of the UCI Machine Learning Repository. The dataset contains data from 1971-1973 for the city of San Francisco, California. The dataset includes information about the number of bike rentals in the system, when they were rented out, and when they were returned.

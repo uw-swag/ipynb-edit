@@ -1,0 +1,47 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add solution to exercise 10 in chapter 9"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from sklearn.datasets import fetch_openml
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import LogisticRegression
+
+    mnist = fetch_openml('mnist_784', version=1)
+    X, y = mnist["data"], mnist["target"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    clf = LogisticRegression(random_state=42)
+    clf.fit(X_train_scaled, y_train)
+    print("Test score: ", clf.score(X_test_scaled, y_test))
+    <\Cell_0>
+    '''
+    ]
+
+    ### Response:
+    
+    ### Instruction:
+    [
+    Commit Message: "Add solution to exercise 11 in chapter 9"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from sklearn.datasets import fetch_openml
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import LogisticRegression
+
+    mnist = fetch_openml('mnist_784', version=1)
+    X, y = mnist["data"], mnist["target"]
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_

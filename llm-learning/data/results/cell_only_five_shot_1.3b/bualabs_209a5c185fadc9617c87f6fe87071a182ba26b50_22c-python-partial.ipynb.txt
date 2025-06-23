@@ -1,0 +1,42 @@
+```python
+    # Disable warnings
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import matplotlib as mpl
+    %matplotlib inline
+
+    # Scikit-learn
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+
+    # Plot settings
+    mpl.rcParams['legend.frameon'] = False
+    mpl.rcParams['legend.fontsize'] = 'xx-large'
+    mpl.rcParams['xtick.labelsize'] = 16
+    mpl.rcParams['ytick.labelsize'] = 16
+    mpl.rcParams['axes.titlesize'] = 18
+    mpl.rcParams['axes.labelsize'] = 18
+    mpl.rcParams['lines.linewidth'] = 2.5
+
+    # Useful functions
+    def plot_perf_randomforest_vs_ntree(rf_regre, trainX, trainY, testX, testY):
+        plt.figure(figsize=(15, 7.5))
+        for sX, sY, label in [(trainX, trainY, 'Train'), (testX, testY, 'Test')]:
+            predictions = np.zeros(len(sX))
+            curve_rms = []
+            curve_mean = []
+
+            predictions = np.array([tree.predict(sX) for tree in rf_regre.estimators_])
+            for i in range(0, rf_regre.n_estimators):
+                if (i == 0):
+                    Ypred = predictions[0]
+                else:
+                    prediction_i = predictions[0:i]
+                    Ypred = np.average(prediction_i, axis=0)
+
+                curve_rms.append(np.sqrt(np.var(Ypred - sY)))
+                curve_mean.append(np.abs(np.average(Ypred - sY)))

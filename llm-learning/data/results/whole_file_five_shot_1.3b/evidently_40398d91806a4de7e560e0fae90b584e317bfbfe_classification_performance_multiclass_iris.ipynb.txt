@@ -1,0 +1,33 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add more unittests (#315)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import unittest
+
+class TestIrisModel(unittest.TestCase):
+    def setUp(self):
+        self.iris = datasets.load_iris()
+        self.iris_frame = pd.DataFrame(self.iris.data, columns = self.iris.feature_names)
+        self.iris_frame['target'] = self.iris.target
+        self.train_data, self.test_data = model_selection.train_test_split(self.iris_frame, random_state=0)
+        self.target = 'target'
+        self.prediction = 'prediction'
+        self.numerical_features = self.iris.feature_names
+        self.categorical_features = []
+        self.features = numerical_features + categorical_features
+        self.model = neighbors.KNeighborsClassifier(n_neighbors=1)
+        self.model.fit(self.train_data[features], self.train_data.target)
+        self.train_predictions = self.model.predict(self.train_data[features])
+        self.test_predictions = self.model.predict(self.test_data[features])
+        self.train_data['prediction'] = self.train_predictions
+        self.test_data['prediction'] = self.test_predictions
+        self.iris_column_mapping = ColumnMapping()
+        self.iris_column_mapping.target = target
+        self.iris_column_mapping.prediction = prediction
+        self.iris_column_mapping.numerical_features = numerical_features
+        self.iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=1)])
+        self.iris_model_performance_dashboard.calculate(self.train_data, self.test_data, column_mapping = iris_column_mapping)
+        self.iris_model_performance_dashboard

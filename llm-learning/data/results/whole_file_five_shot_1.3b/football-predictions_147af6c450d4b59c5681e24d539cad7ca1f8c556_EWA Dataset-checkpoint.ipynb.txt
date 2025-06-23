@@ -1,0 +1,43 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Added Readme and license"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Import libraries
+import pandas as pd
+import os
+from sklearn.metrics import log_loss
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+import matplotlib.pyplot as plt
+
+DATA_PATH = 'data/'
+<\Cell_0>
+<Cell_1>
+def create_df(path):
+	df = (pd.read_csv(path)
+		.assign(Date=lambda df: pd.to_datetime(df.Date))
+		.dropna(axis=0)  # Drop rows with NAs
+		.sort_values('Date')
+		.reset_index(drop=True)
+		.assign(Id=lambda df: list(df.index + 1)))
+	return df
+<\Cell_1>
+<Cell_2>
+df = create_df(os.path.join(DATA_PATH, 'season0708.csv'))
+df.head()
+<\Cell_2>
+<Cell_3>
+# Define a function which restructures our DataFrame
+def create_multiline_df(old_stats_df):
+    # Create a list of columns we want and their mappings to more interpretable names
+    home_stats_cols = ['Date', 'HomeTeam', 'FTHG', 'FTAG', 'FTR', 'HS', 'AS', 'B365H', 'B365D', 'B365A']
+    
+    away_stats_cols = ['Date', 'AwayTeam', 'FTHG', 'FTAG', 'FTR', 'HS', 'AS', 'B365H', 'B365D', 'B365A']
+    
+    stats_cols_mapping = ['Date', 'Team', 'GoalsFor', 'GoalsAgainst', 'Result', 'ShotsFor', 'ShotsAgainst', 
+                          'HomeOdd

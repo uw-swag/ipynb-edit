@@ -1,0 +1,47 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    from matplotlib import pyplot as plt
+    import matplotlib
+%matplotlib inline
+
+    from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment, RegExp
+
+#NO descriptors
+
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text")
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text", descriptors={
+        "Review Text OOV" : OOV(),
+        "Review Text Non Letter %" : NonLetterCharacterPercentage(),
+        "Review Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        "Review Sentence Count" : SentenceCount(),
+        "Review Word Count" : WordCount(),
+        "Review Sentiment" : Sentiment(),
+        "Review questions": RegExp(reg_exp=r'.*\?.*'),
+    })
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report

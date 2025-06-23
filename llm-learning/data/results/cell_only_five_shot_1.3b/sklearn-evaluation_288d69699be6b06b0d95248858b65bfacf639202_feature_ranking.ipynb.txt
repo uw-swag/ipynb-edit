@@ -1,0 +1,30 @@
+```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    from sklearn.datasets import load_iris
+    from sklearn.datasets import make_classification
+    from sklearn_evaluation.plot import Rank1D, Rank2D
+
+    # Load the iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Define the features
+    features = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+
+    # Create a dataframe
+    df = pd.DataFrame(X, columns=features)
+
+    # Create a rank1d plot
+    rank1d = Rank1D(features=features)
+    rank1d.feature_ranks(df)
+
+    # Create a rank2d plot
+    rank2d = Rank2D(features=features)
+    rank2d.feature_ranks(df)
+
+    # Show the plots
+    plt.show()
+    ```

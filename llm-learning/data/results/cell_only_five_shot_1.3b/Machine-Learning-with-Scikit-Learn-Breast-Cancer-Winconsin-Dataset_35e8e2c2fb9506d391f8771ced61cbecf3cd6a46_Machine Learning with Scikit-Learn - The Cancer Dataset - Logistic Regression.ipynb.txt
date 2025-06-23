@@ -1,0 +1,48 @@
+
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    # Loading the breast cancer dataset
+    data = load_breast_cancer()
+    df = pd.DataFrame(np.c_[data['data'], data['target']], columns=np.append(data['feature_names'], ['target']))
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df[data['feature_names']], df['target'], test_size=0.2, random_state=42)
+
+    # Creating a Logistic Regression model
+    model = LogisticRegression(max_iter=1000)
+
+    # Training the model
+    model.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print("Confusion Matrix:", confusion_matrix(y_test, y_pred))
+
+    # Visualizing the confusion matrix
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    cm = confusion_matrix(y_test, y_pred)
+    sns.heatmap(cm, annot=True, fmt='d')
+    plt.title('Confusion Matrix')
+    plt.xlabel('Predicted')
+    plt.ylabel('Actual')
+    plt.show()
+
+    # Predicting the probabilities
+    y_pred_proba = model.predict_proba(X_test)[:, 1]
+
+    # Visualizing the ROC curve
+    from sklearn.metrics import roc_curve
+    import matplotlib.pyplot as plt
+
+   

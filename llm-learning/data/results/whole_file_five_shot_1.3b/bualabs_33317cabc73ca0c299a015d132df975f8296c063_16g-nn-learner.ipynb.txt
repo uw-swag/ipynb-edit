@@ -1,0 +1,71 @@
+```
+    class DataBunchLearner(DataBunch):
+        def __init__(self, train_dl, valid_dl, c=None):
+            super().__init__(train_dl, valid_dl, c)
+
+        @property
+        def train_ds(self): return self.train_dl.dataset
+
+        @property
+        def valid_ds(self): return self.valid_dl.dataset
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Rename learner to databunch-learner"
+    Original Code Cells:
+    '''
+    <Cell_10>
+
+<\Cell_10>
+<Cell_11>
+from .data import DataBunchLearner
+<\Cell_11>
+<Cell_12>
+databunch = DataBunchLearner(train_dl, valid_dl, c)
+<\Cell_12>
+<Cell_13>
+fit(epoch, model, opt, databunch)
+<\Cell_13>
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    from .data import DataBunchLearner
+
+    databunch = DataBunchLearner(train_dl, valid_dl, c)
+
+    def fit(epoch, model, opt, databunch):
+        # Your code here
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Rename learner to databunch-learner"
+    Original Code Cells:
+    '''
+    <Cell_13>
+
+<\Cell_13>
+<Cell_14>
+def fit(epoch, model, opt, databunch):
+    # Your code here
+<\Cell_14>
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    def fit(epoch, model, opt, databunch):
+        # Your code here
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Rename learner to databunch-learner"
+    Original Code Cells:
+    '''
+    <Cell_14>
+
+<\Cell_14>
+<Cell_

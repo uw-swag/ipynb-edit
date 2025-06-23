@@ -1,0 +1,37 @@
+
+The code you provided is a Go code snippet that defines several functions and types to handle different MIME types and data. Here's a simplified version of the code:
+
+```go
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+)
+
+func downloadAndDisplay(url string) {
+	resp, err := http.Get(url)
+	if err != nil {
+		fmt.Println("Error downloading file:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	data, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading file:", err)
+		return
+	}
+
+	fmt.Println(string(data))
+}
+
+func main() {
+	downloadAndDisplay("https://github.com/gopherdata/gophernotes/raw/master/files/gophernotes-logo.png")
+}
+```
+
+This simplified version of the code only downloads and displays the file. The `downloadAndDisplay` function takes a URL as a parameter and downloads the file from that URL. It then reads the file and prints the contents to the console.
+
+Please note that this simplified version of the code does not include the `display.PNG` function, which is not a part of the original code you provided. You would need to implement this function yourself or use a library that provides this functionality.

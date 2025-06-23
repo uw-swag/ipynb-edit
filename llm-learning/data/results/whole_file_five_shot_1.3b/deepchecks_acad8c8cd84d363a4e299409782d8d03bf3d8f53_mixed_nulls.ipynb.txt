@@ -1,0 +1,19 @@
+```python
+    import deepchecks
+    from deepchecks.checks import MixedNulls
+    import pandas as pd
+
+    data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+    dataframe = pd.DataFrame(data=data)
+
+    # Create a new instance of the MixedNulls check
+    mixed_nulls_check = MixedNulls()
+
+    # Run the check on the dataframe
+    result = mixed_nulls_check.run(dataframe)
+
+    # Print the result
+    print(result)
+    ```
+
+    The commit message "Renaming MLChecks to deepchecks" is a simple change to reflect the new name of the library. The new name "deepchecks" is chosen to be a more descriptive and user-friendly name.

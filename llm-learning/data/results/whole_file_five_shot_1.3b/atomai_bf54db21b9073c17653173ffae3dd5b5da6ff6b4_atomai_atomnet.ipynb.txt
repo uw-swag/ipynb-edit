@@ -1,0 +1,40 @@
+```
+    [
+    Commit Message: "Bump to v0.5.0"
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install git+https://github.com/ziatdinovmax/atomai --upgrade
+<\Cell_0>
+<Cell_1>
+import atomai as aoi
+import numpy as np
+<\Cell_1>
+<Cell_2>
+download_link = 'https://drive.google.com/uc?id=1-0fXGXGY8jW11q2GdPZ2hmOhQ7-WNlnK'
+#!gdown -q $download_link -O 'training_data.npy'
+dataset_1 = np.load('training_data.npy')
+images_1 = dataset_1['X_train']
+labels_1 = dataset_1['y_train']
+images_test_1 = dataset_1['X_test']
+labels_test_1 = dataset_1['y_test']
+print(images_1.shape, labels_1.shape)
+<\Cell_2>
+<Cell_3>
+trained_model_1 = aoi.atomnet.train_single_model(images_1, labels_1,
+                                                 images_test_1, labels_test_1,
+                                                 training_cycles=500, IoU=True)
+<\Cell_3>
+<Cell_4>
+# Load "validation" data
+expdata = dataset_1['validation_img']
+# Get NN output with atomic coordinates
+predictive = aoi.atomnet.predictor(trained_model_1, refine=False, use_gpu=True)
+nn_input, (nn_output, coordinates_1) = predictive.run(expdata)
+<\Cell_4>
+<Cell_5>
+aoi.utils.plot_coord(expdata, coordinates_1[0], fsize=12)
+<\Cell_5>
+<Cell_6>
+updated_coordinates_1 = aoi.atomstat.update_classes(coordinates_1, nn_input,
+                                                    method="meanshift

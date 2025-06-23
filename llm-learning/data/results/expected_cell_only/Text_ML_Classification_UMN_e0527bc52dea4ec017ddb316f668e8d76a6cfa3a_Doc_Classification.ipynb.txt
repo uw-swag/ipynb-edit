@@ -1,0 +1,393 @@
+
+
+!pip install markdown2
+from __future__ import print_function
+from nltk.stem.snowball import SnowballStemmer
+import string
+from nltk.tag import pos_tag
+from gensim import corpora, models, similarities
+from sklearn.externals import joblib
+from sklearn.metrics import euclidean_distances
+from sklearn.metrics.pairwise import cosine_similarity
+import colorsys
+import markdown2
+
+
+import seaborn as sns
+from scipy.sparse import coo_matrix
+from sklearn.metrics import silhouette_samples, silhouette_score
+import sys
+from operator import itemgetter
+import time
+from tqdm.auto import tqdm
+import re
+
+from datetime import datetime
+from nltk.corpus import stopwords
+from nltk import word_tokenize, sent_tokenize
+from nltk.stem import PorterStemmer
+from nltk import pos_tag
+import nltk
+import math
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
+from matplotlib import figure
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.cluster import KMeans
+from sklearn import metrics
+from IPython.display import display, HTML
+
+import numpy as np  ##20.2
+import pandas as pd
+from pandas.io.common import EmptyDataError
+
+import matplotlib
+from pathlib import Path
+import shutil
+
+import ipywidgets as widgets
+
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+
+%matplotlib inline
+!rm -rf Text_ML_Classification_UMN
+!git clone https://github.com/Dkreitzer/Text_ML_Classification_UMN
+
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/AAR_Corp_.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/2U_Inc_.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/3M_Company.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/ADT_Inc_.txt", 'Text_ML_Classification_UMN/Analyze')
+shutil.move("Text_ML_Classification_UMN/Train/Text_Files_Trained/180_Degree_Capital_Corp_.txt", 'Text_ML_Classification_UMN/Analyze')
+
+def make_pipeline(NUMBER_OF_DOCS):
+    doclist = []
+    names = []
+    # %cd "
+    pathlist = Path(
+        "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+
+    for path in tqdm(pathlist):
+        path_in_str = str(path)
+    #     print(path_in_str)
+        name = path_in_str.split(".")[0].split("/")[3]
+        names.append(name.replace("_", " "))
+        # TODO SPLIT PATH TO COMPANY NAME, make Index
+        file = open(path, "r", encoding= 'Windows-1252')
+        # print "Output of Readlines after appending"
+        text = file.readlines()
+    #     print(text[:10])
+        doclist.append(text[0])
+      
+      
+            
+    df_to_split = pd.DataFrame(list(zip(names, doclist)),
+                               columns=['Company', 'Text'])
+    split_df = df_to_split.sample(n=NUMBER_OF_DOCS, random_state=42)
+    doclist, names =  split_df["Text"].tolist(), split_df["Company"].tolist()
+    print(split_df.head())
+    
+    
+    
+    return doclist, names
+
+doclist, names = make_pipeline(1000)
+import string
+def transform_filtered(token_list, doclist, names):
+
+    punc = ['.', ',', '"', "'", '?', '!', ':',
+            ';', '(', ')', '[', ']', '{', '}', "%"]
+    more_stops = ['\t',
+                  '\\t\\t\\', '\\t\\t\\t',
+                  '<U+25CF>', '<u+feff>',  '[1]', 'feff', '1a', 'item']
+    maybe_bad_stops = ['may', 'could',  'contents',
+                       'table', 'time', '25cf', 'factors', 'risk']
+    stopwords_list = stopwords.words(
+        'english') + more_stops + punc + maybe_bad_stops
+    filtered_tokens = []
+    names_list = []
+    
+    if type(token_list) != list:
+        token_list = [token_list]
+    index = 0
+              
+    for document in tqdm(token_list, desc="Filtering Documents"):
+        name = names[index]
+        for token in document:
+            filtered_token = [word.lower() for word in token.split(" ") if word.lower() not in stopwords_list and word.isalpha()]
+            filtered_token = ' '.join(filtered_token)
+            if len(filtered_token) != 0:
+                names_list.append(name)
+                filtered_tokens.append(filtered_token)
+        index += 1
+    
+    return filtered_tokens, names_list, stopwords_list
+least_used = dict(sorted(vectorizer.vocabulary_.items(),
+            key=itemgetter(1), reverse=False)[:5])
+most_used = dict(sorted(vectorizer.vocabulary_.items(),
+            key=itemgetter(1), reverse=True)[:5])
+print("Most Common Words", most_used)
+print("Least Common Words", least_used)
+
+
+##TODO GET VALUES NOT INDEX
+
+def plot_coo_matrix(m):
+    if not isinstance(m, coo_matrix):
+        m = coo_matrix(m)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, facecolor='black')
+    ax.plot(m.col, m.row, 's', color='white', ms=1)
+    ax.set_xlim(0, m.shape[1])
+    ax.set_ylim(0, m.shape[0])
+    ax.set_aspect('equal')
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.invert_yaxis()
+    ax.set_aspect('equal')
+    ax.set_xticks([])
+    ax.set_yticks([])
+    return ax
+from sklearn.model_selection import GridSearchCV
+model = KMeans(init='k-means++', random_state=42, n_init=15
+                   )
+param_grid = {'max_iter': [10, 50, 100, 150, 200, 300, 350, 400, 500],
+             'n_clusters': [25,30, 33, 35],
+             }
+grid = GridSearchCV(model, param_grid, verbose=3, n_jobs=8)
+grid.fit(sparseMatrix)
+
+lids = model.cluster_centers_
+
+score = model.score(sparseMatrix)
+silhouette_score = metrics.silhouette_score(sparseMatrix, labels, metric='euclidean')
+# # List the best parameters for this dataset
+print(grid.best_params_)
+# # List the best score
+print(grid.best_score_)
+def move_to_history():
+    pathlist = Path(
+        "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+
+    for path in tqdm(pathlist):
+        shutil.move(str(path), 'Text_ML_Classification_UMN/History/Text_Files_History')
+move_to_history()
+def estimator_ppscore(model):
+    labels = model.labels_
+    centroids = model.cluster_centers_
+
+    print(f"Model Generated at {model_time}")
+
+    print("Cluster id labels for inputted data")
+    print(labels)
+    print("Centroids data")
+    #print (centroids)
+
+    kmeans_score = model.score(sparseMatrix)
+    print("Score (Opposite of the value of X on the K-means objective, \n",
+          "which is Sum of distances of samples to their closest cluster center):")
+    print(kmeans_score)
+
+    silhouette_score = metrics.silhouette_score(
+        sparseMatrix, labels, metric='euclidean')
+
+    print("Silhouette_score: ", silhouette_score)
+
+    
+    
+    return kmeans_score, silhouette_score
+
+def estimator_load_model(model_time):
+      
+      vectorizer = joblib.load(f'Text_ML_Classification_UMN/Model/vec{model_time}.pkl')
+      model = joblib.load(f'Text_ML_Classification_UMN/Model/model{model_time}.pkl')
+      estimator_ppscore(model)
+      return model, vectorizer
+
+pathlist = Path(
+        "Text_ML_Classification_UMN/Model/").glob('**/*.pkl')
+# times = []
+
+times = set([str(path).split(".pkl")[0].split("/")[2].replace(
+        "model", "").replace("vec", "") for path in pathlist])
+#Dropdown Widget
+selection = widgets.Dropdown(
+        options=times,
+        description='Available Models:',
+        disabled=False,
+    )
+display(selection)
+
+
+model_time = selection.value
+model, vectorizer = estimator_load_model(model_time)
+def estimator_predict_string(string):
+    empty_list = ["string"]
+    print('Input String: %s' % string)
+    print('\n')
+    print('Prediction:')
+    tokens = transform_tokens(empty_list)
+    filtered_tokens, names_list, stopwords_list = transform_filtered(tokens, empty_list, empty_list)
+    stemmed = transform_stemming(filtered_tokens)
+    X = vectorizer.transform(stemmed)
+    predicted = model.predict(X)
+    print('kmeans prediction: %s' % predicted)
+    print("closest centroid terms :")
+    for ind in order_centroids[predicted[0], :10]:
+        print(' %s' % terms[ind])
+
+# for topic in topics:
+#     print(topic)
+#     estimator_predict_string(topic)
+def prep_for_heatmap(muliple_company_frame):
+    company_clusters = muliple_company_frame.groupby(['label', 'company']).agg(
+        {'% of total': 'sum'}).unstack(level='company').fillna(0).T
+
+    company_clusters = company_clusters.reset_index(level=0, drop=True)
+    return company_clusters
+
+ import os
+
+#@title ## Save Documents
+To_Master_List= True #@param ["False", "True"] {type:"raw"}
+To_New_List =  True #@param ["False", "True"] {type:"raw"}
+
+def analyze_documents():
+  doclist = []
+  names = []
+  # %cd "
+  pathlist = Path(
+      "Text_ML_Classification_UMN/Analyze").glob('**/*.txt')
+# try:
+  for path in tqdm(pathlist):
+      path_in_str = str(path)
+  #     print(path_in_str)
+      name = path_in_str.split(".")[0].split("/")[2]
+      names.append(name.replace("_", " "))
+      # TODO SPLIT PATH TO COMPANY NAME, make Index
+      file = open(path, "r", encoding= 'Windows-1252')
+      # print "Output of Readlines after appending"
+      text = file.readlines()
+      doclist.append(text[0])
+
+
+
+  analysis_df = pd.DataFrame(list(zip(names, doclist)),
+                             columns=['Company', 'Text'])
+
+  analysis_df.head()
+
+  frames = []
+  for document, name in zip(doclist, names):
+      frame = estimator_predict_document(document, name)
+      frames.append(frame)
+
+  muliple_company_frame = pd.concat(frames)
+  muliple_company_frame.head()
+  grouped_frame = muliple_company_frame.groupby(
+    ['company', 'label']).agg({'% of total': 'sum'}).reset_index()
+  company_clusters = prep_for_heatmap(muliple_company_frame)
+  if To_Master_List == True:
+      # if file does not exist write header 
+      master_path = "Text_ML_Classification_UMN/Predicting/CSV/master.csv"
+      
+      with open(master_path, 'a') as f:
+          company_clusters.to_csv(f, header=f.tell()==0)
+      
+      ##!! THIS IS CAUSING DUPLICATES ##
+      
+      
+      
+#       if not os.path.isfile(master_path):
+#          company_clusters.to_csv(master_path, header=label)
+#       else: # else it exists so append without writing the header
+#         master = pd.read_csv(master_path)
+#         pd.concat([master, company_clusters], ignore_index=True).dropna().to_csv(master_path, index=False)
+
+#          company_clusters.to_csv('filename.csv', mode='a', header=True)
+    
+#       try:
+#           master = pd.read_csv('Text_ML_Classification_UMN/Predicting/CSV/master.csv')
+#           master = pd.concat([master, company_clusters.T]
+#                    ).drop_duplicates(names).set_index("label")
+#           master.to_csv('master.csv', header=True, mode="a")
+#           print('MASTER UPDATED')
+#       except FileNotFoundError:
+#            company_clusters.T.to_csv('Text_ML_Classification_UMN/Predicting/CSV/master.csv',header=True)
+
+    
+    
+  if To_New_List == True:
+    analysis_time = datetime.now().strftime("%b%d-%I%M%p")
+
+    with open(f'Text_ML_Classification_UMN/Predicting/CSV/{analysis_time}.csv', 'w') as f:
+        company_clusters.T.to_csv(f, header=True)
+#   except IndexError:
+#     print("Are there any files in /Analyze?")
+#     company_clusters, grouped_frame = len(names), False
+  return company_clusters, grouped_frame, muliple_company_frame
+
+
+company_clusters, grouped_frame, muliple_company_frame = analyze_documents()
+company_clusters.T.head()
+
+
+master = pd.read_csv('Text_ML_Classification_UMN/Predicting/CSV/master.csv')
+master = master.set_index("company")
+master
+company_clusters.index.values
+to_plot = master.head()reset_index(drop=True).T
+to_plot.head()
+f = plt.figure()
+master.plot(kind='bar', stacked=True, figsize=(15,10), use_index=True, ax=f.gca())
+plt.legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+
+plt.show()
+def plot_heatmap(company_clusters):
+    map_time = datetime.now().strftime("%b%d-%I%M%p")
+
+    fig2, ax2 = plt.subplots(figsize=(20, 14))
+    cmap = sns.light_palette('red', as_cmap=True)
+
+    sns.heatmap(company_clusters, ax=ax2, cmap=cmap)
+    
+
+    ax2.set_xlabel('Label', fontdict={'weight': 'bold', 'size': 14})
+    ax2.set_ylabel('Company', fontdict={'weight': 'bold', 'size': 14})
+    for label in ax2.get_xticklabels():
+        label.set_size(16)
+        label.set_weight("bold")
+    for label in ax2.get_yticklabels():
+        label.set_size(16)
+        label.set_weight("bold")
+    plt.savefig(
+        "Text_ML_Classification_UMN/Predicting/Images/Heatmap{map_time}.jpg",
+        dpi=None, facecolor='w', edgecolor='w',
+                orientation='portrait', papertype=None, format=None,
+                transparent=False, bbox_inches=None, pad_inches=0.1,
+                frameon=None, metadata=None)
+
+    def onhover(event):
+        print('%s click: button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %
+              ('double' if event.dblclick else 'single', event.button,
+               event.x, event.y, event.xdata, event.ydata))
+    cid = fig2.canvas.mpl_connect('motion_notify_event', onhover)
+
+plot_heatmap(company_clusters)
+
+# coloring txt file
+for counter, company in enumerate(muliple_company_frame['company'].unique()):
+  print(counter, company)
+  company = muliple_company_frame['company'].unique()[counter]
+  companyFrame = muliple_company_frame[muliple_company_frame['company'] == company]
+  Html_file= open(f'Text_ML_Classification_UMN/Predicting/Text_Files/{company.replace(" ", "_")}',"w")
+  
+
+  for text, label in zip(companyFrame['text'], companyFrame['label']):
+      color = colormap[label]
+      html_str = HTML(f'<font color="{color}">' +
+                       text + f'  ({label})' + '</font>')
+      display(html_str)
+  Html_file.close()

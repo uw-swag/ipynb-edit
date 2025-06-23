@@ -1,0 +1,56 @@
+```python
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    from scar import C
+
+    train_x, _, train_s = train
+
+    x_ = train_x[:]
+    y_ = train_s[:]
+
+    tau = 0.5
+    class_weight = {
+        0: 1 - (1 - tau) / (1 - C * tau),
+        1: tau / (C * tau),
+    }
+    from sklearn.linear_model import LogisticRegression
+
+    clf = LogisticRegression(class_weight=class_weight).fit(x_, y_)
+    test_x, test_y, _ = test
+
+    test_y_hat = clf.predict(test_x)
+    test_y_prob_hat = clf.predict_proba(test_x)[:, 1]
+    from sklearn.metrics import f1_score
+
+    f1_score(test_y, test_y_hat)
+    plot_x_y(test_x, test_y)
+    plot_x_y(test_x, test_y_hat)
+    plot_x_y_proba(test_x, test_y_prob_hat)
+
+    # Merge data processing into one note and update the existing notebooks accordingly
+    # Update the existing notebook to include the data processing and the model training
+    # Update the existing notebook to include the model evaluation and the plotting
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add data processing and model training into one note"
+    Original Code Cells:
+    '''
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    from scar import C
+
+    train_x, _, train_s = train
+
+    x_ = train_x[:]
+    y_ = train_s[:]
+
+    tau = 0.5
+    class_weight = {
+        0: 1 - (1 - tau) / (1 - C * tau),
+        1: tau / (C * tau),
+    }
+    from

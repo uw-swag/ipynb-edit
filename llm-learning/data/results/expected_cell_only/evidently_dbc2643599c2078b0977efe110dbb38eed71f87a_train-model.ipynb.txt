@@ -1,0 +1,109 @@
+%load_ext autoreload
+%autoreload 2
+
+import joblib
+import mlflow
+import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+import pandas as pd
+
+from evidently.metric_preset import RegressionPreset
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+from pathlib import Path
+from sklearn import ensemble, model_selection
+
+from config import MLFLOW_TRACKING_URI, DATA_DIR, FILENAME, REPORTS_DIR
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+# Download original dataset with: python src/pipelines/load_data.py 
+
+raw_data = pd.read_csv(f"../{DATA_DIR}/{FILENAME}")
+raw_data.head()
+target = 'cnt'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'mnth', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', ]
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+sample_data = raw_data.set_index('dteday').loc['2011-01-01 00:00:00':'2011-01-28 23:00:00'].reset_index()
+
+print(sample_data.shape)
+X_train, X_test, y_train, y_test = model_selection.train_test_split(
+    sample_data[numerical_features + categorical_features],
+    sample_data[target],
+    test_size=0.3
+)
+regressor = ensemble.RandomForestRegressor(random_state = 0, n_estimators = 50)
+regressor.fit(X_train, y_train) 
+
+model_path = Path('../models/model.joblib')
+joblib.dump(regressor, model_path)
+# Calculate predictions 
+preds_train = regressor.predict(X_train)
+preds_test = regressor.predict(X_test)
+X_train['target'] = y_train
+X_train['prediction'] = preds_train
+
+X_test['target'] = y_test
+X_test['prediction'] = preds_test
+X_train.head()
+regression_performance_report = Report(metrics=[
+    RegressionPreset(),
+])
+
+regression_performance_report.run(
+    reference_data=X_train, 
+    current_data=X_test,
+    column_mapping=column_mapping)
+
+regression_performance_report
+# Extract Model Train Metrics from the report
+
+train_report_metrics = regression_performance_report.as_dict()
+me = train_report_metrics['metrics'][0]['result']['current']['mean_error']
+mae = train_report_metrics['metrics'][0]['result']['current']["mean_abs_error"]
+
+print(me, mae)
+# Set up MLFlow Client
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+client = MlflowClient()
+
+print(f"Client tracking uri: {client.tracking_uri}")
+
+# Set experiment name
+mlflow.set_experiment('Train Model')
+with mlflow.start_run() as run: 
+
+    # Show newly created run metadata info
+    print("Experiment id: {}".format(run.info.experiment_id))
+    print("Run id: {}".format(run.info.run_id))
+    print("Run name: {}".format(run.info.run_name))
+    print('MLFlow tracking uri:', mlflow.get_tracking_uri())
+    print('MLFlow artifact uri:', mlflow.get_artifact_uri())
+    run_id = run.info.run_id
+
+    # Log metrics
+    mlflow.log_metric('me', round(me, 3))
+    mlflow.log_metric('mae', round(mae, 3))
+    
+    # Log model 
+    mlflow.log_artifact(model_path)
+report_path = f"../{REPORTS_DIR}/train_report.html"
+regression_performance_report.save_html(report_path)
+    
+with mlflow.start_run(run_id=run_id):
+    
+    # Show the run metadata info
+    print("Experiment id: {}".format(run.info.experiment_id))
+    print("Run id: {}".format(run.info.run_id))
+    print("Run name: {}".format(run.info.run_name))
+    
+    # Log the regression_performance_report as an artifact
+    mlflow.log_artifact(report_path)
+

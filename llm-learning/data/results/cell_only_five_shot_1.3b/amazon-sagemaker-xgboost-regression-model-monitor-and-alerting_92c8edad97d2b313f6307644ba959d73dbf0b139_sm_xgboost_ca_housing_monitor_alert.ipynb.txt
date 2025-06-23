@@ -1,0 +1,27 @@
+```python
+    # Adding files via upload
+    from werkzeug.utils import secure_filename
+
+    def allowed_file(filename, ALLOWED_EXTENSIONS):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+    def upload_file():
+        if 'file' not in request.files:
+            return jsonify({"msg": "No file part"}), 400
+
+        file = request.files['file']
+        if file and allowed_file(file.filename, ALLOWED_EXTENSIONS):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return jsonify({"msg": "File uploaded successfully"}), 200
+        else:
+            return jsonify({"msg": "Allowed file types are txt, pdf, png, jpg, jpeg, gif"}), 400
+
+    @app.route('/upload', methods=['POST'])
+    def upload_file_handler():
+        return upload_file()
+    ```
+    This code adds a new route for file upload. The function `upload_file` checks if a file is uploaded, and if it is, it checks if the file is of an allowed type, and if it is, it saves the file to the specified upload folder. The function `upload_file_handler` is a wrapper for `upload_file` that handles the request and returns a response.

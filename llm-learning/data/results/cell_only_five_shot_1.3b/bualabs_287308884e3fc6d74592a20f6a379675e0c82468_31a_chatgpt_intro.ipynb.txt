@@ -1,0 +1,12 @@
+```python
+    messages = [{"role": "user", "content": "Hello World"}]
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=0, 
+        request_timeout=3.0,
+    )
+
+    # completion2
+    response.choices[0].message["content"]
+    ```

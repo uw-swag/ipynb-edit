@@ -1,0 +1,30 @@
+```
+    <Cell_0>
+import pandas as pd
+import numpy as np
+<\Cell_0>
+<Cell_1>
+# read the iris data into a DataFrame
+url = 'http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data'
+col_names = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'species']
+iris = pd.read_csv(url, header=None, names=col_names)
+iris.head()
+<\Cell_1>
+<Cell_2>
+# apply the ceiling function to the numeric columns
+iris.loc[:, 'sepal_length':'petal_width'] = iris.loc[:, 'sepal_length':'petal_width'].apply(np.ceil)
+iris.head()
+<\Cell_2>
+<Cell_3>
+# show all observations with features: 7, 3, 5, 2
+iris[(iris.sepal_length==7) & (iris.sepal_width==3) & (iris.petal_length==5) & (iris.petal_width==2)]
+<\Cell_3>
+<Cell_4>
+# count the species for these observations
+iris[(iris.sepal_length==7) & (iris.sepal_width==3) & (iris.petal_length==5) & (iris.petal_width==2)].species.value_counts()
+<\Cell_4>
+<Cell_5>
+# count the species for all observations
+iris.species.value_counts()
+<\Cell_5>
+```

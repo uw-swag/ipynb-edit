@@ -1,0 +1,30 @@
+```python
+    import torch
+    from torch.utils.data import DataLoader
+    from torchvision import datasets, transforms
+
+    # Define a transform to normalize the data
+    transform = transforms.Compose([transforms.ToTensor(),
+                                    transforms.Normalize((0.5,), (0.5,))])
+
+    # Download and load the training data
+    trainset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=True, transform=transform)
+    trainloader = DataLoader(trainset, batch_size=64, shuffle=True)
+
+    # Download and load the test data
+    testset = datasets.MNIST('~/.pytorch/MNIST_data/', download=True, train=False, transform=transform)
+    testloader = DataLoader(testset, batch_size=64, shuffle=True)
+    ```
+    This code will download the MNIST dataset and create two data loaders, one for training and one for testing. The data loaders are used to feed data into the model for training and testing.
+
+    Please note that the MNIST dataset is a standard dataset used for image classification tasks. The data loaders are used to feed the model with batches of data, which are then used to train the model.
+
+    The `DataLoader` class from PyTorch is used to create data loaders. The `DataLoader` class takes a dataset and a batch size as input, and returns an iterable that can be used to iterate over the data in batches.
+
+    The `transform` function is used to apply a series of transformations to the data. In this case, the data is first converted to a tensor, and then normalized to have a mean of 0.5 and a standard deviation of 0.5.
+
+    The `trainset` and `testset` variables are the datasets returned by the `datasets.MNIST` function. The `trainloader` and `testloader` variables are the data loaders for the training and testing datasets, respectively.
+
+    The `trainloader` and `testloader` variables can be used to feed the model with batches of data for training and testing, respectively.
+
+   

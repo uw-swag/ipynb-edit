@@ -1,0 +1,35 @@
+```
+    [
+    Commit Message: "[MLC-153] new dataset column type (#214)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+
+    names = [*(f'col_{i}' for i in range(1,14)), 'target']
+    train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data', 
+                           header=None, names=names)
+    val_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test', 
+                         skiprows=1, header=None, names=names)
+    val_df['target'] = val_df['target'].str[:-1]
+
+    # Run label encoder on all categorical columns
+    for column in train_df.columns:
+        if train_df[column].dtype == 'object':
+            le = LabelEncoder()
+            le.fit(pd.concat([train_df[column], val_df[column]]))
+            train_df[column] = le.transform(train_df[column])
+            val_df[column] = le.transform(val_df[column])
+
+    # New dataset column type
+    train_df['new_column'] = train_df['col_1'] + train_df['col_2']
+    val_df['new_column'] = val_df['col_1'] + val_df['col_2']
+
+    # Update column types
+    train_df.columns = [col.replace('col_', '') for col in train_df.columns]
+    val_df.columns = [col.replace('col_', '') for col in val_df.columns]
+
+    # Update column names
+    train_df.columns = [f'col_{i}' for i in range(1,14)] + ['target', 'new_column']
+    val_df.columns = [f'col_{i}' for i in range(1,

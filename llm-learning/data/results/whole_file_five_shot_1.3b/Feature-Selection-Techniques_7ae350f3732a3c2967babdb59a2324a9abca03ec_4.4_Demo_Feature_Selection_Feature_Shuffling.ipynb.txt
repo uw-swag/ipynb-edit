@@ -1,0 +1,59 @@
+```
+    [
+    Commit Message: "adding the first notebook about filter methods"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    # import seaborn as sns
+    # import matplotlib.pyplot as plt
+    import os
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_selection import SelectFromModel
+    from sklearn.ensemble import RandomForestClassifier
+    # plt.style.use('seaborn-colorblind')
+    # %matplotlib inline
+    from feature_selection import feature_shuffle
+
+    <\Cell_0>
+    <Cell_1>
+    from sklearn.datasets import load_breast_cancer
+    data = load_breast_cancer()
+    data = pd.DataFrame(np.c_[data['data'], data['target']],
+                  columns= np.append(data['feature_names'], ['target']))
+    <\Cell_1>
+    <Cell_2>
+    data.head(5)
+    <\Cell_2>
+    <Cell_3>
+    X_train, X_test, y_train, y_test = train_test_split(data.drop(labels=['target'], axis=1), 
+                                                        data.target, test_size=0.2,
+                                                        random_state=0)
+    X_train.shape, X_test.shape
+    <\Cell_3>
+    <Cell_4>
+    auc_drop, selected_features = feature_shuffle.feature_shuffle_rf(X_train=X_train,
+                                                                     y_train=y_train,
+                                                                     random_state=0)
+    <\Cell_4>
+    <Cell_5>
+    #  we select features that have auc_drop > 0
+    auc_drop
+    <\Cell_5>
+    <Cell_6>
+    selected_features
+    <\Cell_6>
+    <Cell_7>
+
+    <\Cell_7>
+
+    '''
+    ]
+    ```
+    '''
+
+    }
+    '''
+
+    '''

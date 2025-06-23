@@ -1,0 +1,27 @@
+```python
+    import matplotlib.pyplot as plt
+    from keras.callbacks import Callback
+
+    class LRFinder(Callback):
+        def on_epoch_begin(self, epoch, logs=None):
+            if not hasattr(self, 'epoch'):
+                self.epoch = [epoch]
+            else:
+                self.epoch.append(epoch)
+
+            if not hasattr(self, 'lr'):
+                self.lr = [1e-5]
+            else:
+                self.lr.append(1e-5)
+
+            plt.figure(figsize=(12, 6))
+            plt.plot(self.epoch, self.lr, label='Learning Rate')
+            plt.legend()
+            plt.grid()
+            plt.show()
+
+    lr_finder = LRFinder()
+    model.fit(X_train, Y_train, epochs=100, callbacks=[lr_finder])
+    ```
+
+    This code creates a custom callback that plots the learning rate as a function of the epoch. The learning rate is set to 1e-5 for the first 10 epochs and then it decreases linearly over the next 100 epochs.

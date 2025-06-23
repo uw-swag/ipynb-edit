@@ -1,0 +1,50 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added histogram for first 200 iterations."
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="torch.nn.functional")
+<\Cell_2>
+<Cell_3>
+path = untar_data(URLs.MNIST)
+path
+<\Cell_3>
+<Cell_4>
+batchsize = 64
+np.random.seed(0)
+transform = get_transforms(do_flip=False)
+
+databunch = ImageDataBunch.from_folder(path, train='training', valid_pct=0.2, size=28, 
+                                       ds_tfms=transform, bs=batchsize, num_workers=8).normalize(mnist_stats)
+<\Cell_4>
+<Cell_5>
+databunch.show_batch(rows=3, figsize=(10, 10))
+<\Cell_5>
+<Cell_6>
+databunch.classes
+<\Cell_6>
+<Cell_7>
+
+<\Cell_7>
+<Cell_8>
+def get_cnn_model(data):
+    return nn.Sequential(
+        nn.Conv2d(  3,  8, 5, padding=2, stride=2), nn.ReLU(), #14
+        nn.Conv2d(  8, 16, 3, padding=1, stride=2), nn.ReLU(), # 7
+        nn.Conv2d( 16, 32, 3, padding=1, stride=2), nn.ReLU(), # 4
+        nn.Con

@@ -1,0 +1,16 @@
+```python
+    import tensorflow as tf
+    import tensorflow_js as tfjs
+    import json
+
+    # Load a TensorFlow model
+    model = tf.keras.models.load_model('my_model.h5')
+
+    # Convert the model to TensorFlow.js format
+    tfjs.converters.convert_keras_model(model)
+
+    # Save the model to a JSON file
+    model_json = model.to_json()
+    with open("model.json", "w") as json_file:
+        json_file.write(model_json)
+    ```

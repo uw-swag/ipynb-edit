@@ -1,0 +1,38 @@
+```python
+    # @title Authorization Form
+    ACCOUNT_ID = "ACCOUNT_ID"  # @param {type:"string"}
+    AUTH_TOKEN = "AUTH_TOKEN"  # @param {type:"string"}
+    MATERIALS_PROJECT_API_KEY = "MATERIALS_PROJECT_API_KEY"  # @param {type:"string"}
+    ORGANIZATION_ID = "ORGANIZATION_ID"  # @param {type:"string"}
+
+    import os
+    import sys 
+
+    if "COLAB_JUPYTER_IP" in os.environ:
+        os.environ.update(
+            dict(
+                ACCOUNT_ID=ACCOUNT_ID,
+                AUTH_TOKEN=AUTH_TOKEN,
+                MATERIALS_PROJECT_API_KEY=MATERIALS_PROJECT_API_KEY,
+                ORGANIZATION_ID=ORGANIZATION_ID,
+            )
+        )
+
+        !GIT_BRANCH="dev"; export GIT_BRANCH; curl -s "https://raw.githubusercontent.com/Exabyte-io/api-examples/${GIT_BRANCH}/scripts/env.sh" | bash
+    
+    if sys.platform == "emscripten":
+        apiConfig = data_from_host.get("apiConfig")
+        os.environ.update(data_from_host.get("environ", {}))
+        os.environ.update(
+            dict(
+                ACCOUNT_ID=apiConfig.get("accountId"),
+                AUTH_TOKEN=apiConfig.get("authToken"),
+                MATERIALS_PROJECT_API_KEY=MATERIALS_PROJECT_API_KEY,
+                ORGANIZATION_ID=apiConfig.get("organizationId") or "",
+            )
+        )
+    
+        import micropip
+        await micropip.install('mat3ra-api-examples', deps=False)
+        await micropip.install("exabyte-api-client")
+        from utils.jupyterlite import

@@ -1,0 +1,48 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import classification_report
+    from sklearn.metrics import confusion_matrix
+    from sklearn import preprocessing
+    from sklearn.model_selection import GridSearchCV
+    from time import time
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Preprocess the data
+    # This step depends on the nature of your data and the preprocessing steps you want to apply
+
+    # Split the data into features and target variable
+    X = df.drop("target_column", axis=1)
+    y = df["target_column"]
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Define the model
+    model = DecisionTreeClassifier()
+
+    # Fit the model
+    start_time = time()
+    model.fit(X_train, y_train)
+    print("Model Inference Time: ", time() - start_time)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print("Accuracy: ", accuracy_score(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Parameter tuning for the model
+    parameters = {'max_depth': range(1, 10), 'min_samples_split': range(10, 100, 10)}
+    clf = GridSearchCV(model, parameters, cv=5)
+    clf.fit(X_train, y_train)
+    print("Best parameters: ", clf.best_params_)
+
+    # Predict the model with the best parameters

@@ -1,0 +1,62 @@
+```python
+    ## Update EDA Notebook and Slides
+
+    ### Update EDA Notebook
+
+    #### Step 1: Import Necessary Libraries
+    Import necessary libraries such as pandas, numpy, matplotlib, seaborn, and sklearn.
+
+    ```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    ```
+
+    #### Step 2: Load the Dataset
+    Load the dataset using pandas' `read_csv()` function.
+
+    ```python
+    df = pd.read_csv('your_dataset.csv')
+    ```
+
+    #### Step 3: Data Understanding
+    Perform initial data understanding by checking the first few rows of the dataset, its shape, and its data types.
+
+    ```python
+    print(df.head())
+    print(df.shape)
+    print(df.dtypes)
+    ```
+
+    #### Step 4: Data Cleaning
+    Clean the data by handling missing values, outliers, and incorrect data types.
+
+    ```python
+    df = df.dropna()  # Drop missing values
+    df = df[(np.abs(stats.zscore(df)) < 3).all(axis=1)]  # Remove outliers
+    ```
+
+    #### Step 5: Data Analysis
+    Perform exploratory data analysis (EDA) to understand the patterns, trends, and correlations in the data.
+
+    ```python
+    # Plotting histograms
+    df.hist(bins=50, figsize=(20,15))
+    plt.show()
+
+    # Plotting pairwise relationships
+    sns.pairplot(df)
+    plt.show()
+
+    # Correlation matrix
+    corr = df.corr()
+    sns.heatmap(corr, annot=True, cmap='coolwarm')
+    plt.show()
+    ```
+
+    ### Update Slides
+
+    #### Introduction
+    This section should introduce the purpose of the

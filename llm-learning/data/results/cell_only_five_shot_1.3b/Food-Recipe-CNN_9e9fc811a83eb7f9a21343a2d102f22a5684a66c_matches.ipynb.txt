@@ -1,0 +1,65 @@
+
+    '''
+    # code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir(os.path.join('..', 'notebook_format'))
+    from formats import load_style
+    load_style(css_style = 'custom2.css', plot_style = False)
+    os.chdir(path)
+
+    # 1. magic to print version
+    # 2. magic so that the notebook will reload external python modules
+    %load_ext watermark
+    %load_ext autoreload
+    %autoreload 2
+
+    import numpy as np
+    import pandas as pd
+    from math import ceil
+    from tqdm import trange
+    from subprocess import call
+    from scipy.sparse import csr_matrix, dok_matrix
+
+    %watermark -a 'Ethen' -d -t -v -p numpy,pandas,sklearn,tqdm,scipy
+    def dcg_at_k(score, k = None):
+        """
+        discounted cumulative gain (dcg)
+        
+        Parameters
+        ----------
+        score : 1d nd.array
+            ranking/relevance score
+        
+        k : int, default None
+            evaluate the measure for the top-k ranking score,
+            default None evaluates all
+        
+        Returns
+        -------
+        dcg: float
+        """
+        if k is not None:
+            score = score[:k]
+
+        gain = 2 ** score - 1
+        discounts = np.log2(np.arange(2, score.size + 2))
+        dcg = np.sum(gain / discounts)
+        return dcg
+
+
+    score = np.array([2, 0, 3, 2])
+    dcg_at_k(score)
+
+    '''
+    '''
+    ]
+
+    ### Response:
+    '''
+    # code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert

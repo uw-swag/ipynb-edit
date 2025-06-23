@@ -1,0 +1,19 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    def plot_drift(df, column):
+        fig, ax = plt.subplots(1, 2, figsize=(14, 7))
+
+        sns.histplot(df[column], ax=ax[0])
+        ax[0].set_title('Histogram of the column')
+
+        sns.kdeplot(df[column], ax=ax[1])
+        ax[1].set_title('Density plot of the column')
+
+        plt.tight_layout()
+        plt.show()
+
+    # Example usage:
+    plot_drift(df, 'column_name')
+    ```

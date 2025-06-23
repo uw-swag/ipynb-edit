@@ -1,0 +1,63 @@
+```python
+    from evidently.dashboard import ColourSchema
+    from evidently.dashboard.tabs.data_drift import DataDriftTab
+
+    # Define a ColourSchema
+    colour_schema = ColourSchema(
+        drift_color="blue",
+        normal_color="green",
+        missing_color="red",
+        categorical_threshold="blue",
+        numerical_threshold="red",
+    )
+
+    # Create a DataDriftTab
+    data_drift_tab = DataDriftTab(
+        title="Data Drift",
+        colour_schema=colour_schema,
+    )
+
+    # Add the DataDriftTab to the dashboard
+    dashboard = Dashboard(tabs=[data_drift_tab])
+
+    # Generate the report
+    report = dashboard.generate_report(data_drift_tab.calculate(data_drift_tab.observe(data)))
+
+    # Print the report
+    print(report)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added examples for ColourSchema & DataDrift options"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from evidently.dashboard import ColourSchema
+    from evidently.dashboard.tabs.data_drift import DataDriftTab
+
+    # Define a ColourSchema
+    colour_schema = ColourSchema(
+        drift_color="blue",
+        normal_color="green",
+        missing_color="red",
+        categorical_threshold="blue",
+        numerical_threshold="red",
+    )
+
+    # Create a DataDriftTab
+    data_drift_tab = DataDriftTab(
+        title="Data Drift",
+        colour_schema=colour_schema,
+    )
+
+    # Add the DataDriftTab to the dashboard
+    dashboard = Dashboard(tabs=[data_drift_tab])
+
+    # Generate the report
+    report = dashboard.generate_report(data_drift_tab.calculate(data_drift_tab.ob

@@ -1,0 +1,35 @@
+
+The code you provided is a part of a Jupyter notebook. The commit message "remove label_name from dataset constructor (#456)" suggests that the label_name variable is being removed from the dataset constructor. This is a common practice in machine learning to avoid confusion and to ensure that the label is not included in the dataset.
+
+However, the code you provided is not complete and does not include the entire process of removing the label_name from the dataset. It only includes the part of the code that reads the dataset and encodes the label.
+
+Here is the complete code:
+
+```python
+import pandas as pd
+from urllib.request import urlopen
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
+
+name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+features = [l.split(':')[0] for l in lines]
+label_name = 'income'
+
+cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
+
+train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
+                       names=features + [label_name])
+test_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
+                      names=features + [label_name], skiprows=1)
+
+test_df[label_name] = test_df [label_name].str[:-1]
+
+encoder = LabelEncoder()
+encoder.fit(train_df[label_name])
+train_df[label_name] = encoder.transform(train_df[label_name])
+test_df[label_name] = encoder.transform(test_df[label_name])
+```
+
+This code reads the dataset, enc

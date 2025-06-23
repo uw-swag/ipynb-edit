@@ -1,0 +1,50 @@
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing the LSTM model"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense
+    <\Cell_0>
+    <Cell_1>
+    def LSTM_Model(X_train, y_train, X_test, y_test, results):
+        model = Sequential()
+        model.add(LSTM(50, activation='relu', input_shape=(X_train.shape[1], 1)))
+        model.add(Dense(1))
+        model.compile(optimizer='adam', loss='mean_squared_error')
+        model.fit(X_train, y_train, epochs=100, batch_size=1, verbose=1)
+        predictions = model.predict(X_test)
+        results.loc['LSTM', :] = classificationPerformanceIndexes (y_test, predictions)
+    <\Cell_1>
+    <Cell_2>
+    # Code for LSTM model implementation goes here
+    <\Cell_2>
+    '''
+
+    ### Response:
+    
+    '''
+    # Code for LSTM model implementation goes here
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing the LSTM model"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense
+    <\Cell_0>
+    <Cell_1>
+    def LSTM_Model(X_train, y_train, X_test, y_test, results):
+        model = Sequential()
+        model.add(LSTM(50, activation='relu', input_shape=(X_train.shape[1], 1)))
+        model.add(Dense(1))
+        model.compile(optimizer='adam', loss='

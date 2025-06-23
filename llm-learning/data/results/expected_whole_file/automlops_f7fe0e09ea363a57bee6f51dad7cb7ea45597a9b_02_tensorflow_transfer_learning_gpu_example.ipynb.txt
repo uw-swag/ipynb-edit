@@ -1,0 +1,249 @@
+<Cell_0>
+# Copyright 2024 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+<\Cell_0>
+<Cell_1>
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+<\Cell_1>
+<Cell_2>
+!pip3 install google-cloud-automlops --user
+<\Cell_2>
+<Cell_3>
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+<\Cell_3>
+<Cell_4>
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+
+BUCKET_NAME = 'automlops-sandbox-bucket'  # @param {type:"string"}
+BUCKET_URI = f'gs://{BUCKET_NAME}'
+MODEL_DIR = BUCKET_URI + '/tensorflow_model'
+
+TRAINING_IMAGE = 'us-docker.pkg.dev/vertex-ai/training/tf-gpu.2-11.py310:latest' # includes required cuda packages
+SERVING_IMAGE = 'us-docker.pkg.dev/vertex-ai/prediction/tf-gpu.2-11.py310:latest'
+<\Cell_4>
+<Cell_5>
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+<\Cell_5>
+<Cell_6>
+! gcloud config set project $PROJECT_ID
+<\Cell_6>
+<Cell_7>
+MODEL_ID = 'cassava-resnet-50'
+<\Cell_7>
+<Cell_8>
+from kfp.v2 import dsl
+from kfp.v2.dsl import Metrics, Model, Output
+from google_cloud_automlops import AutoMLOps
+<\Cell_8>
+<Cell_9>
+AutoMLOps.clear_cache()
+<\Cell_9>
+<Cell_10>
+@dsl.component(
+    packages_to_install=[
+        'tensorflow',
+        'tensorflow_datasets',
+        'opencv-python-headless'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/custom_train_model.yaml',
+)
+def custom_train_model(
+    metrics: Output[Metrics],
+    model_dir: str,
+    output_model: Output[Model],
+    lr: float = 0.001,
+    epochs: int = 10,
+    steps: int = 200,
+    distribute: str = 'single'
+):
+    import faulthandler
+    import os
+    import sys
+
+    import tensorflow as tf
+    import tensorflow_datasets as tfds
+    from tensorflow.python.client import device_lib
+
+    faulthandler.enable()
+    tfds.disable_progress_bar()
+
+    print('Component start')
+
+    print(f'Python Version = {sys.version}')
+    print(f'TensorFlow Version = {tf.__version__}')
+    print(f'''TF_CONFIG = {os.environ.get('TF_CONFIG', 'Not found')}''')
+    print(f'DEVICES = {device_lib.list_local_devices()}')
+
+    # Single Machine, single compute device
+    if distribute == 'single':
+        if tf.test.is_gpu_available():
+            strategy = tf.distribute.OneDeviceStrategy(device='/gpu:0')
+        else:
+            strategy = tf.distribute.OneDeviceStrategy(device='/cpu:0')
+    # Single Machine, multiple compute device
+    elif distribute == 'mirror':
+        strategy = tf.distribute.MirroredStrategy()
+    # Multiple Machine, multiple compute device
+    elif distribute == 'multi':
+        strategy = tf.distribute.experimental.MultiWorkerMirroredStrategy()
+
+    # Multi-worker configuration
+    print(f'num_replicas_in_sync = {strategy.num_replicas_in_sync}')
+
+    # Preparing dataset
+    BUFFER_SIZE = 10000
+    BATCH_SIZE = 64
+
+    def preprocess_data(image, label):
+        '''Resizes and scales images.'''
+
+        image = tf.image.resize(image, (300,300))
+        return tf.cast(image, tf.float32) / 255., label
+
+    def create_dataset(batch_size: int):
+        '''Loads Cassava dataset and preprocesses data.'''
+
+        data, info = tfds.load(name='cassava', as_supervised=True, with_info=True)
+        number_of_classes = info.features['label'].num_classes
+        train_data = data['train'].map(preprocess_data,
+                                       num_parallel_calls=tf.data.experimental.AUTOTUNE)
+        train_data  = train_data.cache().shuffle(BUFFER_SIZE).repeat()
+        train_data  = train_data.batch(batch_size)
+        train_data  = train_data.prefetch(tf.data.experimental.AUTOTUNE)
+
+        # Set AutoShardPolicy
+        options = tf.data.Options()
+        options.experimental_distribute.auto_shard_policy = tf.data.experimental.AutoShardPolicy.DATA
+        train_data = train_data.with_options(options)
+
+        return train_data, number_of_classes
+
+    # Build the ResNet50 Keras model    
+    def create_model(number_of_classes: int, lr: int = 0.001):
+        '''Creates and compiles pretrained ResNet50 model.'''
+
+        base_model = tf.keras.applications.ResNet50(weights='imagenet', include_top=False)
+        x = base_model.output
+        x = tf.keras.layers.GlobalAveragePooling2D()(x)
+        x = tf.keras.layers.Dense(1016, activation='relu')(x)
+        predictions = tf.keras.layers.Dense(number_of_classes, activation='softmax')(x)
+        model = tf.keras.Model(inputs=base_model.input, outputs=predictions)
+
+        model.compile(
+            loss=tf.keras.losses.sparse_categorical_crossentropy,
+            optimizer=tf.keras.optimizers.Adam(lr),
+            metrics=['accuracy'])
+        return model
+
+    # Train the model
+    NUM_WORKERS = strategy.num_replicas_in_sync
+    # Here the batch size scales up by number of workers since
+    # `tf.data.Dataset.batch` expects the global batch size.
+    GLOBAL_BATCH_SIZE = BATCH_SIZE * NUM_WORKERS
+    train_dataset, number_of_classes = create_dataset(GLOBAL_BATCH_SIZE)
+
+    with strategy.scope():
+        # Creation of dataset, and model building/compiling need to be within `strategy.scope()`.
+        resnet_model = create_model(number_of_classes, lr)
+
+    h = resnet_model.fit(x=train_dataset, epochs=epochs, steps_per_epoch=steps)
+    acc = h.history['accuracy'][-1]
+    resnet_model.save(model_dir)
+    
+    output_model.path = model_dir
+    metrics.log_metric('accuracy', (acc * 100.0))
+    metrics.log_metric('framework', 'Tensorflow')
+<\Cell_10>
+<Cell_11>
+@AutoMLOps.pipeline(name='tensorflow-gpu-example')
+def pipeline(
+    project_id: str,
+    model_dir: str,
+    lr: float,
+    epochs: int,
+    steps: int,
+    serving_image: str,
+    distribute: str,
+):
+    from google_cloud_pipeline_components.types import artifact_types
+    from google_cloud_pipeline_components.v1.model import ModelUploadOp
+    from kfp.v2.components import importer_node
+
+    custom_train_model_task = custom_train_model(
+        model_dir=model_dir,
+        lr=lr,
+        epochs=epochs,
+        steps=steps,
+        distribute=distribute
+    )
+
+    unmanaged_model_importer = importer_node.importer(
+        artifact_uri=model_dir,
+        artifact_class=artifact_types.UnmanagedContainerModel,
+        metadata={
+            'containerSpec': {
+                'imageUri': serving_image
+            }
+        },
+    )
+
+    model_upload_op = ModelUploadOp(
+        project=project_id,
+        display_name='tensorflow_gpu_example',
+        unmanaged_container_model=unmanaged_model_importer.outputs['artifact'],
+    )
+    model_upload_op.after(custom_train_model_task)
+<\Cell_11>
+<Cell_12>
+pipeline_params = {
+    'project_id': PROJECT_ID,
+    'model_dir': MODEL_DIR,
+    'lr': 0.01,
+    'epochs': 10,
+    'steps': 200,
+    'serving_image': SERVING_IMAGE,
+    'distribute': 'single'
+}
+<\Cell_12>
+<Cell_13>
+AutoMLOps.launchAll(project_id=PROJECT_ID, 
+                    pipeline_params=pipeline_params, 
+                    use_ci=True,
+                    schedule_pattern='59 11 * * 0', # retrain every Sunday at Midnight
+                    base_image=TRAINING_IMAGE,
+                    naming_prefix=MODEL_ID,
+                    custom_training_job_specs = [{
+                       'component_spec': 'custom_train_model',
+                       'display_name': 'train-model-accelerated',
+                       'machine_type': 'a2-highgpu-1g',
+                       'accelerator_type': 'NVIDIA_TESLA_A100',
+                       'accelerator_count': 1
+                    }]
+)
+<\Cell_13>
+<Cell_14>
+
+<\Cell_14>

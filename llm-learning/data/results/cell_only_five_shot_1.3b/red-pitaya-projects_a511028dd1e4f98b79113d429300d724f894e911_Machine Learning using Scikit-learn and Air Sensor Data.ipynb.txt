@@ -1,0 +1,33 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.io import loadmat
+
+    # Loading the sensor data
+    data = loadmat('sensor_data.mat')
+
+    # Extracting the sensor data
+    sensor_data = data['sensor_data']
+
+    # Plotting the sensor data
+    plt.figure(figsize=(10, 5))
+    plt.plot(sensor_data)
+    plt.title('Sensor Data')
+    plt.xlabel('Time')
+    plt.ylabel('Sensor Value')
+    plt.show()
+
+    # Adding more sensor data
+    additional_sensor_data = np.random.normal(0, 1, 100)
+    sensor_data = np.concatenate([sensor_data, additional_sensor_data])
+
+    # Plotting the updated sensor data
+    plt.figure(figsize=(10, 5))
+    plt.plot(sensor_data)
+    plt.title('Updated Sensor Data')
+    plt.xlabel('Time')
+    plt.ylabel('Sensor Value')
+    plt.show()
+    ```
+    This code will load a sensor data file, plot the sensor data, add some additional sensor data, and then plot the updated sensor data.

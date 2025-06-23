@@ -1,0 +1,31 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import AdaBoostClassifier
+    from autolearn.baselines import SimpleModelComparison
+    from autolearn.dataset import Dataset
+
+    np.random.seed(42)
+
+    iris = load_iris(as_frame=True)
+    x = iris.data
+    y = iris.target
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                       features=iris.feature_names,
+                       label_name='target')
+    val_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                     features=iris.feature_names,
+                     label_name='target')
+    clf = AdaBoostClassifier()
+    _ = clf.fit(x_train, y_train)
+    check = SimpleModelComparison(simple_model_type='random')
+    check.run(train_ds, val_ds, clf)
+    check = SimpleModelComparison(simple_model_type='constant')
+    check.run(train_ds, val_ds, clf)
+    ```
+
+    This code is a simple example of using the AdaBoostClassifier from sklearn, and the SimpleModelComparison from autolearn. The code first loads the iris dataset, splits it into a training set and a test set, trains a model on the training set, and then compares the model's performance with two different simple models: a random model and a constant model.

@@ -1,0 +1,15 @@
+from evidently.dashboard import Dashboard
+from evidently.tabs import ProbClassificationPerformanceTab
+DATA_DIR = "../../datasets/ibm-hr-analytics/" #full path to directory with the input data 
+              
+dataset_path = os.path.join(DATA_DIR, "WA_Fn-UseC_-HR-Employee-Attrition.csv")
+dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab])
+dashboard.calculate(rf_merged_train, rf_merged_test, column_mapping = column_mapping)
+dashboard.show()
+#dashboard.save('ibm_hr_attrition_baseline_performance.html')
+dashboard.calculate(cat_merged_train, cat_merged_test, column_mapping = column_mapping)
+dashboard.show()
+#dashboard.save('ibm_hr_attrition_better_model_performance.html')
+dashboard.calculate(rf_merged_test, cat_merged_test, column_mapping = column_mapping)
+dashboard.show()
+#dashboard.save('ibm_hr_attrition_model_comparison.html')

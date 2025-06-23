@@ -1,0 +1,18 @@
+```python
+    from data import load_scar, load_sar, load_pg
+
+    def change_data_distribution(data, distribution):
+        if distribution == 'scar':
+            return load_scar()
+        elif distribution == 'sar':
+            return load_sar()
+        elif distribution == 'pg':
+            return load_pg()
+        else:
+            raise ValueError("Invalid distribution. Please choose from 'scar', 'sar', or 'pg'.")
+
+    train, valid, test, c = load_pg()
+
+    # Now you can change the data distribution by calling the function like this:
+    train, valid, test, c = change_data_distribution(train, 'scar')
+    ```

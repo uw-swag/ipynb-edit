@@ -1,0 +1,34 @@
+```python
+    import os
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy.io import wavfile
+
+    # path to dataset
+    path = '../mnt/data/INT/free-spoken-digit-dataset/recordings/'
+
+    # list of all wav files in the directory
+    wav_files = [f for f in os.listdir(path) if f.endswith('.wav')]
+
+    # empty list to store the data
+    X = []
+
+    # iterate over all wav files
+    for wav_file in wav_files:
+        # read the wav file
+        rate, data = wavfile.read(os.path.join(path, wav_file))
+
+        # calculate the amplitude
+        amplitude = np.abs(data)
+
+        # add the amplitude to the list
+        X.append(amplitude)
+
+    # plot the histogram
+    plt.hist(np.hstack(X), bins=500);
+    plt.xlabel('amplitude')
+    plt.ylabel('count')
+    plt.xlim([-.2,.2])
+    plt.grid()
+    plt.show()
+    ```

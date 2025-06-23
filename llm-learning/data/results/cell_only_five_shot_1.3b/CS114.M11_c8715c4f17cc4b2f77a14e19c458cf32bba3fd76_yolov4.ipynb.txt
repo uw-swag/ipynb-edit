@@ -1,0 +1,20 @@
+```python
+    # Load the pre-trained Keras model, ensuring the head FC layer sets are left off
+    model = load_model('yolov4.weights.h5')
+
+    # Load the pre-trained model's configuration file
+    with open('yolov4.cfg') as f:
+        config = f.read()
+
+    # We need to compile our model a second time, this time specifying the optimizer and the
+    # loss function. Even though we are using a config file, we can also specify the 
+    # optimizer and loss function manually.
+    model.compile(optimizer = Adam(), loss = 'objective_function', config = config)
+
+    # Then we can train our model to the same place but with a different 
+    # configuration file
+    model.fit(X_train, y_train, validation_data = (X_test, y_test), batch_size = 10, epochs = 10)
+
+    # Save the model
+    model.save('yolov4_trained.h5')
+    ```

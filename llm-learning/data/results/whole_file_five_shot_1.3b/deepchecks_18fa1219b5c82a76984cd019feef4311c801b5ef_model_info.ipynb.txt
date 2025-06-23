@@ -1,0 +1,23 @@
+```python
+    <Cell_0>
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_iris
+
+clf = AdaBoostClassifier(learning_rate=1.2)
+iris = load_iris()
+X = iris.data
+Y = iris.target
+clf.fit(X, Y)
+<\Cell_0>
+<Cell_1>
+from deepchecks.checks.overview import ModelInfo
+
+ModelInfo().run(clf)
+<\Cell_1>
+
+    '''
+    The code above is an example of how to use the AdaBoostClassifier from sklearn and the ModelInfo check from deepchecks to analyze a model.
+
+    The first code cell is a simple example of how to train an AdaBoostClassifier on the iris dataset from sklearn. The second code cell is an example of how to use the ModelInfo check to analyze the trained model.
+
+    Please note that the ModelInfo check is a part of the deepchecks library and may not be available in all environments.

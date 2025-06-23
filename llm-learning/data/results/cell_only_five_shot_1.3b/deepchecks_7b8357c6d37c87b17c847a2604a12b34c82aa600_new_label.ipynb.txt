@@ -1,0 +1,25 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import make_blobs
+    from sklearn.cluster import KMeans
+
+    # Generate data
+    X, y = make_blobs(n_samples=1000, centers=3, n_features=2, random_state=42)
+
+    # Initialize KMeans
+    kmeans = KMeans(n_clusters=3, random_state=42)
+
+    # Fit KMeans
+    kmeans.fit(X)
+
+    # Plotting the clusters
+    plt.scatter(X[:, 0], X[:, 1], c=kmeans.labels_)
+    plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=300, c='red')
+    plt.show()
+
+    # MLCl92 testing nb (#78)
+    # Testing the notebook
+    print("MLC 92 testing nb (#78)")
+    ```

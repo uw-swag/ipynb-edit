@@ -1,0 +1,95 @@
+#Libraries
+import numpy as np
+import pandas as pd
+import random
+from scipy.special import expit #Vectorized sigmoid function
+import scipy.optimize
+from scipy.optimize import minimize
+#Reading data. Input the path to the files instead of "../input".
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+train['hair_soul'] = train['hair_length'] * train['has_soul']
+train['hair_bone'] = train['hair_length'] * train['bone_length']
+test['hair_soul'] = test['hair_length'] * test['has_soul']
+test['hair_bone'] = test['hair_length'] * test['bone_length']
+train['hair_soul_bone'] = train['hair_length'] * train['has_soul'] * train['bone_length']
+test['hair_soul_bone'] = test['hair_length'] * test['has_soul'] * test['bone_length']
+#Turning data into numpy arrays and dropping unnecesary values.
+X = np.array(train.drop(['id', 'color', 'type'], axis=1))
+X = np.insert(X,0,1,axis=1)
+X_test = np.array(test.drop(['id', 'color'], axis=1))
+X_test = np.insert(X_test,0,1,axis=1)
+Y_train = np.array((pd.get_dummies(train['type'], drop_first=False)).astype(float))
+#I'll need this for predictions.
+monsters = (pd.get_dummies(train['type'], drop_first=False)).columns
+hidden_size = 12
+learning_rate = 1
+params = (np.random.random(size=hidden_size * (X.shape[1]) + Y_train.shape[1] * (hidden_size + 1)) - 0.5)
+def forward_propagate(X, theta1, theta2):
+    z2 = X * theta1.T
+    a2 = np.insert(expit(z2), 0, 1, axis=1) 
+    a3 = expit(a2 * theta2.T)
+    return z2, a2, a3
+def back_propagate(X, y, theta1, theta2, z2, a2, a3):
+    D1 = np.zeros(theta1.shape)
+    D2 = np.zeros(theta2.shape)
+    
+    for t in range(len(X)):
+        z2t = z2[t,:]
+        
+        d3t = a3[t,:] - y[t,:]
+        z2t = np.insert(z2t, 0, values=1)
+        d2t = np.multiply((theta2.T * d3t.T).T, np.multiply(expit(z2t), (1 - expit(z2t))))
+        
+        D1 += (d2t[:,1:]).T * X[t,:]
+        D2 += d3t.T * a2[t,:]
+        
+    D1 = D1 / len(X)
+    D2 = D2 / len(X)
+    
+    D1[:,1:] += (theta1[:,1:] * learning_rate) / len(X)
+    D2[:,1:] += (theta2[:,1:] * learning_rate) / len(X)
+    return D1, D2
+def cost(params, X, y, learningRate):  
+    X = np.matrix(X)
+    y = np.matrix(y)
+    theta1 = np.matrix(np.reshape(params[:hidden_size * (X.shape[1])], (hidden_size, (X.shape[1]))))
+    theta2 = np.matrix(np.reshape(params[hidden_size * (X.shape[1]):], (Y_train.shape[1], (hidden_size + 1))))
+
+    z2, a2, a3 = forward_propagate(X, theta1, theta2)
+    J = 0
+    for i in range(len(X)):
+        first_term = np.multiply(-y[i,:], np.log(a3[i,:]))
+        second_term = np.multiply((1 - y[i,:]), np.log(1 - a3[i,:]))
+        J += np.sum(first_term - second_term)
+    
+    J = (J + (float(learningRate) / 2) * (np.sum(np.power(theta1[:,1:], 2)) + np.sum(np.power(theta2[:,1:], 2)))) / len(X)
+    
+    #Backpropagation
+    D1, D2 = back_propagate(X, y, theta1, theta2, z2, a2, a3)
+    
+    #Unravel the gradient into a single array.
+    grad = np.concatenate((np.ravel(D1), np.ravel(D2)))
+    return J, grad
+#Simply to see that this works.
+J, grad = cost(params, X, Y_train, 1)
+J, grad.shape
+#Minimizing function.
+fmin = minimize(cost, x0=params, args=(X, Y_train, learning_rate), method='TNC', jac=True, options={'maxiter': 600})
+#Get the optimized weights and use them to get output. 
+theta1 = np.matrix(np.reshape(fmin.x[:hidden_size * (X.shape[1])], (hidden_size, (X.shape[1]))))
+theta2 = np.matrix(np.reshape(fmin.x[hidden_size * (X.shape[1]):], (Y_train.shape[1], (hidden_size + 1))))
+z2, a2, a3 = forward_propagate(X, theta1, theta2)
+#Prediction is in form of probabilities for each class. Get the class with highest probability.
+def pred(a):
+    for i in range(len(a)):
+        yield monsters[np.argmax(a[i])]
+prediction = list(pred(a3))
+#Accuracy on training dataset.
+accuracy = sum(prediction == train['type']) / len (train['type'])
+print('accuracy = {0}%'.format(accuracy * 100))
+#Predict on test set.
+z2, a2, a3_test = forward_propagate(X_test, theta1, theta2)
+prediction_test = list(pred(a3_test))
+submission = pd.DataFrame({'id':test['id'], 'type':prediction_test})
+submission.to_csv('GGG_submission.csv', index=False)

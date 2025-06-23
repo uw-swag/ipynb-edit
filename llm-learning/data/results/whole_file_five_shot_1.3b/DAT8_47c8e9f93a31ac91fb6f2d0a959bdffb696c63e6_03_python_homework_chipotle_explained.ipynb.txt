@@ -1,0 +1,62 @@
+```python
+    #!/usr/bin/env python3
+
+    # The following code is a solution to the Python Chipotle problem.
+    # The problem is described in the problem statement.
+
+    import csv
+    import re
+
+    def parse_file(file_name):
+        with open(file_name, 'r') as file:
+            csv_reader = csv.reader(file)
+            header = next(csv_reader)
+            data = []
+            for row in csv_reader:
+                # Parse the item price
+                item_price = re.search(r'\d+\.\d+', row[2])
+                if item_price:
+                    item_price = float(item_price.group(0))
+                else:
+                    item_price = 0.0
+
+                # Parse the item quantity
+                item_quantity = re.search(r'\d+', row[3])
+                if item_quantity:
+                    item_quantity = int(item_quantity.group(0))
+                else:
+                    item_quantity = 0
+
+                # Parse the item name
+                item_name = row[1]
+
+                # Parse the order id
+                order_id = row[0]
+
+                # Append the data to the list
+                data.append({
+                    'order_id': order_id,
+                    'item_name': item_name,
+                    'item_price': item_price,
+                    'item_quantity': item_quantity,
+                })
+
+        return data
+
+    def calculate_total(data):
+        total = 0.0
+        for item in data:
+            total += item['item_price'] * item['item_quantity']
+        return total
+
+    def main():
+        data = parse_file('chipotle.csv')
+        total = calculate_total(data)
+        print(f'The total is: ${total:.2f}')
+
+    if __name__ == '__main__':
+        main()
+    ```
+    '''
+    }
+    ```

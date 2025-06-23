@@ -1,0 +1,54 @@
+#evaluate data drift with Evidently Profile
+def detect_dataset_drift(reference, production, column_mapping, confidence=0.95, threshold=0.5, get_ratio=False):
+    """
+    Returns True if Data Drift is detected, else returns False.
+    If get_ratio is True, returns ration of drifted features.
+    The Data Drift detection depends on the confidence level and the threshold.
+    For each individual feature Data Drift is detected with the selected confidence (default value is 0.95).
+    Data Drift for the dataset is detected if share of the drifted features is above the selected threshold (default value is 0.5).
+    """
+    
+    data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+    data_drift_profile.calculate(reference, production, column_mapping=column_mapping)
+    report = data_drift_profile.json()
+    json_report = json.loads(report)
+
+    drifts = []
+    num_features = column_mapping.numerical_features if column_mapping.numerical_features else []
+    cat_features = column_mapping.categorical_features if column_mapping.categorical_features else []
+    for feature in num_features + cat_features:
+        drifts.append(json_report['data_drift']['data']['metrics'][feature]['p_value']) 
+        
+    n_features = len(drifts)
+    n_drifted_features = sum([1 if x<(1. - confidence) else 0 for x in drifts])
+    
+    if get_ratio:
+        return n_drifted_features/n_features
+    else:
+        return True if n_drifted_features/n_features >= threshold else False
+
+#evaluate data drift with Evidently Profile
+def detect_features_drift(reference, production, column_mapping, confidence=0.95, threshold=0.5, get_pvalues=False):
+    """
+    Returns 1 if Data Drift is detected, else returns 0. 
+    If get_pvalues is True, returns p-value for each feature.
+    The Data Drift detection depends on the confidence level and the threshold.
+    For each individual feature Data Drift is detected with the selected confidence (default value is 0.95).
+    """
+    
+    data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+    data_drift_profile.calculate(reference, production, column_mapping=column_mapping)
+    report = data_drift_profile.json()
+    json_report = json.loads(report)
+    
+    drifts = []
+    num_features = column_mapping.numerical_features if column_mapping.numerical_features else []
+    cat_features = column_mapping.categorical_features if column_mapping.categorical_features else []
+    for feature in num_features + cat_features:
+        p_value = json_report['data_drift']['data']['metrics'][feature]['p_value']
+        if get_pvalues:
+            drifts.append((feature, p_value))
+        else:
+            drifts.append((feature, True if p_value <(1. - confidence) else False))
+             
+    return drifts

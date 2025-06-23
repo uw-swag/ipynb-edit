@@ -1,0 +1,54 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Checking the first few rows of the dataset
+    print(df.head())
+
+    # Checking the basic information of the dataset
+    print(df.info())
+
+    # Checking the statistical summary of the dataset
+    print(df.describe())
+
+    # Checking for missing values
+    print(df.isnull().sum())
+
+    # Checking the distribution of the target variable
+    sns.countplot(df['target'])
+    plt.show()
+
+    # Checking the correlation between different features
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Checking the distribution of the target variable
+    sns.distplot(df['target'])
+    plt.show()
+
+    # Checking the distribution of the categorical features
+    df.select_dtypes(include=['object']).nunique().plot(kind='bar')
+    plt.show()
+
+    # Checking the distribution of the numerical features
+    df.select_dtypes(include=['int64', 'float64']).hist(bins=50)
+    plt.show()
+
+    # Checking the distribution of the numerical features
+    df.select_dtypes(include=['int64', 'float64']).plot(kind='box')
+    plt.show()
+
+    # Checking the distribution of the numerical features
+    df.select_dtypes(include=['int64', 'float64']).plot(kind='hist')
+    plt.show()
+
+    # Checking the distribution of the numerical features
+    df.select_dtypes(include=['int64', 'float64']).plot(kind='density')
+    plt.show()

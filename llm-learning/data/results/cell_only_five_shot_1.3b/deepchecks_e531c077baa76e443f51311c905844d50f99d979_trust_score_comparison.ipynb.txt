@@ -1,0 +1,19 @@
+```python
+    # Calculate the lower and upper bounds for the trust score
+    lower_bound = trust_scores.quantile(0.05)
+    upper_bound = trust_scores.quantile(0.95)
+
+    # Create a mask to exclude the upper and lower bounds
+    mask = (trust_scores >= lower_bound) & (trust_scores <= upper_bound)
+
+    # Plot the trust score with the mask
+    trust_scores[mask].plot(kind='hist', alpha=0.5, bins=30, color='blue')
+
+    # Add labels and title
+    plt.xlabel('Trust Score')
+    plt.ylabel('Frequency')
+    plt.title('Trust Score Distribution (Excluding Upper and Lower 5%)')
+
+    # Show the plot
+    plt.show()
+    ```

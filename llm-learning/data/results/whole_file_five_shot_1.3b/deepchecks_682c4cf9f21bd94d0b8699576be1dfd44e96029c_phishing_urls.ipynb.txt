@@ -1,0 +1,49 @@
+```python
+    ## Phishing URL Dataset
+    ## This dataset is used for the demonstration of how to create a dataset in Python using the Kaggle API.
+    ## The dataset is a CSV file with two columns: 'url' and 'label'. The 'url' column contains the URLs to be tested, and the 'label' column contains the expected results (1 for phishing, 0 for not phishing).
+    ## The dataset is available at: https://www.kaggle.com/datasnaek/phishing-url-dataset
+
+    import pandas as pd
+
+    # Load the dataset
+    data = pd.read_csv('https://raw.githubusercontent.com/datasnaek/datafiles/master/phishing.csv')
+
+    # Display the first few rows of the dataset
+    print(data.head())
+
+    # Display the statistics of the dataset
+    print(data.describe())
+
+    # Display the distribution of the labels
+    print(data['label'].value_counts())
+    ```
+
+    ## Phishing URL Notebook
+    ## This notebook demonstrates how to use the Kaggle API to load and analyze the phishing URL dataset.
+
+    ### Code:
+    ```python
+    # Import necessary libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # Load the dataset
+    data = pd.read_csv('https://raw.githubusercontent.com/datasnaek/datafiles/master/phishing.csv')
+
+    # Display the first few rows of the dataset
+    print(data.head())
+
+    # Display the statistics of the dataset
+    print(data.describe())
+
+    # Display the distribution of the labels
+    print(data['label'].value_counts())
+
+    # Plot the distribution of the labels
+    data['label'].value_counts().plot(kind='bar')
+    plt.show()
+    ```
+    ## Note:
+    ## The Kaggle API is used to load the dataset. The notebook demonstrates how to use the Kaggle API to load and analyze the phishing URL dataset.
+    ```

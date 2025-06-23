@@ -1,0 +1,43 @@
+```python
+    import folium
+
+    # Create a map centered at the coordinates of New York City
+    m = folium.Map(location=[40.7128, -74.0060], zoom_start=13)
+
+    # Add a circle marker on the map
+    folium.Circle(
+        location=[40.7128, -74.0060],
+        radius=3000,
+        color='red',
+        fill=True,
+        fill_color='blue'
+    ).add_to(m)
+
+    # Add a polygon marker on the map
+    folium.PolyLine(
+        locations=[[40.7128, -74.0060], [40.7228, -74.0070]],
+        color='green',
+        weight=2,
+        opacity=0.5
+    ).add_to(m)
+
+    # Add a polygon marker on the map
+    folium.Polygon(
+        locations=[[40.7128, -74.0060], [40.7228, -74.0070], [40.7228, -74.0080]],
+        color='purple',
+        fill=True,
+        fill_color='pink'
+    ).add_to(m)
+
+    # Add a marker on the map
+    folium.Marker(
+        location=[40.7128, -74.0060],
+        icon=folium.Icon(icon='cloud'),
+        popup='<i>Marker location</i>',
+        tooltip='Click me!'
+    ).add_to(m)
+
+    # Display the map
+    m.save('map.html')
+    ```
+    This code will create an interactive map with a circle, a line, and a polygon. The map will be saved as 'map.html'.

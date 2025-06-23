@@ -1,0 +1,85 @@
+<Cell_0>
+import pandas as pd
+from bs4 import BeautifulSoup
+import re
+import nltk
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import roc_auc_score
+from sklearn.model_selection import train_test_split
+<\Cell_0>
+<Cell_1>
+#This downloads data for nltk analysis. Use if necessary.
+#nltk.download()
+<\Cell_1>
+<Cell_2>
+#reading data. Not csv, so additional parameters are necessary. Input the path to the files instead of "../input".
+train = pd.read_csv('../input/labeledTrainData.tsv', header=0, delimiter='\t', quoting=3)
+test = pd.read_csv('../input/testData.tsv', header=0, delimiter='\t', quoting=3)
+<\Cell_2>
+<Cell_3>
+#Extract words from text
+def text_to_words(text):
+    text = BeautifulSoup(text, 'lxml').get_text() #get text
+    letters = re.sub('[^a-zA-Z]', ' ', text) #leave only letters
+    words = letters.lower().split() #split, lower case
+    stops = set(stopwords.words('english')) 
+    meaningful_words = [w for w in words if not w in stops] #leave words not in stopwords
+    return(' '.join(meaningful_words))
+<\Cell_3>
+<Cell_4>
+#Check that it works
+print(text_to_words(train['review'][0]))
+<\Cell_4>
+<Cell_5>
+#Function for cleaning data.
+def clean(a):
+    for i in range(0, a.size):
+        yield text_to_words(a[i])
+<\Cell_5>
+<Cell_6>
+#Vectorizing words.
+vectorizer = CountVectorizer(analyzer = 'word',
+                             tokenizer = None,
+                             preprocessor = None,
+                             stop_words = None,
+                             max_df = 0.5,
+                             max_features = 10000)
+<\Cell_6>
+<Cell_7>
+#Cleaning train and test data.
+train_reviews = list(clean(train['review']))
+train_data_features = vectorizer.fit_transform(train_reviews)
+test_reviews = list(clean(test['review'])) 
+test_data_features = vectorizer.transform(test_reviews)
+<\Cell_7>
+<Cell_8>
+#Splitting data into train and validation sets
+Xtrain, Xtest, ytrain, ytest = train_test_split(train_data_features, train['sentiment'], test_size=0.20, random_state=36)
+<\Cell_8>
+<Cell_9>
+#I tried several models and MultinomialNB proved to be better than most of them.
+mnb = MultinomialNB(alpha=0.0001)
+y_val_m = mnb.fit(Xtrain, ytrain).predict_proba(Xtest)[:,1] #Predict on validation data
+y_pred_m = mnb.fit(train_data_features, train['sentiment']).predict_proba(test_data_features)[:,1] #Predict on test data
+#Accuracy of prediction on validation set
+roc_auc_score(ytest, y_val_m)
+<\Cell_9>
+<Cell_10>
+#Random Forest is even better
+forest = RandomForestClassifier(n_estimators=300, criterion = 'gini')
+y_val_f = forest.fit(Xtrain, ytrain).predict_proba(Xtest)[:,1]
+y_pred_f = forest.fit(train_data_features, train['sentiment']).predict_proba(test_data_features)[:,1]
+roc_auc_score(ytest, y_val_f)
+<\Cell_10>
+<Cell_11>
+#Ensemble of models seems to be the best.
+roc_auc_score(ytest, y_val_m+y_val_f)
+<\Cell_11>
+<Cell_12>
+output = pd.DataFrame(data={'id':test['id'], 'sentiment':y_pred_m+y_pred_f})
+
+output.to_csv('Bag_of_Words_model.csv', index=False, quoting=3)
+<\Cell_12>

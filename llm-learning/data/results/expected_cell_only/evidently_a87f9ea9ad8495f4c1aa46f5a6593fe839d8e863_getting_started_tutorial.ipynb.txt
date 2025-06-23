@@ -1,0 +1,18 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import TargetDriftPreset
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataStabilityTestPreset
+from evidently.tests import *
+drift_report = Report(metrics=[DataDriftPreset(), TargetDriftPreset()])
+
+drift_report.run(reference_data=reference, current_data=current)
+drift_report

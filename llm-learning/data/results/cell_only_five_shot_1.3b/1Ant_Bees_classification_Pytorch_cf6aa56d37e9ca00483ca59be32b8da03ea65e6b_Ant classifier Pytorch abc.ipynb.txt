@@ -1,0 +1,49 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    class Classifier(nn.Module):
+        def __init__(self, input_size, hidden_size, num_classes):
+            super(Classifier, self).__init__()
+            self.fc1 = nn.Linear(input_size, hidden_size) 
+            self.relu = nn.ReLU()
+            self.fc2 = nn.Linear(hidden_size, num_classes)  
+        
+        def forward(self, x):
+            out = self.fc1(x)
+            out = self.relu(out)
+            out = self.fc2(out)
+            return out
+
+    # Initialize the network
+    classifier = Classifier(input_size, hidden_size, num_classes)
+
+    # Loss and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(classifier.parameters(), lr=0.01)
+
+    # Train the network
+    for epoch in range(num_epochs):
+        for i, (images, labels) in enumerate(train_loader):
+            # Forward pass
+            outputs = classifier(images)
+            loss = criterion(outputs, labels)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+    # Test the network
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in test_loader:
+            outputs = classifier(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        print('Accuracy of the network on the test images: {} %'.format(100 * correct / total))
+    ```

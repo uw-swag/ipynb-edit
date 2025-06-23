@@ -1,0 +1,21 @@
+
+    The code you provided is already set to use 4 cores in the SparkContext. The line `conf = SparkConf().setMaster("local[4]")` sets the number of cores to 4.
+
+    However, if you want to avoid using the '*' wildcard in the SparkConf, you can specify the number of cores explicitly. For example, you can set it to 4 as follows:
+
+    ```
+    conf = SparkConf().setMaster("local[4]")
+    ```
+
+    This will ensure that Spark will use 4 cores for the application.
+
+    If you want to use the number of cores available on your machine, you can use the `scala.collection.JavaConverters.collectionAsScalaIterator` method to get the number of cores available, and then set it as the number of cores in the SparkConf:
+
+    ```
+    import scala.collection.JavaConverters._
+
+    val cores = scala.collection.JavaConverters.collectionAsScalaIterator(sc.conf.getAll().asScala).next()
+    val conf = SparkConf().setMaster("local[" + cores + "]")
+    ```
+
+    This will set the number of cores to the number of cores available on your machine.

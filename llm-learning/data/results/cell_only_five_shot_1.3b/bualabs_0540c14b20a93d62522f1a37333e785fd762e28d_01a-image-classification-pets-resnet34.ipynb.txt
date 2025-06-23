@@ -1,0 +1,76 @@
+
+    '''
+    
+filenames = get_image_files(path_images)
+filenames[:5]
+batchsize = 64
+np.random.seed(42)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+learn = cnn_learner(data, models.resnet34, metrics=error_rate)
+learn.fit_one_cycle(4)
+learn.save('stage-1')
+interp = ClassificationInterpretation.from_learner(learn)
+interp.plot_top_losses(9, figsize=(15,11))
+learn.unfreeze()
+learn.lr_find()
+learn.recorder.plot()
+learn.fit_one_cycle(3, max_lr=slice(1e-6, 1e-4))
+learn.save('stage-2')
+interp = ClassificationInterpretation.from_learner(learn)
+interp.plot_top_losses(9, figsize=(15,11))
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code:
+    '''
+
+    ###
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code:
+    '''
+
+    ###
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code:
+    '''
+
+    ###
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code:
+    '''
+
+    ###
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code:
+    '''
+
+    ###
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code:
+    '''
+
+    ###
+   

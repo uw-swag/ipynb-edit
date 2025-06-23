@@ -1,0 +1,81 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+from sklearn import ensemble
+from sklearn import model_selection
+
+from evidently import ColumnMapping
+from evidently.options import ColorOptions
+from evidently.report import Report
+
+from evidently.metrics import ColumnDriftMetric
+from evidently.metrics import DataDriftTable
+from evidently.metrics import DatasetDriftMetric
+from evidently.metrics import ColumnDistributionMetric
+from evidently.metrics import ColumnValuePlot
+from evidently.metrics import ColumnQuantileMetric
+from evidently.metrics import ColumnCorrelationsMetric
+from evidently.metrics import ColumnValueListMetric
+from evidently.metrics import ColumnValueRangeMetric
+from evidently.metrics import DatasetCorrelationsMetric
+from evidently.metrics import ColumnRegExpMetric
+from evidently.metrics import ColumnSummaryMetric
+from evidently.metrics import ColumnMissingValuesMetric
+from evidently.metrics import DatasetSummaryMetric
+from evidently.metrics import DatasetMissingValuesMetric
+from evidently.metrics import ConflictTargetMetric
+from evidently.metrics import ConflictPredictionMetric
+from evidently.metrics import ClassificationQualityMetric
+from evidently.metrics import ClassificationClassBalance
+from evidently.metrics import ClassificationConfusionMatrix
+from evidently.metrics import ClassificationQualityByClass
+from evidently.metrics import ClassificationClassSeparationPlot
+from evidently.metrics import ClassificationProbDistribution
+from evidently.metrics import ClassificationRocCurve
+from evidently.metrics import ClassificationPRCurve
+from evidently.metrics import ClassificationPRTable
+from evidently.metrics import ClassificationQualityByFeatureTable
+from evidently.metrics import ClassificationDummyMetric
+from evidently.metrics import RegressionQualityMetric
+from evidently.metrics import RegressionPredictedVsActualScatter
+from evidently.metrics import RegressionPredictedVsActualPlot
+from evidently.metrics import RegressionErrorPlot
+from evidently.metrics import RegressionAbsPercentageErrorPlot
+from evidently.metrics import RegressionErrorDistribution
+from evidently.metrics import RegressionErrorNormality
+from evidently.metrics import RegressionTopErrorMetric
+from evidently.metrics import RegressionErrorBiasTable
+from evidently.metrics import RegressionDummyMetric
+#label binary classification
+classification_report = Report(metrics=[
+    ClassificationQualityMetric(),
+    ClassificationClassBalance(),
+    ConflictTargetMetric(),
+    ConflictPredictionMetric(),
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass(),
+    ClassificationDummyMetric(),
+    ClassificationQualityByFeatureTable(columns=['mean area', 'fractal dimension error']),
+])
+
+classification_report.run(reference_data=bcancer_label_ref, current_data=bcancer_label_cur)
+classification_report
+regression_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionPredictedVsActualScatter(),
+    RegressionPredictedVsActualPlot(),
+    RegressionErrorPlot(),
+    RegressionAbsPercentageErrorPlot(),
+    RegressionErrorDistribution(),
+    RegressionErrorNormality(),
+    RegressionTopErrorMetric(),
+    RegressionErrorBiasTable(columns=['MedInc', 'AveRooms']),
+    RegressionDummyMetric(),
+    ConflictTargetMetric(),
+    ConflictPredictionMetric(),
+    
+])
+
+regression_report.run(reference_data=housing_ref, current_data=housing_cur)
+regression_report

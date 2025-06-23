@@ -1,0 +1,60 @@
+```python
+    import time
+    import bme680
+    import threading
+
+    class SensorData:
+        def __init__(self):
+            self.temperature = 0
+            self.pressure = 0
+            self.humidity = 0
+
+    class SensorThread(threading.Thread):
+        def __init__(self, sensor_data):
+            threading.Thread.__init__(self)
+            self.sensor_data = sensor_data
+
+        def run(self):
+            sensor = bme680.BME680(i2c_addr=0x77, i2c_bus=1)
+            sensor.set_humidity_oversample(bme680.OS_2X)
+            sensor.set_pressure_oversample(bme680.OS_4X)
+            sensor.set_temperature_oversample(bme680.OS_8X)
+            sensor.set_filter(bme680.FILTER_SIZE_3)
+
+            while True:
+                sensor.get_sensor_data()
+                self.sensor_data.temperature = sensor.temperature
+                self.sensor_data.pressure = sensor.pressure
+                self.sensor_data.humidity = sensor.humidity
+                time.sleep(1)
+
+    sensor_data = SensorData()
+    sensor_thread = SensorThread(sensor_data)
+    sensor_thread.start()
+
+    # Dashboard code here to display the sensor data
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature: User-friendly dashboard"
+    Original Code Cells:
+    '''
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        html.H1("User-Friendly Dashboard"),
+        dcc.Graph(

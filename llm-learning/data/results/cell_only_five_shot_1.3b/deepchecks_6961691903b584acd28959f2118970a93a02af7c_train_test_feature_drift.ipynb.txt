@@ -1,0 +1,22 @@
+```python
+    ## setup the config
+    my_cluster_config = {
+      "cluster_name": cluster_name,
+      "node_type_id": node_type_id,
+      "autoscale" : {
+        "min_workers": min_workers,
+        "max_workers": max_workers
+      },
+      "autotermination_minutes": autotermination_minutes,
+      "spark_version": spark_version,
+      "spark_env_vars": {
+        "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+      }
+    }
+
+    ## paths for downloading and uplaoding of relevant jars and eggs
+    cosmosdb_jar_url = 'https://search.maven.org/remotecontent?filepath=com/microsoft/azure/azure-cosmosdb-spark_2.3.0_2.11/1.2.2/azure-cosmosdb-spark_2.3.0_2.11-1.2.2-uber.jar'
+    local_jar_filename = cosmosdb_jar_url.split("/")[-1]
+    upload_cosmosdb_jar_path = "/tmp/"+local_jar_filename
+    upload_reco_utils_egg_path = "/tmp/reco_utils.egg"
+    ```

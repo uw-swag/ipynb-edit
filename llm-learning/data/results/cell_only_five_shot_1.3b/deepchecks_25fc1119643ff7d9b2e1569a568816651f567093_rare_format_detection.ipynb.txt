@@ -1,0 +1,41 @@
+```python
+    from deepchecks.base import Dataset
+    from deepchecks.checks.integrity.rare_format_detection import RareFormatDetection
+
+    # Create a dataset
+    df = pd.DataFrame({
+        'date': ['2021-11-10', '2021-11-11', '2021-11-12', '2021-11-13', '2021-11-14'],
+        'email': ['abc@gmail.com', 'def@gmail.com', 'ghi@gmail.com', 'jkl@gmail.com', 'mno@gmail.com']
+    })
+
+    ds = Dataset(df)
+
+    # Create a check
+    check = RareFormatDetection()
+
+    # Run the check
+    result = check.run(dataset=ds)
+
+    # Print the result
+    print(result)
+
+    # Change dates to different format:
+    df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%b-%d')
+
+    # Change emails to have mistakes in format
+    df['email'].loc[[0,1]] = ['myname@gmail.com1', 'myname@gmail.co']
+
+    # Create a new dataset with the updated data
+    df_updated = pd.DataFrame({
+        'date': df['date'],
+        'email': df['email']
+    })
+
+    ds_updated = Dataset(df_updated)
+
+    # Run the check again with the updated dataset
+    result_updated = check.run(dataset=ds_updated)
+
+    # Print the result
+    print(result_updated)
+    ```

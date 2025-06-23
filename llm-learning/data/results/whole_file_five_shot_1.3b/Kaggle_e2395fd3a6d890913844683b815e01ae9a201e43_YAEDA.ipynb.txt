@@ -1,0 +1,42 @@
+```python
+    #@title Zomato Data Analysis
+    #@markdown This is a Jupyter notebook for analyzing Zomato data.
+
+    #@markdown Please run the code below to load the data.
+
+    ## Load the data
+    import pandas as pd
+
+    ## Load the data
+    data = pd.read_csv('zomato.csv')
+
+    ## Check the data
+    data.head()
+
+    ## Check the data type
+    data.dtypes
+
+    ## Check the summary statistics
+    data.describe()
+
+    ## Check the missing values
+    data.isnull().sum()
+
+    ## Check the unique values
+    data.nunique()
+
+    ## Check the distribution of the target variable
+    data['Restaurant_Location'].value_counts()
+
+    ## Check the correlation between the features and the target variable
+    data.corr()['Restaurant_Location'].sort_values()
+
+    ## Check the distribution of the 'Rating' column
+    data['Rating'].value_counts().plot(kind='bar')
+
+    ## Check the distribution of the 'Votes' column
+    data['Votes'].value_counts().plot(kind='bar')
+
+    ## Check the distribution of the 'Review_Count' column
+    data['Review_Count'].value_counts().plot(kind='bar')
+    ```

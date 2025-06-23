@@ -1,0 +1,35 @@
+```python
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+    from sklearn.datasets import load_iris
+    from deepchecks.checks.performance import PerformanceReport
+
+    iris = load_iris(as_frame=True)
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    ds = Dataset(frame, 
+                features=iris.feature_names,
+                label_name='target')
+    clf.fit(X, Y)
+
+    check = PerformanceReport()
+    check.run(ds, clf)
+
+    check = PerformanceReport(alternative_scorers={'Recall - Micro': 'recall_micro'})
+    check.run(ds, clf)
+
+    from sklearn.datasets import load_diabetes
+
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    train = Dataset(diabetes, label_name='target')
+    clf = AdaBoostRegressor(random_state=0)
+    clf.fit(train.features_columns, train.label_col)
+
+    check = PerformanceReport()
+    check.run(train, clf)
+    ```
+
+    The examples provided in the commit message are updating the existing examples to better fit the new changes introduced in the commit.

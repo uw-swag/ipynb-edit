@@ -1,0 +1,31 @@
+import json
+import pandas as pd
+import requests
+import zipfile
+import io
+
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+
+import mlflow
+import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+#evaluate data drift with Evidently Profile
+def eval_drift(reference, production, column_mapping):
+    """
+    Returns a list with pairs (feature_name, drift_score)
+    Drift Score depends on the selected statistical test or distance and the threshold
+    """    
+    data_drift_report = Report(metrics=[DataDriftPreset()])
+    data_drift_report.run(reference_data=reference, current_data=production, column_mapping=column_mapping)
+    report = data_drift_report.as_dict()
+
+    drifts = []
+
+    for feature in column_mapping.numerical_features + column_mapping.categorical_features:
+        drifts.append((feature, report["metrics"][1]["result"]["drift_by_columns"][feature]["drift_score"]))
+
+    return drifts
+#run MLflow UI (it will be more convinient to run it directly from the terminal)
+#!mlflow ui

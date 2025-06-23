@@ -1,0 +1,47 @@
+```
+    The notebook you've provided is incomplete and contains several errors. Here's a corrected version of the notebook:
+
+    ```python
+    import pandas as pd
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from mlchecks.checks.performance import NaiveComparision
+    from mlchecks.base import Dataset
+
+    # Load the iris dataset
+    iris = load_iris(as_frame=True)
+    x = iris.data
+    y = iris.target
+
+    # Split the dataset into training and testing sets
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.33, random_state=42)
+
+    # Create a dataset for training and validation
+    train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                       features=iris.feature_names,
+                       label='target')
+    val_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                     features=iris.feature_names,
+                     label='target')
+
+    # Create a AdaBoost classifier
+    clf = AdaBoostClassifier()
+
+    # Fit the model
+    clf.fit(x_train, y_train)
+
+    # Create NaiveComparision checks
+    check_native = NaiveComparision(native_model_type='random')
+    check_tree = NaiveComparision(native_model_type='tree')
+
+    # Run the checks
+    check_native.run(train_ds, val_ds, clf)
+    check_tree.run(train_ds, val_ds, clf)
+    ```
+
+    The notebook contains several errors:
+
+    1. The iris dataset is loaded incorrectly. The correct import statement is `from sklearn.datasets import load_iris`.
+    2. The `train_

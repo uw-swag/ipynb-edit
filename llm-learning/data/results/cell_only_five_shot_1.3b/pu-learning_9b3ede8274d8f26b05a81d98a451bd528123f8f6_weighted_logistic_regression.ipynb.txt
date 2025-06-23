@@ -1,0 +1,43 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import plot_confusion_matrix
+    from sklearn.metrics import precision_recall_curve, auc
+    from sklearn.preprocessing import label_binarize
+    from sklearn.multiclass import OneVsRestClassifier
+    from sklearn.metrics import f1_score
+
+    # Load the data
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    train_x, train_y, train_s = train
+
+    # Binarize the output
+    train_y = label_binarize(train_y, classes=[0, 1])
+    valid_y = label_binarize(valid.classes, classes=[0, 1])
+
+    # Compute class weight
+    class_weight = {0: (train_s[0] == 1).sum() / len(train_s[0]),
+                    1: (train_s[0] == 0).sum() / len(train_s[0])}
+
+    # Train a model
+    clf = OneVsRestClassifier(LogisticRegression(class_weight=class_weight, random_state=0))
+    clf.fit(train_x, train_y)
+
+    # Predict
+    test_x, test_y, _ = test
+    test_y_hat = clf.predict(test_x)
+    test_y_prob_hat = clf.predict_proba(test_x)
+
+    # Compute F1 score
+    f1_score(test_y, test_y_hat, average='weighted')
+
+    # Plot confusion matrix
+    plot_confusion_matrix(clf, test_x, test_y)
+
+    # Plot ROC curve
+    plt.figure()
+    test_y_prob = clf.predict_proba(test_x)[:, 1]
+    fpr, tpr, _ = precision_recall_curve(test_y, test_y_prob)
+    roc_auc = auc(

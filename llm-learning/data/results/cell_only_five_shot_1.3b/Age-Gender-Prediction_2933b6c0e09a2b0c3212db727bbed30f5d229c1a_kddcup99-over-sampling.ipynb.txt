@@ -1,0 +1,35 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from imblearn.over_sampling import SMOTE
+
+    # Load the data
+    train_df = pd.read_csv('train.csv')
+    test_df = pd.read_csv('test.csv')
+
+    # Define the features and the target
+    features = train_df.drop(['target'], axis=1)
+    target = train_df['target']
+
+    # Initialize the SMOTE object
+    smote = SMOTE(random_state=42)
+
+    # Fit and transform the data
+    X_sm, y_sm = smote.fit_resample(features, target)
+
+    # Create a new dataframe with the resampled data
+    smote_df = pd.DataFrame(X_sm, columns=features.columns)
+    smote_df['target'] = y_sm
+
+    # Save the resampled data to a new csv file
+    smote_df.to_csv('smote_train.csv', index=False)
+
+    # Predict the target for the test data
+    test_predictions = model.predict(test_df)
+
+    # Create a submission dataframe
+    submission_df = pd.DataFrame({'Id': test_df['Id'], 'target': test_predictions})
+
+    # Save the submission dataframe to a csv file
+    submission_df.to_csv('submission.csv', index=False)
+    ```

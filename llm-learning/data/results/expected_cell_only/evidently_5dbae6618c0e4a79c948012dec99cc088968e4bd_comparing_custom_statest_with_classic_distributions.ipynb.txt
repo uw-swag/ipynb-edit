@@ -1,0 +1,16 @@
+# Define function for checking p-values per population
+
+def create_test_result_dataset(data_drift_dataset_tests):
+    d = []
+
+    for tests in data_drift_dataset_tests.as_dict()['tests']:
+        d2 = []
+        d2.append(tests['parameters']['features']['test_group']['stattest_name'])
+        d2.append(tests['parameters']['features']['test_group']['score'])
+
+        #added the test name and drift score(p-value or distance)
+        d.append(d2)
+
+    df = pd.DataFrame(d, columns = ['test','p-value'])
+
+    return df

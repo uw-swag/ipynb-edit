@@ -1,0 +1,37 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+    from keras.layers.convolutional import Conv2D, MaxPooling2D
+    from keras.optimizers import Adam
+    from keras.wrappers.scikit_learn import KerasClassifier
+    from sklearn.model_selection import GridSearchCV
+    from sklearn.preprocessing import LabelBinarizer
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report
+    from keras.datasets import cartpole
+    from keras.utils import np_utils
+
+    # Load the CartPole dataset
+    (X_train, Y_train), (X_test, Y_test) = cartpole.load_data()
+
+    # Preprocess the data
+    X_train = X_train / 100.0
+    X_test = X_test / 100.0
+
+    # Reshape the data
+    X_train = X_train.reshape((X_train.shape[0], X_train.shape[1], X_train.shape[2], 4))
+    X_test = X_test.reshape((X_test.shape[0], X_test.shape[1], X_test.shape[2], 4))
+
+    # One-hot encode the labels
+    lb = LabelBinarizer()
+    Y_train = lb.fit_transform(Y_train)
+    Y_test = lb.transform(Y_test)
+
+    # Define the model
+    model = Sequential()
+    model.add(Conv2D(32, (8, 8), strides=(4, 4), activation='relu', input_shape=(X_train.shape[1:])))
+    model.add(Conv2D(64, (4, 4), strides=(2, 2), activation='relu

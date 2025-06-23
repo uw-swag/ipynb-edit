@@ -1,0 +1,32 @@
+
+    '''
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+
+    from sklearn.pipeline import Pipeline
+    from sklearn.linear_model import LinearRegression
+    from sklearn.cross_validation import cross_val_score, train_test_split
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn import manifold, decomposition, linear_model, ensemble, neighbors, cross_validation
+    train = pd.read_csv("credit_train.csv", sep = ";", encoding='cp1251')
+    test = pd.read_csv("credit_test.csv", sep = ";", encoding='cp1251')
+    train.head(2)
+    y = train['open_account_flg']
+    train.info()
+    test.info()
+    train.monthly_income.fillna(value=train.monthly_income.mean(), inplace=True)
+    train[train.credit_count.isnull()]
+    train.credit_count.fillna(value = train.credit_count.mean(), inplace=True)
+    train.overdue_credit_count.fillna(value = train.overdue_credit_count.mean(), inplace=True)
+    test.credit_count.fillna(value = train.credit_count.mean(), inplace=True)
+    test.overdue_credit_count.fillna(value = train.overdue_credit_count.mean(), inplace=True)
+    train.living_region.fillna(value="Unknown", inplace=True)
+    test.living_region.fillna(value="Unknown", inplace=True)
+
+    train.gender = train.gender.map({"M":1, "F":0})
+    test.gender = test.gender.map({"M":1, "F":0})
+    train.rename(columns={"open_account_flg":"target"}, inplace=True)
+    '''
+    '''

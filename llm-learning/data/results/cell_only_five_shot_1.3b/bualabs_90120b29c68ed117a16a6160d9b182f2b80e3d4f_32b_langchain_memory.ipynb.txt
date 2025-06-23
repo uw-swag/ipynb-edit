@@ -1,0 +1,29 @@
+```python
+    # ! pip install langchain
+
+    from langchain.memory.conversation_buffer_memory import ConversationBufferMemory
+
+    class DescConversationBufferMemory(ConversationBufferMemory):
+        """
+        A memory that uses a conversation buffer to store and retrieve messages.
+        """
+
+        def save_context(self, input_message_dict, output_message_dict):
+            """
+            Save a context in the memory.
+
+            Args:
+                input_message_dict (Dict[str, Any]): A dictionary containing the input message.
+                output_message_dict (Dict[str, Any]): A dictionary containing the output message.
+            """
+            # Add a description to the context
+            input_message_dict['description'] = 'This is a description'
+            output_message_dict['description'] = 'This is a description'
+
+            super().save_context(input_message_dict, output_message_dict)
+
+    # Usage
+    memory = DescConversationBufferMemory()
+    memory.save_context({"input": "Hi"}, {"output": "What's up"})
+    memory.save_context({"input": "Not much, just hanging"}, {"output": "Cool"})
+    ```

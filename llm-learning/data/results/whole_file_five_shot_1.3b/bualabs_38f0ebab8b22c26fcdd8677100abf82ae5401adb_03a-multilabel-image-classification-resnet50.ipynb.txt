@@ -1,0 +1,40 @@
+```
+    #@title Interpretation Plot
+    #@markdown This is the interpretation plot for the model.
+    #@markdown You can change the threshold value to see different interpretations.
+
+    thresh = 0.2  #@param {type:"slider", min:0, max:1, step:0.01}
+
+    # Get predictions
+    preds, _ = learner.get_preds(ds_type=DatasetType.Test)
+
+    # Get top predictions
+    top_preds = [' '.join([learn.data.classes[i] for i,p in enumerate(pred) if p > thresh]) for pred in preds]
+
+    # Plot the top predictions
+    interpretation.plot_top_losses(9, figsize=(10,10), largest=False)
+    interpretation.plot_top_losses(9, figsize=(10,10), largest=True)
+
+    #@title Submit to Kaggle
+    #@markdown This is the code to submit your model to the Kaggle competition.
+
+    # Get the test images
+    test = ImageList.from_folder(path/'test-jpg').add(ImageList.from_folder(path/'test-jpg-additional'))
+
+    # Get the learner
+    learner = load_learner(path, test=test)
+
+    # Get the predictions
+    preds, _ = learner.get_preds(ds_type=DatasetType.Test)
+
+    # Get the top predictions
+    top_preds = [' '.join([learn.data.classes[i] for i,p in enumerate(pred) if p > thresh]) for pred in preds]
+
+    # Create a dataframe
+    df = pd.DataFrame({'image_name':[f.name[:-4] for f in learner.data.test_ds.items], 'tags':top_preds}, columns=['image_name', 'tags'])
+
+    # Save the dataframe
+    df.to_csv(path/'submission.csv', index=False)
+
+    # Submit to Kaggle
+    ! kaggle compet

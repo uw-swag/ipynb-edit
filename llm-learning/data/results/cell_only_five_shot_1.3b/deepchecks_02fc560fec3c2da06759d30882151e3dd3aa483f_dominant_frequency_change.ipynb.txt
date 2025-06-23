@@ -1,0 +1,52 @@
+```python
+    # Example 1: Basic usage
+    from mmtfPyspark.io import mmtfReader
+    from mmtfPyspark.interactions import InteractionFilter, GroupInteractionExtractor
+    from mmtfPyspark.filters import ContainsLProteinChain, Resolution
+    from mmtfPyspark.webFilters import Pisces
+    from mmtfPyspark.structureViewer import group_interaction_viewer, metal_distance_widget
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import seaborn as sns
+    import pandas as pd
+    import py3Dmol
+    import time
+
+    # Create variables
+    APP_NAME = "MMTF_Spark"
+    path = "../../resources/mmtf_full_sample/"
+
+    # Configure Spark
+    conf = SparkConf().setAppName(APP_NAME).setMaster("local[*]")
+    sc = SparkContext(conf=conf)
+
+    # Read MMTF file
+    reader = mmtfReader(sc)
+    data = reader.read(path)
+
+    # Filter interactions
+    filter = InteractionFilter()
+    filtered_data = filter.filter(data)
+
+    # Extract group interactions
+    extractor = GroupInteractionExtractor()
+    group_interactions = extractor.extract(filtered_data)
+
+    # Resolve interactions
+    resolution = Resolution()
+    resolved_data = resolution.resolve(group_interactions)
+
+    # Filter interactions based on protein chain
+    protein_chain_filter = ContainsLProteinChain()
+    protein_chain_data = protein_chain_filter.filter(resolved_data)
+
+    # Filter interactions based on web filter
+    web_filter = Pisces()
+    web_filtered_data = web_filter.filter(protein_chain_data)
+
+    # View group interactions
+    viewer = group_interaction_viewer()
+    viewer.view(web_filtered_data)
+
+    # Example 2: Advanced usage
+    from mmtfPyspark.io import m

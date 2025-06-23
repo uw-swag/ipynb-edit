@@ -1,0 +1,41 @@
+```
+    # Load vectorizer
+    with open(args.vectorizer_file) as fp:
+        vectorizer = SurnameVectorizer.from_serializable(json.load(fp))
+    # Load the model
+    model = SurnameModel_BN(num_input_channels=len(vectorizer.surname_vocab),
+                            num_output_channels=args.num_filters,
+                            num_classes=len(vectorizer.nationality_vocab),
+                            dropout_p=args.dropout_p)
+    model.load_state_dict(torch.load(args.model_state_file))
+    print (model.named_modules)
+    # Initialize
+    inference = Inference(model=model, vectorizer=vectorizer, device=args.device)
+    class InferenceDataset(Dataset):
+        def __init__(self, df, vectorizer):
+            self.df = df
+            self.vectorizer = vectorizer
+            self.target_size = len(self.df)
+
+        def __str__(self):
+            return "<Dataset(size={1})>".format(self.target_size)
+
+        def __len__(self):
+            return self.target_size
+
+        def __getitem__(self, index):
+            row = self.df.iloc[index]
+            surname_vector = self.vectorizer.vectorize(row.surname)
+            return {'surname': surname_vector}
+
+        def get_num_batches(self, batch_size):
+            return len(self) // batch_size
+
+        def generate_batches(self, batch_size, shuffle=True, drop_last=False, device="cpu"):
+            dataloader = DataLoader(dataset=self, batch_size=batch_size, 
+                                    shuffle=shuffle, drop_last=drop_last)
+            for data_dict in dataloader:
+                out_data_dict = {}
+                for name, tensor in data_dict.items():
+                    out_data_dict[name] = data_dict[name].to(device)
+               

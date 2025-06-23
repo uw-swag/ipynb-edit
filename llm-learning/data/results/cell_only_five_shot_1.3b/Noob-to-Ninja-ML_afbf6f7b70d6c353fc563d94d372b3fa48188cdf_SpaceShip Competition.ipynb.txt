@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    spaceship_data = pd.read_csv('spaceship_data.csv')
+
+    # Check for missing values
+    print(spaceship_data.isnull().sum())
+
+    # Data preprocessing
+    spaceship_data = spaceship_data.dropna()
+
+    # Feature selection
+    X = spaceship_data.drop('Survived', axis=1)
+    y = spaceship_data['Survived']
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Model training
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    # Model evaluation
+    y_pred = model.predict(X_test)
+    print('Accuracy:', metrics.accuracy_score(y_test, y_pred))
+
+    # Model prediction
+    prediction = model.predict(X)
+
+    # Visualization
+    plt.scatter(X['Age'], X['Fare'], c=y)
+    plt.xlabel('Age')
+    plt.ylabel('Fare')
+    plt.title('Spaceship Survival Prediction')
+    plt.show()
+    ```

@@ -1,0 +1,32 @@
+
+The code you've provided is a part of a Jupyter notebook and it's using Deepchecks library to detect date leakage in a dataset. The `DateTrainTestLeakageOverlap` check is used to detect when the training and test datasets have overlapping dates.
+
+The issue you're facing is that the test dataset has dates that are not present in the training dataset. This is a common issue when dealing with time-series data, where the test dataset might not have the same dates as the training dataset.
+
+The `DateTrainTestLeakageOverlap` check will return a warning for each date in the test dataset that is not present in the training dataset. This warning can be used to identify potential issues with the data.
+
+To fix this issue, you need to ensure that the test dataset has the same dates as the training dataset. If the dates are not the same, you might need to adjust the test dataset accordingly.
+
+Here's a simple way to ensure that the test dataset has the same dates as the training dataset:
+
+```python
+# Get the dates from the training dataset
+train_dates = train_ds.get_column('col1')
+
+# Create a new dataframe with the same dates as the test dataset
+test_df = pd.DataFrame(index=pd.date_range(start=min(train_dates), end=max(train_dates)))
+test_df.index.name = 'col1'
+
+# Add the test dataset to the new dataframe
+test_df.update(test_ds.get_dataframe())
+
+# Now the test dataset should have the same dates as the training dataset
+```
+
+After this, you can run the `DateTrainTestLeakageOverlap` check on the new dataframe:
+
+```python
+DateTrainTestLeakageOverlap().run(train_dataset=train_ds, test_dataset=test_df)
+```
+
+This should help you to identify and fix the date leakage issue.

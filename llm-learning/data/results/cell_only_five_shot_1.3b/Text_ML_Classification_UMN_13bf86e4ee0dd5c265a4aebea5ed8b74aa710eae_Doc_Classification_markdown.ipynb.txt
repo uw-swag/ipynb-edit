@@ -1,0 +1,47 @@
+```python
+    #@title Model Results  { vertical-output: true }
+    %time terms, order_centroids, model, truek, model_time =  \
+      estimator_cluster(sparseMatrix, vectorizer, params)
+    print_score(model)
+    #@title Move Files?
+
+    train_to_history = False #@param {type:"boolean"}
+    analyze_to_history = False #@param {type:"boolean"}
+
+    def move_to_history(analysis_to_history, train_to_history):
+        if train_to_history == True:
+            pathlist = Path(
+                "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+     
+        if analyze_to_history == True:
+            pathlist = Path(
+                "Text_ML_Classification_UMN/Analyze").glob('**/*.txt')
+    
+        if analyze_to_history or train_to_history:
+            for path in tqdm(pathlist):
+                shutil.move(str(path), 'Text_ML_Classification_UMN/History/Text_Files_History')
+
+    move_to_history(analyze_to_history, train_to_history)
+
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    #@title Model Results  { vertical-output: true }
+    %time terms, order_centroids, model, truek, model_time =  \
+      estimator_cluster(sparseMatrix, vectorizer, params)
+    print_score(model)
+    #@title Move Files?
+
+    train_to_history = False #@param {type:"boolean"}
+    analyze_to_history = False #@param {type:"boolean"}
+
+    def move_to_history(analysis_to_history, train_to_history):
+        if train_to_history == True:
+            pathlist = Path(
+                "Text_ML_Classification_UMN/Train/Text_Files_Trained").glob('**/*.txt')
+     
+        if analyze_to_history == True:
+            pathlist = Path(

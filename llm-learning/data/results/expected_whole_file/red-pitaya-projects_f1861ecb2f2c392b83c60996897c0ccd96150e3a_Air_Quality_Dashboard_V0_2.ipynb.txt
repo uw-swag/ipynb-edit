@@ -1,0 +1,169 @@
+<Cell_0>
+%matplotlib notebook
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import collect_air_data
+import time
+import pandas as pd
+
+air_data = collect_air_data.collect_air_object()
+<\Cell_0>
+<Cell_1>
+pms5003_data = air_data.pms5003.read()
+print(pms5003_data.pm_per_1l_air(0.3))
+print(pms5003_data.pm_per_1l_air(0.5))
+print(pms5003_data.pm_per_1l_air(1.0))
+print(pms5003_data.pm_per_1l_air(2.5))
+print(pms5003_data.pm_per_1l_air(5.0))
+print(pms5003_data.pm_per_1l_air(10.0))
+<\Cell_1>
+<Cell_2>
+air_data.pms5003.read()
+<\Cell_2>
+<Cell_3>
+print(air_data.gas_gmxxxb.getGM102B_volts())
+print(air_data.gas_gmxxxb.getGM302B_volts())
+print(air_data.gas_gmxxxb.getGM502B_volts())
+print(air_data.gas_gmxxxb.getGM702B_volts())
+<\Cell_3>
+<Cell_4>
+while True:
+    if air_data.bme_680.get_sensor_data():
+        output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
+            air_data.bme_680.data.temperature,
+            air_data.bme_680.data.pressure,
+            air_data.bme_680.data.humidity)
+        #Only print gas data if the heater is stable
+        if air_data.bme_680.data.heat_stable:
+            print('{0},{1} Ohms'.format(
+                output,
+                air_data.bme_680.data.gas_resistance))
+            break
+        else:
+            print(output)
+    time.sleep(1)
+<\Cell_4>
+<Cell_5>
+from __future__ import print_function
+from ipywidgets import interact, interactive, fixed, interact_manual
+import ipywidgets as widgets
+from ipywidgets import Button, HBox, VBox
+import random
+import threading
+from IPython.display import display, clear_output
+import time
+import math
+from redpitaya.overlay.mercury import mercury as FPGA
+
+import numpy as np
+
+from datetime import datetime, date
+import pandas as pd
+
+overlay = FPGA()
+ANALOG_TEMP = FPGA.analog_in(1) # define which pin will be used for temperature sensor
+<\Cell_5>
+<Cell_6>
+air_data.analog_temp()
+<\Cell_6>
+<Cell_7>
+air_data.analog_voc_ratio()
+<\Cell_7>
+<Cell_8>
+air_data.analog_alcohol_ratio()
+<\Cell_8>
+<Cell_9>
+air_data.reset_initial_values()
+<\Cell_9>
+<Cell_10>
+air_data.voc_air_ref
+<\Cell_10>
+<Cell_11>
+air_data.alcohol_air_ref
+<\Cell_11>
+<Cell_12>
+bme_680_latest = air_data.bme_680.get_sensor_data()
+bme_680_latest.gas_resistance
+<\Cell_12>
+<Cell_13>
+df = pd.DataFrame() #Create an empty data frame to append to later
+#timestamp = df.size
+def animate(i):
+    global df
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    clean_data_table['Analog Temperature (oC)'] = [air_data.analog_temp()]
+    clean_data_table['Analog VOC in Air'] = [air_data.analog_voc_ratio()]
+    clean_data_table['Analog Alcohol in Air'] = [air_data.analog_alcohol_ratio()]
+    pms5003_data = air_data.pms5003.read()
+    clean_data_table['0.3um in 0.1L air'] = [pms5003_data.pm_per_1l_air(0.3)]
+    clean_data_table['0.5um in 0.1L air'] = [pms5003_data.pm_per_1l_air(0.5)]
+    clean_data_table['1.0um in 0.1L air'] = [pms5003_data.pm_per_1l_air(1.0)]
+    clean_data_table['GM102B VOC'] = [air_data.gas_gmxxxb.getGM102B_raw()]
+    clean_data_table['GM302B VOC'] = [air_data.gas_gmxxxb.getGM302B_raw()]
+    clean_data_table['GM502B VOC'] = [air_data.gas_gmxxxb.getGM502B_raw()]
+    clean_data_table['GM702B VOC'] = [air_data.gas_gmxxxb.getGM702B_raw()]
+    bme_680_latest = air_data.bme_680.get_sensor_data()
+    clean_data_table['Digital Temperature (oC)'] = [bme_680_latest.temperature]
+    clean_data_table['Air Pressure (hPa)'] = [bme_680_latest.pressure]
+    clean_data_table['Humidity %'] = [bme_680_latest.humidity]
+    clean_data_table['BM680 Heater Stable'] = [bme_680_latest.heat_stable]
+    if bme_680_latest.heat_stable:
+        clean_data_table['BM680 VOC'] = [bme_680_latest.gas_resistance]
+    timestamp = df.size
+    timestamp = 2
+    df = df.append(clean_data_table, ignore_index = True)
+    df.index.name = 'timestamp'
+    
+    #x = df['Date']
+    x = df.index
+    y1 = df['Analog Temperature (oC)']
+    y2 = df['Analog VOC in Air']
+    y3 = df['Analog Alcohol in Air']
+    y4 = df['0.3um in 0.1L air']
+    y5 = df['0.5um in 0.1L air']
+    y6 = df['1.0um in 0.1L air']
+    y7 = df['GM102B VOC']
+    y8 = df['GM302B VOC']
+    y9 = df['GM502B VOC']
+    y10 = df['GM702B VOC']
+    y11 = df['Digital Temperature (oC)']
+    y12 = df['Air Pressure (hPa)']
+    y13 = df['Humidity %']
+    y14 = df['BM680 VOC']
+    
+    plt.cla()
+    plt.plot(x,y1,label='Analog Temperature (oC)')
+    plt.plot(x,y2,label='Analog VOC in Air')
+    plt.plot(x,y3,label='Analog Alcohol in Air')
+    plt.plot(x,y4,label='0.3um in 0.1L air')
+    plt.plot(x,y5,label='0.5um in 0.1L air')
+    plt.plot(x,y6,label='1.0um in 0.1L air')
+    plt.plot(x,y7,label='GM102B VOC')
+    plt.plot(x,y8,label='GM302B VOC')
+    plt.plot(x,y9,label='GM502B VOC')
+    plt.plot(x,y10,label='GM702B VOC')
+    plt.plot(x,y11,label='Digital Temperature (oC)')
+    plt.plot(x,y12,label='Air Pressure (hPa)')
+    plt.plot(x,y13,label='Humidity %')
+    plt.plot(x,y14,label='BM680 VOC')
+    plt.xlabel('Timestamp')
+    plt.ylabel('Temprature (C) / VOC / Particles')
+    plt.title("Room Temperature & Air Quality")
+    plt.gcf().autofmt_xdate()
+    plt.ticklabel_format(useOffset=False,axis='y')
+    plt.legend(bbox_to_anchor=(0.6, 0.7))
+    plt.show()
+    
+ani = FuncAnimation(plt.gcf(), animate,interval=3000)
+plt.show()
+<\Cell_13>
+<Cell_14>
+df
+<\Cell_14>
+<Cell_15>
+df.index.name = 'timestamp'
+filename = "CSV-Data/Vicks " + str(datetime.now()) + ".csv"
+df.to_csv(filename)
+<\Cell_15>

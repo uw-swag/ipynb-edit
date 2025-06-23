@@ -1,0 +1,37 @@
+```python
+    import torch
+    import torchvision.transforms as transforms
+    from PIL import Image
+
+    # Assuming that `show_image` is a function that takes a tensor and displays it
+    def show_image(tensor):
+        tensor = tensor.permute(1, 2, 0)
+        tensor = tensor.numpy()
+        tensor = torch.from_numpy(tensor)
+        tensor = tensor.float()
+        tensor = transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])(tensor)
+        tensor = tensor.permute(2, 0, 1)
+        tensor = tensor.numpy()
+        tensor = torch.from_numpy(tensor)
+        tensor = tensor.float()
+        tensor = tensor.unsqueeze(0)
+        tensor = tensor.repeat(3, 1, 1, 1)
+        tensor = tensor.permute(0, 2, 3, 1)
+        tensor = tensor.numpy()
+        tensor = torch.from_numpy(tensor)
+        tensor = tensor.float()
+        tensor = tensor.unsqueeze(0)
+        tensor = tensor.repeat(3, 1, 1, 1)
+        tensor = tensor.permute(0, 2, 3, 1)
+        tensor = tensor.numpy()
+        tensor = torch.from_numpy(tensor)
+        tensor = tensor.float()
+        tensor = tensor.unsqueeze(0)
+        tensor = tensor.repeat(3, 1, 1, 1)
+        tensor = tensor.permute(0, 2, 3, 1)
+        tensor = tensor.numpy()
+        tensor = torch.from_numpy(tensor)
+        tensor = tensor.float()
+        tensor = tensor.unsqueeze(0)
+        tensor = tensor.repeat(3, 1, 1, 1)
+        tensor =

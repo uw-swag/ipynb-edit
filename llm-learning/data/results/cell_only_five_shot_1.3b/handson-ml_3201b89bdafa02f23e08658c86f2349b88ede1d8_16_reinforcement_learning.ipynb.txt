@@ -1,0 +1,28 @@
+```
+    from collections import deque
+
+    replay_memory_size = 20000
+    replay_memory = deque([], maxlen=replay_memory_size)
+
+    def sample_memories(batch_size):
+        indices = np.random.permutation(len(replay_memory))[:batch_size]
+        cols = [[], [], [], [], []] # state, action, reward, next_state, continue
+        for idx in indices:
+            memory = replay_memory[idx]
+            for col, value in zip(cols, memory):
+                col.append(value)
+        cols = [np.array(col) for col in cols]
+        return cols[0], cols[1], cols[2].reshape(-1, 1), cols[3], cols[4].reshape(-1, 1)
+
+    ```
+
+    ### Explanation:
+    The code snippet you provided is a function that uses a deque from the collections module to store a certain number of past experiences (memories) for training a reinforcement learning agent. The function `sample_memories` is used to sample a batch of experiences from the memory.
+
+    The `replay_memory_size` variable determines the maximum number of past experiences that the deque can store. The `maxlen=replay_memory_size` argument in the deque constructor ensures that the deque only stores the most recent experiences.
+
+    The `sample_memories` function takes a batch size as input and returns a batch of experiences. It first generates a random permutation of the indices of the past experiences, then it iterates over these indices to collect the state, action, reward, next state, and continue information for each experience.
+
+    The collected data is reshaped into numpy arrays and returned as a tuple.
+
+    This function is used in the training of a reinforcement learning agent to learn from the experiences it has stored.

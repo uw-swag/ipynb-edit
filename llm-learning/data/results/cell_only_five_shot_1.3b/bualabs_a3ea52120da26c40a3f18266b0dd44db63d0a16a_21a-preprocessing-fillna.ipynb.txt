@@ -1,0 +1,17 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.impute import SimpleImputer
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Fill missing values with the mean of the column
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Save the processed dataframe
+    df.to_csv('data_processed.csv', index=False)
+    ```
+    This code will fill missing values in the dataset with the mean of the column.

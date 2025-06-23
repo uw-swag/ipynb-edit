@@ -1,0 +1,69 @@
+```python
+    # refactor the code
+    def calculate_average_rating(df):
+        """
+        This function calculates the average rating of a DataFrame.
+        """
+        return df['rating'].mean()
+
+    def calculate_total_ratings(df):
+        """
+        This function calculates the total number of ratings in a DataFrame.
+        """
+        return df['rating'].count()
+
+    def calculate_total_users(df):
+        """
+        This function calculates the total number of unique users in a DataFrame.
+        """
+        return df['user_id'].nunique()
+
+    def calculate_total_movies(df):
+        """
+        This function calculates the total number of unique movies in a DataFrame.
+        """
+        return df['movie_id'].nunique()
+
+    def calculate_rating_distribution(df):
+        """
+        This function calculates the distribution of ratings in a DataFrame.
+        """
+        return df['rating'].value_counts()
+
+    def calculate_movie_distribution(df):
+        """
+        This function calculates the distribution of movies in a DataFrame.
+        """
+        return df['movie_id'].value_counts()
+
+    def calculate_user_distribution(df):
+        """
+        This function calculates the distribution of users in a DataFrame.
+        """
+        return df['user_id'].value_counts()
+
+    def calculate_average_ratings_per_movie(df):
+        """
+        This function calculates the average rating per movie in a DataFrame.
+        """
+        return df.groupby('movie_id')['rating'].mean()
+
+    def calculate_average_ratings_per_user(df):
+        """
+        This function calculates the average rating per user in a DataFrame.
+        """
+        return df.groupby('user_id')['rating'].mean()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add new function"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_median_ratings(df

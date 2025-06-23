@@ -1,0 +1,16 @@
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithNANs(),
+    TestNumberOfRowsWithNANs(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedFeatures(), 
+])
+
+tests.run(reference_data=reference, current_data=current)
+
+#show HTML
+tests
+#get JSON
+tests.json()

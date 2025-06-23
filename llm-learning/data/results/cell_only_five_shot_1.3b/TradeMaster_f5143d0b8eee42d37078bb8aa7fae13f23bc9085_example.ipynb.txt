@@ -1,0 +1,42 @@
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "add example.html and modify notebook for clarity"
+    Original Code Cells:
+    '''
+    def preprocess(data):
+    data=data['Adj Close']
+    data=data.reset_index()
+    data=data.rename(columns={ 'Date': 'date'})
+    data_dict={}
+    tics=[tic for tic in data.columns][1:]
+    for tic in tics:
+        temp=data.loc[:,['date',tic]]
+        temp.rename(columns={tic:'adjcp'},inplace=True)
+        temp=temp.assign(pct_return=temp['adjcp'].pct_change().fillna(0))
+        data_dict[tic]=temp
+    return data_dict,tics
+
+def apply_to_all(tics,dataset,function):
+    for tic in tics:
+        function(dataset[tic])
+
+def plot_ori(data,name):
+    fig, ax = plt.subplots(1, 1, figsize=(20, 10),constrained_layout=True)
+    if isinstance(data['date'][0],str):
+        date=data['date'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d'))
+    else:
+        date=data['date']
+    ax.plot(date, data['adjcp'])
+    ax.xaxis.set_major_locator(mdates.YearLocator(base=1))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%M'))
+    ax.set_title(name+'_adjcp',fontsize=20)
+    ax.grid(True)
+
+def plot_pct(data,name):
+    fig, ax = plt.subplots(1, 1, figsize=(20, 10),constrained_layout=True)
+    if isinstance(data['date'][0],str):
+        date=data['date'].apply(lambda x: datetime.str

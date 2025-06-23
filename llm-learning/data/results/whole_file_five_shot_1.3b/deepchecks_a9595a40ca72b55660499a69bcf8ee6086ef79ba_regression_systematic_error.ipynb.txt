@@ -1,0 +1,34 @@
+```python
+    from deepchecks.tabular.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.tabular.checks.performance import RegressionSystematicError
+
+    # Load the diabetes dataset
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    # Split the dataset into training and testing sets
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+
+    # Add a target column to the training data
+    train_df['target'] = train_df['target'] + 150
+
+    # Create a Dataset object for the training data
+    train = Dataset(train_df, label='target', cat_features=['sex'])
+
+    # Create a Dataset object for the testing data
+    test = Dataset(test_df, label='target', cat_features=['sex'])
+
+    # Create a GradientBoostingRegressor model
+    clf = GradientBoostingRegressor(random_state=0)
+
+    # Fit the model to the training data
+    _ = clf.fit(train.data[train.features], train.data[train.label_name])
+
+    # Create a RegressionSystematicError check
+    check = RegressionSystematicError()
+
+    # Run the check on the testing data
+    check.run(test, clf)
+    ```

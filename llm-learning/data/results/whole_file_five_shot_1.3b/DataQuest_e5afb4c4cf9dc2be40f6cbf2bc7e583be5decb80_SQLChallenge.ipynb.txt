@@ -1,0 +1,56 @@
+
+    '''
+    [
+    Commit Message: "Completed, Answering business questions using SQL"
+    Original Code Cells:
+    '''
+    %matplotlib inline
+    import psycopg2
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import cm
+    import security as s
+    <\Cell_0>
+    <Cell_1>
+    def run_query(query):
+        with psycopg2.connect(dbname='chinook', user=s.credentials['user'], 
+                              host=s.credentials['host'], password=s.credentials['password']) as conn:
+            
+            return pd.read_sql_query(query, conn)
+
+    def run_command(command):
+        with psycopg2.connect(dbname='chinook', user=s.credentials['user'], 
+                              host=s.credentials['host'], password=s.credentials['password']) as conn:
+            
+            conn.isolation_level = None # tells PostgreSQL to autocommit any changes
+            conn.execute(command)
+
+    def show_tables():
+        query = "select table_name, table_type from information_schema.tables \
+                where table_type = 'BASE TABLE' AND table_schema = 'public';"
+        return run_query(query)
+    
+    # rest of the code...
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    [
+    Commit Message: "Completed, Answering business questions using SQL"
+    Original Code Cells:
+    '''
+    %matplotlib inline
+    import psycopg2
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import cm
+    import security as s
+    <\Cell_0>
+    <Cell_1>
+    def run_query(query):
+        with psycopg2.connect(dbname='chinook', user=s.credentials['user'], 
+                              host=s.credentials['host'], password=s.credentials['password']) as conn:

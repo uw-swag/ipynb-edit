@@ -1,0 +1,52 @@
+
+    '''
+    Commit Message: "Python Project - Update to Imports"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#!pip install pandas
+#!pip install requests
+#!pip install bs4
+#!pip install plotly
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+<\Cell_1>
+<Cell_2>
+url = "https://finance.yahoo.com/quote/AMZN/history?period1=1451606400&period2=1612137600&interval=1mo&filter=history&frequency=1mo&includeAdjustedClose=true"
+html_data = requests.get(url).text
+<\Cell_2>
+<Cell_3>
+soup = BeautifulSoup(html_data, "html5lib")
+print(soup.prettify())
+<\Cell_3>
+<Cell_4>
+soup.title.string
+<\Cell_4>
+<Cell_5>
+amazon_data = pd.DataFrame(columns=["Date", "Open", "High", "Low", "Close", "Volume"])
+
+for row in soup.find("tbody").find_all("tr"):
+    col = row.find_all("td")
+    
+    date = col[0].text
+    Open = col[1].text
+    high = col[2].text
+    low = col[3].text
+    close = col[4].text
+    adj_close = col[5].text
+    volume = col[6].text
+    
+    
+    amazon_data = amazon_data.append({"Date":date, "Open":Open, "High":high, "Low":low, "Close":close, "Adj Close":adj_close, "Volume":volume}, ignore_index=True)
+
+<\Cell_5>
+<Cell_6>
+amazon_data.head(5)
+<\Cell_6>
+<Cell_7>
+amazon_data.columns
+<\Cell_7>
+<Cell

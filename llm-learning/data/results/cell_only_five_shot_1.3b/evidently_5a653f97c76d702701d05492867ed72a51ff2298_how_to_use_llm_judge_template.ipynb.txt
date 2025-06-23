@@ -1,0 +1,38 @@
+
+    The code you provided is a part of the Evidently library, which is a Python library for creating and visualizing data-driven insights. The code is used to create a report with two columns, "question" and "response", and two metrics, NegativityLLMEval and PIILLMEval.
+
+    The NegativityLLMEval metric is used to calculate the negativity score for the "question" column, and the PIILLMEval metric is used to calculate the PII (Personally Identifiable Information) score for the "response" column.
+
+    The TextOverviewPreset is a preset for creating a text overview report. This preset includes metrics for text length, number of unique words, and number of sentences.
+
+    The TextEvals class is used to define the metrics for the "question" and "response" columns. The TextEvals class takes a column name and a list of descriptors as arguments.
+
+    The run method of the Report class is used to generate the report. The run method takes three arguments: the reference data, the current data, and the column mapping.
+
+    The final line of the code is the creation of the report.
+
+    The code is not complete because it's missing the creation of the column_mapping object, which is required for the run method.
+
+    Here's the complete code:
+
+    ```python
+    from evidently.descriptors import LLMEval, NegativityLLMEval, PIILLMEval, DeclineLLMEval, BiasLLMEval, ToxicityLLMEval, ContextQualityLLMEval
+    from evidently.ui.workspace.cloud import CloudWorkspace
+
+    from evidently import ColumnMapping
+    from evidently.report import Report
+
+    from evidently.metrics import ColumnSummaryMetric
+
+    from evidently.metric_preset import DataQualityPreset, TextOverviewPreset, TextEvals
+
+    column_mapping = ColumnMapping(
+        feature_references={
+            "question": "question_column",
+            "response": "response_column"
+        }
+    )
+
+    report = Report(metrics=[
+        TextEvals(column_name="question", descriptors=[
+            NegativityLLMEval(include_category=True)   

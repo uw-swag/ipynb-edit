@@ -1,0 +1,28 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Assuming you have a DataFrame df with columns 'feature1', 'feature2', 'target'
+    X = df[['feature1', 'feature2']]
+    y = df['target']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a Linear Regression model
+    regressor = LinearRegression()
+
+    # Fit the model to the training data
+    regressor.fit(X_train, y_train)
+
+    # Make predictions using the testing data
+    y_pred = regressor.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+    ```

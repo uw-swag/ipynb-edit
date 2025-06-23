@@ -1,0 +1,63 @@
+import pandas as pd
+import numpy as np
+from sklearn.datasets import fetch_openml
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ProbClassificationPerformanceTab, DataDriftTab
+
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+wine = fetch_openml(name='wine_quality', version=1, as_frame='auto')
+wine_df = wine.frame
+wine_df['target'] = (wine_df['quality'] > 5).astype(int)
+wine_df['target'] = wine_df['target'].map({1: 'good', 0: 'bad'}).astype(str).values
+wine_df.target.value_counts()
+wine_df.head()
+wine.feature_names
+train_data, test_data = train_test_split(wine_df, random_state=0)
+model = LogisticRegression()
+model.fit(wine_df[wine.feature_names], wine_df.target)
+train_probas = pd.DataFrame(model.predict_proba(train_data[wine.feature_names]))
+train_probas.columns = ['bad', 'good']
+test_probas = pd.DataFrame(model.predict_proba(test_data[wine.feature_names]))
+test_probas.columns = ['bad', 'good']
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+wine_column_mapping = ColumnMapping()
+
+wine_column_mapping.target = 'target'
+wine_column_mapping.prediction = ['good', 'bad']
+wine_column_mapping.numerical_features = wine.feature_names
+ProbClassificationPerformanceTab.list_widgets()
+widgets = ['Reference: Quality Metrics by Class', 'Current: Quality Metrics by Class', 'Reference: Confusion Matrix', 'Current: Confusion Matrix', 'Reference: Class Separation Quality',
+           'Current: Class Separation Quality', 'Classification Quality By Feature']
+wine_model_performance_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(include_widgets=widgets)])
+wine_model_performance_dashboard.calculate(reference_data=merged_train_data.sample(1000, random_state=0), current_data=merged_test_data.sample(1000, random_state=0), 
+                                           column_mapping=wine_column_mapping)
+wine_model_performance_dashboard.show()
+from evidently.options import QualityMetricsOptions
+m_options = QualityMetricsOptions(cut_quantile={'chlorides': ('right', 0.95)}, classification_threshold = 0.8)
+wine_model_performance_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(include_widgets=widgets)], options=[m_options])
+wine_model_performance_dashboard.calculate(reference_data=merged_train_data.sample(1000, random_state=0), current_data=merged_test_data.sample(1000, random_state=0), 
+                                           column_mapping=wine_column_mapping)
+wine_model_performance_dashboard.show()
+from evidently.dashboard.tabs import DataDriftTab
+model_performance_dashboard = Dashboard(tabs=[DataDriftTab()])
+model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                      merged_test_data.sample(1000, random_state=0),
+                                      column_mapping=wine_column_mapping)
+model_performance_dashboard.show()
+m_options = QualityMetricsOptions(conf_interval_n_sigmas=3)
+model_performance_dashboard = Dashboard(tabs=[DataDriftTab()], options=[m_options])
+model_performance_dashboard.calculate(merged_train_data.sample(1000, random_state=0), 
+                                      merged_test_data.sample(1000, random_state=0),
+                                      column_mapping=wine_column_mapping)
+model_performance_dashboard.show()
+

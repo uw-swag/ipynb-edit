@@ -1,0 +1,10 @@
+```
+    from mlchecks.checks import MixedNulls
+    import pandas as pd
+
+    data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+    dataframe = pd.DataFrame(data=data)
+    MixedNulls().run(dataframe)
+    ```
+
+    The `MixedNulls` check prioritizes columns according to the 'FI' (First In, First Out) order. In this case, the check will prioritize 'col1' over 'col2' and 'col3' over 'col2'.

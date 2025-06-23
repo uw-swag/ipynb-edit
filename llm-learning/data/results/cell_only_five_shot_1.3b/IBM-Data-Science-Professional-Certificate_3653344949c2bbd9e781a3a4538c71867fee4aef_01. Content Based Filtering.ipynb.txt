@@ -1,0 +1,41 @@
+```python
+    # Importing the required libraries
+    import pandas as pd
+    from scipy.sparse import csr_matrix
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Loading the movie and user data
+    movies = pd.read_csv('movies.csv')
+    ratings = pd.read_csv('ratings.csv')
+
+    # Merge the movie and ratings data
+    merged = pd.merge(movies, ratings)
+
+    # Create a sparse matrix from the user's movie ratings
+    user_movie_mat = csr_matrix(merged.values)
+
+    # Compute the cosine similarity matrix
+    cosine_sim = cosine_similarity(user_movie_mat.T)
+
+    # Function to get recommendations
+    def recommendations(title, cosine_sim=cosine_sim):
+        idx = indices[title]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:16]
+        movie_indices = [i[0] for i in sim_scores]
+        return movies.iloc[movie_indices]
+
+    # Get movie titles
+    movies['title'] = movies['title'].str.lower()
+    movie_title = 'The Dark Knight'
+
+    # Get movie index from title
+    movie_index = indices[movie_title]
+
+    # Get top 15 similar movies
+    close_movies = recommendations(movie_title, cosine_sim)
+
+    # Print the top 15 movies
+    print(close_movies.head(15))
+    ```

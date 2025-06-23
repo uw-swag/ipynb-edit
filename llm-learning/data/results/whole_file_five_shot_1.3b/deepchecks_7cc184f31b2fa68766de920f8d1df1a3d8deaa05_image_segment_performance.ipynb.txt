@@ -1,0 +1,14 @@
+```
+    # Split VisionData and remove Formatters
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+    from deepchecks.vision.checks.performance import ImageSegmentPerformance
+
+    coco_data = coco.load_dataset(train=False, object_type='VisionData')
+    model = coco.load_model()
+
+    prediction_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+    result = ImageSegmentPerformance().run(coco_data, model, prediction_formatter=prediction_formatter)
+    result
+    ```
+    '''

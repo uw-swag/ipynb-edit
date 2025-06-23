@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+from evidently import ColumnMapping
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+
+from evidently.test_preset import NoTargetPerformance, DataQuality, DataStability, DataDrift
+no_target_performance = TestSuite(tests=[
+    NoTargetPerformance(most_important_features=['education-num', 'hours-per-week']),
+])
+
+no_target_performance.run(reference_data=ref,current_data=curr)
+no_target_performance
+data_drift = TestSuite(tests=[
+    DataDrift(),
+])
+
+data_drift.run(reference_data=ref, current_data=curr)
+data_drift
+data_stability = TestSuite(tests=[
+    DataStability(),
+])
+
+data_stability.run(reference_data=ref, current_data=curr)
+data_stability
+data_quality = TestSuite(tests=[
+    DataQuality(),
+])
+
+data_quality.run(reference_data=ref,current_data=curr)
+data_quality
+
+    ```

@@ -1,0 +1,17 @@
+```python
+    # Import necessary libraries
+    from keras.models import Sequential
+    from keras.layers import Dense
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(32, input_dim=8, activation='relu'))
+    model.add(Dense(16, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+
+    # Compile the model
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Save the model
+    model.save('res_apartment.h5')
+    ```

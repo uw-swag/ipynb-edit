@@ -1,0 +1,28 @@
+```python
+    # Add segment performance check
+    def performance_check(segment):
+        # Check if segment is a list
+        if not isinstance(segment, list):
+            return "Segment is not a list"
+
+        # Check if list is empty
+        if not segment:
+            return "List is empty"
+
+        # Check if list contains only integers
+        if not all(isinstance(item, int) for item in segment):
+            return "List contains non-integer elements"
+
+        # Check if list contains only unique integers
+        if len(segment) != len(set(segment)):
+            return "List contains duplicate elements"
+
+        return "Segment is performing well"
+
+    # Test the function
+    print(performance_check([1, 2, 3, 4, 5]))  # List is not empty and contains only unique integers
+    print(performance_check([1, 1, 2, 2, 3, 3]))  # List contains duplicate elements
+    print(performance_check([1, 2, '3', 4, 5]))  # List contains non-integer elements
+    print(performance_check('Not a list'))  # Segment is not a list
+    print(performance_check([]))  # List is empty
+    ```

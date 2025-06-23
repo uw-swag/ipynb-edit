@@ -1,0 +1,36 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Input
+    from tensorflow.keras.utils import plot_model
+
+    class ConvNetHook(tf.keras.callbacks.Callback):
+        def on_epoch_end(self, epoch, logs=None):
+            # This function is called at the end of each epoch
+            # You can use it to save the model's weights, or to generate a histogram
+            pass
+
+    # Create a simple 24c ConvNet
+    input_layer = Input(shape=(32, 32, 3))
+    x = Conv2D(64, (3, 3), activation='relu', padding='same')(input_layer)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = Conv2D(128, (3, 3), activation='relu', padding='same')(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = Conv2D(256, (3, 3), activation='relu', padding='same')(x)
+    x = MaxPooling2D(pool_size=(2, 2))(x)
+    x = Flatten()(x)
+    output_layer = Dense(10, activation='softmax')(x)
+
+    model = Model(inputs=input_layer, outputs=output_layer)
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+    # Plot the model
+    plot_model(model, to_file='model.png')
+
+    # Create a ConvNetHook instance
+    convnet_hook = ConvNetHook()
+
+    # Train the model with the hook
+    model.fit(x_train, y_train, epochs=10, callbacks

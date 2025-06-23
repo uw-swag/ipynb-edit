@@ -1,0 +1,49 @@
+```
+    # Fixing docs
+    #
+    # This commit fixes the documentation.
+    #
+    # ### Instruction:
+    [
+    Commit Message: "Adding new feature (#900)"
+    Original Code Cells:
+    '''
+    from pyspark import SparkConf, SparkContext
+    from pyspark.sql.functions import *
+    from mmtfPyspark.datasets import groupInteractionExtractor
+    from mmtfPyspark.io import MmtfReader
+    from mmtfPyspark.webFilters import Pisces
+    seqId = 40
+    resolution = 2.0
+
+    pdb = pdb.filter(Pisces(seqId, resolution))
+
+    '''
+    ]
+
+    ### Response:
+    The commit adds a new feature to the code.
+
+    The new feature is a function `Pisces` that filters the dataframe `pdb` based on the Pisces web filter. The `Pisces` function takes two arguments: `seqId` and `resolution`.
+
+    Here is the code after the commit:
+
+    ```python
+    from pyspark import SparkConf, SparkContext
+    from pyspark.sql.functions import *
+    from mmtfPyspark.datasets import groupInteractionExtractor
+    from mmtfPyspark.io import MmtfReader
+    from mmtfPyspark.webFilters import Pisces
+    seqId = 40
+    resolution = 2.0
+
+    pdb = pdb.filter(Pisces(seqId, resolution))
+    ```
+
+    This code will filter the dataframe `pdb` based on the Pisces web filter, which is a method used to filter the dataframe based on the sequence identifier and resolution.
+
+    The `Pisces` function is a part of the `mmtfPyspark.webFilters` module, which is a part of the `mmtfPyspark` package.
+
+    The `seqId` and `resolution` variables are used to pass the sequence identifier and resolution to the `Pisces` function.
+
+    The `pdb` variable is the dataframe that will

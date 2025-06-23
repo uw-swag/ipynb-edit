@@ -1,0 +1,38 @@
+```python
+    # This is a simple feature contribution issue 842 (#989)
+
+    # Let's start with a simple feature contribution issue 842 (#989)
+
+    # First, we need to import the necessary libraries
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Let's assume we have a DataFrame df with a column 'description'
+    df = pd.DataFrame({
+        'description': [
+            'This is a great product',
+            'This product is not bad',
+            'The quality of this product is mediocre',
+            'I love this product',
+            'I hate this product'
+        ]
+    })
+
+    # We can use the TfidfVectorizer to convert the text into a matrix of TF-IDF features
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(df['description'])
+
+    # We can then calculate the cosine similarity between all pairs of descriptions
+    cosine_sim = cosine_similarity(X, X)
+
+    # Now, let's say we want to find the most similar product to 'This is a great product'
+    # We can do this by finding the index of 'This is a great product' in the DataFrame and then finding the index of the most similar product
+    most_similar_index = df['description'].values.tolist().index('This is a great product')
+    most_similar_product = df.iloc[most_similar_index].values[0]
+
+    # We can then print the most similar product
+    print(most_similar_product)
+
+    # This is a simple feature contribution issue 842 (#989)
+    ```

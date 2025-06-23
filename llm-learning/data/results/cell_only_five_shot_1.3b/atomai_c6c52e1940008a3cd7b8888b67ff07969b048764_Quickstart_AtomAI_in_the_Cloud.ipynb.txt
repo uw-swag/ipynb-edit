@@ -1,0 +1,28 @@
+```python
+    import os
+    import json
+
+    # Get the current directory
+    current_dir = os.getcwd()
+
+    # Get the list of all files in the current directory
+    file_list = os.listdir(current_dir)
+
+    # Create a dictionary to store the metadata
+    metadata = {}
+
+    # Loop through each file in the directory
+    for file_name in file_list:
+        # Check if the file is a notebook
+        if file_name.endswith('.ipynb'):
+            # Open the notebook
+            with open(os.path.join(current_dir, file_name), 'r') as f:
+                # Load the notebook
+                notebook = json.load(f)
+
+            # Get the metadata from the notebook
+            metadata[file_name] = notebook['cells'][0]['metadata']
+
+    # Print the metadata
+    print(metadata)
+    ```

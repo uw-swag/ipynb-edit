@@ -1,0 +1,23 @@
+```python
+    import boto3
+
+    # Create a session using your AWS credentials
+    session = boto3.Session(
+        aws_access_key_id='YOUR_ACCESS_KEY',
+        aws_secret_access_key='YOUR_SECRET_KEY',
+        region_name='us-west-2'
+    )
+
+    # Use the session to create a resource object
+    s3 = session.resource('s3')
+
+    # Get the bucket named 'my_bucket'
+    my_bucket = s3.Bucket('my_bucket')
+
+    # Get the object 'my_key' from the bucket
+    my_key = my_bucket.Object('my_key')
+
+    # Download the object to a file
+    my_key.download_file('my_download_path')
+    ```
+    This code will download a file from an S3 bucket. Replace 'YOUR_ACCESS_KEY', 'YOUR_SECRET_KEY', 'my_bucket', 'my_key', and 'my_download_path' with your actual AWS credentials, bucket name, key, and download path.

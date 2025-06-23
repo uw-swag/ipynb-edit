@@ -1,0 +1,48 @@
+```python
+    # import dependencies
+from getpass import getpass
+import sqlalchemy
+from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+import psycopg2
+
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split
+from imblearn.over_sampling import RandomOverSampler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import balanced_accuracy_score
+from imblearn.metrics import classification_report_imbalanced
+# read in table from database
+attrition_df = pd.read_sql('SELECT * FROM encoded_data', connection)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(attrition_df.drop('Attrition', axis=1), 
+                                                    attrition_df['Attrition'], 
+                                                    test_size=0.2, 
+                                                    random_state=1)
+
+# Using random oversampling increase the number of minority class (Yes values)
+ros = RandomOverSampler(random_state=1)
+X_resampled, y_resampled = ros.fit_resample(X_train, y_train)
+
+# create a LogisticRegression instance
+model = LogisticRegression(solver="lbfgs", max_iter=150)
+
+# Fit the model
+model.fit(X_resampled, y_resampled)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+print(confusion_matrix(y_test, y_pred))
+print(classification_report_imbalanced(y_test, y_pred))
+print(balanced_accuracy_score(y_test, y_pred))
+
+# Save the model
+with open('model.pkl', 'wb') as f:
+    pickle.dump(model, f)
+
+    '''

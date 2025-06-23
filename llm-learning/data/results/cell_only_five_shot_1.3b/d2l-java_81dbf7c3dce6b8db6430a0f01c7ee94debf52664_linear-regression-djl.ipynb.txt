@@ -1,0 +1,34 @@
+```python
+    from pyspark.ml import Pipeline
+    from pyspark.ml.classification import LogisticRegression
+    from pyspark.ml.feature import VectorAssembler
+    from pyspark.ml.evaluation import BinaryClassificationEvaluator
+
+    # Load data
+    df = spark.read.format("libsvm").load("hdfs://localhost:9000/user/hive/warehouse/my_data.txt")
+
+    # Vector assembler
+    assembler = VectorAssembler(
+        inputCols=["label", "features"],
+        outputCol="vector")
+
+    # Logistic Regression
+    lr = LogisticRegression(maxIter=10)
+
+    # Pipeline
+    pipeline = Pipeline(stages=[assembler, lr])
+
+    # Train model
+    model = pipeline.fit(df)
+
+    # Make predictions
+    predictions = model.transform(df)
+
+    # Select (prediction, true label) and compute test error
+    evaluator = BinaryClassificationEvaluator(rawPredictionCol="rawPrediction")
+    testError = evaluator.evaluate(predictions)
+    print("Test Error = %g" % (1.0 - testError))
+
+    # Explain predictions
+    predictions.select("prediction", "label", "features").show()
+    ```

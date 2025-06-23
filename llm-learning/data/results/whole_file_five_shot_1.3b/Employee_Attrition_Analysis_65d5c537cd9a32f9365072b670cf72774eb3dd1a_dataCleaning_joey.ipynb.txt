@@ -1,0 +1,48 @@
+```
+    # dependencies
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler,OneHotEncoder
+
+    # read in csv
+    file_path = "resources/IBM_employee_data.csv"
+    attrition_df = pd.read_csv(file_path)
+    attrition_df.head()
+
+    # determine if any missing values and data types for columns
+    attrition_df.info()
+
+    # column names
+    attrition_df.columns
+
+    # ambiguous columns - only going to keep MonthlyIncome
+    attrition_df[["DailyRate", "HourlyRate", "MonthlyIncome", "MonthlyRate", "StandardHours"]]
+
+    # Create our target
+    y = attrition_df["Attrition"]
+
+    # Create a OneHotEncoder instance
+    enc = OneHotEncoder(sparse=False)
+
+    # Fit and transform the OneHotEncoder using the categorical variable list
+    encode_df = pd.DataFrame(enc.fit_transform(attrition_df[attrition_cat]))
+
+    # Add the encoded variable names to the dataframe
+    encode_df.columns = enc.get_feature_names(attrition_cat)
+    encode_df.head()
+
+    # Merge one-hot encoded features and drop the originals
+    attrition_df = attrition_df.merge(encode_df,left_index=True, right_index=True)
+    attrition_df = attrition_df.drop(attrition_cat,1)
+    attrition_df.head()
+
+    # Split our preprocessed data into our features and target arrays
+    X = attrition_df.drop("Attrition",1).values
+
+    # Split the preprocessed data into a training and testing dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=78, stratify=y)
+
+    # Create a StandardScaler instances
+    scaler = StandardScaler()
+
+    # Fit the

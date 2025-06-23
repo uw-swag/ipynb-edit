@@ -1,0 +1,22 @@
+
+    #PClass -- Very similar to 'Embarked'
+    figure, (ax1,ax2, ax3, ax4) = plt.subplots(1,4,figsize=(20,5))
+    sns.factorplot(x = 'Pclass', y = 'Survived', order = [1,2,3], data = train_DF, ax = ax1)
+    sns.countplot(x = 'Pclass', data = train_DF, ax = ax2)
+    sns.countplot(x = 'Survived', hue = 'Pclass', data = train_DF, ax = ax3)
+    pclass_perc = train_DF[["Pclass", "Survived"]].groupby(['Pclass'],as_index=False).mean()
+    sns.barplot(x = 'Pclass', y = 'Survived', data = pclass_perc, ax = ax4)
+
+    '''
+
+    ### Response:
+    
+    #PClass -- Very similar to 'Embarked'
+    figure, (ax1,ax2, ax3, ax4) = plt.subplots(1,4,figsize=(20,5))
+    sns.factorplot(x = 'Pclass', y = 'Survived', order = [1,2,3], data = train_DF, ax = ax1)
+    sns.countplot(x = 'Pclass', data = train_DF, ax = ax2)
+    sns.countplot(x = 'Survived', hue = 'Pclass', data = train_DF, ax = ax3)
+    pclass_perc = train_DF[["Pclass", "Survived"]].groupby(['Pclass'],as_index=False).mean()
+    sns.barplot(x = 'Pclass', y = 'Survived', data = pclass_perc, ax = ax4)
+
+    '''

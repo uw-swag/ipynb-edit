@@ -1,0 +1,59 @@
+```python
+    import cudf
+    import pandas as pd
+    import requests
+    from io import StringIO
+
+    url = "https://github.com/plotly/datasets/raw/master/tips.csv"
+    content = requests.get(url).content.decode("utf-8")
+
+    tips_df = pd.read_csv(StringIO(content))
+    tips_df["tip_percentage"] = tips_df["tip"] / tips_df["total_bill"] * 100
+
+    # display average tip by dining party size
+    print(tips_df.groupby("size").tip_percentage.mean())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented a function to calculate the mean of a list"
+    Original Code Cells:
+    '''
+    <Cell_0>
+def mean_of_list(lst):
+    return sum(lst) / len(lst)
+
+# test the function
+print(mean_of_list([1, 2, 3, 4, 5]))
+<\Cell_0>
+<Cell_1>
+
+<\Cell_1>
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def mean_of_list(lst):
+        return sum(lst) / len(lst)
+
+    # test the function
+    print(mean_of_list([1, 2, 3, 4, 5]))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented a function to calculate the median of a list"
+    Original Code Cells:
+    '''
+    <Cell_0>
+def median_of_list(lst):
+    lst.sort()
+    if len(lst) % 2 == 0:
+        return (lst[len(lst) // 2 - 1] + lst[len(lst) // 2]) / 2
+    else:
+        return lst[len(lst) // 2]
+
+# test the function
+print(median_of_list([1, 2,

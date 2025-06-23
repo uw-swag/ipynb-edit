@@ -1,0 +1,21 @@
+```python
+    # Importing necessary libraries
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Creating a Spark Session
+    spark = SparkSession.builder.getOrCreate()
+
+    # Loading the data
+    df = spark.read.json("data.json")
+
+    # Displaying the data
+    df.show()
+
+    # Aligning the data
+    df_aligned = df.select(col("column1").alias("new_column1"),
+                           col("column2").alias("new_column2"))
+
+    # Displaying the aligned data
+    df_aligned.show()
+    ```

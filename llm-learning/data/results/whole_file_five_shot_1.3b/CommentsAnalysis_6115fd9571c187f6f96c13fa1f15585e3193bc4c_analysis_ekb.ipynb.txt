@@ -1,0 +1,27 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense, Dropout
+
+    # Assuming that we have a dataset in the form of a numpy array
+    # Let's assume that the dataset is 3D and has shape (samples, timesteps, features)
+    X = np.random.rand(100, 10, 5)
+    y = np.random.rand(100, 1)
+
+    # Define the LSTM model
+    model = Sequential()
+    model.add(LSTM(50, activation='relu', input_shape=(10, 5)))
+    model.add(Dense(1))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mse')
+
+    # Train the model
+    model.fit(X, y, epochs=100, verbose=0)
+    ```
+
+    This is a simple example of a LSTM model. The model is defined with an LSTM layer and a dense output layer. The model is then compiled with the Adam optimizer and the mean squared error loss function. The model is then trained on the dataset.
+
+    Please note that you need to replace the `X` and `y` with your actual data. The `X` should be a 3D numpy array with shape (samples, timesteps, features), and `y` should be a 2D numpy array with shape (samples, 1).
+
+    Also, the number of epochs and the batch size can be adjusted according to your needs.

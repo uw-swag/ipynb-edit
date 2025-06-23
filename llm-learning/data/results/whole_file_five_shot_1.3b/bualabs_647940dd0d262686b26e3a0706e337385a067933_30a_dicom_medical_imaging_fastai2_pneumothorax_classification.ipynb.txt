@@ -1,0 +1,14 @@
+```
+    ## Changing the architecture to ResNet34 with a weighted loss function
+
+    ## Importing necessary libraries
+    from fastai2.vision.models import resnet34
+    from fastai2.vision.losses import LabelSmoothingCrossEntropy
+
+    ## Defining the model
+    model = resnet34(pretrained=True)
+    model.loss_func = LabelSmoothingCrossEntropy()
+
+    ## Displaying the model
+    model
+    ```

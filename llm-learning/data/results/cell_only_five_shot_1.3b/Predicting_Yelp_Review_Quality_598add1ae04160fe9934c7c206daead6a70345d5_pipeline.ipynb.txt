@@ -1,0 +1,35 @@
+```python
+    # Cleaning the data
+    # Dropping rows with missing values
+    test = test.dropna()
+
+    # Convert 'review_date' and 'user_yelp_start' to datetime format
+    test['review_date'] = pd.to_datetime(test['review_date'])
+    test['user_yelp_start'] = pd.to_datetime(test['user_yelp_start'])
+
+    # Calculate the user_time_active_at_review_time
+    test['user_time_active_at_review_time'] = test['review_date'] - test['user_yelp_start']
+
+    # Feature Engineering
+    # Create a new feature 'user_review_frequency'
+    test['user_review_frequency'] = test['review_date'].nunique()
+
+    # Create a new feature 'user_review_time_average'
+    test['user_review_time_average'] = test['user_time_active_at_review_time'].mean()
+
+    # Create a new feature 'user_review_time_median'
+    test['user_review_time_median'] = test['user_time_active_at_review_time'].median()
+
+    # Create a new feature 'user_review_time_mode'
+    test['user_review_time_mode'] = test['user_time_active_at_review_time'].mode()[0]
+
+    # Create a new feature 'user_review_time_range'
+    test['user_review_time_range'] = test['user_time_active_at_review_time'].max() - test['user_time_active_at_review_time'].min()
+
+    # Create a new feature 'user_review_time_variance'
+    test['user_review_time_variance'] = test['user_time_active_at_review_time'].var()
+
+    # Create a new feature 'user_review_time_std'
+    test['user_review_time_std'] = test['user_time_active_at_review_time'].std()
+
+    # Create a new feature 'user_review_time_

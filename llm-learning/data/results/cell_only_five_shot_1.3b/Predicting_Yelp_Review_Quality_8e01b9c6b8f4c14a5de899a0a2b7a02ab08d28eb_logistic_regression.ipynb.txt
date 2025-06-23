@@ -1,0 +1,47 @@
+```python
+    # import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score, confusion_matrix
+    from sklearn.preprocessing import StandardScaler
+
+    # load dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # preprocess data
+    # assuming 'target' is the column you want to predict
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # standardize features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # setup and train Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100, random_state=42)
+    rfc.fit(X_train, y_train)
+
+    # predict on test set
+    y_pred_rfc = rfc.predict(X_test)
+
+    # setup and train Logistic Regression
+    logreg = LogisticRegression(random_state=42)
+    logreg.fit(X_train, y_train)
+
+    # predict on test set
+    y_pred_logreg = logreg.predict(X_test)
+
+    # print accuracy scores
+    print("Random Forest Accuracy: ", accuracy_score(y_test, y_pred_rfc))
+    print("Logistic Regression Accuracy: ", accuracy_score(y_test, y_pred_logreg))
+
+    # print confusion matrix
+    print("Random Forest Confusion Matrix: \n", confusion_matrix(y_test, y_pred_rfc))
+    print("Logistic Regression

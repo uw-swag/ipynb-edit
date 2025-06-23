@@ -1,0 +1,30 @@
+```python
+    from deepchecks.checks.methodology import DateTrainTestLeakageOverlap
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, date_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, date_name=date_name)
+
+    train_ds = dataset_from_dict({'col1': [
+        datetime(2021, 10, 1, 0, 0),
+        datetime(2021, 10, 1, 0, 0),
+        datetime(2021, 10, 1, 0, 0),
+        datetime(2021, 10, 2, 0, 0),
+        datetime(2021, 10, 2, 0, 0),
+        datetime(2021, 10, 2, 0, 0),
+        datetime(2021, 10, 3, 0, 0),
+        datetime(2021, 10, 3, 0, 0),
+        datetime(2021, 10, 3, 0, 0),
+        datetime(2021, 10, 4, 0, 0),
+        datetime(2021, 10, 4, 0, 0),
+        datetime(2021, 10, 4, 0, 0),
+        datetime(2021, 10, 5, 0, 0),
+        datetime(2021, 10, 5, 0, 0)
+    ]}, 'col1')
+    test_ds = dataset_from_dict({'col1': [
+        datetime(2021, 10, 3, 0, 0),
+        datetime(2021, 10, 3, 0, 0),
+        datetime(202

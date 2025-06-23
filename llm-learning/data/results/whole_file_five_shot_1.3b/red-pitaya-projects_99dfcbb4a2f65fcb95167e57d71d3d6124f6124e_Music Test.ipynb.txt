@@ -1,0 +1,16 @@
+```
+    import os
+    import shutil
+
+    # Get the list of all notebooks
+    notebooks = [nb for nb in os.listdir('.') if nb.endswith('.ipynb')]
+
+    # Create a folder for each notebook
+    for nb in notebooks:
+        folder_name = nb.split('.ipynb')[0]
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
+
+        # Move the notebook to the folder
+        shutil.move(nb, folder_name)
+    ```

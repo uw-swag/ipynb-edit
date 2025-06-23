@@ -1,0 +1,37 @@
+```python
+    import os
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from keras.models import load_model
+
+    # Carrega o modelo de classificação
+    model = load_model('model.h5')
+
+    # Carrega os arquivos de classificação
+    with open('classification_files.txt', 'r') as f:
+        classification_files = f.read().splitlines()
+
+    # Carrega os arquivos de imagem
+    with open('image_files.txt', 'r') as f:
+        image_files = f.read().splitlines()
+
+    # Verifica se os arquivos de imagem e de classificação são iguais
+    assert len(classification_files) == len(image_files)
+
+    # Lê e carrega as imagens
+    for image_file, classification_file in zip(image_files, classification_files):
+        image = plt.imread(os.path.join('images', image_file), format='jpg')
+        classification = np.load(os.path.join('classifications', classification_file))
+
+        # Faz a predição
+        prediction = model.predict(np.array([image]))
+
+        # Exibe a imagem e a sua classificação
+        plt.subplot(1, 2, 1)
+        plt.imshow(image)
+        plt.title('Imagem')
+        plt.subplot(1, 2, 2)
+        plt.title('Classificação')
+        plt.imshow(classification, cmap='gray')
+        plt.show()
+    ```

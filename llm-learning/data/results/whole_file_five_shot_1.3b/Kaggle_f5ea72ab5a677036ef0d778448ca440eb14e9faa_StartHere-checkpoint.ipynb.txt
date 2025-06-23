@@ -1,0 +1,24 @@
+
+The warning you're seeing is a result of the `np.random.normal` function, which generates random numbers from a normal distribution. The warning is triggered because the standard deviation of the generated numbers is not specified, and the standard deviation is set to 2 by default.
+
+To fix this warning, you can specify the standard deviation of the generated numbers when calling the `np.random.normal` function. For example, you can set the standard deviation to 1.5 as follows:
+
+```python
+np.random.normal(0, 1.5, 1)[0]
+```
+
+This will generate a number with a standard deviation of 1.5.
+
+However, please note that the standard deviation of the generated numbers is not the same as the standard deviation of the actual data. The standard deviation of the actual data is the standard deviation of the data itself, not the standard deviation of the generated numbers.
+
+If you want to generate numbers with a standard deviation of 1.5, you should generate the numbers with a standard deviation of 1.5, not 1.5.
+
+Here's how you can modify the code:
+
+```python
+np.random.normal(0, 1, 1)[0]
+```
+
+This will generate a number with a standard deviation of 1, which is the same as the standard deviation of the actual data.
+
+Please note that the above changes are based on the assumption that the standard deviation of the actual data is 1. If the actual data's standard deviation is not 1, you should use the actual standard deviation as the standard deviation of the generated numbers.

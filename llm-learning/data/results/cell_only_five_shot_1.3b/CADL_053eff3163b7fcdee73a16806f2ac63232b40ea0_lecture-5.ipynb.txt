@@ -1,0 +1,36 @@
+```python
+    # this will return us a list of outputs of every element in our sequence.
+# Each output is `batch_size` x `n_cells` of output.
+# It will also return the state as a tuple of the n_cells's memory and
+# their output to connect to the time we use the recurrent layer.
+outputs, state = tf.contrib.rnn.static_rnn(cells, Xs, initial_state=initial_state)
+
+# We'll now stack all our outputs for every cell
+outputs_flat = tf.reshape(tf.concat(1, outputs), [-1, n_cells])
+with tf.variable_scope('prediction'):
+    W = tf.get_variable(
+        "W",
+        shape=[n_cells, n_chars],
+        initializer=tf.random_normal_initializer(stddev=0.1))
+    b = tf.get_variable(
+        "b",
+        shape=[n_chars],
+        initializer=tf.random_normal_initializer(stddev=0.1))
+
+    # Find the output prediction of every single character in our minibatch
+    # we denote the pre-activation prediction, logits.
+    logits = tf.matmul(outputs_flat, W) + b
+
+    # We get the probabilistic version by calculating the softmax of this
+    probs = tf.nn.softmax(logits)
+
+    # And then we can find the index of maximum probability
+    Y_pred = tf.argmax(probs, 1)
+with tf.variable_scope('loss'):
+    # Compute mean cross entropy loss for each output.
+    Y_true_flat = tf.reshape(tf.concat(1, Y), [-1])
+    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits, Y_true_flat)
+    mean_loss = tf.reduce_mean(loss)
+
+    '''
+    The code you provided seems to be correct. It defines a recurrent neural network using TensorFlow's `

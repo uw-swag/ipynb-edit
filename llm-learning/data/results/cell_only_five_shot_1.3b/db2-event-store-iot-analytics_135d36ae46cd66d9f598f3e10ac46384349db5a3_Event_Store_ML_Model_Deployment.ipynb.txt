@@ -1,0 +1,11 @@
+```python
+    import os
+    import json
+
+    materials_in = []
+    input_folder = "materials_list"
+    for file in os.listdir(input_folder):
+        with open(f"{input_folder}/{file}", "r") as f:
+            data = f.read()
+            materials_in.append(json.loads(data))
+    ```

@@ -1,0 +1,17 @@
+```
+    databunch = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=224, bs=batchsize).normalize(imagenet_stats)
+    loss_func = LabelSmoothingCrossEntropy()
+    learner = cnn_learner(databunch, models.resnet34, loss_func=loss_func, metrics=accuracy).mixup()
+    learner.lr_find()
+    learner.recorder.plot()
+    learner.fit_one_cycle(10, max_lr=1e-2) # Increase epoch to train for longer
+    learner.save('01a-image-classification-pets-resnet34-1')
+    learner.load('01a-image-classification-pets-resnet34-1');
+    interpretation = ClassificationInterpretation.from_learner(learner)
+    learner.recorder.plot()
+    learner.fit_one_cycle(6, max_lr=slice(1e-6, 3e-5)) # Increase epoch to train for longer
+    learner.save('01a-image-classification-pets-resnet34-2')
+    learner.load('01a-image-classification-pets-resnet34-2');
+    ```

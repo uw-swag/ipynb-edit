@@ -1,0 +1,18 @@
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_ci=True,
+                   naming_prefix=MODEL_ID,
+                   schedule_pattern='59 11 * * 0', # retrain every Sunday at Midnight
+                   setup_model_monitoring=True
+)
+AutoMLOps.monitor(
+    alert_emails=['srastatter@google.com'],
+    target_field='churned',
+    model_endpoint='projects/45373616427/locations/us-central1/endpoints/4270303051165728768',
+    monitoring_interval=1,
+    auto_retraining_params=pipeline_params,
+    drift_thresholds={'country': 0.0001, 'cnt_user_engagement': 0.0001},
+    skew_thresholds={'country': 0.0001, 'cnt_user_engagement': 0.0001},
+    training_dataset='bq://mco-mm.bqmlga4.train'
+)
+

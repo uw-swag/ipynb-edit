@@ -1,0 +1,49 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add uncompleted notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir('../../notebook_format')
+    from formats import load_style
+    load_style( css_style = 'custom2.css' )
+    <\Cell_0>
+    <Cell_1>
+    os.chdir(path)
+    %matplotlib inline
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    plt.rcParams['figure.figsize'] = 8, 6 # change default figure size
+
+    # 1. magic to print version
+    # 2. magic so that the notebook will reload external python modules
+    %load_ext watermark
+    %load_ext autoreload 
+    %autoreload 2
+
+    from keras.models import Sequential
+    from keras.callbacks import EarlyStopping
+    from keras.utils.np_utils import to_categorical
+    from keras.preprocessing.text import Tokenizer
+    from keras.preprocessing.sequence import pad_sequences
+    from keras.layers import Dense, Flatten, Conv1D, MaxPooling1D, Embedding
+
+    %watermark -a 'Ethen' -d -t -v -p numpy,pandas,matplotlib,keras,scikit-learn
+    <\Cell_1>
+    <Cell_2>
+    # define some global variables
+    GLOVE_DIR = 'glove.6B/'
+    TEXT_DATA_DIR = '20_newsgroup/'
+    MAX_SEQUENCE_LENGTH = 1000
+    MAX_NB_WORDS = 20000
+    EMBEDDING_DIM = 100
+    VALIDATION_SPLIT = 0.2
+    <\Cell_2>
+    <Cell_3>

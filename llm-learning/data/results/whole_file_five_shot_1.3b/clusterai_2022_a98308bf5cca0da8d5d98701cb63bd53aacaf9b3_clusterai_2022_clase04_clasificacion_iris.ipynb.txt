@@ -1,0 +1,30 @@
+```python
+    from sklearn import datasets
+    from sklearn.model_selection import train_test_split
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn import metrics
+
+    # Load iris dataset
+    iris = datasets.load_iris()
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3,random_state=1) 
+
+    # Create KNN Classifier
+    knn = KNeighborsClassifier(n_neighbors=3)
+
+    # Train the model using the training sets
+    knn.fit(X_train,y_train)
+
+    # Predict the response for test dataset
+    y_pred = knn.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+    # Model Precision
+    print("Precision:",metrics.precision_score(y_test, y_pred, average='macro'))
+
+    # Model Recall
+    print("Recall:",metrics.recall_score(y_test, y_pred, average='macro'))
+    ```

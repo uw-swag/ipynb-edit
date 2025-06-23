@@ -1,0 +1,55 @@
+```
+    # Copyright 2023 Google LLC
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     https://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+    '''
+    #!/usr/bin/env python3
+    # -*- coding: utf-8 -*-
+    """
+    This is a sample Python script for the KFP pipeline.
+    """
+
+    # Importing necessary libraries
+    import os
+    import sys
+
+    import tensorflow as tf
+    import tensorflow_datasets as tfds
+    from tensorflow.python.client import device_lib
+
+    # Enabling GPU memory growth
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            tf.config.experimental.set_memory_growth(gpus[0], True)
+        except RuntimeError as e:
+            print(e)
+
+    # Importing necessary components
+    from kfp.v2 import dsl
+    from kfp.v2.dsl import Metrics, Model, Output
+    from AutoMLOps import AutoMLOps
+
+    # Importing the custom train model component
+    from kfp.components import func_to_component
+    custom_train_model = func_to_component(train_model)
+
+    # Importing the pipeline
+    from pipeline import pipeline
+
+    # Setting the pipeline parameters
+    pipeline_params = {
+        'project_id': PROJECT_ID,
+        'model_dir': MODEL_DIR,
+        'lr': 0.01,
+        'epochs': 

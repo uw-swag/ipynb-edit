@@ -1,0 +1,13 @@
+```python
+    import logging
+
+    # Set up logging
+    logging.basicConfig(filename='log.txt', level=logging.INFO)
+
+    # Log the column inference
+    logging.info('Column inference:')
+    logging.info(f'Number of categorical columns: {len(train_df.select_dtypes(include=['object']))}')
+    logging.info(f'Number of numerical columns: {len(train_df.select_dtypes(include=['int64', 'float64']))}')
+    ```
+
+    The above code will log the number of categorical and numerical columns in the dataset. This can be useful for debugging and understanding the nature of the data.

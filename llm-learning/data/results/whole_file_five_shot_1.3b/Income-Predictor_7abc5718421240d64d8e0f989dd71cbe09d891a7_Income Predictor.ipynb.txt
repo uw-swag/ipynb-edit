@@ -1,0 +1,52 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add code for Data Cleaning"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Data Cleaning
+
+# Removing duplicates
+dataset.drop_duplicates(inplace=True)
+
+# Removing missing values
+dataset.dropna(inplace=True)
+
+# Removing outliers
+dataset = dataset[(np.abs(stats.zscore(dataset)) < 3).all(axis=1)]
+
+# Removing unnecessary columns
+dataset.drop(['Capital Gain', 'Capital Loss'], axis=1, inplace=True)
+
+# Removing rows with missing values
+dataset.dropna(inplace=True)
+
+# Removing rows with '?' in 'Work Class'
+dataset.drop(dataset[dataset['Work Class'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Occupation'
+dataset.drop(dataset[dataset['Occupation'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Marital Status'
+dataset.drop(dataset[dataset['Marital Status'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Relationship'
+dataset.drop(dataset[dataset['Relationship'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Race'
+dataset.drop(dataset[dataset['Race'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Sex'
+dataset.drop(dataset[dataset['Sex'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Country'
+dataset.drop(dataset[dataset['Country'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Income'
+dataset.drop(dataset[dataset['Income'] == ' ?'].index, inplace=True)
+
+# Removing rows with '?' in 'Final Weight'
+dataset.drop(dataset[dataset['Final Weight'] == ' ?'].index, inplace=True)
+
+# Removing rows with

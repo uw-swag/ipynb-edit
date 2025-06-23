@@ -1,0 +1,29 @@
+
+    The code you provided seems to be correct, and it should work as expected. However, there is a small issue in the `get_samples` function. The `C` variable is used to generate the binary labels for the samples, but it seems to be a probability rather than a threshold. 
+
+    Here's the corrected version of the function:
+
+```python
+def get_samples(n: int):
+    x_p = np.random.multivariate_normal(MEAN_P, COV_P, n)
+    y_p = np.asarray([1] * n)
+    s_p = (np.random.uniform(size=n) < ALPHA).astype(int)
+    
+    x_n = np.random.multivariate_normal(MEAN_N, COV_N, n)
+    y_n = np.asarray([0] * n)
+    s_n = np.asarray([0] * n)
+    
+    return (
+        np.concatenate([x_p, x_n]),
+        np.concatenate([y_p, y_n]),
+        np.concatenate([s_p, s_n]),
+    )
+```
+
+In this version, `ALPHA` is used to generate the binary labels for the samples, which is a probability rather than a threshold.
+
+Also, the `get_samples` function is now correctly generating the samples for the training, validation, and test sets.
+
+Please note that the `ALPHA` and `C` variables are not defined in the provided code, so they need to be defined before the function is called.
+
+After making these changes, you can rerun the notebooks to see if the bug has been fixed.

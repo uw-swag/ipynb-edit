@@ -1,0 +1,36 @@
+```
+    # SparkContext is already defined as sc
+    HDFS = 'hdfs://scut0:9000/'
+
+    # Load the text files from HDFS
+    textFilePairs = sc.wholeTextFiles(HDFS + '20_newsgroup/*')
+    print(textFilePairs.count())
+    print(textFilePairs.first())
+
+    # Count the number of news group files
+    newsGroup = textFilePairs.map(lambda (path, content) : (path.split('/')[-2], 1)).reduceByKey(lambda a, b: a + b)
+    print(newsGroup.count())
+    sortedNewsGroup = newsGroup.sortBy(lambda x:x[1], ascending = False)
+    for ng in sortedNewsGroup.collect():
+        print(ng)
+
+    # Split the text and convert all words to lowercase
+    texts = textFilePairs.map(lambda (path, text):text.encode('utf8'))
+    totalWords = texts.flatMap(lambda text:map(lambda word:word.lower(), text.replace('\n', ' ').split()))
+    print(totalWords.distinct().count())
+    print(totalWords.take(100))
+
+    # Split the text and convert all words to lowercase, but remove punctuation
+    noPunctuationWords = texts.flatMap(lambda text:map(lambda word:word.lower(), re.split('\W+', text)))
+    print(noPunctuationWords.take(100))
+
+    # Filter out string with digits
+    onlyWords = noPunctuationWords.filter(lambda word: not re.search(r'\d', word))
+    print(onlyWords.take(100))
+
+    # Count the frequency of each word
+    wordCount = onlyWords.map(lambda word:(word, 1)).reduceByKey(lambda a,b : a+b)
+    sortedWordCount = wordCount.sortBy(lambda (k, v):v, ascending = False)
+    print(sortedWordCount.take(20))
+
+    # Filter

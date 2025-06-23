@@ -1,0 +1,56 @@
+```
+    # Deleting notebooks
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding notebook step3"
+    Original Code Cells:
+    '''
+    from deepchecks.vision.datasets.detection import coco
+from deepchecks.vision.checks.performance import ImageSegmentPerformance
+
+coco_data = coco.load_dataset(train=False, object_type='VisionData')
+model = coco.load_model()
+
+result = ImageSegmentPerformance().run(coco_data, model)
+result
+print(f'Properties: {result.value.keys()}')
+print(f'Brightness Bins: {result.value["Brightness"]}')
+check = ImageSegmentPerformance().add_condition_score_from_mean_ratio_not_less_than(0.5)
+result = check.run(coco_data, model)
+result.show(show_additional_outputs=False)
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    # Adding notebook step3
+
+    ### Instruction:
+    [
+    Commit Message: "Update notebook step3"
+    Original Code Cells:
+    '''
+    from deepchecks.vision.datasets.detection import coco
+from deepchecks.vision.checks.performance import ImageSegmentPerformance
+
+coco_data = coco.load_dataset(train=False, object_type='VisionData')
+model = coco.load_model()
+
+result = ImageSegmentPerformance().run(coco_data, model)
+result
+print(f'Properties: {result.value.keys()}')
+print(f'Brightness Bins: {result.value["Brightness"]}')
+check = ImageSegmentPerformance().add_condition_score_from_mean_ratio_not_less_than(0.5)
+result = check.run(coco_data, model)
+result.show(show_additional_outputs=False)
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    # Updating notebook step3
+

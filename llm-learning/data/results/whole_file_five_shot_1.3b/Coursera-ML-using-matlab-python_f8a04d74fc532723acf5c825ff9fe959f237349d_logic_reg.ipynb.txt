@@ -1,0 +1,39 @@
+```python
+    from azureml.core import Workspace, Dataset
+
+    # Load the workspace from the saved config file
+    ws = Workspace.from_config()
+
+    # Create a new Python script and upload it to the current project
+    with open("upload.py", "w") as f:
+        f.write("""
+        # This is a sample Python script
+        print("Hello, world!")
+        """)
+
+    # Upload the script to the current project
+    ws.upload_file(name="upload.py", path_on_compute="upload.py")
+
+    # Create a new Python script and upload it to the current project
+    with open("main.py", "w") as f:
+        f.write("""
+        # This is a sample Python script
+        from azureml.core import Workspace, Dataset
+
+        # Load the workspace from the saved config file
+        ws = Workspace.from_config()
+
+        # Load the dataset
+        dataset = Dataset.get_by_name(ws, 'my_dataset')
+
+        # Print the first five rows of the dataset
+        dataset.take(5).to_pandas_dataframe().head()
+        """)
+
+    # Upload the script to the current project
+    ws.upload_file(name="main.py", path_on_compute="main.py")
+    ```
+
+    Please replace 'my_dataset' with your actual dataset name.
+
+    Note: The script above will only work if you have the necessary permissions to upload files to the workspace.

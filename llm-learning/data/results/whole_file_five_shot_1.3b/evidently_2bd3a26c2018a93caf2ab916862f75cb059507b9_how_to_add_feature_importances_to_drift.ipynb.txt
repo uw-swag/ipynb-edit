@@ -1,0 +1,27 @@
+```python
+    from sklearn.inspection import permutation_importance
+
+    # Define the model
+    model = load_model('model.h5')
+
+    # Generate some data
+    X, y = generate_data()
+
+    # Fit the model
+    model.fit(X, y)
+
+    # Generate some new data
+    X_new, _ = generate_data()
+
+    # Use permutation importance to detect data drift
+    result = permutation_importance(model, X_new, y, n_repeats=10, random_state=42, n_jobs=2)
+    importances = result.importances_mean
+
+    # Print feature importances
+    for i, name in enumerate(X.columns):
+        print(f"{name}: {importances[i]}")
+    ```
+
+    This script uses permutation importance to detect data drift in a model. The permutation importance of a feature is calculated as the mean decrease in model performance when the feature is randomly shuffled. The higher the permutation importance, the more likely the feature is a good predictor of the target variable.
+
+    Note: This is a simplified example and in a real-world scenario, you would need to handle more complex scenarios such as handling missing values, outliers, and more.

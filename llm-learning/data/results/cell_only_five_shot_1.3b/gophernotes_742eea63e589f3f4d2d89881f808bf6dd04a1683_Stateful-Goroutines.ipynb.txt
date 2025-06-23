@@ -1,0 +1,52 @@
+```go
+    // Stateful goroutines example
+    package main
+
+    import (
+        "fmt"
+        "math/rand"
+        "sync/atomic"
+        "time"
+    )
+
+    type writeOp struct {
+        key  int
+        val  int
+        resp chan bool
+    }
+
+    var writes = make(chan *writeOp)
+    var ops int64
+
+    func main() {
+        rand.Seed(time.Now().UnixNano())
+        for w := 0; w < 10; w++ {
+            go func() {
+                for {
+                    write := &writeOp{
+                        key:  rand.Intn(5),
+                        val:  rand.Intn(100),
+                        resp: make(chan bool)}
+                    writes <- write
+                    <-write.resp
+                    atomic.AddInt64(&ops, 1)
+                }
+            }()
+        }
+
+        for {
+            write := &writeOp{
+                key:  rand.Intn(5),
+                val:  rand.Intn(100),
+                resp: make(chan bool)}
+            writes <- write
+            if atomic.LoadInt64(&ops) >= 100 {
+                break
+            }
+        }
+
+        fmt.Println("ops:", ops)
+    }
+    ```
+
+    This code creates a number of goroutines that write random values to a shared channel. The main goroutine then reads from the channel and increments a counter. The counter is shared between all goroutines, and the main goroutine breaks the loop when the counter reaches 100.

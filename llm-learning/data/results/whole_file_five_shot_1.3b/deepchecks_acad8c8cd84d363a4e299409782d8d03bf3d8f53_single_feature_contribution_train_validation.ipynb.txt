@@ -1,0 +1,47 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.leakage import *
+    from deepchecks.base import Dataset
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Renaming MLChecks to deepchecks (#133)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from mlchecks.checks.leakage import *
+    from mlchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['label'] = df['x2'] + 0.1 * df['x1']
+    df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+    ds = Dataset(df, label='label')
+    df_validation = df.copy()
+    df_validation['x2'] = df['x2'] + 0.5 * df['x1']
+    df_validation['x3'] = 0.3 * df['x3'] + df['label']
+
+    <\Cell_1>
+    <Cell_2>
+    ds_validation = Dataset(df_validation, label='label')
+    <\Cell_2>
+    <Cell_3>
+    SingleFeatureContributionTrainValidation().run(train_dataset=ds, validation_dataset=ds_validation)
+    <\Cell_3>
+    <Cell_4>
+    my_check = SingleFeatureContributionTrainValidation(ppscore_params={'sample': 10})
+    my_check.run(train_dataset=ds, validation_dataset=ds_validation)
+    <\Cell_4>
+    ```
+
+    '''
+   

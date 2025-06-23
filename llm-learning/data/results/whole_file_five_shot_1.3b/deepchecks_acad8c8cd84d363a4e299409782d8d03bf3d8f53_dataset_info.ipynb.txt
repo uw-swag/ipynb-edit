@@ -1,0 +1,36 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    from mlchecks.checks.overview import DatasetInfo
+    from mlchecks.base import Dataset
+
+    df = load_iris(return_X_y=False, as_frame=True)
+    df = pd.concat([df.data, df.target], axis=1)
+
+    DatasetInfo().run(Dataset(df))
+    ```
+
+    ### Explanation:
+    The commit message "Renaming MLChecks to deepchecks (#133)" is a change in the commit message format. The commit message is a short description of the changes made in the commit. The number (#133) is a reference to the issue or pull request that the commit is related to.
+
+    The original code cells are unchanged.
+
+    The new code cells are as follows:
+
+    ```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    from mlchecks.checks.overview import DatasetInfo
+    from mlchecks.base import Dataset
+
+    df = load_iris(return_X_y=False, as_frame=True)
+    df = pd.concat([df.data, df.target], axis=1)
+
+    DatasetInfo().run(Dataset(df))
+    ```
+
+    The `DatasetInfo().run(Dataset(df))` line of code is using the `mlchecks` library to run a dataset check. The `mlchecks` library is a collection of tools for data quality checks. The `DatasetInfo` class is a check that provides information about the dataset, such as the number of rows, columns, and data types. The `Dataset` class is a check that validates the dataset.
+
+    The `load_iris` function is used to load the iris dataset, which is a common dataset for machine learning tasks. The `return_X_y` parameter is set to `False` to return only the feature matrix and the target vector. The `as_frame` parameter is set to `True` to return a pandas DataFrame instead of a numpy array.
+
+   

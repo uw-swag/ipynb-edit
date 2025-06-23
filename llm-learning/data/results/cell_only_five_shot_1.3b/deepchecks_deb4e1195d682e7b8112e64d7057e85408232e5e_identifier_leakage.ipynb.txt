@@ -1,0 +1,31 @@
+```python
+    #@markdown - **挂载** 
+    from google.colab import drive
+    drive.mount('GoogleDrive')
+    # #@markdown - **卸载**
+    # !fusermount -u GoogleDrive
+    #@title 决策树 { display-mode: "both" }
+    # Decision tree
+    # 该程序用于实现决策树对随机生成数据的分类
+    from sklearn import tree
+    import numpy as np
+    import graphviz
+    import matplotlib.pyplot as plt
+    from sklearn.externals import joblib
+    from mpl_toolkits.mplot3d import Axes3D
+
+    #@markdown - **绑定数据**
+    class Bunch(dict):  
+        def __init__(self,*args,**kwds):  
+            super(Bunch,self).__init__(*args,**kwds)  
+            self.__dict__ = self
+    #@markdown - **生成带标签的随机数据**
+    def generate_random(sigma, N, mu1=[15., 25., 10], mu2=[30., 40., 30], mu3=[25., 10., 20], mu4=[40., 30., 40]):  
+        c = sigma.shape[-1]        #生成N行c维的随机测试数据，比较kmeans与decision tree
+        X = np.zeros((N, c))       # 初始化X，2行N列。2维数据，N个样本 
+        target = np.zeros((N,1))
+        for i in range(N):  
+            if np.random.random(1) < 0.25:  # 生成0-1之间随机数  
+                X[i, :]  = np.random.multivariate_normal(mu1, sigma[0, :, :], 1)     #用第一个高斯模型生成2维数据  
+                target[i] = 1
+            elif 0.25 <= np.random.random(1

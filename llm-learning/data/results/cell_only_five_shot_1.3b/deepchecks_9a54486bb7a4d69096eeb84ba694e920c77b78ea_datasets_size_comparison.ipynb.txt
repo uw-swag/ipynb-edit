@@ -1,0 +1,39 @@
+```
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Split the data into features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a DeepChecks dataset
+    train_ds = Dataset(X_train, y_train, ids=X_train.index)
+    test_ds = Dataset(X_test, y_test, ids=X_test.index)
+
+    # Create a check to compare the size of the training and testing datasets
+    check = DatasetsSizeComparison(train_ds, test_ds)
+
+    # Run the check
+    check.run()
+    ```
+
+    The above code will create a DeepChecks check that compares the size of the training and testing datasets. The check will return a report with the size comparison and other information about the datasets.
+
+    Please note that you need to have the DeepChecks library installed. You can install it using pip:
+
+    ```
+    pip install deepchecks
+    ```
+
+    Also, please replace 'data.csv' with the path to your actual data file.
+
+    The 'target' column is assumed to be the column you want to predict. If your data has a different column, please replace 'target' with the correct column name.
+
+    The 'train_test_split' function is used to split the data into a training set and a testing set. The 'test_size' parameter is set to 0.2, which means that 20% of the data will be used for testing. The 'random_state' parameter is set to 42, which means that the split will be the same every time the code is run.
+
+    The 'Dataset' class is used to create a DeepChecks dataset. The 'ids' parameter is optional and can be used to provide a list of ids for the dataset. If not provided, the ids will be generated automatically.
+
+    The 'Datas

@@ -1,0 +1,65 @@
+<Cell_0>
+from redpitaya.overlay.mercury import mercury as overlay
+fpga = overlay()
+<\Cell_0>
+<Cell_1>
+in2 = fpga.osc(1, 1.0)
+<\Cell_1>
+<Cell_2>
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+
+# trigger timing [sample periods]
+N = in2.buffer_size
+in2.trigger_pre  = 0
+in2.trigger_post = N
+
+# disable hardware trigger sources - the Jupyter notebook will trigger the start of audio recording
+in2.trig_src = 0
+<\Cell_2>
+<Cell_3>
+# synchronization and trigger sources are the default,
+# which is the module itself
+in2.reset()
+in2.start()
+in2.trigger()
+# wait for data
+while (in2.status_run()): pass
+print ('Recording complete')
+data = in2.data(N)
+<\Cell_3>
+<Cell_4>
+import IPython.display as ipd
+sr = 3000 # sample rate 30 Ksps
+ipd.Audio(data, rate=sr) # load a NumPy array
+<\Cell_4>
+<Cell_5>
+import matplotlib.pyplot as plt
+
+# show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+
+plt.plot(data)
+plt.show()
+<\Cell_5>
+<Cell_6>
+sr2 = 40 # sample rate 48 Ksps
+ipd.Audio('/tmp/stream_files/data_file_2020-05-23_13-23-32.wav', rate=sr2) # load a NumPy array
+<\Cell_6>
+<Cell_7>
+import pydub 
+import numpy as np
+
+def read(file):
+    """MP3 to numpy array"""
+    a = pydub.AudioSegment.from_wav(file)
+    y = np.array(a.get_array_of_samples())
+    if a.channels == 2:
+        y = y.reshape((-1, 2))
+    return np.float32(y) / 2**15
+<\Cell_7>
+<Cell_8>
+np_sound = read('/tmp/stream_files/data_file_2020-05-23_13-23-32.wav')
+<\Cell_8>
+<Cell_9>
+ipd.Audio(np_sound, rate=48000)
+<\Cell_9>

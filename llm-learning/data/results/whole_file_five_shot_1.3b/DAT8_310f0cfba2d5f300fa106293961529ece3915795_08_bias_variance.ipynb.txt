@@ -1,0 +1,45 @@
+
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+
+    # allow plots to appear in the notebook
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    url = 'http://people.sc.fsu.edu/~jburkardt/datasets/regression/x01.txt'
+    col_names = ['id', 'brain', 'body']
+    df = pd.read_table(url, sep='\s+', skiprows=33, names=col_names, index_col='id')
+    df.head()
+    <\Cell_1>
+    <Cell_2>
+    df.describe()
+    <\Cell_2>
+    <Cell_3>
+    # only keep rows in which the body weight is less than 200
+    df = df[df.body < 200]
+    df.shape
+    <\Cell_3>
+    <Cell_4>
+    sns.lmplot(x='body', y='brain', data=df, ci=None, fit_reg=False)
+    sns.plt.xlim(-10, 200)
+    sns.plt.ylim(-10, 250)
+    <\Cell_4>
+    <Cell_5>
+    sns.lmplot(x='body', y='brain', data=df, ci=None)
+    sns.plt.xlim(-10, 200)
+    sns.plt.ylim(-10, 250)
+    <\Cell_5>
+    <Cell_6>
+    # set a random seed for reproducibility
+    np.random.seed(12345)
+
+    # randomly assign every observation to either universe 1 or universe 2
+    df['universe'] = np.random.randint(1, 3, len(df))
+    df.head()
+    <\Cell_6>
+    <Cell_7>
+    # col='universe' subsets the data by universe and creates two separate plots
+   

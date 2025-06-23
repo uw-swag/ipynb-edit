@@ -1,0 +1,66 @@
+# df['full_content'] = (df.description + df.title)
+df['full_content'] = (df.title)
+df.head(1)
+from sklearn.model_selection import train_test_split
+training, testing = train_test_split(
+    df,                # The dataset we want to split
+    train_size=0.7,    # The proportional size of our training set
+    stratify=df.label, # The labels are used for stratification
+    random_state=400   # Use the same random state for reproducibility
+)
+pipeline.predict(["10 things you need to do..."])
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from utils.plotting import plot_confusion_matrix
+
+def evaluate(pipeline, test_samples, test_labels, n=5):
+    predicted_label = pipeline.predict(test_samples)
+
+    print("Accuracy = {:.1f}%".format(
+        accuracy_score(test_labels, predicted_label) * 100.0
+    ))
+    
+    cm = confusion_matrix(test_labels, predicted_label)
+    plot_confusion_matrix(cm, pipeline.classes_)
+    
+    wrong_predictions = [
+        (true_label, pred_label, test_sample)
+        for true_label, pred_label, test_sample in zip(test_labels, predicted_label, test_samples) 
+        if true_label != pred_label
+    ]
+    
+    print('true_label, pred_label, test_sample')
+    print('\n')
+    for wrong_prediction in wrong_predictions[:n]:
+        print(wrong_prediction)
+    
+evaluate(pipeline, testing.full_content, testing.label)
+df['full_content'] = (df.description + "\n" + df.title)
+training, testing = train_test_split(
+    df,                # The dataset we want to split
+    train_size=0.7,    # The proportinal size of our training set
+    stratify=df.label, # The labels are used for stratification
+    random_state=400   # Use the same random state for reproducibility
+)
+pipeline = pipeline.fit(training.full_content, training.label)
+evaluate(pipeline, testing.full_content, testing.label)
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+steps = (
+    ('vectorizer', TfidfVectorizer()),
+    ('classifier', LinearSVC())
+)
+
+pipeline = Pipeline(steps)
+
+pipeline = pipeline.fit(training.full_content, training.label)
+evaluate(pipeline, testing.full_content, testing.label)
+steps = (
+    ('vectorizer', TfidfVectorizer()),
+    ('classifier', LinearSVC())
+)
+
+pipeline = Pipeline(steps)
+evaluate(pipeline, testing.full_content)
+
+

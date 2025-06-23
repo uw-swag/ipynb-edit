@@ -1,0 +1,47 @@
+```python
+    from sklearn.preprocessing import StandardScaler
+
+    scaler = StandardScaler()
+    player_attr_scaled = scaler.fit_transform(player_attr)
+    player_attr_scaled = pd.DataFrame(player_attr_scaled, columns=player_attr.columns)
+    ```
+    ### Instruction:
+    [
+    Commit Message: "t_sne preprocessing (t-SNE)"
+    Original Code Cells:
+    '''
+    from sklearn.manifold import TSNE
+    import numpy as np
+
+    tsne = TSNE(n_components=2, random_state=0)
+    player_attr_scaled = player_attr_scaled.values
+    player_attr_scaled = np.nan_to_num(player_attr_scaled)
+    player_attr_scaled = tsne.fit_transform(player_attr_scaled)
+
+    '''
+    ]
+    ### Response:
+    ```python
+    player_attr_scaled = pd.DataFrame(player_attr_scaled, columns=['component1', 'component2'])
+    ```
+    ### Instruction:
+    [
+    Commit Message: "t_sne visualization"
+    Original Code Cells:
+    '''
+    import matplotlib.pyplot as plt
+
+    plt.figure(figsize=(10,8))
+    plt.scatter(player_attr_scaled['component1'], player_attr_scaled['component2'], c=player_attr['player_position'])
+    plt.title('t-SNE Visualization')
+    plt.xlabel('component1')
+    plt.ylabel('component2')
+    plt.show()
+    ```
+    ### Response:
+    ```python
+    plt.figure(figsize=(10,8))
+    plt.scatter(player_attr_scaled['component1'], player_attr_scaled['component2'], c=player_attr['player_position'])
+    plt.title('t-SNE Visualization')
+    plt.xlabel('component1')
+    plt.ylabel

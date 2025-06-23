@@ -1,0 +1,58 @@
+```markdown
+    # SageMaker Studio Kernel byoc Example
+
+    This example demonstrates how to use the AWS SageMaker Studio Kernel byoc (Bring Your Own Kernel) feature to deploy a custom kernel image in SageMaker.
+
+    ## Prerequisites
+
+    - An AWS account with SageMaker, ECR (Elastic Container Registry), and IAM (Identity and Access Management) services.
+    - A Python environment with the necessary packages installed (`ipykernel`, `numpy`, `sagemaker`, `sagemaker-training`).
+
+    ## Steps
+
+    1. **Create a repository in ECR**
+
+        Run the following command in your terminal:
+
+        ```bash
+        aws ecr create-repository --repository-name my-repository
+        ```
+
+    2. **Push your Docker image to ECR**
+
+        Run the following command in your terminal:
+
+        ```bash
+        aws ecr get-login-password --region region | docker login --username AWS --password-stdin account_id.dkr.ecr.region.amazonaws.com
+        docker push account_id.dkr.ecr.region.amazonaws.com/my-repository:tag
+        ```
+
+    3. **Create a kernel in SageMaker**
+
+        Run the following command in your terminal:
+
+        ```bash
+        aws sagemaker create-kernel --name my-kernel
+        ```
+
+    4. **Create a kernel image in SageMaker**
+
+        Run the following command in your terminal:
+
+        ```bash
+        aws sagemaker create-image --kernel-name my-kernel --name my-image
+        ```
+
+    5. **Deploy the kernel image in SageMaker**
+
+        Run the following command in your terminal:
+
+        ```bash
+        aws sagemaker create-app-image-config --app-image-config-name my-app-image-config --kernel-name my-kernel --image-name my-image
+        ```
+
+    6. **Update the domain settings in SageMaker**
+
+        Run the following command in your terminal:
+
+        ```bash

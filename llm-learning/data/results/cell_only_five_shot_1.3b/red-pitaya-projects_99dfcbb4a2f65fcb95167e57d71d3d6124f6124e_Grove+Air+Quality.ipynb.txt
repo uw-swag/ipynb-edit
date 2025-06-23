@@ -1,0 +1,66 @@
+```python
+    import os
+    import shutil
+
+    # Get the list of all files in the current directory
+    files = os.listdir()
+
+    # Create a dictionary to map the file extension to the folder name
+    folder_dict = {'.ipynb': 'notebooks'}
+
+    # Create the 'notebooks' folder if it doesn't exist
+    if 'notebooks' not in os.listdir():
+        os.makedirs('notebooks')
+
+    # Move each file to the corresponding folder
+    for file in files:
+        if file.endswith('.ipynb'):
+            shutil.move(file, os.path.join('notebooks', folder_dict[file[-3:]]))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add code to create a new notebook"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from IPython.display import display, Javascript
+    from IPython.notebook.services.contents.nbformat import write_notebook
+    from IPython.utils.localize import _
+
+    def create_new_notebook(name, language='python'):
+        """
+        Create a new notebook and add a cell with the given name.
+        """
+        # Create a new notebook
+        nb = {
+            'cells': [{
+                'cell_type': 'markdown',
+                'metadata': {},
+                'source': [
+                    _('New notebook: %s') % name,
+                ]
+            }],
+            'metadata': {},
+            'nbformat': 4,
+            'nbformat_minor': 0
+        }
+
+        # Write the notebook
+        write_notebook(nb, name + '.ipynb')
+
+        # Display the notebook
+        display(Javascript('IPython.notebook.save_notebook();'))
+
+    # Create a new notebook
+    create_new_notebook('My New Notebook')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add code to create a new code cell"

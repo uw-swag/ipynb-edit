@@ -1,0 +1,68 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add fine-tune code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from google.colab import drive
+drive.mount('/content/drive')
+<\Cell_0>
+<Cell_1>
+cd /content/drive/My Drive/ML
+<\Cell_1>
+<Cell_2>
+ls -l
+<\Cell_2>
+<Cell_3>
+from tqdm.notebook import tqdm
+import json
+import re
+import os
+<\Cell_3>
+<Cell_4>
+import nltk
+nltk.download('punkt')
+<\Cell_4>
+<Cell_5>
+import json
+
+with open(r"./datasets/DGen/total_new_cleaned_train.json", "r") as file:
+    questions = json.load(file)
+
+print("train:", len(questions))
+
+input_list = list()
+label_list = list()
+
+for question in tqdm(questions):
+    sent = question["sentence"] + " [SEP] " + question["answer"]
+    dis_input = sent.replace("**blank**", "[MASK]")
+    diss = question["distractors"]
+
+    for dis in diss:
+        dis_label = sent.replace("**blank**", dis)
+
+        input_list.append(dis_input)
+        label_list.append(dis_label)
+
+        # print(dis_input)
+        # print(dis_label)
+        # print("-"*50)
+<\Cell_5>
+<Cell_6>
+print(len(input_list))
+print(len(label_list))
+<\Cell_6>
+<Cell_7>
+print(input_list[:10])
+print(label_list[:10])
+<\Cell_7>
+<Cell_8>
+max_len = 0
+
+# For every sentence...
+for input in input_list:
+
+    # Tokenize the text and add `[CLS]` and `[SEP]` tokens.
+    input_

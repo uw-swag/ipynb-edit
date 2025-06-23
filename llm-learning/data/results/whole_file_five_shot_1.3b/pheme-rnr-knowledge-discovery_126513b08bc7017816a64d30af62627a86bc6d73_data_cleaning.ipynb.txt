@@ -1,0 +1,37 @@
+```python
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import numpy as np
+
+    # Load the data
+    ottawashooting = pd.read_csv("data/pheme-rnr-dataset/ottawashooting.csv",
+                                 dtype={"user.verified": np.bool,
+                                        "user.default_profile": np.bool},
+                                 engine="python")  # This engine helps when loading large datasets
+
+    # Remove rows with boolean False values in the hashtags_count column
+    ottawashooting = ottawashooting.drop(ottawashooting[ottawashooting.hashtags_count == "False"].index)
+    ottawashooting.hashtags_count = ottawashooting.hashtags_count.astype(np.int32)
+
+    # Remove the row with NoneType in the retweet_count column
+    ottawashooting = ottawashooting.drop(ottawashooting[ottawashooting.retweet_count.isnull()].index)
+    ottawashooting["retweet_count"] = ottawashooting["retweet_count"].astype(np.int32)
+
+    # ottawashooting[ottawashooting["user.default_profile"] == True]
+    ottawashooting.head()
+
+    def agg_event_data(df, limit=0):
+        """ Aggregate tabular tweet data from a PHEME event into aggregated thread-level data
+        
+        Params:
+            - df: the DataFrame with tabular tweet data
+       
+        Return: A DataFrame with thread-level data for this event
+        """
+        data = df.head(limit) if limit > 0 else df
+        data = data.replace({"has_url": {"True": True, "False": False}})
+        
+        # Returns the proportion of True values in col
+        bool_prop = lambda col : np.sum(col) / len(col)
+        
+        agg = data.groupby

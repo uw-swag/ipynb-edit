@@ -1,0 +1,37 @@
+```python
+    import tensorflow as tf
+    import matplotlib.pyplot as plt
+
+    # Load the TensorFlow Dataset's Rock, Paper, Scissors dataset
+    splits = tfds.load('rock_paper_scissors', split=tfds.Split.ALL, with_info=True)
+    (train_examples, validation_examples, test_examples) = splits.splits['train'].subsplit(weighted=(80, 10, 10))
+
+    num_examples = info.splits['train'].num_examples
+    num_classes = info.features['label'].num_classes
+
+    # Prepare the examples by preprocessing them and then batching them
+    AUTOTUNE = tf.data.AUTOTUNE
+
+    train_batches = train_examples.shuffle(1000).batch(32).prefetch(AUTOTUNE)
+    validation_batches = validation_examples.batch(32).prefetch(AUTOTUNE)
+    test_batches = test_examples.batch(32)
+
+    # Use TensorFlow's SavedModel API to export the SavedModel from the trained Keras model
+    model.save('my_model')
+
+    # Initialize the TFLiteConverter to load the SavedModel
+    converter = tf.lite.TFLiteConverter.from_saved_model('my_model')
+
+    # Set the optimization strategy for 'size' in the converter
+    converter.optimizations = [tf.lite.Optimize.DEFAULT]
+
+    # Use the tool to finally convert the model
+    tflite_model = converter.convert()
+
+    # Visualize the outputs
+    index = 0  #@param {type:"slider", min:0, max:9, step:1}
+    plt.figure(figsize=(6,3))
+    plt.subplot(1,2,1)
+    plot_image(index, predictions, test_labels, test_imgs)
+    plt.show()
+    ```

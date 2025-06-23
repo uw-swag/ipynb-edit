@@ -1,0 +1,55 @@
+
+    [
+    Commit Message: "feat: Implement code changes for improved model performance"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from sklearn.datasets import load_breast_cancer
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+    <\Cell_0>
+    <Cell_1>
+    cancer_dataset = load_breast_cancer()
+    print(type(cancer_dataset))
+    <\Cell_1>
+    <Cell_2>
+    print(len(cancer_dataset["feature_names"]))
+    print(cancer_dataset["feature_names"])
+    <\Cell_2>
+    <Cell_3>
+    print(cancer_dataset["data"])
+    <\Cell_3>
+    <Cell_4>
+    print(cancer_dataset["target_names"])
+    <\Cell_4>
+    <Cell_5>
+    # 0 - malignant
+    # 1 - benign
+    print(cancer_dataset["target"])
+    <\Cell_5>
+    <Cell_6>
+    # describe the dataset
+    print(cancer_dataset["DESCR"])
+    <\Cell_6>
+    <Cell_7>
+    cancer_df = pd.DataFrame(np.c_[cancer_dataset['data'], cancer_dataset['target']], columns=np.append(cancer_dataset["feature_names"], ["target"]))
+    cancer_df.head()
+    <\Cell_7>
+    <Cell_8>
+    cancer_df.info()
+    <\Cell_8>
+    <Cell_9>
+    cancer_df.describe()
+    <\Cell_9>
+    <Cell_10>
+    # sns.pairplot(cancer_df, hue="target")
+    <\Cell_10>
+    <Cell_11>
+    s

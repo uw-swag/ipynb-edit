@@ -1,0 +1,22 @@
+```python
+    import requests
+    import zipfile
+    import io
+    import pandas as pd
+
+    content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip").content
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+        raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+    ```
+
+    The code above will download the bike dataset from the UCI Machine Learning Repository and then read the `hour.csv` file into a pandas DataFrame. The `parse_dates` parameter is used to convert the `dteday` column into a datetime index.
+
+    However, if you want to skip SSL verification for the dataset, you can do so by setting the `verify` parameter to `False` in the `requests.get()` function. This will bypass the SSL certificate verification.
+
+    ```python
+    content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip", verify=False).content
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+        raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+    ```
+
+    Please note that this is not recommended for production environments as it can expose your system to security risks. It's best to use SSL certificates for all requests, unless you have a good reason not to.

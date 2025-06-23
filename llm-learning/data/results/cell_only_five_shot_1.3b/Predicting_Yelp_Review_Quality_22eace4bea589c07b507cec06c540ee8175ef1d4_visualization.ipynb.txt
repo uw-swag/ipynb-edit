@@ -1,0 +1,45 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import psycopg2
+from sqlalchemy import create_engine
+from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import LatentDirichletAllocation
+
+# Connect to the database
+connect = 'postgresql+psycopg2://postgres:password@localhost:5432/yelp'
+engine = create_engine(connect)
+
+# Query to fetch data
+query = '''
+        SELECT
+        restaurant_reviews.review_id,
+        restaurant_reviews.user_id,
+        restaurant_reviews.business_id,
+        restaurant_reviews.review_stars,
+        restaurant_reviews.review_date,
+        restaurant_reviews.review_text,
+        restaurant_reviews.review_useful,
+        restaurant_reviews.review_funny,
+        restaurant_reviews.review_cool,
+        restaurant_reviews.restaurant_name,
+        restaurant_reviews.restaurant_address,
+        restaurant_reviews.restaurant_city,
+        restaurant_reviews.restaurant_state,
+        restaurant_reviews.restaurant_postal_code,
+        restaurant_reviews.restaurant_latitude,
+        restaurant_reviews.restaurant_longitude,
+        restaurant_reviews.restaurant_overall_stars,
+        restaurant_reviews.restaurant_review_count,
+        restaurant_reviews.restaurant_is_open,
+        restaurant_reviews.restaurant_categories,
+        restaurant_reviews.restaurant_price_range,
+        users.name               AS user_name,
+        users.review_count       AS user_review_count,
+        users.yelping_since      AS user_yelping_since,
+        users.useful             AS user_useful,
+        users.funny              AS user_funny,
+        users.cool               AS user_cool,
+        users.elite

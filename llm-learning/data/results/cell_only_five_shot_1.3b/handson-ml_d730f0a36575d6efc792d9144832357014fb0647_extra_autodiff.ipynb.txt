@@ -1,0 +1,33 @@
+```python
+    import tensorflow as tf
+
+    # Point notebooks to handson-ml2
+    import sys
+    sys.path.append('../handson-ml2')
+
+    # Improve save_fig
+    import matplotlib.pyplot as plt
+    def save_fig(fig_id, tight_layout=True):
+        plt.tight_layout()
+        plt.savefig(fig_id + ".png", tight_layout=tight_layout)
+
+    # Add Colab link
+    from google.colab import files
+    uploaded = files.upload()
+    import os
+    import urllib.request
+    DOWNLOAD_ROOT = 'https://raw.githubusercontent.com/ageron/handson-ml2/master/'
+    FILES = [
+        'datasets/housing/housing.csv',
+        'datasets/housing/housing_extend.csv',
+        'datasets/housing/housing_extra.csv'
+    ]
+    for filename in FILES:
+        print('Downloading ' + filename)
+        urllib.request.urlretrieve(DOWNLOAD_ROOT + filename, filename)
+
+    # Add Colab link
+    from IPython.display import IFrame
+    IFrame('https://colab.research.google.com/notebooks/intro.ipynb', width=1000, height=800)
+    ```
+    '''

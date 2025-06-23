@@ -1,0 +1,32 @@
+```python
+    # Box-Cox transformation
+    for c in classes:
+        if skew(train[c]) > 0.5:
+            train[c], lambda_, lambda_0 = boxcox(train[c])
+            X_u[c] = train[c]
+        else:
+            X_u[c] = train[c]
+    
+    # Removing outliers
+    for c in classes:
+        Q1 = train[c].quantile(0.25)
+        Q3 = train[c].quantile(0.75)
+        IQR = Q3 - Q1
+        train = train[~((train[c] < (Q1 - 1.5 * IQR)) |(train[c] > (Q3 + 1.5 * IQR)))]
+    
+    # Removing duplicates
+    for c in classes:
+        train = train.drop_duplicates(c)
+    
+    # Removing missing values
+    for c in classes:
+        train = train.dropna(subset=[c])
+    
+    # Feature scaling
+    for c in classes:
+        min_max_scaler = preprocessing.MinMaxScaler()
+        train[c] = min_max_scaler.fit_transform(train[c].values.reshape(-1,1))
+    
+    # Saving the transformed data
+    X_u.to_csv('transformed_glass.csv')
+    ```

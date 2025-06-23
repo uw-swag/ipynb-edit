@@ -1,0 +1,46 @@
+
+    '''
+    [
+    Commit Message: "94% using Ridge"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#Imports
+import numpy as np
+import pandas as pd
+from scipy.stats import skew
+from scipy.stats.stats import pearsonr
+import matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter, MultipleLocator
+import seaborn as sns
+pd.options.display.max_columns = 50
+sns.set_style('whitegrid')
+%matplotlib inline
+
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression, Ridge, RidgeCV, LassoCV, LassoLarsCV, ElasticNet, Lasso
+from sklearn.cross_validation import cross_val_score
+import xgboost as xgb
+<\Cell_0>
+<Cell_1>
+#importing data
+train_DF = pd.read_csv('train.csv')
+test_DF = pd.read_csv('test.csv')
+train_DF.head()
+<\Cell_1>
+<Cell_2>
+print("------Training Data Information-------\n")
+train_DF.info()
+print("\n\n------Test Data Information-------\n")
+test_DF.info()
+<\Cell_2>
+<Cell_3>
+#Plot a general distribution of the prices (Fixing the skewed metic)
+figure, (ax1, ax2) = plt.subplots(1,2,figsize = (17,5))
+sns.distplot(train_DF['SalePrice'], kde = False, ax = ax1, bins = 100)
+sns.distplot(np.log1p(train_DF["SalePrice"]), kde = False, axlabel = 'Normalized Sales Price', ax = ax2, bins = 100)
+train_DF['SalePrice'] = np.log1p(train_DF["SalePrice"])
+<\Cell_3>
+<Cell_4>
+#Getting

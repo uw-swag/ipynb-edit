@@ -1,0 +1,34 @@
+```python
+    # Importing necessary libraries
+    import torch
+    import torchvision
+    import torchvision.datasets as datasets
+    import sys
+    import numpy as np
+    import torch.utils.data as utils
+    import torch
+    from torch.utils.data import DataLoader
+    from torchvision import datasets, transforms
+    sys.path.append("../../Dataset-REPAIR")
+    from utils.datasets import ColoredDataset
+    import pickle as pkl
+
+    from os.path import join as oj
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+
+    # Loading the data
+    x_train = np.load(oj("../data/ColorMNIST", "train_x.npy"))/255.0
+    y_train = np.load(oj("../data/ColorMNIST", "train_y.npy"))
+    x_test = np.load(oj("../data/ColorMNIST", "test_x.npy"))/255.0
+    y_test = np.load(oj("../data/ColorMNIST", "test_y.npy"))
+
+    # Calculating the mean of each class
+    prob = ((x_train).sum(axis = 1)).mean(axis = 0)
+
+    # Plotting the mean probabilities
+    plt.imshow(prob)
+
+    # Saving the figure
+    fig.savefig(oj(save_path, "ColorMNIST_examples"))
+    ```

@@ -1,0 +1,47 @@
+```python
+    import tensorflow as tf
+
+    # Define the GPUs
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+
+    # Check if GPUs are available
+    if gpus:
+        try:
+            # Try to use the first GPU
+            tf.config.experimental.set_virtual_device_configuration(gpus[0],
+            [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=2048)])
+
+            # Use the first GPU
+            strategy = tf.distribute.MirroredStrategy(gpus)
+        except RuntimeError as e:
+            print(e)
+            # If there's an error, use the second GPU
+            strategy = tf.distribute.MirroredStrategy(gpus[1])
+    else:
+        # If no GPUs are available, use the CPU
+        strategy = tf.distribute.MirroredStrategy()
+
+    with strategy.scope():
+        # Define your model here
+        model = ...
+
+    # Define the test dataset
+    test_dataset = ...
+
+    # Define the test function
+    def test_model():
+        # Define your test steps and losses here
+        test_steps = ...
+
+        # Define the test metrics here
+        test_metrics = ...
+
+        # Evaluate the model
+        model.evaluate(test_dataset, steps=test_steps, metrics=test_metrics)
+
+    # Run the test
+    test_model()
+    ```
+    This code is an example of how to use TensorFlow's `tf.distribute.MirroredStrategy` to use multiple GPUs in a TensorFlow program. The code defines a model and a test function, which is then run.
+
+    Please replace the `...` with your actual code.

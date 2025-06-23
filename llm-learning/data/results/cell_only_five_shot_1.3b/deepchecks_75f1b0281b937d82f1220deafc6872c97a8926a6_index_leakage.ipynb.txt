@@ -1,0 +1,12 @@
+```
+    from deepchecks.base import Dataset
+    from deepchecks.checks import IndexTrainValidationLeakage
+    import pandas as pd
+    %load_ext autoreload
+    %autoreload 2
+    train_ds = dataset_from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1')
+    val_ds = dataset_from_dict({'col1': [4, 3, 5, 6, 7]}, 'col1')
+    check_obj = IndexTrainValidationLeakage(n_index_to_show=1)
+    check_obj.run(train_ds, val_ds)
+    ```
+    The validation check is renamed to 'test' to reflect its purpose.

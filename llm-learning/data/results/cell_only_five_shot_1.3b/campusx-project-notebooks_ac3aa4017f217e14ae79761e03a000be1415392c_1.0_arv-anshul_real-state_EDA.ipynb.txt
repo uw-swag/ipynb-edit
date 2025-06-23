@@ -1,0 +1,58 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+    # Load the dataset
+    df = pd.read_csv('real_estate.csv')
+
+    # Checking the first few rows of the dataset
+    print(df.head())
+
+    # Checking the basic information of the dataset
+    print(df.info())
+
+    # Checking the statistical summary of the dataset
+    print(df.describe())
+
+    # Checking for missing values
+    print(df.isnull().sum())
+
+    # Checking the distribution of the target variable
+    sns.countplot(df['price'])
+    plt.show()
+
+    # Checking the correlation between different features
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Checking the distribution of the 'size' feature
+    sns.distplot(df['size'])
+    plt.show()
+
+    # Checking the distribution of the 'location' feature
+    sns.countplot(df['location'])
+    plt.show()
+
+    # Checking the distribution of the 'bedrooms' feature
+    sns.distplot(df['bedrooms'])
+    plt.show()
+
+    # Checking the distribution of the 'age' feature
+    sns.distplot(df['age'])
+    plt.show()
+
+    # Checking the distribution of the 'price' feature
+    sns.distplot(df['price'])
+    plt.show()
+
+    # Checking the distribution of the 'type' feature
+    sns.countplot(df['type'])
+    plt.show

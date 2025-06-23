@@ -1,0 +1,65 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+
+from evidently.test_preset import NoTargetPerformanceTestPreset
+from evidently.test_preset import DataQualityTestPreset
+from evidently.test_preset import DataStabilityTestPreset
+from evidently.test_preset import DataDriftTestPreset
+from evidently.test_preset import RegressionTestPreset
+from evidently.test_preset import MulticlassClassificationTestPreset
+from evidently.test_preset import BinaryClassificationTopKTestPreset
+from evidently.test_preset import BinaryClassificationTestPreset
+no_target_performance = TestSuite(tests=[
+    NoTargetPerformanceTestPreset(columns=['education-num', 'hours-per-week']),
+])
+
+no_target_performance.run(reference_data=adult_ref, current_data=adult_cur)
+no_target_performance
+data_drift = TestSuite(tests=[
+    DataDriftTestPreset(),
+])
+
+data_drift.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift
+data_stability = TestSuite(tests=[
+    DataStabilityTestPreset(),
+])
+
+data_stability.run(reference_data=adult_ref, current_data=adult_cur)
+data_stability
+data_quality = TestSuite(tests=[
+    DataQualityTestPreset(),
+])
+
+data_quality.run(reference_data=adult_ref, current_data=adult_cur)
+data_quality
+regression_performance = TestSuite(tests=[
+    RegressionTestPreset()
+])
+
+regression_performance.run(reference_data=housing_ref, current_data=housing_cur)
+regression_performance
+classification_performance = TestSuite(tests=[
+   MulticlassClassificationTestPreset(prediction_type='labels')
+])
+
+classification_performance.run(reference_data=iris_ref, current_data=iris_cur)
+classification_performance
+binary_classification_performance = TestSuite(tests=[
+    BinaryClassificationTestPreset(prediction_type='probas'),
+])
+
+binary_classification_performance.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+binary_classification_performance
+binary_topK_classification_performance = TestSuite(tests=[
+    BinaryClassificationTopKTestPreset(k=10),
+])
+
+binary_topK_classification_performance.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+binary_topK_classification_performance

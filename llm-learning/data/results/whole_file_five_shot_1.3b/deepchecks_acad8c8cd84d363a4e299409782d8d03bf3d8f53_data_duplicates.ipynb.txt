@@ -1,0 +1,35 @@
+```
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2],"col3":[2,3,4,4,4,3,4,5,6,4]})
+
+    DataDuplicates().run(ds)
+
+    DataDuplicates(n_to_show=2).run(ds)
+
+    DataDuplicates(columns=["col1"]).run(ds)
+
+    DataDuplicates(ignore_columns=["col3"]).run(ds)
+
+    ds_no_dups = ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2], "col3":[1,2,3,4,5,6,7,8,9,0]})
+
+    DataDuplicates().run(ds_no_dups)
+
+    DataDuplicates(ignore_columns=["col3"]).run(ds_no_dups)
+    ```
+    '''
+    }
+    '''
+
+    ### Response:
+    ```
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2], "col3":[2,3,4,4,4,3,4,5,6,4]})
+

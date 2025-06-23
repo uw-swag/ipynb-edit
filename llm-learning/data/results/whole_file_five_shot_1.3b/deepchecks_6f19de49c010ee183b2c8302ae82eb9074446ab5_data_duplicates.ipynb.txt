@@ -1,0 +1,43 @@
+```
+    The DataDuplicates check in Deepchecks is used to find duplicate rows in a dataset. It can be used to identify and remove duplicates, or to find duplicates in specific columns.
+
+    Here's an example of how to use the DataDuplicates check:
+
+    ```python
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2],"col3":[2,3,4,4,4,3,4,5,6,4]})
+
+    DataDuplicates().run(ds)
+    ```
+
+    This will return a DataFrame with duplicate rows, and you can choose to remove them or keep them.
+
+    The `DataDuplicates` class also allows you to specify the number of rows to show, the columns to consider for duplicates, and the columns to ignore.
+
+    The `run` method of the `DataDuplicates` class will return a `Suite` object, which you can use to visualize the results.
+
+    Please note that the `DataDuplicates` check is not available in the core Deepchecks library, you need to install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    Also, please note that the `DataDuplicates` check is a part of the Deepchecks core library, and it may not be available in all environments or notebook environments.
+
+    The `DataDuplicates` check is not available in the core Deepchecks library, you need to install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    Also, please note that the `DataDuplicates` check is not available in the core Deepchecks library, you need to install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    The `DataDuplicates` check is

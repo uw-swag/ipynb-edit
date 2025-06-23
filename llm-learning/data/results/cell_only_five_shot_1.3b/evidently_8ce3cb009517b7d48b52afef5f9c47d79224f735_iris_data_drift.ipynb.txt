@@ -1,0 +1,40 @@
+
+    Here is the updated code with the new Dashboard interface and profile usage examples:
+
+    ```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, model_selection, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, CatTargetDriftTab, ClassificationPerformanceTab, ProfileTab
+
+# Load your data
+iris_data = datasets.load_iris()
+X, y = iris_data.data, iris_data.target
+
+# Split your data
+X_train, X_test, y_train, y_test = model_selection.train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a profile
+profile = ProfileTab(show_top_n=5)
+profile.calculate(X_train, y_train)
+
+# Save the profile
+profile.save('reports/iris_profile.html')
+
+# Create a dashboard
+iris_data_drift_report = Dashboard(X_train, X_test, column_mapping=None, tabs=[DriftTab])
+iris_data_drift_report.save('reports/iris_data_drift.html')
+
+iris_data_and_target_drift_report = Dashboard(X_train[:75], X_test[:75], column_mapping=None, tabs=[DriftTab, CatTargetDriftTab])
+iris_data_and_target_drift_report.save('reports/iris_data_and_target_drift.html')
+
+iris_drift = Dashboard(X_train, X_test, column_mapping=iris_data.feature_names, 
+                       tabs=[ClassificationPerformanceTab])
+iris_drift.show()
+iris_drift.save('reports/iris_classification_performance_test.html')
+    ```
+
+    In this updated code, we're using the new Dashboard interface and the ProfileTab to analyze the performance of the model. The DriftTab and CatTargetDriftTab are used to analyze the data drift, and the

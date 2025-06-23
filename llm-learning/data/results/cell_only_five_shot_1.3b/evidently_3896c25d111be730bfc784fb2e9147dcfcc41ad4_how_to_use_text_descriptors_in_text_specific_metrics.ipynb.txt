@@ -1,0 +1,37 @@
+```python
+    from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage
+
+    # Create a mapping of columns
+    column_mapping = ColumnMapping(
+        feature_columns=["feature1", "feature2", "feature3"],
+        timestamp_columns=["timestamp"],
+    )
+
+    # Create a test suite
+    test_suite = TestSuite(
+        tests=[
+            TextDescriptorsDriftMetric(),
+            TextDescriptorsDistribution(),
+            TextDescriptorsCorrelationMetric(),
+        ],
+        metrics_preset=TextOverviewPreset(),
+    )
+
+    # Create a report
+    report = Report(column_mapping=column_mapping, test_suite=test_suite)
+
+    # Perform tests
+    report.run(data)
+    ```
+
+    This code will create a report with the specified metrics and tests. The data should be a pandas DataFrame with the columns specified in the `column_mapping`.

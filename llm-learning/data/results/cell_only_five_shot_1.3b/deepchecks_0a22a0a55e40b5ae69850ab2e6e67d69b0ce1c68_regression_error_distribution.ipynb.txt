@@ -1,0 +1,39 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add image of KNN"
+    Original Code Cells:
+    '''
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.datasets import load_iris
+
+    iris = load_iris()
+    clf = KNeighborsClassifier(n_neighbors=3)
+    clf.fit(iris.data, iris.target)
+
+    from matplotlib import pyplot as plt
+    from matplotlib.colors import ListedColormap
+
+    # plot the decision boundary.
+    h = .02  # step size in the mesh
+    x_min, x_max = iris.data[:, 0].min() - 1, iris.data[:, 0].max() + 1
+    y_min, y_max = iris.data[:, 1].min() - 1, iris.data[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    # Put the result into a color plot
+    Z = Z.reshape(xx.shape)
+    plt.figure()
+    plt.pcolormesh(xx, yy, Z, cmap=ListedColormap(('red', 'blue', 'green')))
+
+    # Plot also the training points
+    plt.scatter(iris.data[:, 0], iris.data[:, 1], c=iris.target, cmap=ListedColormap(('red', 'blue', 'green')))
+    plt.xlim(xx.min(), xx.max())
+    plt.ylim(yy.min(), yy.max())
+    plt.title("3-Class classification (k = %i)" % (3))
+
+    plt.show()
+    '''
+    ]
+
+    ### Response:

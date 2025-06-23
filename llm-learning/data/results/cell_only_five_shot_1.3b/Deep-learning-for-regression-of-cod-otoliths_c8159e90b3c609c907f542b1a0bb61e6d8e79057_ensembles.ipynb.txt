@@ -1,0 +1,33 @@
+```python
+    # Create a new table
+    new_table = pd.DataFrame(data=[], columns=['Participant1', 'Participant2', 'Percentage_Agreement'])
+
+    # Add data to the new table
+    new_table.loc[0] = ['Participant1', 'Participant2', 'Percentage_Agreement']
+    new_table.loc[1] = ['Participant1', 'Participant2', 90]
+    new_table.loc[2] = ['Participant1', 'Participant2', 85]
+    new_table.loc[3] = ['Participant1', 'Participant2', 75]
+    new_table.loc[4] = ['Participant1', 'Participant2', 80]
+
+    # Save the new table to a CSV file
+    new_table.to_csv('percentage_agreement.csv', index=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "new table - percentage agreement (PA)"
+    Original Code Cells:
+    '''
+    df = pd.read_csv('percentage_agreement.csv')
+    df
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Read the CSV file
+    df = pd.read_csv('percentage_agreement.csv')
+
+    # Print the dataframe
+    print(df)
+    ```

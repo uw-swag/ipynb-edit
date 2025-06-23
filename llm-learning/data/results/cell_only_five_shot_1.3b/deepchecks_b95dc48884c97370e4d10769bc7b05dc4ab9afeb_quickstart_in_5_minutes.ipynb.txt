@@ -1,0 +1,11 @@
+
+The code you provided is used to create a DeepChecks dataset. The `label_name` parameter is used to specify the name of the label column in the dataset. If the dataset has categorical features, the `cat_features` parameter is used to specify the list of categorical features.
+
+If you want to remove the label_name from the dataset, you can do so by setting the `label_name` parameter to `None`. Here's how you can do it:
+
+```python
+ds_train = Dataset(df_train, label_name=None, cat_features=[])
+ds_test =  Dataset(df_test,  label_name=None, cat_features=[])
+```
+
+In this case, the label column will not be used in any operations, such as splitting the dataset into training and validation sets.

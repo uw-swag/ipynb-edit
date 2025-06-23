@@ -1,0 +1,33 @@
+```
+    import pandas as pd
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from deepchecks import Dataset
+
+# Load the dataset
+df = load_breast_cancer(as_frame=True).frame
+label = 'target'
+
+# Split the dataset into training and testing sets
+train_df, test_df = train_test_split(df, test_size=0.33, random_state=0)
+
+# Create a DeepChecks Dataset object for the training set
+train = Dataset(train_df, label=label)
+
+# Create a DeepChecks Dataset object for the testing set
+test = Dataset(test_df, label=label)
+
+# Create an AdaBoost classifier
+clf = AdaBoostClassifier()
+
+# Extract features from the training set
+features = train_df.drop(label, axis=1)
+
+# Extract the target variable from the training set
+target = train_df[label]
+
+# Fit the classifier to the training data
+clf.fit(features, target)
+
+```

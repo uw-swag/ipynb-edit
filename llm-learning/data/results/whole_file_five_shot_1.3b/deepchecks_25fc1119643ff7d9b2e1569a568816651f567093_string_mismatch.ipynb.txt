@@ -1,0 +1,29 @@
+
+    The code you provided is a simple example of using the Deepchecks library to perform a string mismatch check on a DataFrame. The `StringMismatch` class is a check that checks for string mismatches in a DataFrame.
+
+    The first cell of your code is a simple example of how to use the `StringMismatch` class. It creates a DataFrame with a list of strings, then runs the check on this DataFrame.
+
+    The second cell of your code is an example of how to use the `conditions_decision` method of the `StringMismatch` class. This method takes the result of the check as input and returns a decision on the conditions that were violated.
+
+    The `add_condition_no_variants` method is not a part of the `StringMismatch` class, but it is a method of the `Condition` class. This method is used to add a condition to the check without specifying the variants. This is useful if you want to add a condition that requires a specific number of variants.
+
+    However, the code you provided is not complete and does not provide a complete solution. The `add_condition_no_variants` method is not a part of the `StringMismatch` class, and the `conditions_decision` method is not a part of the `StringMismatch` class either.
+
+    If you want to add a condition that requires a specific number of variants, you would need to use the `add_condition_variants` method of the `Condition` class.
+
+    Here is a complete example:
+
+    '''
+    <Cell_0>
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    r = StringMismatch().add_condition_variants(min_variants=2, max_variants=3).run(df)
+    c  = StringMismatch().conditions_decision(r)
+    <\Cell_0>
+    <Cell_1>
+    c
+    <\Cell_1>
+    '''

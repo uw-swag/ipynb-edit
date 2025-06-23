@@ -1,0 +1,15 @@
+```python
+    <Cell_0>
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+from mlchecks.checks import string_mismatch
+import pandas as pd
+<\Cell_1>
+<Cell_2>
+data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+df = pd.DataFrame(data=data)
+string_mismatch(df)
+<\Cell_2>
+```

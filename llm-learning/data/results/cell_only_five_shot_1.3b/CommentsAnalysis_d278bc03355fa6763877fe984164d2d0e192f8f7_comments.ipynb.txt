@@ -1,0 +1,41 @@
+
+    # Experimenting with Word2Vec and LDA
+
+    # First, we need to convert our text data into vectors. We can use the CountVectorizer or TfidfVectorizer for this.
+
+    # CountVectorizer
+    vectorizer = CountVectorizer(stop_words=get_stop_words('russian'), max_features=1000, ngram_range=(1, 2))
+    X = vectorizer.fit_transform(comments.text)
+
+    # TfidfVectorizer
+    vectorizer = TfidfVectorizer(stop_words=get_stop_words('russian'), max_features=1000, ngram_range=(1, 2))
+    X = vectorizer.fit_transform(comments.text)
+
+    # Now, we can use LDA to create topics.
+
+    # LDA
+    lda = lm.LDA(n_components=10)
+    lda.fit(X)
+
+    # We can then print the topics.
+
+    for i, topic in enumerate(lda.components_):
+        print(f"Top 10 words for topic #{i}")
+        print([vectorizer.get_feature_names()[index] for index in topic.argsort()[-10:]])
+
+    # We can also print the proportions of words in each topic.
+
+    for i, topic in enumerate(lda.components_):
+        print(f"Topic #{i}")
+        print([(vectorizer.get_feature_names()[index], topic[index]) for index in topic.argsort()[-10:]])
+
+    # We can also print the proportions of words in each topic.
+
+    for i, topic in enumerate(lda.components_):
+        print(f"Topic #{i}")
+        print([(vectorizer.get_feature_names()[index], topic[index]) for index in topic.argsort()[-10:]])
+
+    # We can also print the proportions of words in each topic.
+
+    for i, topic in enumerate(lda.components_):
+        print(f"Topic #{

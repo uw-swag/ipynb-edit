@@ -1,0 +1,27 @@
+```python
+    import string
+    import re
+
+    def most_freq_letter(text):
+        # Remove non-letter characters
+        text = re.sub(r'[^a-zA-Z]', '', text)
+
+        # Convert to lowercase
+        text = text.lower()
+
+        # Get the frequency of each letter
+        freq = {char: text.count(char) for char in string.ascii_lowercase}
+
+        # Return the letter with the highest frequency
+        return max(freq, key=freq.get)
+
+    # Test cases
+    assert most_freq_letter("Hello World!") == "l", "Hello test"
+    assert most_freq_letter("How do you do?") == "o", "O is most wanted"
+    assert most_freq_letter("One") == "e", "All letter only once."
+    assert most_freq_letter("Oops!") == "o", "Don't forget about lower case."
+    assert most_freq_letter("AAaooo!!!!") == "a", "Only letters."
+    assert most_freq_letter("abe") == "a", "The First."
+
+    print("The local tests are done.")
+    ```

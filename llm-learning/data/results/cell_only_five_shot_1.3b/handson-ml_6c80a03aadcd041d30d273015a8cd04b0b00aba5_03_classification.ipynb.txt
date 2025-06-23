@@ -1,0 +1,40 @@
+
+    '''
+    from sklearn.datasets import fetch_mldata
+mnist = fetch_mldata('MNIST original')
+mnist
+from sklearn.linear_model import SGDClassifier
+
+sgd_clf = SGDClassifier(max_iter=5, random_state=42)
+sgd_clf.fit(X_train, y_train_5)
+from sklearn.ensemble import RandomForestClassifier
+forest_clf = RandomForestClassifier(random_state=42)
+y_probas_forest = cross_val_predict(forest_clf, X_train, y_train_5, cv=3,
+                                    method="predict_proba")
+from sklearn.multiclass import OneVsOneClassifier
+ovo_clf = OneVsOneClassifier(SGDClassifier(max_iter=5, random_state=42))
+ovo_clf.fit(X_train, y_train)
+ovo_clf.predict([some_digit])
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import Imputer
+
+imputer = Imputer(strategy="median")
+
+num_pipeline = Pipeline([
+        ("select_numeric", DataFrameSelector(["Age", "SibSp", "Parch", "Fare"])),
+        ("imputer", Imputer(strategy="median")),
+    ])
+from future_encoders import OneHotEncoder
+from sklearn.svm import SVC
+
+svm_clf = SVC()
+svm_clf.fit(X_train, y_train)
+from sklearn.ensemble import RandomForestClassifier
+
+forest_clf = RandomForestClassifier(random_state=42)
+forest_scores = cross_val_score(forest_clf, X_train, y_train, cv=10)
+forest_scores.mean()
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import cross_val_score
+
+log_clf = Logistic

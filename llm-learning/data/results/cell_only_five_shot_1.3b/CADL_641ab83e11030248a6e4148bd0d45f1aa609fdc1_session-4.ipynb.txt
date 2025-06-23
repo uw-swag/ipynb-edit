@@ -1,0 +1,62 @@
+```python
+    import tensorflow as tf
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import gif
+    import vgg16
+
+    # Initialize all variables
+    def global_variables_initializer():
+        tf.global_variables_initializer().run()
+
+    # Define the step size
+    step = 0.1
+
+    # Initialize the input image
+    img_copy = dream_img.copy()
+
+    # Initialize the optimizer
+    optimizer = tf.train.AdamOptimizer(learning_rate=step)
+
+    # Define the number of iterations
+    n_iterations = 100
+
+    # Define the plot step
+    plot_step = 5
+
+    # Initialize the list for storing images
+    imgs = []
+
+    # Initialize the session
+    with tf.Session() as sess:
+        sess.run(global_variables_initializer())
+
+        for it_i in range(n_iterations):
+            # Calculate the gradient
+            this_res = sess.run(tf.gradients(-tv_loss + feature_loss, x)[0], feed_dict={x: img_copy})[0]
+
+            # Normalize the gradient
+            this_res /= (np.max(np.abs(this_res) + 1e-8))
+
+            # Add the gradient to the input image
+            img_copy += this_res * step
+
+            # Plot the image
+            if (it_i + 1) % plot_step == 0:
+                m = vgg16.deprocess(img_copy[0])
+                imgs.append(m)
+                plt.imshow(m)
+                plt.show()
+
+        # Build the GIF
+        gif.build_gif(imgs, saveto='guided.gif')
+
+        # Reset the list for storing images
+        imgs = []
+
+        # Initialize the session
+        with tf.Session() as sess:
+            sess.run(global_variables_initializer())
+
+            # Map input to noise
+            og_img

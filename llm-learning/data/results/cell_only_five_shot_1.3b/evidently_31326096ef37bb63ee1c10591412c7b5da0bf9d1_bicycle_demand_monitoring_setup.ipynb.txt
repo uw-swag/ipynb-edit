@@ -1,0 +1,27 @@
+```python
+    from evidently.dashboard.tabs.data_drift import DataDriftTab
+    from evidently.dashboard.tabs.data_drift.data_drift_tab import DataDriftOptions
+    from evidently.dashboard.tabs.data_drift.data_drift_tab import StatTest
+    from evidently.dashboard.tabs.data_drift.data_drift_tab import anderson_stat_test
+
+    class MyDataDriftTab(DataDriftTab):
+        def __init__(self, options: DataDriftOptions):
+            super().__init__(options)
+            self.options = options
+
+        def calculate(self, data: pd.DataFrame) -> pd.DataFrame:
+            # your code here
+            pass
+
+        def present(self, data: pd.DataFrame) -> go.Figure:
+            # your code here
+            pass
+
+    # options = DataDriftOptions(feature_stattest_func=anderson_stat_test, all_features_threshold=0.9, nbinsx=20)
+
+    my_tab = MyDataDriftTab(options)
+    my_tab.calculate(data)
+    my_tab.present(data)
+    ```
+
+    This code will create a new tab in the evidently dashboard that uses the Andersons test to compare the statistical properties of two datasets. The Andersons test is a non-parametric test that is used to determine if the data are similar or not. The p-value is used to determine the significance of the results. If the p-value is less than a certain threshold, the test is considered statistically significant.

@@ -1,0 +1,16 @@
+```python
+    from tensorflow.keras.layers import Conv2D, GlobalAveragePooling2D, Input
+    from tensorflow.keras.models import Model
+
+    def spp_block(inputs, pool_size):
+        x = GlobalAveragePooling2D()(inputs)
+        x = Reshape((-1, 1))(x)
+        x = Dense(units=pool_size*pool_size*512, activation='relu')(x)
+        x = Reshape((-1, pool_size, pool_size, 512))(x)
+        return x
+
+    inputs = Input(shape=(IM_SIZE, IM_SIZE, 3))
+    x = Conv2D(filters=64, kernel_size=(1, 1), strides=(1, 1), padding='same')(inputs)
+    x = spp_block(x, pool_size=5)
+    model = Model(inputs, x)
+    ```

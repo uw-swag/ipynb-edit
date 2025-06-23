@@ -1,0 +1,44 @@
+```
+    import tensorflow as tf
+    from tensorflow import keras
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+
+    dataset = pd.read_csv("../dataset/data.csv")
+    print(dataset)
+
+    X=dataset.iloc[:,:-1].values
+    Y=dataset.iloc[:,20].values
+    print(X)
+
+    print(Y)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
+
+    X_train
+
+    X_test
+
+    model = keras.Sequential([
+        keras.layers.Dense(19,input_shape=(20,),activation='relu'),
+        keras.layers.Dense(300,activation='relu'),
+        keras.layers.Dense(250,activation='relu'),
+        keras.layers.Dense(200,activation='relu'),
+        keras.layers.Dense(150,activation='relu'),
+        keras.layers.Dense(100,activation='relu'),
+        keras.layers.Dense(50,activation='relu'),
+        keras.layers.Dense(45,activation='relu'),
+        keras.layers.Dense(30,activation='relu'),
+        keras.layers.Dense(20,activation='relu'),
+        keras.layers.Dense(15,activation='relu'),
+        keras.layers.Dense(6,activation='sigmoid')    
+    ])
+
+    model.compile(
+        optimizer='adam',
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy']
+    )
+
+    model.fit(X_train,y_train,epochs=20, batch_size=64

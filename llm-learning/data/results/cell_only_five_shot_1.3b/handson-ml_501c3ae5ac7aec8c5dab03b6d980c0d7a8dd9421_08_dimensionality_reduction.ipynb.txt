@@ -1,0 +1,66 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the mean of a list"
+    Original Code Cells:
+    '''
+    def calculate_mean(lst):
+        return sum(lst) / len(lst)
+
+    # Usage
+    lst = [1, 2, 3, 4, 5]
+    print(calculate_mean(lst))
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the median of a list"
+    Original Code Cells:
+    '''
+    def calculate_median(lst):
+        sorted_lst = sorted(lst)
+        lst_len = len(lst)
+        if lst_len % 2 == 0:
+            return (sorted_lst[lst_len//2] + sorted_lst[lst_len//2 - 1]) / 2
+        else:
+            return sorted_lst[lst_len//2]
+
+    # Usage
+    lst = [1, 2, 3, 4, 5]
+    print(calculate_median(lst))
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the mode of a list"
+    Original Code Cells:
+    '''
+    from collections import Counter
+
+    def calculate_mode(lst):
+        counter = Counter(lst)
+        max_count = max(list(counter.values()))
+        mode_val = [num for num, freq in counter.items() if freq == max_count]
+        return mode_val
+
+    # Usage
+    lst = [1, 2, 3, 4, 5, 5, 5]
+    print(calculate_mode(lst))
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "

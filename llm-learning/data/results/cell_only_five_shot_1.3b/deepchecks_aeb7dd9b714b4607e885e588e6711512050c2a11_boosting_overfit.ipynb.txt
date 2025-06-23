@@ -1,0 +1,23 @@
+```python
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.model_selection import cross_val_score
+
+    # Define the model
+    gb = GradientBoostingClassifier(random_state=0)
+
+    # Perform cross-validation
+    scores = cross_val_score(gb, X, y, cv=5)
+
+    # Print the mean score
+    print("Mean cross-validation score: %.2f" % np.mean(scores))
+
+    # Fit the model
+    gb.fit(X, y)
+
+    # Predict the labels
+    y_pred = gb.predict(X)
+
+    # Print the accuracy
+    print("Accuracy: %.2f" % accuracy_score(y, y_pred))
+    ```
+    This code improves the performance of the Gradient Boosting Classifier by using cross-validation to tune the hyperparameters and avoid overfitting. The mean cross-validation score is printed, which indicates the average accuracy of the model across the 5 folds. The model is then fitted to the data and the accuracy is printed.

@@ -1,0 +1,217 @@
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab
+dataset = fetch_california_housing(as_frame=True)
+df = dataset.frame
+df.head()
+target = 'MedHouseVal'
+prediction = 'prediction'
+
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+ref_data = df[:15000]
+prod_data = df[15000:]
+model = RandomForestRegressor(random_state=0)
+model.fit(ref_data[features], ref_data[target])
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0)])
+dashboard.calculate(ref_data.sample(1000, random_state=0).sort_index(), 
+                    prod_data.sample(1000, random_state=0).sort_index(), column_mapping=column_mapping)
+dashboard.show()
+RegressionPerformanceTab.list_widgets()
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    'Regression Model Performance Report.',
+    'Reference: Model Quality (+/- std)',
+    'Current: Model Quality (+/- std)',
+    'Current: Error Normality',
+    'Current: Error Distribution'
+])])
+dashboard.calculate(ref_data.sample(1000, random_state=0).sort_index(), prod_data.sample(1000, random_state=0).sort_index(), column_mapping=column_mapping)
+dashboard.show()
+import numpy as np
+
+def calculate_PSI(expected, actual, buckets=10):
+    # inspired by https://github.com/mwburke/population-stability-index/blob/master/psi.py
+    
+    def scale_range (input, min, max):
+            input += -(np.min(input))
+            input /= np.max(input) / (max - min)
+            input += min
+            return input
+
+
+    breakpoints = np.arange(0, buckets + 1) / (buckets) * 100
+#     breakpoints = np.stack([np.percentile(expected, b) for b in breakpoints])
+    breakpoints = scale_range(breakpoints, np.min(expected), np.max(expected))
+    expected_percents = np.histogram(expected, breakpoints)[0] / len(expected)
+    actual_percents = np.histogram(actual, breakpoints)[0] / len(actual)
+    
+    def sub_psi(e_perc, a_perc):
+            '''Calculate the actual PSI value from comparing the values.
+               Update the actual value to a very small number if equal to zero
+            '''
+            if a_perc == 0:
+                a_perc = 0.0001
+            if e_perc == 0:
+                e_perc = 0.0001
+
+            value = (e_perc - a_perc) * np.log(e_perc / a_perc)
+            return(value)
+        
+    psi = (sub_psi(expected_percents[i], actual_percents[i]) for i in range(0, len(expected_percents)))
+    psi_value = np.round(sum(psi), 3)
+    
+    return buckets, expected_percents, actual_percents, psi_value
+
+buckets, ref, curr, val = calculate_PSI(ref_data.MedInc, prod_data.MedInc, buckets=10)
+# prototype of the widget
+import plotly.graph_objs as go
+
+psi = go.Figure()
+
+psi.add_trace(go.Bar(x=[x+1 for x in range(buckets)], y=ref, marker_color='#191970', name='reference'))
+psi.add_trace(go.Bar(x=[x+1 for x in range(buckets)], y=curr, marker_color='#b0c4de', name='production'))
+
+psi.update_layout(     
+    width=500, 
+    height=500,
+    xaxis_title="buckets",
+    yaxis_title="percents",
+    xaxis=dict(
+        showticklabels=True
+    ),
+    yaxis=dict(
+        showticklabels=True
+    ),
+    legend_title=f'PSI = {val}',
+    legend=dict(
+        orientation="v",
+        yanchor="top",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+)
+
+
+# make a class for the widget
+import json
+from typing import Optional
+
+import pandas as pd
+import numpy as np
+
+import plotly.graph_objs as go
+
+from evidently.analyzers.regression_performance_analyzer import RegressionPerformanceAnalyzer
+from evidently.model.widget import BaseWidgetInfo, AlertStats
+from evidently.widgets.widget import Widget, RED
+
+
+class PSIWidget(Widget):
+    
+    def __init__(self, title: str, feature: str):
+        self.title = title
+        self.feature = feature
+
+    def calculate(self,
+                  reference_data: pd.DataFrame,
+                  current_data: pd.DataFrame,
+                  column_mapping,
+                  analyzers_results) -> Optional[BaseWidgetInfo]:
+        
+        buckets, ref, curr, val = calculate_PSI(reference_data[self.feature], current_data[self.feature], buckets=10)
+        
+        psi = go.Figure()
+        
+        psi.add_trace(go.Bar(x=[x+1 for x in range(buckets)], y=ref, marker_color='#191970', name='reference'))
+        psi.add_trace(go.Bar(x=[x+1 for x in range(buckets)], y=curr, marker_color='#b0c4de', name='production'))
+
+        psi.update_layout(        
+            xaxis_title="buckets",
+            yaxis_title="percents",
+            xaxis=dict(
+                showticklabels=True
+            ),
+            yaxis=dict(
+                showticklabels=True
+            ),
+            legend_title=f'PSI = {val}',
+            legend=dict(
+                orientation="v",
+                yanchor="top",
+                y=1.02,
+                xanchor="right",
+                x=1
+            ),
+        )
+
+        psi_json = json.loads(psi.to_json())
+
+        return BaseWidgetInfo(
+            title=self.title,
+            type="big_graph",
+            size=1,
+            params={
+                "data": psi_json['data'],
+                "layout": psi_json['layout']
+            },
+        )
+
+
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    'Current: Predicted vs Actual',
+    'Current: Error Normality',
+    PSIWidget('PSI MedInc reference/production', 'MedInc'),
+    'Current: Error Distribution'
+])])
+dashboard.calculate(ref_data.sample(1000, random_state=0).sort_index(), 
+                    prod_data.sample(1000, random_state=0).sort_index(), 
+                    column_mapping=column_mapping)
+dashboard.show()
+from evidently.tabs.base_tab import Tab, Verbose
+
+class MyPSITab(Tab):
+    widgets = [
+        (PSIWidget('PSI MedInc reference/production', 'MedInc'), Verbose.ALWAYS),
+        (PSIWidget('PSI HouseAge reference/production', 'HouseAge'), Verbose.ALWAYS),
+        (PSIWidget('PSI Latitude reference/production', 'Latitude'), Verbose.ALWAYS),
+        (PSIWidget('PSI Longitude reference/production', 'Longitude'), Verbose.ALWAYS),
+    ]
+
+
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+dashboard = Dashboard(tabs=[MyPSITab()])
+dashboard.calculate(ref_data.sample(1000, random_state=0).sort_index(), 
+                    prod_data.sample(1000, random_state=0).sort_index(), 
+                    column_mapping=column_mapping)
+dashboard.show()
+#share your dashboard with colleagues and friends
+#dashboard.save('california_housing_PSI_tap.html')

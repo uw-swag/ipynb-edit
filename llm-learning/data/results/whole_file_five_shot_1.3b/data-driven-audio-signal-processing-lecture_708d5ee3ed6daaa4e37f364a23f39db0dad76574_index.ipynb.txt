@@ -1,0 +1,23 @@
+```python
+    import numpy as np
+    import pandas as pd
+
+    # Create a simple DataFrame
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': np.random.randn(8),
+        'D': np.random.randn(8)
+    })
+
+    # Create a pattern
+    pattern = 'one two'
+
+    # Use a boolean mask to select rows where 'B' matches the pattern
+    mask = df['B'].str.contains(pattern)
+
+    # Select rows where 'B' matches the pattern
+    df_matched = df[mask]
+
+    print(df_matched)
+    ```

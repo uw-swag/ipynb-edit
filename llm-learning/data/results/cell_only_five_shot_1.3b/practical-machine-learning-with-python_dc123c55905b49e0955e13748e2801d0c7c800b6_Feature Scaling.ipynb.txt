@@ -1,0 +1,26 @@
+
+    The code you provided is a demonstration of how to perform various scaling techniques on a single column of a pandas DataFrame. Here's a brief explanation of what each line of code does:
+
+1. `from sklearn.preprocessing import StandardScaler, MinMaxScaler, RobustScaler`: This line imports the necessary scaling methods from the sklearn.preprocessing module.
+
+2. `import numpy as np`: This line imports the numpy library, which is used for numerical computations.
+
+3. `import pandas as pd`: This line imports the pandas library, which is used for data manipulation and analysis.
+
+4. `np.set_printoptions(suppress=True)`: This line sets the printing options to suppress scientific notation.
+
+5. `views = pd.DataFrame([1295., 25., 19000., 5., 1., 300.], columns=['views'])`: This line creates a pandas DataFrame with the given data.
+
+6. `ss = StandardScaler()`: This line creates an instance of the StandardScaler class.
+
+7. `views['zscore'] = ss.fit_transform(views[['views']])`: This line applies the standard scaler to the 'views' column of the DataFrame and stores the result in a new column named 'zscore'.
+
+8. `vw = np.array(views['views'])`: This line converts the 'views' column to a numpy array.
+
+9. `(vw[0] - np.mean(vw)) / np.std(vw)`: This line calculates the z-score of the first element of the array.
+
+10. `mms = MinMaxScaler()`: This line creates an instance of the MinMaxScaler class.
+
+11. `views['minmax'] = mms.fit_transform(views[['views']])`: This line applies the min-max scaler to the 'views' column of the DataFrame and stores the result in a new column named 'minmax'.
+
+12. `(vw[0] - np.min(vw)) / (np.max(vw)

@@ -1,0 +1,33 @@
+```python
+    import tensorflow as tf
+
+    # Sparse softmax cross entropy with logits
+    tf.nn.sparse_softmax_cross_entropy_with_logits(labels=None, logits=None,
+                                                   softmax_dim=-1, name=None)
+
+    # This function computes the softmax cross entropy between the softmax of the logits
+    # and the true labels.
+
+    # Arguments:
+    #   labels: A tensor of int32 or int64 scalar values.
+    #   logits: A tensor of float values.
+    #   softmax_dim: The dimension along which to softmax.
+    #   name: A name for the operation (optional).
+
+    # Returns:
+    #   A tensor of the same dtype as logits, with the same shape as logits,
+    #   containing the softmax cross entropy loss.
+
+    # Examples:
+    # >>> y = tf.constant([[0.0, 0.0, 1.0, 0.0]], dtype=tf.float32)
+    # >>> logits = tf.constant([[3.0, -1.0, 2.0, -1.0]], dtype=tf.float32)
+    # >>> tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
+    # <tf.Tensor: shape=(1, 3), dtype=float32,
+    # numpy=array([[0.5, 0.2, 0.3]], dtype=float32)>
+    ```
+
+    ## References
+    # This function is part of the TensorFlow API.
+    # The softmax function, and the softmax cross entropy loss function, are described in more detail in the TensorFlow documentation.
+    # https://www.tensorflow.org/api_docs/python/tf/nn/sparse_softmax_cross_entropy_with_logits
+    ```

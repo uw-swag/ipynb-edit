@@ -1,0 +1,30 @@
+```python
+    # Rename multiple files within 02. Regression folder
+
+    # Import necessary libraries
+    import os
+
+    # Define the directory path
+    directory_path = "../02_regression"
+
+    # Define the list of old and new names
+    old_names = ["old_file1.txt", "old_file2.txt", "old_file3.txt"]
+    new_names = ["new_file1.txt", "new_file2.txt", "new_file3.txt"]
+
+    # Check if the directory exists
+    if os.path.exists(directory_path):
+        # Iterate over the old and new names
+        for old_name, new_name in zip(old_names, new_names):
+            # Define the old and new file paths
+            old_file_path = os.path.join(directory_path, old_name)
+            new_file_path = os.path.join(directory_path, new_name)
+
+            # Check if the old file exists
+            if os.path.exists(old_file_path):
+                # Rename the file
+                os.rename(old_file_path, new_file_path)
+            else:
+                print(f"The file {old_name} does not exist.")
+    else:
+        print(f"The directory {directory_path} does not exist.")
+    ```

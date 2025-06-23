@@ -1,0 +1,43 @@
+<Cell_0>
+!git clone https://github.com/zhouhaoyi/Informer2020.git
+<\Cell_0>
+<Cell_1>
+% cd Informer2020
+<\Cell_1>
+<Cell_2>
+!ls
+<\Cell_2>
+<Cell_3>
+! pip install -r requirements.txt
+<\Cell_3>
+<Cell_4>
+import pandas as pd
+<\Cell_4>
+<Cell_5>
+f=pd.read_csv("/content/Informer2020/data/ETT/ETTh1.csv")
+<\Cell_5>
+<Cell_6>
+f.head()
+<\Cell_6>
+<Cell_7>
+m1=pd.read_csv("/content/Informer2020/data/ETT/ETTm1.csv")
+m1.head()
+<\Cell_7>
+<Cell_8>
+# run code in local machine as it takes time and colab doesnt support full requirements
+<\Cell_8>
+<Cell_9>
+# ETTh1
+!python -u main_informer.py --model informer --data ETTh1 --attn prob
+<\Cell_9>
+<Cell_10>
+# ETTh2
+!python -u main_informer.py --model informer --data ETTh2 --attn prob
+<\Cell_10>
+<Cell_11>
+# ETTm1
+python -u main_informer.py --model informer --data ETTm1 --attn prob
+<\Cell_11>
+<Cell_12>
+
+<\Cell_12>

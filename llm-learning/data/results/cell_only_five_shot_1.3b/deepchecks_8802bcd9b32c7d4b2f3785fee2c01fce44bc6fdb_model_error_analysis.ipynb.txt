@@ -1,0 +1,20 @@
+```
+    from deepchecks.vision.checks.performance import ModelErrorAnalysis
+    from deepchecks.vision.datasets.classification import mnist
+
+    mnist_model = mnist.load_model()
+    train_ds = mnist.load_dataset(train=True, object_type='VisionData')
+    test_ds = mnist.load_dataset(train=False, object_type='VisionData')
+    check = ModelErrorAnalysis(min_error_model_score=0)
+    check.run(train_ds, test_ds, mnist_model)
+
+    import numpy as np
+    from deepchecks.vision.datasets.detection import coco
+    yolo = coco.load_model(pretrained=True)
+
+    train_ds = coco.load_dataset(train=True, object_type='VisionData')
+    test_ds = coco.load_dataset(train=False, object_type='VisionData')
+    check = ModelErrorAnalysis(min_error_model_score=-1)
+    check.run(train_ds, test_ds, yolo)
+    ```
+    The code above is a part of a larger codebase and deletes the notebooks. The notebooks were used for data exploration and model training, and they are no longer needed.

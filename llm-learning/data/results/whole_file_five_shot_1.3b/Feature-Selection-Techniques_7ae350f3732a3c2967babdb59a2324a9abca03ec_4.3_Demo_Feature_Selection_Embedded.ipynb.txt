@@ -1,0 +1,49 @@
+
+    '''
+    Commit Message: "adding the first notebook about filter methods"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    # import seaborn as sns
+    # import matplotlib.pyplot as plt
+    import os
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import Lasso, LogisticRegression
+    from sklearn.preprocessing import RobustScaler
+    from sklearn.feature_selection import SelectFromModel
+    from feature_selection import embedded_method
+    # plt.style.use('seaborn-colorblind')
+    # %matplotlib inline
+
+    <\Cell_0>
+    <Cell_1>
+    from sklearn.datasets import load_breast_cancer
+    data = load_breast_cancer()
+    data = pd.DataFrame(np.c_[data['data'], data['target']],
+                  columns= np.append(data['feature_names'], ['target']))
+    <\Cell_1>
+    <Cell_2>
+    data.head(5)
+    <\Cell_2>
+    <Cell_3>
+    X_train, X_test, y_train, y_test = train_test_split(data.drop(labels=['target'], axis=1), 
+                                                    data.target, test_size=0.2,
+                                                    random_state=0)
+    X_train.shape, X_test.shape
+    <\Cell_3>
+    <Cell_4>
+    # linear models benefit from feature scaling
+
+    scaler = RobustScaler()
+    scaler.fit(X_train)
+    <\Cell_4>
+    <Cell_5>
+    # fit the LR model
+    sel_ = SelectFromModel(LogisticRegression(C=1, penalty='l1'))
+    sel_.fit(scaler.transform(X_train), y_train)
+    <\Cell_5>
+    <Cell_6>
+    # make a list with the selected features
+    selected_feat = X_train.columns[(sel_.get_

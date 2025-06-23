@@ -1,0 +1,28 @@
+
+    The code you provided seems to be correct for performing Principal Component Analysis (PCA) on a dataset. However, there seems to be a bug in the 'read_and_store_data' function. The function seems to be reading the data from a CSV file, but it's not storing the data in a pandas DataFrame.
+
+    Here's the corrected code:
+
+    ```python
+    from sklearn.decomposition import PCA
+    import pandas as pd
+
+    channels = ['FP1-F7', 'F7-T7','T7-P7', 'P7-O1', 'FP1-F3', 'F3-C3', 'C3-P3', 'P3-O1', 'FP2-F4', 'F4-C4', 'C4-P4', 'P4-O2', 'FP2-F8', 'F8-T8', 'T8-P8', 'P8-O2', 'FZ-CZ', 'CZ-PZ', 'seizure']
+    experiments = ['Average', 'LeftRight', 'Full']
+    perfInd = ['Accuracy', 'Sensitivity', 'Specificity', 'Precision', 'F1 Score', 'MCC', 'Kappa', 'Time']
+
+    df = pd.read_csv(csvImportFile, delimiter = ',', header = 0)
+
+    # Perform PCA on the data
+    pca = PCA(n_components=2)
+    pca.fit(df)
+
+    # Transform the data
+    transformed_data = pca.transform(df)
+
+    # Store the transformed data
+    transformed_df = pd.DataFrame(transformed_data, columns=['PC1', 'PC2'])
+    transformed_df.to_csv(csvExportFile, index = False)
+    ```
+
+    This code will read the data from the CSV file, perform PCA, and then store the transformed data in a new CSV file.

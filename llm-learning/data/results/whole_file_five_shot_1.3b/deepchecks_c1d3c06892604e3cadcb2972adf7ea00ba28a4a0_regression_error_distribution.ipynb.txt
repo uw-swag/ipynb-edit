@@ -1,0 +1,40 @@
+```python
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RegressionErrorDistribution
+
+    # Load the diabetes dataset
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    # Split the data into training and testing sets
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+
+    # Create a dataset from the training data
+    train = Dataset(train_df, label_name='target', cat_features=['sex'])
+
+    # Create a dataset from the testing data
+    test = Dataset(test_df, label_name='target', cat_features=['sex'])
+
+    # Create a Gradient Boosting Regressor model
+    clf = GradientBoostingRegressor(random_state=0)
+
+    # Fit the model to the training data
+    _ = clf.fit(train.features_columns, train.label_col)
+
+    # Create a RegressionErrorDistribution check
+    check = RegressionErrorDistribution()
+
+    # Run the check on the test data
+    _ = check.run(test, clf)
+
+    # Update the label in the test data
+    test.data[test.label_name] = 150
+
+    # Create a new RegressionErrorDistribution check
+    check = RegressionErrorDistribution()
+
+    # Run the check on the updated test data
+    _ = check.run(test, clf)
+    ```

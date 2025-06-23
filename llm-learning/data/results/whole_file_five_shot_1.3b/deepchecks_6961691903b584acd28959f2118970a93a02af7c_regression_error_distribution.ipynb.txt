@@ -1,0 +1,36 @@
+```python
+    #require "ocephes" ;;
+    Format.printf "gamma = %g@." (Ocephes.gamma 4.0)
+
+    ## Load the diabetes dataset
+    from sklearn.datasets import load_diabetes
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    ## Split the dataset into training and testing sets
+    from sklearn.model_selection import train_test_split
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+
+    ## Create a dataset from the training data
+    from deepchecks.base import Dataset
+    train = Dataset(train_df, label='target', cat_features=['sex'])
+
+    ## Create a dataset from the testing data
+    test = Dataset(test_df, label='target', cat_features=['sex'])
+
+    ## Create a Gradient Boosting Regressor model
+    from sklearn.ensemble import GradientBoostingRegressor
+    clf = GradientBoostingRegressor(random_state=0)
+
+    ## Fit the model to the training data
+    _ = clf.fit(train.features_columns, train.label_col)
+
+    ## Run the RegressionErrorDistribution check on the test data
+    check = RegressionErrorDistribution()
+    _ = check.run(test, clf)
+
+    ## Add a new example to the test data
+    test.data[test.label_name] = 150
+
+    ## Run the RegressionErrorDistribution check on the updated test data
+    _ = check.run(test, clf)
+    ```

@@ -1,0 +1,25 @@
+```python
+    # Import the necessary libraries
+    from transformers import ChatPromptTemplate
+
+    # Define the template string
+    template_string42 = """
+    Give me 10 reasons why {country} is a good place to retire.
+    Write in {language}. Output in JSON Format.
+    """
+
+    # Define the prompt template
+    prompt_template42 = ChatPromptTemplate.from_template(template_string42)
+
+    # Define the country to retire and the language to write in
+    country_to_retire = "Japanese"
+    language_to_write = "Rude English"
+
+    # Generate the prompt
+    prompt42 = prompt_template42.format_messages(
+        country=country_to_retire,
+        language=language_to_write)
+
+    # Print the prompt
+    print(prompt42)
+    ```

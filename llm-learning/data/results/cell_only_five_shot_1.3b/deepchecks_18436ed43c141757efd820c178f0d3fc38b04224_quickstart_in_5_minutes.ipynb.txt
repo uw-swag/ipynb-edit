@@ -1,0 +1,43 @@
+```python
+    ### Instruction
+    [
+    Commit Message:" [EDIT] mappers demos to use new class and function names"
+    Original Code:
+    '''
+    from pyspark import SparkConf, SparkContext
+    from mmtfPyspark.io import mmtfReader
+    from mmtfPyspark.mappers import structureToProteinDimers, structureToBioassembly
+    cutoffDistance = 8.0
+    contacts = 20
+    useAllAtoms = False
+    exclusive = True
+
+    dimers = protein.flatMap(structureToBioassembly()) \
+                    .flatMap(structureToProteinDimers(cutoffDistance, contacts, useAllAtoms, exclusive))
+    
+
+    '''
+    ]
+
+    ### Response
+    The original code is using the `structureToBioassembly` and `structureToProteinDimers` functions from the `mmtfPyspark.mappers` module. These functions are used to transform the protein structure into a format that can be used for further analysis.
+
+    Here's how the code is being used:
+
+    ```python
+    from pyspark import SparkConf, SparkContext
+    from mmtfPyspark.io import mmtfReader
+    from mmtfPyspark.mappers import structureToProteinDimers, structureToBioassembly
+
+    cutoffDistance = 8.0
+    contacts = 20
+    useAllAtoms = False
+    exclusive = True
+
+    dimers = protein.flatMap(structureToBioassembly()) \
+                    .flatMap(structureToProteinDimers(cutoffDistance, contacts, useAllAtoms, exclusive))
+    ```
+
+    The `protein` variable is a Spark DataFrame that contains the protein structure data. The `flatMap` function is used to apply a function to each element in the DataFrame, and the result is a new DataFrame with the transformed elements.
+
+    The `structureToBioassembly` function is used to transform the protein structure into a format that can be used for bioassembly analysis. The `structureToProteinDimers` function is used to transform the protein structure into a format that can be used for protein

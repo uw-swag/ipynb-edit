@@ -1,0 +1,46 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.preprocessing import LabelBinarizer
+    from sklearn.metrics import make_scorer
+    from sklearn.multiclass import OneVsRestClassifier
+    from sklearn import linear_model, cross_validation
+    from sklearn.svm import SVC
+
+    # ... existing code ...
+
+    class_5 = pd.read_csv('class_5.csv')
+    class_6 = pd.read_csv('class_6.csv')
+
+    # ... existing code ...
+
+    def ten_fold_oneVsRest(data, labels):
+        # ... existing code ...
+
+        for x in range(0, 10):
+            foldnum+=1
+            oneVsRest = OneVsRestClassifier(linear_model.LogisticRegression(solver='lbfgs', penalty='l2'))
+            oneVsRest.fit(bnb_train.values, bnb_train_labels[bnb_train_labels.columns.values[0]].values)
+        
+            # ... existing code ...
+
+    def ten_fold_oneVsOne(data, labels):
+        # ... existing code ...
+
+        for x in range(0, 10):
+            foldnum+=1
+            oneVsOne = OneVsOneClassifier(linear_model.LogisticRegression(solver='lbfgs'))
+            oneVsOne.fit(train_sets[x].values, train_set_labels[x].values.ravel())
+        
+            # ... existing code ...
+
+    def ten_fold_ada_logistic(data, labels):
+        # ... existing code ...
+
+        for x in range(0, 10):
+            foldnum+=1
+            ada = AdaBoostClassifier(learning_rate=0.3, n_estimators=100, 
+                                     base_estimator=linear_model.LogisticRegression(solver='lbfgs'), 
+                                     algorithm='SAMME')  
+            ada.fit(bnb_train.values, bnb

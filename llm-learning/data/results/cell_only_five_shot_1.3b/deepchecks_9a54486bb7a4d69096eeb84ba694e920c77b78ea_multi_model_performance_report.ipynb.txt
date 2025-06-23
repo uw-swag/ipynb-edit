@@ -1,0 +1,28 @@
+```python
+    from deepchecks.base import Dataset
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import MultiModelPerformanceReport
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a dataset
+    train_ds = Dataset(X_train, y_train)
+    test_ds = Dataset(X_test, y_test)
+
+    # Define the models
+    models = {
+        "Decision Tree": DecisionTreeClassifier(),
+        "Random Forest": RandomForestClassifier(),
+        "AdaBoost": AdaBoostClassifier()
+    }
+
+    # Create a MultiModelPerformanceReport
+    report = MultiModelPerformanceReport(models)
+
+    # Run the report
+    report.run(train_ds, test_ds)
+    ```

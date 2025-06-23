@@ -1,0 +1,214 @@
+<Cell_0>
+import nltk
+from nltk.tokenize import RegexpTokenizer
+from nltk.text import Text
+from nltk.util import ngrams
+from nltk.stem.wordnet import WordNetLemmatizer
+import spacy
+en_stop = spacy.en.STOPWORDS
+nlp = spacy.load('en')
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.ticker as ticker
+%matplotlib inline
+from cycler import cycler
+
+import re
+import os
+from scipy.misc import imread
+from collections import Counter, defaultdict
+<\Cell_0>
+<Cell_1>
+#fate_folder = 'Data various/Fate_Zero/'
+files = [os.path.join(fate_folder, f) for f in sorted(os.listdir(fate_folder)) if str(f).endswith('txt')]
+files
+<\Cell_1>
+<Cell_2>
+#Let's see how does the text looks like.
+open(files[1], 'r', encoding='UTF-8').read()[:1000]
+<\Cell_2>
+<Cell_3>
+def read_files():
+    skillRegex = re.compile((r'-\d\d\d.\d\d.\d\d'))
+    for f in files:
+        temp_data = open(f, 'r', encoding='UTF-8').read()
+        temp_data = [i for i in temp_data.split('\n')]
+        temp_data = [i.replace(skillRegex.search(i).group(),'') if skillRegex.search(i) != None else i for i in temp_data]
+        temp_data = [i.replace('[edit]', '').replace('\ufeff', '') for i in temp_data if i != '' and i != '[edit]']
+        yield temp_data
+text_sentences = list(read_files())
+text_sentences[1][:10]
+<\Cell_3>
+<Cell_4>
+#List of four lists with text.
+text_lists = [' '.join(i) for i in text_sentences]
+text_lists[1][:1000]
+<\Cell_4>
+<Cell_5>
+#One cleaned text.
+text = ' '.join(text_lists)
+text[:1000]
+<\Cell_5>
+<Cell_6>
+#I'll also need a tokenized text.
+text_tokens_lists = []
+tokenizer = RegexpTokenizer(r'\w+')
+lemma = WordNetLemmatizer()
+for j in text_lists:
+    tokens = tokenizer.tokenize(j.lower())
+    stopped_tokens = [i for i in tokens if i not in en_stop]
+    lemmatized = [lemma.lemmatize(i) for i in stopped_tokens]
+    text_tokens_lists.append(lemmatized)
+
+text_tokens = [j for i in text_tokens_lists for j in i]
+<\Cell_6>
+<Cell_7>
+#Parse text with spacy
+nlp_text = nlp(text)
+#For nltk
+text_nltk = Text(text_tokens)
+<\Cell_7>
+<Cell_8>
+def character_occurences(condition):
+    if condition == 1:
+        characters = Counter()
+        for ent in nlp_text.ents:
+            if ent.label_ == 'PERSON':
+                characters[ent.lemma_] += 1
+        return characters.most_common()
+    
+    if condition == 2:
+        characters1 = Counter()
+        for token in nlp_text:
+            if token.pos_ == 'PROPN':
+                characters1[token.lemma_] += 1
+        return characters1.most_common()
+    
+    if condition == 3:
+        tagged_tokens = nltk.pos_tag(text_tokens)
+        characters2 = Counter()
+        for token in tagged_tokens:
+            if token[1] in ['NN', 'NNP', 'NNS']:
+                characters2[token[0].lower()] += 1
+        return characters2.most_common()
+    
+    else:
+        counts = Counter(text_tokens)
+        return counts.most_common()        
+<\Cell_8>
+<Cell_9>
+print('Spacy. Person entities.')
+print(character_occurences(1)[:20])
+print('\n', 'Spacy. Pronouns.')
+print(character_occurences(2)[:20])
+print('\n', 'NLTK.')
+print(character_occurences(3)[:20])
+print('\n', 'Counts.')
+print(character_occurences(4)[:20])
+<\Cell_9>
+<Cell_10>
+def offsets(text):
+    '''
+    Collect positions of words in text.
+    '''
+    offsets = defaultdict(list)
+    for ent in text.ents:
+        if ent.label_ == 'PERSON':
+            offsets[ent.lemma_].append(ent.start)
+            
+    return dict(offsets)
+
+occurences = offsets(nlp_text)
+
+def plot_character(labels):
+    x = [occurences[label] for label in labels] 
+    plt.figure(figsize=(16,12))
+    bins_n = 20
+    n, bins, patches = plt.hist(x, bins_n, label=labels)
+    plt.clf()
+    ax = plt.subplot(111)
+    for i, a in enumerate(n):
+        ax.plot([float(x) / (bins_n - 1) for x in range(len(a))], a, label=labels[i])
+
+    matplotlib.rcParams['axes.prop_cycle'] = cycler(color=['r', 'b', 'y', 'black', 'cyan', 'green', 'lightgray'])
+    ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    #Divide plot into chapters. It isn't exact, but should be accurate enough.
+    labels = [0, 0, 'Act 1', 'Act 2', 'Act 3', 'Act 4', 'Act 5', 'Act 6', 'Act 7', 'Act 8', 'Act 9', 'Act 10', 'Act 11',
+              'Act 12', 'Act 13', 'Act 14', 'Act 15', 'Act 16', 'Act 17', 'Act 18', 'Epilogue']
+    ax.set_xticklabels(labels)
+    tick_spacing = 0.05
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_spacing))
+<\Cell_10>
+<Cell_11>
+#Occurences of servants.
+plot_character(['saber', 'assassin', 'lancer', 'rider', 'caster', 'berserker', 'archer'])
+<\Cell_11>
+<Cell_12>
+#Occurences of masters.
+plot_character(['kiritsugu', 'kirei', 'kayneth', 'waver', 'ryūnosuke', 'kariya', 'tokiomi'])
+<\Cell_12>
+<Cell_13>
+text_nltk.dispersion_plot(['saber', 'assassin', 'lancer', 'rider', 'caster', 'berserker', 'archer'])
+<\Cell_13>
+<Cell_14>
+def get_adjectives(doc, character_lemma):
+    adjectives = []
+    for ent in nlp_text.ents:
+        if ent.lemma_ == character_lemma:
+            for token in ent.subtree:
+                if token.dep_ == 'amod':
+                    adjectives.append(token.lemma_)
+    
+    for ent in nlp_text.ents:
+        if ent.lemma_ == character_lemma:
+            if ent.root.dep_ == 'nsubj':
+                for child in ent.root.head.children:
+                    if child.dep_ == 'acomp':
+                        adjectives.append(child.lemma_)
+    
+    return adjectives
+<\Cell_14>
+<Cell_15>
+print(get_adjectives(nlp_text, 'waver'))
+<\Cell_15>
+<Cell_16>
+tag_list = ['PROPN', 'ADJ', 'ADP', 'PRON', 'ADV', 'NOUN', 'VERB']
+for i in tag_list:
+    words = [token.lemma_ for token in nlp_text if token.pos_ == i and token.lemma_ not in en_stop]
+    words_count = Counter(words)
+    print(i, words_count.most_common(10))
+<\Cell_16>
+<Cell_17>
+counter = Counter()
+word_list = ['say', 'tell', 'speak']
+
+for ent in nlp_text.ents:
+    if ent.label_ == 'PERSON' and ent.root.head.lemma_ in word_list:
+        counter[ent.text] += 1
+
+print(counter.most_common(30)) 
+<\Cell_17>
+<Cell_18>
+n_grams = ngrams(text_tokens,2)
+Counter(n_grams).most_common(20)
+<\Cell_18>
+<Cell_19>
+n_grams = ngrams(text_tokens,3)
+Counter(n_grams).most_common(20)
+<\Cell_19>
+<Cell_20>
+n_grams = ngrams(text_tokens,4)
+Counter(n_grams).most_common(20)
+<\Cell_20>
+<Cell_21>
+#The source of the icon: http://icons.iconarchive.com/icons/icons8/windows-8/512/Military-Sword-icon.png
+mask_ = imread('Data various/Fate_Zero/sword.png', flatten=False)
+wordcloud = WordCloud(max_font_size=None, mask=mask_, stopwords=en_stop, background_color='white',
+                      width=1200, height=1000).generate(text)
+plt.figure(figsize=(12,8))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.show()
+<\Cell_21>

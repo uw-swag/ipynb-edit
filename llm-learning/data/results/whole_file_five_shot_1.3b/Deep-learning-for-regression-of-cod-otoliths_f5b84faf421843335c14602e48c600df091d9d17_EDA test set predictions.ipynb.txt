@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.ensemble import RandomForestRegressor
+
+    # Load the data
+    data = pd.read_csv('../input/your-data-file.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your data and what you want to achieve
+    # For example, you might want to fill missing values, normalize numerical features, etc.
+
+    # Split the data into features (X) and target (y)
+    X = data.drop('target_column', axis=1)
+    y = data['target_column']
+
+    # Split the data into training and validation sets
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a linear regression model
+    lr = LinearRegression()
+    lr.fit(X_train, y_train)
+
+    # Train a random forest regressor model
+    rfr = RandomForestRegressor(n_estimators=100, random_state=42)
+    rfr.fit(X_train, y_train)
+
+    # Make predictions on the validation set
+    lr_preds = lr.predict(X_val)
+    rfr_preds = rfr.predict(X_val)
+
+    # Evaluate the models
+    # This step depends on the specifics of your problem and what you want to measure
+    # For example, you might want to calculate the mean absolute error, mean squared error, etc.
+
+    # Print the results
+    print(f'Linear Regression MAE: {np.mean(np.abs(lr_preds - y_val))}')
+    print(f'Random Forest MAE: {np.mean(np.abs(rfr_preds - y_val))}')
+
+    # Save the models
+    # This step depends on the specifics

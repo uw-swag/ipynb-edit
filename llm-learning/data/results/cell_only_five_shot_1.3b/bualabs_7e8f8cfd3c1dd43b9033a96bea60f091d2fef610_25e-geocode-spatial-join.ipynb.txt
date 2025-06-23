@@ -1,0 +1,29 @@
+```python
+    # Create a base map
+m_2 = folium.Map(location=[54, 15], tiles='cartodbpositron', zoom_start=2)
+
+# create a map
+Choropleth(geo_data=europe.geometry.__geo_interface__, data=europe.pop_est, key_on='feature.id', 
+           fill_color='YlGnBu', 
+           legend_name='Population').add_to(m_2)
+
+# Add points to the map
+for idx, row in universities.iterrows():
+    Marker([row['Latitude'], row['Longitude']], popup=row['Name']).add_to(m_2)
+
+embed_map(m_2, '25e-m_2.html')
+
+# Create a base map
+m_3 = folium.Map(location=[54, 15], tiles='cartodbpositron', zoom_start=2)
+
+# create a map
+Choropleth(geo_data=europe.geometry.__geo_interface__, data=europe.pop_est, key_on='feature.id', 
+           fill_color='YlGnBu', 
+           legend_name='Population').add_to(m_3)
+
+# Add points to the map
+for idx, row in european_universities.iterrows():
+    Marker([row['Latitude'], row['Longitude']], popup=row['Name']).add_to(m_3)
+
+embed_map(m_3, '25e-m_3.html')
+    ```

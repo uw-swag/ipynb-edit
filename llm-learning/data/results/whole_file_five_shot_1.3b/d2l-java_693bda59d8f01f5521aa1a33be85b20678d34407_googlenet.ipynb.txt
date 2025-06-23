@@ -1,0 +1,43 @@
+```python
+    # Import necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.layers import Input, Dense, Conv2D, MaxPooling2D, Flatten, Dropout, BatchNormalization
+    from tensorflow.keras.regularizers import l2
+    from tensorflow.keras.optimizers import Adam
+
+    # Define the input shape
+    input_shape = (224, 224, 3)
+
+    # Define the number of classes
+    num_classes = 1000
+
+    # Define the base model
+    base_model = tf.keras.applications.MobileNetV2(input_shape=input_shape,
+                                                  include_top=False,
+                                                  weights='imagenet')
+
+    # Freeze the base model
+    base_model.trainable = False
+
+    # Define the model
+    inputs = Input(shape=input_shape)
+    x = base_model(inputs)
+    x = Flatten()(x)
+    x = Dense(1024, activation='relu', kernel_regularizer=l2(0.001))(x)
+    x = Dropout(0.5)(x)
+    outputs = Dense(num_classes, activation='softmax')(x)
+
+    model = Model(inputs, outputs)
+
+    # Compile the model
+    model.compile(optimizer=Adam(lr=0.0001),
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    # Print the model summary
+    model.summary()
+
+    # Save the model
+    model.save('google_net.h5')
+    ```

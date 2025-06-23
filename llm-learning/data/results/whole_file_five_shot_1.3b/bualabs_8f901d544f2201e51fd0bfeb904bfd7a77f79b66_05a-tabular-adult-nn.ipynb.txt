@@ -1,0 +1,17 @@
+```
+    # clean up temporary directory
+    tmp_dir.cleanup()
+
+    # delete () is used to deprovision and delete the AzureML Compute target. 
+    # do not run below before experiment completes
+
+    # compute_target.delete()
+
+    # deletion will take a few minutes. You can check progress in Azure Portal / Computing tab
+
+    # run below after run is complete, otherwise metrics is empty
+    metrics = run.get_metrics()
+    print(metrics)
+
+    # run
+    ```

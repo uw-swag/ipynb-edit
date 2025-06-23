@@ -1,0 +1,9 @@
+feature = 'test_group'
+
+data_drift_dataset_tests = TestSuite(tests=[
+    TestColumnValueDrift(column_name=feature, stattest=mann_whitney_u_stat_test),
+    TestColumnValueDrift(column_name=feature, stattest=epps_singleton_test),
+    TestColumnValueDrift(column_name=feature, stattest='ks'),
+    TestColumnValueDrift(column_name=feature, stattest='anderson'),
+    TestColumnValueDrift(column_name=feature, stattest='cramer_von_mises')
+])

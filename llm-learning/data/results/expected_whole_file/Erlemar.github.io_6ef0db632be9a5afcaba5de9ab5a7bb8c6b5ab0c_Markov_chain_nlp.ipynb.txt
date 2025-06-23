@@ -1,0 +1,198 @@
+<Cell_0>
+import random
+from random import choice
+
+import re
+from collections import Counter
+import nltk
+from nltk.util import ngrams
+<\Cell_0>
+<Cell_1>
+def read_file(filename):
+    with open(filename, "r", encoding='UTF-8') as file:
+        contents = file.read().replace('\n\n',' ').replace('[edit]', '').replace('\ufeff', '').replace('\n', ' ').replace('\u3000', ' ')
+    return contents
+text = read_file('Data various/Monte_Cristo.txt')
+
+text_start = [m.start() for m in re.finditer('VOLUME ONE', text)]
+text_end = [m.start() for m in re.finditer('End of Project Gutenberg', text)]
+text = text[text_start[1]:text_end[0]]
+<\Cell_1>
+<Cell_2>
+def collect_dict(corpus):
+    text_dict = {}
+    words = corpus.split(' ')
+    for i in range(len(words)-1):
+        if words[i] in text_dict:
+            text_dict[words[i]].append(words[i+1])
+        else:
+            text_dict[words[i]] = [words[i+1]]
+    
+    return text_dict
+
+def generate_text(words, limit = 100):
+    first_word = random.choice(list(words.keys()))
+    markov_text = first_word
+    while len(markov_text.split(' ')) < limit:
+        next_word = random.choice(words[first_word])
+        first_word = next_word
+        markov_text += ' ' + next_word
+    
+    return markov_text
+<\Cell_2>
+<Cell_3>
+word_pairs = collect_dict(text)
+markov_text = generate_text(word_pairs, 200)
+print(markov_text)
+<\Cell_3>
+<Cell_4>
+def generate_text(words, limit = 100):
+    capitalized_keys = [i for i in words.keys() if len(i) > 0 and i[0].isupper()]
+    first_word = random.choice(capitalized_keys)
+    markov_text = first_word
+    while len(markov_text.split(' ')) < limit:
+        next_word = random.choice(words[first_word])
+        first_word = next_word
+        markov_text += ' ' + next_word
+    
+    return markov_text
+<\Cell_4>
+<Cell_5>
+markov_text = generate_text(word_pairs, 200)
+print(markov_text)
+<\Cell_5>
+<Cell_6>
+def collect_dict(corpus):
+    text_dict = {}
+    words = corpus.split(' ')
+    for i in range(len(words)-2):
+        if (words[i], words[i+1]) in text_dict:
+            text_dict[(words[i], words[i+1])].append(words[i+2])
+        else:
+            text_dict[(words[i], words[i+1])] = [words[i+2]]
+    
+    return text_dict
+<\Cell_6>
+<Cell_7>
+def generate_text(words, limit = 100):
+    capitalized_keys = [i for i in words.keys() if len(i[0]) > 0 and i[0][0].isupper()]
+    first_key = random.choice(capitalized_keys)
+
+    markov_text = ' '.join(first_key)
+    while len(markov_text.split(' ')) < limit:
+        next_word = random.choice(words[first_key])
+        first_key = tuple(first_key[1:]) + tuple([next_word])
+        markov_text += ' ' + next_word
+    
+    return markov_text
+<\Cell_7>
+<Cell_8>
+word_pairs = collect_dict(text)
+markov_text = generate_text(word_pairs, 200)
+print(markov_text)
+<\Cell_8>
+<Cell_9>
+def collect_dict(corpus):
+    text_dict = {}
+    words = nltk.word_tokenize(corpus)
+    for i in range(len(words)-2):
+        if (words[i], words[i+1]) in text_dict:
+            text_dict[(words[i], words[i+1])].append(words[i+2])
+        else:
+            text_dict[(words[i], words[i+1])] = [words[i+2]]
+    
+    return text_dict
+<\Cell_9>
+<Cell_10>
+def generate_text(words, limit = 100):
+    capitalized_keys = [i for i in words.keys() if len(i[0]) > 0 and i[0][0].isupper()]
+    first_key = random.choice(capitalized_keys)
+    markov_text = ' '.join(first_key)
+    while len(markov_text.split(' ')) < limit:
+        next_word = random.choice(words[first_key])
+
+        first_key = tuple(first_key[1:]) + tuple([next_word])
+        markov_text += ' ' + next_word
+    #Previous line attaches spaces to every token, so need to remove some spaces.
+    for i in ['.', '?', '!', ',']:
+        markov_text = markov_text.replace(' .', '.').replace(' ,', ',').replace(' !', '!').replace(' ?', '?').replace(' ;', ';')
+    return markov_text
+<\Cell_10>
+<Cell_11>
+word_pairs = collect_dict(text)
+markov_text = generate_text(word_pairs, 200)
+print(markov_text)
+<\Cell_11>
+<Cell_12>
+tokenized_text = nltk.word_tokenize(text)
+n_grams = ngrams(tokenized_text, 6)
+Counter(n_grams).most_common(20)
+<\Cell_12>
+<Cell_13>
+def collect_dict(corpus):
+    text_dict = {}
+    words = nltk.word_tokenize(corpus)
+
+    for i in range(len(words)-6):
+        key = tuple(words[i:i+6])
+        if key in text_dict:
+            text_dict[key].append(words[i+6])
+        else:
+            text_dict[key] = [words[i+6]]
+        
+    return text_dict
+<\Cell_13>
+<Cell_14>
+word_pairs = collect_dict(text)
+markov_text = generate_text(word_pairs, 200)
+print(markov_text)
+<\Cell_14>
+<Cell_15>
+def collect_dict(corpus, n_grams):
+    text_dict = {}
+    words = nltk.word_tokenize(corpus)
+    #Main dictionary will have "n_grams" as keys - 1, 2 and so on up to N.
+    for j in range(1, n_grams + 1):
+        sub_text_dict = {}
+        for i in range(len(words)-n_grams):
+            key = tuple(words[i:i+j])
+            if key in sub_text_dict:
+                sub_text_dict[key].append(words[i+n_grams])
+            else:
+                sub_text_dict[key] = [words[i+n_grams]]
+        text_dict[j] = sub_text_dict
+    
+    return text_dict
+<\Cell_15>
+<Cell_16>
+def get_next_word(key_id, min_length):
+    for i in range(len(key_id)):
+        if key_id in word_pairs[len(key_id)]:
+            if len(word_pairs[len(key_id)][key_id]) >= min_length:
+                return random.choice(word_pairs[len(key_id)][key_id])
+        else:
+            pass
+        
+        if len(key_id) > 1:
+            key_id = key_id[1:]
+
+    return random.choice(word_pairs[len(key_id)][key_id])
+<\Cell_16>
+<Cell_17>
+def generate_text(words, limit = 100, min_length = 5):
+    capitalized_keys = [i for i in words[max(words.keys())].keys() if len(i[0]) > 0 and i[0][0].isupper()]
+    first_key = random.choice(capitalized_keys)
+    markov_text = ' '.join(first_key)
+    while len(markov_text.split(' ')) < limit:
+        next_word = get_next_word(first_key, min_length)
+        first_key = tuple(first_key[1:]) + tuple([next_word])
+        markov_text += ' ' + next_word
+    for i in ['.', '?', '!', ',']:
+        markov_text = markov_text.replace(' .', '.').replace(' ,', ',').replace(' !', '!').replace(' ?', '?').replace(' ;', ';')
+    return markov_text
+<\Cell_17>
+<Cell_18>
+word_pairs = collect_dict(text, 6)
+markov_text = generate_text(word_pairs, 200, 6)
+print(markov_text)
+<\Cell_18>

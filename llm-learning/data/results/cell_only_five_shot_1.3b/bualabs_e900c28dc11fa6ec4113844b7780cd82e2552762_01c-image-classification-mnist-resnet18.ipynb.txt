@@ -1,0 +1,29 @@
+```
+    # Adding custom test data
+    test_data = ImageDataBunch.from_folder(path, 'testing', valid_pct=0.2, size=28, 
+                                           ds_tfms=transform, bs=batchsize).normalize()
+    test_data.show_batch(rows=3, figsize=(7, 7))
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Added custom test data"
+    Original Code Cells:
+    '''
+    batchsize = 128
+np.random.seed(0)
+transform = get_transforms(do_flip=False)
+
+databunch = ImageDataBunch.from_folder(path, 'training', valid_pct=0.2, size=28, 
+                                       ds_tfms=transform, bs=batchsize).normalize()
+databunch.show_batch(rows=3, figsize=(7, 7))
+learner.fit_one_cycle(3)
+
+    '''
+    ]
+
+    ### Response:
+    # Adding custom test data
+    test_data = ImageDataBunch.from_folder(path, 'testing', valid_pct=0.2, size=28, 
+                                           ds_tfms=transform, bs=batchsize).normalize()
+    test_data.show_batch(rows=3, figsize=(7, 7))
+    ```

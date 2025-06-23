@@ -1,0 +1,46 @@
+
+    ## Pattern Recognition Example
+
+    ## Importing Libraries
+    import numpy as np
+    import cv2
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.model_selection import train_test_split
+    from keras.models import Sequential
+    from keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
+    from keras.utils import np_utils
+
+    ## Loading the dataset
+    dataset = cv2.imread('faces.png')
+
+    ## Resizing the dataset
+    faces = []
+    ids = []
+
+    for x in range(0, 178):
+        for y in range(0, 38):
+            for z in range(0, 3):
+                face = dataset[x][y][z]
+                faces.append(face)
+                ids.append(y)
+
+    ## Reshaping the dataset
+    faces = np.array(faces)
+    faces = faces.reshape((-1, 178, 38, 3))
+
+    ## Encoding the labels
+    lb = LabelEncoder()
+    ids = lb.fit_transform(ids)
+    ids = np_utils.to_categorical(ids)
+
+    ## Splitting the dataset
+    train_set, test_set = train_test_split(dataset, test_size=0.10, random_state=42)
+
+    ## Creating the model
+    model = Sequential()
+    model.add(Conv2D(32, (5, 5), input_shape=(178, 38, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(32, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Flatten())
+    model.add(Dense(128, activation='relu

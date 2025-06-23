@@ -1,0 +1,19 @@
+
+The original code is already scaling the state `X_state` to the range [-1, 1] in the chapter 16. The scaling is done in the `q_network` function. The scaling is done by the `tf.layers.conv2d` and `tf.layers.dense` layers.
+
+Here is the code again for reference:
+
+```python
+prev_layer = tf.layers.conv2d(
+    prev_layer, filters=n_maps, kernel_size=kernel_size,
+    strides=strides, padding=padding, activation=activation,
+    kernel_initializer=initializer)
+```
+
+This line of code is responsible for scaling the input state `X_state`. The `tf.layers.conv2d` layer applies a convolution operation to the input layer, and the `kernel_initializer` parameter is used to initialize the weights of the convolution operation. The `kernel_initializer` is a function that initializes the weights of the layer.
+
+The `tf.layers.dense` layer is a fully connected layer, and the `n_outputs` parameter is the number of output neurons in the layer. The `kernel_initializer` is used to initialize the weights of the layer.
+
+The scaling is done by subtracting the mean of the state from the state, and then dividing by the standard deviation of the state. This is done to ensure that the state is in the range [-1, 1], which is the range of values that the Q-learning algorithm typically expects.
+
+If you want to change the scaling, you can modify the `kernel_initializer` and the scaling operation in the `q_network` function. For example, you can use a different `kernel_initializer` or change the scaling operation to a different formula.

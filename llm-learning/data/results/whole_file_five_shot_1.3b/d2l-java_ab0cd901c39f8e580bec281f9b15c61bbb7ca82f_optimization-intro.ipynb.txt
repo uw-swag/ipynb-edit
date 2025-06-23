@@ -1,0 +1,52 @@
+```
+    ## 1. Introduction
+
+    This notebook provides an introduction to optimization and deep learning.
+
+    ## 2. Optimization
+
+    Optimization is the process of finding the best solution to a problem. It involves techniques such as gradient descent, where the model's parameters are adjusted to minimize a loss function.
+
+    ## 3. Deep Learning
+
+    Deep learning is a subset of machine learning that involves the use of neural networks with many layers. These networks are trained using large amounts of data and are capable of learning complex patterns.
+
+    ## 4. Conclusion
+
+    In this notebook, we have covered the basics of optimization and deep learning. We have also demonstrated how to use these techniques to solve complex problems.
+
+    ```
+    ## 5. References
+
+    [1] https://en.wikipedia.org/wiki/Optimization_(mathematics)
+    [2] https://en.wikipedia.org/wiki/Deep_learning
+    ```
+    ## 6. Code
+
+    ```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a neural network classifier
+    clf = MLPClassifier(hidden_layer_sizes=(10, 10, 10), max_iter=1000)
+
+    # Train the classifier
+    clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test)
+
+    # Calculate the accuracy of the

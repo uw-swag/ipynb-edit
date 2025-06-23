@@ -1,0 +1,26 @@
+
+    from evidently.test_preset import NoTargetPerformanceTestPreset
+    from evidently.test_suite import TestSuite
+
+    # Rename parameters in simple metrics/tests presets
+    data_quality_suite = TestSuite(
+        tests=[
+            NoTargetPerformanceTestPreset(columns=["education-num", "hours-per-week"]),
+        ]
+    )
+
+    data_quality_suite.run(current_data=current_data, reference_data=reference_data)
+    data_quality_suite
+
+    '''
+
+    ### Explanation:
+    The provided code is a test suite for a data quality test. The test preset used in this test suite is a NoTargetPerformanceTestPreset, which is a simple test that checks the performance of a model by comparing the performance of a model on the current data with a model on the reference data.
+
+    The test preset is configured to check the performance of a model by comparing the "education-num" and "hours-per-week" columns of the current data with the "education-num" and "hours-per-week" columns of the reference data.
+
+    The code snippet renames the parameters in the test preset to "education-num" and "hours-per-week" to avoid any confusion or potential misinterpretation.
+
+    The updated code is then run on the current_data and reference_data. The result of the test suite is then printed.
+
+    The final output of the code will be the result of the test suite, which includes the results of the test preset.

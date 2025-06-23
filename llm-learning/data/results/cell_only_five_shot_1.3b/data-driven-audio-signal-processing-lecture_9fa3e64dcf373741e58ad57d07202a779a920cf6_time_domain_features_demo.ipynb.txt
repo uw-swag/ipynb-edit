@@ -1,0 +1,21 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import librosa
+
+    # Load the audio file
+    vocal, fs = librosa.load('data/vocal_o.wav', sr=None)
+
+    # Normalize the signal
+    vocal = vocal / np.max(np.abs(vocal))
+
+    def plot_signal(x):
+        plt.plot(x)
+        plt.xlabel(r'$k$')
+        plt.ylabel(r'$x[k]$')
+        plt.grid()
+        plt.show()
+
+    plot_signal(vocal)
+    ```
+    The path for the binder service is fixed in the code. The path is set to 'data/vocal_o.wav' which is a relative path from the notebook's location. If you want to use a different file, you can change the path to the correct one.

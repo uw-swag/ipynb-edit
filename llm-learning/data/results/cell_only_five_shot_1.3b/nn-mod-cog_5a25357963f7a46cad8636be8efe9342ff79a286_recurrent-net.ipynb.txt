@@ -1,0 +1,32 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense, Dropout
+
+    # Define the model
+    model = Sequential()
+    model.add(LSTM(128, input_shape=(X_train.shape[1], 1), activation='relu', return_sequences=True))
+    model.add(Dropout(0.2))
+
+    model.add(LSTM(128, activation='relu'))
+    model.add(Dropout(0.1))
+
+    model.add(Dense(32, activation='relu'))
+    model.add(Dropout(0.2))
+
+    model.add(Dense(10, activation='softmax'))
+
+    # Compile the model
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Train the model
+    history = model.fit(X_train, y_train, epochs=10, batch_size=64, validation_data=(X_test, y_test))
+    ```
+
+    This is a simple example of a LSTM model for time series prediction. The model is a sequence to sequence model, where the input is a sequence of time steps and the output is a sequence of time steps. The model is trained to predict the next time step in the sequence.
+
+    The model is composed of two LSTM layers, each with 128 units. The first LSTM layer has `return_sequences=True`, which means it will return the output of each time step in the sequence, and the second LSTM layer has `return_sequences=False`, which means it will only return the last time step's output.
+
+    The model is then compiled with the `categorical_crossentropy` loss function and the `adam` optimizer, and the accuracy metric is used to measure the performance of the model.
+
+    The model is then trained on the training data using the `fit` method, with 10 epochs and a batch size of 64. The model's performance is

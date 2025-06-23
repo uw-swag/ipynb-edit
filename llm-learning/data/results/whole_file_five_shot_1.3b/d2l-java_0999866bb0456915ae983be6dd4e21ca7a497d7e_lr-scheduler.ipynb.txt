@@ -1,0 +1,30 @@
+```python
+    from torch.optim.lr_scheduler import StepLR, MultiStepLR, ExponentialLR, CosineAnnealingLR
+
+    # Define the learning rate schedulers
+    schedulers = {
+        'step': StepLR(optimizer, step_size=7, gamma=0.1),
+        'multi': MultiStepLR(optimizer, milestones=[1, 3, 5], gamma=0.1),
+        'exp': ExponentialLR(optimizer, gamma=0.9),
+        'cos': CosineAnnealingLR(optimizer, T_max=20, eta_min=1e-5)
+    }
+
+    # Train the model
+    for epoch in range(epochs):
+        for batch_idx, (data, target) in enumerate(train_loader):
+            # Forward pass
+            output = model(data)
+            loss = criterion(output, target)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            # Update learning rate
+            for scheduler_name, scheduler in schedulers.items():
+                if scheduler_name in ['exp', 'cos']:
+                    scheduler.step()
+                else:
+                    scheduler.step(epoch)
+    ```

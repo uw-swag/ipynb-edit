@@ -1,0 +1,39 @@
+
+    The issue seems to be with the convergence of the model. The model is not converging, which is causing the loss to increase. 
+
+    One possible solution is to increase the number of training epochs. However, this might not be the best solution as it may lead to overfitting. 
+
+    Another possible solution is to use a different optimizer or a different learning rate. 
+
+    Here is the modified code:
+
+    Loss loss = Loss.softmaxCrossEntropyLoss();
+
+    DefaultTrainingConfig config = new DefaultTrainingConfig(loss)
+                .optOptimizer(Optimizer.sgd().setLearningRate(0.1)) // Optimizer (loss function)
+                .addEvaluator(new Accuracy()) // Model Accuracy
+                .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+
+    try (Model model = Model.newInstance("mlp")) {
+        model.setBlock(net);
+
+        try (Trainer trainer = model.newTrainer(config)) {
+
+            trainer.initialize(new Shape(1, 784));
+            trainer.setMetrics(new Metrics());
+
+            EasyTrain.fit(trainer, 10, trainIter, testIter); // collect results from evaluators
+            // collect results from evaluators
+            Metrics metrics = trainer.getMetrics();
+
+            trainer.getEvaluators().stream()
+                    .forEach(evaluator -> {
+                        evaluatorMetrics.put("train_epoch_" + evaluator.getName(), metrics.getMetric("train_epoch_" + evaluator.getName()).stream()
+                                            .mapToDouble(x -> x.getValue().doubleValue()).toArray());
+                        evaluatorMetrics.put("validate_epoch_" + evaluator.getName(), metrics.getMetric("validate_epoch_" + evaluator.getName()).stream()
+                                            .mapToDouble(x -> x.getValue().doubleValue()).toArray());
+                    });
+    }
+}
+
+    This should fix the issue of the model not converging.

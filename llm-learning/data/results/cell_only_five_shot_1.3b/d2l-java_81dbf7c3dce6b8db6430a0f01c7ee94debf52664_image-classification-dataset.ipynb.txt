@@ -1,0 +1,19 @@
+```python
+    #Clear output and minor fix on notebooks (#121)
+    import os
+    import subprocess
+
+    # Clear output
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if file.endswith(".ipynb"):
+                file_path = os.path.join(root, file)
+                subprocess.run(["jupyter", "nbformat", "clear", file_path])
+
+    # Minor fix on notebooks
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if file.endswith(".ipynb"):
+                file_path = os.path.join(root, file)
+                subprocess.run(["jupyter", "nbconvert", "--execute", file_path])
+    ```

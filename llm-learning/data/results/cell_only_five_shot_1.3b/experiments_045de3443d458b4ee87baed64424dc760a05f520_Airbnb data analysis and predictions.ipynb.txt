@@ -1,0 +1,49 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error
+
+    # Load the Airbnb data
+    df = pd.read_csv('AB_NYC_2019.csv')
+
+    # Check the data
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+
+    # Data preprocessing
+    # Drop rows with missing values
+    df = df.dropna()
+
+    # Convert the 'price' column to numeric
+    df['price'] = pd.to_numeric(df['price'], errors='coerce')
+    df = df.dropna(subset=['price'])
+
+    # Create a new column 'price_per_night'
+    df['price_per_night'] = df['price'] / df['number_of_reviews']
+
+    # Create a new column 'availability_365'
+    df['availability_365'] = 1 / df['availability_365']
+
+    # Split the data into train and test sets
+    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Fit the model
+    model.fit(train_df[['longitude', 'latitude', 'availability_365']], train_df['price_per_night'])
+
+    # Predict the prices
+    predictions = model.predict(test_df[['longitude', 'latitude', 'availability_365']])
+
+    # Calculate the mean squared error
+    mse = mean_squared_error(test_df['price_per_night'], predictions)
+    print('Mean Squared Error:', mse)
+
+    # Plot the predictions
+    plt.scatter

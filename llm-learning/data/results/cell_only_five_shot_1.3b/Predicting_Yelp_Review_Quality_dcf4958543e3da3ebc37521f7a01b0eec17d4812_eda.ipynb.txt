@@ -1,0 +1,47 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas_profiling
+    from dataprep.eda import plot, plot_correlation, plot_missing
+    from sqlalchemy import create_engine
+    pd.set_option("display.max_columns", 100)
+    pd.set_option('display.width', 100)
+    pd.set_option("display.precision", 5)
+    plt.style.use('fivethirtyeight')
+    plt.rcParams.update({'font.size': 4, 'font.family': 'sans'})
+
+    # Load data
+    def load_dataframe_from_yelp_2(query):
+        """
+        Connects to yelp_2 database on Postgres and
+        loads a Pandas dataframe based off sql query.
+
+        Args:
+            query (string): Sql query to select data from yelp_2.
+
+        Returns:
+            Dataframe: Pandas dataframe of records
+                        from sql query of yelp_2 database.
+        """
+        connect = 'postgresql+psycopg2://postgres:password@localhost:5432/yelp_2'
+        engine = create_engine(connect)
+        df = pd.read_sql(query, con=engine)
+        df = df.copy()
+        return df
+
+    query = '''
+            SELECT *
+            FROM working_non_td_data
+            LIMIT 1000000
+            ;
+            '''
+    df = load_dataframe_from_yelp_2(query)
+    df = df.drop_duplicates(subset=['review_id']).iloc[:10000, :]
+    df.info()
+
+    # Data preprocessing and EDA
+    dataset_release_date = pd.to_datetime('2020-3-25 19:13:01')
+    # df['business_categories

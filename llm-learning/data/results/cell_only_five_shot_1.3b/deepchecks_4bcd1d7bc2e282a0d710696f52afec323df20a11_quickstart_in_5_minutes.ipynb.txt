@@ -1,0 +1,44 @@
+
+# If you don't have deepchecks installed yet:
+import sys
+!{sys.executable} -m pip install deepchecks --quiet #--user
+# General imports
+import pandas as pd
+import numpy as np
+np.random.seed(22)
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Load Data
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+label_col = 'target'
+df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+# Train Model
+rf_clf = RandomForestClassifier()
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+# note that we set check_datasets_policy to 'both' so that for single dataset checks (e.g. some of the integrity checks),
+# both the test and the train data will be checked.
+
+suite.run(train_dataset=df_train, test_dataset=df_test, model=rf_clf)
+
+    ## When to use page:
+
+When you want to visualize the results of a Deepchecks suite, you can use the `page` function. This function allows you to display the results in a Jupyter notebook.
+
+Here's an example:
+
+```python
+from deepchecks.base import Suite
+
+# assuming suite is your Suite object
+suite.page()
+```
+
+This will open a new tab in your browser where you can view the visualization of the suite's results.
+
+Please note that the `page` function is available in the `deepchecks` version 0.10.0 and above. If you're using an older version, you might need to use the `display` function instead.
+
+Also, keep in mind that the `page` function will only work in a Jupyter notebook environment. If you're running this code in

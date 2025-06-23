@@ -1,0 +1,47 @@
+
+    '''
+    <Cell_0>
+    # ! pip install geopandas
+    # ! pip install kaggle --upgrade
+    <\Cell_0>
+    <Cell_1>
+    config_path = '/content/drive'
+    dataset = 'alexisbcook/geospatial-learn-course-data'
+    data_path = '/content/datasets/' + dataset
+    <\Cell_1>
+    <Cell_2>
+    from google.colab import drive
+    drive.mount(config_path)
+    <\Cell_2>
+    <Cell_3>
+    import os
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+    <\Cell_3>
+    <Cell_4>
+    !kaggle datasets download {dataset} -p "{data_path}" --unzip
+    <\Cell_4>
+    <Cell_5>
+    import geopandas as gpd
+    <\Cell_5>
+    <Cell_6>
+    loans_filepath = data_path + "/kiva_loans/kiva_loans/kiva_loans.shp"
+
+    world_loans = gpd.read_file(loans_filepath)
+    <\Cell_6>
+    <Cell_7>
+    world_loans.head()
+    <\Cell_7>
+    <Cell_8>
+    world_filepath = gpd.datasets.get_path('naturalearth_lowres')
+    world = gpd.read_file(world_filepath)
+    world.head()
+    <\Cell_8>
+    <Cell_9>
+    ax = world.plot(figsize=(18,10), color='none', edgecolor='black', zorder=3)
+    world_loans.plot(color='green', markersize=15, ax=ax)
+    <\Cell_9>
+    <Cell_10>
+    PHL_loans = world_loans[world_loans.country=='Philippines']
+    <\Cell_10>
+    <Cell_11>
+    gpd.io.file.

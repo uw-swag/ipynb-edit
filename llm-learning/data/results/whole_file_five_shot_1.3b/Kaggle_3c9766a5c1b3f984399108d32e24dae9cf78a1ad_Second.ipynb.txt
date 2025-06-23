@@ -1,0 +1,36 @@
+```python
+    <Cell_0>
+    # Feature Engineering
+    # Convert timestamp to day of week
+    train_df['day_of_week'] = train_df['timestamp'].dt.day_name()
+    test_df['day_of_week'] = test_df['timestamp'].dt.day_name()
+
+    # Convert timestamp to hour of day
+    train_df['hour_of_day'] = train_df['timestamp'].dt.hour
+    test_df['hour_of_day'] = test_df['timestamp'].dt.hour
+
+    # Convert timestamp to month
+    train_df['month'] = train_df['timestamp'].dt.month
+    test_df['month'] = test_df['timestamp'].dt.month
+
+    # Convert timestamp to quarter
+    train_df['quarter'] = train_df['timestamp'].dt.quarter
+    test_df['quarter'] = test_df['timestamp'].dt.quarter
+
+    # Convert timestamp to year
+    train_df['year'] = train_df['timestamp'].dt.year
+    test_df['year'] = test_df['timestamp'].dt.year
+
+    # Drop timestamp column
+    train_df.drop('timestamp', axis=1, inplace=True)
+    test_df.drop('timestamp', axis=1, inplace=True)
+
+    # Check for missing values
+    print(train_df.isnull().sum())
+    print(test_df.isnull().sum())
+    <\Cell_0>
+    ```
+
+    The above code performs various feature engineering steps such as converting the timestamp to day of week, hour of day, month, quarter, and year. It also checks for missing values in the dataframes.
+
+    Please note that the actual feature engineering steps may vary based on the specific requirements of the problem at hand.

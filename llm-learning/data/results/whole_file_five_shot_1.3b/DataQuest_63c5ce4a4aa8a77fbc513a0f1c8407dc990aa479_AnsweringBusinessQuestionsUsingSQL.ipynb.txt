@@ -1,0 +1,76 @@
+```
+    <Cell_0>
+import sqlite3
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+%matplotlib inline
+
+conn = sqlite3.connect('chinook.db')
+cur = conn.cursor() 
+<\Cell_0>
+<Cell_1>
+def run_query(query):
+    return pd.read_sql_query(query, conn)
+
+def run_command(command):
+    cur.execute(command)
+    conn.commit()
+
+def show_tables():
+    query = "SELECT name FROM sqlite_master WHERE type='table';"
+    return run_query(query)
+
+tables = show_tables()
+tables
+<\Cell_1>
+<Cell_2>
+conn.close()
+<\Cell_2>
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Guided Project: Answering Business Question Using SQL, completed"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import sqlite3
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+%matplotlib inline
+
+conn = sqlite3.connect('chinook.db')
+cur = conn.cursor() 
+<\Cell_0>
+<Cell_1>
+def run_query(query):
+    return pd.read_sql_query(query, conn)
+
+def run_command(command):
+    cur.execute(command)
+    conn.commit()
+
+def show_tables():
+    query = "SELECT name FROM sqlite_master WHERE type='table';"
+    return run_query(query)
+
+tables = show_tables()
+tables
+<\Cell_1>
+<Cell_2>
+conn.close()
+<\Cell_2>
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Guided Project: Answering Business Question Using SQL, in progress"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import sqlite3
+import pandas as pd

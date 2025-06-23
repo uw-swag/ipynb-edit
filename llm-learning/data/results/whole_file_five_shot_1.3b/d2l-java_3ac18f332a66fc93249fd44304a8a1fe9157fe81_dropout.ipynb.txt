@@ -1,0 +1,22 @@
+
+The issue you're facing seems to be related to the way the Maven repository is configured. The `%mavenRepo` command is used to add a Maven repository to your notebook, but it seems like you're not using it correctly.
+
+The `%mavenRepo` command is used to specify the URL of the Maven repository, but it's not used to add a repository to your notebook. The correct command to add a repository to your notebook is `%repo`.
+
+Here's the corrected version of your code:
+
+```jupyter
+%mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+%maven ai.djl:api:0.7.0-SNAPSHOT
+%maven ai.djl:basicdataset:0.7.0-SNAPSHOT
+%maven org.slf4j:slf4j-api:1.7.26
+%maven org.slf4j:slf4j-simple:1.7.26
+
+%maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+%maven ai.djl.mxnet:mxnet-native-auto:1.7.0-b
+
+%repo https://oss.sonatype.org/content/repositories/snapshots/
+```
+
+After adding the repository, you should be able to import the necessary libraries and dependencies without any issues.

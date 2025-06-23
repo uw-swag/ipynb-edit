@@ -1,0 +1,137 @@
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+import torch
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+import pickle as pkl
+
+from os.path import join as oj
+import matplotlib.pyplot as plt
+%matplotlib inline
+import os
+import seaborn as sns
+from torch.utils.data import Subset
+
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import matplotlib.pyplot as plt
+import numpy as np
+import torch.utils.data as utils
+
+import csv
+import numpy as np
+sys.path.append("../../fit")
+from tqdm import tqdm_notebook
+import cd
+from shutil import copyfile
+from os.path import join as oj
+from PIL import Image
+from tqdm import tqdm
+from skimage.color import rgb2gray
+
+from torch import nn    
+
+<\Cell_0>
+<Cell_1>
+sys.path.append("../../../pytorch-cnn-visualizations/src")
+from gradcam import GradCam
+<\Cell_1>
+<Cell_2>
+mean = np.asarray([0.485, 0.456, 0.406])
+std = np.asarray([0.229, 0.224, 0.225])
+<\Cell_2>
+<Cell_3>
+save_path = "../../results_for_export"
+device = torch.device("cuda")
+import torchvision.models as models
+
+model = models.vgg16(pretrained=True).to(device)
+model.classifier[-1] = nn.Linear(4096, 2)
+model.classifier.load_state_dict(torch.load('../old_feature_models/30446737273071054815.pt'))
+model = model.to(device).eval()
+model = model.cuda()
+<\Cell_3>
+<Cell_4>
+# load the two imgs
+data_path = "../../../../datasets"
+img_path = oj(data_path, "ISIC/raw_data/not_cancer")
+seg_path  = oj(data_path, "ISIC/segmentation")
+<\Cell_4>
+<Cell_5>
+os.listdir(seg_path)[:20]
+<\Cell_5>
+<Cell_6>
+img = Image.open(oj(img_path, "ISIC_0000570.jpg"))
+img_np = np.asarray(img)/255.0
+img.close()
+<\Cell_6>
+<Cell_7>
+seg = Image.open(oj(seg_path, "ISIC_0000570.jpg"))
+seg_np = np.asarray(seg)[:,:,0]
+seg_np = (seg_np > seg_np.mean())
+seg.close()
+<\Cell_7>
+<Cell_8>
+from skimage.morphology import dilation
+from skimage.morphology import square
+seg_np_open = dilation(seg_np.astype(np.uint8),square(15))
+<\Cell_8>
+<Cell_9>
+plt.imshow(img_np * (1- seg_np).astype(np.float32)[:,:,None])
+<\Cell_9>
+<Cell_10>
+torch_img = torch.from_numpy(((img_np - mean)/std).swapaxes(0,2).swapaxes(1,2)).float().cuda()
+model(torch_img[None, :])
+<\Cell_10>
+<Cell_11>
+out = cd.cd_track_vgg(seg_np[None, :], torch_img[None, :].cuda(), model.cuda())
+print("Relevant:")
+print(out[0])
+print("Irrelevant:")
+print(out[1])
+<\Cell_11>
+<Cell_12>
+not_cancer_cd = torch.nn.functional.softmax(torch.abs(torch.cat((out[0][0][1][None,], out[1][0][1][None,]),dim=0).data))
+cancer_cd = torch.nn.functional.softmax(torch.abs(torch.cat((out[0][0][0][None,], out[1][0][0][None,]),dim=0).data))
+<\Cell_12>
+<Cell_13>
+test_out.mean()
+<\Cell_13>
+<Cell_14>
+model_gradCAM = GradCam(model.cpu(),30)
+
+fig, axes = plt.subplots(ncols =3, figsize = (10, 5))
+axes[0].imshow(img_np[50:274, 50:274])
+test_out = model_gradCAM.generate_cam(torch_img[None, :,50:274, 50:274].cpu(), target_class= 0)
+
+axes[1].imshow(test_out)
+test_out = model_gradCAM.generate_cam(torch_img[None, :,50:274, 50:274].cpu(), target_class= 1)
+
+axes[2].imshow(test_out)
+# GradCAM agrees that this is good
+<\Cell_14>
+<Cell_15>
+model_gradCAM = GradCam(model.cpu(),30)
+
+fig, axes = plt.subplots(ncols =3, figsize = (10, 5))
+axes[0].imshow(img_np[50:274, 50:274])
+test_out = model_gradCAM.generate_cam(torch_img[None, :,50:274, 50:274].cpu(), target_class= 0)
+
+axes[1].imshow(test_out)
+test_out = model_gradCAM.generate_cam(torch_img[None, :,50:274, 50:274].cpu(), target_class= 1)
+
+axes[2].imshow(test_out)
+# GradCAM agrees that this is good
+<\Cell_15>
+<Cell_16>
+# Extract features, extract 
+<\Cell_16>

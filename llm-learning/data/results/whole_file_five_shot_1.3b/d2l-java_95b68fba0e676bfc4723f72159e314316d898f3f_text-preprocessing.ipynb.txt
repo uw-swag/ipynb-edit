@@ -1,0 +1,20 @@
+```python
+    # Section 8.2: Text Preprocessing
+    ## 8.2.1: Lowercasing
+    text_data['text'] = text_data['text'].apply(lambda x: x.lower())
+
+    ## 8.2.2: Removing Punctuation
+    text_data['text'] = text_data['text'].apply(lambda x: "".join(e for e in x if e not in string.punctuation))
+
+    ## 8.2.3: Removing Stopwords
+    stop_words = set(stopwords.words('english'))
+    text_data['text'] = text_data['text'].apply(lambda x: " ".join(e for e in x.split() if e not in stop_words))
+
+    ## 8.2.4: Stemming
+    ps = nltk.PorterStemmer()
+    text_data['text'] = text_data['text'].apply(lambda x: " ".join([ps.stem(word) for word in x.split()]))
+
+    ## 8.2.5: Lemmatization
+    lemmatizer = nltk.WordNetLemmatizer()
+    text_data['text'] = text_data['text'].apply(lambda x: " ".join([lemmatizer.lemmatize(word) for word in x.split()]))
+    ```

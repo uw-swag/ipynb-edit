@@ -1,0 +1,41 @@
+
+    The `ConversationSummaryBufferMemory` class in Langchain is used to store and access the context of a conversation. It is particularly useful when you want to store the context of a conversation and then recall it later.
+
+    The `ConversationSummaryBufferMemory` class is a subclass of `ConversationBufferMemory` that stores the context of a conversation in a summary rather than in a buffer. The summary is a string that is created by concatenating the input and output of each context.
+
+    The `ConversationSummaryBufferMemory` class has the following methods:
+
+    - `save_context(input, output)`: This method saves a context in the memory. The context is a dictionary that contains the input and output of the context.
+
+    - `load_memory_variables(kwargs)`: This method loads the memory variables. The method takes keyword arguments that are used to load the memory variables.
+
+    - `get_contexts()`: This method returns a list of the contexts in the memory.
+
+    - `clear()`: This method clears the memory.
+
+    The `ConversationSummaryBufferMemory` class is useful when you want to store the context of a conversation and then recall it later.
+
+    Here is an example of how to use the `ConversationSummaryBufferMemory` class:
+
+    ```python
+    from langchain.memory import ConversationSummaryBufferMemory
+
+    memory = ConversationSummaryBufferMemory(llm=llm, max_token_limit=50)
+    memory.save_context({"input": "Hello"}, {"output": "What's up"})
+    memory.save_context({"input": "Not much, just hanging"},
+                        {"output": "Cool"})
+    memory.save_context({"input": "What is on the schedule today?"}, 
+                        {"output": f"{news}"})
+
+    memory.load_memory_variables({})
+
+    conversation = ConversationChain(
+        llm=llm, 
+        memory = memory,
+        verbose=True
+    )
+
+    conversation.predict(input="What would be a good demo to show?")
+    ```
+
+    In the above example, the `ConversationSummaryBufferMemory` class is used to store the context of a conversation and

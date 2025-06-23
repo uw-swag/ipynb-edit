@@ -1,0 +1,26 @@
+
+The code you provided is a modification of the Iris dataset, where the label_name parameter is being removed from the dataset constructor. This is a common practice in machine learning to ensure that the label is included in the dataset, as it is often required for supervised learning models.
+
+However, in your code, the label_name parameter is not being used anywhere. The label_name parameter is used in the train_dataset and validation_dataset, but it is not used in the code you provided.
+
+If you want to keep the label_name parameter, you can simply remove it from the code. Here is the modified code:
+
+```python
+iris = load_iris(return_X_y=False, as_frame=True)
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=iris.feature_names)
+
+test_df = pd.concat([X_test, y_test], axis=1)
+
+# make duplicates in the test data
+test_df.loc[test_df.index % 2 == 0, 'petal length (cm)'] = 5.1
+test_df.loc[test_df.index / 3 > 8, 'sepal width (cm)'] = 2.7
+
+validation_dataset = Dataset(test_df, 
+            features=iris.feature_names)
+```
+
+In this modified code, the label_name parameter is not used in the train_dataset and validation_dataset, but it is still used in the code you provided.

@@ -1,0 +1,34 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    from sklearn import datasets
+
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DriftTab
+
+    boston = datasets.load_boston()
+
+    boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)
+
+    boston_frame_reference = boston_frame[:200]
+    boston_frame_recent = boston_frame[200:]
+
+    column_mapping = {}
+
+    column_mapping['target'] = None
+    column_mapping['prediction'] = None
+    column_mapping['id'] = None
+    column_mapping['datetime'] = None
+
+    column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+    column_mapping['categorical_features'] = ['CHAS', 'RAD']
+
+    boston_data_drift_report = Dashboard(boston_frame_reference, boston_frame_recent, column_mapping = column_mapping, 
+                                     tabs=[DriftTab])
+
+    boston_data_drift_report .show()
+
+    boston_data_drift_report .save('reports/boston_data_drift_report.html')
+    ```

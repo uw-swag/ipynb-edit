@@ -1,0 +1,49 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to plot_confusion_matrix()"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    def plot_confusion_matrix(matrix):
+        """If you prefer color and a colorbar"""
+        fig = plt.figure(figsize=(8,8))
+        ax = fig.add_subplot(111)
+        cax = ax.matshow(matrix, cmap=plt.cm.gray)
+        fig.colorbar(cax)
+        plt.xticks(range(10))
+        plt.yticks(range(10))
+        plt.xlabel('Predicted')
+        plt.ylabel('Truth')
+        plt.show()
+<\Cell_0>
+<Cell_1>
+plot_confusion_matrix(conf_mx)
+<\Cell_1>
+<Cell_2>
+from sklearn.metrics import confusion_matrix
+
+def plot_confusion_matrix(y_true, y_pred, classes=None,
+                          normalize=False,
+                          title=None):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if not title:
+        if normalize:
+            title = 'Normalized confusion matrix'
+        else:
+            title = 'Confusion Matrix'
+
+    plt.figure(figsize=(10, 10))
+    plt.imshow(confusion_matrix(y_true, y_pred), interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    fmt = 'd'
+    thresh = confusion_matrix.trace() / np.sum(confusion_matrix, dtype=np.float)
+    annot = np.array(conf

@@ -1,0 +1,38 @@
+<Cell_0>
+import numpy as np
+
+<\Cell_0>
+<Cell_1>
+def read_glove_vecs(glove_file):
+    with open(glove_file, 'rb') as f:
+        words = set()
+        word_to_vec_map = {}
+        
+        for line in f:
+            line = line.strip().split()
+            curr_word = line[0]
+            words.add(curr_word)
+            word_to_vec_map[curr_word] = np.array(line[1:], dtype=np.float64)
+            
+    return words, word_to_vec_map
+
+<\Cell_1>
+<Cell_2>
+from google.colab import files
+uploaded = files.upload()
+<\Cell_2>
+<Cell_3>
+words, word_to_vec_map = read_glove_vecs('glove.6B.50d.txt')
+<\Cell_3>
+<Cell_4>
+len(words)
+<\Cell_4>
+<Cell_5>
+list(word_to_vec_map.keys())[0]
+<\Cell_5>
+<Cell_6>
+father = word_to_vec_map['father']
+<\Cell_6>
+<Cell_7>
+mother = word_to_vec_map["mother"]
+<\Cell_7>

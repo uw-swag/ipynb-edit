@@ -1,0 +1,39 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.ml.feature import Tokenizer, HashingTF, IDF
+    from pyspark.ml.classification import LogisticRegressionModel
+
+    spark = SparkSession.builder.appName('Yelp_ETL').getOrCreate()
+
+    # Load data
+    text_data = spark.read.json('text_data.json')
+    non_text_data = spark.read.csv('non_text_data.csv', header=True, inferSchema=True)
+
+    # Text data preprocessing
+    tokenizer = Tokenizer(inputCol="review_text", outputCol="words")
+    hashing_tf = HashingTF(inputCol="words", outputCol="features")
+    idf = IDF(inputCol="features", outputCol="idf_features")
+
+    text_data_transformed = tokenizer.transform(text_data)
+    text_data_transformed = hashing_tf.transform(text_data_transformed)
+    text_data_transformed = idf.transform(text_data_transformed)
+
+    # Non-text data preprocessing
+    non_text_data_transformed = tokenizer.transform(non_text_data)
+    non_text_data_transformed = hashing_tf.transform(non_text_data_transformed)
+    non_text_data_transformed = idf.transform(non_text_data_transformed)
+
+    # Save transformed data
+    text_data_transformed.write.json('text_data_transformed.json')
+    non_text_data_transformed.write.csv('non_text_data_transformed.csv', header=True, sep=',')
+
+    # Load model
+    model = LogisticRegressionModel.load('logistic_regression_model')
+
+    # Predict on transformed data
+    predictions = model.transform(text_data_transformed)
+    predictions.select('review_id', 'prediction').show()
+
+    # Save predictions
+    predictions.write.json('predictions.json')
+    ```

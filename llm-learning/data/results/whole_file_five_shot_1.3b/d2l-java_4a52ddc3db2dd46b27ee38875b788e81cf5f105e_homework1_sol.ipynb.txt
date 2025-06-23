@@ -1,0 +1,40 @@
+```
+    [
+    Commit Message: "Update to DJL 0.20.0 (#190)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.19.0
+    %maven org.slf4j:slf4j-api:2.0.1
+    %maven org.slf4j:slf4j-simple:2.0.1
+
+    %maven ai.djl.mxnet:mxnet-engine:0.19.0
+    <\Cell_0>
+    <Cell_1>
+    import ai.djl.Device;
+    import ai.djl.ndarray.NDManager;
+    import ai.djl.ndarray.NDArray;
+    import ai.djl.ndarray.LazyNDArray;
+    import ai.djl.ndarray.index.NDIndex;
+    import ai.djl.ndarray.types.Shape;
+
+    // You have to use the MXNet engine for Q1 since
+    // it is currently the only engine in DJL
+    // to support Lazy NDArrays
+    NDManager manager = NDManager.newBaseManager(Device.cpu(), "MXNet");
+    <\Cell_1>
+    <Cell_2>
+    %load ../../utils/StopWatch
+    <\Cell_2>
+    <Cell_3>
+    var A = manager.randomNormal(new Shape(4096, 4096));
+    var B = manager.randomNormal(new Shape(4096, 4096));
+    var sw = new StopWatch();
+    var C = (LazyNDArray) A.dot(B);
+    C.waitToRead();
+    System.out.printf("Matrix by matrix: %f seconds\n", sw.stop());
+
+    C = (LazyNDArray) manager.zeros(new Shape(4096, 4096));
+    sw.

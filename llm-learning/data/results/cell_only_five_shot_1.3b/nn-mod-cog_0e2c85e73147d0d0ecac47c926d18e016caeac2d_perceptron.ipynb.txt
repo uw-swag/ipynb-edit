@@ -1,0 +1,61 @@
+```
+    ## Adaline
+
+    Adaline is a simple neural network model that is used for binary classification. It's a type of neural network that is used for learning from data.
+
+    The Adaline model is a linear model, which means it's a model that can only learn from data that is linearly separable.
+
+    The Adaline model is a good starting point for beginners in machine learning. It's simple and easy to understand, but it's not very effective for complex tasks.
+
+    ## Code
+
+    ```python
+    from sklearn.linear_model import AdalineGD
+
+    # Initialize Adaline
+    adaline = AdalineGD()
+
+    # Train Adaline
+    adaline.fit(X_train, y_train)
+
+    # Predict
+    y_pred = adaline.predict(X_test)
+    ```
+
+    ## Parameters
+
+    - `C`: Strength of the regularization parameter.
+    - `intercept_scaling`: Intercept shrinking parameter.
+    - `fit_intercept`: Whether to calculate the intercept.
+    - `warm_start`: When set to True, reuse the solution of the previous call to fit as initialization, otherwise, just erase the previous solution.
+
+    ## Code
+
+    ```python
+    from sklearn.linear_model import AdalineLBFGS
+
+    # Initialize Adaline
+    adaline = AdalineLBFGS()
+
+    # Train Adaline
+    adaline.fit(X_train, y_train)
+
+    # Predict
+    y_pred = adaline.predict(X_test)
+    ```
+
+    ## Parameters
+
+    - `shrink_step`: The step size for the shrinkage process.
+    - `tolerance`: Convergence criterion.
+    - `max_iter`: Maximum number of iterations.
+
+    ## Code
+
+    ```python
+    from sklearn.linear_model import AdalineSGD
+
+    # Initialize Adaline
+    adaline = AdalineSGD()
+
+    # Train Adal

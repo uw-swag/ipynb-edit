@@ -1,0 +1,179 @@
+%load_ext autoreload
+%autoreload 2
+
+import joblib
+import mlflow
+import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+import pandas as pd
+
+from pathlib import Path
+from sklearn import ensemble
+from typing import Dict
+
+from evidently.pipeline.column_mapping import ColumnMapping
+
+from config import MLFLOW_TRACKING_URI, DATA_DIR, FILENAME, REPORTS_DIR
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+# Download original dataset with: python src/pipelines/load_data.py 
+
+raw_data = pd.read_csv(f"../{DATA_DIR}/{FILENAME}")
+
+raw_data.head()
+target = 'cnt'
+prediction = 'prediction'
+datetime = 'dteday'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'mnth', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', ]
+
+column_mapping = ColumnMapping()
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.datetime = datetime
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+start_date_0 = '2011-01-02 00:00:00'
+end_date_0 = '2011-01-30 23:00:00'
+
+experiment_batches = [
+    
+    ('2011-01-31 00:00:00','2011-02-06 23:00:00'),
+    ('2011-02-07 23:00:00','2011-02-13 23:00:00'),
+    ('2011-02-14 23:00:00','2011-02-20 23:00:00'),
+    ('2011-02-21 00:00:00','2011-02-27 23:00:00'),
+    ('2011-02-28 00:00:00','2011-03-06 23:00:00'),  
+]
+# Set datetime index 
+raw_data = raw_data.set_index('dteday')
+
+# Define the reference dataset
+reference = raw_data.loc[start_date_0:end_date_0]
+
+print(reference.shape)
+reference.head()
+from src.reports import (
+    build_regression_quality_report,
+    get_regression_quality_metrics,
+    build_data_drift_report,
+    get_data_drift_metrics,
+)
+# Set up MLFlow Client
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+client = MlflowClient()
+print(f"Client tracking uri: {client.tracking_uri}")
+
+# Set experiment name
+mlflow.set_experiment("Data Drift")
+
+# Set experiment variables
+model_path = Path('../models/model.joblib')
+ref_end_data = end_date_0
+
+ref_end_data = end_date_0
+FEATURE_COLUMNS = numerical_features + categorical_features
+
+# Start a new Run (Parent Run)
+with mlflow.start_run() as run: 
+    
+    # Show newly created run metadata info
+    print("Experiment id: {}".format(run.info.experiment_id))
+    print("Run id: {}".format(run.info.run_id))
+    print("Run name: {}".format(run.info.run_name))
+    run_id = run.info.run_id
+    
+    # Save every fold metrics to a single object
+    metrics_model = {}  # Model Quality metrics on train  (averaged)
+    metrics_data = {}   # Data Drift metrics (averaged)
+
+    # Run model train for each batch (K-Fold)
+    for k, test_dates in enumerate(experiment_batches):
+        
+        print(f"Batch: {k}")
+        
+        train_dates = start_date_0, ref_end_data
+        ref_end_data = test_dates[1] # Update reference end date for the next train batch 
+        print(f"Train dates: {train_dates}") 
+        print(f"Test (current) dates: {test_dates}") 
+        
+        train_data = raw_data.loc[train_dates[0]:train_dates[1]]
+        X_train = train_data.loc[:, FEATURE_COLUMNS]
+        y_train = train_data.loc[:, target]
+        print("X_train (reference) dataset shape: ", X_train.shape, y_train.shape)
+        
+        test_data = raw_data.loc[test_dates[0]:test_dates[1]]
+        X_test = test_data.loc[:, FEATURE_COLUMNS]
+        y_test = test_data[target]
+        print("X_test (current)) dataset shape: ",  X_test.shape, y_test.shape)
+        
+        # Train model
+        regressor = ensemble.RandomForestRegressor(random_state = 0, n_estimators = 50)
+        regressor.fit(X_train, y_train)
+        
+        # Make predictions 
+        ref_prediction = regressor.predict(train_data[FEATURE_COLUMNS])
+        train_data['prediction'] = ref_prediction
+        cur_prediction = regressor.predict(test_data[FEATURE_COLUMNS])
+        test_data['prediction'] = cur_prediction
+        
+        # Calculate Model Quality metrics
+        regression_quality_report = build_regression_quality_report(
+            reference_data=train_data, 
+            current_data=test_data,
+            column_mapping=column_mapping
+        )
+        
+        # Extract Metrics from the  the Model Quality report
+        train_metrics = get_regression_quality_metrics(regression_quality_report)
+        metrics_model.update({test_dates[1]: train_metrics})
+
+        # Calculate Data Drift metrics
+        data_drift_report = build_data_drift_report(
+            reference_data=X_train.reset_index(drop=True), 
+            current_data=X_test.reset_index(drop=True),
+            column_mapping=column_mapping,
+            drift_share=0.4
+        )
+        data_drift_metrics: Dict = get_data_drift_metrics(data_drift_report)
+        metrics_data.update({test_dates[1]: data_drift_metrics})
+        
+        # Run a Child Run for each Fold 
+        with mlflow.start_run(run_name=test_dates[1], nested=True) as nested_run:
+            
+            # Show newly created run metadata info
+            print("Run id: {}".format(nested_run.info.run_id))
+            print("Run name: {}".format(nested_run.info.run_name))
+
+            # Log parameters
+            mlflow.log_param("begin", test_dates[0])
+            mlflow.log_param("end", test_dates[1])
+            
+            # Log metrics
+            mlflow.log_metrics(train_metrics)
+            mlflow.log_metrics(data_drift_metrics)
+            
+            # Save the Model Quality report & Log  
+            model_quality_report_path = f"../{REPORTS_DIR}/model_quality_report.html"
+            regression_quality_report.save_html(model_quality_report_path)
+            mlflow.log_artifact(model_quality_report_path)
+            
+            # Log Data Drift report ONLY if drift is detected
+            if data_drift_metrics['dataset_drift'] is True:
+                report_date = test_dates[1].split(' ')[0]
+                data_drift_report_path = f"../{REPORTS_DIR}/data_drift_report_{report_date}.html"
+                data_drift_report.save_html(data_drift_report_path)
+                mlflow.log_artifact(data_drift_report_path)
+    
+    # Save final model
+    joblib.dump(regressor, model_path)
+    
+    # Log the last batch model as the parent Run model
+    mlflow.log_artifact(model_path)
+    
+    # Log metrics
+    avg_model_metrics = pd.DataFrame.from_dict(metrics_model).T.mean().round(3).to_dict()
+    mlflow.log_metrics(avg_model_metrics)
+    
+    avg_data_metrics = pd.DataFrame.from_dict(metrics_data).T.mean().round(3).to_dict()
+    mlflow.log_metrics(avg_data_metrics)

@@ -1,0 +1,41 @@
+```
+    <Cell_0>
+    import (
+        "fmt"
+        "time"
+    )
+    <\Cell_0>
+    <Cell_1>
+    t := time.Now()
+    <\Cell_1>
+    <Cell_2>
+    t.Format(time.RFC3339)
+    <\Cell_2>
+    <Cell_3>
+    t1, _ := time.Parse(time.RFC3339, "2012-11-01T22:08:41+00:00")
+    <\Cell_3>
+    <Cell_4>
+    ansic := "Mon Jan _2 15:04:05 2006"
+    _, e := time.Parse(ansic, "8:41PM")
+    <\Cell_4>
+    <Cell_5>
+    t.Format("3:04PM")
+    <\Cell_5>
+    <Cell_6>
+    t.Format("Mon Jan _2 15:04:05 2006")
+    <\Cell_6>
+    <Cell_7>
+    t.Format("2006-01-02T15:04:05.999999-07:00")
+    <\Cell_7>
+    <Cell_8>
+    form := "3 04 PM"
+    t2, _ := time.Parse(form, "8 41 PM")
+    <\Cell_8>
+    <Cell_9>
+    fmt.Printf("%d-%02d-%02dT%02d:%02d:%02d-00:00\n",
+        t.Year(), t.Month(), t.Day(),
+        t.Hour(), t.Minute(), t.Second())
+    <\Cell_9>
+    <Cell_10>
+    fmt.Printf("%d-%02d-%02dT%02d:%02d:%02d-00:00\n",
+        t.Year(), t.Month(), t.Day(),

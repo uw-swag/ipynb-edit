@@ -1,0 +1,44 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Creating a dataframe
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': np.random.randn(8),
+        'D': np.random.randn(8)
+    })
+
+    # Creating a tracker dictionary
+    tracker = {}
+
+    # Function to handle exceptions
+    def exception_handler(func):
+        def wrapper(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                return None
+        return wrapper
+
+    # Function to track exceptions
+    @exception_handler
+    def track_exception(chapter, exception_type):
+        if chapter not in tracker:
+            tracker[chapter] = []
+        tracker[chapter].append(exception_type)
+
+    # Function to print tracker
+    def print_tracker():
+        for chapter, exceptions in tracker.items():
+            print(f"Chapter {chapter}: {', '.join(exceptions)}")
+
+    # Testing the functions
+    track_exception(11, "Exception in Chapter 11")
+    track_exception(12, "Another Exception in Chapter 12")
+    print_tracker()
+    ```
+    This code creates a dataframe, a tracker dictionary, and a function to handle exceptions. The function `track_exception` is used to track exceptions in a given chapter, and the function `print_tracker` is used to print the tracker. The `exception_handler` decorator is used to handle exceptions in a function.

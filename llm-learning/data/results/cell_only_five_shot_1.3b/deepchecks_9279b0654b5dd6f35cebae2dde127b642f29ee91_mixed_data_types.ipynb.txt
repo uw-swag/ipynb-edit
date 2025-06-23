@@ -1,0 +1,26 @@
+```python
+    # import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.preprocessing import MinMaxScaler
+
+    # define a function to normalize business value
+    def normalize_business_value(df, column):
+        scaler = MinMaxScaler()
+        df[column] = scaler.fit_transform(df[[column]])
+        return df
+
+    # test the function
+    df = pd.DataFrame({
+        'business_value': [10, 20, 30, 40, 50]
+    })
+
+    df_normalized = normalize_business_value(df, 'business_value')
+
+    print(df_normalized)
+    ```
+    This code will normalize the 'business_value' column in the DataFrame. The MinMaxScaler is used to scale the data to a range between 0 and 1.
+
+    Please note that the function `normalize_business_value` assumes that the 'business_value' column is numeric. If the column contains non-numeric values, you may need to handle them accordingly.
+
+    Also, the function `normalize_business_value` does not return the DataFrame, it only prints the normalized DataFrame. If you want to use the normalized DataFrame for further processing, you can modify the function accordingly.

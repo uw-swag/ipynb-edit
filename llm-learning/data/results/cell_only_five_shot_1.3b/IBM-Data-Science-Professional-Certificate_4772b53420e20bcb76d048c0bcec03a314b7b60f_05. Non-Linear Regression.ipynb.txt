@@ -1,0 +1,50 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import PolynomialFeatures
+
+    # Generate some data
+    x = np.linspace(0, 10, 100)
+    y = x**2 + np.random.normal(0, 1, 100)
+
+    # Create a linear regression model
+    model_linear = LinearRegression()
+    model_linear.fit(x[:, np.newaxis], y)
+
+    # Create a polynomial regression model
+    model_poly = PolynomialFeatures(degree=2)
+    x_poly = model_poly.fit_transform(x[:, np.newaxis])
+    model_poly.fit(x_poly, y)
+    y_poly = model_poly.predict(x_poly)
+
+    # Plot the results
+    plt.figure(figsize=(10, 5))
+    plt.plot(x, y, label='Original data', color='blue')
+    plt.plot(x, y_poly, label='Polynomial regression', color='green')
+    plt.plot(x, model_linear.predict(x[:, np.newaxis]), label='Linear regression', color='red')
+    plt.legend()
+    plt.show()
+    ```
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Create 06. Logistic Regression.ipynb"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import make_classification
+
+    # Generate some data
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=2, n_redundant=5, random_state=42)
+
+    #

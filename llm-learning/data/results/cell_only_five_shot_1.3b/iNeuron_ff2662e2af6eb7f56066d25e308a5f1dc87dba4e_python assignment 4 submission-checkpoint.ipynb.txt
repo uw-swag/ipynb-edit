@@ -1,0 +1,27 @@
+
+    The code you provided is a Python program that prompts the user for the lengths of the sides of a triangle, and then calculates the area of a triangle if the triangle is valid. If the triangle is not valid, it prints a message to the user.
+
+    Here's the updated code:
+
+    ```python
+    class Triangle:   
+        def __init__(self):
+            a = int(input("Side 1: "))
+            b = int(input("Side 2: "))
+            c = int(input("Side 3: "))
+            
+            if a+b>c and b+c>a and a+c>b:
+                t = TriangleArea()
+                print("Area of Triangle = "+str(t.find_area(a, b, c)))
+            else:
+                print("Not a valid Triangle!")
+            
+    class TriangleArea:    
+        def find_area(self, a, b, c):
+            s = (a+b+c)/2
+            return (s*(s-a)*(s-b)*(s-c))**0.5
+
+    Triangle()
+    ```
+
+    In this updated code, the `Triangle` class is defined with a method `__init__` that prompts the user for the lengths of the sides of a triangle. If the triangle is valid (i.e., the sum of the lengths of any two sides is greater than the length of the third side), it creates an instance of the `TriangleArea` class and calculates the area of the triangle. If the triangle is not valid, it prints a message to the user.

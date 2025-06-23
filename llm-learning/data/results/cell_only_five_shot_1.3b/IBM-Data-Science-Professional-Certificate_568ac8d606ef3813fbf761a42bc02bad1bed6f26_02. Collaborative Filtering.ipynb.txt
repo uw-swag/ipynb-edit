@@ -1,0 +1,30 @@
+```python
+    import os
+    import shutil
+
+    # Define the source directory
+    source_dir = 'source_directory'
+
+    # Define the destination directory
+    destination_dir = 'destination_directory'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Iterate over each file
+    for file in files:
+        # Get the file extension
+        file_extension = os.path.splitext(file)[1]
+
+        # Define the destination file path
+        destination_file_path = os.path.join(destination_dir, file)
+
+        # Check if the destination directory exists
+        if not os.path.exists(os.path.dirname(destination_file_path)):
+            # Create the destination directory
+            os.makedirs(os.path.dirname(destination_file_path))
+
+        # Move the file to the destination directory
+        shutil.move(os.path.join(source_dir, file), destination_file_path)
+    ```
+    This script will move all files from the source directory to the destination directory, creating any necessary subdirectories.

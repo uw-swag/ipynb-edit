@@ -1,0 +1,36 @@
+
+The code is a Python script that uses the Altair library to create a line chart. The chart represents the sigmoid function, which is a function that maps any real-valued number to the range (0,1) using the logistic function.
+
+The sigmoid function is defined as:
+
+    f(z) = 1 / (1 + e^-z)
+
+where e is the base of the natural logarithm (approximately equal to 2.71828).
+
+The chart shows the sigmoid function, which is a curve that passes through the point (0,0.5) and intersects the x-axis at the point (0,1). This is the threshold that separates the positive and negative classes in a binary classification task.
+
+The red rule is a vertical line that represents the threshold. When the input z is 0, the output a is 0.5, so the line crosses the y-axis at (0,0.5).
+
+The purpose of this chart is to visualize the concept of a threshold in a binary classification task. It helps to understand the decision boundary in a binary classification task.
+
+The backward pass of a neural network is the process of calculating the gradient of the loss function with respect to the weights of the network. This is done by computing the derivative of the loss function with respect to the weights, and then updating the weights in the direction that minimizes the derivative.
+
+The equations for a backpropagation algorithm are:
+
+1. Forward Propagation:
+
+    z = W1 * X + b1
+    a = sigmoid(z)
+    z = W2 * a + b2
+    y_hat = sigmoid(z)
+
+2. Compute Loss:
+
+    loss = -(y * log(y_hat) + (1 - y) * log(1 - y_hat))
+
+3. Backward Propagation:
+
+    d_L_d_W2 = a * d_L_d_z2
+    d_L_d_b2 = d_L_d_z2
+    d_L_d_z2 = W2 * d_L_d_a
+    d_L_d_a = W1 * d_L_d_z

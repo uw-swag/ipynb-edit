@@ -1,0 +1,53 @@
+```
+    ### Instruction:
+    [
+    Commit Message:" Added some examples of metrics and metric presets usage Added some examples of tests and test presets usage Removed outdated example with metrics"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+from sklearn.datasets import fetch_openml
+<\Cell_0>
+<Cell_1>
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+curr.head()
+<\Cell_1>
+<Cell_2>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDrift
+
+
+report = Report(metrics=[
+    DataDrift(),
+])
+
+
+report.run(reference_data=ref, current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+report
+<\Cell_2>
+<Cell_3>
+report.save_html('test_save.html')
+<\Cell_3>
+<Cell_4>
+report.save_json('test_save.json')
+<\Cell_4>
+<Cell_5>
+from evidently.metric_preset import classification_performance
+from evidently.metric_preset import regression_performance
+from evidently.metric_preset import data_quality
+<\Cell_5>
+<Cell_6>
+regression_report = Report(

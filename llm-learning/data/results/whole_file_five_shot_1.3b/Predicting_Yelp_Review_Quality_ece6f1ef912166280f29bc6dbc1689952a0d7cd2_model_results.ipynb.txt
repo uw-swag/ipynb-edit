@@ -1,0 +1,36 @@
+```python
+    import pprint
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    pd.set_option("display.max_columns", 100)
+    pd.set_option("display.max_rows", 100)
+    pd.set_option('display.width', 100)
+    pd.set_option("display.precision", 5)
+    plt.style.use('fivethirtyeight')
+    plt.rcParams.update({'font.size': 16, 'font.family': 'sans'})
+    %matplotlib inline
+
+    filepath = '../models/model_info.csv'
+    model_results = pd.read_csv(filepath).copy()
+
+    model_results.info()
+
+    show_results = model_results.query("record_type == 'test' & target == 'T2_CLS_ufc_>0'")
+    show_results = show_results.loc[:, ['record_id', 'data', 'model_type', 'Test_accuracy',
+                 'Test_balanced_accuracy', 'Test_f1_score',
+                 'Test_precision', 'Test_recall', 'Test_hamming_loss',
+                 'Test_jaccard_score', 'Test_log_loss',
+                 'hyperparameters']]
+    show_results = show_results.sort_values(by=['data', 'Test_accuracy'],
+                                        ascending=False, ignore_index=True).drop_duplicates(ignore_index=True,
+                                                                                           subset='record_id')
+    show_results = show_results[show_results['model_type'] == 'Forest Cls']
+    hyper_dict = show_results.loc[0:, ['hyperparameters']].to_dict()
+    for k, v in hyper_dict['hyperparameters'].items():
+        print (f'Index: {k}')
+        pprint.pprint(v)
+        print()
+    ```

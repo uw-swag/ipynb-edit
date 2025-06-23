@@ -1,0 +1,47 @@
+```python
+    # Update metrics and tests parameters and options
+
+    # Parameters
+    n_sigmas = 3
+    lte = 0
+    lt = 0.2
+
+    # Tests
+    data_integrity_dataset_tests = TestSuite(tests=[
+        TestNumberOfColumns(),
+        TestNumberOfRows(),
+        TestNumberOfNulls(),
+        TestShareOfNulls(),
+        TestNumberOfColumnsWithNulls(),
+        TestNumberOfRowsWithNulls(),
+        TestShareOfColumnsWithNulls(),
+        TestShareOfRowsWithNulls(),
+        TestNumberOfDifferentNulls(),
+        TestNumberOfConstantColumns(),
+        TestNumberOfEmptyRows(),
+        TestNumberOfEmptyColumns(),
+        TestNumberOfDuplicatedRows(),
+        TestNumberOfDuplicatedColumns(),
+        TestColumnsType(),
+    ])
+
+    data_integrity_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+
+    data_integrity_column_tests = TestSuite(tests=[
+        TestColumnNumberOfNulls(column_name='education'),
+        TestColumnShareOfNulls(column_name='education'),
+        TestColumnNumberOfDifferentNulls(column_name='education'),
+        TestColumnAllConstantValues(column_name='education'),
+        TestColumnAllUniqueValues(column_name='education'),
+        TestColumnValueRegExp(column_name='education', reg_exp='^[0..9]'),
+    ])
+
+    data_integrity_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+
+    feature_level_tests = TestSuite(tests=[
+        TestMeanInNSigmas(column_name='hours-per-week', n_sigmas=n_sigmas),
+        TestShareOfOutRangeValues(column_name='hours-per-week', lte=lte),
+        TestColumnShareOfNulls(column_name='education', lt=lt),
+    ])
+
+    feature_level_tests.run(reference_data

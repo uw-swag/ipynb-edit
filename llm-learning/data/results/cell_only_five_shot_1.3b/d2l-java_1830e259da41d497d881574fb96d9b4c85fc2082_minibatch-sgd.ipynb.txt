@@ -1,0 +1,22 @@
+```python
+    from pyspark.ml.feature import MinibatchSGDClassifier
+
+    # Create a Minibatch SGD classifier
+    sgd = MinibatchSGDClassifier(
+        featuresCol="features", 
+        labelCol="label", 
+        predictionCol="prediction", 
+        loss="log", 
+        step=1e-3, 
+        minIter=10, 
+        maxIter=100, 
+        fitIntercept=True, 
+        regularization=0.01, 
+        subPlanConvergenceThreshold=0.001, 
+        convergenceThreshold=0.001, 
+        binary=False, 
+        verbose=True)
+
+    # Train model
+    model = sgd.fit(trainingData)
+    ```

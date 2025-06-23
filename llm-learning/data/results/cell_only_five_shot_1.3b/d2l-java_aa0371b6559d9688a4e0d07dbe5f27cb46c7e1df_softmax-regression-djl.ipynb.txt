@@ -1,0 +1,20 @@
+```
+    import ai.djl.*;
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.nn.*;
+    import ai.djl.nn.core.*;
+    import ai.djl.training.*;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.listener.TrainingListener;
+    import ai.djl.training.evaluator.Accuracy;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+    import ai.djl.training.dataset.RandomAccessDataset;
+    import ai.djl.metric.*;
+    import ai.djl.util.*;
+    LearningRateTracker lrt = LearningRateTracker.fixedLearningRate(0.1f);
+    Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+
+    ```
+    LearningRateTracker has been renamed to Tracker.

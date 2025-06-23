@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "rename parameters threshold in simple metrics/tests presets (#456)"
+    Original Code Cells:
+    '''
+    data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(all_features_stattest='psi'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest='psi', cat_features_stattest='jensenshannon'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+from calendar import c
+
+
+per_feature_stattest = {x: 'wasserstein' for x in ['age', 'education-num']}
+for column in ['sex', 'class']:
+    per_feature_stattest[column] = 'z'
+for column in ['workclass', 'education']:
+    per_feature_stattest[column] = 'kl_div'
+for column in [ 'relationship', 'race',  'native-country']:
+    per_feature_stattest[column] = 'jensenshannon'
+for column in ['fnlwgt','hours-per-week']:
+    per_feature_stattest[column] = 'anderson'
+for column in ['capital-gain','capital-loss']:
+    per_feature_stattest[column] = 'cramer_von_mises'
+for column in ['occupation', 'marital-status']:
+    per_feature_stattest[column] = 'g_test'
+per_feature_stattest
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(per_feature_stattest=per_feature_stattest

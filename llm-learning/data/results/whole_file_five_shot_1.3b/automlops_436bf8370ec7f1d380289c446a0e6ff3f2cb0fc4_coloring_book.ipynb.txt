@@ -1,0 +1,52 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "renamed JupyterUtilsMagic to JupyterUtils"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from IPython.core.magic import register_cell_magic
+
+from utils import OneClickMLOps
+# consider dumping files to a tmpfiles dir
+@register_cell_magic
+def imports(_, cell):
+    'Run and save python code block to a file'
+    file = '.imports.py'
+    with open(file, 'wt') as fd:
+        fd.write(cell)
+    code = compile(cell, file, 'exec')
+    exec(code, globals())
+
+@register_cell_magic
+def define(_, cell):
+    'Run and save python code block to a file'
+    file = '.cell.py'
+    with open(file, 'wt') as fd:
+        fd.write(cell)
+    code_to_exec = cell[cell.find("OneClickMLOps.makeComponent("):cell.find(")")+1]
+    code = compile(code_to_exec, file, 'exec')
+    exec(code, globals())
+<\Cell_0>
+<Cell_1>
+%%imports
+import json
+import pandas as pd
+from google.cloud import aiplatform
+from google.cloud import aiplatform_v1
+from google.cloud import bigquery
+from google.cloud import storage
+import datetime
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import roc_curve
+from sklearn.model_selection import train_test_split
+from joblib import dump
+import pickle
+import os
+<\Cell_1>
+<Cell_2>
+bq_table = "sandbox-srastatter.mlops_boxer_test.dry-beans"
+model_directory = f"gs://mlops-boxer-test/trained_models/{datetime.datetime.now()}"
+data_path = "gs://mlops-boxer-test/data"
+project_id = "sandbox-srastatter

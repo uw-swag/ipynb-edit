@@ -1,0 +1,16 @@
+```python
+    import tensorflow as tf
+
+    # Load the trained model
+    model = tf.keras.models.load_model('my_model.h5')
+
+    # Save the model as a Keras HDF5 file
+    model.save('my_model.h5')
+
+    # Use the tensorflow.js converter to convert the saved Keras model into JSON format
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model = converter.convert()
+
+    with open('my_model.tflite', 'wb') as f:
+        f.write(tflite_model)
+    ```

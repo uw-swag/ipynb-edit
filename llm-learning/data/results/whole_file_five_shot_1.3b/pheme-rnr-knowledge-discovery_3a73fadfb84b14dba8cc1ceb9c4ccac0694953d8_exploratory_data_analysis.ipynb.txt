@@ -1,0 +1,39 @@
+
+    [
+    Commit Message: "Add beeswarm plot to eda"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Import dependencies for this notebook
+import pandas as pd
+
+import numpy as np
+import networkx as nx
+import seaborn as sns  # Must be seaborn-0.9.0
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from lib.util import fetch_tweets
+<\Cell_0>
+<Cell_1>
+tweets = fetch_tweets("germanwings-crash")
+tweets[["is_source_tweet","is_rumor"]] = tweets[["is_source_tweet", "is_rumor"]].astype(bool)
+tweets.created = pd.to_datetime(tweets.created * 1e6)
+tweets.describe()
+<\Cell_1>
+<Cell_2>
+twts_event_rumor = tweets[["event", "tweet_id", "is_rumor"]].groupby(["event", "is_rumor"]) \
+    .agg(len) \
+    .rename(columns={"tweet_id": "total"}) \
+    .reset_index()
+
+plt.figure(figsize=(12,12))
+sns.violinplot(x="features", y="value", hue="is_rumor", data=X, split=True, inner="quart")
+plt.xticks(rotation=90)
+<\Cell_2>
+<Cell_3>
+tweets
+# Z = (data - data.mean()) / data.std()  # normalaize
+# X = pd.concat([y, Z.iloc[:,0:12]], axis=1)
+# X = pd.melt(X, id_vars="is_rumor", var_name="features", value_name="value")
+# plt.figure(figsize=(12,12))
+# sns.viol

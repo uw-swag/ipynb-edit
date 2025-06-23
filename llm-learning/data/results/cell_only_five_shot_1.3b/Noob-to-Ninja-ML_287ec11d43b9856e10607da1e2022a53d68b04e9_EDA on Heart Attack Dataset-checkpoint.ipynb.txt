@@ -1,0 +1,49 @@
+
+    ## Adding New Notebooks
+    ### Python Notebook
+    ```python
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import confusion_matrix, accuracy_score
+    from yellowbrick.classifier import ConfusionMatrix 
+
+    # Load dataset
+    df = pd.read_csv('dataset.csv')
+
+    # Preprocess data
+    previsores = df.iloc[:,0:20].values
+    classe = df.iloc[:,20].values
+
+    # Encode categorical data
+    labelencoder1 = LabelEncoder()
+    previsores[:,0] = labelencoder1.fit_transform(previsores[:,0])
+
+    labelencoder2 = LabelEncoder()
+    previsores[:,2] = labelencoder2.fit_transform(previsores[:,2])
+
+    # Split data into training and test sets
+    X_treinamento, X_teste, y_treinamento, y_teste = train_test_split(
+        previsores, classe, test_size = 0.3, random_state = 0
+    )
+
+    # Create and train the model
+    naive_bayes = GaussianNB()
+    naive_bayes.fit(X_treinamento, y_treinamento)
+
+    # Predict the test set results
+    previsoes = naive_bayes.predict(X_teste)
+
+    # Generate the confusion matrix and calculate the accuracy score
+    confusao = confusion_matrix(y_teste, previsoes)
+    taxa_acerto = accuracy_score(y_teste, previsoes)
+
+    # Visualize the confusion matrix
+    v = ConfusionMatrix(GaussianNB())
+    v.fit(X_treinamento, y_treinamento)
+    v.score(X_teste, y_teste)
+    v.poof()
+    ```
+
+    ### Jupyter Note

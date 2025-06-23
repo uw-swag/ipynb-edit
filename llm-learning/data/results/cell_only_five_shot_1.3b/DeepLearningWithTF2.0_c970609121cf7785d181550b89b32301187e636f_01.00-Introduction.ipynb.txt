@@ -1,0 +1,10 @@
+```
+    # Removing old notebooks
+    import os
+    import shutil
+    old_notebooks_path = "/path/to/old/notebooks"
+    for filename in os.listdir(old_notebooks_path):
+        file_path = os.path.join(old_notebooks_path, filename)
+        if os.path.isfile(file_path) and filename.endswith('.ipynb'):
+            os.remove(file_path)
+    ```

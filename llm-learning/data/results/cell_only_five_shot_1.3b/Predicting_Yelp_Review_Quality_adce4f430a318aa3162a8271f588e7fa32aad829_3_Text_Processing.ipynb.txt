@@ -1,0 +1,43 @@
+```python
+    # Text Pipeline
+    from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+    from sklearn.pipeline import Pipeline
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Data Preprocessing
+    def preprocess_text(text):
+        # Lowercase
+        text = text.lower()
+        # Remove punctuation
+        text = ''.join(e for e in text if e.isalnum() or e.isspace())
+        # Remove stopwords
+        stop_words = set(nltk_stopwords.words('english'))
+        words = text.split()
+        text = [word for word in words if word not in stop_words]
+        return " ".join(text)
+
+    # Text Analysis
+    def analyze_text(text):
+        # Text Statistics
+        flesch_reading_score = textstat.flesch_reading_ease(text)
+        flesch_kincaid_grade_level = textstat.flesch_kincaid_grade(text)
+        gunning_fog_index = textstat.gunning_fog(text)
+        # Sentiment Analysis
+        sentiment_score = textstat.sentiment(text)
+        return flesch_reading_score, flesch_kincaid_grade_level, gunning_fog_index, sentiment_score
+
+    # Text Pipeline
+    text_clf = Pipeline([
+        ('vect', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('clf', MultinomialNB()),
+    ])
+
+    # Train the model
+    X_train, X_test, y_train, y_test = train_test_split(df['text'], df['sentiment'], test_size=0.2, random_state=42)
+    text_clf.fit(X_train, y_train)
+
+    # Predict the sentiment of the test set
+    y_pred = text_

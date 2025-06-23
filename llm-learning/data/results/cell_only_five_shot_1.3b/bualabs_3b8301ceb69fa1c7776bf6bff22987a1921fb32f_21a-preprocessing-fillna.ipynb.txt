@@ -1,0 +1,19 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.impute import SimpleImputer
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Fill missing values with the mean of the column
+    imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+    df = pd.DataFrame(imputer.fit_transform(df), columns=df.columns)
+
+    # Save the preprocessed dataframe
+    df.to_csv('preprocessed_data.csv', index=False)
+    ```
+    This code will fill the missing values in the dataset with the mean of the column. The `SimpleImputer` function from the `sklearn.impute` module is used to fill the missing values. The `fit_transform` method is used to fit the imputer and transform the data, and the result is a DataFrame.
+
+    Please note that this is a simple example and might not be suitable for all datasets. For more complex preprocessing, you might need to use more advanced techniques like filling in the missing values with a specific value, or using a machine learning model to predict the missing values.

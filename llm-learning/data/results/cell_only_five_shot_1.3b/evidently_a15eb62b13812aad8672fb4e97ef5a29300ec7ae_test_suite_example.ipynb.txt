@@ -1,0 +1,21 @@
+```python
+    import pandas as pd
+
+    from evidently.v2.metrics import DataIntegrityMetrics
+    from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+    from evidently.v2.test_suite import TestSuite
+    from evidently.v2.tests import TestNumberOfColumns, TestNumberOfDriftedFeatures
+    from evidently import ColumnMapping
+
+    suite = TestSuite(tests=[TestNumberOfColumns(
+        gt=1,
+        data_integrity_metric=DataIntegrityMetrics(),
+    ),
+                             TestNumberOfDriftedFeatures(),
+                            ])
+
+    suite.run(reference_data=pd.DataFrame([{'a': 1, 'b': 2}]), current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping())
+    ```
+
+    This code is a test suite for the `TestNumberOfColumns` and `TestNumberOfDriftedFeatures` tests. The `TestNumberOfColumns` test checks if the number of columns in the current data matches the expected number (1 in this case). The `TestNumberOfDriftedFeatures` test checks if the number of drifted features in the current data matches the expected number (0 in this case). The `suite.run` method executes these tests and prints the results.

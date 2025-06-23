@@ -1,0 +1,31 @@
+```python
+    import pandas as pd
+    from sklearn import preprocessing
+    from sklearn.utils import class_weight
+
+    def majority_class_undersampling(df, target_column):
+        # Calculate class weights
+        class_weights = class_weight.compute_class_weight('balanced',
+                                                           np.unique(df[target_column]),
+                                                           df[target_column])
+
+        # Undersample majority class
+        majority_class = df[target_column].value_counts().idxmax()
+        majority_class_df = df[df[target_column] == majority_class]
+        undersampled_df = majority_class_df.sample(frac=1, weights='count')
+
+        return undersampled_df
+
+    def featureNormalization(ft):
+        seizures = ft['seizure'].copy()
+        scale = preprocessing.StandardScaler()
+        scaled_df = scale.fit_transform(ft.iloc[:, :ft.shape[1]-1])
+        norm_ft = pd.DataFrame(scaled_df)
+        norm_ft['seizure'] = seizures
+        return norm_ft
+
+    # Example usage:
+    df = pd.read_csv('your_data.csv')
+    df = majority_class_undersampling(df, 'target_column')
+    df = featureNormalization(df)
+    ```

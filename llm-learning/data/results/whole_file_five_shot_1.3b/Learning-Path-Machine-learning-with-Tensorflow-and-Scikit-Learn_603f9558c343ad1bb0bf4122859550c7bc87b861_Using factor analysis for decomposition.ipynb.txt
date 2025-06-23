@@ -1,0 +1,51 @@
+```python
+    # This is a sample Python code file
+    # It is added to demonstrate the structure of a Python code file
+
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error, r2_score
+    from sklearn.preprocessing import StandardScaler
+
+    # Loading the dataset
+    df = pd.read_csv('data.csv')
+
+    # Data preprocessing
+    # This is a placeholder for the actual preprocessing steps
+    # You should replace this with your actual preprocessing steps
+    df = df.dropna()
+    df = pd.get_dummies(df)
+
+    # Splitting the dataset
+    X = df.drop('target', axis=1)
+    y = df['target']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Model training
+    regressor = LinearRegression()
+    regressor.fit(X_train, y_train)
+
+    # Model evaluation
+    y_pred = regressor.predict(X_test)
+    mse = mean_squared_error(y_test, y_pred)
+    r2 = r2_score(y_test, y_pred)
+
+    print('Mean Squared Error:', mse)
+    print('R2 Score:', r2)
+
+    # This is a placeholder for the actual model building and training steps
+    # You should replace this with your actual model building and training steps
+
+    # Plotting the results
+    plt.scatter(y_test, y_pred)
+    plt

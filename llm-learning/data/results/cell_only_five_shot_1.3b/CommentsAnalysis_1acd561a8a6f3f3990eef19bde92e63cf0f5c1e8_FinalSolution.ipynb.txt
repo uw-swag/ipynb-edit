@@ -1,0 +1,26 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Assuming you have a pandas DataFrame df with columns 'model1', 'model2', 'model3', etc.
+    correlation_matrix = df.corr().round(2)
+
+    # Generate a mask for the upper triangle of the heatmap
+    mask = np.triu(np.ones_like(correlation_matrix, dtype=bool))
+
+    # Set up the matplotlib figure
+    f, ax = plt.subplots(figsize=(11, 9))
+
+    # Generate a custom diverging colormap
+    cmap = sns.diverging_palette(230, 20, as_cmap=True)
+
+    # Draw the heatmap with the mask and correct aspect ratio
+    sns.heatmap(correlation_matrix, mask=mask, cmap=cmap, vmax=.3, center=0,
+                square=True, linewidths=.5, cbar_kws={"shrink": .5})
+
+    plt.show()
+    ```
+
+    This code will generate a correlation matrix heatmap, where the color intensity represents the correlation coefficient between two models. The heatmap is generated using seaborn, a Python data visualization library based on matplotlib.
+
+    Please replace `df` with your actual DataFrame.

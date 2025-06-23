@@ -1,0 +1,38 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added experiment with all channels"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import configparser
+<\Cell_0>
+<Cell_1>
+from ipynb.fs.full.EdfManipulation import read_and_store_data
+from ipynb.fs.full.ImportExportData import importCsvToDataframe
+from ipynb.fs.full.LeftRightHemispheresExperiment import LeftRightHemispheresExperiment
+from ipynb.fs.full.AverageChannelExperiment import AverageChannelExperiment
+<\Cell_1>
+<Cell_2>
+config = configparser.ConfigParser()
+config.read('config.ini')
+<\Cell_2>
+<Cell_3>
+channels = config['DATASET'].getint('channels')
+readEdf = config['DATASET'].getboolean('readEdf')
+csvImportFile = config['DATASET'].get('csvImportFile')
+csvExportFile = config['DATASET'].get('csvExportFile')
+dataset = config['DATASET'].get('dataset')
+sample_rate = config['DATASET'].getint('sample_rate')
+time_window = config['DATASET'].getint('time_window')
+test_ratio = config['TRAINING'].getfloat('test_ratio')
+pca_tolerance = config['PCA'].getfloat('pca_tolerance')
+smote_neighbors = config['SMOTE'].getint('smote_neighbors')
+k_fold = config['CLASSIFICATION'].getint('k_fold')
+knn_neighbors = config['CLASSIFICATION'].getint('knn_neighbors')
+rf_estimators = config['CLASSIFICATION'].getint('rf_estimators')
+max_iter = config['LOGISTIC'].getint('max_iter')
+dropout = config['LSTM'].getfloat('dropout_percentage')
+loss_function = config['LSTM'].get('loss_function')
+epochs = config['LSTM'].getint('epochs')
+lstm_units = config['LSTM'].getint

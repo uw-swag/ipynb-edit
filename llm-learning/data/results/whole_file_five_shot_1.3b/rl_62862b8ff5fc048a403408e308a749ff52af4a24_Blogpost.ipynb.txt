@@ -1,0 +1,27 @@
+```python
+    class RestartableLightGBM:
+        def __init__(self, params):
+            self.params = params
+            self.model = None
+
+        def fit(self, X, y):
+            self.model = lgb.train(self.params, X, y)
+
+        def predict(self, X):
+            if self.model is None:
+                raise Exception('Model is not trained. Please fit the model first.')
+            return self.model.predict(X)
+
+        def score(self, X, y):
+            if self.model is None:
+                raise Exception('Model is not trained. Please fit the model first.')
+            return self.model.score(X, y)
+
+        def save_model(self, path):
+            if self.model is None:
+                raise Exception('Model is not trained. Please fit the model first.')
+            self.model.save_model(path)
+
+        def load_model(self, path):
+            self.model = lgb.Booster(model_file=path)
+    ```

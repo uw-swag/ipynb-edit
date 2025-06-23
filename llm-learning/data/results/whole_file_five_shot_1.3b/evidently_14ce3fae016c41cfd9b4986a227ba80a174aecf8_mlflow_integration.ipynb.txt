@@ -1,0 +1,19 @@
+```
+    import mlflow
+    import mlflow.sklearn
+
+    mlflow.set_experiment('data-drift-example')
+
+    with mlflow.start_run():
+        mlflow.log_param("data_url", "https://example.com")
+        mlflow.log_param("data_version", "1.0")
+
+        mlflow.sklearn.log_model(model, "model")
+
+        # Log metrics
+        mlflow.log_metric("accuracy", 0.95)
+        mlflow.log_metric("loss", 0.12)
+
+    # Run MLflow UI
+    !mlflow ui
+    ```

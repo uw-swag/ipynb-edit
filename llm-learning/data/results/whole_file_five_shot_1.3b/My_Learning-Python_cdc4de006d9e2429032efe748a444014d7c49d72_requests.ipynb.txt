@@ -1,0 +1,51 @@
+```
+    <Cell_0>
+    import requests
+    <\Cell_0>
+    <Cell_1>
+    response = requests.get('https://api.github.com')
+    <\Cell_1>
+    <Cell_2>
+    # print the status code
+    print(response.status_code)
+    <\Cell_2>
+    <Cell_3>
+    # conditional output based on the response
+    if response.status_code == 200:
+        print("Success!")
+    elif response.status_code == 404:
+        print("Not Found")
+    <\Cell_3>
+    <Cell_4>
+    # True (if response b/w 200 and 400), False otherwise
+    if response:
+        print("Success!")
+    else:
+        print("An error has occurred.")
+    <\Cell_4>
+    <Cell_5>
+    # True (if response was successful), False otherwise
+    if response.status_code == 200:
+        print("Success!")
+    else:
+        print("An error has occurred.")
+    <\Cell_5>
+    <Cell_6>
+    from requests.exceptions import HTTPError
+    <\Cell_6>
+    <Cell_7>
+    # Generate Exception if response was not successful
+    for url in ['https://api.github.com', 'https://api.github.com/invalid']:
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+        except HTTPError as http_err:
+            print('HTTP error occurred: {}'.format(http_err))
+        except Exception as err:
+            print('other error occurred: {}'.format(err))
+        else:
+            print('Success!')
+    <\Cell_7>
+    <Cell_8>
+
+    ```

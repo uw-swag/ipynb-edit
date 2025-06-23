@@ -1,0 +1,88 @@
+import pandas as pd
+
+from sklearn import datasets, model_selection, linear_model, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ClassificationPerformanceProfileSection
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+iris = datasets.load_iris()
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+iris_frame['target'] = iris.target
+train_data, test_data = model_selection.train_test_split(iris_frame, random_state=0)
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = iris.feature_names
+categorical_features = []
+
+features = numerical_features + categorical_features
+model = neighbors.KNeighborsClassifier(n_neighbors=1)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+iris_column_mapping = ColumnMapping()
+
+iris_column_mapping.target = target
+iris_column_mapping.prediction = prediction
+iris_column_mapping.numerical_features = numerical_features
+from typing import Optional
+import pandas as pd
+
+from evidently import ColumnMapping
+from evidently.dashboard.widgets.widget import Widget
+from evidently.model.widget import BaseWidgetInfo
+
+class TextCommentWidget(Widget):
+    def __init__(self, title:str, text:str, size:int):
+        super().__init__(title)
+        self.text = text
+        self.size = size
+        
+    def calculate(self, reference_data: pd.DataFrame, current_data: Optional[pd.DataFrame],
+                  column_mapping: ColumnMapping, analyzers_results) -> Optional[BaseWidgetInfo]:
+        return BaseWidgetInfo(
+            title=self.title,
+            type="text",
+            size=self.size,
+            params={
+                "text": self.text
+            }
+        )
+
+    def analyzers(self):
+        return []
+text_example = """
+# Header H1
+Important paragraph!
+
+## Header H2
+- point 1
+- point 2
+- point 3
+"""
+#ClassificationPerformanceTab().list_widgets()
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(include_widgets=[
+    'Classification Model Performance Report.',
+    'Reference: Model Quality With Macro-average Metrics',
+    'Current: Model Quality With Macro-average Metrics',
+    TextCommentWidget("Regarding Quality Metrcis", text=text_example, size=2),
+    'Reference: Class Representation',
+    'Current: Class Representation',
+    'Reference: Confusion Matrix',
+    TextCommentWidget("", text=text_example, size=1),
+    TextCommentWidget("", text=text_example, size=1),
+    'Current: Confusion Matrix',
+    'Reference: Quality Metrics by Class',
+    'Current: Quality Metrics by Class',])])
+
+iris_model_performance_dashboard.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()
+#iris_model_performance_dashboard.save('reports/iris_model_performance.html')

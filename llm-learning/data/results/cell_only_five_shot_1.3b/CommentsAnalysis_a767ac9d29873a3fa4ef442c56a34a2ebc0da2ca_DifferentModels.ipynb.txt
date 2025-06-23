@@ -1,0 +1,22 @@
+```python
+    def mean_word_length(comments):
+        lengths = []
+        for comment in comments:
+            comment = comment.lower()
+            comment = re.sub('[^а-яё\-]', ' ', comment).split()
+            ls = [len(w) for w in comment]
+            if len(ls):
+                lengths.append(sum(ls) / len(ls))
+            else:
+                lengths.append(1)
+        return lengths
+
+    baseline_scores = cross_val_score(lr, X, y, cv=3)
+    print(baseline_scores.mean(), baseline_scores.std())
+    lr.fit(X_train, y_train)
+    prediction = lr.predict_proba(X_test)[:, 1]
+    accuracy_score(y_test, prediction)
+    y_test = [int(y) for y in y_test]
+    prediction = [int(p) for p in prediction]
+    list(zip(comments_list[index_test], y_test, prediction, ans))
+    ```

@@ -1,0 +1,31 @@
+```python
+    # Adding files via upload
+    from azureml.core import Workspace
+    from azureml.core.model import Model
+    from azureml.core.webservice import AciWebservice
+    from azureml.core.model import InferenceConfig
+    from azureml.core.webservice import Webservice
+    from azureml.core.model import Model
+    from azureml.core.resource_configuration import ResourceConfiguration
+
+    # Load workspace from the saved config
+    ws = Workspace.from_config()
+
+    # Get the model
+    model = Model(ws, 'my_model')
+
+    # Set the scoring uri
+    inference_config = InferenceConfig(entry_script="score.py", environment=model.environment)
+
+    # Set the deployment configuration
+    aci_config = AciWebservice.deploy_configuration(cpu_cores=1, memory_gb=1)
+
+    # Deploy the model as a service
+    service = Model.deploy(ws, "myservice", [model], inference_config, aci_config)
+
+    # Wait for the deployment to complete
+    service.wait_for_deployment(show_output=True)
+
+    # Display the endpoint
+    print(service.scoring_uri)
+    ```

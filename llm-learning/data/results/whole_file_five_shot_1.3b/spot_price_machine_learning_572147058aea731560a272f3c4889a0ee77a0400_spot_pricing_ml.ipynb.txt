@@ -1,0 +1,43 @@
+
+    '''
+    <Cell_0>
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+%matplotlib inline
+from IPython.core.display import display, HTML
+display(HTML("<style>.container { width:100% !important; }</style>"))
+import boto3
+<\Cell_0>
+<Cell_1>
+pricing_df = pd.read_csv("../data/ec2-prices.csv")
+pricing_df['price_per_ecu_on_demand'] = pricing_df['linux_on_demand_cost_hourly']/pricing_df['compute_units_ecu']
+pricing_df.head()
+<\Cell_1>
+<Cell_2>
+pricing_df.describe()
+<\Cell_2>
+<Cell_3>
+names = pricing_df["InstanceType"].to_dict()
+<\Cell_3>
+<Cell_4>
+list(names.values())[0:5]
+<\Cell_4>
+<Cell_5>
+client = boto3.client('ec2', region_name='us-west-2')
+response =client.describe_spot_price_history(InstanceTypes = list(names.values()),
+        ProductDescriptions = ["Linux/UNIX"])
+<\Cell_5>
+<Cell_6>
+spot_price_history = response['SpotPriceHistory']
+spot_history_df = pd.DataFrame(spot_price_history)
+spot_history_df.SpotPrice = spot_history_df.SpotPrice.astype(float)
+<\Cell_6>
+<Cell_7>
+spot_history_df.head()
+<\Cell_7>
+<Cell_8>
+df = spot_history_df.merge(pricing_df, how="inner", on="InstanceType")
+df['price_memory_spot'] = df['SpotPrice']/df['memory_gb']
+df['price_ecu_spot'] = df['SpotPrice']/df['

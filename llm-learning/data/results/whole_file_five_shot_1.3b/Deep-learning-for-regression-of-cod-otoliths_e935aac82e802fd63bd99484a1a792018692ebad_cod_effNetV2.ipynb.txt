@@ -1,0 +1,32 @@
+```python
+    import torch
+    from torchvision import models, transforms
+
+    # Load the pre-trained model
+    model = models.efficientnet_v2(pretrained=True)
+
+    # Define the transformations
+    transform = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+
+    # Apply the transformations to the image
+    image = Image.open('image.jpg')
+    image_t = transform(image)
+    batch_t = image_t.unsqueeze(0)  # add an extra dimension for batch
+
+    # Move the image to the GPU
+    if torch.cuda.is_available():
+        batch_t = batch_t.to('cuda')
+        model.to('cuda')
+
+    # Forward pass
+    with torch.no_grad():
+        output = model(batch_t)
+
+    # Print the output
+    print(output)
+    ```

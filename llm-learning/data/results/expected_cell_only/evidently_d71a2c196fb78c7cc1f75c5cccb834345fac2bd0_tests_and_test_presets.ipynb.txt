@@ -1,0 +1,45 @@
+data_quality_dataset_tests = TestSuite(tests=[
+    TestTargetPredictionCorrelation(),
+    TestHighlyCorrelatedColumns(),
+    TestTargetFeaturesCorrelations(),
+    TestPredictionFeaturesCorrelations(),
+    TestCorrelationChanges(),
+])
+
+data_quality_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_quality_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestNumberOfDriftedColumns(),
+    TestShareOfDriftedColumns(),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+data_quality_column_tests = TestSuite(tests=[
+    TestColumnValueMin(column_name='education-num'),
+    TestColumnValueMax(column_name='education-num'),
+    TestColumnValueMean(column_name='education-num'),
+    TestColumnValueMedian(column_name='education-num'),
+    TestColumnValueStd(column_name='education-num'),
+    TestNumberOfUniqueValues(column_name='education'),
+    TestUniqueValuesShare(column_name='education'),
+    TestMostCommonValueShare(column_name='education'),
+    TestMeanInNSigmas(column_name='education-num'),
+    TestValueRange(column_name='education-num'),
+    TestNumberOfOutRangeValues(column_name='education-num'),
+    TestShareOfOutRangeValues(column_name='education-num'),
+    TestValueList(column_name='education'),
+    TestNumberOfOutListValues(column_name='education'),
+    TestShareOfOutListValues(column_name='education'),
+    TestValueQuantile(column_name='education-num', quantile=0.25),
+    TestShareOfOutListValues(column_name='education-num'),
+])
+
+data_quality_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_quality_column_tests
+data_drift_column_tests = TestSuite(tests=[
+    TestColumnValueDrift(column_name='education-num')
+])
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests

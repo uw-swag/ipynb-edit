@@ -1,0 +1,36 @@
+```
+    from keras.models import load_model
+    model = load_model('data/char_rnn.h5')
+    model.optimizer.lr=0.001
+    model.fit(sentences, np.expand_dims(next_chars,-1), batch_size=64, nb_epoch=1)
+    print_example()
+    model.optimizer.lr=0.0001
+    model.fit(sentences, np.expand_dims(next_chars,-1), batch_size=64, nb_epoch=1)
+    print_example()
+    model.optimizer.lr=0.00001
+    model.fit(sentences, np.expand_dims(next_chars,-1), batch_size=64, nb_epoch=1)
+    print_example()
+    model.save_weights('data/char_rnn.h5')
+    model.optimizer.lr=0.00001
+    model.fit(sentences, np.expand_dims(next_chars,-1), batch_size=64, nb_epoch=1)
+    print_example()
+    model.fit(sentences, np.expand_dims(next_chars,-1), batch_size=64, nb_epoch=1)
+    print_example()
+    print_example()
+    model.save_weights('data/char_rnn.h5')
+
+    '''
+    '''
+    Commit Message: "[DEL] Irrelevant files"
+    Original Code Cells:
+    '''
+    from theano.sandbox import cuda
+cuda.use('gpu2')
+%matplotlib inline
+import utils; reload(utils)
+from utils import *
+from __future__ import division, print_function
+from keras.layers import TimeDistributed, Activation
+from numpy.random import choice
+path = get_file('nietzsche.txt', origin="https://s3.amazonaws.com/text-datasets/nietzsche.txt")
+text = open(path).

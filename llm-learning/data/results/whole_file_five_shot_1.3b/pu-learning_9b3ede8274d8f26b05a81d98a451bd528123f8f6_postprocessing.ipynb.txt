@@ -1,0 +1,48 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    <\Cell_0>
+    <Cell_1>
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    <\Cell_1>
+    <Cell_2>
+    from sklearn.linear_model import LogisticRegression
+
+    train_x, _, train_s = train
+
+    clf = LogisticRegression(random_state=0).fit(train_x, train_s)
+    <\Cell_2>
+    <Cell_3>
+    from scar import C
+
+    test_x, test_y, _ = test
+
+    test_s_prob_hat = clf.predict_proba(test_x)[:, 1]
+
+    test_y_prob_hat = np.minimum(test_s_prob_hat / C, 1.0)
+    test_y_hat = (test_y_prob_hat > 0.5).astype(np.int32)
+    <\Cell_3>
+    <Cell_4>
+    from sklearn.metrics import f1_score
+
+    f1_score(test_y, test_y_hat)
+    <\Cell_4>
+    <Cell_5>
+    from utils import plot_x_y, plot_x_y_proba
+    <\Cell_5>
+    <Cell_6>
+    plot_x_y(test_x, test_y)
+    <\Cell_6>
+    <Cell_7>
+    plot_x_y(test_x, test_y_hat)
+    <\Cell_7>
+    <Cell_8>
+    plot_x_y_proba(test_x, test_y_prob_hat)
+    <\Cell_8>
+    ```
+
+    ### Explanation:
+    The code is merging the data processing and existing notebooks. The data processing part is done in the `load_scar` function, which is used to load the training, validation, and test sets. The existing notebooks are updated to use the processed data and the trained model for predictions. The F1 score of the model is also calculated and displayed in

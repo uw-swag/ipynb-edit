@@ -1,0 +1,34 @@
+```python
+    import pprint
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Assuming 'show_results' is your DataFrame and 'model_type' is the column you want to filter by
+    show_results = show_results.sort_values(by=['data', 'Test_accuracy'],
+                                        ascending=False, ignore_index=True).drop_duplicates(ignore_index=True,
+                                                                                           subset='record_id')
+
+    show_results = show_results[show_results['model_type'] == 'Forest Cls']
+
+    # Extract hyperparameters
+    hyper_dict = show_results.loc[0:, ['hyperparameters']].to_dict()
+    for k, v in hyper_dict['hyperparameters'].items():
+        print (f'Index: {k}')
+        pprint.pprint(v)
+        print()
+
+    # Create a Random Forest Classifier
+    rf = RandomForestClassifier(**hyper_dict['hyperparameters'])
+
+    # Fit the model
+    rf.fit(show_results['data'], show_results['target'])
+
+    # Predict
+    predictions = rf.predict(show_results['data'])
+
+    # Add predictions to the original DataFrame
+    show_results['predictions'] = predictions
+
+    # Show the results
+    print(show_results)
+    ```

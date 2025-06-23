@@ -1,0 +1,16 @@
+from calendar import c
+
+
+per_feature_stattest = {x: 'wasserstein' for x in ['age', 'education-num']}
+for column in ['sex', 'class']:
+    per_feature_stattest[column] = 'z'
+for column in ['workclass', 'education']:
+    per_feature_stattest[column] = 'kl_div'
+for column in [ 'relationship', 'race',  'native-country']:
+    per_feature_stattest[column] = 'jensenshannon'
+for column in ['fnlwgt','hours-per-week']:
+    per_feature_stattest[column] = 'anderson'
+for column in ['capital-gain','capital-loss']:
+    per_feature_stattest[column] = 'cramer_von_mises'
+for column in ['occupation', 'marital-status']:
+    per_feature_stattest[column] = 'g_test'

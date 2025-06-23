@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    train_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": ['a','b','b','q']*10}
+    test_data = {"col1": ["a","b","d"] * 10, "col2": ['a', '2', '1']*10}
+    train = Dataset(pd.DataFrame(data=train_data), cat_features=["col1","col2"])
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1", "col2"])
+
+    CategoryMismatchTrainTest().run(train, test)
+    ```
+
+    The code above is an example of how to use the DeepChecks library to perform a check on the training and test data to ensure that the categories in the 'col1' column match in both datasets.

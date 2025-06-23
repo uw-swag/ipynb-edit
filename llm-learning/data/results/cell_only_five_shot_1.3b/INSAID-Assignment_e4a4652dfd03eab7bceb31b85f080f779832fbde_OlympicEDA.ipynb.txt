@@ -1,0 +1,45 @@
+
+    The code you provided is a mix of Python and Jupyter notebook code. It's a mix of data analysis, data visualization, and machine learning code. 
+
+    Here's a brief explanation of what each section of code does:
+
+    1. Importing necessary libraries:
+       - numpy: for multi-dimensional array and matrices
+       - pandas: for data manipulation and analysis
+       - pandas_profiling: for data profiling
+       - matplotlib.pyplot: for plotting
+       - seaborn: for statistical data visualization
+       - subprocess: for executing shell commands
+
+    2. Reading the CSV file:
+       - olympic = pd.read_csv("https://raw.githubusercontent.com/insaid2018/Term-1/master/Data/Projects/summer%20olympics.csv")
+
+    3. Checking the shape, head, info, and description of the data:
+       - olympic.shape
+       - olympic.head()
+       - olympic.info()
+       - olympic.describe(include='all')
+
+    4. Creating a function to check missing data:
+       - missing_data(data)
+
+    5. Fetching the mode of the 'Country' column:
+       - olympic.Country.mode()
+
+    6. Replacing missing values with the mode:
+       - olympic.Country.fillna('USA', inplace=True)
+
+    7. Changing all column names to lower case:
+       - olympic.columns = map(str.lower, olympic.columns)
+
+    8. Checking the unique values in each column:
+       - olympic.year.unique()
+       - olympic.city.unique()
+       - olympic.sport.unique()
+       - olympic.discipline.unique()
+       - olympic.country.unique()
+       - olympic.gender.unique()
+       - olympic.medal.unique()
+
+    9. Plotting the distribution of the 'Year' column:
+       - sns.distplot([tuple(ol

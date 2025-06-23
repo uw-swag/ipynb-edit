@@ -1,0 +1,38 @@
+```
+    from deepchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from deepchecks.checks import UnusedFeatures
+    import pandas as pd
+    from deepchecks import Dataset
+
+    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                    'race', 'sex', 'native-country']
+    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
+    test_ds = Dataset(test_df, label=label_name, cat_features=cat_features)
+
+    numeric_features = list(set(train_ds.features) - set(cat_features))
+
+    # Split the dataset into train and validation sets
+    train_ds, valid_ds = train_ds.split(0.8)
+
+    # Train a model
+    model = AdaBoostClassifier()
+    model.fit(train_ds.X, train_ds.y)
+
+    # Evaluate the model
+    valid_preds = model.predict(valid_ds.X)
+    print(f"Validation accuracy: {accuracy_score(valid_ds.y, valid_preds)}")
+
+    # Check for unused features
+    check = UnusedFeatures(train_ds)
+    check.run()
+
+    # Plot the feature importances
+    plt.figure(figsize=(10, 6))
+    plt.barh(train_ds.features, model.feature_importances_)
+    plt.xlabel("Feature Importance")
+    plt.title("Feature Importances")
+    plt.show()
+    ```

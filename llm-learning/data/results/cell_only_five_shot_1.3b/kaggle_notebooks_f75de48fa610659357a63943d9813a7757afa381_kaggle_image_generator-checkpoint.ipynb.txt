@@ -1,0 +1,43 @@
+```
+    %%html
+    <style>        
+    @import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+    body {background-color: gainsboro;} 
+    a {color: #818286; font-family: 'Roboto';} 
+    h1 {color: #37c9e1; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #ccc;} 
+    h2, h3 {color: slategray; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #ccc;}
+    h4 {color: #818286; font-family: 'Roboto';}
+    span {text-shadow: 4px 4px 4px #ccc;}
+    div.output_prompt, div.output_area pre {color: slategray;}
+    div.input_prompt, div.output_subarea {color: #37c9e1;}      
+    div.output_stderr pre {background-color: gainsboro;}  
+    div.output_stderr {background-color: slategrey;} 
+    </style>
+    import numpy as np 
+    import pandas as pd
+    import math
+    from scipy import misc
+    from collections import namedtuple
+
+    import cv2
+    from PIL import ImageFile, Image
+    from tqdm import tqdm
+    from glob import glob
+
+    from keras.preprocessing import image as keras_image
+    from keras.utils import to_categorical
+    from sklearn.model_selection import train_test_split
+
+    import tensorflow as tf
+    import tflearn
+
+    from tflearn.data_utils import build_hdf5_image_dataset
+
+    from matplotlib import rcParams
+    import matplotlib.pyplot as plt
+    import matplotlib.image as plt_image
+    from matplotlib import cm
+
+    %matplotlib inline
+    %config InlineBackend.figure_format = 'retina'
+    df_train

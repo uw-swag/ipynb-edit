@@ -1,0 +1,39 @@
+
+    ## SSL: CERTIFICATE_VERIFY_FAILED
+    ## This error occurs when the SSL certificate of the server is not valid or not trusted.
+    ## To fix this issue, you need to install a valid SSL certificate on your server.
+    ## If you are using a third-party server, you might need to contact your hosting provider to get a valid SSL certificate.
+    ## If you are using a local server, you can use a self-signed SSL certificate.
+    ## In Python, you can use the ssl module to create a self-signed certificate.
+    ## Here is an example:
+
+    ```python
+    import ssl
+    import socket
+
+    # Create a self-signed certificate
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    context.load_cert_chain('certfile.pem', 'keyfile.pem')
+
+    # Create a server socket
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, 0)
+    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    server_socket.bind(('localhost', 8443))
+    server_socket.listen(5)
+
+    # Accept a client connection
+    client_socket, fromaddr = server_socket.accept()
+    context.wrap_socket(client_socket, server_side=True)
+
+    # Get the certificate details
+    cert = client_socket.getpeercert()
+    print(f"Certificate details: {cert}")
+    ```
+
+    ## After creating the certificate, you can use it to run your server.
+    ## Remember to replace 'certfile.pem' and 'keyfile.pem' with the paths to your actual certificate and key files.
+
+    ## Please note that this is a very basic example and in a real-world scenario, you would need to handle more cases, such as handling multiple clients, managing connections, etc.
+
+    ## Also, this code will not work if you are running it on a server that is not configured to use SSL.
+

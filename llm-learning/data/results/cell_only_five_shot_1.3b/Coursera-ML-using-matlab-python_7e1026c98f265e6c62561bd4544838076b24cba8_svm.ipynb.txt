@@ -1,0 +1,29 @@
+```python
+    # 定义一个函数来画决策边界  
+    def plot_decision_boundary(pred_func,X,y):  
+      
+        # 设定最大最小值，附加一点点边缘填充  
+        x_min, x_max = X[:, 0].min() - 0.1, X[:, 0].max() + 0.1  
+        y_min, y_max = X[:, 1].min() - 0.1, X[:, 1].max() + 0.1  
+        h = 0.01  
+    
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))  
+      
+        # 用预测函数预测一下  
+        Z = pred_func(np.c_[xx.ravel(), yy.ravel()])  
+        Z = Z.reshape(xx.shape)  
+        #plt.xlim(x_min,x_max)
+        #plt.ylim(y_min,y_max)
+        # 然后画出图  
+        plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)  
+        plt.scatter(X[:, 0], X[:, 1], c=y,cmap=plt.cm.coolwarm) 
+    
+    plot_decision_boundary(lambda x:clf.predict(x),X,y)
+    plt.title("LinearSVM")  
+    plt.show()
+    
+    #Training SVM with RBF Kernel (Dataset 2)
+    from sklearn import svm
+    clf2 = svm.SVC(kernel='rbf',gamma=3.0,C=5.0)
+    clf2.fit(X2,y2.ravel())
+    ```

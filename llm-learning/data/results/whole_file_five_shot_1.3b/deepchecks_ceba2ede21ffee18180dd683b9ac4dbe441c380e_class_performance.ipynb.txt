@@ -1,0 +1,40 @@
+```python
+    <Cell_0>
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import precision_score, make_scorer
+
+from deepchecks.checks import ClassPerformance
+from deepchecks.base import Dataset
+
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label_name="target")
+test_ds = Dataset(test, label_name="target")
+
+clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+<\Cell_1>
+<Cell_2>
+check = ClassPerformance()
+check.run(test_ds, clf)
+<\Cell_2>
+<Cell_3>
+scorers = {
+    "precision": make_scorer(precision_score, average=None, zero_division=0),
+}
+
+check = ClassPerformance(alternative_scorers=scorers)
+check.run(test_ds, clf)
+<\Cell_3>
+    ```
+
+    ### Explanation:
+    The code snippet you provided is a part of a Jupyter notebook. The commit message "Update utils.metric to delete duplicated code (#290)" suggests that the code in the cell with the id "290" is being updated or deleted. However, the cell with the id "290" is not provided in the provided code snippet. 
+
+    The code in the cell with the id "290" is a part of a larger codebase and it's not clear what the purpose of this code is. If it's a part of a larger codebase, it might be a part of a specific function or method, and it's not clear what the purpose of this code is. 
+
+    If this code is part of

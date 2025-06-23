@@ -1,0 +1,24 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+
+    # Convert the text to a matrix of token counts
+    count_vect = CountVectorizer()
+    X_train_counts = count_vect.fit_transform(movie_reviews.train.data)
+
+    # Train a Multinomial Naive Bayes classifier
+    clf = MultinomialNB().fit(X_train_counts, movie_reviews.train.target)
+
+    # Predict the category of a review
+    review = "This movie is so great!"
+    X_new_counts = count_vect.transform([review])
+    prediction = clf.predict(X_new_counts)
+
+    print(prediction)
+    ```
+
+    The code above uses the sklearn library to train a Multinomial Naive Bayes classifier on the movie reviews dataset. It then uses the trained classifier to predict the category of a new review.
+
+    The output of the prediction is the predicted category of the review.
+
+    The code also includes a few additional lines to print the output of the prediction.

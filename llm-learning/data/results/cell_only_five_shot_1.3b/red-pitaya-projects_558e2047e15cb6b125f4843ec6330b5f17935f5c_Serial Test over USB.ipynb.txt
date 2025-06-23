@@ -1,0 +1,18 @@
+```python
+    import serial
+
+    # Open serial port
+    ser = serial.Serial('/dev/ttyUSB0', 9600)
+
+    while True:
+        # Read data from serial port
+        data = ser.readline()
+        # Convert bytes to string and print
+        print(str(data, 'utf-8'))
+    ```
+
+    This code opens the serial port at the path '/dev/ttyUSB0' and sets the baud rate to 9600. It then enters a loop where it continuously reads data from the serial port and prints it.
+
+    Please note that you need to have the correct permissions to access the serial port and the device file '/dev/ttyUSB0' should be available.
+
+    Also, this is a simple example and might not work for your specific use case. For more complex tasks, you might need to use a different library or method.

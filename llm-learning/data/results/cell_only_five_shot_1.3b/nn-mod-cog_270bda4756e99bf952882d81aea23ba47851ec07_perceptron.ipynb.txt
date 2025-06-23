@@ -1,0 +1,45 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Perceptron equation: y = sign(w*x + b)
+    def perceptron_model(x, w, b):
+        return np.where(np.dot(x, w) + b > 0, 1, -1)
+
+    # Adaline equation: y = sign(w*x + b)
+    def adaline_model(x, w, b):
+        return np.where(np.dot(x, w) + b >= 0, 1, -1)
+
+    # Generate random data
+    np.random.seed(0)
+    X = np.random.randn(100, 2)
+    Y = np.random.randint(0, 2, 100)
+
+    # Initialize weights and bias
+    w = np.random.randn(2)
+    b = 0
+
+    # Fit perceptron and adaline models
+    perceptron_output = perceptron_model(X, w, b)
+    adaline_output = adaline_model(X, w, b)
+
+    # Plot the results
+    plt.figure(figsize=(10, 4))
+
+    plt.subplot(121)
+    plt.scatter(X[:, 0], X[:, 1], c=Y, cmap='b', edgecolor='k')
+    plt.title('Perceptron')
+    plt.grid(True)
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.tight_layout()
+
+    plt.subplot(122)
+    plt.scatter(X[:, 0], X[:, 1], c=Y, cmap='b', edgecolor='k')
+    plt.title('Adaline')
+    plt.grid(True)
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.tight_layout()
+
+    plt.show

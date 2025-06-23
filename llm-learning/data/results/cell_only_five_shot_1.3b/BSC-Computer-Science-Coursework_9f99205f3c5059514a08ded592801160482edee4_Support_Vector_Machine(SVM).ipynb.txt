@@ -1,0 +1,40 @@
+```python
+    from sklearn import svm
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import classification_report, confusion_matrix
+    import pandas as pd
+    import numpy as np
+
+    # Load the dataset
+    data = pd.read_csv('your_data.csv')
+
+    # Split the dataset into features and target variable
+    X = data.drop('target_variable', axis=1)
+    y = data['target_variable']
+
+    # Standardize the features
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+
+    # Split the dataset into the Training set and Test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+    # Train the SVM model on the Training set
+    classifier = svm.SVC(kernel = 'linear', random_state = 0)
+    classifier.fit(X_train, y_train)
+
+    # Predict the Test set results
+    y_pred = classifier.predict(X_test)
+
+    # Create a confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    print('Confusion Matrix: \n', cm)
+
+    # Create a classification report
+    cr = classification_report(y_test, y_pred)
+    print('Classification Report: \n', cr)
+    ```
+    Please replace 'your_data.csv' and 'target_variable' with your actual data file and target variable.
+
+    This code will load a dataset, split it into a training set and a test set, standardize the features, train a SVM model on the training set, make predictions on the test set, and then create a confusion matrix and a classification report.

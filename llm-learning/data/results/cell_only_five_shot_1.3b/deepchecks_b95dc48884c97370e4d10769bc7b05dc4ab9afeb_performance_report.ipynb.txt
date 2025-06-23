@@ -1,0 +1,35 @@
+
+    # Remove label_name from dataset constructor
+    train_ds = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=diabetes.feature_names,
+            label_name=None)
+    
+    test_ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+            features=diabetes.feature_names,
+            label_name=None)
+
+    # The label_name parameter in the Dataset constructor is used to specify the name of the label column.
+    # If you don't provide a label_name, the label column will be named 'target' by default.
+    # If you want to use a different name, you can provide it as a string.
+
+    # If you want to use categorical features, you can specify them in the cat_features parameter.
+    # For example, if you have a 'sex' column in your dataset, you can specify it as follows:
+
+    train_ds = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=diabetes.feature_names,
+            label_name='target', cat_features=['sex'])
+
+    test_ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+            features=diabetes.feature_names,
+            label_name='target', cat_features=['sex'])
+
+    # The cat_features parameter is used to specify the categorical features in your dataset.
+    # If you don't provide a cat_features parameter, no categorical features will be used.
+    # If you provide a list of categorical features, only these features will be used.
+    # If you provide a list of categorical features, only these features will be used.
+    # If you provide a list of categorical features, only these features will be used.
+
+    # If you want to use numerical features, you can specify them in the num_features parameter.
+    # For example, if you have a 'age' column in your dataset, you can specify it as follows:
+
+    train_ds = Dataset(pd.concat([X_train, y_train], axis=1),

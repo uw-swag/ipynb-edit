@@ -1,0 +1,45 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Activation, LSTM
+    from keras.optimizers import RMSprop
+    from keras.layers import Embedding
+    from keras.layers import LSTM
+    from keras.models import Model
+    from keras.layers import Input
+    from keras.layers.merge import concatenate
+    from sklearn.preprocessing import MinMaxScaler
+    from keras.callbacks import EarlyStopping
+    from keras.models import load_model
+
+    # Loading the data
+    data = pd.read_csv('Lunar_Lander_1.csv')
+    data = data.dropna()
+
+    # Splitting the data into input and output variables
+    X = data.drop('Class', axis=1)
+    y = data['Class']
+
+    # Normalizing the data
+    scaler = MinMaxScaler(feature_range=(-1, 1))
+    X = scaler.fit_transform(X)
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Building the LSTM model
+    model = Sequential()
+    model.add(LSTM(100, input_shape=(X_train.shape[1], X_train.shape[2])))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer=RMSprop(lr=0.01))
+
+    # Training the model
+    model.fit(X_train, y_train, epochs=100, batch_size=1, verbose=2)
+
+    # Saving the model
+    model.save('Lun

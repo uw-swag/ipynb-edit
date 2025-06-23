@@ -1,0 +1,22 @@
+```python
+    import numpy as np
+    from sklearn.preprocessing import LabelBinarizer
+    from sklearn.metrics import roc_auc_score
+
+    # Mixup
+    def mixup_data(x, y, alpha=0.2):
+        batch_size = x.shape[0]
+        lambda_ = np.random.beta(alpha, alpha)
+        mixed_x = lambda_ * x + (1 - lambda_) * np.random.uniform(size=x.shape)
+        mixed_y = lambda_ * y + (1 - lambda_) * np.random.uniform(size=y.shape)
+        return mixed_x, mixed_y
+
+    # Label Smoothing
+    def label_smoothing(y_true, epsilon=0.1):
+        K = y_true.shape[1]
+        y_true = LabelBinarizer().fit_transform(y_true)
+        y_pred = np.empty_like(y_true)
+        for i in range(K):
+            y_pred[:,i] = y_true[:,i]/(K-1) + epsilon/(K-1)
+        return y_pred
+    ```

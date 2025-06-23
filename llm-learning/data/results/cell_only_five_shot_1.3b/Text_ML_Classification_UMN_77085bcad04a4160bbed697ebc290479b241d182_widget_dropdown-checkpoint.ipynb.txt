@@ -1,0 +1,66 @@
+```python
+    import dash
+    import dash_bootstrap_components as dbc
+
+    app = dash.Dash(
+        __name__, external_stylesheets=[dbc.themes.BOOTSTRAP]
+    )
+
+    app.layout = html.Div([
+        dbc.Dropdown(
+            id="dropdown-widget",
+            options=[
+                {"label": "Option 1", "value": "option1"},
+                {"label": "Option 2", "value": "option2"},
+                {"label": "Option 3", "value": "option3"},
+            ],
+            value="option1",
+        ),
+    ])
+
+    if __name__ == "__main__":
+        app.run_server(debug=True)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new section in the sandbox"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import dash
+    import dash_bootstrap_components as dbc
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(
+        __name__, external_stylesheets=[dbc.themes.BOOTSTRAP]
+    )
+
+    app.layout = html.Div([
+        dbc.Dropdown(
+            id="dropdown-widget",
+            options=[
+                {"label": "Option 1", "value": "option1"},
+                {"label": "Option 2", "value": "option2"},
+                {"label": "Option 3", "value": "option3"},
+            ],
+            value="option1",
+        ),
+        html.Div(id='new-section'),
+    ])
+
+    @app.callback(
+        dash.dependencies.Output('new-section', 'children'),
+        [dash.dependencies.Input('dropdown-widget', 'value')]
+    )
+    def update_new_section(value):
+        return f'You have selected: {value}'
+
+    if __name__ == "__main__":
+        app.run_server

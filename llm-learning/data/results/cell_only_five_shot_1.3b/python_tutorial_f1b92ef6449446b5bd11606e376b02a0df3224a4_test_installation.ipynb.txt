@@ -1,0 +1,45 @@
+```
+    # This is a test installation notebook
+    # You can run this cell to test if the notebook is installed correctly
+
+    # Import the required libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Display the first 5 rows of the dataset
+    print(df.head())
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Check the summary statistics
+    print(df.describe())
+
+    # Plotting the distribution of the target variable
+    sns.countplot(df['target_variable'])
+    plt.show()
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target_variable', axis=1), df['target_variable'], test_size=0.2, random_state=42)
+
+    # Creating a linear regression model
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+    ```
+    This is a simple test notebook to check if the installation of the required libraries and the execution of the code is successful. You can run this cell to test the installation.

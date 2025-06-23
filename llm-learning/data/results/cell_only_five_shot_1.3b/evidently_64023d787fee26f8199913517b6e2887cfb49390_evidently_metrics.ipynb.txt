@@ -1,0 +1,57 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.options import DataDriftOptions
+from evidently.report import Report
+from evidently.metrics import ColumnDriftMetric, DataDriftTable, DatasetDriftMetric, ColumnRegExpMetric
+
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Define the column mapping
+    column_mapping = ColumnMapping(
+        target=df['target'],
+        columns=df.columns.drop('target')
+    )
+
+    # Define the data drift options
+    data_drift_options = DataDriftOptions(
+        drift_threshold=0.01,
+        drift_threshold_type='percentage',
+        drift_baseline_window='auto',
+        drift_baseline_type='percentage',
+        drift_baseline_period='auto',
+        drift_baseline_shift='auto',
+        drift_baseline_aggregation='mean',
+        drift_baseline_unit='auto',
+        drift_baseline_unit_type='auto',
+        drift_baseline_ignore_missing=True,
+        drift_baseline_ignore_missing_percent=0.01,
+        drift_baseline_ignore_missing_unit='auto',
+        drift_baseline_ignore_missing_aggregation='mean',
+        drift_baseline_ignore_missing_shift='auto',
+        drift_baseline_ignore_missing_unit_type='auto',
+    )
+
+    # Create a data drift report
+    report = Report(
+        column_mapping=column_mapping,
+        metrics=[
+            ColumnDriftMetric(),
+            DataDriftMetric(),
+            DatasetDriftMetric(),
+            ColumnRegExpMetric()
+        ],
+        options=data_drift_options
+    )
+
+    # Generate the report
+    report.generate(df)
+
+    # Print the report
+    print(report)
+    ```

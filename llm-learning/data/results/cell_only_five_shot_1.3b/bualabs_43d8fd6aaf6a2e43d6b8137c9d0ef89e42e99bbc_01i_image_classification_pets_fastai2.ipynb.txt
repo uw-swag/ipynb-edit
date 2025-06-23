@@ -1,0 +1,6 @@
+```
+    np.random.seed(42)
+    item_tfms = RandomResizedCrop(448, min_scale=0.75, ratio=(1., 1.))
+    batch_tfms = [*aug_transforms(size=224, max_warp=0.25), Normalize.from_stats(*imagenet_stats)]
+    learn.save('01i-resnet50-stage1')
+    ```

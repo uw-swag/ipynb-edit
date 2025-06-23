@@ -1,0 +1,27 @@
+```python
+    # Modify the check without a function
+    # This is a placeholder, the actual modification will depend on the specific check you want to modify
+
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from mlchecks.checks.overview import ColumnsInfo
+    from mlchecks.base import Dataset
+
+    # Generate random data
+    num_fe = np.random.rand(200)
+    cat_fe = np.random.randint(10, size=200)
+    date = range(1635693229, 1635693429)
+    index = range(200)
+    data = {'index': index, 'date': date, 'a': cat_fe, 'b': num_fe, 'c': num_fe, 'label': cat_fe}
+    df = pd.DataFrame.from_dict(data)
+
+    # Create a dataset
+    dataset = Dataset(df, label='label', date='date', index='index', features=['a', 'b'])
+
+    # Modify the check
+    check = ColumnsInfo()
+
+    # Run the check
+    check.run(dataset=dataset)
+    ```

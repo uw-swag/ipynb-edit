@@ -1,0 +1,44 @@
+```python
+    import pandas as pd
+    import psycopg2
+    from sqlalchemy import create_engine
+
+    # Connect to your postgres DB
+    conn = psycopg2.connect(
+        dbname="your_dbname",
+        user="your_username",
+        password="your_password",
+        host="your_host"
+    )
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    # Execute a query
+    cur.execute("SELECT * FROM your_table")
+
+    # Fetch all the rows
+    rows = cur.fetchall()
+
+    # Convert the result to a pandas DataFrame
+    df = pd.DataFrame(rows, columns=['column1', 'column2', 'column3'])
+
+    # Create an engine to connect to the database
+    engine = create_engine('postgresql://user:password@localhost/mydatabase')
+
+    # Write the DataFrame to a SQL table
+    df.to_sql('table_name', con=engine, if_exists='append', index=False)
+
+    # Close the cursor and connection
+    cur.close()
+    conn.close()
+    ```
+    This script connects to a PostgreSQL database, executes a SQL query to fetch data from a table, and then writes the data to a SQL table. The `sqlalchemy` library is used to create an engine to connect to the database, and the `pandas` library is used to convert the data to a pandas DataFrame.
+
+    Please replace `"your_dbname"`, `"your_username"`, `"your_password"`, `"your_host"`, `"your_table"`, and `"table_name"` with your actual database details.
+
+    Also, make sure that the table you're querying has the same structure as the DataFrame you're writing to the SQL table.
+
+    This script assumes that you have the necessary permissions to read from the database and write to the SQL table.
+
+    Please note that this is a basic example. In a real-world scenario, you would need to handle errors, and you might want to use a context manager to ensure that the connection and cursor are properly

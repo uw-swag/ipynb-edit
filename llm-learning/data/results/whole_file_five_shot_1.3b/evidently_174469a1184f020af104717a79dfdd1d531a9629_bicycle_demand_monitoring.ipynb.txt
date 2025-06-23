@@ -1,0 +1,47 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import silhouette_score
+    from sklearn.cluster import AgglomerativeClustering
+
+    # Load the data
+    data = pd.read_csv('WiMLDS_Conference.csv')
+
+    # Preprocess the data
+    data = data.dropna()
+    data = data.drop(['Unnamed: 0'], axis=1)
+
+    # Standardize the data
+    scaler = StandardScaler()
+    data_scaled = scaler.fit_transform(data)
+
+    # Apply PCA
+    pca = PCA(n_components=2)
+    data_pca = pca.fit_transform(data_scaled)
+
+    # Apply KMeans
+    kmeans = KMeans(n_clusters=3)
+    kmeans.fit(data_pca)
+
+    # Get the silhouette score
+    silhouette_score(data_pca, kmeans.labels_)
+
+    # Plot the clusters
+    plt.scatter(data_pca[:,0], data_pca[:,1], c=kmeans.labels_)
+    plt.show()
+
+    # Apply Agglomerative Clustering
+    clustering = AgglomerativeClustering(n_clusters=3)
+    clustering.fit(data_pca)
+
+    # Get the silhouette score
+    silhouette_score(data_pca, clustering.labels_)
+
+    # Plot the clusters
+    plt.scatter(data_pca[:,0], data_pca[:,1], c=clustering.labels_)
+    plt.show()
+    ```

@@ -1,0 +1,56 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.layers import Layer
+
+    # Defining a custom layer
+    class CustomLayer(Layer):
+        def __init__(self, units, activation=None, **kwargs):
+            super(CustomLayer, self).__init__(**kwargs)
+            self.units = units
+            self.activation = activation
+
+        def build(self, input_shape):
+            # Create a trainable weight variable for this layer.
+            self.kernel = self.add_weight(name='kernel', 
+                                          shape=(input_shape[1], self.units),
+                                          initializer='uniform',
+                                          trainable=True)
+            self.bias = self.add_weight(name='bias', 
+                                       shape=(self.units,),
+                                       initializer='zeros',
+                                       trainable=True)
+            super(CustomLayer, self).build(input_shape)  # Be sure to call this at the end
+
+        def call(self, x):
+            # Compute the output of the layer given the input
+            return tf.matmul(x, self.kernel) + self.bias
+
+        def compute_output_shape(self, input_shape):
+            # The output shape of the layer is the same as the input shape
+            return (input_shape[0], self.units)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add Ch 5.5 Custom Loss Function (#14)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.losses import Loss
+
+    # Defining a custom loss function
+    class CustomLoss(Loss):
+        def __init__(self, name='custom_loss', **kwargs):
+            super(CustomLoss, self).__init__(**kwargs)
+
+        def call(self, y_true, y_pred):
+            # Compute the output of the loss function given the input
+            return t

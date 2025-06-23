@@ -1,0 +1,33 @@
+```python
+    # Importing the required libraries
+    import RPi.GPIO as GPIO
+    import time
+
+    # Setting up the GPIO pins
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(18, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+    # Function to read the sensor
+    def read_sensor():
+        return GPIO.input(18)
+
+    # Main function
+    def main():
+        while True:
+            # Read the sensor
+            sensor_value = read_sensor()
+            print("Sensor value: ", sensor_value)
+            time.sleep(1)
+
+    # Call the main function
+    if __name__ == "__main__":
+        try:
+            main()
+        except KeyboardInterrupt:
+            print("Program interrupted")
+        finally:
+            GPIO.cleanup()
+    ```
+    This code sets up a simple program that reads the value from a GPIO pin connected to the alcohol sensor. The sensor is connected to a Raspberry Pi and the pin number is 18. The program reads the value every second and prints it to the console.
+
+    Please note that this is a simple example and may not work as expected in a real-world application. The sensor value is printed to the console, but you may want to use this value in a more complex way, such as sending it to a server or storing it in a database.

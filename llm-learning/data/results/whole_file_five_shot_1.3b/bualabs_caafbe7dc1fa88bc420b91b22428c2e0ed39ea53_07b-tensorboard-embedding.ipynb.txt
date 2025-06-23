@@ -1,0 +1,25 @@
+```
+    The log path you've specified is incorrect. The log path is the directory where TensorBoard will store its data. 
+
+    The log path should be a directory that exists on your machine. If you're running this code in a Jupyter notebook, you can specify the log path by setting the `TB_LOGDIR` environment variable. For example, you can set it to `/tmp/tensorboard`.
+
+    If you're running this code in a script, you can specify the log path by setting the `TB_LOGDIR` environment variable before running the script. For example, you can run the script like this:
+
+    ```
+    export TB_LOGDIR=/tmp/tensorboard
+    python your_script.py
+    ```
+
+    If you're running this code in a cloud environment, you can specify the log path by setting the `TB_LOGDIR` environment variable when you create the TensorBoard logger. For example, you can create the logger like this:
+
+    ```
+    from fastai_tensorboard_callback import *
+    tboard_path = Path('data/tensorboard/' + proj_id)
+    learner.fit_one_cycle(5, 5e-3, callbacks=[TensorboardLogger(learner,  
+                                    f'Learner{time.time()}',
+                                    path=tboard_path)])
+    ```
+
+    In this case, the log path is specified when creating the TensorBoard logger.
+
+    Please replace `your_script.py` with the actual name of your script.

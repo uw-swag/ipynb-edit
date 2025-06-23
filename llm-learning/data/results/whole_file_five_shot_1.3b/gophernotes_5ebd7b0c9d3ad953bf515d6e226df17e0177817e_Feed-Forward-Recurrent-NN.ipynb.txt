@@ -1,0 +1,25 @@
+```go
+    package main
+
+    import (
+        "math/rand"
+        "github.com/goml/gobrain"
+    )
+
+    func main() {
+        rand.Seed(0)
+
+        patterns := [][][]float64{
+            {{0, 0}, {0}},
+            {{0, 1}, {1}},
+            {{1, 0}, {1}},
+            {{1, 1}, {0}},
+        }
+
+        ff := &gobrain.FeedForward{}
+        ff.Init(2, 2, 1)
+        ff.Train(patterns, 1000, 0.6, 0.4, true)
+        ff.Test(patterns)
+        ff.SetContexts(1, nil)
+    }
+    ```

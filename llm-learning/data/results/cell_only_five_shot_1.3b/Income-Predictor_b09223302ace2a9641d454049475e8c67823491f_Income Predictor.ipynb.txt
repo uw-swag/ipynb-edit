@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    columns = ['Age', 'Work Class', 'Fnlwgt', 'Education', 'Education Number', 'Marital Status', 'Occupation',
+          'Relationship', 'Race', 'Sex', 'Capital Gain', 'Capital Loss', 'Hours per Week', 'Country', 'Income']
+    dataset = pd.read_csv('income-dataset.csv', names = columns)
+
+    # Checking for missing values
+    print(dataset.isnull().sum())
+
+    # Checking the statistical summary
+    print(dataset.describe())
+
+    # Checking the distribution of the data
+    for column in dataset.columns:
+        plt.figure(figsize=(10, 4))
+        sns.histplot(dataset[column], bins=30)
+        plt.title(f'Distribution of {column}')
+        plt.show()
+
+    # Checking the correlation between the data
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(dataset.corr(), annot=True, cmap='coolwarm')
+    plt.title('Correlation Matrix')
+    plt.show()
+    ```

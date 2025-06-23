@@ -1,0 +1,58 @@
+```python
+    import AutoMLOps
+
+    pipeline_params = {
+        "bq_table": "your_bq_table",
+        "model_directory": "your_model_directory",
+        "data_path": "your_data_path",
+        "project_id": "your_project_id",
+        "region": "your_region"
+    }
+
+    AutoMLOps.makePipeline(
+        name="training-pipeline",
+        description="description",
+        params=[
+            {"name": "bq_table", "type": str},
+            {"name": "model_directory", "type": str, "description": "Description."},
+            {"name": "data_path", "type": str, "description": "Description."},
+            {"name": "project_id", "type": str, "description": "Description."},
+            {"name": "region", "type": str, "description": "Description."}
+        ],
+        pipeline=[
+            {
+                "component_name": "create_dataset",
+                "param_mapping": [
+                    ("bq_table", "bq_table"),
+                    ("data_path", "data_path"),
+                    ("project_id", "project_id")
+                ]
+            },
+            {
+                "component_name": "train_model",
+                "param_mapping": [
+                    ("model_directory", "model_directory"),
+                    ("data_path", "data_path")
+                ]
+            },
+            {
+                "component_name": "deploy_model",
+                "param_mapping": [
+                    ("model_directory", "model_directory"),
+                    ("project_id", "project_id"),
+                    ("region", "region")
+                ]
+            }
+        ]
+    )
+
+    AutoMLOps.generate(
+        project_id=pipeline_params["project_id"],
+        pipeline_params=pipeline_params,
+        use_kfp_spec=False,
+        run_local=True,
+        schedule_pattern='0 */12 * * *'
+    )
+
+    AutoMLOps.go(
+        project_id=pipeline_

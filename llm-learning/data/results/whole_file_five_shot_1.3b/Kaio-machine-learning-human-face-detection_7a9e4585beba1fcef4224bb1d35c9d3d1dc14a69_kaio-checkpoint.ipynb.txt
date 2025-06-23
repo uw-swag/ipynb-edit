@@ -1,0 +1,44 @@
+```
+    # Include the predict server path to access data and scripts
+    import os,sys
+    parentdir = os.path.dirname("../server/")
+    sys.path.append(parentdir)
+
+    # Imports to execute the analysis
+    from data import get_full_data, get_training, get_predict
+    from matplotlib import pyplot as plt
+    from sklearn import linear_model
+    from predicting import accuracy_score, performance_metric, real_world, plot_learning_curve
+    import pandas as pd
+    import numpy as np
+
+    # Allows the use of display() for DataFrames
+    from IPython.display import display 
+
+    # Import supplementary visualizations code visuals.py
+    import visuals as vs
+
+    # Get X (Features) and Y (Target)
+    # features (rate_blink_left, rate_blink_right, rate_smile_or_not)
+    # target (0 - sad, 1 - angry, 2 - happy)
+    X, Y, df = get_full_data()
+
+    # Print the first few entries
+    display(X.head(25))
+
+    # Calculate number of expressions
+    n_expressions = len(df.index)
+
+    # Calculate number of features
+    n_features = len(df.columns) - 1 # 1 minus target label 
+
+    # Print the results
+    print "Total number of expressions: {}".format(n_expressions)
+    print "Number of features: {}".format(n_features)
+
+    # Representation examples
+    # Good references about data analysis
+    #http://felipegalvao.com.br/blog/2016/03/08/visualizacao-de-dados-com-python-matplotlib/
+    # Another links
+    # http://www.dummies.com/programming/big-data/data-science/how-to-visualize-the-classifier-in-an-svm-supervised-learning-model/
+    # http://scikit-learn.org/stable/auto_examples/svm/plot_

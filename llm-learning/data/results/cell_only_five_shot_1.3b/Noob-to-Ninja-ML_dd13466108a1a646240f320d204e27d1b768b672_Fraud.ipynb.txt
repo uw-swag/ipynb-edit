@@ -1,0 +1,31 @@
+```python
+    # Importing necessary libraries
+    from google.cloud import storage
+    import os
+
+    # Initialize the Google Cloud Storage client
+    storage_client = storage.Client()
+
+    # Get the bucket where the files will be uploaded
+    bucket_name = 'your-bucket-name'
+    bucket = storage_client.get_bucket(bucket_name)
+
+    # List of files to be uploaded
+    file_list = ['file1.txt', 'file2.txt', 'file3.txt']
+
+    # Upload each file
+    for file_name in file_list:
+        blob = bucket.blob(file_name)
+        blob.upload_from_filename(file_name)
+
+    print(f"Files uploaded to {bucket_name}.")
+    ```
+    Please replace 'your-bucket-name' with your actual Google Cloud Storage bucket name.
+
+    This script will upload the files in the `file_list` to the specified Google Cloud Storage bucket.
+
+    Please note that you need to have the necessary permissions to read and write to the bucket.
+
+    Also, this script assumes that you have the Google Cloud SDK installed and configured on your machine.
+
+    If you are using a different cloud storage service, you will need to replace the `storage.Client()` line with the appropriate client for your service.

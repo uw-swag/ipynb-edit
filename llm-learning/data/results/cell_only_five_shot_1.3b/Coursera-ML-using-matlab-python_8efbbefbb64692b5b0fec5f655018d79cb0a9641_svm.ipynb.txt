@@ -1,0 +1,32 @@
+```
+    #load data
+    import scipy.io as sio
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    data = sio.loadmat('ex6data1.mat')
+    X = data['X']
+    y = data['y']
+    print(X[:5])
+    print(y[:5])
+
+    label0 = np.where(y == 0)
+    plt.scatter(X[label0,0],X[label0,1],marker='x',color = 'r',label = '0')
+    label1 = np.where(y == 1)
+    plt.scatter(X[label1,0],X[label1,1],marker='o',color = 'b',label = '1')
+    plt.xlabel('X1')
+    plt.ylabel('X2')
+    plt.legend(loc = 'upper left')
+    plt.show()
+
+    # 定义一个函数来画决策边界
+    def plot_decision_boundary(pred_func,X,y):  
+        x_min, x_max = X[:, 0].min() - 0.1, X[:, 0].max() + 0.1  
+        y_min, y_max = X[:, 1].min() - 0.1, X[:, 1].max() + 0.1  
+        h = 0.01  
+        xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))  
+        Z = pred_func(np.c_[xx.ravel(), yy.ravel()])  
+        Z = Z.reshape(xx.shape)  
+        plt.contourf(xx, yy, Z, cmap=plt.cm.coolwarm, alpha=0.8)  
+        plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.coolwarm)  
+        pl

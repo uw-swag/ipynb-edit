@@ -1,0 +1,49 @@
+
+    # Importing necessary libraries
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+
+    # Creating a sample dataframe
+    df = pd.DataFrame({
+        'Category': ['A', 'B', 'C', 'D', 'E'],
+        'Values': [12, 4, 33, 16, 10]
+    })
+
+    # Creating a pie chart
+    plt.figure(figsize=(10, 7))
+    plt.pie(df['Values'], labels=df['Category'], autopct='%1.1f%%')
+    plt.title('Pie Chart')
+    plt.show()
+
+    # Creating a box plot
+    plt.figure(figsize=(10, 7))
+    plt.boxplot(df['Values'])
+    plt.title('Box Plot')
+    plt.show()
+
+    # Creating a scatter plot
+    plt.figure(figsize=(10, 7))
+    plt.scatter(df['Category'], df['Values'])
+    plt.title('Scatter Plot')
+    plt.show()
+
+    # Creating a bubble plot
+    plt.figure(figsize=(10, 7))
+    plt.scatter(df['Category'], df['Values'])
+    plt.title('Bubble Plot')
+    plt.show()
+
+    # Adding a new column to the dataframe
+    df['Cubes'] = df['Values'] ** 3
+
+    # Creating a new pie chart
+    plt.figure(figsize=(10, 7))
+    plt.pie(df['Cubes'], labels=df['Category'], autopct='%1.1f%%')
+    plt.title('Cubed Pie Chart')
+    plt.show()
+
+    # Creating a new box plot
+    plt.figure(figsize=(10, 7))
+    plt.boxplot(df['Cubes'])
+    plt.title('Cubed

@@ -1,0 +1,53 @@
+#Import libraries.
+import pandas as pd
+pd.set_option('display.max_columns', None)
+import matplotlib.pyplot as plt
+%matplotlib inline
+import numpy as np
+import seaborn as sns
+sns.set_style('whitegrid')
+import re
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split, GridSearchCV
+from sklearn.feature_selection import SelectFromModel
+#Reading data. Input the path to the files instead of "../input".
+#Age is read as float, because later I'll need more precision for calculations.
+train = pd.read_csv('../input/train.csv', dtype={'Age': np.float64}, )
+test = pd.read_csv('../input/test.csv', dtype={'Age': np.float64}, )
+#Creating new feature.
+df_train['Family'] = df_train['Parch'] + df_train['SibSp']
+df_test['Family'] = df_test['Parch'] + df_test['SibSp']
+ax = plt.subplot()
+ax.set_ylabel('Average Fare')
+df_train.groupby('Pclass').mean()['Fare'].plot(kind='bar',figsize=(7, 4), ax=ax)
+df_test['Fare'] = df_test.groupby(['Pclass'])['Fare'].apply(lambda x: x.fillna(x.median()))
+#Fill NA with 'Unknown'
+df_train.Cabin.fillna('Unknown',inplace=True)
+df_test.Cabin.fillna('Unknown',inplace=True)
+#Extract first letter
+df_train['Cabin'] = df_train['Cabin'].map(lambda x: x[0])
+df_test['Cabin'] = df_test['Cabin'].map(lambda x: x[0])
+#Factorplot shows that most people for whom there is no info on Cabin didn't survive.
+sns.factorplot('Survived', col='Cabin', col_wrap=4, data=df_train[df_train.Cabin == 'U'], kind='count', size=2.5, aspect=.8)
+#Simply fill na with most common value.
+MedEmbarked = df_train.groupby('Embarked').count()['PassengerId']
+df_train.Embarked.fillna(MedEmbarked, inplace=True)
+#Drop unnecessary columns
+to_drop = ['Ticket', 'Name', 'SibSp', 'Parch']
+for i in to_drop:
+    df_train.drop([i], axis=1, inplace=True)
+    df_test.drop([i], axis=1, inplace=True)
+#Here I take categorical columns and dummify them. I create a column with binary values for each unique value in the column.
+#Pclass in fact is a categorical variable,
+for col in df_train.columns:
+    if df_train[col].dtype == 'object' or col == 'Pclass':
+        dummies = pd.get_dummies(df_train[col], drop_first=False)
+        dummies = dummies.add_prefix('{}_'.format(col))
+        df_train.drop(col, axis=1, inplace=True)
+        df_train = df_train.join(dummies)
+for col in df_test.columns:
+    if df_test[col].dtype == 'object' or col == 'Pclass':
+        dummies = pd.get_dummies(df_test[col], drop_first=False)
+        dummies = dummies.add_prefix('{}_'.format(col))
+        df_test.drop(col, axis=1, inplace=True)
+        df_test = df_test.join(dummies)

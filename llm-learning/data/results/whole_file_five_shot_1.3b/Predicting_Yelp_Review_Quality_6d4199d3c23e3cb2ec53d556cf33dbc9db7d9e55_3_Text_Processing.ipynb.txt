@@ -1,0 +1,53 @@
+
+    '''
+    [
+    Commit Message: "Added Spacy features: pos, ent, dep"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # Common Libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    # Main NLP libraries
+    import nltk
+    # Wordclouds
+    from wordcloud import WordCloud, STOPWORDS
+    # Reading Level and Basic Stats
+    import textstat
+    from nltk.corpus import stopwords as nltk_stopwords
+    # Sentiment Analysis
+    from textblob import TextBlob
+    # Classification
+    from sklearn.model_selection import cross_validate
+    from sklearn.pipeline import Pipeline
+    from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+    from sklearn.metrics import make_scorer, recall_score, precision_score
+    from sklearn.naive_bayes import MultinomialNB
+
+
+    pd.set_option('display.float_format', lambda x: '%.5f' % x)
+<\Cell_0>
+<Cell_1>
+    file_location = "../data/full_data/analytics_ready/"
+    filename = "text_data.json"
+<\Cell_1>
+<Cell_2>
+    # 6907890 records available
+    num_records_to_load = 10000
+<\Cell_2>
+<Cell_3>
+    df = pd.read_json(file_location + filename, nrows=num_records_to_load, orient="records", lines=True)
+<\Cell_3>
+<Cell_4>
+    df.head(5)
+<\Cell_4>
+<Cell_5>
+    df.info()
+<\Cell_5>
+<Cell_6>
+    df.target_ufc_bool.value_counts()
+<\Cell_6>
+<Cell_7>
+    corpus = df.review_text

@@ -1,0 +1,21 @@
+```
+    # Fixing colab & notebook links
+    import re
+
+    def fix_colab_notebook_links(text):
+        # Replace colab links with notebook links
+        text = re.sub(r'https://colab\.research\.google\.com/github/\S+/blob/\S+/\S+', 
+                      'https://colab.research.google.com/github/USERNAME/blob/MAIN', text)
+
+        # Replace notebook links with colab links
+        text = re.sub(r'https://colab\.research\.google\.com/github/\S+/d/blob/\S+', 
+                      'https://colab.research.google.com/github/USERNAME/blob/MAIN', text)
+
+        return text
+
+    # Test the function
+    text = "Check out this colab link: https://colab.research.google.com/github/USERNAME/blob/MAIN\n"
+    text += "And this notebook link: https://colab.research.google.com/github/USERNAME/d/blob/MAIN"
+    print(fix_colab_notebook_links(text))
+    ```
+    This script will replace colab links with notebook links and vice versa. Please replace 'USERNAME' and 'MAIN' with your actual username and main branch name.

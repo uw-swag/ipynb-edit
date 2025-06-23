@@ -1,0 +1,33 @@
+```
+    // %maven ai.djl:api:0.11.0
+    // %maven ai.djl:basicdataset:0.11.0
+    // %maven org.slf4j:slf4j-api:1.7.26
+    // %maven org.slf4j:slf4j-simple:1.7.26
+
+    // %maven ai.djl.mxnet:mxnet-engine:0.11.0
+    // %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-backport
+    // %load ../utils/plot-utils
+    // %load ../utils/Functions.java
+    // %load ../utils/GradDescUtils.java
+    // %load ../utils/Accumulator.java
+    // %load ../utils/StopWatch.java
+    // %load ../utils/Training.java
+    // %load ../utils/TrainingChapter11.java
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.Device;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.tracker.Tracker;
+    import ai.djl.ndarray.index.NDIndex;
+
+    import java.io.IOException;
+    import ai.djl.translate.TranslateException;
+    import org.apache.commons.lang3.ArrayUtils;
+    NDManager manager = NDManager.newBaseManager();
+
+    float[] gammas = new float[]{0.95f, 0.9f, 0.6f, 0f};
+
+    NDArray timesND = manager.arange(40f);
+    float[] times = timesND.toFloatArray();
+    display(plotGammas(times, gammas, 600, 400));
+    AirfoilRandomAccess airfoil = TrainingChapter11.getDataCh11(10, 150

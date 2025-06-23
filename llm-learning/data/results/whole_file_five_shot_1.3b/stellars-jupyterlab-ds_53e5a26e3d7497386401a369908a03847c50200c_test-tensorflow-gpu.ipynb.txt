@@ -1,0 +1,18 @@
+```
+    <Cell_0>
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+<\Cell_0>
+<Cell_1>
+import tensorflow as tf
+<\Cell_1>
+<Cell_2>
+# check if GPU is used
+print(f'Tensorflow built with CUDA support: {tf.test.is_built_with_cuda()}')
+print(f'Is GPU available: {len(tf.config.list_physical_devices("GPU")) > 0}')
+print(f'List of physical devices: {tf.config.list_physical_devices()}' )
+print(f'List of logical devices: {tf.config.list_logical_devices()}')
+print(f'GPU available: {tf.config.list_physical_devices("GPU")}')
+print(f'GPU: {tf.test.gpu_device_name()}')
+<\Cell_2>
+```

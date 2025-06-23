@@ -1,0 +1,20 @@
+%matplotlib inline
+import os
+from os.path import join as oj
+import sys, time
+import pickle as pkl
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+pd.set_option('precision', 3)
+save_path = "../results_for_export"
+# trained_model_folder = '../models/ColorMNIST'
+trained_model_folder = '../models/DecoyMNIST'
+fnames = [oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+concise_results = results_save.groupby(by = ['dataset', 'method','regularizer_rate']).std()
+concise_results.columns = ['Test accuracy', 'Train accuracy', 'Test loss' , 'CD',]
+concise_results
+results_save.groupby(by = ['dataset', 'method','regularizer_rate']).mean()

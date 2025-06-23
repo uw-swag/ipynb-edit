@@ -1,0 +1,12 @@
+```
+    # Import necessary libraries
+    import os
+
+    # Get the list of all repositories
+    repos = [f.path for f in os.scandir('.') if f.is_dir()]
+
+    # Concatenate all the repositories
+    with open('all_repos.txt', 'w') as f:
+        for repo in repos:
+            f.write(repo + '\n')
+    ```

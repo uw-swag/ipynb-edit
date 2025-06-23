@@ -1,0 +1,91 @@
+results['final_acc'] = [max(x) for x in results['val_acc_history']] #TODO change so it 
+results['final_acc_train'] = [max(x)  for x in results['train_acc_history']]
+results['AUC (no patches)'] =[0 for x in results['regularizer_rate']]
+results['final_cd'] = [min(x) for x in results['train_cd_history']]
+results['final_test_loss'] = [min(x) for x in results['val_loss_history']]
+results['final_train_loss'] = [min(x) for x in results['train_loss_history']]
+results['F1 score (no patches)'] =[0 for x in results['regularizer_rate']]
+results['F1 score (patches)'] =[0 for x in results['regularizer_rate']]
+results['AUC (patches)'] =[0 for x in results['regularizer_rate']]
+test_filtered_dataset = torch.utils.data.Subset(complete_dataset, [idx for idx in test_dataset.indices if complete_dataset[idx][2][0,0] ==-1])
+results_for_auc = results[['regularizer_rate','pid',]]
+
+f1_scores_pid = {}
+
+auc_scorespid = {}
+
+for index, row in results_for_auc.iterrows():
+
+    with open(oj(trained_model_folder, str(row['pid']) + '.pt'), 'rb') as f:
+
+        weights = torch.load(f)
+    model.load_state_dict(weights)
+#     model = long_model.classifier
+    y, y_hat = eval_model_on(model, test_filtered_dataset)
+    auc_scorespid[row['pid']] = roc_auc_score(y_hat, y)
+    f1_scores_pid[row['pid']] = np.asarray([f1_score(y_hat, y > x) for x in np.linspace(0.1,1, num = 20) ]).max()
+
+results['AUC (no patches)'] =[auc_scorespid[x] for x in results['pid']]
+results['F1 score (no patches)'] =[f1_scores_pid[x] for x in results['pid']]
+results_for_auc = results[['regularizer_rate','pid',]]
+f1_scores_pid = {}
+auc_scorespid = {}
+
+for index, row in results_for_auc.iterrows():
+
+    with open(oj(trained_model_folder, str(row['pid']) + '.pt'), 'rb') as f:
+        weights = torch.load(f)
+    model.load_state_dict(weights)
+
+    y, y_hat = eval_model_on(model, test_dataset)
+    auc_scorespid[row['pid']] = roc_auc_score(y_hat, y)
+    f1_scores_pid[row['pid']] = np.asarray([f1_score(y_hat, y > x) for x in np.linspace(0.1,1, num = 20) ]).max()
+
+results['AUC (patches)'] =[auc_scorespid[x] for x in results['pid']]
+results['F1 score (patches)'] =[f1_scores_pid[x] for x in results['pid']]
+
+sns.reset_orig()
+idxs = [1,4, 9]
+num_rows = len(idxs)
+
+fig, axes = plt.subplots(3,num_rows, figsize=  (4.2*3, num_rows*3))
+
+
+# axes[0,0].set_title( "Image")
+# axes[0,1].set_title( "Vanilla")
+# axes[0,2].set_title( "CDEP")
+for i, (idx) in enumerate(idxs):
+    original_img, vanilla_sal, reg_sal, true_class = triples[idx]
+
+    axes[i,0].imshow(np.clip(original_img,0,1))
+    axes[i,0].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    axes[i,1].imshow( vanilla_sal, cmap = plt.get_cmap("viridis"),)
+    axes[i,1].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    pcm = axes[i,2].imshow(reg_sal, cmap =plt.get_cmap("viridis"))
+#     pcm = axes[i,2].imshow(np.random.normal(size =(20,20)),
+#                             cmap=plt.get_cmap("viridis"))
+    axes[i,2].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+    if i ==1:
+        fig.colorbar(pcm, ax=axes[i,2])
+plt.tight_layout()
+
+fig.savefig(oj(save_path,"gradCAM"))
+sns.reset_orig()
+num_rows = len(cancer_triples)
+fig, axes = plt.subplots(ncols=3, nrows = num_rows, figsize=  (3*3, num_rows*3))
+i_small  =0 
+for i, (original_img, vanilla_sal, reg_sal, true_class) in enumerate(no_cancer_triples[:num_rows]):
+
+
+
+    axes[i,0].imshow(np.clip(original_img,0,1))
+    axes[i,0].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    axes[i,1].imshow(vanilla_sal)
+    axes[i,1].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    axes[i,2].imshow(reg_sal)
+    axes[i,2].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+

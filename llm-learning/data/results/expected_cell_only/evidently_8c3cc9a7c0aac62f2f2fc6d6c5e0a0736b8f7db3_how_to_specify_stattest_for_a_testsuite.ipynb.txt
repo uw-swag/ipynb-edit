@@ -1,0 +1,16 @@
+import pandas as pd
+import numpy as np
+
+from scipy.stats import mannwhitneyu
+from sklearn import datasets
+
+from evidently.calculations.stattests import StatTest
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+data_drift_column_tests = TestSuite(tests=[
+    TestColumnDrift(column_name='education-num'),
+    TestColumnDrift(column_name='education-num', stattest='psi')
+])
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests

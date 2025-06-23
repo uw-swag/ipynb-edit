@@ -1,0 +1,44 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    df = pd.read_csv('HR_comma_sep.csv')
+
+    # Preprocess the data
+    le = LabelEncoder()
+    df['Attrition'] = le.fit_transform(df['Attrition'])
+    df['Position'] = le.fit_transform(df['Position'])
+    df['Department'] = le.fit_transform(df['Department'])
+
+    # Split the data into features and target variable
+    X = df.drop('Attrition', axis=1)
+    y = df['Attrition']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a logistic regression model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Plot the confusion matrix
+    sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, cmap='Blues')
+    plt.title('Confusion Matrix')
+    plt.show()
+    <\Cell_0>
+    ```

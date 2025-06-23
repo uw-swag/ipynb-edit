@@ -1,0 +1,54 @@
+```
+    %matplotlib inline
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+pd.set_option('max_columns', 180)
+pd.set_option('max_rows', 200000)
+pd.set_option('max_colwidth', 5000)
+
+game_log = pd.read_csv('game_log.csv')
+park_codes = pd.read_csv('park_codes.csv')
+person_codes = pd.read_csv('person_codes.csv')
+team_codes = pd.read_csv('team_codes.csv')
+
+# Checking the data
+print(game_log.head())
+print(park_codes.head())
+print(person_codes.head())
+print(team_codes.head())
+
+# Checking the data types
+print(game_log.dtypes)
+print(park_codes.dtypes)
+print(person_codes.dtypes)
+print(team_codes.dtypes)
+
+# Checking the number of missing values
+print(game_log.isnull().sum())
+print(park_codes.isnull().sum())
+print(person_codes.isnull().sum())
+print(team_codes.isnull().sum())
+
+# Checking the summary statistics
+print(game_log.describe())
+print(park_codes.describe())
+print(person_codes.describe())
+print(team_codes.describe())
+
+# Checking the data distribution
+for i, col in enumerate(game_log.columns):
+    plt.figure(i)
+    sns.distplot(game_log[col])
+
+plt.show()
+
+for i, col in enumerate(park_codes.columns):
+    plt.figure(i)
+    sns.distplot(park_codes[col])
+
+plt.show()
+
+for i, col in enumerate(person_codes.columns):
+    plt.figure(i)

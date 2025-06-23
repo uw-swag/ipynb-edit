@@ -1,0 +1,29 @@
+```
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['label'] = df['x2'] + 0.1 * df['x1']
+    df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+    <\Cell_1>
+    <Cell_2>
+    ds = Dataset(df, label_name='label')
+    <\Cell_2>
+    <Cell_3>
+    SingleFeatureContribution().run(ds)
+    <\Cell_3>
+    <Cell_4>
+    my_check = SingleFeatureContribution(ppscore_params={'sample': 10})
+    my_check.run(dataset=ds)
+    <\Cell_4>
+    ```
+
+    The code above is an example of how to use the DeepChecks library to perform a single feature contribution check. The check is used to see the contribution of a single feature to the model's prediction.

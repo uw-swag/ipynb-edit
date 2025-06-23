@@ -1,0 +1,27 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import MinMaxScaler
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Handle missing values
+    df = df.fillna(df.mean())
+
+    # Convert categorical data to numerical data
+    df = pd.get_dummies(df)
+
+    # Normalize numerical data
+    scaler = MinMaxScaler()
+    df = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    # Split the data into training and testing sets
+    train_df = df.iloc[:8000]
+    test_df = df.iloc[8000:]
+
+    # Save the normalized data to a new csv file
+    train_df.to_csv('normalized_train.csv', index=False)
+    test_df.to_csv('normalized_test.csv', index=False)
+    ```

@@ -1,0 +1,25 @@
+```python
+    import pandas as pd
+    from sklearn.metrics import roc_auc_score
+    from sklearn.preprocessing import LabelEncoder
+
+    # Assuming 'label' is the column in your dataset that contains the labels
+    label_encoder = LabelEncoder()
+    train_dataset['label'] = label_encoder.fit_transform(train_dataset['label'])
+    test_dataset['label'] = label_encoder.transform(test_dataset['label'])
+
+    # Compute ROC AUC score
+    train_roc_auc = roc_auc_score(train_dataset['label'], train_dataset['area'])
+    test_roc_auc = roc_auc_score(test_dataset['label'], test_dataset['area'])
+
+    print(f'Train ROC AUC: {train_roc_auc}')
+    print(f'Test ROC AUC: {test_roc_auc}')
+
+    # Refactor the code to remove the label drift
+    check_result = ImagePropertyDrift(
+        image_properties=['area', 'aspect_ratio'], 
+        default_number_of_bins=20
+    ).run(train_dataset, test_dataset)
+
+    check_result
+    ```

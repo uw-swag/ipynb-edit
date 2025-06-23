@@ -1,0 +1,22 @@
+
+The error message "Found bug folium cannot handle more than 3000 circles." is due to the fact that folium's Circle object can only handle a maximum of 3000 circles. This limit is imposed by the underlying leaflet.js library. 
+
+To resolve this issue, you can create a GeoDataFrame from the earthquakes data and then use the `add_to` method of the GeoDataFrame to add the circles to the map. Here's how you can do it:
+
+```python
+from geopandas.tools import geocode
+
+# Geocode the earthquakes
+earthquakes['Location'] = earthquakes['Location'].apply(geocode)
+
+# Create a GeoDataFrame from the earthquakes
+gdf = gpd.GeoDataFrame(earthquakes, geometry='Location')
+
+# Add the circles to the map
+for idx, e in gdf.iterrows():    
+    Circle(location=[e['Latitude'], e['Longitude']], radius=5000, color=e['marker_color']).add_to(m_2)
+
+m_2
+```
+
+This code will create a GeoDataFrame from the earthquakes data, geocode the locations, and then add the circles to the map.

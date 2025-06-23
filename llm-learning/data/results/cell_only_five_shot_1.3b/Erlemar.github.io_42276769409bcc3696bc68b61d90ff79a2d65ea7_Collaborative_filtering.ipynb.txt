@@ -1,0 +1,24 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Define the function to calculate cosine similarity
+    def cosine_similarity(vec1, vec2):
+        return np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2))
+
+    # Generate some random data
+    vec1 = np.random.rand(5)
+    vec2 = np.random.rand(5)
+
+    # Calculate cosine similarity
+    similarity = cosine_similarity(vec1, vec2)
+
+    # Plot the vectors
+    plt.figure(figsize=(5,5))
+    plt.quiver([0,0,0,0,0], [0,0,0,0,0], vec1, pivot='tail', color=['r', 'g', 'b', 'c', 'm'][::-1])
+    plt.quiver([0,0,0,0,0], [0,0,0,0,0], vec2, pivot='tail', color=['r', 'g', 'b', 'c', 'm'][::-1])
+    plt.xlim([-0.5,1.5])
+    plt.ylim([-0.5,1.5])
+    plt.show()
+    ```
+    This code will generate two random vectors, calculate their cosine similarity, and plot the vectors in a 5x5 figure. The vectors are colored according to their direction, with 'r' representing the first vector, 'g' the second, 'b' the third, and so on.

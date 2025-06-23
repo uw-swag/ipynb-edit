@@ -1,0 +1,20 @@
+```
+    get_config('X').head()
+    params = {
+        'learning_rate': [0.01, 0.02, 0.05],
+        'max_depth': [1,2, 3, 4, 5, 6, 7, 8],
+        'subsample': [0.4, 0.5, 0.6, 0.7, 0.8],
+        'n_estimators' : [100, 200, 300, 400, 500, 600]
+    }
+
+    tuned_model = tune_model(model, optimize = 'RMSE', fold = 10,
+                            custom_grid = params, n_iter = 100)
+    cols = ['age', 'bmi', 'children', 'sex_female', 'smoker_no','charges','Label']
+
+    predictions = predict_model(tuned_model)
+    predictions[cols].head()
+    model_xgb = create_model('xgboost', verbose = False)
+
+    interpret_model(model_xgb, plot = 'msa')
+    ```
+    This is the updated version of the regression notebook.

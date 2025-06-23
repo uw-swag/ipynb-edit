@@ -1,0 +1,17 @@
+```python
+    # Refactoring code into folders
+
+    # Create a folder for the pipeline
+    if not os.path.exists("sfscores_pipeline"):
+        os.makedirs("sfscores_pipeline")
+
+    # Create a folder for the spark SQL code
+    if not os.path.exists("sfscores_spark"):
+        os.makedirs("sfscores_spark")
+
+    # Move the SQL code to the pipeline folder
+    pipe1.features.to_sql().save("sfscores_pipeline")
+
+    # Move the SQL code to the spark SQL folder
+    pipe1.features.to_sql(dialect=getml.pipeline.dialect.spark_sql).save("sfscores_spark")
+    ```

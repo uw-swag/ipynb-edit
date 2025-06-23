@@ -1,0 +1,62 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+    # Generate some random data
+    np.random.seed(0)
+    x = np.random.rand(100, 1)
+    y = 2 + 3 * x + np.random.rand(100, 1)
+
+    # Fit a linear regression model
+    model = LinearRegression()
+    model.fit(x, y)
+
+    # Predict y values
+    y_pred = model.predict(x)
+
+    # Plot the original data and the predicted data
+    plt.scatter(x, y)
+    plt.plot(x, y_pred, color='red')
+    plt.show()
+
+    # Compute the residuals
+    residuals = y - y_pred
+    print('Residuals:', residuals)
+
+    # Compute the coefficient of determination (R^2)
+    r_squared = model.score(x, y)
+    print('R-squared:', r_squared)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Computational examples for logistic regression"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LogisticRegression
+
+    # Generate some random data
+    np.random.seed(0)
+    x = np.random.rand(100, 1)
+    y = (x > 0.5) * 1
+    x = np.random.rand(100, 1)
+
+    # Fit a logistic regression model
+    model = LogisticRegression()
+    model.fit(x, y)
+
+    # Predict y values
+    y_pred = model.predict(x)
+
+    # Plot the original data and the predicted data
+    plt.scatter(x, y)
+    plt.plot(x, y_pred,

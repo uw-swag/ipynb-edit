@@ -1,0 +1,37 @@
+```python
+    # Create a StandardScaler instances
+    scaler = StandardScaler()
+
+    # Fit the StandardScaler
+    X_scaler = scaler.fit(X_over)
+
+    # Scale the data
+    X_train_scaled = X_scaler.transform(X_over)
+    X_test_scaled = X_scaler.transform(X_testo)
+
+    # Create a Neural Network instance
+    model = Sequential()
+    model.add(Dense(units=12, activation='relu', input_dim=X_train_scaled.shape[1]))
+    model.add(Dense(units=1, activation='sigmoid'))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+    # Fit the model
+    model.fit(X_train_scaled, y_over, epochs=100, batch_size=10)
+
+    # Evaluate the model
+    model.evaluate(X_test_scaled, y_testo)
+
+    # Predict the test data
+    y_pred_test = model.predict(X_testo)
+    y_pred_test = (y_pred_test > 0.5)
+
+    # Print the model's accuracy
+    print(f'Model Accuracy: {accuracy_score(y_testo, y_pred_test)}')
+
+    # Plot the confusion matrix
+    plot_confusion_matrix(y_testo, y_pred_test)
+    ```
+
+    Please note that the code above is a simplified example and may not work as expected. The model architecture, hyperparameters, and the data preprocessing steps may need to be adjusted based on the specific problem and data.

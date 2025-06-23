@@ -1,0 +1,28 @@
+
+The code you've provided is a Jupyter notebook that uses the PyTest framework to test a suite of functions. The test suite includes several tests related to the number of columns with NaNs, rows with NaNs, constant columns, duplicated rows, duplicated columns, the type of columns, and the number of drifted features.
+
+The test suite is run with a reference data set and a current data set. The results of the tests are displayed in an HTML format.
+
+If you want to rework the tests to handle null values, you could consider the following changes:
+
+1. Replace the `TestNumberOfColumnsWithNANs()` and `TestNumberOfRowsWithNANs()` functions with `TestColumnsWithNullValues()` and `TestRowsWithNullValues()` respectively.
+2. Replace the `TestNumberOfConstantColumns()` and `TestNumberOfDuplicatedRows()` functions with `TestColumnsWithNullValues()` and `TestRowsWithNullValues()` respectively.
+3. Replace the `TestNumberOfDuplicatedColumns()` and `TestNumberOfDriftedFeatures()` functions with `TestColumnsWithNullValues()` and `TestRowsWithNullValues()` respectively.
+
+Here's how the updated test suite would look:
+
+```python
+tests = TestSuite(tests=[
+    TestColumnsWithNullValues(),
+    TestRowsWithNullValues(),
+    TestColumnsType(),
+    TestNumberOfDriftedFeatures(), 
+])
+
+tests.run(reference_data=reference, current_data=current)
+
+#show HTML
+tests
+```
+
+Please note that the actual implementation of these functions would depend on the specifics of your data and the functions you're testing.

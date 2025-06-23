@@ -1,0 +1,41 @@
+```python
+    #Query: help
+
+    # Import all libraries
+    import pandas as pd
+    import numpy as np
+    import os
+    import plotly.express as px
+    import matplotlib.pyplot as plt
+    pd.options.plotting.backend = 'plotly'
+
+    #Query: Load Episodes.csv in df
+    df = pd.read_csv('Episodes.csv')
+
+    #Query: Show df shape
+    df.shape
+
+    #Query: show all columns from df
+    df.columns
+
+    #Query: show 5 rows from df
+    df.head(5)
+
+    #Query: display corelation matrix from df
+    df.corr()
+
+    #Query: plot histogram of flavour_of_tea from df
+    df.plot.hist(x=["flavour_of_tea"])
+
+    #Query: make pie chart of flavour_of_tea from df
+    tmp = df['flavour_of_tea'].value_counts(dropna=False)
+    px.pie(tmp,values=tmp.values,names=tmp.index,title='CustomTitle')
+
+    #Query: show bar chart of heroes_twitter_handle and youtube_views from df
+    px.bar(x='heroes_twitter_handle',y='youtube_views',data_frame=df,title='CustomTitle', labels={'heroes_twitter_handle':'heroes_twitter_handle','youtube_views':'youtube_views'})
+
+    #Query: group the df by heroes_gender and get min, max, mean of episode_duration
+    df[['heroes_gender','episode_duration']].groupby(['heroes_gender']).agg(['min','max','mean'])
+
+    #Query: line chart of release_date and youtube_avg_watch_duration from df
+    df.plot.line(x='release_date', y='youtube_avg_watch_duration', color=None, title='CustomTitle', labels={'release_date':'release_date', 'youtube_avg_watch_

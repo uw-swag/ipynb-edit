@@ -1,0 +1,43 @@
+```python
+    from sklearn.preprocessing import LabelBinarizer
+
+    class ColumnMapping:
+        def __init__(self):
+            self.target = None
+            self.prediction = None
+            self.target_names = None
+            self.pos_label = None
+
+        def map_target(self, y):
+            if self.target_names is not None:
+                lb = LabelBinarizer(classes=self.target_names)
+                y = lb.fit_transform(y)
+            return y
+
+        def map_prediction(self, y):
+            if self.target is not None:
+                y = self.map_target(y)
+            return y
+
+        def map_target_and_prediction(self, y):
+            if self.target is not None and self.prediction is not None:
+                y_target = self.map_target(y[self.target])
+                y_prediction = self.map_prediction(y[self.prediction])
+                y = pd.concat([y_target, y_prediction], axis=1)
+            return y
+
+    column_mapping = ColumnMapping()
+
+    column_mapping.target = 'target'
+    column_mapping.prediction = 'prediction'
+    column_mapping.target_names = ['Malignant', 'Benign']
+    pos_label = 'Malignant'
+
+    y = pd.DataFrame({
+        column_mapping.target: ['Malignant', 'Benign', 'Malignant', 'Benign'],
+        column_mapping.prediction: [1, 0, 1, 0]
+    })
+
+    y_mapped = column_mapping.map_target_and_prediction(y)
+    print(y_mapped)
+    ```

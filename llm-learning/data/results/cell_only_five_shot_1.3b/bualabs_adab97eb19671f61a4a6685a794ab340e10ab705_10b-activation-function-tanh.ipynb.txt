@@ -1,0 +1,49 @@
+
+    # Add hard tanh function
+    g = lambda w: np.tanh(w)
+
+    # Run gradient descent
+    w = -1.0; max_its = 10; alpha_choice = 0.1;
+    version = 'full'
+    weight_history,cost_history = gradient_descent(g,alpha_choice,max_its,w,version)
+
+    # Plot contour and weight history
+    static_plotter.two_input_surface_contour_plot(g,weight_history,view = [20,300],num_contours = 20,xmin = -3,xmax = 3,ymin = -1,ymax = 1)
+
+    # Fix legend
+    plt.ylim(top=1.2, bottom=-1.2)
+    plt.xlim(right=3, left=-3)
+    plt.legend(['Sigmoid', 'Hard Tanh'], loc='upper left')
+    plt.grid()
+
+    plt.plot(x.numpy(), y1.numpy())
+    plt.plot(x.numpy(), y2.numpy())
+    plt.show()
+
+    '''
+    }
+
+    ### Instruction:
+    [
+    Commit Message: "Add softsign function and fix legend"
+    Original Code Cells:
+    '''
+    plt.ylim(top=1.2, bottom=-1.2)
+plt.xlim(right=3, left=-3)
+plt.legend(['Sigmoid', 'Tanh', 'Softsign'], loc='upper left')
+plt.grid()
+
+plt.plot(x.numpy(), y1.numpy())
+plt.plot(x.numpy(), y2.numpy())
+plt.show()
+
+    '''
+    ]
+
+    ### Response:
+    
+    # Add softsign function
+    g = lambda w: w/(np.abs(w) + 1)
+
+    # Run gradient descent
+    w = -1.0; max_its = 10; alpha_choice = 

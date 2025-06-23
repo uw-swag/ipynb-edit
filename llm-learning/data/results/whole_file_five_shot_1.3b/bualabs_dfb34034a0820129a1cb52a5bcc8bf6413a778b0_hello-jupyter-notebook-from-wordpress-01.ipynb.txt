@@ -1,0 +1,31 @@
+```python
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    N = 5
+    menMeans = (20, 35, 30, 35, 27)
+    menStd = (2, 3, 4, 1, 2)
+
+    ind = np.arange(N)    # the x locations for the groups
+    width = 0.35       # the width of the bars: can also be len(x) sequence
+
+    fig, ax = plt.subplots()
+
+    p1 = ax.bar(ind, menMeans, width, yerr=menStd)
+
+    ax.set_xticks(ind + width / 2)
+    ax.set_xticklabels(('G1', 'G2', 'G3', 'G4', 'G5'))
+
+    ax.axhline(0, color='grey', linewidth=0.8)
+    ax.set_ylabel('Scores')
+    ax.set_title('Scores by group and gender')
+
+    plt.show()
+    <\Cell_1>
+    ```

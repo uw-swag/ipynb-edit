@@ -1,0 +1,53 @@
+```python
+    # Homework 1
+    # Problem 1:
+    # Write a Python function that takes a list of integers as input and returns a new list that contains only the even numbers from the original list.
+
+    def get_even_numbers(lst):
+        return [num for num in lst if num % 2 == 0]
+
+    # Homework 1
+    # Problem 2:
+    # Write a Python function that takes a list of integers as input and returns a new list that contains only the odd numbers from the original list.
+
+    def get_odd_numbers(lst):
+        return [num for num in lst if num % 2 != 0]
+
+    # Homework 1
+    # Problem 3:
+    # Write a Python function that takes a list of integers as input and returns a new list that contains only the prime numbers from the original list.
+
+    def is_prime(n):
+        if n <= 1:
+            return False
+        if n <= 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        i = 5
+        while i * i <= n:
+            if n % i == 0 or n % (i + 2) == 0:
+                return False
+            i += 6
+        return True
+
+    def get_prime_numbers(lst):
+        return [num for num in lst if is_prime(num)]
+
+    # Homework 2
+    # Problem 1:
+    # Write a Python function that takes a string as input and returns a new string that contains only the uppercase letters from the original string.
+
+    def get_uppercase_letters(s):
+        return ''.join(ch for ch in s if ch.isupper())
+
+    # Homework 2
+    # Problem 2:
+    # Write a Python function that takes a string as input and returns a new string that contains only the lowercase letters from the original string.
+
+    def get_lowercase_letters(s):
+        return ''.join(ch for ch in s if ch.islower())
+
+    # Homework 2
+    # Problem 3:
+    # Write a Python function that

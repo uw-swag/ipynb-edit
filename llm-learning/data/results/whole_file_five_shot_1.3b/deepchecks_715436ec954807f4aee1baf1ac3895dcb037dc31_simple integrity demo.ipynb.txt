@@ -1,0 +1,25 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67 * len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    from deepchecks.suites import IntegrityCheckSuite
+
+    # Add conditions to the 'RareFormatDetection' check
+    IntegrityCheckSuite.add_condition(
+        "RareFormatDetection",
+        lambda df: df.nunique() > 1,
+        "The column 'RareFormatDetection' should not have rare format"
+    )
+
+    # Run the check
+    IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    The conditions added in the 'RareFormatDetection' check are:
+    - The 'RareFormatDetection' check will only be applied to columns that have more than 1 unique value.
+    This is to prevent the check from flagging columns that are highly represented in the dataset, such as 'species' in the iris dataset.

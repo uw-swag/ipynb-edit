@@ -1,0 +1,87 @@
+```python
+    import concurrent.futures
+
+    def worker(n):
+        return n*n
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        futures = {executor.submit(worker, n) for n in range(10)}
+        for future in concurrent.futures.as_completed(futures):
+            print(future.result())
+    ```
+
+    '''
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Update code to use multiprocessing instead of threading"
+    Original Code Cells:
+    '''
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import multiprocessing
+
+    def worker(n):
+        return n*n
+
+    with multiprocessing.Pool(processes=5) as pool:
+        result = pool.map(worker, range(10))
+        print(result)
+    ```
+
+    '''
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Update code to use multiprocessing with Pool.apply_async"
+    Original Code Cells:
+    '''
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import multiprocessing
+
+    def worker(n):
+        return n*n
+
+    with multiprocessing.Pool(processes=5) as pool:
+        futures = [pool.apply_async(worker, args=(n,)) for n in range(10)]
+        results = [future.get() for future in futures]
+        print(results)
+    ```
+
+    '''
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Update code to use multiprocessing with Pool.starmap"
+    Original Code Cells:
+    '''
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import multiprocessing
+
+    def worker(a, b):
+        return a*a + b*b
+
+    with multiprocessing.Pool(process

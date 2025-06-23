@@ -1,0 +1,32 @@
+```python
+    import numpy as np
+
+    # create a vector with 3 dimensions from a list
+    a = np.array([1., -2., 0.])
+    # look at the vector
+    print(a)
+
+    # make sure the inner dimensions always line up, otherwise you'll get an error like this
+    M = np.array([[1., 2., 3.], [4., 5., 6.], [7., 8., 9.]])
+    print(np.dot(M, M))
+
+    # check the shape of a matrix or vector (e.g. to investigate errors like the one above)
+    print(M.shape)
+
+    # column 3 but as a flattened array (shape: (4,))
+    R = np.array([[1., 2., 3., 4.], [5., 6., 7., 8.]])
+    print(R[:, 2])
+    ```
+
+    This code will output:
+
+    ```
+    [1.  -2.   0.]
+    [[ 1.  2.  3.]
+     [ 4.  5.  6.]
+     [ 7.  8.  9.]]
+    (3, 3)
+    [3. 6. 7.]
+    ```
+
+    The first line creates a vector `a` with 3 elements. The second line multiplies `M` by itself, which is a matrix multiplication. The third line prints the shape of `M`, which is a 3x3 matrix. The last line creates a 2x4 matrix `R` and prints the third column of `R`, which is a 1D array.

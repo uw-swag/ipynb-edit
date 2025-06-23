@@ -1,0 +1,36 @@
+```
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs import DataDriftTab, FeatureImportanceTab, ClassificationTab
+
+    # Create a Dashboard object
+    dashboard = Dashboard(tabs=[DataDriftTab(), FeatureImportanceTab(), ClassificationTab()])
+
+    # Evaluate the model
+    llm_eval = LLMEval(column_mapping=column_mapping)
+    dashboard.evaluate(llm_eval)
+
+    # Print the results
+    print(dashboard.export())
+    ```
+
+    The above code will create a dashboard with three tabs: Data Drift, Feature Importance, and Classification. Each tab will show the evaluation results of the LLM model.
+
+    Please note that you need to replace the `column_mapping` with your actual column mapping.
+
+    Also, you need to install the `evidently` library if you haven't done so. You can install it using pip:
+
+    ```
+    pip install evidently
+    ```
+
+    And you need to have a model to evaluate. You can use the `LLMEval` class to evaluate a model. The `LLMEval` class takes a `ColumnMapping` object as an argument, which specifies the columns to evaluate.
+
+    The `ColumnMapping` object is a dictionary-like object that maps column names to the corresponding column names in the data. The keys of the dictionary are the column names in the data, and the values are the column names in the `ColumnMapping` object.
+
+    The `export()` method of the `Dashboard` object returns a string representation of the dashboard, which can be printed or saved to a file.
+
+    The `Dashboard` object's `evaluate()` method takes an `Evaluator` object as an argument, which is used to evaluate the model. The `Evaluator` object is an object that can evaluate a model.
+
+    The `LLMEval` class is a subclass of the `Evaluator` class, and it evaluates the model using the LLM model.
+
+    The `Dashboard` class is a subclass of the `Evaluator` class, and it creates a dashboard with a list of tabs. The tabs are instances of the `Tab`

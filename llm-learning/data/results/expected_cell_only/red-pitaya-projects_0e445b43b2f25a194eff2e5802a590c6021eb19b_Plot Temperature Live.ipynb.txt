@@ -1,0 +1,28 @@
+df = pd.DataFrame() #Create an empty data frame to append to later
+
+def animate(i):
+    global df
+    global plt
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    current_temp = !xadc_get_value_temp
+    temp_value = float(current_temp[0][:5])
+    clean_data_table['Temperature (oC)'] = [temp_value]
+    clean_data_table['Time(Minutes)'] = [i/60]
+    df = df.append(clean_data_table)
+    
+    x = df['Time(Minutes)']
+    y1 = df['Temperature (oC)']
+    plt.cla()
+    plt.plot(x,y1)
+    plt.gcf().autofmt_xdate()
+    plt.xlabel('Time (Minutes)')
+    plt.ylabel('Temprature (C)')
+    plt.title("Temperature - Arcylic Case with Fan")
+    plt.ylim(ymin=0,ymax=85)
+    plt.xlim(xmin=0,xmax=10.0)
+
+
+current_temp = !xadc_get_value_temp
+temp_value = float(current_temp[0][:5])
+temp_value
+

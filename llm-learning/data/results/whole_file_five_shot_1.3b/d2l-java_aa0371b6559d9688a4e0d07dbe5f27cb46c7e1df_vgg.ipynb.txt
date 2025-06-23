@@ -1,0 +1,38 @@
+
+    [
+    Commit Message: "Rename LearningRateTracker to Tracker"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.7.0-SNAPSHOT
+    %maven ai.djl:model-zoo:0.7.0-SNAPSHOT
+    %maven ai.djl:basicdataset:0.7.0-SNAPSHOT
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    %maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-b
+    <\Cell_0>
+    <Cell_1>
+    %loadFromPOM
+    <dependency>
+        <groupId>tech.tablesaw</groupId>
+        <artifactId>tablesaw-jsplot</artifactId>
+        <version>0.30.4</version>
+    </dependency>
+    <\Cell_1>
+    <Cell_2>
+    %load ../utils/plot-utils.ipynb
+    <\Cell_2>
+    <Cell_3>
+    import ai.djl.Device;
+    import ai.djl.Model;
+    import ai.djl.basicdataset.FashionMnist;
+    import ai.djl.modality.cv.transform.Resize;
+    import ai.djl.modality.cv.transform.ToTensor;
+    import ai.djl.ndarray.NDArray;
+    import ai.djl.ndarray.NDList;
+    import ai.djl.ndarray.NDManager;
+    import ai.djl.ndarray.types.DataType;
+    import ai.djl.ndarray

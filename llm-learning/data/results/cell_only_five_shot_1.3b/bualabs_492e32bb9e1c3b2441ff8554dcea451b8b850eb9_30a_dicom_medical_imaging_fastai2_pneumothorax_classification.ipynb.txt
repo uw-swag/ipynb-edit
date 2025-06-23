@@ -1,0 +1,20 @@
+```python
+    #@title Show Bounding Box
+    lo, hi = bbs
+    show_image(wind[lo[0]:hi[0], lo[1]:hi[1]], figsize=(5, 5))
+
+    #@title Fine-tune Model
+    learn.fine_tune(10, freeze_epochs=2)
+
+    #@title Learning Rate Finder
+    # learn.lr_find()
+
+    #@title Fit One Cycle
+    learn.fit_one_cycle(2, lr_max=slice(1e-4))
+
+    #@title Learning Rate Finder
+    # learn.lr_find()
+
+    #@title Fit One Cycle with Custom Learning Rate
+    learn.fit_one_cycle(10, lr_max=slice(3e-7, 3e-5))
+    ```

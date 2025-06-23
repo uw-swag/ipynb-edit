@@ -1,0 +1,26 @@
+
+    The code you provided skips SSL verification for the bike dataset in the examples. This is because the bike dataset is not publicly available and the URL used to download the dataset is not secure.
+
+    If you want to use the bike dataset in your examples, you should download it from a secure source and then load it into your code.
+
+    Here is an example of how you can download the dataset:
+
+    ```python
+    import urllib.request
+
+    url = "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+    urllib.request.urlretrieve(url, "bike.zip")
+
+    with zipfile.ZipFile("bike.zip", 'r') as zip_ref:
+        zip_ref.extractall("data")
+    ```
+
+    Then, you can load the dataset into your code like this:
+
+    ```python
+    raw_data = pd.read_csv("data/hour.csv", header=0, sep=',', parse_dates=['dteday'])
+    ```
+
+    Please note that you need to replace "bike.zip" with the actual path where you saved the downloaded zip file.
+
+    Also, make sure that the URL is secure and the dataset is publicly available.

@@ -1,0 +1,42 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from keras.layers import Input, Dense
+    from keras.models import Model
+    from keras.datasets import mnist
+    from keras.utils import to_categorical
+
+    # Load MNIST dataset
+    (X_train, y_train), (X_test, y_test) = mnist.load_data()
+
+    # Reshape and normalize the data
+    X_train = X_train.reshape(60000, 784)
+    X_test = X_test.reshape(10000, 784)
+    X_train = X_train.astype('float32')
+    X_test = X_test.astype('float32')
+    X_train /= 255
+    X_test /= 255
+    print(X_train.shape, 'train samples')
+    print(X_test.shape, 'test samples')
+
+    # Convert class vectors to binary class matrices
+    y_train = to_categorical(y_train, 10)
+    y_test = to_categorical(y_test, 10)
+
+    # Define the autoencoder
+    encoding_dim = 32  # number of encoded representation
+    input_img = Input(shape=(784,))
+    encoded = Dense(encoding_dim, activation='relu')(input_img)
+    decoded = Dense(784, activation='sigmoid')(encoded)
+
+    autoencoder = Model(input_img, decoded)
+    autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+
+    # Train the autoencoder
+    autoencoder.fit(X_train, X_train, epochs=50, batch_size=256, shuffle=True, validation_data=(X_test, X_test))
+
+    # Display the autoencoder's architecture
+    autoencoder.summary()
+    ```
+   

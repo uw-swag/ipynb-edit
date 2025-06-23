@@ -1,0 +1,19 @@
+
+    Here is how you can create a 3D plot to visualize the NMF components:
+
+```python
+from mpl_toolkits.mplot3d import Axes3D
+
+fig = plt.figure(1, figsize=(8, 6))
+ax = Axes3D(fig, elev=-150, azim=110)
+ax.scatter(H1[:, 0], H1[:, 1], H1[:, 2], c='b', cmap=plt.cm.Set1, edgecolor='k', s=40)
+ax.set_title("First three NMF components")
+ax.set_xlabel("1st eigenvector")
+ax.set_ylabel("2nd eigenvector")
+ax.set_zlabel("3rd eigenvector")
+plt.show()
+```
+
+This will create a 3D scatter plot of the NMF components. The x, y, and z coordinates are the eigenvectors of the NMF model, and the color of the points represents the topic of the document.
+
+Please note that you need to replace `vectors` and `vectors_tfidf` with your actual data.

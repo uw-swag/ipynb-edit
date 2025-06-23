@@ -1,0 +1,37 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from pycaret.classification import *
+
+    numeric = ['bmi', 'age', 'charges']
+
+    data[numeric].hist(bins=20, figsize = (12,8))
+    plt.show()
+
+    categorical = ['sex', 'children', 'smoker', 'region']
+    color = ['C0', 'C1', 'C2', 'C3', 'C4', 'C5']
+
+    fig, axes = plt.subplots(2, 2, figsize = (16,14))
+
+    for ax, col in zip(axes.flatten(), categorical) :
+        data[col].value_counts().plot(kind = 'bar', ax = ax, color = color)
+        ax.set_xlabel(col)
+
+    fig, axes = plt.subplots(2, 2, figsize=(18,10))
+    for ax, col in zip(axes.flatten(), categorical):
+        sns.histplot(data, x='charges', hue=col,
+                   multiple='stack', ax=ax)
+
+    # Setup the environment
+    reg = setup(data=data, target='charges', train_size = 0.8, session_id = 7402,
+               normalize = True, transform_target = True)
+
+    # Create a new dataframe for the model
+    cols =  ['age', 'sex', 'bmi', 'children', 'smoker', 'region']
+    records = [
+        [30, 'male', 20, 0, 'no', 'southeast'],
+        [30, 'male', 20, 0, 'yes', 'southeast'],
+        [30, 'male', 35, 0, 'yes', 'southeast'],
+        [70, 'male', 35, 0, 'yes', 'southeast'],
+        [30, 'female', 

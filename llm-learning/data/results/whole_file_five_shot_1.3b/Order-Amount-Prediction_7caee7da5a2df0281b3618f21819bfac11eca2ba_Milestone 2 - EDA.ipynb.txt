@@ -1,0 +1,22 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Creating a DataFrame
+    df = pd.DataFrame({
+        'Name': ['John', 'Anna', 'Peter', 'Linda'],
+        'Age': [28, 24, 35, 32],
+        'Country': ['USA', 'Sweden', 'USA', 'Sweden']
+    })
+
+    # Milestone 2
+    # Grouping the DataFrame by 'Country' and getting the mean age of each group
+    mean_age_by_country = df.groupby('Country')['Age'].mean()
+    print(mean_age_by_country)
+
+    # Milestone 3
+    # Creating a new column 'Age_Category' in the DataFrame based on the age
+    df['Age_Category'] = pd.cut(df['Age'], bins=[0, 18, 65, 100], labels=['Child', 'Adult', 'Senior'])
+    print(df)
+    ```

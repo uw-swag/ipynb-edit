@@ -1,0 +1,47 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Trust Score Comparison (#85)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    from sklearn.metrics import f1_score, precision_score, recall_score
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Split the data into features and target variable
+    X = df.drop("target", axis=1)
+    y = df["target"]
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the classifier
+    rfc.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = rfc.predict(X_test)
+
+    # Calculate the precision, recall, and F1 score
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
+    # Print the results
+    print(f"Precision: {precision}")
+    print(f"Recall: {recall}")
+    print(f"F1 Score: {f1}")
+
+    # Compare the trust scores
+    trust_scores = pd.read_csv('trust_scores.csv')
+    trust_scores['predicted'] = rfc.predict(trust_scores.drop("target", axis=1))
+    trust_scores['actual'] = trust_scores['target']
+
+    comparison = trust_scores.groupby(['actual', 'pred

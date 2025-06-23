@@ -1,0 +1,64 @@
+
+    '''
+    Commit Message: "Data exploration in analysis"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.linear_model import LinearRegression
+from data import get_full_data
+from matplotlib import pyplot as plt
+from sklearn import linear_model
+
+X, Y, df = get_full_data()
+
+def show_relationship(label_x, label_y):
+
+    reg = LinearRegression()
+
+    # name of label
+    data_x = df[[label_x]]
+
+    #print data_x
+
+    reg.fit(data_x, Y) 
+    plt.plot(data_x, reg.predict(data_x), color='red', linewidth=0.5)
+    plt.scatter(data_x, Y, alpha=0.5, c=Y)
+    plt.xlabel(label_x)
+    plt.ylabel(label_y)
+    plt.show()
+<\Cell_0>
+<Cell_1>
+show_relationship('blink_left', 'user')
+show_relationship('blink_right', 'user')
+show_relationship('smile_or_not', 'user')
+<\Cell_1>
+<Cell_2>
+show_relationship('rate_smile_or_not', 'user')
+show_relationship('rate_blink_left', 'user')
+show_relationship('rate_blink_right', 'user')
+<\Cell_2>
+<Cell_3>
+from predicting_who_is import fit_and_predict, evaluate
+
+evaluate()
+<\Cell_3>
+<Cell_4>
+
+<\Cell_4>
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    Commit Message: "Data exploration in analysis"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.linear_model import LinearRegression
+from data import get_full_data
+from matplotlib import pyplot as plt
+from sklearn import linear_model
+
+X, Y, df = get_full_

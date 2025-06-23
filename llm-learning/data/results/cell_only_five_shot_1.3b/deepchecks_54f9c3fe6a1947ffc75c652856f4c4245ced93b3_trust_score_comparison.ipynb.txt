@@ -1,0 +1,44 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # append path for local library, data, and image import
+    import sys
+    sys.path.append('./chapter_10_library') 
+    sys.path.append('./chapter_10_images') 
+    sys.path.append('./chapter_10_datasets') 
+
+    # import section helper
+    import section_10_6_helpers
+
+    # dataset paths
+    data_path_1 = "chapter_10_datasets/circle_data.csv"
+
+    # image paths
+    image_path_1 = "chapter_10_images/10_5.png"
+    image_path_2 = "chapter_10_images/autoencoder_circle.png"
+
+    
+    # standard imports
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+    import IPython, copy
+
+    # import autograd-wrapped numpy
+    import autograd.numpy as np
+
+    # this is needed to compensate for matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib inline
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+    IPython.display.HTML('''<img src="''' + image_path_1 + '''" width="100%" height="auto" alt=""/>''')
+    ## This code cell will not be shown in the HTML version of this notebook
+    # import data
+    X = np.loadtxt(data_path_1,delimiter=',')
+
+    # scatter dataset
+    fig = plt.figure(figsize = (9,4))
+    gs = gridspec.GridSpec(1,1) 
+    ax = plt.subplot(gs[0],aspect = 'equal'); 
+    ax.set_xlabel(r'$x_1$',fontsize = 15

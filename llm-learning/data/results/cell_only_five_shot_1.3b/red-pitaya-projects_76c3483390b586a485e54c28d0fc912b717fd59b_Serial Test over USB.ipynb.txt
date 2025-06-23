@@ -1,0 +1,57 @@
+```python
+    import serial
+    import time
+    import csv
+    import re
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    import pandas as pd
+    import numpy as np
+    from datetime import datetime
+
+    portPath = "/dev/ttyACM4"  # Must match value shown on Arduino IDE
+    baud = 115200  # Must match Arduino baud rate
+    timeout = 5  # Seconds
+    filename = "data.csv"
+    max_num_readings = 8
+    num_signals = 1
+
+    def create_serial_obj(portPath, baud_rate, tout):
+        """
+        Given the port path, baud rate, and timeout value, creates and returns a pyserial object.
+        """
+        return serial.Serial(portPath, baud_rate, timeout=tout)
+
+    headers = ["Co2", "Date & Time"]
+    df = pd.read_csv(filename, names=headers, skiprows=1)
+
+    def is_number(string):
+        """
+        Given a string returns True if the string represents a number.
+        Returns False otherwise.
+        """
+        try:
+            float(string)
+            return True
+        except ValueError:
+            return False
+
+    def clean_serial_data(data):
+        """
+        Given a list of serial lines (data). Removes all characters.
+        Returns the cleaned list of lists of digits.
+        Given something like: ['0.5000,33\r\n', '1.0000,283\r\n']
+        Returns: [[0.5,33.0], [1.0,283.0]]
+        """
+        clean_data = []
+
+        for line in data:
+            line_data = float(line.strip())
+            clean_data.append(line_data)
+
+        clean_data.append(datetime.now())
+        return clean_data
+
+    print("Cleaning data...")
+    clean_data = clean_serial_data(serial_data)
+    clean_data_table = [clean_

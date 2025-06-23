@@ -1,0 +1,80 @@
+```python
+    import pickle
+
+    # Load the model from the .pkl file
+    with open('model.pkl', 'rb') as f:
+        model = pickle.load(f)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add a function to predict"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def predict(self, X):
+        """
+        Predict the class of a given sample.
+
+        :param X: A numpy array of shape (n_samples, n_features)
+        :return: A numpy array of shape (n_samples, n_classes)
+        """
+        return self.model.predict(X)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add a function to evaluate"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def evaluate(self, X, y):
+        """
+        Evaluate the model on a given set of data.
+
+        :param X: A numpy array of shape (n_samples, n_features)
+        :param y: A numpy array of shape (n_samples, n_classes)
+        :return: The accuracy of the model.
+        """
+        return self.model.score(X, y)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add a function to save model"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def save_model(self, filename):
+        """
+        Save the model to a .pkl file.
+
+        :param filename: The name of the file to save the model to.
+        """
+        with open(filename, 'wb') as f:
+            pickle.dump(self.model, f)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add a function to load model"
+    Original Code Cells:
+    '''
+    
+    '''
+   

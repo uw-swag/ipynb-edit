@@ -1,0 +1,16 @@
+<Cell_0>
+import serial
+import struct
+import time
+import sys
+sys.path.append("..")
+
+from pms5003_no_gpio import PMS5003
+<\Cell_0>
+<Cell_1>
+# Configure the PMS5003
+pms5003 = PMS5003(device='/dev/ttyPS1',baudrate=9600)
+
+data = pms5003.read()
+print(data)
+<\Cell_1>

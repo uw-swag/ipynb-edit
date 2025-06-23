@@ -1,0 +1,21 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Assuming imgs, spectra, imgs_test, spectra_test, prediction are defined
+
+    k = 12
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(9, 4))
+    ax1.imshow(imgs[k], cmap='gray')
+    ax2.plot(specval[0, :64], spectra[k])
+    k = 100
+
+    _, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+    ax1.imshow(imgs_test[k], cmap='gray', label="Input image")
+    ax2.plot(specval, spectra_test[k], label="Ground truth")
+    ax2.plot(specval, prediction[k], label="Prediction")
+    plt.legend()
+
+    # Save the figure as a jpeg
+    plt.savefig('output.jpeg')
+    ```

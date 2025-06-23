@@ -1,0 +1,73 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing Word2Vec Model"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Importing Libraries
+import gensim
+from gensim.models import Word2Vec
+from gensim.models.word2vec import Text8Corpus
+
+# Loading the corpus
+corpus = api.download('text8')
+
+# Creating the model
+model = Word2Vec(corpus, min_count=1)
+
+# Saving the model
+model.save("word2vec.model")
+
+# Using the model
+model = gensim.models.KeyedVectors.load("word2vec.model")
+
+# Printing some words and their vectors
+for word in model.vocab:
+    print(word, model[word])
+    break
+<\Cell_0>
+<Cell_1>
+# Loading the corpus
+corpus = api.load('text8')
+
+# Creating the model
+model = Word2Vec(corpus, min_count=1)
+
+# Saving the model
+model.save("word2vec.model")
+
+# Using the model
+model = gensim.models.KeyedVectors.load("word2vec.model")
+
+# Printing some words and their vectors
+for word in model.vocab:
+    print(word, model[word])
+    break
+<\Cell_1>
+<Cell_2>
+# Loading the corpus
+corpus = api.load('text8')
+
+# Creating the model
+model = Word2Vec(corpus, min_count=1)
+
+# Saving the model
+model.save("word2vec.model")
+
+# Using the model
+model = gensim.models.KeyedVectors.load("word2vec.model")
+
+# Printing some words and their vectors
+for word in model.vocab:
+    print(word, model[word])
+    break
+<\Cell_2>
+
+    '''
+    ]
+
+    ### Response:
+    
+    ### Instruction:
+   

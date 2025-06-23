@@ -1,0 +1,13 @@
+options = DataDriftOptions(feature_stattest_func=anderson_stat_test, confidence=0.99, 
+                           nbinsx=20)
+options = DataDriftOptions(num_target_stattest_func=anderson_stat_test, 
+                           confidence={'MedInc':0.99, 'HouseAge': 0.99, 'AveRooms':0.99},
+                           nbinsx={'MedInc':15, 'HouseAge': 25, 'AveRooms':20}, 
+                           feature_stattest_func={'MedInc':anderson_stat_test, 'HouseAge':anderson_stat_test, 
+                                                  'AveRooms':anderson_stat_test}
+                          )
+data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()], options=[options])
+data_and_target_drift_dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                                          prod_data.sample(1000, random_state=0), 
+                                          column_mapping=column_mapping)
+data_and_target_drift_dashboard.show()

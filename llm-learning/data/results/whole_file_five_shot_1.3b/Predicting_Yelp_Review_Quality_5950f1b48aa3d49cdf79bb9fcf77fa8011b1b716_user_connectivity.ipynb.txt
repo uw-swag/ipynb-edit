@@ -1,0 +1,37 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import psycopg2
+    from sqlalchemy import create_engine
+
+    # Establish a connection to the Postgres database
+    conn = psycopg2.connect(
+        dbname="your_database",
+        user="your_username",
+        password="your_password",
+        host="your_host",
+        port="your_port"
+    )
+
+    # Create an engine to interact with the database
+    engine = create_engine(conn)
+
+    # Read the user_friends table
+    user_friends_df = pd.read_sql_table('user_friends', engine)
+
+    # Read the checkins_expanded table
+    checkins_df = pd.read_sql_table('checkins_expanded', engine)
+
+    # Check the data
+    print(user_friends_df.head())
+    print(checkins_df.head())
+
+    # Close the connection
+    conn.close()
+    ```
+
+    This script will connect to your Postgres database, read the user_friends and checkins_expanded tables, and print the first few rows of each dataframe. Please replace "your_database", "your_username", "your_password", "your_host", and "your_port" with your actual database credentials.
+
+    Also, please note that you need to have the necessary permissions to read the tables from the database.
+
+    Finally, remember to handle your database credentials securely and not expose them in your code or version control system.

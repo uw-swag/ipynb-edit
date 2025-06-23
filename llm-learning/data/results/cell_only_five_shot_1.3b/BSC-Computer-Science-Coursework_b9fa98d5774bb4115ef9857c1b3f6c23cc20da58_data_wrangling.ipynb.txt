@@ -1,0 +1,40 @@
+```python
+    #import libraries and create dataframe
+    import pandas as pd
+    dataframe = pd.DataFrame()
+    #Read the CSV file
+    url = "practical 03\assets\Iris.csv"
+    df = pd.read_csv(url)
+
+    #Show first five rows
+    df.head()
+    df.head(1)
+    #Show dimensions
+    print("Dimensions: {}".format(df.shape))
+    #Show Statistics
+    df.describe()
+    #Select First Row
+    print(df.iloc[0])
+    #SelectThree Rows
+    print(df.iloc[1:4])
+    #All rows upto and including the fourth row
+    print(df.iloc[:4])
+    #All coloums
+    print(df.columns)
+    #Set Index
+    df.set_index("Id")
+    #Show Row
+    val = 1
+    df.loc[val]
+    #Select top two rows where column "SepalLengthCm" is > 4
+    df[df['SepalLengthCm']>= 4].head(2)
+    #Multiple Conditions
+    df[(df['SepalLengthCm']>= 4) & (df['SepalWidthCm'<= 3)]
+    #Replace any instance of "Iris-setosa" with "Iris-Setosa"
+    df['Species'].replace("Iris-setosa","Iris-Setosa").head()
+    #Replace any instance of "Iris-Setosa" with "Iris-setosa" and "Irisvirginica" with "Iris-Virginica"
+    df['Species'].replace(["Iris-Setosa","Iris-setosa"],["Irisvirginica","Iris-Virginica"]).head()
+    df.replace(1,"One").head()
+    df.replace("One",1).head()
+    df.rename(columns={'SepalLengthCm':"Sepal Length In CM",'SepalWidthCm':'SepalWidthInCm'}).head()
+    df.rename(columns={'Sepal L

@@ -1,0 +1,108 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from scipy.stats import mannwhitneyu
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.calculations.stattests import StatTest
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+<\Cell_1>
+<Cell_2>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_2>
+<Cell_3>
+#Dataset for Data Quality and Integrity
+adult_data = datasets.fetch_openml(name='adult', version=2, as_frame='auto')
+adult = adult_data.frame
+
+adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+adult_cur.iloc[:2000, 3:5] = np.nan
+<\Cell_3>
+<Cell_4>
+data_drift_column_tests = TestSuite(tests=[
+    TestColumnValueDrift(column_name='education-num'),
+    TestColumnValueDrift(column_name='education-num', stattest='psi')
+])
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests
+<\Cell_4>
+<Cell_5>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(all_features_stattest='psi'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_5>
+<Cell_6>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest='psi', cat_features_stattest='jensenshannon'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_6>
+<Cell_7>
+from calendar import c
+
+
+per_feature_stattest = {x: 'wasserstein' for x in ['age', 'education-num']}
+for column in ['sex', 'class']:
+    per_feature_stattest[column] = 'z'
+for column in ['workclass', 'education']:
+    per_feature_stattest[column] = 'kl_div'
+for column in [ 'relationship', 'race',  'native-country']:
+    per_feature_stattest[column] = 'jensenshannon'
+for column in ['fnlwgt','hours-per-week']:
+    per_feature_stattest[column] = 'anderson'
+for column in ['capital-gain','capital-loss']:
+    per_feature_stattest[column] = 'cramer_von_mises'
+for column in ['occupation', 'marital-status']:
+    per_feature_stattest[column] = 'g_test'
+<\Cell_7>
+<Cell_8>
+per_feature_stattest
+<\Cell_8>
+<Cell_9>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(per_feature_stattest=per_feature_stattest),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_9>
+<Cell_10>
+def _mann_whitney_u(reference_data: pd.Series, current_data: pd.Series, _feature_type: str, threshold: float):
+    p_value = mannwhitneyu(np.array(reference_data), np.array(current_data))[1]
+    return p_value, p_value < threshold
+
+mann_whitney_stat_test = StatTest(
+    name="mann-whitney-u",
+    display_name="mann-whitney-u test",
+    func=_mann_whitney_u,
+    allowed_feature_types=["num"]
+)
+<\Cell_10>
+<Cell_11>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest=mann_whitney_stat_test),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_11>

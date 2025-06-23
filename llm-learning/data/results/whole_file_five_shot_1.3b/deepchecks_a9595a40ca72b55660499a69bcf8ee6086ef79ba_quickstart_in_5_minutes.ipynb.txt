@@ -1,0 +1,43 @@
+```
+    ## Commit Message: "fixing docs (#898)"
+
+    # The commit message is now "fixing docs (#898)"
+
+    ## Original Code Cells:
+    '''
+    <Cell_0>
+    # If you don't have deepchecks installed yet:
+    import sys
+    !{sys.executable} -m pip install deepchecks -U --quiet #--user
+    <\Cell_0>
+    <Cell_1>
+    from deepchecks.vision.datasets.detection import coco
+    yolo = coco.load_model(pretrained=True)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+    <\Cell_1>
+    <Cell_2>
+    from deepchecks.vision import VisionData
+    from deepchecks.vision.utils import DetectionLabelFormatter
+
+    label_formatter=DetectionLabelFormatter(coco.yolo_label_formatter)
+
+    # The num_classes is explicitly declared to aid computation, but would be inferred automatically otherwise.
+    train_ds = VisionData(coco_train_loader, label_formatter=label_formatter, num_classes=80)
+    test_ds = VisionData(coco_test_loader, label_formatter=label_formatter, num_classes=80)
+    <\Cell_2>
+    <Cell_3>
+    from deepchecks.vision.suites import full_suite
+
+    suite = full_suite()
+    <\Cell_3>
+    <Cell_4>
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+    det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+    <\Cell_4>
+    <Cell_5>
+    result = suite.run(train_dataset=train_ds, test_dataset=test_ds, model=yolo, prediction_formatter=det_formatter)
+    <\Cell_5>
+    <Cell_6>

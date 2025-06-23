@@ -1,0 +1,62 @@
+
+    ### Instruction:
+    [
+    Commit Message: "first unsuccessful attempt at actor-critic"
+    Original Code Cells:
+    '''
+<\Cell_7>
+<Cell_8>
+env = gym.make('CartPole-v1')
+env.seed(int(np.random.uniform(10000)))
+
+agent = REINFORCE_Agent(state_size=env.observation_space.shape[0],
+                        action_size=env.action_space.n,
+                        learning_rate=0.0005,
+                        discount_rate=0.99,)
+agent.train()
+<\Cell_8>
+<Cell_9>
+agent.view()
+<\Cell_9>
+<Cell_10>
+agent.save()
+<\Cell_10>
+<Cell_11>
+agent.load()
+<\Cell_11>
+<Cell_12>
+agent.train_model.train_on_batch([state_memory, discounted_rewards], actions)
+<\Cell_12>
+<Cell_13>
+agent.view()
+<\Cell_13>
+<Cell_14>
+agent.save()
+<\Cell_14>
+<Cell_15>
+agent.load()
+<\Cell_15>
+<Cell_16>
+agent.train_model.train_on_batch([state_memory, discounted_rewards], actions)
+<\Cell_16>
+<Cell_17>
+agent.view()
+<\Cell_17>
+<Cell_18>
+agent.save()
+<\Cell_18>
+<Cell_19>
+agent.load()
+<\Cell_19>
+<Cell_20>
+agent.train_model.train_on_batch([state_memory, discounted_rewards], actions)
+<\Cell_20>
+<Cell_21>
+agent.view()
+<\Cell_21>
+<Cell_22>
+agent.save()
+<\Cell_22>
+<Cell_23>
+agent.load()
+<\

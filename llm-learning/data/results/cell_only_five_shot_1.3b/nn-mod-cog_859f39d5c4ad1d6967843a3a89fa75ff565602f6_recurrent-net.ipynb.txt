@@ -1,0 +1,27 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense
+
+    # Define the model
+    model = Sequential()
+    model.add(LSTM(50, activation='relu', input_shape=(None, 1)))
+    model.add(Dense(1))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mse')
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=100, verbose=0)
+
+    # Predict
+    y_pred = model.predict(X_test)
+
+    # Plot the results
+    import matplotlib.pyplot as plt
+
+    plt.plot(y_test, label='Actual')
+    plt.plot(y_pred, label='Predicted')
+    plt.legend()
+    plt.show()
+    ```

@@ -1,0 +1,39 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#58)"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
+
+name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+features = [l.split(':')[0] for l in lines]
+label_name = 'income'
+
+cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                'race', 'sex', 'native-country']
+train_df = pd.DataFrame(train_df, label=label_name, cat_features=cat_features)
+test_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
+                      names=features + [label_name])
+<\Cell_0>
+<Cell_1>
+train_df.label_name
+<\Cell_1>
+<Cell_2>
+test_df = test_df.data.sample(min(sample_size, test_df.n_samples), random_state=random_seed)
+<\Cell_2>
+<Cell_3>
+check = WholeDatasetDrift().add_condition_overall_drift_value_not_greater_than()
+check.run(train_dataset=train_df, test_dataset=test_df)
+<\Cell_3>
+<Cell_4>
+check = WholeDatasetDrift().add_condition_overall_drift_value_not_greater_than()
+check.run(train_dataset=train_df, test_dataset=test_df)
+<\Cell_4>
+<Cell_5>
+sample_size = 1

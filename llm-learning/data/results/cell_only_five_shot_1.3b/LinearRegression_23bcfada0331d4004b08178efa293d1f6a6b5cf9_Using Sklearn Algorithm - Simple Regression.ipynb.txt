@@ -1,0 +1,20 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+    # Generate some random data
+    np.random.seed(0)
+    x = np.random.rand(100, 1)
+    y = 2 + 3 * x + np.random.rand(100, 1)
+
+    # Fit the model
+    model = LinearRegression()
+    model.fit(x, y)
+
+    # Plot the results
+    plt.scatter(x, y)
+    plt.plot(x, model.predict(x), color='red')
+    plt.show()
+    ```
+    The code above will generate some random data, fit a simple linear regression model to it, and then plot the original data and the predicted line.

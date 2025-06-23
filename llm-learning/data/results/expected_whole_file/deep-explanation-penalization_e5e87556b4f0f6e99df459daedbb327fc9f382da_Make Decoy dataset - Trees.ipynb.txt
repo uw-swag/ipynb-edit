@@ -1,0 +1,132 @@
+<Cell_0>
+%matplotlib inline
+import os
+from os.path import join as oj
+import sys, time
+
+import csv
+from random import shuffle
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+from copy import deepcopy
+from model import LSTMSentiment
+import matplotlib.pyplot as plt
+from os.path import isdir
+
+from torchtext.data import TabularDataset
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+from torchtext import data
+from torchtext import datasets
+from tqdm import tqdm_notebook, tqdm 
+import pickle
+from nltk import Tree
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+sys.path.append('../fit')
+<\Cell_1>
+<Cell_2>
+from cd import *
+<\Cell_2>
+<Cell_3>
+def write_dataset(name):
+    
+    data_path = "./.data/sst/trees"
+    with open(oj(data_path, name + ".txt")) as f:
+        content = []
+        content = f.read().splitlines()
+        
+    parsed_dataset = []
+    for line in (content):
+        t = Tree.fromstring(line)
+        text = t.leaves()
+        label = int(t.label()) 
+
+        if label !=2: 
+            label = int(label >2)
+            segment_labels = np.asarray([int(child.label()) for child in t])
+
+
+            if label ==1:
+                segment_labels = 4-segment_labels
+            diff = np.abs(segment_labels[0] - segment_labels[1])
+ 
+            segment_labels = (segment_labels >2).astype(np.float32)
+            if segment_labels.sum() ==0 or diff <2:
+                segment_labels = np.asarray([0.5, 0.5])
+            else:
+                segment_labels  =np.round(segment_labels/segment_labels.sum(), decimals =1)
+
+            stop_position = [int(len(child.leaves())) for child in t][0]
+            parsed_dataset.append((" ".join(text), label, segment_labels[0],segment_labels[1] , stop_position))
+
+    file_path = "../data"
+    file_name = name + '_segment_annotated_SST.csv'
+    print(len(parsed_dataset))
+    with open(os.path.join(file_path, file_name), 'w') as csv_file:
+        writer = csv.writer(csv_file)
+        for line in parsed_dataset:
+
+            writer.writerow(line)
+
+
+
+<\Cell_3>
+<Cell_4>
+write_dataset("train")
+write_dataset("dev")
+write_dataset("test")
+<\Cell_4>
+<Cell_5>
+file_path = "../data"
+<\Cell_5>
+<Cell_6>
+dataset_path = file_path
+<\Cell_6>
+<Cell_7>
+inputs = data.Field(lower=True)
+answers = data.Field(sequential=False, unk_token=None)
+segment1_label = data.Field(sequential=False, unk_token=None, dtype=torch.float16)
+segment2_label = data.Field(sequential=False, unk_token=None, dtype=torch.float16)
+stop_pos = data.Field(sequential=False, unk_token=None)
+
+tv_datafields = [ ("text", inputs), 
+                 ("label", answers), 
+                 ("segment1_label", segment1_label), 
+                 ("segment2_label", segment2_label), 
+                 ("stop_pos", stop_pos)]
+train, dev, test = TabularDataset.splits(
+                           path=dataset_path,
+                           train='train_segment_annotated_SST.csv', validation="dev_segment_annotated_SST.csv", test = "test_segment_annotated_SST.csv",
+                           format='csv', 
+                           skip_header=False, # if your csv header has a header, make sure to pass this to ensure it doesn't get proceesed as data!
+                           fields=tv_datafields)
+
+<\Cell_7>
+<Cell_8>
+a = 0
+test_list = []
+for i in range(len(train)):
+    test_list.append(float(train[i].segment2_label))
+    a+= float(train[i].segment2_label) ==0.5
+print(a/len(train))
+<\Cell_8>
+<Cell_9>
+set(test_list)
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>

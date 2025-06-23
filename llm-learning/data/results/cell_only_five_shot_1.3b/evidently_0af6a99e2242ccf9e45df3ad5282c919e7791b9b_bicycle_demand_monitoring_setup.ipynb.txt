@@ -1,0 +1,14 @@
+```python
+    from databricks.koalas import DataFrame as kf
+    from databricks.koalas.statistics import anderson_ksamp
+    from databricks.koalas.options import DataDriftOptions
+
+    def anderson_stat_test(reference_data: kf, current_data: kf):
+        return anderson_ksamp(np.array([reference_data, current_data]))[2]
+
+    options = DataDriftOptions(feature_stattest_func=anderson_stat_test, nbinsx=20, confidence=0.90)
+    ```
+
+    The function `anderson_stat_test` is used to perform the Anderson-Darling K-sample test on the two input dataframes. The test is performed on the difference between the two dataframes, and the result is returned.
+
+    The `DataDriftOptions` class is used to configure the options for the data drift analysis. The `feature_stattest_func` option is set to the `anderson_stat_test` function, which is used to perform the stat test on the features. The `nbinsx` option is set to 20, which means that 20 bins are used to divide the data into bins. The `confidence` option is set to 0.90, which means that 90% of the data will be included in the test.

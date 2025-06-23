@@ -1,0 +1,28 @@
+```python
+    from skimage import filters
+    from skimage.feature import match_descriptors
+    from skimage.transform import pyramid_gaussian_filter
+
+    # Load the image
+    image = io.imread('image.jpg', plugin='matplotlib')
+
+    # Apply a Gaussian filter to the image
+    image_pyramid = pyramid_gaussian_filter(image, sigma=3)
+
+    # Detect the keypoints in the image
+    keypoints = detect_keypoints(image_pyramid)
+
+    # Compute the descriptors for the keypoints
+    descriptors = compute_descriptors(keypoints, image)
+
+    # Match the descriptors with a reference image
+    matches = match_descriptors(descriptors, reference_image, cross_check=True)
+
+    # Draw the matches on the image
+    draw_matches(image, keypoints, matches)
+
+    # Show the result
+    plt.imshow(image)
+    plt.show()
+    ```
+    This code uses the `skimage` library to perform pattern detection and matching. The `detect_keypoints`, `compute_descriptors`, and `match_descriptors` functions are used to detect keypoints, compute descriptors, and match descriptors respectively. The `draw_matches` function is used to draw the matches on the image.

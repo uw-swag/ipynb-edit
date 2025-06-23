@@ -1,0 +1,41 @@
+```python
+    # Import necessary libraries
+    from google.cloud import bigquery
+    from oauth2client.client import GoogleCredentials
+
+    # Set up the BigQuery client
+    credentials = GoogleCredentials.get_application_default()
+    client = bigquery.Client(credentials=credentials)
+
+    # Define the query
+    QUERY = (
+        "SELECT "
+        "  COUNT(*) AS num_reviews, "
+        "  AVG(stars) AS avg_stars, "
+        "  AVG(price) AS avg_price "
+        "FROM "
+        "  `project.dataset.table` "
+        "WHERE "
+        "  review_score > 4 "
+        "AND "
+        "  review_score_rank <= 10 "
+        "AND "
+        "  review_score_rank > 0 "
+    )
+
+    # Run the query
+    query_job = client.query(QUERY)
+    results = query_job.result()
+
+    # Print the results
+    for row in results:
+        print("num_reviews: ", row.num_reviews)
+        print("avg_stars: ", row.avg_stars)
+        print("avg_price: ", row.avg_price)
+    ```
+
+    This Python script uses the Google Cloud BigQuery library to run a BigQuery ML query. The query is set to select the number of reviews, the average star rating, and the average price for reviews with a score greater than 4, a score rank less than or equal to 10, and a score rank greater than 0. The results are then printed to the console.
+
+    Please replace `project.dataset.table` with your actual project ID, dataset ID, and table name.
+
+    Also, make sure you have the necessary permissions to run the query and access the BigQuery dataset.

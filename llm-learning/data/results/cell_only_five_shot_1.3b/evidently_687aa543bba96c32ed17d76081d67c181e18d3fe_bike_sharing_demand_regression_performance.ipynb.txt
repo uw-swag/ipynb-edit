@@ -1,0 +1,52 @@
+```python
+    from dash import Dash
+    from dash.dependencies import Input, Output
+    from dash.html import Div
+    from dash.page_components import DashPage
+
+    class RegressionPerformanceTab(DashPage):
+        def __init__(self, *args, **kwargs):
+            super(RegressionPerformanceTab, self).__init__(*args, **kwargs)
+
+            self.layout = Div(children=[
+                html.H1(children='Regression Performance'),
+                dcc.Graph(
+                    id='regression-performance-graph',
+                    figure={
+                        'data': [
+                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'Test'},
+                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Training'},
+                        ],
+                        'layout': {
+                            'title': 'Regression Performance'
+                        }
+                    }
+                )
+            ])
+
+        def update(self, selected_data):
+            # Update the graph with the selected data
+            pass
+
+    class RegressionPerformanceProfileSection(DashPage):
+        def __init__(self, *args, **kwargs):
+            super(RegressionPerformanceProfileSection, self).__init__(*args, **kwargs)
+
+            self.layout = Div(children=[
+                html.H1(children='Regression Performance Profile'),
+                dcc.Graph(
+                    id='regression-performance-profile-graph',
+                    figure={
+                        'data': [
+                            {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'Test'},
+                            {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Training'},
+                        ],
+                        'layout': {
+                            'title': 'Regression Performance Profile'
+                        }
+                    }
+                )
+            ])
+
+        def update(self, selected_data):
+            #

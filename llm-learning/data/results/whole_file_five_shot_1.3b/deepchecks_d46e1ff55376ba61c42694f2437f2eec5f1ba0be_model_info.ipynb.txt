@@ -1,0 +1,16 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+
+    classifier = AdaBoostClassifier(n_estimators=100, learning_rate=1.0, random_state=0)
+    iris = load_iris()
+    X = iris.data
+    Y = iris.target
+    classifier.fit(X, Y)
+
+    from deepchecks.checks.overview import ModelInfo
+
+    ModelInfo().run(classifier)
+    ```
+
+    The `n_estimators` parameter is used to specify the number of weak learners in the ensemble, and the `learning_rate` parameter is used to control the contribution of each tree in the ensemble. The `random_state` parameter is used to initialize the random number generator.

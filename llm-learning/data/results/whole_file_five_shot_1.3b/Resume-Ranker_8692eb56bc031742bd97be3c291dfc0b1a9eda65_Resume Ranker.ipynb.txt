@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    class ResumeRanker:
+        def __init__(self, resume_data):
+            self.resume_data = resume_data
+            self.vectorizer = TfidfVectorizer()
+
+        def fit(self):
+            tfidf_matrix = self.vectorizer.fit_transform(self.resume_data)
+            self.cosine_similarity = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+        def rank(self, resume):
+            resume_vector = self.vectorizer.transform([resume])
+            similarity_scores = list(enumerate(self.cosine_similarity[0]))
+            sorted_similarity_scores = sorted(similarity_scores, key=lambda x: x[1], reverse=True)
+            rank = 0
+            for score in sorted_similarity_scores:
+                rank += 1
+                print(f"Resume {rank}: {score[0]}, Similarity: {score[1]}")
+
+    # Example usage:
+    ranker = ResumeRanker(["My name is John Doe. I am a software engineer.", "My name is Jane Smith. I am a data scientist."])
+    ranker.fit()
+    ranker.rank("My name is Jane Smith. I am a data scientist.")
+    ```

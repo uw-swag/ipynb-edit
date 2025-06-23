@@ -1,0 +1,38 @@
+
+The performance report degradation in the code is due to the fact that the AdaBoost classifier and regressor models are not optimized for large datasets. The performance of these models can degrade when the dataset is too large, as they may not be able to find patterns in the data effectively.
+
+To fix this, you can use the `fit_sample` method instead of `fit`. The `fit_sample` method is designed to fit the model to a sample of the data, which can be more efficient for large datasets.
+
+Here's the corrected code:
+
+```python
+<Cell_1>
+clf.fit_sample(X_train, y_train)
+<\Cell_1>
+<Cell_2>
+check = PerformanceReport()
+check.run(train_ds, test_ds, clf)
+<\Cell_2>
+```
+
+In the code above, `clf.fit_sample(X_train, y_train)` is used instead of `clf.fit(X_train, y_train)`. This will fit the model to a sample of the data, which can be more efficient for large datasets.
+
+For the regression model, the `fit_sample` method is used in the same way.
+
+Please note that the performance of these models can also be affected by the choice of the base estimator. If the base estimator is not a good fit for the data, it can lead to degradation in the performance of the model.
+
+Also, the `fit_sample` method is not available for all models. For example, for AdaBoost, the `fit_sample` method is not available. In such cases, you can use the `partial_fit` method, which is available for all models.
+
+Here's the corrected code:
+
+```python
+<Cell_3>
+clf.partial_fit(X_train, y_train)
+<\Cell_3>
+<Cell_4>
+check = PerformanceReport()
+check.run(train_ds, test_ds, clf)
+<\Cell_4>
+```
+
+In the code above, `clf.partial_fit(X_train, y_train)` is used instead of `clf.fit(X_train, y_train)`. This will

@@ -1,0 +1,13 @@
+
+The typo in the `DataLoader` class in the code is `DataLoader` to `Local DataLoader`. The `DataLoader` class in PyTorch is used to create a PyTorch iterable over a dataset, and it's used to feed data to the model during training. The `Local DataLoader` is used to load the data locally in the notebook, which is not recommended for distributed training.
+
+Here is the corrected code:
+
+```python
+class DataLoader():
+    def __init__(self, ds, bs): self.ds,self.bs = ds,bs
+    def __iter__(self):
+        for i in range(0, len(self.ds), self.bs): yield self.ds[i:i+self.bs]
+```
+
+The `DataLoader` class in PyTorch is used to create a PyTorch iterable over a dataset, and it's used to feed data to the model during training. The `Local DataLoader` is used to load the data locally in the notebook, which is not recommended for distributed training.

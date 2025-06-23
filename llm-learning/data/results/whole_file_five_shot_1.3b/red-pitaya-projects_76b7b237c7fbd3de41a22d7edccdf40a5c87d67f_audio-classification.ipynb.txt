@@ -1,0 +1,43 @@
+```python
+    import os
+    import sys, getopt
+    import signal
+    import numpy as np
+    from edge_impulse_linux.runner import ImpulseRunner
+
+    model_file_name = 'modelfile.eim'
+    runner = None
+    dir_path = os.path.dirname(os.path.realpath(model_file_name))
+    modelfile = os.path.join(dir_path, model_file_name)
+    modelfile
+
+    # Add the files you want to upload to Edge Impulse
+    files = ['float_wave_test_raw.wav']
+    audio_file = files[0] #save the first one
+
+    # Creating the data payload for the request.
+    files=(('data', (os.path.basename(i), open(i, 'rb'), 'audio/wav')) for i in files)
+    audio_file
+
+    model_file_name = 'modelfile.eim'
+
+    dir_path = os.path.dirname(os.path.realpath(model_file_name))
+    modelfile = os.path.join(dir_path, model_file_name)
+    full_audio_file = os.path.join(dir_path, audio_file)
+
+    full_audio_file
+    files=(('data', (os.path.basename(i), open(i, 'rb'), 'audio/wav')) for i in files)
+    files
+
+    from scipy.io import wavfile
+    samplerate, generator = wavfile.read(full_audio_file)
+
+    features = np.array([], dtype=np.int16)
+    runner = ImpulseRunner(modelfile)
+
+    model_info = runner.init()
+    labels = model_info['model_parameters']['labels']
+    window_size = model_info['model_parameters']['input_features_count']
+    sampling_rate = model_info['model_parameters']['frequency']
+    print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
+    print(

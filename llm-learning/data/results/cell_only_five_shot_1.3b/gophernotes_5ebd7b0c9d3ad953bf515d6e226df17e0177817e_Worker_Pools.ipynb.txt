@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "new example and new install docs"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+
+    # Load the iris dataset
+    iris = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',
+                      names=['sepal length', 'sepal width', 'petal length', 'petal width', 'class'])
+
+    # Split the data into features and target
+    X = iris.iloc[:, :-1].values
+    y = iris.iloc[:, 4].values
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+
+    # Create a Logistic Regression object
+    logreg = LogisticRegression()
+
+    # Train the model
+    logreg.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = logreg.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+    '''
+    ]
+
+    ### Response:
+    ### Instruction:
+    [
+    Commit Message: "new example and new install docs"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+
+    # Load the iris dataset
+    iris = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',
+                      names=

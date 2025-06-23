@@ -1,0 +1,51 @@
+from evidently.descriptors import LLMEval, NegativityLLMEval, PIILLMEval, DeclineLLMEval, BiasLLMEval, ToxicityLLMEval, ContextQualityLLMEval
+column_mapping = ColumnMapping(
+    datetime='start_time',
+    datetime_features=['end_time'],
+    text_features=['question', 'response', 'target_response'],
+    categorical_features=['organization', 'model_ID', 'region', 'environment', 'feedback'],
+)
+print(ToxicityLLMEval().get_template().get_prompt_template())
+data = [
+    ["Why is the sky blue?",
+     "The sky is blue because molecules in the air scatter blue light from the sun more than they scatter red light.",
+     "The sky appears blue because air molecules scatter the sun’s blue light more than they scatter other colors."],
+
+    ["How do airplanes stay in the air?",
+     "Airplanes stay in the air because their wings create lift by forcing air to move faster over the top of the wing than underneath, which creates lower pressure on top.",
+     "Airplanes stay airborne because the shape of their wings causes air to move faster over the top than the bottom, generating lift."],
+    
+    #irrelevant one
+    ["How do airplanes stay in the air?",
+     "The moon changes shape, or goes through phases, because we see different portions of its illuminated half as it orbits the Earth.",
+     "Airplanes stay airborne because the shape of their wings causes air to move faster over the top than the bottom, generating lift."],
+
+    ["Why do we have seasons?",
+     "We have seasons because the Earth is tilted on its axis, which causes different parts of the Earth to receive more or less sunlight throughout the year.",
+     "Seasons occur because of the tilt of the Earth’s axis, leading to varying amounts of sunlight reaching different areas as the Earth orbits the sun."],
+
+    ["How do magnets work?",
+     "Magnets work because they have a magnetic field that can attract or repel certain metals, like iron, due to the alignment of their atomic particles.",
+     "Magnets generate a magnetic field, which can attract metals like iron by causing the electrons in those metals to align in a particular way, creating an attractive or repulsive force."],
+
+    ["Why does the moon change shape?",
+     "The moon changes shape, or goes through phases, because we see different portions of its illuminated half as it orbits the Earth.",
+     "The moon appears to change shape as it orbits Earth, which is because we see different parts of its lit-up half at different times. The sun lights up half of the moon, but as the moon moves around the Earth, we see varying portions of that lit-up side. So, the moon's shape in the sky seems to change gradually, from a thin crescent to a full circle and back to a crescent again."]
+]
+
+columns = ["question", "context", "target_context"]
+
+eval_data = pd.DataFrame(data, columns=columns)
+
+report = Report(metrics=[
+    TextEvals(column_name="context", descriptors=[
+        ContextQualityLLMEval(question="question"),
+    ])
+])
+
+report.run(reference_data=eval_data[:2], 
+           current_data=eval_data[2:])
+report 
+#that's how you can see the prompt
+
+print(ContextQualityLLMEval(question="question").get_template().get_prompt_template())

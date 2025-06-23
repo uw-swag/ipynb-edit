@@ -1,0 +1,16 @@
+```python
+    from reco_utils.dataset.dataset_summary_metric import DatasetSummaryMetric
+
+    # Define a DatasetSummaryMetric
+    dataset_summary_metric = DatasetSummaryMetric(
+        name="my_dataset_summary_metric",
+        description="This is a summary metric for my dataset",
+        function=lambda df: df.describe(),
+        unit="summary",
+        importance=1,
+        display_name="Dataset Summary Metric"
+    )
+
+    # Add the dataset summary metric to the population
+    population.add_metric(dataset_summary_metric)
+    ```

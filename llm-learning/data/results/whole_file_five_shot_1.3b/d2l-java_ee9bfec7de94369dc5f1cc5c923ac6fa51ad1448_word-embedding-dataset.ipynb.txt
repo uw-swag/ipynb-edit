@@ -1,0 +1,54 @@
+```python
+    import torch
+from torchtext.legacy import data
+from torchtext.legacy.data import Field, LabelField, TabularDataset, BucketIterator
+
+# Define Fields
+TEXT = Field(tokenize='spacy', lower=True, include_lengths=True)
+LABEL = LabelField(dtype=torch.float)
+
+# Define Sequential Fields
+fields = [('label', LABEL), ('text', TEXT)]
+
+# Define Dataset
+train_data, test_data = TabularDataset.splits(
+    path='path_to_your_dataset',
+    train='train.csv',
+    test='test.csv',
+    format='csv',
+    fields=fields,
+    skip_header=True)
+
+# Build Vocabulary
+TEXT.build_vocab(train_data, max_size=10000, vectors="glove.6B.100d")
+
+# Create Iterator
+BATCH_SIZE = 64
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+train_iterator, valid_iterator, test_iterator = BucketIterator.splits(
+    (train_data, valid_data, test_data), 
+    batch_size=BATCH_SIZE,
+    device=device)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding 14.4. The Word Embedding Model (#121)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import torch.nn as nn
+    from torch.nn import functional as F
+
+    class WordEmbeddingModel(nn.Module):
+        def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim, n_layers, 
+                     bidirectional, dropout, pad_idx):
+            super().__init__()
+            self.embedding = nn.Embedding(vocab_size, embedding_dim, padding_idx=pad_idx)
+           

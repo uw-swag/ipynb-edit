@@ -1,0 +1,25 @@
+```
+    #@title Examples Update
+    import pandas as pd
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    from deepchecks import Dataset
+
+    df = load_breast_cancer(as_frame=True).frame
+    label = 'target'
+
+    train_df, test_df = train_test_split(df, test_size=0.33, random_state=0)
+    train = Dataset(train_df, label_name=label)
+    test = Dataset(test_df, label_name=label)
+
+    clf = AdaBoostClassifier()
+    features = train_df.drop(label, axis=1)
+    target = train_df[label]
+    clf.fit(features, target)
+
+    from deepchecks.checks import TrustScoreComparison
+
+    TrustScoreComparison(min_test_samples=100).run(train, test, clf)
+    ```
+    This code is an example of how to update the examples in a Jupyter notebook. It uses the AdaBoostClassifier from sklearn to classify breast cancer data, and then uses the TrustScoreComparison check from deepchecks to compare the model's trust score to a baseline.

@@ -1,0 +1,28 @@
+```go
+    // Add a and b.
+    d := mat.NewDense(0, 0, nil)
+    d.Add(a, b)
+    fd := mat.Formatted(d, mat.Prefix("            "))
+    fmt.Printf("d = a + b = %0.4v\n\n", fd)
+
+    // Multiply a and c.
+    f := mat.NewDense(0, 0, nil)
+    f.Mul(a, c)
+    ff := mat.Formatted(f, mat.Prefix("          "))
+    fmt.Printf("f = a c = %0.4v\n\n", ff)
+
+    // Raising a matrix to a power.
+    g := mat.NewDense(0, 0, nil)
+    g.Pow(a, 5)
+    fg := mat.Formatted(g, mat.Prefix("          "))
+    fmt.Printf("g = a^5 = %0.4v\n\n", fg)
+
+    // Apply a function to each of the elements of a.
+    h := mat.NewDense(0, 0, nil)
+    sqrt := func(_, _ int, v float64) float64 { return math.Sqrt(v) }
+    h.Apply(sqrt, a)
+    fh := mat.Formatted(h, mat.Prefix("              "))
+    fmt.Printf("h = sqrt(a) = %0.4v\n\n", fh)
+    ```
+
+    The code above is a simple demonstration of how to use the gonum library in Go. It performs various operations on matrices, such as addition, multiplication, raising a matrix to a power, and applying a function to each element of a matrix.

@@ -1,0 +1,38 @@
+
+    [
+    Commit Message: "del old files"
+    Original Code Cells:
+    '''
+    %%html
+<style> 
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+body {background-color: gainsboro;} 
+a {color: #37c9e1; font-family: 'Roboto';} 
+h1 {color: #37c9e1; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #aaa;} 
+h2, h3 {color: slategray; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #aaa;}
+h4 {color: #818286; font-family: 'Roboto';}
+span {text-shadow: 4px 4px 4px #aaa;}
+div.output_prompt, div.output_area pre {color: slategray;}
+div.input_prompt, div.output_subarea {color: #37c9e1;}      
+div.output_stderr pre {background-color: gainsboro;}  
+div.output_stderr {background-color: slategrey;}       
+</style>
+import numpy as np 
+import pandas as pd
+
+import matplotlib.pylab as plt
+from matplotlib import cm
+import matplotlib.colors as mcolors
+import seaborn as sns
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+style_dict = {'background-color':'slategray',
+              'color':'#37c9e1',
+              'border-color': 'white',
+              'font-family':'Roboto'}
+print(plt.colormaps())
+school_explorer = pd.read_csv('2016 School Explorer.csv')
+school_explorer.head(3).T[3:41].style.set_properties(**style_dict)
+na_list = ['Adjusted Grade','New?','Other Location Code in LCGMS']
+school_expl

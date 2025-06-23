@@ -1,0 +1,107 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab
+<\Cell_0>
+<Cell_1>
+dataset = fetch_california_housing(as_frame=True)
+df = dataset.frame
+<\Cell_1>
+<Cell_2>
+target = 'MedHouseVal'
+prediction = 'prediction'
+
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+<\Cell_2>
+<Cell_3>
+ref_data = df[:15000]
+prod_data = df[15000:]
+<\Cell_3>
+<Cell_4>
+model = RandomForestRegressor(random_state=0)
+<\Cell_4>
+<Cell_5>
+model.fit(ref_data[features], ref_data[target])
+<\Cell_5>
+<Cell_6>
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+<\Cell_6>
+<Cell_7>
+import plotly.figure_factory as ff
+
+hist_data = [ref_data[target], prod_data[target]]
+
+group_labels = ['reference', 'production']
+
+colors = ['#333F44', '#37AA9C'] 
+
+fig = ff.create_distplot(hist_data, group_labels, colors=colors, show_hist=False, show_rug=False)
+
+fig.update_layout(   
+    xaxis_title="Value", 
+    yaxis_title="Share",
+    xaxis=dict(
+        showticklabels=True
+    ),
+    yaxis=dict(
+        showticklabels=True
+    ),
+    legend=dict(
+        orientation="v",
+        yanchor="top",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+)
+<\Cell_7>
+<Cell_8>
+from my_widgets.target_distribution_widget import TargetDistributionWidget
+<\Cell_8>
+<Cell_9>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+<\Cell_9>
+<Cell_10>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    'Current: Predicted vs Actual',
+    TargetDistributionWidget('Target distribution')
+])])
+<\Cell_10>
+<Cell_11>
+dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                    prod_data.sample(1000, random_state=0), 
+                    column_mapping=column_mapping)
+<\Cell_11>
+<Cell_12>
+dashboard.show()
+<\Cell_12>
+<Cell_13>
+from my_tabs.my_simple_tab import MySimpleTab
+<\Cell_13>
+<Cell_14>
+dashboard = Dashboard(tabs=[MySimpleTab()])
+<\Cell_14>
+<Cell_15>
+dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                    prod_data.sample(1000, random_state=0), 
+                    column_mapping=column_mapping)
+<\Cell_15>
+<Cell_16>
+dashboard.show()
+<\Cell_16>
+<Cell_17>
+
+<\Cell_17>

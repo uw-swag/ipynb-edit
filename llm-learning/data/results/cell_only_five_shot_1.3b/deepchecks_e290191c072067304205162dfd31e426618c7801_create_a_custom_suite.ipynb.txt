@@ -1,0 +1,37 @@
+```python
+    ### Instruction
+    [
+    Commit Message:" [ENHANCEMENT] Implemented new feature"
+    Original Code:
+    '''
+    from pyspark import SparkConf, SparkContext                    
+    from mmtfPyspark.io import mmtfReader
+    from mmtfPyspark.interactions import InteractionFilter, InteractionFingerprinter
+                                                               
+    # Create variables                                             
+    APP_NAME = "MMTF_Spark"                                        
+
+    # Configure Spark                                              
+    conf = SparkConf().setAppName(APP_NAME).setMaster("local[4]")  
+    sc = SparkContext(conf=conf)                                   
+    pdb = mmtfReader.download_mmtf_files(['1OHR'], sc)
+    sc.stop()
+
+    '''
+    ]
+
+    ### Response:
+    Here is the updated code:
+
+    ```python
+    from pyspark.sql import SparkSession                  
+    from mmtfPyspark.io import mmtfReader
+    from mmtfPyspark.interactions import InteractionFilter, InteractionFingerprinter                                 
+    spark = SparkSession.builder.master("local[*]") \
+                                 .appName("PolymerInteractionFingerprintDemo") \
+                                 .getOrCreate()
+    pdb = mmtfReader.download_mmtf_files(['1OHR'])
+    spark.stop()
+    ```
+
+    The code above is the updated version of the original code. It now imports the necessary libraries and sets up the Spark context. It also downloads the MMTF files and stops the Spark context.

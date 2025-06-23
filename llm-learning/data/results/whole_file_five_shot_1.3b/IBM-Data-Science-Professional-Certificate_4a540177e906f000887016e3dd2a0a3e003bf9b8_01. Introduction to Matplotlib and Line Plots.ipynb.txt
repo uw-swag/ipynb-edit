@@ -1,0 +1,54 @@
+
+    '''
+    ## Introduction to Matplotlib and Line Plots
+
+    Matplotlib is a plotting library in Python. It provides a high-level interface for embedding plots into applications using general-purpose GUI toolkits like Tkinter, wxPython, Qt, GTK, GTK+, Fltk, and others.
+
+    Line plots are a type of plot that displays a series of data points as if they were connected in a line. They are used to show trends, changes, or patterns over time.
+
+    In this notebook, we will learn how to:
+
+    1. Import necessary libraries.
+    2. Read an Excel file using pandas.
+    3. Drop unnecessary columns from the dataframe.
+    4. Rename columns.
+    5. Create a new column 'Total' that calculates the cumulative immigration for each country.
+    6. Filter the dataframe to get the top 5 countries with the highest immigration.
+    7. Plot the immigration trends for the top 5 countries.
+
+    This will help you understand how to use Matplotlib to create line plots.
+
+    Remember, the key to good data visualization is to understand the data and the question you are trying to answer.
+
+    Let's start by importing the necessary libraries.
+
+    '''
+    ## Code
+
+    import numpy as np  # useful for many scientific computing in Python
+    import pandas as pd # primary data structure library
+
+    ## Code
+
+    #install the openpyxl package
+    #!python -m pip install openpyxl
+
+    ## Code
+
+    df_can = pd.read_excel(
+        'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/Canada.xlsx',
+        sheet_name='Canada by Citizenship',
+        skiprows=range(20),
+        skipfooter=2)
+
+    ## Code
+
+    df_can.head()
+
+    ## Code
+
+    df_can.tail()
+
+    ## Code
+
+    df_can.info

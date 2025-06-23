@@ -1,0 +1,182 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from evidently.v2.metrics import DataIntegrityMetrics
+from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests import TestNumberOfColumns
+from evidently.v2.tests import TestNumberOfDriftedFeatures
+from evidently.v2.tests import TestValueMAE, TestValueMeanError
+from evidently.v2.tests import TestAccuracyScore, TestPrecisionScore, TestF1Score, TestRecallScore, TestRocAuc, TestLogLoss, TestTPR, TestTNR, TestFPR, TestFNR
+<\Cell_1>
+<Cell_2>
+# from evidently import ColumnMapping
+# from evidently.v2.suite.base_suite import Suite
+
+# suite = Suite()
+# suite.add_metrics(DataIntegrityMetrics())
+# suite.add_tests(TestNumberOfColumns(NumberRange(exact=3)))
+
+# suite.run_calculate(InputData(reference_data=None, current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping()))
+# suite.run_checks()
+<\Cell_2>
+<Cell_3>
+from evidently import ColumnMapping
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+suite = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    # TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite
+<\Cell_3>
+<Cell_4>
+suite_with_reference = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite_with_reference.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite_with_reference
+<\Cell_4>
+<Cell_5>
+from sklearn import datasets, ensemble, model_selection
+bcancer = datasets.load_breast_cancer(as_frame=True)
+bcancer_frame = bcancer.frame
+bcancer_frame['target'] = bcancer.target
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+train_data, test_data = model_selection.train_test_split(
+    bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = [bcancer.target_names[x] for x in train_predictions]
+test_data['prediction'] = [bcancer.target_names[x] for x in test_predictions]
+
+train_data['target'] = [bcancer.target_names[x] for x in train_data['target']]
+test_data['target'] = [bcancer.target_names[x] for x in test_data['target']]
+
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+train_data[bcancer.target_names] = model.predict_proba(train_data[features])
+test_data[bcancer.target_names] = model.predict_proba(test_data[features])
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = prediction
+bcancer_column_mapping.numerical_features = numerical_features
+
+tests = [TestAccuracyScore(), TestPrecisionScore(), TestF1Score(), TestRecallScore(), TestTPR(), TestTNR(), TestFPR(), TestFNR()]
+
+suite_classification = TestSuite(tests=tests)
+
+suite_classification.run(reference_data=None, current_data=test_data, column_mapping=bcancer_column_mapping)
+suite_classification
+<\Cell_5>
+<Cell_6>
+suite_classification_with_reference = TestSuite(tests=tests)
+
+suite_classification_with_reference.run(reference_data=train_data, current_data=test_data, column_mapping=bcancer_column_mapping)
+suite_classification_with_reference
+<\Cell_6>
+<Cell_7>
+bcancer_column_mapping_probas = ColumnMapping()
+
+bcancer_column_mapping_probas.target = target
+bcancer_column_mapping_probas.prediction = bcancer.target_names.tolist()
+bcancer_column_mapping_probas.numerical_features = numerical_features
+
+suite_classification_probas = TestSuite(tests=tests + [TestRocAuc(), TestLogLoss()])
+
+suite_classification_probas.run(reference_data=train_data, current_data=test_data, column_mapping=bcancer_column_mapping_probas)
+suite_classification_probas
+<\Cell_7>
+<Cell_8>
+suite.show(mode="inline")
+<\Cell_8>
+<Cell_9>
+suite_with_reference.show(mode="inline")
+<\Cell_9>
+<Cell_10>
+suite.save_html("example.html")
+<\Cell_10>
+<Cell_11>
+suite_with_reference.save_html("example_with_reference.html")
+<\Cell_11>
+<Cell_12>
+
+<\Cell_12>
+<Cell_13>
+suite_classification.save_html("example_classification.html")
+suite_classification_probas.save_html("example_classification_probas.html")
+<\Cell_13>
+<Cell_14>
+suite_classification_with_reference.save_html("example_classification_with_reference.html")
+<\Cell_14>
+<Cell_15>
+suite.json()
+<\Cell_15>
+<Cell_16>
+suite_with_reference.json()
+<\Cell_16>
+<Cell_17>
+suite_classification.json()
+<\Cell_17>
+<Cell_18>
+suite_classification_with_reference.json()
+<\Cell_18>
+<Cell_19>
+suite.save_json("example.json")
+<\Cell_19>

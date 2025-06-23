@@ -1,0 +1,46 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.signal import freqz
+
+    # Generating a sample signal
+    t = np.linspace(0, 1, 1000, False)  # 1 second samples
+    x = np.sin(2 * np.pi * 10 * t) + np.sin(2 * np.pi * 20 * t)
+
+    # Frequency response
+    w, h = freqz(x, 20, whole=True)
+    plt.plot(w, abs(h), 'b')
+    plt.title('Frequency domain analysis')
+    plt.ylabel('Amplitude')
+    plt.xlabel('Frequency (Hz)')
+    plt.show()
+    ```
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Added notebooks demonstrating time/frequency domain features"
+    Original Code Cells:
+    '''
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.signal import freqz
+
+    # Generating a sample signal
+    t = np.linspace(0, 1, 1000, False)  # 1 second samples
+    x = np.sin(2 * np.pi * 10 * t) + np.sin(2 * np.pi * 20 * t)
+
+    # Frequency response
+    w, h = freqz(x, 20, whole=True)
+    plt.plot(w, abs(h), 'b')
+    plt.title('Frequency domain analysis')
+    plt.ylabel('Amplitude')
+    plt.xlabel('Frequency (Hz)')
+    plt.show()
+    '''
+    ]
+
+    ### Response:
+    The code provided is a simple demonstration of frequency domain analysis using the `freqz` function from the `scipy.signal` module. This function computes the frequency response of a signal, which is a way to understand the relationship between the

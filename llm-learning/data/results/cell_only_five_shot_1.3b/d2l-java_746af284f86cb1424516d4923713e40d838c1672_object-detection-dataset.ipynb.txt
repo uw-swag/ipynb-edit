@@ -1,0 +1,42 @@
+```java
+    Image[] imageArr = new Image[10];
+    List<List<String>> classNames = new ArrayList<>();
+    List<List<Double>> prob = new ArrayList<>();
+    List<List<BoundingBox>> boxes = new ArrayList<>();
+
+    for (Batch batch : trainIter.getData(manager)) {
+
+        for (int i=0; i < 10; i++){
+            NDArray imgData = batch.getData().get(0).get(i);
+            imgData.muli(255);
+            NDArray imgLabel = batch.getLabels().get(0).get(i);
+            
+            List<String> bananaList = new ArrayList<>();
+            bananaList.add("banana");
+            classNames.add(new ArrayList<>(bananaList));
+            
+            List<Double> probabilityList = new ArrayList<>();
+            probabilityList.add(1.0);
+            prob.add(new ArrayList<>(probabilityList));
+            
+            List<BoundingBox> boundBoxes = new ArrayList<>();
+            
+            float[] coord = imgLabel.get(0).toFloatArray();
+            double first = (double) (coord[1]);
+            double second = (double) (coord[2]);
+            double third = (double) (coord[3]);
+            double fourth = (double) (coord[4]);
+
+            boundBoxes.add(new Rectangle(first, second, (third-first), (fourth-second)));
+            
+            boxes.add(new ArrayList<>(boundBoxes));
+            DetectedObjects detectedObjects = new DetectedObjects(classNames.get(i), prob.get(i), boxes.get(i));
+            imageArr[i] = ImageFactory.getInstance().fromNDArray(imgData.toType(DataType.INT8, true));
+            imageArr[i].drawBoundingBoxes(detectedObjects);
+        }
+    }
+
+    showImages(imageArr, 10, 256, 256, 1, manager);
+    ```
+
+    This code is fixing the Object Detection Notebook's `showImages` method.

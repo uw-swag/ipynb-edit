@@ -1,0 +1,26 @@
+```python
+    # Refactoring the code to improve readability and maintainability
+
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.checks.performance import ImageSegmentPerformance
+
+    # Load the dataset and model
+    coco_data = coco.load_dataset(train=False, object_type='VisionData')
+    model = coco.load_model()
+
+    # Run the ImageSegmentPerformance check
+    result = ImageSegmentPerformance().run(coco_data, model)
+
+    # Print the properties and brightness bins
+    print(f'Properties: {result.value.keys()}')
+    print(f'brightness bins: {result.value["brightness"]}')
+
+    # Add a condition to the check to only include images with a score greater than 0.5
+    check = ImageSegmentPerformance().add_condition_score_from_mean_ratio_not_less_than(0.5)
+    result = check.run(coco_data, model)
+
+    # Show the result
+    result.show(show_additional_outputs=False)
+    ```
+
+    The refactored code is more readable and maintainable. It first loads the dataset and model, then runs the ImageSegmentPerformance check. It then prints the properties and brightness bins of the result. After that, it adds a condition to the check to only include images with a score greater than 0.5, and finally, it shows the result.

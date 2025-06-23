@@ -1,0 +1,28 @@
+# set condition for all generated tests and specify that we want to generate tests for all columns explicitly
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfNulls, columns="all", parameters={"lt": 0.5})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestFeatureValueMin, columns="num")])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfNulls, columns="cat", parameters={"lt": 0.1})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestFeatureValueMin, columns=["age", "fnlwgt", "education-num"], parameters={"gt": 0})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+from evidently.metrics import ColumnValueRangeMetric
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.report import Report
+
+report = Report(
+    metrics=[
+        generate_column_metrics(
+            ColumnValueRangeMetric,
+            columns="num",
+            parameters={"left": 0, "right": 10}
+        )
+    ]
+)
+report.run(current_data=current_data, reference_data=reference_data)
+report

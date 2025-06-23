@@ -1,0 +1,28 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.feature_extraction.text import TfidfTransformer
+    from sklearn.pipeline import Pipeline
+    from sklearn.metrics import classification_report
+    from sklearn.datasets import fetch_20newsgroups
+    from sklearn.decomposition import NMF
+
+    # Loading the 20 Newsgroups dataset
+    data = fetch_20newsgroups(subset='all')
+
+    # Creating a CountVectorizer and a TfidfTransformer
+    text_clf = Pipeline([
+        ('vect', CountVectorizer()),
+        ('tfidf', TfidfTransformer()),
+        ('clf', NMF(n_components=10)),
+    ])
+
+    # Training the model
+    text_clf.fit(data.data)
+
+    # Printing the top 10 words for each category
+    for i in range(10):
+        print("Category: ", data.target_names[i])
+        features = text_clf.named_steps['clf'].components_[i]
+        print("Top 10 words: ", [data.get_feature_names()[index] for index in features.argsort()[-10:]])
+    ```
+    This code will print the top 10 words for each category in the 20 Newsgroups dataset.

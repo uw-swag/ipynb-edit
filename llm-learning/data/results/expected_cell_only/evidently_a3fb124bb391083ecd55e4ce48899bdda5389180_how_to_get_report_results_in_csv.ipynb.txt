@@ -1,0 +1,84 @@
+import numpy as np
+import pandas as pd
+from sklearn.datasets import fetch_openml
+
+from evidently.report import Report
+from evidently.metrics.base_metric import generate_column_metrics
+from evidently.metrics import ColumnSummaryMetric, ColumnMissingValuesMetric
+
+from evidently.test_suite import TestSuite
+from evidently.tests import TestNumberOfColumns
+from evidently.tests import TestColumnsType
+from evidently.tests import TestNumberOfEmptyRows
+from evidently.tests import TestNumberOfEmptyColumns
+from evidently.tests import TestNumberOfDuplicatedRows
+from evidently.tests import TestNumberOfDuplicatedColumns
+
+from evidently import ColumnMapping
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+reference = data.frame[:10000]
+current = data.frame[10000:20000]
+
+columns = ColumnMapping(
+    target='class',
+    numerical_features=['age', 'fnlwgt', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week'],
+    categorical_features=['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'sex', 'native-country']
+)
+column_summary = Report(metrics=[
+    generate_column_metrics(ColumnSummaryMetric, columns='all'),
+])
+
+column_summary.run(reference_data=reference, current_data=current, column_mapping=columns)
+column_summary_dict = column_summary.as_dict()
+data = {}
+for result in column_summary_dict['metrics']:
+    data[result['result']['column_name']] = {
+        **{f"ref_{key}": val for key, val in result['result']['reference_characteristics'].items()},
+        **{f"cur_{key}": val for key, val in result['result']['current_characteristics'].items()}
+    }
+    
+column_summary_frame = pd.DataFrame.from_dict(data, orient='index')
+column_summary_frame
+#column_summary_frame.to_csv('column_summary_frame.csv', header='True', sep=',', index=True, index_label='column')
+missing_values = Report(metrics=[
+    generate_column_metrics(ColumnMissingValuesMetric, columns='all'),
+])
+
+missing_values.run(reference_data=reference, current_data=current, column_mapping=columns)
+missing_values_dict = missing_values.as_dict()
+
+data = {}
+for result in column_summary_dict['metrics']:
+    data[result['result']['column_name']] = {
+        **{f"ref_{key}": val for key, val in result['result']['reference_characteristics'].items()},
+        **{f"cur_{key}": val for key, val in result['result']['current_characteristics'].items()}
+    }
+missing_values_frame = pd.DataFrame.from_dict(data, orient='index')
+missing_values_frame
+#missing_values_frame.to_csv('missing_values_frame.csv', header='True', sep=',', index=True, index_label='column')
+column_metrics_frame = pd.merge(column_summary_frame, missing_values_frame, left_index=True, right_index=True)
+column_metrics_frame
+#column_metrics_frame.to_csv('column_metrics_frame.csv', header='True', sep=',', index=True, index_label='column')
+dataset_tests = TestSuite(tests=[
+    TestNumberOfColumns(),
+    TestColumnsType(),
+    TestNumberOfEmptyRows(),
+    TestNumberOfEmptyColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns()
+])
+
+dataset_tests.run(reference_data=reference, current_data=current, column_mapping=columns)
+dataset_tests_dict = dataset_tests.as_dict()
+
+data = []
+for result in dataset_tests_dict['tests']:
+    data.append({
+        'test':result['name'],
+        'group':result['group'],
+        'status':result['status'],
+        }
+    )
+dataset_tests_frame = pd.DataFrame.from_records(data)
+dataset_tests_frame
+#dataset_tests_frame.to_csv('dataset_tests_frame.csv', header='True', sep=',', index=True, index_label='index')

@@ -1,0 +1,55 @@
+```python
+    from google.colab import files
+    uploaded = files.upload()
+
+    for fn in uploaded:
+        print('File name:', fn)
+        with open(fn, 'r') as f:
+            print(f.read())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature"
+    Original Code:
+    '''
+    # Importing necessary libraries
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.optimizers import Adam
+
+    # Creating a new model
+    model = Sequential()
+    model.add(Dense(64, input_dim=100, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+
+    # Training the model
+    model.fit(X_train, y_train, epochs=50, batch_size=10)
+
+    # Evaluating the model
+    scores = model.evaluate(X_test, y_test)
+    print('Test loss:', scores[0])
+    print('Test accuracy:', scores[1])
+
+    # Predicting on new data
+    predictions = model.predict(new_data)
+    ```
+
+    ### Response:
+    The new feature you're adding is a prediction of new data using the trained model. Here's how you can do it:
+
+    ```python
+    # Importing necessary libraries
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.optimizers import Adam
+
+    # Creating a new model
+    model = Sequential()
+    model.add(Dense(64, input_dim=100, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(), metrics=['accuracy'])
+
+    # Training the model
+    model.fit(X

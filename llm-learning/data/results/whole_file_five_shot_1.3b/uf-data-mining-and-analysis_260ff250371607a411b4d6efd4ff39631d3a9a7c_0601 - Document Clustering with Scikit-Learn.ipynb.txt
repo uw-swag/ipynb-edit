@@ -1,0 +1,51 @@
+```
+    ## Overview
+    This project is a demonstration of the use of the getML library in Python for time series forecasting. The library is designed to simplify the process of feature learning and prediction in time series data.
+
+    ## Installation
+    ```
+    pip install getml
+    ```
+
+    ## Usage
+    ```
+    import getml
+
+    # Load the occupancy dataset
+    data_test, data_train, data_validate = getml.datasets.load_occupancy(roles=True).values()
+
+    # Create a population
+    population = getml.data.Placeholder("population")
+    peripheral = getml.data.Placeholder("peripheral")
+
+    population.join(
+        peripheral,
+        time_stamp="date",
+        memory=getml.data.time.minutes(15),
+        horizon=0.0,
+        allow_lagged_targets=False,
+    )
+
+    # Feature learning
+    feature_learner = getml.feature_learning.FastPropModel(
+        loss_function=getml.feature_learning.loss_functions.CrossEntropyLoss,
+        aggregation=getml.feature_learning.FastPropModel.agg_sets.All,
+    )
+
+    # Pipeline
+    pipe_fp_fl = getml.pipeline.Pipeline(
+        feature_learners=[feature_learner],
+        peripheral=[peripheral],
+        population=population,
+        tags=["feature learning", "fastprop"],
+    )
+
+    # Train and test
+    pipe_fp_fl.fit(data_train, [data_train])
+    fastprop_train = pipe_fp_fl.transform(data_train, [data_train], df_name="fastprop_train")
+    fastprop_test = pipe_fp_fl.transform(data_test, [data_test], df_name="fastprop_test")
+
+    # Prediction
+    predictor = getml.predictors.XGBoostClassifier()
+    pipe_fp_pr = getml.pipeline.Pipeline(
+        tags=["prediction", "fast

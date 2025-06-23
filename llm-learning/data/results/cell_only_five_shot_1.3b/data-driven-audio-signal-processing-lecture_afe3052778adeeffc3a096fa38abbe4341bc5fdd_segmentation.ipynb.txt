@@ -1,0 +1,27 @@
+```
+    # This function is used to segment a signal x into segments of size 32, with a hop size of 16.
+    # The window used for the segmenting is a Hanning window.
+    # The function returns a list of segments.
+
+    def segments(x, segment_size=32, hop_size=16, window=np.hanning):
+        # Calculate the number of segments
+        num_segments = len(x) // (segment_size + hop_size)
+
+        # Initialize an empty list to store the segments
+        segments = []
+
+        # Loop over the segments
+        for i in range(num_segments):
+            # Calculate the start and end indices of the segment
+            start = i * (segment_size + hop_size)
+            end = start + segment_size
+
+            # Apply the window to the segment
+            segment = window(x[start:end])
+
+            # Append the segment to the list
+            segments.append(segment)
+
+        # Return the list of segments
+        return segments
+    ```

@@ -1,0 +1,28 @@
+```python
+    # Module 03: Code files added
+    # This is a module for handling code files.
+
+    import os
+    import re
+
+    class CodeFiles:
+        def __init__(self, directory):
+            self.directory = directory
+            self.files = self.get_files()
+
+        def get_files(self):
+            files = os.listdir(self.directory)
+            return [file for file in files if file.endswith('.py')]
+
+        def get_file_content(self, file_name):
+            with open(os.path.join(self.directory, file_name), 'r') as file:
+                return file.read()
+
+        def find_pattern(self, file_name, pattern):
+            content = self.get_file_content(file_name)
+            return re.findall(pattern, content)
+
+    # Example usage:
+    code_files = CodeFiles('/path/to/your/code/files')
+    print(code_files.find_pattern('your_file.py', 'your_pattern'))
+    ```

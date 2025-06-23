@@ -1,0 +1,38 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import bokeh
+    import bokeh.plotting as bkh
+    bkh.output_notebook()
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.metrics import confusion_matrix
+
+    # Load your data
+    data = pd.read_csv('your_data.csv')
+
+    # Split your data into features and target
+    X = data.drop('target', axis=1)
+    y = data['target']
+
+    # Split your data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize your data
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Define the hyperparameters for the MLP
+    hyperparameters = {
+        'hidden_layer_sizes': [(10,), (20,), (30,)],
+        'activation': ['relu', 'tanh', 'logistic'],
+        'solver': ['lbfgs', 'sgd', 'adam'],
+        'alpha': [0.0001, 0.001, 0.01, 0.1, 1, 10, 100],
+        'batch_size': [2, 5, 10, 20],
+        'learning_rate': ['constant', 'invscaling', 'adaptive'],
+        'learning_rate_init': [0.001, 0.01, 0.1, 0.2, 0.3],
+        'max_iter': [200, 500, 1000, 2000],
+        'random_state': [0, 1, 2, 3, 4,

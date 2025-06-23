@@ -1,0 +1,21 @@
+```python
+    from deepchecks.tabular.datasets.classification.phishing import load_data, load_fitted_model
+
+    train_dataset, test_dataset = load_data()
+    model = load_fitted_model()
+
+    from deepchecks.tabular.checks.performance import SimpleModelComparison
+
+    # Using tree model as a simple model, and changing the tree depth from the default 3 to 5
+    check = SimpleModelComparison(simple_model_type='tree', max_depth=5)
+    result = check.run(train_dataset, test_dataset, model)
+    result.value
+
+    from deepchecks.tabular.checks.performance import SimpleModelComparison
+
+    # Using tree model as a simple model, and adding a condition that the gain should be greater than 0.9
+    check = SimpleModelComparison(simple_model_type='tree')
+    check.add_condition_gain_not_less_than(0.9)
+    result = check.run(train_dataset, test_dataset, model)
+    result.show(show_additional_outputs=False)
+    ```

@@ -1,0 +1,32 @@
+```
+    import pandas as pd
+
+    from datetime import datetime
+    from sklearn import datasets
+
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DataDriftTab, CatTargetDriftTab
+
+    from evidently.model_profile import Profile
+    from evidently.profile_sections import DataDriftProfileSection, CatTargetDriftProfileSection
+
+    # Refactoring the column_mapping
+    column_mapping = {}
+
+    column_mapping['datetime'] = 'date'
+
+    numerical_features = list(bcancer.feature_names)
+    numerical_features.remove('date')
+
+    column_mapping['numerical_features'] = numerical_features
+    column_mapping['target'] = 'target'
+
+    # Creating a Dashboard and Profile
+    bcancer_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab, CatTargetDriftTab])
+    bcancer_data_and_target_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping)
+    bcancer_data_and_target_drift_dashboard.show()
+
+    bcancer_data_and_target_drift_profile = Profile(sections=[DataDriftProfileSection, CatTargetDriftProfileSection])
+    bcancer_data_and_target_drift_profile.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping) 
+    bcancer_data_and_target_drift_profile.json()
+    ```

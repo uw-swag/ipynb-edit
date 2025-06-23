@@ -1,0 +1,38 @@
+
+    '''
+    Commit Message: "Fixed naming issues for widgets Updated Ranges for plots inside of the Classification Quality By Feature Table in Probabilistic Classification Performance Dashboard Updated bicycle demand monitoring example"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets, ensemble
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, NumTargetDriftTab, RegressionPerformanceTab
+<\Cell_0>
+<Cell_1>
+raw_data = pd.read_csv('../../train.csv', header=0, sep=',', parse_dates=['datetime'], index_col='datetime')
+<\Cell_1>
+<Cell_2>
+raw_data.head()
+<\Cell_2>
+<Cell_3>
+raw_data['month'] = raw_data.index.map(lambda x : x.month)
+raw_data['hour'] = raw_data.index.map(lambda x : x.hour)
+raw_data['weekday'] = raw_data.index.map(lambda x : x.weekday() + 1)
+<\Cell_3>
+<Cell_4>
+target = 'count'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'humidity', 'windspeed', 'hour', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday']
+<\Cell_4>
+<Cell_5>
+reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+production = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+<\Cell_5>
+<Cell_6>
+regressor = ensemble.RandomForest

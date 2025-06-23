@@ -1,0 +1,19 @@
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnValuePlot('age'),  
+    
+],
+    options={"render": {"raw_data": True}}
+   )
+
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_report
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age', options={"render": {"raw_data": True}}),
+    ColumnValuePlot('age'),  
+    
+]
+   )
+
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_report

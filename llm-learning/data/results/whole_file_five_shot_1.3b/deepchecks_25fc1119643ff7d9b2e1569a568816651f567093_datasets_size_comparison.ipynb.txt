@@ -1,0 +1,26 @@
+
+The commit message "Adding nblinks instead of copy (#292)" is a typo. The correct commit message should be "Adding nblinks instead of copy". The original code was copying the cell content, which is not the correct approach. The correct approach is to add a new cell in the notebook that includes the nblinks functionality. Here's how you can do it:
+
+```python
+<Cell_0>
+import nbformat as nbf
+
+# Load the notebook
+with open("notebook.ipynb", "r") as f:
+    nb = nbf.read(f, as_version=4)
+
+# Add a new cell
+new_cell = nbf.v4.new_code_cell('<Cell_3>\n'
+                                'import nblinks\n'
+                                'nblinks.show()\n'
+                                '<\Cell_3>')
+
+# Insert the new cell at the beginning of the notebook
+nb['cells'] = [new_cell] + nb['cells']
+
+# Save the notebook
+with open("notebook.ipynb", "w") as f:
+    nbf.write(nb, f)
+```
+
+This code will add a new cell at the beginning of the notebook that includes the nblinks functionality. The nblinks.show() call will display a link to the nblinks documentation.

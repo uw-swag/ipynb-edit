@@ -1,0 +1,19 @@
+```
+    # Deleting notebooks
+    import os
+    import matplotlib.pyplot as plt
+
+    # Get a list of all files in the current directory
+    files = os.listdir()
+
+    # Loop through the list and delete any files that end with '.ipynb'
+    for f in files:
+        if f.endswith('.ipynb'):
+            os.remove(f)
+
+    # Confirm that the notebooks have been deleted
+    files = os.listdir()
+    for f in files:
+        if f.endswith('.ipynb'):
+            print(f'Found a deleted notebook: {f}')
+    ```

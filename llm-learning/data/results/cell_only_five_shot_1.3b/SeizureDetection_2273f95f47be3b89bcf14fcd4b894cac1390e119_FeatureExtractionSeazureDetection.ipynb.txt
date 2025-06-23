@@ -1,0 +1,34 @@
+```python
+    import os
+import pywt
+import pathlib
+import pyedflib
+import numpy as np
+import pandas as pd
+from pyentrp import entropy
+from tqdm.notebook import tqdm
+from scipy import signal, stats, integrate
+from sklearn import metrics, preprocessing, decomposition
+from imblearn.over_sampling import SMOTE
+
+sample_rate = 256
+time_window = 5
+step = time_window*sample_rate
+pca_tolerance = 0.95
+dataset = 'TestData' # 'CHB-MIT-Dataset'
+df = read_and_store_data(dataset, sample_rate)
+df = leftRightHemisphericChannels(df)
+features = pd.DataFrame(featureExtraction (df, sample_rate, step))
+del df
+features = featureNormalization(features)
+reduced_features = dimentionalityReduction(features, pca_tolerance)
+del features
+
+# Balancing the dataset using SMOTE
+smote = SMOTE(random_state=42)
+X_res, y_res = smote.fit_resample(reduced_features.drop('target', axis=1), reduced_features['target'])
+
+# Converting the resampled data to pandas dataframe
+resampled_df = pd.DataFrame(X_res, columns=reduced_features.columns[:-1])
+resampled_df['target'] = y_res
+    ```

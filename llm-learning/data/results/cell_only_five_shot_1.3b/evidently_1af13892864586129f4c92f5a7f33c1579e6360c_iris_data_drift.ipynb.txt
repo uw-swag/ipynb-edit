@@ -1,0 +1,29 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, CatTargetDriftTab
+
+# Load some data
+iris = datasets.load_iris()
+X = iris.data
+y = iris.target
+
+# Create a DataFrame
+df = pd.DataFrame(X, columns=iris.feature_names)
+df['target'] = y
+
+# Create a Dashboard
+dashboard = Dashboard(tabs=[DriftTab(), CatTargetDriftTab()])
+
+# Compute the report
+report = dashboard.compute(df)
+
+# Print the report
+print(report)
+    ```
+
+    This code will create a classification report for the Iris dataset using the `DriftTab` and `CatTargetDriftTab` tabs. The report will show the distribution of the target variable, the distribution of the features, and the differences between the distributions.

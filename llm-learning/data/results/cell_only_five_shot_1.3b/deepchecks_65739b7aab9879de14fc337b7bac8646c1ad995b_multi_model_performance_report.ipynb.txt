@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import LabelBinarizer
+    from sklearn.metrics import make_scorer
+
+    def dcg_score(y_true, y_score, k=5):
+        order = np.argsort(y_score)[::-1]
+        y_true = np.take(y_true, order[:k])
+        gain = 2 ** y_true - 1
+        discounts = np.log2(np.arange(len(y_true)) + 2)
+        return np.sum(gain / discounts)
+
+    def ndcg_score(y_true, y_score, k):
+        lb = LabelBinarizer(top_k=k)
+        y_true = lb.fit_transform(y_true)
+        score = dcg_score(y_true, y_score)
+        return score / lb.transform(y_true).mean(axis=1)
+
+    ndcg_scorer = make_scorer(ndcg_score, k=5)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "links-checks github action fix (#775)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import LabelBinarizer
+    from sklearn.metrics import make_scorer
+
+    def dcg_score(y_true, y_score, k=5):
+        order = np.argsort(y_score)[::-1]
+        y_true = np.take(y_true, order[:k])
+        gain = 2 ** y_true - 1
+        discounts = np.log2(np.arange(len(y_true)) + 2)
+        return np.sum(gain / discounts)
+
+    def ndcg_score(y_true, y_score, k):
+        lb = LabelBinarizer(top_k=k)
+        y_true = lb.fit_transform(y_true)
+        score = dcg_

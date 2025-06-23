@@ -1,0 +1,49 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+
+    # This is needed to compensate for %matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib inline
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+
+    # Define activation function
+    def activation1(w):
+        a = 1/(1 + np.exp(-5*w))
+        return a
+
+    def activation2(w):
+        a = np.maximum(0,w)
+        return a
+
+    # Create input and functions to plot
+    w = np.linspace(-5,5,100)
+    a = activation1(w)
+    a2 = activation2(w)
+
+    # Create derivatives to plot
+    der = grad(activation1)
+    b = np.array([der(v) for v in w])
+    der2 = grad(activation2)
+    b2 =  np.array([der2(v) for v in w])
+
+    # Create figure and subplots
+    fig = plt.figure(figsize = (8,5))
+    gs = gridspec.GridSpec(2, 2)
+    ax = plt.subplot(gs[0])
+    ax.plot(w,a)
+    ax = plt.subplot(gs[1])
+    ax.plot(w,a2)
+    ax = plt.subplot(gs[2])
+    ax.plot(w,b)
+    ax = plt.subplot(gs[3])
+    ax.plot(w,b2)
+
+    # Save the figure
+    fig.savefig('my_figure.png')
+    ```

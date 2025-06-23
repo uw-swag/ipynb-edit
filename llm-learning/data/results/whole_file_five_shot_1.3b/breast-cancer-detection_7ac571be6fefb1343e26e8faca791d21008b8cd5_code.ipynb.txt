@@ -1,0 +1,57 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from sklearn.datasets import load_breast_cancer
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+    from sklearn.svm import SVC
+
+    cancer_dataset = load_breast_cancer()
+    print(type(cancer_dataset))
+
+    print(len(cancer_dataset["feature_names"]))
+    print(cancer_dataset["feature_names"])
+
+    print(cancer_dataset["data"])
+
+    print(cancer_dataset["target_names"])
+
+    print(cancer_dataset["target"])
+
+    print(cancer_dataset["DESCR"])
+
+    cancer_df = pd.DataFrame(np.c_[cancer_dataset['data'], cancer_dataset['target']], columns=np.append(cancer_dataset["feature_names"], ["target"]))
+    cancer_df.head()
+
+    cancer_df.info()
+
+    cancer_df.describe()
+
+    # sns.pairplot(cancer_df, hue="target")
+
+    sns.pairplot(
+        cancer_df,
+        hue="target",
+        vars=[
+            "mean radius",
+            "mean texture",
+            "mean perimeter",
+            "mean area",
+            "mean smoothness",
+        ],
+    )
+
+    sns.countplot(data=cancer_df, x="target", hue="target")
+
+    plt.figure(figsize=(20, 8))
+    ax = sns.countplot(data=cancer_df, x="mean radius", palette=palette)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=90, ha="right", fontsize=8)
+    plt.show()
+
+    pl

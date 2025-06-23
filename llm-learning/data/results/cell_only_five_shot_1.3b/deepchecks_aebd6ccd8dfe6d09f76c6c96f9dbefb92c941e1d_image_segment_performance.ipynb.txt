@@ -1,0 +1,28 @@
+```python
+    from skimage import exposure
+
+    # Refactor image and label properties
+    image = result.value['image']
+    label = result.value['label']
+
+    # Convert image to grayscale
+    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # Equalize the histogram of the grayscale image
+    eq_image = exposure.equalize_hist(gray_image)
+
+    # Convert image to binary
+    binary_image = threshold_otsu(eq_image)
+
+    # Refactor prediction properties
+    prediction = result.value['prediction']
+
+    # Refactor properties
+    properties = {
+        'image': binary_image,
+        'label': label,
+        'prediction': prediction,
+    }
+
+    return properties
+    ```

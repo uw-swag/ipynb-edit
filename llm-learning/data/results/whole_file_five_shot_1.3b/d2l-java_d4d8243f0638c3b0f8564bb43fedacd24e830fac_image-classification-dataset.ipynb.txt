@@ -1,0 +1,64 @@
+```java
+    // FashionMnistUtils.java
+    public class FashionMnistUtils {
+
+        // Method to load FashionMnist dataset
+        public static Dataset<Row> loadFashionMnist() {
+            // Load FashionMnist dataset
+            Dataset<Row> dataset = ...;
+
+            // Convert dataset to Dask dataframe
+            dataset = dataset.to_dask_dataframe();
+
+            return dataset;
+        }
+
+        // Method to normalize dataset
+        public static Dataset<Row> normalizeDataset(Dataset<Row> dataset) {
+            // Normalize dataset
+            dataset = dataset.map(row -> {
+                // Convert row to array
+                Array<String> array = row.as(Array.class);
+
+                // Normalize array
+                Array<Double> normalizedArray = array.map(Double::parseDouble).to_array();
+
+                // Convert back to row
+                return Row.of(normalizedArray);
+            });
+
+            return dataset;
+        }
+
+        // Method to split dataset into training and test sets
+        public static Dataset<Row> splitDataset(Dataset<Row> dataset, double ratio) {
+            // Split dataset
+            Dataset<Row> trainingSet = dataset.randomSplit(ratio)[0];
+            Dataset<Row> testSet = dataset.randomSplit(ratio)[1];
+
+            return trainingSet;
+        }
+
+        // Method to train softmax regression model
+        public static Model trainSoftmaxRegressionModel(Dataset<Row> trainingSet) {
+            // Create model
+            Model model = ...;
+
+            // Train model
+            model.fit(trainingSet);
+
+            return model;
+        }
+
+        // Method to classify images
+        public static Dataset<Row> classifyImages(Model model, Dataset<Row> testSet) {
+            // Classify images
+            Dataset<Row> classifiedSet = testSet.map(row -> {
+                // Convert row to array
+                Array<Double> array = row.as(Array.class);
+
+                // Classify array
+                Double predictedClass = model.predict(array);
+
+                // Convert back to row
+                return Row.of(

@@ -1,0 +1,46 @@
+```
+    ## Metrics Notebook
+
+    ## Overview
+    This notebook provides a comprehensive analysis of the metrics used in the model. The metrics used in this model are:
+
+    - Accuracy: The ratio of correct predictions to the total number of predictions.
+    - Precision: The ratio of true positives to the sum of true positives and false positives.
+    - Recall (Sensitivity): The ratio of true positives to the sum of true positives and false negatives.
+    - F1 Score: The weighted average of Precision and Recall.
+    - AUC-ROC: The receiver operating characteristic curve (ROC) curve.
+    - Confusion Matrix: A table that describes the performance of a classification model.
+
+    ## Import Libraries
+    ```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix
+    ```
+
+    ## Load Data
+    ```python
+    # Load your data here
+    df = pd.read_csv('your_data.csv')
+    ```
+
+    ## Calculate Metrics
+    ```python
+    # Calculate metrics here
+    accuracy = accuracy_score(y_true, y_pred)
+    precision = precision_score(y_true, y_pred)
+    recall = recall_score(y_true, y_pred)
+    f1 = f1_score(y_true, y_pred)
+    auc = roc_auc_score(y_true, y_pred)
+    cm = confusion_matrix(y_true, y_pred)
+    ```
+
+    ## Plot Metrics
+    ```python
+    # Plot metrics here
+    fig, ax = plt.subplots(1, 2, figsize=(12, 6))
+
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax[0])
+    ax[0].set_title('

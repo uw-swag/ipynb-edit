@@ -1,0 +1,35 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Web app structure"
+    Original Code Cells:
+    '''
+    from flask import Flask, render_template, request
+    app = Flask(__name__)
+
+    @app.route('/')
+    def home():
+        return render_template('home.html')
+
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        # Here you can add your prediction code
+        return render_template('home.html')
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    '''
+    ]
+
+    ### Response:
+    Your web application is now structured with a Flask application. The home page is served by the `home` route, and the prediction page is served by the `predict` route.
+
+    The `home` route renders the 'home.html' template, which is a simple HTML page that contains a form for user input. The `predict` route handles the POST request made when the form is submitted, and it's where you would add your prediction code.
+
+    The `if __name__ == '__main__':` line ensures that the code is only run when the script is run directly, not when it's imported as a module.
+
+    Please note that you need to create a 'home.html' template in a templates directory in the same directory as your Python script. This template should contain a form for user input and a place to display the prediction result.
+
+    Also, you need to handle the form submission in the 'predict' route, and you can use the `request` object to access the form data.
+
+    Remember to replace the placeholder code in the `predict` route with your actual prediction code.

@@ -1,0 +1,14 @@
+from redpitaya.overlay.mercury import mercury as overlay
+import IPython.display as ipd
+import matplotlib.pyplot as plt
+
+fpga = overlay()
+sr = 3000 # sample rate 30 Ksps
+ipd.Audio(data, rate=sr) # load a NumPy array
+# show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+
+plt.plot(data)
+plt.show()
+sr2 = 40 # sample rate 48 Ksps
+ipd.Audio('/tmp/stream_files/data_file_2020-06-04_16-02-47.wav', rate=sr2) # load a NumPy array
+np_sound = read('/tmp/stream_files/data_file_2020-06-04_16-09-28.wav')

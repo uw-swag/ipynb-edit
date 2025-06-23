@@ -1,0 +1,38 @@
+```
+    ## Reproducibility with TensorFlow
+
+    TensorFlow is a powerful open-source library for numerical computation and large-scale machine learning. It provides a flexible and efficient environment for implementing complex machine learning models.
+
+    Reproducibility in machine learning is crucial for several reasons:
+
+    1. **Simplicity**: Reproducibility ensures that the same results are obtained every time the code is run. This is especially important in machine learning where the same results can be achieved by using the same code.
+
+    2. **Consistency**: Reproducibility ensures that the same results are obtained every time the code is run. This is especially important in machine learning where the same results can be achieved by using the same code.
+
+    3. **Flexibility**: Reproducibility allows for the implementation of different machine learning algorithms and models. This flexibility is crucial for understanding the impact of different techniques and models on the results.
+
+    TensorFlow provides a number of features that help achieve reproducibility. For instance, TensorFlow provides a `tf.set_random_seed()` function that can be used to set a seed for the random number generator, which can be used to ensure that the same random numbers are generated every time the code is run.
+
+    Here is an example of how to use `tf.set_random_seed()`:
+
+    ```python
+    import tensorflow as tf
+
+    tf.set_random_seed(0)
+
+    a = tf.constant([1, 2, 3], name='a')
+    b = tf.constant([4, 5, 6], name='b')
+
+    sess = tf.Session()
+
+    print(sess.run(a + b))
+    print(sess.run(a + b))
+    ```
+
+    In this example, the output of the two runs of the code will be the same, demonstrating the reproducibility of the results.
+
+    TensorFlow also provides a `tf.reset_default_graph()` function that can be used to clear the default graph, which can be useful when running multiple instances of the same code.
+
+    Here is an example of how to use `tf.reset_default_graph()`:
+
+    

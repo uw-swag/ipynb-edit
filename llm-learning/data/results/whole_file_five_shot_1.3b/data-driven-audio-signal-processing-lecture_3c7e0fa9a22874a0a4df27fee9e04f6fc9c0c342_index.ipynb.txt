@@ -1,0 +1,41 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D, UpSampling2D, Concatenate
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.optimizers import Adam
+    from tensorflow.keras.losses import MeanSquaredLogarithmicError
+    from tensorflow.keras.utils import to_categorical
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    import numpy as np
+    import os
+    import librosa
+    import matplotlib.pyplot as plt
+
+    # Load audio data
+    audio_path = 'path_to_your_audio_files'
+    audio_files = os.listdir(audio_path)
+    audio_data = []
+    labels = []
+    for file in audio_files:
+        y, sr = librosa.load(os.path.join(audio_path, file))
+        audio_data.append(y)
+        labels.append(file.split('_')[0])
+
+    # Preprocess audio data
+    audio_data = np.array(audio_data) / max(np.abs(np.min(audio_data)), np.max(np.abs(audio_data)))
+
+    # Encode labels
+    label_encoder = LabelEncoder()
+    labels = label_encoder.fit_transform(labels)
+    labels = to_categorical(labels)
+
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(audio_data, labels, test_size=0.2, random_state=42)
+
+    # Define CNN model
+    input_shape = (None, 1)
+    inputs = tf.keras.Input(shape=input_shape)
+
+    x = Conv2D(64, kernel_size=(3, 3), activation='relu')(inputs)
+    x = MaxPooling2D(pool_size=(2, 2))(

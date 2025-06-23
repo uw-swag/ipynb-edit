@@ -1,0 +1,22 @@
+```python
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.svm import SVC
+    from sklearn.metrics import accuracy_score
+    
+    data_set = pd.read_csv("E:\Abdul Rafay\Documents\GitHub\Cyber-Attack-Detection\Data-Set\Data-Set-01\Shill Bidding Dataset.csv")
+    
+    X = data_set.drop('target', axis=1)
+    y = data_set['target']
+    
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    
+    model = SVC(kernel='linear')
+    model.fit(X_train, y_train)
+    
+    y_pred = model.predict(X_test)
+    
+    acc = accuracy_score(y_test, y_pred)
+    
+    print("Accuracy: {:.2f}%".format(acc * 100))
+    ```

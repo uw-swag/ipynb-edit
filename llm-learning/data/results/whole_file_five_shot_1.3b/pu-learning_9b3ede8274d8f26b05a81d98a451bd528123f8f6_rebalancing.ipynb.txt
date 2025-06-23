@@ -1,0 +1,61 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    <\Cell_0>
+    <Cell_1>
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    <\Cell_1>
+    <Cell_2>
+    from scar import C
+
+    train_x, _, train_s = train
+
+    x_ = train_x[:]
+    y_ = train_s[:]
+
+    tau = 0.5
+    class_weight = {
+        0: 1 - (1 - tau) / (1 - C * tau),
+        1: tau / (C * tau),
+    }
+    <\Cell_2>
+    <Cell_3>
+    from sklearn.linear_model import LogisticRegression
+
+    clf = LogisticRegression(class_weight=class_weight).fit(x_, y_)
+    <\Cell_3>
+    <Cell_4>
+    test_x, test_y, _ = test
+
+    test_y_hat = clf.predict(test_x)
+    test_y_prob_hat = clf.predict_proba(test_x)[:, 1]
+    <\Cell_4>
+    <Cell_5>
+    from sklearn.metrics import f1_score
+
+    f1_score(test_y, test_y_hat)
+    <\Cell_5>
+    <Cell_6>
+    from utils import plot_x_y, plot_x_y_proba
+    <\Cell_6>
+    <Cell_7>
+    plot_x_y(test_x, test_y)
+    <\Cell_7>
+    <Cell_8>
+    plot_x_y(test_x, test_y_hat)
+    <\Cell_8>
+    <Cell_9>
+    plot_x_y_proba(test_x, test_y_prob_hat)
+    <\Cell_9>
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add data processing notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import

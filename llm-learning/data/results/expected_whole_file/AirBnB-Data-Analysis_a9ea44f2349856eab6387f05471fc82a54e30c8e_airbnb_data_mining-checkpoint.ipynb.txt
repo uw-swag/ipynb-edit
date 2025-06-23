@@ -1,0 +1,58 @@
+<Cell_0>
+# Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Communicating with operating and file system
+import os
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+<\Cell_0>
+<Cell_1>
+"""
+Check whether or not train.csv has been created. 
+If not os walk all over the files in data folder,
+and create the dataset based on .csv files.
+"""
+DATASET = "./data/train.csv"
+if os.path.exists(DATASET):
+    print("good")
+else:
+    for root, _, files in os.walk("./data", topdown=False):
+        for file in files:
+            if (file.endswith(".csv")):
+                print(os.path.join(root, file))
+<\Cell_1>
+<Cell_2>
+
+<\Cell_2>

@@ -1,0 +1,20 @@
+```python
+    import nbformat as nbf
+    from nbconvert.preprocessors import ExecutePreprocessor
+
+    # Read the notebook
+    nb = nbf.read('your_notebook_name.ipynb', as_version=4)
+
+    # Execute the cells
+    ep = ExecutePreprocessor(timeout=-1, kernel_name='python3')
+    nbf.write(nb, 'text2code.ipynb')
+
+    # Get the code from the notebook
+    code = ep.preprocess(nb, {'metadata': {'path': '.'}})
+
+    # Write the code to a file
+    with open('text2code.py', 'w') as f:
+        f.write('\n'.join(code))
+    ```
+
+    This script will convert the Jupyter notebook to a Python script. The output will be a file named 'text2code.py' in the same directory as your notebook.

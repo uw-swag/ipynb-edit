@@ -1,0 +1,58 @@
+```
+    ## Examples
+
+    ### Code
+    ```python
+    from fastbook import *
+    from fastai.vision import *
+
+    ## Load a sample image
+    img = Image.open('dog.jpg')
+
+    ## Show the image
+    img.show()
+
+    ## Save the image
+    img.save('dog_copy.jpg')
+
+    ## Resize the image
+    img_resized = img.resize((200,200))
+    img_resized.show()
+
+    ## Crop the image
+    img_cropped = img.crop((100,100,200,200))
+    img_cropped.show()
+
+    ## Rotate the image
+    img_rotated = img.rotate(-90)
+    img_rotated.show()
+
+    ## Flip the image
+    img_flipped = img.flip(VerticalReflection)
+    img_flipped.show()
+
+    ## Transform the image
+    transform_matrix = [0.5, 0, 0, 0, 1, 0, -0.5, 0, 0]
+    img_transformed = img.transform(transform_matrix)
+    img_transformed.show()
+
+    ## Change the color
+    img_color_changed = img.change_color((0,0,255))
+    img_color_changed.show()
+
+    ## Change the brightness
+    img_brightness_changed = img.change_brightness(0.5)
+    img_brightness_changed.show()
+
+    ## Change the contrast
+    img_contrast_changed = img.change_contrast(0.5)
+    img_contrast_changed.show()
+
+    ## Change the saturation
+    img_saturation_changed = img.change_saturation(0.5)
+    img_saturation_changed.show()
+
+    ## Change the hue
+    img_hue_changed = img.change_hue(-0.5)
+    img_hue_changed.show()
+

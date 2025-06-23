@@ -1,0 +1,50 @@
+
+    ## Chapter 12 - Section 12.3, 12.4 and 12.7 (#19)
+
+    ### 12.3. Introduction to the SVM model
+
+    Support Vector Machines (SVM) are a powerful machine learning algorithm that can be used for both classification and regression tasks. SVMs are particularly effective in high-dimensional spaces, which makes them ideal for data that is not linearly separable.
+
+    ### 12.4. Implementing SVM with Python
+
+    Here is a simple example of how to implement SVM with Python using the scikit-learn library.
+
+    ```python
+    from sklearn import datasets
+    from sklearn import svm
+
+    # Load the iris dataset
+    iris = datasets.load_iris()
+
+    # Create a SVM classifier
+    clf = svm.SVC(kernel='linear')
+
+    # Train the model
+    clf.fit(iris.data, iris.target)
+
+    # Predict the response for test dataset
+    y_pred = clf.predict(iris.data)
+    ```
+
+    ### 12.7. Evaluating the SVM model
+
+    After training the model, it's important to evaluate its performance. This can be done using various metrics such as accuracy, precision, recall, and F1-score.
+
+    ```python
+    from sklearn import metrics
+
+    # Model Accuracy
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+    # Model Precision
+    print("Precision:", metrics.precision_score(y_test, y_pred))
+
+    # Model Recall
+    print("Recall:", metrics.recall_score(y_test, y_pred))
+    ```
+
+    This will give you a basic understanding of how to implement and evaluate an SVM model using Python.
+
+    ## References
+    - [scikit-learn documentation](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html)
+    - [scikit-learn documentation](https://scikit-

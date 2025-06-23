@@ -1,0 +1,55 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection, NumTargetDriftProfileSection
+<\Cell_0>
+<Cell_1>
+boston = datasets.load_boston()
+<\Cell_1>
+<Cell_2>
+boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)
+<\Cell_2>
+<Cell_3>
+boston_frame.head()
+<\Cell_3>
+<Cell_4>
+column_mapping = {}
+
+column_mapping['target'] = 'target'
+column_mapping['prediction'] = None
+column_mapping['datetime'] = None
+
+column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping['categorical_features'] = ['CHAS', 'RAD']
+<\Cell_4>
+<Cell_5>
+boston_frame['target'] = boston.target
+<\Cell_5>
+<Cell_6>
+boston_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()])
+boston_data_and_target_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], 
+                                                   column_mapping = column_mapping)
+<\Cell_6>
+<Cell_7>
+boston_data_and_target_drift_dashboard.show()
+<\Cell_7>
+<Cell_8>
+#boston_data_and_target_drift_dashboard.save('boston_data_and_target_drift_with_mapping.html')
+<\Cell_8>
+<Cell_9>
+boston_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection(), NumTargetDriftProfileSection()])
+<\Cell_9>
+<Cell_10>
+boston_target_and_data_drift_profile.calculate(boston_frame[:200], boston_frame[200:], 
+                                               column_mapping = column_mapping) 
+<\Cell_10>
+<Cell_11>
+boston_target_and_data_drift_profile.json()
+<\Cell_11>

@@ -1,0 +1,29 @@
+```python
+    from deepchecks.tabular.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.tabular.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    # Assuming you have a DataFrame df with duplicates
+    df = pd.DataFrame({
+        'A': [1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 7, 7, 7, 7, 8, 8, 9, 9, 9, 9],
+        'B': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        'C': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+    })
+
+    # Create a Dataset
+    dataset = Dataset(df, name='Duplicates')
+
+    # Create a Suite
+    suite = Suite(
+        DataDuplicates(column='A', threshold=0.9),
+        DataDuplicates(column='B', threshold=0.9),
+        DataDuplicates(column='C', threshold=0.9)
+    )
+
+    # Run the Suite
+    suite.run(dataset)
+    ```
+    This code will split the DataFrame into multiple files based on the DataDuplicates check. The files will be named after the check and the column they are checking.
+
+    Please note that this is a simplified example and may not work as expected in your specific use case. The DataDuplicates check in DeepChecks is designed to find duplicates in a DataFrame, but it does not provide a way to split the DataFrame into multiple files based on the duplic

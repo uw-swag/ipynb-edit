@@ -1,0 +1,50 @@
+```python
+    # Import necessary libraries
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.svm import SVC
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.tree import DecisionTreeClassifier
+
+    # Define the models
+    models = [
+        LogisticRegression(),
+        SVC(gamma='auto'),
+        RandomForestClassifier(),
+        KNeighborsClassifier(),
+        GaussianNB(),
+        DecisionTreeClassifier()
+    ]
+
+    # Define the names of the models
+    names = [
+        "Logistic Regression",
+        "SVM",
+        "Random Forest",
+        "K-Nearest Neighbors",
+        "Naive Bayes",
+        "Decision Tree"
+    ]
+
+    # Compare each model
+    for name, model in zip(names, models):
+        print(f"\nModel: {name}")
+
+        # Split the data
+        X_train, X_test, y_train, y_test = train_test_split(train, target, test_size=0.2, random_state=42)
+
+        # Fit the model
+        model.fit(X_train, y_train)
+
+        # Make predictions
+        predictions = model.predict(X_test)
+
+        # Print the classification report
+        print(classification_report(y_test, predictions))
+
+        # Print the confusion matrix
+        print(confusion_matrix(y_test, predictions))
+    ```

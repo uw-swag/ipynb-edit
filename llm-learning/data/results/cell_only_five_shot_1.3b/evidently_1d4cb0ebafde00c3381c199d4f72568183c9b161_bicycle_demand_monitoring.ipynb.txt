@@ -1,0 +1,18 @@
+```python
+    # Remove metrics dependence from analyzers
+    from mmtfPyspark.analyzers import Analyzer
+    from mmtfPyspark.metrics import Metrics
+
+    class NoMetricsAnalyzer(Analyzer):
+        def __init__(self, *args, **kwargs):
+            super(NoMetricsAnalyzer, self).__init__(*args, **kwargs)
+
+        def compute(self, data):
+            return data
+
+        def metrics(self):
+            return Metrics.empty()
+
+    # Replace the analyzer with the new one
+    mmtfWriter.registerAnalyzer(NoMetricsAnalyzer)
+    ```

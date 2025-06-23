@@ -1,0 +1,34 @@
+```python
+    import fastbook
+    from fastbook import *
+    from fastai.vision.all import *
+    from fastai.vision.widgets import *
+
+    # Download the data
+    path = untar_data(URLs.PETS)
+    path.ls()
+
+    # Create a data block
+    dblock = DataBlock(
+        blocks=(ImageBlock, LabelBlock), 
+        get_items=get_image_files, 
+        split_by_folder=True,
+        get_y=lambda x: x[0].parent.name, 
+        item_tfms=RandomResizedCrop(224, min_scale=0.5),
+        batch_tfms=aug_transforms())
+
+    # Create a data loader
+    dls = dblock.dataloaders(path)
+    dls.valid.show_batch(max_n=4, nrows=1)
+
+    # Create a model
+    learn = vision_learner(dls, resnet34, metrics=error_rate)
+
+    # Train the model
+    learn.fit_one_cycle(4)
+
+    # Use TensorBoard
+    tensorboard = TensorBoard()
+    tensorboard(learn)
+    ```
+    This code will create a fastai learner with a resnet34 model, train it for 4 epochs, and then use TensorBoard to visualize the training process.

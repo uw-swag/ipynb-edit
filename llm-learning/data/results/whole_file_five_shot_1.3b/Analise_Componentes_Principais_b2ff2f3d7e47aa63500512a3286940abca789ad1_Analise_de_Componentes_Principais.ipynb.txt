@@ -1,0 +1,28 @@
+```python
+    ## Adding files via upload
+    ## This requires the cluster to be started or at least pending.
+    ## it will return an "unknown cluster" error if the cluster is off.
+    local_path_to_ref_arch_notebook = path_to_recommenders_repo_root+"notebooks/05_operationalize/als_movie_o16n.ipynb"
+
+    with open(local_path_to_ref_arch_notebook, 'rb') as f:
+        notebook_data = f.read()
+
+    import_config = {
+      "path": upload_location_for_endtoend_notebook+'/als_movie_o16n.ipynb',
+      "format": "JUPYTER",
+      "language": "PYTHON",
+      "overwrite": "false"
+    }
+    
+    response = requests.post(
+        BASE_URL + "workspace/import",
+        headers = my_header,
+        data=import_config,
+        files = {"content": notebook_data}
+    )
+    response.json()
+
+    if record_for_tests:
+        pm.record('nb_upload_code', response.status_code)
+        pm.record('nb_upload_json', response.json())
+    ```

@@ -1,0 +1,59 @@
+```
+    ## Colab
+    ! curl -s https://course.fast.ai/setup/colab | bash
+
+    ## VM
+    # !nvidia-smi
+
+    from fastai import *
+    from fastai.text import *
+    from fastai.callbacks import *
+    from fastai.callbacks.mem import *
+
+    dataset = '26i-giga-fren'
+
+    ## Google Colab
+    config_path = Path('/content/drive')
+    data_path_base = Path('/content/drive/My Drive/datasets/')
+
+    data_path = data_path_base/dataset
+
+    from google.colab import drive
+    drive.mount(str(config_path))
+
+    path = data_path/'giga-fren'
+    path.ls()
+
+    def seq2seq_collate(samples, pad_idx=1, pad_first=True, backwards=False):
+        # ...
+
+    class Seq2SeqDataBunch(TextDataBunch):
+        # ...
+
+    class Seq2SeqTextList(TextList):
+        _bunch = Seq2SeqDataBunch
+        _label_cls = TextList
+
+    data = load_data(path, 'databunch-small-questions.pkl')
+
+    model_path = config_path/'My Drive/models'
+
+    emb_enc = torch.load(model_path/'fr_emb.pth')
+    emb_dec = torch.load(model_path/'en_emb.pth')
+
+    def seq2seq_loss(out, targ, pad_idx=1):
+        # ...
+
+    def seq2seq_acc(out, targ, pad_idx=1):
+        # ...
+
+    class NGram():
+        # ...
+
+    def get_grams(x, n, max_n=5000):
+        # ...
+
+    def get_correct_ngrams(pred, targ, n, max_n=5000): 
+        # ...
+
+    class CorpusBLEU(Callback

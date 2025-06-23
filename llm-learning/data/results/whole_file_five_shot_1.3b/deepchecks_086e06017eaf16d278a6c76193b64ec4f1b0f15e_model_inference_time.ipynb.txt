@@ -1,0 +1,31 @@
+```python
+    import numpy as np
+    import sklearn
+    import sklearn.decomposition as dec
+    import sklearn.datasets as ds
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.model_selection import train_test_split
+
+    from deepchecks import Dataset
+    from deepchecks.checks.methodology import ModelInferenceTimeCheck
+
+    iris = load_iris(as_frame=True)
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    train_ds = Dataset(train, features=iris.feature_names, label='target')
+    test_ds = Dataset(test, features=iris.feature_names, label='target')
+
+    clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+
+    # NBVAL_SKIP
+    check = ModelInferenceTimeCheck()
+    check.run(test_ds, clf)
+
+    # NBVAL_SKIP
+    check = ModelInferenceTimeCheck().add_condition_inference_time_is_not_greater_than(0.00001)
+    check.run(test_ds, clf)
+    ```

@@ -1,0 +1,49 @@
+
+    [
+    Commit Message: "[docs] fix typos in docs (#828)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+
+from datetime import datetime, time
+from sklearn import datasets, ensemble
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset, RegressionPreset
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataDriftTestPreset, RegressionTestPreset
+from evidently.tests import TestValueMeanError, TestValueMAE, TestValueRMSE
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+<\Cell_2>
+<Cell_3>
+raw_data.index = raw_data.apply(
+    lambda row: datetime.combine(row.name, time(hour=int(row['hr']))), axis = 1)
+<\Cell_3>
+<Cell_4>
+raw_data.head()
+<\Cell_4>
+<Cell_5>
+target = 'cnt'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday']
+<\Cell_5>
+<Cell_6>
+reference = raw_data.loc['2011-01-01 00:00:00':'2

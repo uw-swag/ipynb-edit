@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Removed examples with an old api"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, NumTargetDriftTab
+
+data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), NumTargetDriftTab()])
+data_drift_profile = Profile(sections=[DataDriftProfileSection()], options=[options])
+data_drift_profile.calculate(ref_data.sample(100, random_state=0), 
+                                          prod_data.sample(100, random_state=0), 
+                                          column_mapping=column_mapping)
+data_drift_profile.json()
+<\Cell_1>
+<Cell_2>
+data_drift_profile.show()
+<\Cell_2>
+<Cell_3>
+data_drift_profile.calculate(ref_data.sample(100, random_state=0), 
+                                          prod_data.sample(100, random_state=0), 
+                                          column_mapping=column_mapping)
+data_drift_profile.json()
+<\Cell_3>
+<Cell_4>
+data_drift_profile.show()
+<\Cell_4>
+<Cell_5>
+data_drift_profile.calculate(ref_data.sample(100, random_state=0), 
+                                          prod_data.sample(100, random_state=0), 
+                                          column_mapping=column_mapping)
+data_drift_profile.json()
+<\Cell_5>
+<Cell_6>
+data_drift_profile.show()
+<\Cell_6>
+<Cell_7>
+data_drift_profile.calculate(ref_data.sample(100, random_state=0), 
+                                          prod_data.sample(100

@@ -1,0 +1,175 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, model_selection, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, CatTargetDriftTab
+from evidently.tabs import ClassificationPerformanceTab, ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection, CatTargetDriftProfileSection 
+from evidently.profile_sections import ClassificationPerformanceProfileSection, ProbClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+iris = datasets.load_iris()
+<\Cell_1>
+<Cell_2>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_2>
+<Cell_3>
+iris_data_drift_report = Dashboard(tabs=[DataDriftTab])
+iris_data_drift_report.calculate(iris_frame, iris_frame, column_mapping = None)
+<\Cell_3>
+<Cell_4>
+iris_data_drift_report.show()
+<\Cell_4>
+<Cell_5>
+#iris_data_drift_report.save('iris_data_drift.html')
+<\Cell_5>
+<Cell_6>
+iris_data_drift_profile = Profile(sections=[DataDriftProfileSection])
+iris_data_drift_profile.calculate(iris_frame, iris_frame, column_mapping = None)
+<\Cell_6>
+<Cell_7>
+drift_profile = iris_data_drift_profile.json() 
+<\Cell_7>
+<Cell_8>
+drift_profile
+<\Cell_8>
+<Cell_9>
+iris_frame['target'] = iris.target
+<\Cell_9>
+<Cell_10>
+iris_data_and_target_drift_report = Dashboard(tabs=[DataDriftTab, CatTargetDriftTab])
+iris_data_and_target_drift_report.calculate(iris_frame[:75], iris_frame[75:], column_mapping = None)
+<\Cell_10>
+<Cell_11>
+iris_data_and_target_drift_report.show()
+<\Cell_11>
+<Cell_12>
+iris_data_and_target_drift_report.save('iris_data_and_target_drift.html')
+<\Cell_12>
+<Cell_13>
+iris_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection, CatTargetDriftProfileSection])
+iris_target_and_data_drift_profile.calculate(iris_frame[:75], iris_frame[75:], column_mapping = None) 
+<\Cell_13>
+<Cell_14>
+data_and_target_profile = iris_target_and_data_drift_profile.json() 
+<\Cell_14>
+<Cell_15>
+data_and_target_profile
+<\Cell_15>
+<Cell_16>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_16>
+<Cell_17>
+reference, production, y_train, y_test = model_selection.train_test_split(iris_frame, 
+                                                                          iris.target, 
+                                                                          random_state=0)
+<\Cell_17>
+<Cell_18>
+model = neighbors.KNeighborsClassifier(n_neighbors=1)
+<\Cell_18>
+<Cell_19>
+model.fit(reference, y_train)
+<\Cell_19>
+<Cell_20>
+train_predictions = model.predict(reference)
+test_predictions = model.predict(production)
+<\Cell_20>
+<Cell_21>
+reference['target'] = y_train
+reference['prediction'] = train_predictions
+
+production['target'] = y_test
+production['prediction'] = test_predictions
+<\Cell_21>
+<Cell_22>
+reference.target = reference.target.apply(lambda x: iris.target_names[x])
+reference.prediction = reference.prediction.apply(lambda x: iris.target_names[x])
+
+production.target = production.target.apply(lambda x: iris.target_names[x])
+production.prediction = production.prediction.apply(lambda x: iris.target_names[x])
+<\Cell_22>
+<Cell_23>
+iris_column_mapping = {}
+
+iris_column_mapping['target'] = 'target'
+iris_column_mapping['prediction'] = 'prediction'
+iris_column_mapping['numerical_features'] = iris.feature_names
+<\Cell_23>
+<Cell_24>
+iris_model_performance = Dashboard(tabs=[ClassificationPerformanceTab])
+iris_model_performance.calculate(reference, production, column_mapping = iris_column_mapping)
+iris_model_performance.show()
+<\Cell_24>
+<Cell_25>
+#iris_drift.save('iris_classification_performance.html')
+<\Cell_25>
+<Cell_26>
+iris_classification_performance_profile = Profile(sections=[ClassificationPerformanceProfileSection])
+iris_classification_performance_profile.calculate(reference, production, column_mapping = iris_column_mapping)
+<\Cell_26>
+<Cell_27>
+classification_performance_profile = iris_classification_performance_profile.json() 
+<\Cell_27>
+<Cell_28>
+classification_performance_profile
+<\Cell_28>
+<Cell_29>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_29>
+<Cell_30>
+reference, production, y_train, y_test = model_selection.train_test_split(iris_frame, 
+                                                                          iris.target, 
+                                                                          random_state=0)
+<\Cell_30>
+<Cell_31>
+model = neighbors.KNeighborsClassifier(n_neighbors=5)
+<\Cell_31>
+<Cell_32>
+model.fit(reference, y_train)
+<\Cell_32>
+<Cell_33>
+train_probas = pd.DataFrame(model.predict_proba(reference))
+train_probas.columns = iris.target_names
+test_probas = pd.DataFrame(model.predict_proba(production))
+test_probas.columns = iris.target_names
+<\Cell_33>
+<Cell_34>
+reference['target'] = [iris.target_names[x] for x in y_train]
+production['target'] = [iris.target_names[x] for x in y_test]
+<\Cell_34>
+<Cell_35>
+reference.reset_index(inplace=True, drop=True)
+reference['result'] = [iris.target_names[x] for x in y_train]
+merged_reference = pd.concat([reference, train_probas], axis = 1)
+
+production.reset_index(inplace=True, drop=True)
+production['result'] = [iris.target_names[x] for x in y_test]
+merged_production = pd.concat([production, test_probas], axis = 1)
+<\Cell_35>
+<Cell_36>
+iris_column_mapping = {}
+
+iris_column_mapping['target'] = 'target'
+iris_column_mapping['prediction'] = iris.target_names.tolist()
+iris_column_mapping['numerical_features'] = iris.feature_names
+<\Cell_36>
+<Cell_37>
+iris_model_performance = Dashboard(tabs=[ProbClassificationPerformanceTab])
+iris_model_performance.calculate(merged_reference, merged_production, column_mapping = iris_column_mapping)
+iris_model_performance.show()
+<\Cell_37>
+<Cell_38>
+iris_prob_performance_profile = Profile(sections=[ProbClassificationPerformanceProfileSection])
+iris_prob_performance_profile.calculate(merged_reference, merged_production, column_mapping = iris_column_mapping)
+<\Cell_38>
+<Cell_39>
+prob_performance_profile = iris_prob_performance_profile.json() 
+<\Cell_39>
+<Cell_40>
+prob_performance_profile
+<\Cell_40>

@@ -1,0 +1,37 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "move ipynb files"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import warnings; warnings.filterwarnings('ignore')
+import numpy as np,pandas as pd,pylab as pl,h5py
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+from IPython import display
+from keras.preprocessing.image import ImageDataGenerator
+from keras.callbacks import ModelCheckpoint,ReduceLROnPlateau,EarlyStopping
+from keras.metrics import top_k_categorical_accuracy,categorical_accuracy
+from keras.models import Sequential,load_model,Model
+from keras.layers import Dense,LSTM,GlobalAveragePooling1D,GlobalAveragePooling2D
+from keras.layers.advanced_activations import PReLU,LeakyReLU
+from keras.layers import Input,Activation,Flatten,Dropout,BatchNormalization
+from keras.layers import Conv2D,MaxPooling2D,GlobalMaxPooling2D
+fw='weights.best.letters.hdf5'
+<\Cell_0>
+<Cell_1>
+# plotting of fitting histories for neural networks
+def history_plot(fit_history):
+    pl.figure(figsize=(12,10)); pl.subplot(211)
+    keys=list(fit_history.history.keys())[0:4]
+    pl.plot(fit_history.history[keys[0]],
+            color='slategray',label='train')
+    pl.plot(fit_history.history[keys[2]],
+            color='#4876ff',label='valid')
+    pl.xlabel("Epochs"); pl.ylabel("Loss")
+    pl.legend(); pl.grid()
+    pl.title('Loss Function')     
+    pl.subplot(212)
+    pl.plot(fit_history.history[keys[1]],

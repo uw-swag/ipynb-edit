@@ -1,0 +1,19 @@
+```python
+    # Setup Spark SQL
+    from pyspark.sql import SparkSession
+    spark = SparkSession.builder.appName('example_app').getOrCreate()
+
+    # Setup Jupyter Notebook
+    import sys
+    !{sys.executable} -m pip install jupyter
+    import jupyter
+    notebook = jupyter.notebook.Notebook()
+    (version_tuple := st.version_tuple())
+    print(f"Jupyter Notebook version {version_tuple[0]}.{version_tuple[1]}.{version_tuple[2]}")
+    notebook.kernel.identify()
+    notebook.kernel.start()
+    ```
+
+    This code will set up a Spark SQL session and a Jupyter notebook kernel. The Spark SQL session is used to interact with the Spark cluster, while the Jupyter notebook kernel is used to run Python code in the Jupyter notebook environment.
+
+    Please note that you need to have Spark and Jupyter notebook installed and configured properly for this to work.

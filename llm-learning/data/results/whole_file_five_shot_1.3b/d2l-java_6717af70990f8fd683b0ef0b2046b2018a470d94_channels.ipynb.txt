@@ -1,0 +1,38 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added comments and fixed conv2d function errors."
+    Original Code Cells:
+    '''
+    <Cell_0>
+%mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+%maven ai.djl:api:0.7.0-SNAPSHOT
+%maven org.slf4j:slf4j-api:1.7.26
+%maven org.slf4j:slf4j-simple:1.7.26
+%maven net.java.dev.jna:jna:5.3.0
+%maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+%maven ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+<\Cell_0>
+<Cell_1>
+import ai.djl.*;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.index.NDIndex;
+import ai.djl.ndarray.types.DataType;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.ndarray.NDArrays;
+<\Cell_1>
+<Cell_2>
+NDManager manager = NDManager.newBaseManager();
+
+public NDArray corr2D(NDArray X, NDArray K) {
+
+    long h = K.getShape().get(0);
+    long w = K.getShape().get(1);
+
+    NDArray Y = manager.zeros(new Shape(X.getShape().get(0) - h + 1, X.getShape().get(1) - w + 1));
+
+    for (int i = 0; i < Y.getShape().get(0); i++) {
+        for (int j = 0; j < Y.getShape().get(1);

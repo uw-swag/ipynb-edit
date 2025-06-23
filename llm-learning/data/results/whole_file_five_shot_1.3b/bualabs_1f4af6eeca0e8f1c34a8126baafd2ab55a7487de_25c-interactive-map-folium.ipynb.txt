@@ -1,0 +1,44 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Reduced to 2000 samples."
+    Original Code Cells:
+    '''
+    <Cell_0>
+! pip install geopandas
+! pip install git+https://github.com/python-visualization/folium
+! pip install kaggle --upgrade
+<\Cell_0>
+<Cell_1>
+config_path = '/content/drive'
+dataset = 'alexisbcook/geospatial-learn-course-data'
+data_path = '/content/datasets/' + dataset
+<\Cell_1>
+<Cell_2>
+from google.colab import drive
+drive.mount(config_path)
+<\Cell_2>
+<Cell_3>
+import os
+os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+<\Cell_3>
+<Cell_4>
+!kaggle datasets download {dataset} -p "{data_path}" --unzip
+<\Cell_4>
+<Cell_5>
+import pandas as pd
+import geopandas as gpd
+
+import folium
+from folium import *
+from folium.plugins import *
+<\Cell_5>
+<Cell_6>
+plate_boundaries = gpd.read_file("./datasets/alexisbcook/geospatial-learn-course-data/Plate_Boundaries/Plate_Boundaries/Plate_Boundaries.shp")
+plate_boundaries['coordinates'] = plate_boundaries.apply(lambda x: [(b,a) for (a,b) in list(x.geometry.coords)], axis='columns')
+plate_boundaries.drop('geometry', axis=1, inplace=True)
+
+plate_boundaries.head()
+<\Cell_6>
+<Cell_7>
+earthquakes = pd.read_csv("./datasets/alexisbcook/geospatial-learn-course-data/earthquakes1970-2014.csv", parse_dates=["DateTime"])

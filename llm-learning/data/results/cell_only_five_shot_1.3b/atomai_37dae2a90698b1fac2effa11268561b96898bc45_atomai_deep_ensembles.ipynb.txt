@@ -1,0 +1,29 @@
+```
+    # Update example with ensemble training
+    model_type = 'dilnet' # 'dilnet' has only max-pool operation which can lead to higher accuracy
+    batchnorm = False # recommended setting to True when using experimental data for training
+    dropouts = True # recommended setting to True when using synthetic data for training
+    nb_filters = 25 # num of conv filters in 1st block (doubles in each next block)
+    upsampling_method = 'nearest' # use 'nearest' instread of 'bilinear' for full reproducibility when running on gpu
+    criterion = 'ce' # uses numerically stable off-the-shelf PyTorch cross entropy loss
+    ensemble_state_dict = torch.load('/content/drive/Shared drives/uqdl/ensemble_training/NiO_LSMO-ensemble-aver.pt')
+    ensemble = torch.load('/content/drive/Shared drives/uqdl/ensemble_training/NiO_LSMO-ensemble.tar')
+    # Compute coordinates using model with averaged weights
+    predictive_model = aoi.models.dilnet(
+        nb_filters=nb_filters, batch_norm=batchnorm, use_dropout=dropouts)
+    predictive_model.load_state_dict(ensemble_state_dict)
+    predictive_model.eval()
+    _, (nn_output, coordinates) = aoi.atomnet.predictor(
+        expdata, predictive_model, 
+        use_gpu=True, verbose=False).run()
+    
+    # Compute coordinates with each model in the ensemble
+    coordinates_all = {}
+    for i, w in ensemble.items():
+        predictive_model = aoi.models.dilnet(
+            nb_filters=nb_filters, batch_norm=batchnorm, use_dropout=dropouts)
+        predictive_model.load_state_dict(w)
+        predictive_model.eval()
+        _, (nn_output, coordinates) = aoi.atomnet.predictor(
+            expdata, predictive_model, 
+            use

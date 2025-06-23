@@ -1,0 +1,23 @@
+```python
+    # Accessing Databases with SQL Magic
+
+    # Importing necessary libraries
+    import pandas as pd
+    import sqlalchemy as db
+
+    # Creating a connection to the database
+    connection_string = "postgresql://username:password@localhost:5432/mydatabase"
+    engine = db.create_engine(connection_string)
+
+    # Reading a table from the database
+    table_name = "my_table"
+    df = pd.read_sql_table(table_name, engine)
+
+    # Displaying the first few rows of the dataframe
+    print(df.head())
+
+    # Closing the connection
+    engine.dispose()
+    ```
+
+    This code snippet demonstrates how to access a database using SQL Magic in Jupyter notebook. It connects to a PostgreSQL database, reads a table from the database, and then displays the first few rows of the dataframe. The connection string, table name, and other details should be replaced with the actual values for your specific database.

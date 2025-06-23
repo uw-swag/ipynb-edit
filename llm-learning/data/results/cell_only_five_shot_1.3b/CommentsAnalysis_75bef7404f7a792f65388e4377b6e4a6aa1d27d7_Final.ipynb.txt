@@ -1,0 +1,41 @@
+
+    The code you provided is a function that fits a number of machine learning models to a set of comments. The function takes as input the comments, a list of models to be fitted, a number of users to be considered, a boolean indicating whether to use a cache of previously fitted models, and a boolean indicating whether to print debug information.
+
+    The function first identifies the unique users from the comments. It then splits the comments into training and testing sets, and fits the models to the training data. The function also computes the accuracy of the models on the testing data.
+
+    The function returns the predictions made by the models for each user.
+
+    The function is called with the following parameters:
+
+    - comments: a pandas DataFrame containing the comments
+    - models: a list of models to be fitted
+    - n: the number of users to be considered
+    - use_cache: a boolean indicating whether to use a cache of previously fitted models
+    - debug: a boolean indicating whether to print debug information
+
+    The function is called with the following command:
+
+    ```python
+    fit_predict_to_n_user(comments, [
+        LstmModel('lstm_word', nb_epoch=4),
+        LstmModel('lstm_char', nb_epoch=4, nb_words=100, char_level=True, max_len=100)
+    ], 5, True)
+    ```
+
+    The function is called with the following command:
+
+    ```python
+    fit_predict_to_n_user(comments, [
+        MlpModel('mlp'),
+        LrModelCount('lr_count_1k', 1000),
+        LrModelCount('lr_count_5k', 5000),
+        LrModelTfidf('lr_tfidf_1k', 1000),
+        LrModelTfidf('lr_tfidf_5k', 5000),
+    ], 5, True)
+    ```
+
+    The function is called with the following command:
+
+    ```python
+    fit_predict_to_n_user(comments, [
+        LstmModel('

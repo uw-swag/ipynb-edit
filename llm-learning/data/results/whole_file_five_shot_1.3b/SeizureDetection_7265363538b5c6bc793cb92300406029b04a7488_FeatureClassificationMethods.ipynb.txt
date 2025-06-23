@@ -1,0 +1,30 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn import naive_bayes, neighbors, svm
+
+    def classificationPerformanceIndexes(y_test, y_pred):
+        tn, fp, fn, tp = metrics.confusion_matrix(y_test, y_pred).ravel()
+        precision = tp / (tp + fp)
+        recall = tp / (tp + fn)
+        f1_score = 2 * (precision * recall) / (precision + recall)
+        accuracy = (tp + tn) / (tp + fp + fn + tn)
+        return [accuracy, precision, recall, f1_score]
+
+    def SVM(X_train, y_train, X_test, y_test, results):
+        clf = svm.SVC()
+        svm_ind = clf.fit(X_train, y_train).predict(X_test)
+        results.loc['SVM', :] = classificationPerformanceIndexes(y_test, svm_ind)
+
+    def SVM_Kfold(X, kf, cols, results):
+        f = pd.DataFrame(columns = cols)
+        clf = svm.SVC()
+        for train, test in kf.split(X):
+            X_train, y_train = X.loc[train,:], X.loc[train,'seizure']
+            X_test, y_test = X.loc[test,:], X.loc[test,'seizure']
+            svm_ind = clf.fit(X_train, y_train).predict(X_test)
+            f.loc[f.shape[0], :] = classificationPerformanceIndexes(y_test, svm_ind)
+        results.loc['SVM Kfold', :] = np.array(f.mean(axis=0))
+
+    # ... continue with the rest of the code ...
+    ```

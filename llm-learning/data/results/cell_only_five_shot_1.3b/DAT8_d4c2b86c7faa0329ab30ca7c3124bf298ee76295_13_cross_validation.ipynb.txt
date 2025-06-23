@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+    from sklearn.model_selection import cross_val_score
+    from sklearn.linear_model import LogisticRegression
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Define the features and the target variable
+    X = df.drop('target_variable', axis=1)
+    y = df['target_variable']
+
+    # Create a Logistic Regression model
+    model = LogisticRegression()
+
+    # Perform 10-fold cross-validation
+    scores = cross_val_score(model, X, y, cv=10)
+
+    # Print the mean score
+    print("Mean cross-validation score: %.2f" % scores.mean())
+
+    # Print the standard deviation of the scores
+    print("Standard deviation of cross-validation score: %.2f" % scores.std())
+    ```
+    This code will perform 10-fold cross-validation on a Logistic Regression model. The mean score and the standard deviation of the scores will be printed.
+
+    Please replace 'your_dataset.csv' and 'target_variable' with your actual dataset file and target variable.
+
+    Note: This code assumes that your dataset is in a CSV file and that the target variable is the column you want to predict.
+
+    Also, this code does not include any data preprocessing steps, such as handling missing values or encoding categorical variables. You may need to add these steps based on your specific dataset.
+
+    Finally, this code does not include any hyperparameter tuning. You may need to add a grid search or random search to tune the hyperparameters of the Logistic Regression model.
+
+    This is a basic example of how to perform cross-validation in Python using the scikit-learn library.

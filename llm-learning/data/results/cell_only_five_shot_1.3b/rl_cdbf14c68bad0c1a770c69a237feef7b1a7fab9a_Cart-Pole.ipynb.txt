@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding more details to the notebook"
+    Original Code Cells:
+    '''
+    # based on Deep Learning Illustrated by Jon Krohn
+    # https://www.amazon.com/Deep-Learning-Illustrated-Intelligence-Addison-Wesley/dp/0135116694
+    # in turn based on bit.ly/keonDQN
+
+    import os
+    from collections import deque
+    import random
+    import time
+    import resource
+    import pickle
+
+    import pdb
+
+    import numpy as np
+    import pandas as pd
+
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras.models import Sequential, load_model, model_from_json
+    from tensorflow.keras.layers import Dense, Dropout
+    from tensorflow.keras.optimizers import Adam
+
+    import plotly.express as px
+    import plotly.graph_objects as go
+
+    # requires python 3.6
+    # conda install -c akode gym
+    import gym
+
+    # set seeds for reproducibility
+    # np.random.uniform(0,10000) 4465
+    random.seed(4465)
+    np.random.seed(4465)
+    tf.random.set_seed(4465)
+
+    class DQNAgent:
+        def __init__(self, state_size, action_size):
+            self.state_size = state_size
+            self.action_size = action_size
+            self.gamma = 0.98
+            self.epsilon = 1.0
+            self.epsilon_decay = 0.995
+            self.epsilon_min = 0.01
+            self.learning_rate = 0.001
+            self.model = self.build_model()
+            self.memory = pd.DataFrame(columns=["state", "action", "next_state", "reward", "done"])
+            self.memory_size=200000

@@ -1,0 +1,25 @@
+```python
+    import os
+    import shutil
+
+    # Define the source directory and the destination directory
+    source_dir = "/path/to/source/directory"
+    destination_dir = "/path/to/destination/directory"
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Iterate over each file
+    for file in files:
+        # Construct the full source and destination file paths
+        source_file = os.path.join(source_dir, file)
+        destination_file = os.path.join(destination_dir, file)
+
+        # Check if the destination file already exists
+        if os.path.exists(destination_file):
+            print(f"File {file} already exists, skipping...")
+        else:
+            # Move the file to the destination directory
+            shutil.move(source_file, destination_file)
+            print(f"File {file} moved successfully")
+    ```

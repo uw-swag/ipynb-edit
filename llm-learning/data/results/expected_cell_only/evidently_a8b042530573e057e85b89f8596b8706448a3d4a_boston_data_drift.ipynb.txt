@@ -1,0 +1,20 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, NumTargetDriftTab
+column_mapping = {}
+
+column_mapping['target'] = 'target'
+column_mapping['prediction'] = None
+column_mapping['datetime'] = None
+
+column_mapping['numerical_features'] = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+column_mapping['categorical_features'] = ['CHAS', 'RAD']
+boston_frame['target'] = boston.target
+boston_data_and_target_drift_report = Dashboard(boston_frame[:200], boston_frame[200:], column_mapping = column_mapping, 
+                                     tabs=[DriftTab, NumTargetDriftTab])
+boston_data_and_target_drift_report.save('reports/boston_data_and_target_drift_with_mapping.html')

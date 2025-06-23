@@ -1,0 +1,51 @@
+```
+    # Fine-tune the model
+    model.train()
+
+    for step, batch in enumerate(train_loader):
+        input_ids = batch["input_ids"].to(device)
+        labels = batch["labels"].to(device)
+
+        outputs = model(input_ids, labels=labels)
+        loss = outputs.loss
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+
+        progress_bar.update(1)
+
+    print(f"[step {step+1}] loss: {loss.item()}")
+
+    # Save the model
+    model_to_save.save_pretrained(os.path.join(dir_path, model_name))
+
+    del model
+    torch.cuda.empty_cache()
+
+    print("Fine-tuning complete.")
+
+    # 進度條
+    num_training_steps = EPOCH * len(train_loader)
+    progress_bar = tqdm(range(num_training_steps))
+
+    # 開始訓練
+    loss_history = []
+    for epoch in range(EPOCH):
+        for batch in train_loader:
+            inputs = tokenizer(batch["input"], truncation=True, padding="max_length", max_length=MAX_LENGTH, return_tensors="pt")
+            labels = tokenizer(batch["label"], truncation=True, padding="max_length", max_length=MAX_LENGTH, return_tensors="pt")["input_ids"]
+            # print(inputs)
+            # print(labels)
+            output = model(**inputs.to(device), labels=labels.to(device))
+            optimizer.zero_grad()
+            loss = output.loss
+            logits = output.logits
+            loss_history.append(loss.item())
+            loss.backward()
+            optimizer.step()
+            progress_bar.update(1)
+
+        print(f"[epoch {epoch+1}] loss: {loss.item()}")
+
+    print(loss_history)
+    print(len

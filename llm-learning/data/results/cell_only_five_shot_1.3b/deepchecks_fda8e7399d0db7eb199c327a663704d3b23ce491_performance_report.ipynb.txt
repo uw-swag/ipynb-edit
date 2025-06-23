@@ -1,0 +1,18 @@
+```python
+    import logging
+
+    logging.basicConfig(filename='app.log', level=logging.INFO)
+
+    def column_inference(df, column_name):
+        try:
+            logging.info(f"Starting column inference for column: {column_name}")
+            # Your column inference code here
+            # For example, let's assume we are using a simple mean for the column
+            mean_value = df[column_name].mean()
+            logging.info(f"Finished column inference for column: {column_name}. Mean value: {mean_value}")
+            return mean_value
+        except Exception as e:
+            logging.error(f"Error occurred during column inference: {e}")
+            return None
+    ```
+    This function logs the start and end of the column inference process, as well as the mean value of the column. If an error occurs during the inference, it logs the error.

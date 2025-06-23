@@ -1,0 +1,37 @@
+```python
+    from deepchecks.suites import OverallGenericCheckSuite
+
+    def run_overall_generic_check_suite(train_dataset, test_dataset, model, check_datasets_policy):
+        return OverallGenericCheckSuite.run(train_dataset=train_dataset, test_dataset=test_dataset, model=model, check_datasets_policy=check_datasets_policy)
+
+    run_overall_generic_check_suite(ds_train, ds_test, rf_clf, 'both')
+    run_overall_generic_check_suite(alternative_train_df, alternative_test_df, rf_clf, 'both')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "[MLC-182] added factory functions for custom suites. (#178)"
+    Original Code Cells:
+    '''
+    from deepchecks.suites import CustomCheckSuite
+
+CustomCheckSuite.run(train_dataset=ds_train, test_dataset=ds_test, model=rf_clf, check_datasets_policy='both')
+CustomCheckSuite.run(train_dataset=alternative_train_df, test_dataset=alternative_test_df, model=rf_clf, check_datasets_policy='both')
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from deepchecks.suites import CustomCheckSuite
+
+    def run_custom_check_suite(train_dataset, test_dataset, model, check_datasets_policy):
+        return CustomCheckSuite.run(train_dataset=train_dataset, test_dataset=test_dataset, model=model, check_datasets_policy=check_datasets_policy)
+
+    run_custom_check_suite(ds_train, ds_test, rf_clf, 'both')
+    run_custom_check_suite(alternative_train_df, alternative_test_df, rf_clf, 'both')
+    ```
+
+    ### Instruction:
+    [
+    Commit

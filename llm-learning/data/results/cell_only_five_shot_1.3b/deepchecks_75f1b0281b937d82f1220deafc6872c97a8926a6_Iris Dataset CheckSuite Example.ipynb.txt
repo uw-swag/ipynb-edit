@@ -1,0 +1,26 @@
+```
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_val = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+    # We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+
+    ds_train = Dataset(df_train, label = label_col)
+    ds_val =  Dataset(df_val, label = label_col)
+    OverallGenericCheckSuite.run(train_dataset=ds_train, validation_dataset=ds_val, model=rf_clf, check_datasets_policy='both')
+    train_len = round(0.67*iris_df.shape[0])
+    alternative_train_df = Dataset(iris_df[:train_len], label = label_col)
+    alternative_val_df = Dataset(iris_df[train_len:], label = label_col)
+    OverallGenericCheckSuite.run(train_dataset=alternative_train_df, validation_dataset=alternative_val_df,
+                                 model=rf_clf, check_datasets_policy='both')
+    MyModelSuite = CheckSuite('Simple Suite For Model Performance',
+        ModelInfo(),
+        PerformanceReport(),
+        TrainValidationDifferenceOverfit(),
+        ConfusionMatrixReport(),
+        NaiveModelComparison(),
+        NaiveModelComparison(naive_model_type='statistical')
+    )
+    MyModelSuite.run(model=rf_clf, train_dataset=ds_train, validation_dataset=ds_val, check_datasets_policy='both')
+    ```
+
+    The code above is a part of a larger codebase, and the commit message "Renaming validation to test" is a suggestion to improve the readability of the code. The original code suggests that the validation dataset is used for model testing, but in the context of the larger codebase, it might be more appropriate to refer to it as "test" or "validation".

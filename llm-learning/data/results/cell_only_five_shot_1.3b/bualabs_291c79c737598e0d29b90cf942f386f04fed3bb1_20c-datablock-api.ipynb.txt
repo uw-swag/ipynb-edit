@@ -1,0 +1,21 @@
+```python
+    class SplitData():
+        def __init__(self, train, valid):
+            self.train = train
+            self.valid = valid
+
+        def __getattr__(self, k):
+            return getattr(self.train, k)
+
+        # for pickle to save / load data
+        def __setstate__(self, data:Any):
+            self.__dict__.update(data)
+
+        @classmethod
+        def split_by_func(cls, il, f):
+            lists = map(il.new, split_by_func(il.items, f))
+            return cls(*lists)
+
+        def __repr__(self):
+            return f'{self.__class__.__name__}\nTrain: {self.train}\nValid: {self.valid}\n'
+    ```

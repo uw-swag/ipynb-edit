@@ -1,0 +1,9 @@
+```python
+    # Bump to version 0.3.4
+    # Load experimental data
+    expdata = np.load('test_img.npy')
+    # Get NN output with coordinates and classes
+    nn_input, (nn_output, coordinates) = aoi.atomnet.predictor(
+        expdata, model, use_gpu=False).run()
+    imstack = aoi.atomstat.imlocal(nn_output, coordinates, crop_size=16, coord_class=1)
+    ```

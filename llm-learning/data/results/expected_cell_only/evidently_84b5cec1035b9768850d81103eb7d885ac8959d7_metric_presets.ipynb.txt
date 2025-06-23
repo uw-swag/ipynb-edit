@@ -1,0 +1,19 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics.data_integrity_metrics import DataIntegrityMetrics
+from evidently.metrics.data_integrity_metrics import DataIntegrityValueByRegexpMetrics
+from evidently.metrics.data_integrity_metrics import DataIntegrityNullValuesMetrics
+from evidently.metrics.data_drift.data_drift_table import DataDriftTable
+from evidently.metrics.regression_performance_metrics import RegressionPerformanceMetrics
+from evidently.metrics.data_quality_metrics import DataQualityMetrics
+from evidently.metrics.data_quality_metrics import DataQualityStabilityMetrics
+from evidently.metrics.data_quality_metrics import DataQualityValueListMetrics
+from evidently.metrics.data_quality_metrics import DataQualityValueRangeMetrics
+from evidently.metrics.data_quality_metrics import DataQualityValueQuantileMetrics
+from evidently.metrics.data_quality_metrics import DataQualityCorrelationMetrics
+
+
+# make one feature drifted
+curr['education-num'] = 0
+data_mapping = ColumnMapping(target='target', prediction='preds')
+curr.head()

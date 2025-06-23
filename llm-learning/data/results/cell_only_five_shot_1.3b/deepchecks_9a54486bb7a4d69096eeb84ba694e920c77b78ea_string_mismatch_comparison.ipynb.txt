@@ -1,0 +1,17 @@
+```
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    ```
+
+    The code above is a demonstration of how to use the `StringMismatchComparison` check in DeepChecks, a library for data quality checks. The `run` method is used to execute the check on the two input dataframes. The check compares the strings in the 'col1' column and identifies any strings that are not identical.
+
+    Please note that the '$deeP$' and '?deep' in the compared_data are not identical to the 'Deep' and 'deep' in the data, respectively. The '$deeP$' and '?deep' are not identical to the 'Deep' and 'deep' in the data, respectively.
+
+    The check returns a DataFrame with the mismatched strings and their corresponding positions.
+
+    The `StringMismatchComparison` check is a part of the DeepChecks library and can be used in a variety of data quality checks.

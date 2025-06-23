@@ -1,0 +1,33 @@
+```python
+    import pythainlp
+    from pythainlp.tokenize import word_tokenize
+    from pythainlp.corpus import thai_sentiment
+
+    # 1. สร้างตัวอักษร
+    text = "สวัสดีค่าย"
+
+    # 2. ตัดตัวอักษร
+    words = word_tokenize(text)
+    print(words)
+
+    # 3. คำนำหน้า
+    words = [word for word in words if word.startswith('ส')]
+    print(words)
+
+    # 4. คำหลัง
+    words = [word for word in words if word.endswith('ย')]
+    print(words)
+
+    # 5. คำที่มีคำที่มีคำ
+    words = [word for word in words if 'คำ' in word]
+    print(words)
+
+    # 6. คำที่มีคำที่มีตัวอักษร
+    words = [word for word in words if 'ตัว' in word]
+    print(words)
+
+    # 7. คำที่มีคำที่มีคำที่มีคำ
+    words = [word for word in words if 'คำ' in word and 'คำ' in word]
+    print(words)
+
+    # 8. คำที่ม

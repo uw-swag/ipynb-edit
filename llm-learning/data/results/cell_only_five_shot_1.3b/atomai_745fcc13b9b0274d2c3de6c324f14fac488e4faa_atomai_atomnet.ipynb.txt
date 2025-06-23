@@ -1,0 +1,31 @@
+```python
+    # Bump notebooks to v0.6.0
+    # This commit message is not applicable as the original code is not modified.
+
+    # Original Code Cells:
+    '''
+    trained_model_1 = aoi.atomnet.train_single_model(
+    images_1, labels_1, images_test_1, labels_test_1,
+    training_cycles=500, IoU=True, swa=True)
+# Load "validation" data
+expdata = dataset_1['validation_img']
+# Get NN output with atomic coordinates
+predictive = aoi.atomnet.predictor(trained_model_1, refine=False, use_gpu=True)
+nn_output, coordinates_1 = predictive.run(expdata)
+updated_coordinates_1 = aoi.atomstat.update_classes(coordinates_1, expdata,
+                                                    method="meanshift", q=.1)
+aoi.utils.plot_coord(expdata, updated_coordinates_1[0], fsize=12)
+updated_coordinates_1 = aoi.atomstat.update_classes(
+    coordinates_1, expdata, method="gmm_local",
+    window_size=28, n_components=2)
+trained_model_2 = aoi.atomnet.train_single_model(
+    images_2, labels_2, images_test_2, labels_test_2,
+    training_cycles=500, IoU=True, swa=True)
+# Get NN output with atomic cooridnates and classes
+predictive = aoi.atomnet.predictor(trained_model_2, refine=False, use_gpu=True)
+nn_output, coordinates_2 = predictive.run(expdata)
+
+    '''
+    ```
+
+    The original code is not modified, so the response is not applicable.

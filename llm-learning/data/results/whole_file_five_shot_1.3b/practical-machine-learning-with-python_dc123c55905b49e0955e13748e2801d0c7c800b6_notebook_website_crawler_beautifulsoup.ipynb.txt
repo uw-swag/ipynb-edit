@@ -1,0 +1,64 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "removing unnecessary imports"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# import required libraries
+import requests
+from time import sleep
+from bs4 import BeautifulSoup
+<\Cell_0>
+<Cell_1>
+def get_post_mapping(content):
+    """This function extracts blog post title and url from response object
+
+    Args:
+        content (request.content): String content returned from requests.get
+
+    Returns:
+        list: a list of dictionaries with keys title and url
+
+    """
+    post_detail_list = []
+    post_soup = BeautifulSoup(content,"lxml")
+    h3_content = post_soup.find_all("h3")
+    
+    for h3 in h3_content:
+        post_detail_list.append(
+            {'title':h3.a.get_text(),'url':h3.a.attrs.get('href')}
+            )
+    
+    return post_detail_list
+
+
+def get_post_content(content):
+    """This function extracts blog post content from response object
+
+    Args:
+        content (request.content): String content returned from requests.get
+
+    Returns:
+        str: blog's content in plain text
+
+    """
+    plain_text = ""
+    text_soup = BeautifulSoup(content,"lxml")
+    para_list = text_soup.find_all("div",
+                                   {'class':'cms-richtext'})
+    
+    for p in para_list[0]:
+        plain_text += p.getText()
+    
+    return plain_text
+<\Cell_1>
+<Cell_2>
+crawl_url = "http://www.apress.com/in/blog/all-blog-posts"
+post_url_prefix = "http://www.apress.com"
+<\Cell_2>
+<Cell_3>
+response = requests.get(crawl_url)
+<\Cell_3>
+<Cell_4>
+if response.status

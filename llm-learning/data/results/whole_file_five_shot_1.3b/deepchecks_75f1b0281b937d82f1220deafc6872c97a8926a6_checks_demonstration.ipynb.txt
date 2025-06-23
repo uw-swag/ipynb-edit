@@ -1,0 +1,51 @@
+```
+    [
+    Commit Message: "Renaming validation to test (#135)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import os
+<\Cell_0>
+<Cell_1>
+DATASETS_BASEDIR = '../../../../Datasets'
+<\Cell_1>
+<Cell_2>
+# verify that DATASETS_BASEDIR exists a
+dataset_names = os.listdir(DATASETS_BASEDIR)
+# print(dataset_names)
+<\Cell_2>
+<Cell_3>
+# List all datasets used
+DATASET_PATHS = {}
+DATASET_PATHS['Lending_Club'] = os.path.join(DATASETS_BASEDIR, 'Lending Club')
+<\Cell_3>
+<Cell_4>
+for dataset_name in DATASET_PATHS:
+    if not os.path.exists(DATASET_PATHS[dataset_name]):
+        print("Verify that all required datasets are in your datasets folder!")
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), DATASET_PATHS[dataset_name])
+<\Cell_4>
+<Cell_5>
+import pandas as pd
+import numpy as np
+import os
+import joblib
+import errno
+<\Cell_5>
+<Cell_6>
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+<\Cell_6>
+<Cell_7>
+import mlchecks
+from mlchecks.base import Dataset
+<\Cell_7>
+<Cell_8>
+# Note - all checks are initialized also in mlchecks.checks and can be imported directly from there
+# Demonstration here it is just for the sake of order
+<\Cell_8>
+<Cell_9>
+# Overview
+from mlchecks.checks.overview import dataset_info, DatasetInfo
+from mlchecks.checks.overview import model_info, Model

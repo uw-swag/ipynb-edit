@@ -1,0 +1,47 @@
+
+<Cell_0>
+import pandas as pd
+import numpy as np
+<\Cell_0>
+<Cell_1>
+# Create a dataframe
+df = pd.DataFrame({
+    'Name': ['John', 'Anna', 'Peter', 'Linda'],
+    'Age': [28, 24, 35, 32],
+    'Country': ['USA', 'Sweden', 'USA', 'Sweden']
+})
+
+# Print the dataframe
+print(df)
+<\Cell_1>
+<Cell_2>
+# Create a new dataframe with the same data but in a different order
+df_sorted = df.sort_values('Age', ascending=False)
+
+# Print the sorted dataframe
+print(df_sorted)
+<\Cell_2>
+<Cell_3>
+# Create a new dataframe with the same data but with a new column
+df_add_col = df.assign(Age_Group=lambda df: pd.cut(df['Age'], bins=[0, 25, 60, 100], labels=['Young', 'Mid', 'Old']))
+
+# Print the new dataframe
+print(df_add_col)
+<\Cell_3>
+<Cell_4>
+# Create a new dataframe with the same data but with a new row
+df_add_row = df.append({'Name': 'Tom', 'Age': 30, 'Country': 'USA'}, ignore_index=True)
+
+# Print the new dataframe
+print(df_add_row)
+<\Cell_4>
+<Cell_5>
+# Create a new dataframe with the same data but with a new column and a new row
+df_add_col_add_row = df.append(df_add_row, ignore_index=True)
+
+# Print the new dataframe
+print(df_add_col_add_row)
+<\Cell_5>
+<Cell_6>
+# Create a new dataframe with the same data but with a new column and a new row, but with a different order
+df_add_col_add_row_

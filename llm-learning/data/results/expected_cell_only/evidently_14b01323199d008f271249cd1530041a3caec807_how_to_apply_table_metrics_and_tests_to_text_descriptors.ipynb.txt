@@ -1,0 +1,53 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metrics import ColumnCorrelationsMetric
+from evidently.metrics import ColumnDistributionMetric
+from evidently.metrics import ColumnDriftMetric
+from evidently.metrics import ColumnValueRangeMetric
+
+from evidently.tests import TestColumnDrift
+from evidently.tests import TestValueRange
+from evidently.tests import TestNumberOfOutRangeValues
+from evidently.tests import TestShareOfOutRangeValues
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage
+import nltk
+nltk.download('words')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+#Data with Texts
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame='auto')
+reviews = reviews_data.frame
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) 
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+column_mapping = ColumnMapping(
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title']
+)
+table_column_metrics_report = Report(metrics=[
+    ColumnDriftMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnCorrelationsMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnDistributionMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnValueRangeMetric(column_name = TextLength().for_column("Review_Text"), left=0, right=20)
+    
+])
+
+table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_metrics_report
+table_column_test_suite = TestSuite(tests=[
+    TestColumnDrift(column_name = TextLength().for_column("Review_Text")),
+    TestValueRange(column_name = TextLength().for_column("Review_Text")),
+    TestNumberOfOutRangeValues(column_name = TextLength().for_column("Review_Text")),
+    TestShareOfOutRangeValues(column_name = TextLength().for_column("Review_Text"))
+    
+])
+
+table_column_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_test_suite

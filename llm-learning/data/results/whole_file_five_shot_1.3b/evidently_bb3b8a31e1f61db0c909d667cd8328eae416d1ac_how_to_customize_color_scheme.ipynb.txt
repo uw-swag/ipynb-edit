@@ -1,0 +1,50 @@
+```
+    [
+    Commit Message: "[docs] fix typos in docs (#828)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    try:
+        import evidently
+    except:
+        !pip install git+https://github.com/evidentlyai/evidently.git
+    <\Cell_0>
+    <Cell_1>
+    from sklearn import datasets
+
+    from evidently.report import Report
+    from evidently.metric_preset.data_drift import DataDriftPreset
+    from evidently.test_suite import TestSuite
+    from evidently.test_preset import DataDriftTestPreset, DataQualityTestPreset, DataStabilityTestPreset, NoTargetPerformanceTestPreset
+    <\Cell_1>
+    <Cell_2>
+    iris_data = datasets.load_iris(as_frame=True)
+    iris = iris_data.frame
+
+    iris_ref = iris.sample(n=75, replace=False)
+    iris_cur = iris.sample(n=75, replace=False)
+    <\Cell_2>
+    <Cell_3>
+    from evidently.options import ColorOptions
+
+    color_scheme = ColorOptions(
+        primary_color = "#5a86ad",
+        fill_color = "#fff4f2",
+        zero_line_color = "#016795",
+        current_data_color = "#c292a1", 
+        reference_data_color = "#017b92"
+    )
+    <\Cell_3>
+    <Cell_4>
+    from evidently.options import BERLIN_AUTUMN_COLOR_OPTIONS
+    <\Cell_4>
+    <Cell_5>
+    data_drift_dataset_report = Report(metrics=[
+        DataDriftPreset()
+    ], options=[color_scheme]) 
+
+    data_drift_dataset_report.run(reference_data=iris_ref, current_data=iris_cur)
+    data_drift_dataset_report
+    <\Cell_5>
+    <Cell_6>
+    data_dr

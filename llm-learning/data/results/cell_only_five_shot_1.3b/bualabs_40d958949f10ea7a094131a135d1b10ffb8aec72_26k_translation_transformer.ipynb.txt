@@ -1,0 +1,38 @@
+
+    ## Importing necessary libraries
+    import torch
+    from torch import nn
+    from torch.nn import Transformer
+    from torch.nn.utils.rnn import pad_sequence
+
+    ## Defining the Transformer model
+    class TransformerModel(nn.Module):
+        def __init__(self, ntoken, ninp, nhead, nhid, nlayers, dropout=0.5):
+            super(TransformerModel, self).__init__()
+            from torch.nn import TransformerEncoder, TransformerEncoderLayer
+            self.model_type = 'Transformer'
+            self.src_mask = None
+            self.pos_encoder = PositionalEncoding(ninp, dropout)
+            encoder_layers = TransformerEncoderLayer(ninp, nhead, nhid, dropout)
+            self.transformer_encoder = TransformerEncoder(encoder_layers, nlayers)
+            self.encoder = nn.Embedding(ntoken, ninp)
+            self.ninp = ninp
+            self.decoder = nn.Linear(ninp, ntoken)
+
+            self.init_weights()
+
+        def forward(self, src):
+            # src = self.encoder(src) * math.sqrt(self.ninp)
+            src = self.pos_encoder(src)
+            output = self.transformer_encoder(src)
+            output = self.decoder(output)
+            return output
+
+    ## Defining the Positional Encoding
+    class PositionalEncoding(nn.Module):
+
+        def __init__(self, d_model, dropout=0.1, max_len=5000):
+            super(PositionalEncoding, self).__init__()
+            pe = torch.zeros(max_len, d_model)
+            position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+            div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-math.log(10000.

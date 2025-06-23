@@ -1,0 +1,21 @@
+```
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.7.0-SNAPSHOT
+    %maven ai.djl:basicdataset:0.7.0-SNAPSHOT
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    %maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-b
+    NDManager manager = NDManager.newBaseManager();
+
+    Model model = Model.newInstance("softmax-regression");
+
+    SequentialBlock net = new SequentialBlock();
+    net.add(Blocks.batchFlattenBlock(28 * 28)); // flatten input
+    net.add(Linear.builder().setOutChannels(10).build()); // set 10 output channels
+
+    model.setBlock(net);
+    ```
+
+    This code is updating the version of the `ai.djl` libraries to `0.7.0-SNAPSHOT`.

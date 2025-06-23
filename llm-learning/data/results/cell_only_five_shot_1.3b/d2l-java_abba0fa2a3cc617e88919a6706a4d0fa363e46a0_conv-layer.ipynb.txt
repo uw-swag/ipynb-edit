@@ -1,0 +1,46 @@
+
+The code you provided is already in the correct format. The name of the Conv2D layer in the code is already in the correct format. The name of the layer is "Conv2D" and not "ConvND". 
+
+Here is the corrected code:
+
+```python
+import ai.djl.*;
+import ai.djl.engine.Engine;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.index.NDIndex;
+import ai.djl.ndarray.types.DataType;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.nn.Block;
+import ai.djl.nn.ParameterList;
+import ai.djl.nn.convolutional.Conv2D;
+import ai.djl.training.GradientCollector;
+import ai.djl.training.ParameterStore;
+import ai.djl.training.initializer.NormalInitializer;
+import ai.djl.training.loss.Loss;
+
+Block block = Conv2D.builder()
+                .setKernelSize(new Shape(1, 2))
+                .optBias(false)
+                .setFilters(1)
+                .build();
+
+block.setInitializer(new NormalInitializer());
+block.initialize(manager, DataType.FLOAT32, X.getShape());
+
+ParameterList params = block.getParameters();
+NDArray wParam = params.get(0).getValue().getArray();
+wParam.attachGradient();
+
+NDArray lossVal = null;
+ParameterStore parameterStore = new ParameterStore(manager, false);
+
+NDArray lossVal = null;
+
+for (int i = 0; i < 10; i++) {
+
+    wParam.attachGradient();
+
+    try (GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+        NDArray yHat = block.forward(

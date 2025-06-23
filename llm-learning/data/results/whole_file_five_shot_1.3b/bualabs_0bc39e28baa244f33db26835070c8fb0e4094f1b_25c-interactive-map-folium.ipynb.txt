@@ -1,0 +1,15 @@
+```python
+    import folium
+    from folium.plugins import HeatMap
+
+    # Create a map centered at the given location
+    m = folium.Map(location=[45.5236, -122.6750], zoom_start=13)
+
+    # Add a heatmap to the map
+    heat_data = [[point[1][0], point[0][0]] for point in zip(df['Latitude'], df['Longitude'])]
+    HeatMap(heat_data).add_to(m)
+
+    # Save the map to an HTML file
+    m.save('map.html')
+    ```
+    This code will create an interactive map with a heatmap based on the 'Latitude' and 'Longitude' data in the DataFrame 'df'. The map will be saved to an HTML file named 'map.html'.

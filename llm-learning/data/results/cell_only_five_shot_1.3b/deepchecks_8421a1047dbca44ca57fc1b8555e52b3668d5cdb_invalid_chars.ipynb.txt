@@ -1,0 +1,14 @@
+```python
+    import re
+
+    def check_invalid_chars(text):
+        invalid_chars = re.compile(r'[^A-Za-z0-9\s]')
+        if invalid_chars.search(text):
+            return True
+        else:
+            return False
+
+    # Test
+    print(check_invalid_chars("Hello, World!"))  # Returns: True
+    print(check_invalid_chars("Hello World"))  # Returns: False
+    ```

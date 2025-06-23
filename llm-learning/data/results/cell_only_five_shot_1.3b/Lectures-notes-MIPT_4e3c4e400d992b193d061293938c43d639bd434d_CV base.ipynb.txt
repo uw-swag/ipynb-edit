@@ -1,0 +1,18 @@
+```python
+    import cv2
+    import numpy as np
+
+    # Load an image in grayscale
+    img = cv2.imread('image.jpg', cv2.IMREAD_GRAYSCALE)
+
+    # Create a 3x3 kernel
+    kernel = np.array([[0, -1, 0],
+                       [-1, 5,-1],
+                       [0, -1, 0]])
+
+    # Apply the kernel to the image
+    sharpened_img = cv2.filter2D(img, -1, kernel)
+
+    # Save the sharpened image
+    cv2.imwrite('sharpened_image.jpg', sharpened_img)
+    ```

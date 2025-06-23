@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Text preprocessing
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(df['text'])
+
+    # Convert the sparse matrix to a DataFrame
+    X_df = pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names_out())
+
+    # Print the DataFrame
+    print(X_df)
+    ```
+    This code will preprocess the text data in the 'text' column of the DataFrame. The CountVectorizer class from the sklearn.feature_extraction.text module is used to convert the text data into a matrix of token counts. The resulting matrix is then converted to a DataFrame for easier manipulation.
+
+    Please replace 'data.csv' with your actual data file path.
+
+    Also, please note that this is a basic example. Depending on your specific needs, you may need to perform additional preprocessing steps such as removing stop words, stemming, lemmatization, etc.
+
+    The preprocessed DataFrame can then be used for further analysis or modeling.

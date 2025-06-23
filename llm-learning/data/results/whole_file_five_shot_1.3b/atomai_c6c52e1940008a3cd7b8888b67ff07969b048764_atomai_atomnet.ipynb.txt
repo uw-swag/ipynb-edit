@@ -1,0 +1,32 @@
+```
+    ## Update Colab notebooks metadata
+    ## The following code updates the metadata of the Colab notebooks.
+
+    ## Import necessary libraries
+    import os
+    import datetime
+
+    ## Get the list of all notebook files
+    notebook_files = os.listdir()
+
+    ## Loop through each notebook file
+    for file in notebook_files:
+        if file.endswith(".ipynb"):
+            ## Get the creation time of the notebook
+            creation_time = os.path.getctime(file)
+            creation_time = datetime.datetime.fromtimestamp(creation_time)
+
+            ## Get the last modification time of the notebook
+            last_modified_time = os.path.getmtime(file)
+            last_modified_time = datetime.datetime.fromtimestamp(last_modified_time)
+
+            ## Update the creation and last modified times
+            os.utime(file, (creation_time, last_modified_time))
+    ```
+
+    ## Run the code
+    ```
+    ## Update the metadata of all Colab notebooks
+    import update_notebook_metadata
+    update_notebook_metadata.update_all_notebook_metadata()
+    ```

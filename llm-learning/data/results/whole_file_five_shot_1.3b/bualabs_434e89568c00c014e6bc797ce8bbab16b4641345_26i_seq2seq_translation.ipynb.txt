@@ -1,0 +1,47 @@
+
+    '''
+    ### Response:
+    '''
+    [
+    Commit Message: "Adding links to related articles"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    ! pip install fasttext
+    <\Cell_1>
+    <Cell_2>
+    import fasttext as ft
+    <\Cell_2>
+    <Cell_3>
+    fr_vecs = ft.load_model(str((path/'cc.fr.300.bin')))
+    en_vecs = ft.load_model(str((path/'cc.en.300.bin')))
+    <\Cell_3>
+    <Cell_4>
+    def create_emb(vecs, itos, em_sz=300, multi=1.):
+        emb = nn.Embedding(len(itos), em_sz, padding_idx=1)
+        wgts = emb.weight.data
+        vec_dic = {w: vecs.get_word_vector(w) for w in vecs.get_words()}
+        miss = []
+        for i, w in enumerate(itos):
+            try: wgts[i] = tensor(vec_dic[w])
+            except: miss.append(w)
+        return emb
+    <\Cell_4>
+    <Cell_5>
+    emb_enc = create_emb(fr_vecs, data.x.vocab.itos)
+    emb_dec = create_emb(en_vecs, data.y.vocab.itos)
+    <\Cell_5>
+    <Cell_6>
+    emb_enc.weight.size(), emb_dec.weight.size()
+    <\Cell_6>
+    <Cell_7>
+    torch.save(emb_enc, model_path/'fr_emb.pth')
+    torch.save(emb_dec, model_path/'en_emb.pth')
+    <\Cell_7>
+    <Cell_8>
+    del fr

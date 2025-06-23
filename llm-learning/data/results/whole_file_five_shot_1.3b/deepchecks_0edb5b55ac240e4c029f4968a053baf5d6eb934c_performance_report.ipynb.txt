@@ -1,0 +1,57 @@
+
+    The commit message "rename VisionDataset to VisionData" is a rename operation. This means that the class `VisionDataset` has been renamed to `VisionData`. 
+
+    Here's the updated code:
+
+    ```python
+    <Cell_0>
+    %load_ext autoreload
+    %autoreload 2
+    <\Cell_0>
+    <Cell_1>
+    from deepchecks.vision.base import VisionData
+    from torchvision import models
+    import torchvision
+    import torch
+    from torch import nn
+    import torch.nn.functional as F
+    from torchvision.transforms import ToTensor
+    import copy
+    <\Cell_1>
+    <Cell_2>
+    from deepchecks.vision.checks.performance import PerformanceReport
+    <\Cell_2>
+    <Cell_3>
+    from deepchecks.vision.datasets.classification.mnist import (
+        load_model, 
+        load_dataset, 
+        MNistNet, 
+    )
+    <\Cell_3>
+    <Cell_4>
+    def simple_nn():
+        torch.manual_seed(42)
+
+        # Define model
+        class NeuralNetwork(nn.Module):
+            def __init__(self):
+                super(NeuralNetwork, self).__init__()
+                self.flatten = nn.Flatten()
+                self.linear_relu_stack = nn.Sequential(
+                    nn.Linear(28 * 28, 512),
+                    nn.ReLU(),
+                    nn.Linear(512, 512),
+                    nn.ReLU(),
+                    nn.Linear(512, 10)
+                )
+
+            def forward(self, x):
+                x = self.flatten(x)
+                logits = self.linear_relu_stack(x)
+                return logits
+
+        model = NeuralNetwork().to('cpu')
+        return model
+
+    def trained_mnist(simple_nn, mnist_data_loader_train):
+       

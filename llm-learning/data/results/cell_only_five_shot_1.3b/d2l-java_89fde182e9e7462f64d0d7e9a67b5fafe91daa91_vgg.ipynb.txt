@@ -1,0 +1,44 @@
+```
+    float lr = 0.05f;
+    Model model = Model.newInstance("cnn");
+    model.setBlock(block);
+
+    Loss loss = Loss.softmaxCrossEntropyLoss();
+
+    Tracker lrt = Tracker.fixed(lr);
+    Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+
+    DefaultTrainingConfig config = new DefaultTrainingConfig(loss).optOptimizer(sgd) // Optimizer (loss function)
+                .addEvaluator(new Accuracy()) // Model Accuracy
+                .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+
+    Trainer trainer = model.newTrainer(config);
+
+    NDManager manager = NDManager.newBaseManager();
+    NDArray X = manager.randomUniform(0f, 1.0f, new Shape(1, 1, 224, 224));
+    trainer.initialize(X.getShape());
+
+    Shape currentShape = X.getShape();
+
+    for (int i = 0; i < block.getChildren().size(); i++) {
+
+        Shape[] newShape = block.getChildren().get(i).getValue().getOutputShapes(manager, new Shape[]{currentShape});
+        currentShape = newShape[0];
+        System.out.println(block.getChildren().get(i).getKey() + " layer output : " + currentShape);
+    }
+
+    int ratio = 4;
+
+    for(int i=0; i < convArch.length; i++){
+        convArch[i][1] = convArch[i][1]/4;
+    }
+
+    SequentialBlock newBlock = VGG(convArch);
+    model.setBlock(newBlock);
+
+    Loss loss = Loss.softmaxCrossEntropyLoss();
+
+    Tracker lrt = Tracker.fixed(lr);
+    Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+
+    DefaultTrainingConfig config

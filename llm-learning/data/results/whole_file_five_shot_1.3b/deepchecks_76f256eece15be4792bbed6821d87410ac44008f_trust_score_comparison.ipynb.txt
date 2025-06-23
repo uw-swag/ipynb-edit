@@ -1,0 +1,39 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#427)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from deepchecks import Dataset
+
+df = load_breast_cancer(as_frame=True).frame
+label = 'target'
+
+train_df, test_df = train_test_split(df, test_size=0.33, random_state=0)
+train = Dataset(train_df, label_name=label)
+test = Dataset(test_df, label_name=label)
+
+clf = AdaBoostClassifier()
+features = train_df.drop(label, axis=1)
+target = train_df[label]
+clf.fit(features, target)
+<\Cell_0>
+<Cell_1>
+from deepchecks.checks import TrustScoreComparison
+
+TrustScoreComparison(min_test_samples=100).run(train, test, clf)
+<\Cell_1>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a part of a Jupyter notebook, and it's using the Deepchecks library to compare the trust score of the trained AdaBoost classifier with the test data. The trust score is a measure of the reliability of a model's predictions, and it's a function of the model's complexity. The lower the trust score, the better the model's predictions.
+
+    The `TrustScoreComparison` check is used to compare the trust score of the model with the test data. The `min_test_samples` parameter is set to 100, which means that the model's predictions are evaluated only for the first 100 samples from the test data.
+
+    The `run` method of the `TrustScoreComparison` check is used to run the check on the `train` and `test` datasets. The `clf` object is the trained AdaBoost classifier

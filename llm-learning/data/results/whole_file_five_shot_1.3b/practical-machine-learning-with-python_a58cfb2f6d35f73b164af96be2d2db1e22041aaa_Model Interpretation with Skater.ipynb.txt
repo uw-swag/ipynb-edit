@@ -1,0 +1,22 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.inspection import permutation_importance
+
+    # Fit the model
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Calculate permutation importance
+    result = permutation_importance(model, X_test, y_test, scoring='accuracy')
+    importance = result.importances_mean
+
+    # Plot the importance
+    plt.barh(X_test.columns, importance)
+    plt.xlabel('Permutation Importance')
+    plt.show()
+    ```

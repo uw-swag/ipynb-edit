@@ -1,0 +1,23 @@
+```python
+    import os
+    import shutil
+
+    # Define the directory where the deprecated files are located
+    deprecated_dir = "/path/to/deprecated/files"
+
+    # Get a list of all files in the deprecated directory
+    deprecated_files = os.listdir(deprecated_dir)
+
+    # Iterate over each file in the deprecated directory
+    for file in deprecated_files:
+        # Construct the full file path
+        file_path = os.path.join(deprecated_dir, file)
+
+        # Check if the file is a regular file
+        if os.path.isfile(file_path):
+            # Remove the file
+            os.remove(file_path)
+        else:
+            # If the file is a directory, remove it
+            shutil.rmtree(file_path)
+    ```

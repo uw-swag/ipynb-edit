@@ -1,0 +1,16 @@
+```
+    # Log parameters
+    mlflow.log_param("begin", date[0])
+    mlflow.log_param("end", date[1])
+
+    # Log metrics
+    metric = detect_dataset_drift(raw_data.loc[reference_dates[0]:reference_dates[1]], 
+                           raw_data.loc[date[0]:date[1]],
+                           column_mapping=data_columns,
+                           get_ratio=True)
+    
+    mlflow.log_metric('dataset drift', metric)
+
+    print(run.info)
+    ```
+    '''

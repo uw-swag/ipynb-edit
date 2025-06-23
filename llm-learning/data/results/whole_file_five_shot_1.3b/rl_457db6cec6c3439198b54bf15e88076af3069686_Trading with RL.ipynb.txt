@@ -1,0 +1,58 @@
+
+    '''
+    # coef = k/m
+
+    def shmplusgen():
+        return market_gen(gen=shm_gen(dt=1/1000,
+                                  coef=100,     # coef = k/m
+                                  amplitude=1,
+                                  start_trend=100, 
+                                  trend_per_tick=0, 
+                                  noise=0.2,
+                                  damping=0.002, 
+                                  verbose=False),
+                      lag=16)
+    gen = shmplusgen()
+
+    time_series=[]
+    stock_series=[]
+    for i in range(1256):
+        z = next(gen)
+        time_series.append(i)
+        stock_series.append(z[15])
+
+    df = pd.DataFrame({'dateindex': time_series, 'stock': stock_series})
+
+    make_figure(df['dateindex'], df['stock'],
+            title='Simulated Stock Price Data: Simple Harmonic Motion + Noise + Damping',
+            xtitle='Time',
+            ytitle='Value'
+           )
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    # coef = k/m
+
+    def shmplusgen():
+        return market_gen(gen=shm_gen(dt=1/1000,
+                                  coef=100,     # coef = k/m
+                                  amplitude=1,
+                                  start_trend=100, 
+                                  trend_per_tick=0, 
+                                  noise=0.2,
+                                  damping=0.002, 
+                                  verbose=False),
+                      lag=16)
+    gen = shmplusgen()
+
+    time_series=[]
+    stock_series=[]
+    for i in range(1256):
+        z = next(gen)
+        time_series.append(i)
+        stock_series.append(z[15])
+
+    df = pd.DataFrame({'dateindex': time_series, 'stock': stock_series})

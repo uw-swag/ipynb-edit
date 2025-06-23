@@ -1,0 +1,19 @@
+```python
+    from deepchecks.datasets.classification import iris
+
+    train_dataset, test_dataset = iris.load_data()
+    model = iris.load_fitted_model()
+    from deepchecks.checks import ModelErrorAnalysis
+
+    result = ModelErrorAnalysis().add_condition_segments_performance_relative_difference_not_greater_than(\
+                                ).run(train_dataset, test_dataset, model)
+    from deepchecks import CheckResult
+
+    help(CheckResult.to_json)
+    from deepchecks.suites import full_suite
+
+    suite = full_suite()
+    from deepchecks import SuiteResult
+
+    help(SuiteResult.to_json)
+    ```

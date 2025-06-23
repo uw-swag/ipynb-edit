@@ -1,0 +1,8 @@
+```python
+    from deepchecks.vision.datasets.classification.mnist import load_mnist, MNistNet, mnist_train_loader, mnist_test_loader
+    model = trained_mnist(simple_nn(), mnist_train_loader)
+    train_ds = VisionDataset(mnist_train_loader, label_type='classification')
+    test_ds = VisionDataset(mnist_test_loader, label_type='classification')
+    ```
+
+    The MNIST dataset API has been updated to include a new `VisionDataset` class. This class is used to load and preprocess the MNIST dataset. The `VisionDataset` class is a subclass of `deepchecks.vision.datasets.base.VisionDataset`, and it takes a `data_loader` as an argument, which is a PyTorch DataLoader object that contains the images and their corresponding labels. The `label_type` parameter is used to specify the type of labels in the dataset.

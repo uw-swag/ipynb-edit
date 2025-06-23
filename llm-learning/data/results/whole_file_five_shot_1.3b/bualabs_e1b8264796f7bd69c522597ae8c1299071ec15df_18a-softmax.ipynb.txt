@@ -1,0 +1,32 @@
+```python
+    # Numerical stability
+    # The stability of numerical computations is a critical aspect in machine learning and deep learning.
+    # In this section, we will discuss the concept of numerical stability and how to handle it in our computations.
+
+    # Sample data
+    # We will use the same sample data as before, but this time we will add a numerical stability check to our computations.
+
+    # Checking for numerical stability
+    # We will use the torch.exp function to compute the exponential of a tensor.
+    # If the tensor is very large, the result may be NaN or infinity.
+    # We can use the torch.isnan and torch.isinf functions to check for these values.
+
+    # Handling numerical stability
+    # We can use the torch.log1p function to compute the natural logarithm of 1 plus the input tensor.
+    # This can help to stabilize the computation of the exponential function.
+
+    # Checking for numerical stability
+    a = torch.randn(10, 5) * 10
+    a = torch.where(torch.isnan(a), torch.full_like(a, float('inf')), a)
+    a = torch.log1p(a)
+
+    # Sample data
+    a = torch.randn(10, 5) * 10
+    a = torch.where(torch.isnan(a), torch.full_like(a, float('inf')), a)
+    a = torch.log1p(a)
+    ```
+    This code will check for numerical stability in the computations and handle it appropriately.
+    Please note that the actual numerical stability of the computations can vary depending on the specific implementation of the computations.
+    In the above code, we have used the torch.isnan and torch.isinf functions to check for NaN and infinity values, and we have used the torch.log1p function to stabilize the computation of the exponential function.
+    The actual numerical stability of the computations can vary depending on the specific implementation of the computations.
+    In the above code, we have used the torch.isnan and torch.isinf functions to check for NaN and infinity

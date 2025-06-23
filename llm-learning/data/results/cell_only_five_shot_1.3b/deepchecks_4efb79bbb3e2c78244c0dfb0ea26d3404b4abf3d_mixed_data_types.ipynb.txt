@@ -1,0 +1,12 @@
+```python
+    # Improve mixed types
+    def improve_mixed_types(df):
+        for col in df.columns:
+            if df[col].dtype == 'object':
+                df[col] = df[col].astype('category')
+            elif df[col].dtype == 'float64' and df[col].nunique() < 10:
+                df[col] = df[col].astype('int64')
+        return df
+
+    df = improve_mixed_types(df)
+    ```

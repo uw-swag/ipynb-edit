@@ -1,0 +1,45 @@
+```
+    Commit Message: "Update 02. K Nearest Neighbours (KNN).ipynb"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install scikit-learn==0.23.1
+<\Cell_0>
+<Cell_1>
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+df = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%203/data/teleCust1000t.csv')
+df.head()
+<\Cell_2>
+<Cell_3>
+df['custcat'].value_counts()
+<\Cell_3>
+<Cell_4>
+df.hist(column='income', bins=50)
+<\Cell_4>
+<Cell_5>
+df.columns
+<\Cell_5>
+<Cell_6>
+X = df[['region', 'tenure','age', 'marital', 'address', 'income', 'ed', 'employ','retire', 'gender', 'reside']] .values  #.astype(float)
+X[0:5]
+<\Cell_6>
+<Cell_7>
+y = df['custcat'].values
+y[0:5]
+<\Cell_7>
+<Cell_8>
+X = preprocessing.StandardScaler().fit(X).transform(X.astype(float))
+X[0:5]
+<\Cell_8>
+<Cell_9>
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=4)
+print ('Train set:', X_train.shape,  y

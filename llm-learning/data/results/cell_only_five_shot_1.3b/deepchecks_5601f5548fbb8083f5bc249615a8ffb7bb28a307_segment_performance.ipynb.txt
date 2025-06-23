@@ -1,0 +1,8 @@
+```
+    from catboost import CatBoostClassifier, Pool
+
+    clf = CatBoostClassifier(iterations=10, silent=True, cat_features=cat_features)
+    train_pool = Pool(data=train_ds.features_columns(), label=train_ds.label_col())
+    clf.fit(train_pool)
+    print(clf.get_params())
+    ```

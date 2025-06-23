@@ -1,0 +1,54 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Adding data processing and model training into one notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+<\Cell_0>
+<Cell_1>
+from sar import load_sar
+
+train, valid, test = load_sar()
+<\Cell_1>
+<Cell_2>
+from sklearn.svm import SVC
+from utils import f1_prime
+
+train_x, _, train_s = train
+valid_x, _, valid_s = valid
+
+best_f1_prime = -1.0
+best_clf = None
+for class_weight_p in np.arange(0.5, 1.0, 0.05):
+    class_weight = {
+        0: 1.0 - class_weight_p,
+        1: class_weight_p,
+    }
+
+    clf = SVC(class_weight=class_weight, random_state=0, probability=True).fit(train_x, train_s)
+
+    valid_s_hat = clf.predict(valid_x)
+
+    f1_prime_ = f1_prime(valid_s, valid_s_hat)
+    if f1_prime_ > best_f1_prime:
+        print(f"The best classifier is updated: class weight is {class_weight}.")
+        best_f1_prime = f1_prime_
+        best_clf = clf
+<\Cell_2>
+<Cell_3>
+test_x, test_y, _ = test
+
+test_y_hat = best_clf.predict(test_x)
+test_y_prob_hat = best_clf.predict_proba(test_x)[:, 1]
+<\Cell_3>
+<Cell_4>
+from sklearn.metrics import f1_score
+
+f1_score(test_y, test_y_hat)
+<\Cell_4>
+<Cell_5>
+from util

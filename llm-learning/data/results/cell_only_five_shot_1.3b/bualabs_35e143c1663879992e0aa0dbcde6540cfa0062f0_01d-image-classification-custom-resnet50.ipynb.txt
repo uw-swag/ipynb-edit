@@ -1,0 +1,15 @@
+```python
+    batchsize = 24
+    np.random.seed(42)
+
+    databunch = ImageDataBunch.from_folder(download_path, train='.', 
+                                           valid_pct=0.2, 
+                                           ds_tfms=get_transforms(), 
+                                           size=400, bs=batchsize).normalize(imagenet_stats)
+
+    databunch.show_batch(rows=3, figsize=(8, 8))
+    learner.fit_one_cycle(6, max_lr=slice(3e-6,3e-4))
+    learner.show_results(rows=3, figsize=(8, 8))
+    interpretation.plot_top_losses(9, figsize=(8, 8), largest=True)
+    interpretation.plot_confusion_matrix(figsize=(8, 8), dpi=72)
+    ```

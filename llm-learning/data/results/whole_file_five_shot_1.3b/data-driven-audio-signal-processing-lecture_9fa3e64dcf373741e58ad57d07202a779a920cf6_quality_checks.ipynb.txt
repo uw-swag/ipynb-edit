@@ -1,0 +1,39 @@
+
+    The code you provided is a Jupyter notebook that uses the Python programming language to process audio data. It uses the `glob` library to find all .wav files in a directory, `wavfile` to read the audio files, `matplotlib` and `numpy` to plot and analyze the data, and `scipy` to compute various statistics.
+
+    The code also includes several plots and statistics, such as the magnitude spectrum, the spectrogram, the magnitude of the spectral envelope, the histogram of the data, and the mean and variance of the data.
+
+    However, there are a few issues with the code:
+
+    1. The path to the dataset is not correct. It should be relative to the location of the notebook file, not the directory where the notebook is stored.
+
+    2. The code is not saving the plots. You need to add `plt.show()` at the end of the code to display the plots.
+
+    3. The code is not saving the statistics. You need to add `plt.savefig(fname)` at the end of the code to save the statistics as images.
+
+    Here is the corrected code:
+
+    ```python
+    <Cell_0>
+    import glob
+    from scipy.io import wavfile
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    path = 'data/free-spoken-digit-dataset/recordings/'  # path to dataset
+    <\Cell_0>
+    <Cell_1>
+    audiofiles = glob.glob(path + '0_*.wav', recursive=True)
+
+    X = []
+    for filepath in audiofiles:
+        fs, x = wavfile.read(filepath)
+        x = x/2**15
+        X.append(x)
+    <\Cell_1>
+    <Cell_2>
+    print('Total number of examples: {}'.format(len(X)))
+    print('Sampling rate fs = {} Hz'.format(fs))
+    <\Cell_2>
+    <Cell_3>
+    fig, axs = plt.subplots(2, 3, figsize=(10,5))

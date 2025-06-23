@@ -1,0 +1,38 @@
+```python
+    # Standard Library Imports
+    from pathlib import Path
+
+    # Installed packages
+    import pandas as pd
+    from ipywidgets import widgets
+
+    # Our package
+    from ydata_profiling import ProfileReport
+    from ydata_profiling.utils.cache import cache_file
+
+    # Rename the folder
+    Path('old_folder_name').rename('new_folder_name')
+
+    # Up Colab Assignment
+    # Assuming you're using Google Colab
+    from google.colab import drive
+    drive.mount('/content/drive')
+
+    # Up the dataset
+    file_name = cache_file(
+        "new_dataset.csv",
+        "https://raw.githubusercontent.com/datasciencedojo/datasets/master/new_dataset.csv",
+    )
+    df = pd.read_csv(file_name)
+
+    # Generate the Profiling Report
+    profile = ProfileReport(
+        df, title="New Dataset", html={"style": {"full_width": True}}, sort=None
+    )
+
+    # The Notebook Widgets Interface
+    profile.to_widgets()
+
+    # Or use the HTML report in an iframe
+    profile
+    ```

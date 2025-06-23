@@ -1,0 +1,26 @@
+```python
+    # Adding labels and detection encoder classes
+    class DetectionEncoder(DatasetEncoder):
+        def __init__(self, num_classes):
+            self.num_classes = num_classes
+            self.encoder = LabelEncoder()
+
+        def __call__(self, sample):
+            labels = sample['labels']
+            labels = self.encoder.fit_transform(labels)
+            sample['labels'] = labels
+            return sample
+
+    # Use the above classes
+    train_ds = VisionDataset(coco_dataloader, label_type='object_detection', num_classes=80)
+    train_ds = DetectionEncoder(num_classes=80)(train_ds)
+
+    check = PerformanceReport(prediction_extract=coco.yolo_wrapper)
+    check.run(train_ds, test_ds, yolo)
+    ```
+
+    In the above code, we have defined a custom class `DetectionEncoder` that inherits from `DatasetEncoder`. This class is used to encode the labels in the dataset. The `__call__` method of the `DetectionEncoder` class is used to encode the labels.
+
+    We then use this custom class to encode the labels in the `train_ds` dataset. This is done by calling the `__call__` method of the `DetectionEncoder` class, passing the `train_ds` dataset as the argument.
+
+    Finally, we use the `PerformanceReport` class to run the model on the encoded dataset.

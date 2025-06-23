@@ -1,0 +1,51 @@
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, RocCurveDisplay
+# delete our example database, if any
+db = Path('my_experiments.db')
+
+if db.exists():
+    db.unlink()
+from sklearn_evaluation import SQLiteTracker
+
+tracker = SQLiteTracker('my_experiments.db')
+%%capture
+
+def fit(model):
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    experiment = tracker.new_experiment()
+    experiment.log_dict({'accuracy': acc, 'model': type(model).__name__, **model.get_params()})
+    
+    # log plots     
+    experiment.log_confusion_matrix(y_test, y_pred)
+    experiment.log_classification_report(y_test, y_pred)
+    
+    # log generic matplotlib figure
+    roc = RocCurveDisplay.from_estimator(model, X_test, y_test)
+    experiment.log_figure('roc', roc.figure_)
+    
+fit(model=RandomForestClassifier(n_estimators=100))
+fit(model=RandomForestClassifier(n_estimators=10))
+results = tracker.query("""
+SELECT uuid,
+       json_extract(parameters, '$.model') AS model,
+       json_extract(parameters, '$.accuracy') AS accuracy,
+       json_extract(parameters, '$.confusion_matrix') AS cm,
+       json_extract(parameters, '$.roc') AS roc
+FROM experiments
+ORDER BY created DESC
+LIMIT 2
+""", as_frame=False, render_plots=True)
+
+results
+one["confusion_matrix"] - another["confusion_matrix"]
+one["roc"]

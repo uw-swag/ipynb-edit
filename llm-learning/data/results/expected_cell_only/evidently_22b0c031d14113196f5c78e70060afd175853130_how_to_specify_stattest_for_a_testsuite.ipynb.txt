@@ -1,0 +1,41 @@
+import pandas as pd
+import numpy as np
+
+from scipy.stats import mannwhitneyu
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.calculations.stattests import StatTest
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+data_drift_column_tests = TestSuite(tests=[
+    TestColumnValueDrift(column_name='education-num'),
+    TestColumnValueDrift(column_name='education-num', stattest='psi')
+])
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(all_features_stattest='psi'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest='psi', cat_features_stattest='jensenshannon'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(per_feature_stattest=per_feature_stattest),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest=mann_whitney_stat_test),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests

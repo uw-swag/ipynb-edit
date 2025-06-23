@@ -1,0 +1,14 @@
+```
+    %load ../utils/djl-imports
+    %load ../utils/FashionMnistUtils.java
+
+    import ai.djl.metric.*;
+    int batchSize = 256;
+    boolean randomShuffle = true;
+
+    // Get Training and Validation Datasets
+    RandomAccessDataset trainingSet = FashionMnistUtils.getDataset(ai.djl.Model.Dataset.Usage.TRAIN, batchSize, randomShuffle);
+    RandomAccessDataset validationSet = FashionMnistUtils.getDataset(ai.djl.Model.Dataset.Usage.TEST, batchSize, false);
+    ```
+
+    The code above is consistent with the usage of FashionMnist in DJL. The `FashionMnistUtils.getDataset()` method is used to get the training and validation datasets from the FashionMnist dataset. The `ai.djl.Model.Dataset.Usage.TRAIN` and `ai.djl.Model.Dataset.Usage.TEST` are used to specify the usage of the dataset.

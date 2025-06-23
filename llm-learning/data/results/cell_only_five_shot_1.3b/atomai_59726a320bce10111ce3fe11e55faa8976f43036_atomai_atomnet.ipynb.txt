@@ -1,0 +1,26 @@
+
+    Here is the updated code with the version bumped to 0.5.1:
+
+    ```python
+    trained_model_1 = aoi.atomnet.train_single_model(images_1, labels_1,
+                                                 images_test_1, labels_test_1,
+                                                 training_cycles=500, IoU=True)
+    # Load "validation" data
+    expdata = dataset_1['validation_img']
+    # Get NN output with atomic coordinates
+    predictive = aoi.atomnet.predictor(trained_model_1, refine=False, use_gpu=True)
+    nn_input, (nn_output, coordinates_1) = predictive.run(expdata)
+    updated_coordinates_1 = aoi.atomstat.update_classes(coordinates_1, nn_input,
+                                                        method="meanshift", q=.1)
+    updated_coordinates_1 = aoi.atomstat.update_classes(
+        coordinates_1, nn_input, method="gmm_local",
+        window_size=28, n_components=2)
+    trained_model_2 = aoi.atomnet.train_single_model(images_2, labels_2,
+                                                 images_test_2, labels_test_2,
+                                                 training_cycles=500, IoU=True)
+    # Get NN output with atomic coordinates and classes
+    predictive = aoi.atomnet.predictor(trained_model_2, refine=False, use_gpu=True)
+    nn_input, (nn_output, coordinates_2) = predictive.run(expdata)
+    ```
+
+    Please note that the version bump is based on the commit message "Bump to version 0.5.1". The actual version number may vary depending on the commit history.

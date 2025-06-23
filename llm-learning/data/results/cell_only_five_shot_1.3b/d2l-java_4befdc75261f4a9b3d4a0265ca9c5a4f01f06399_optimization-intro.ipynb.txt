@@ -1,0 +1,57 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras import layers
+
+    # Defining the model
+    model = keras.Sequential()
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(10, activation='softmax'))
+
+    # Compiling the model
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    # Preparing the data
+    # Assume we have a dataset 'data' with labels 'labels'
+    # We also assume that 'data' and 'labels' are numpy arrays
+    # data = np.random.rand(1000, 32)
+    # labels = np.random.randint(0, 10, 1000)
+
+    # Training the model
+    model.fit(data, labels, epochs=5)
+
+    # Evaluating the model
+    test_data = np.random.rand(100, 32)
+    test_labels = np.random.randint(0, 10, 100)
+    model.evaluate(test_data, test_labels)
+
+    # Predicting on new data
+    new_data = np.random.rand(10, 32)
+    model.predict(new_data)
+    ```
+    '''
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "2nd Draft of 11.2 Optimization and Deep Learning(optimization-advanced.ipynb)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras import layers
+
+    # Loading the data
+    data = keras.datasets.mnist

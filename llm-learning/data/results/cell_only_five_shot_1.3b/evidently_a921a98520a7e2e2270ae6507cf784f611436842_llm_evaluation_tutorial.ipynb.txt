@@ -1,0 +1,47 @@
+```python
+    from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+from evidently.metric_preset import TextEvals
+from evidently.descriptors import *
+from evidently.metrics import *
+from evidently.tests import *
+
+text_evals_report.save_html("weird_signs_for_Dima.html")
+
+conciseness_prompt = """
+Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+
+A concise response should:
+- Provide the necessary information without unnecessary details or repetition.
+- Be brief yet comprehensive enough to address the query.
+- Use simple and direct language to convey the message effectively.
+
+Please evaluate the following chatbot response for conciseness.
+
+response: REPLACE
+
+Use the following categories for conciseness evaluation:
+CONCISE if the response is concise and to the point
+VERBOSE if the response is overly detailed or contains unnecessary information
+UNKNOWN if the information provided is not sufficient to make a clear determination
+
+Return a category only
+"""
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        OpenAIPrompting(prompt=conciseness_prompt,
+                        prompt_replace_string="REPLACE",
+                        model="gpt-3.5-turbo-instruct",
+                        feature_type="cat",
+                        display_name="Response Conciseness"),
+    ])
+])
+
+report.run(reference_data= None,
+           current_data= assistant_logs[:10],
+           column_mapping=column_mapping)
+
+report
+    ```

@@ -1,0 +1,36 @@
+```
+    import dvc.api
+    import dvc.fileio
+    import dvc.repo
+
+    # Initialize a new DVC repository
+    dvc.repo.init('my_repo')
+
+    # Add a new file to the repository
+    dvc.api.add('data.csv')
+
+    # Commit the changes
+    dvc.api.commit('-c', 'Initial commit')
+
+    # Now, you can use dvc to version your data
+    dvc.api.version('-v', 'data')
+
+    # You can also use dvc to check the status of your data
+    dvc.api.checkout('data')
+
+    # And to push your data to a remote repository
+    dvc.api.push('origin', 'master')
+
+    # And to pull your data from a remote repository
+    dvc.api.pull('origin', 'master')
+
+    # And to remove your data from the remote repository
+    dvc.api.rm('origin', 'master', 'data')
+
+    # And to check the status of your data in the remote repository
+    dvc.api.status('origin', 'master', 'data')
+
+    # And to show the history of your data in the remote repository
+    dvc.api.log('origin', 'master', 'data')
+    ```
+    This code will help you integrate DVC (Data Version Control) with your project. DVC is a system for versioning and tracking data science code and artifacts. It's a tool that helps you to manage and track changes in your data and code.

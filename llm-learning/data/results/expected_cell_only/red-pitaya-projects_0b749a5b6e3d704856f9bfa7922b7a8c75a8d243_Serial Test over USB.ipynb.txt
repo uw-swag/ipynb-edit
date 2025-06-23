@@ -1,0 +1,12 @@
+headers = ["Co2","Date & Time"]
+df = pd.read_csv(filename,names=headers,skiprows = 1)
+df
+df = df.append(pd_data_new_row)
+df
+df.to_csv(filename,names=headers)
+headers = ["Co2","Date & Time"]
+df = pd.read_csv(filename,names=headers,skiprows = 1)
+df
+dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+df = pd.read_csv(filename, parse_dates=['Date & Time'], date_parser=dateparse,index_col=0)
+df

@@ -1,0 +1,12 @@
+
+The code you provided is a PyTorch implementation of a sequence-to-sequence model using teacher forcing. The `end_epoch` parameter in the `TeacherForcing` callback function is used to specify the number of epochs to use for teacher forcing.
+
+If you want to tune the `end_epoch` parameter, you can do so by modifying the `end_epoch` parameter in the `TeacherForcing` callback function. For example, if you want to set `end_epoch` to 20, you can do so by modifying the line in the code as follows:
+
+```python
+callback_fns=[ShowGraph, partial(TeacherForcing, end_epoch=20)])
+```
+
+This will set the `end_epoch` parameter to 20 for the `TeacherForcing` callback function.
+
+However, please note that the `end_epoch` parameter is a hyperparameter that you can tune. The value of `end_epoch` should be chosen based on your specific needs and the results you observe.

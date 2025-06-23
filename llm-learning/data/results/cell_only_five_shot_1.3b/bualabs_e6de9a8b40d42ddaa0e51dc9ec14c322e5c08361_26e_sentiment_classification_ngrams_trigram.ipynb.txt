@@ -1,0 +1,33 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+
+    # Load the data
+    df = pd.read_csv('sentiment_data.csv')
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df['text'], df['sentiment'], test_size=0.2, random_state=42)
+
+    # Create a CountVectorizer object
+    vectorizer = CountVectorizer(ngram_range=(1, 3))
+
+    # Fit and transform the training data
+    X_train_vectorized = vectorizer.fit_transform(X_train)
+
+    # Transform the testing data
+    X_test_vectorized = vectorizer.transform(X_test)
+
+    # Train a Multinomial Naive Bayes classifier
+    clf = MultinomialNB()
+    clf.fit(X_train_vectorized, y_train)
+
+    # Evaluate the classifier
+    print(f'Accuracy: {clf.score(X_test_vectorized, y_test)}')
+
+    # Save the classifier
+    import joblib
+    joblib.dump(clf, 'sentiment_classifier.pkl')
+    ```
+    This notebook creates a 26e sentiment classification model using the Naive Bayes classifier from the sklearn library. The model is trained on a dataset of 26e words (n-grams of 1 to 3) and the accuracy of the model is evaluated on the testing set. The trained model is then saved for future use.

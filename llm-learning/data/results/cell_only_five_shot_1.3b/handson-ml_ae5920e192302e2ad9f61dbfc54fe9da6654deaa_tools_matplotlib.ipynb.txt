@@ -1,0 +1,25 @@
+```python
+    from numpy.random import randn
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import numpy as np
+
+x = np.linspace(0, 2*np.pi, 1000)
+y = 3*x + 5 + np.random.randn(1000)*2
+
+fig, ax = plt.subplots()
+scat = ax.scatter(x, y)
+
+def update(num):
+    scat.set_offsets(np.c_[x + num/100, y + num/100])
+
+ani = animation.FuncAnimation(fig, update, frames=100, interval=20, blit=True)
+
+plt.show()
+
+writer = animation.writers['ffmpeg']
+writer = writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
+ani.save('my_wiggly.mp4', writer=writer)
+    ```
+
+    This code creates an animation of a scatter plot of a wiggly line. The animation is created by updating the position of the scatter plot in each frame. The animation is saved as a video file named 'my_wiggly.mp4'.

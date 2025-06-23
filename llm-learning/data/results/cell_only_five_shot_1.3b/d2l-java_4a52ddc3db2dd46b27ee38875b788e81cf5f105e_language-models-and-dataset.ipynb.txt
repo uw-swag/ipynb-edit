@@ -1,0 +1,33 @@
+```java
+    import com.djl.ndarray.types.Shape;
+    import com.djl.ndarray.types.dtype.FloatType;
+    import com.djl.ndarray.Array;
+    import com.djl.ndarray.Nd4j;
+    import com.djl.ndarray.builder.Nd4jBuilder;
+    import com.djl.ndarray.builder.DataBuilder;
+
+    // Create a new ND4J builder
+    Nd4jBuilder nd4j = Nd4j.create();
+
+    // Create a new data builder
+    DataBuilder data = nd4j.create(FloatType.getInstance());
+
+    // Create a new array
+    Array<Float> array = data.create(Shape.of(35));
+
+    // Fill the array with data
+    for (int i = 0; i < 35; i++) {
+        array.set(i, i);
+    }
+
+    // Print the array
+    System.out.println(array.toString());
+
+    // Now, let's iterate over the array
+    for (int i = 0; i < array.size(); i++) {
+        System.out.println("X: " + array.get(i));
+        System.out.println("Y: " + array.get(i));
+    }
+    ```
+
+    This code creates a new ND4J array, fills it with data, and then prints the array. It also iterates over the array and prints each element.

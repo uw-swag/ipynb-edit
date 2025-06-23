@@ -1,0 +1,37 @@
+```
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import AdaBoostClassifier
+    from deepchecks.datasets.classification.breast_cancer import load_data
+    from deepchecks import Dataset
+
+    label = 'target'
+
+    train_df, test_df = load_data(data_format='Dataframe')
+    train = Dataset(train_df, label=label)
+    test = Dataset(test_df, label=label)
+
+    clf = AdaBoostClassifier()
+    features = train_df.drop(label, axis=1)
+    target = train_df[label]
+    clf = clf.fit(features, target)
+
+    from deepchecks.checks import TrustScoreComparison
+
+    TrustScoreComparison(min_test_samples=100).run(train, test, clf)
+
+    pd.Series(index=train_df.columns[:-1] ,data=clf.feature_importances_, name='Model Feature importance').sort_values(ascending=False).to_frame().head(7)
+
+    mod_test_df = test_df.copy()
+    np.random.seed(0)
+    sample_idx = np.random.choice(test_df.index, 80, replace=False)
+    mod_test_df.loc[sample_idx, 'worst texture'] = mod_test_df.loc[sample_idx, 'target'] * (mod_test_df.loc[sample_idx, 'mean concave points'] > 0.05)
+    mod_test = Dataset(mod_test_df, label=label)
+
+    from deepchecks.checks import TrustScoreComparison
+
+    TrustScoreComparison(min_test_samples=100).add_condition_mean_score_percent_decline_not_greater_than(threshold=0.19).run(train, mod_test, clf)
+
+    from deepchecks.checks.performance import MultiModelPerformanceReport
+
+    MultiModelPerformanceReport().run([train, train], [test,

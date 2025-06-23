@@ -1,0 +1,55 @@
+```python
+    # Add model comparison
+    from deepchecks.reporting.plot import Plot
+
+    # Create a plot
+    plot = Plot(suite[6])
+
+    # Show the plot
+    plot.show()
+
+    # Compare the model with the best performing model
+    best_model = suite.get_best_model()
+
+    # Compare the model with the best performing model
+    suite.compare_models(best_model)
+    ```
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Add model comparison (#274)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# General imports
+%load_ext autoreload
+%autoreload 2
+import pandas as pd
+import numpy as np
+np.random.seed(22)
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Load Data
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+label_col = 'target'
+df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+# Train Model
+rf_clf = RandomForestClassifier()
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+<\Cell_0>
+<Cell_1>
+from deepchecks import Dataset
+
+# We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+# If the dataset has categorical features, the best practice is to pass a list with their names
+
+ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use_default_index=False)
+ds_test =  Dataset(df_test,  label_name=label_col, cat_features=[])
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import overall

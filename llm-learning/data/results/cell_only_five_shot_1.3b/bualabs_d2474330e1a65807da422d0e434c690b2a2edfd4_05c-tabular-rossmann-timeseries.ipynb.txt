@@ -1,0 +1,36 @@
+```
+    from fastai import *
+    from fastai.basics import *
+    from fastai.tabular import *
+    path=Config().data_path()/Path('rossmann/')
+    table_names = ['train', 'store', 'store_states', 'state_names', 'googletrend', 'weather', 'test']
+    tables = [pd.read_csv(path/f'{fname}.csv', low_memory=False) for fname in table_names]
+    train, store, store_states, state_names, googletrend, weather, test = tables
+    len(train),len(test)
+    dataframe.head()
+    dataframe.describe(include='all')
+    dependent_variable = 'salary'
+    category_column_names = ['workclass', 'education', 
+                             'marital-status', 'occupation', 
+                             'relationship', 'race']
+    continuous_column_names = ['age', 'fnlwgt', 'education-num']
+
+    preprocesses = [FillMissing, Categorify, Normalize]
+    tabularlist_test = TabularList.from_df(dataframe.iloc[800:1000].copy(), 
+                                           path=path, 
+                                           cat_names=category_column_names, 
+                                           cont_names=continuous_column_names, 
+                                           procs=preprocesses)
+    databunch = (TabularList.from_df(dataframe, path=path, 
+                                     cat_names=category_column_names, 
+                                     cont_names=continuous_column_names, 
+                                     procs=preprocesses)
+                 .split_by_idx(list(range(800,1000)))
+                 .label_from_df(cols=dependent_variable)
+                 .add_test(tabularlist_test)
+                 .databunch())
+    databunch.classes
+    learner = tabular_learner(databunch, layers=[256, 128], 
+                              metrics=accuracy, 
+                              callback_fns=ShowGraph)
+    learner

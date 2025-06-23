@@ -1,0 +1,13 @@
+```python
+    from PIL import Image
+
+    # Remove all images in the root directory
+    for filename in os.listdir(os.path.join(os.path.abspath('.'), '.')):
+        if filename.endswith('.png') or filename.endswith('.jpg') or filename.endswith('.jpeg'):
+            file_path = os.path.join(os.path.abspath('.'), filename)
+            try:
+                Image.open(file_path).close()
+                os.remove(file_path)
+            except IOError:
+                pass
+    ```

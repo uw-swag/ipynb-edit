@@ -1,0 +1,42 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added exaples for custom descriptors, semantic similarity; removed TextOverviewPreset (#1288)"
+    Original Code Cells:
+    '''
+<Cell_0>
+from evidently.descriptors import LLMEval, NegativityLLMEval, PIILLMEval, DeclineLLMEval, BiasLLMEval, ToxicityLLMEval, ContextQualityLLMEval
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+
+import requests
+from io import BytesIO
+
+from sklearn import datasets, ensemble, model_selection
+<\Cell_1>
+<Cell_2>
+# This code cell will not be shown in the HTML version of this notebook
+# It is used to display the data in a tabular format
+<\Cell_2>
+data = [
+    ["Why is the sky blue?",
+     "The sky is blue because molecules in the air scatter blue light from the sun more than they scatter red light.",
+     "The sky appears blue because air molecules scatter the sun’s blue light more than they scatter other colors."],
+
+    ["How do airplanes stay in the air?",
+     "Airplanes stay in the air because their wings create lift by forcing air to move faster over the top of the wing than underneath, which creates lower pressure on top.",
+     "Airplanes stay airborne because the shape of their wings causes air to move faster over the top than the bottom, generating lift."],
+
+    ["How do magnets work?",
+     "Magnets work because they have a magnetic field that can attract or repel certain metals, like iron, due to the alignment of their atomic particles.",
+     "Magnets generate a magnetic field, which can attract metals like iron by causing the electrons in those metals to align in a particular way, creating an attractive or repulsive force."],
+
+    ["How do magnets work?",
+     "Magnets work because they have a magnetic field that can attract or repel certain metals, like iron, due to the alignment of their atomic particles.",
+     "Magnets

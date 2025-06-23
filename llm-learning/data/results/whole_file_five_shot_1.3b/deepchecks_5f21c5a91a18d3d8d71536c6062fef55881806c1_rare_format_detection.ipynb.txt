@@ -1,0 +1,42 @@
+```python
+    from deepchecks.base.base_check import BaseCheck
+    from deepchecks.base.tags import Tags
+
+    class RareFormatDetection(BaseCheck):
+        def run(self, dataset):
+            # Get the data
+            data = dataset.get_data()
+
+            # Check for rare formats
+            rare_formats = self.check_rare_formats(data)
+
+            # Add the result to the dataset
+            dataset.add_result(self.id, Tags.RARE_FORMATS, rare_formats)
+
+            return dataset
+
+        def check_rare_formats(self, data):
+            # Implement the logic to check for rare formats here
+            # Return a list of rare formats
+            pass
+    ```
+
+    The `RareFormatDetection` class is a custom check that you can use to detect rare formats in your data. The `check_rare_formats` method is where you should implement the logic to detect rare formats.
+
+    The `Tags.RARE_FORMATS` tag is used to store the result of the check. You can use it to filter the results in your report.
+
+    The `run` method of the `RareFormatDetection` class is the method that will be called to run the check. It takes a `Dataset` as input and returns the same `Dataset` with the result of the check added to it.
+
+    The `check_rare_formats` method is a placeholder for the logic to detect rare formats. You should implement this method according to your specific requirements.
+
+    The `RareFormatDetection` class is a part of the `deepchecks` library, which is a Python library for data validation and quality checks.
+
+    The `deepchecks` library is not installed by default, you need to install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    After installing the library, you can use the `RareFormatDetection` class to detect rare formats in your data.
+
+    The `run` method of the `RareFormatDetection` class is the method that will be called to run the check. It takes a `Dataset` as input and returns the same `Dataset` with the

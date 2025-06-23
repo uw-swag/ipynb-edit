@@ -1,0 +1,295 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+# Install sentence transformers
+!pip install sentence-transformers
+<\Cell_1>
+<Cell_2>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics import EmbeddingsDriftMetric
+from sklearn.model_selection import train_test_split
+from evidently.metrics.data_drift.embedding_drift_methods import model, distance, ratio, mmd
+<\Cell_2>
+<Cell_3>
+# IMBD reviews dataset
+imdb_5k_data = pd.read_csv("https://raw.githubusercontent.com/SangamSwadiK/test_dataset/main/cleaned_imdb_data_5000_rows.csv")
+imdb_5k_data.head()
+<\Cell_3>
+<Cell_4>
+#This data is oob and has no relationship with movie reviews, you can replace the test set with eco_dot to better understand the workings of drift detection.
+eco_dot_data = pd.read_csv("https://raw.githubusercontent.com/SangamSwadiK/test_dataset/main/eco_data.csv", squeeze=True)
+eco_dot_data.head()
+<\Cell_4>
+<Cell_5>
+## Run this to experiment with the dataset with various ways of embedding (average over records / sum of records etc ...)
+!wget http://nlp.stanford.edu/data/glove.6B.zip -P /content/test/
+!unzip  /content/test/glove.6B.zip -d /content/test/
+<\Cell_5>
+<Cell_6>
+# Load glove vector from vector file
+def load_glove_model(File):
+  """ Loads the keyed vectors from a given text file
+  Args:
+    File: text file which contains the vectors
+  Returns:
+    Dictionary: map containing the key:vector pair
+  """
+  glove_model = {}
+  with open(File,'r') as f:
+      for line in f:
+          split_line = line.split()
+          word = split_line[0]
+          embedding = np.array(split_line[1:], dtype=np.float64)
+          glove_model[word] = embedding
+      return glove_model
+<\Cell_6>
+<Cell_7>
+# We load 50 dimension vector here
+glove_vec = load_glove_model("/content/test/glove.6B.50d.txt")
+<\Cell_7>
+<Cell_8>
+## Perform train test split on imdb data
+train_df, test_df, y_train, y_test = train_test_split(imdb_5k_data.review, imdb_5k_data.sentiment, test_size=0.50, random_state=42)
+<\Cell_8>
+<Cell_9>
+def get_sentence_vector(dataframe):
+  """Get a sentence vector for each text/record by averaging based on counts for each text record
+  Args:
+    dataframe: the dataframe containing the text data
+  returns:
+    array: a matrix of sentence vectors for each record in the dataframe
+  """
+  tmp_arr = []
+  for row in dataframe.values:
+    tmp = np.zeros(50,)
+    for word in row:
+      try:
+        tmp += glove_vec[word]
+      except KeyError:
+        tmp+= np.zeros(50,)
+    tmp = tmp/len(row.split(" "))
+    tmp_arr.append(tmp.tolist())
+
+  return tmp_arr
+<\Cell_9>
+<Cell_10>
+train_matrix =  get_sentence_vector(train_df)
+<\Cell_10>
+<Cell_11>
+train_df_converted = pd.DataFrame(np.array(train_matrix), index = train_df.index)
+train_df_converted.columns = ["col_"+ str(i) for i in range(train_df_converted.shape[1])]
+train_df_converted.head()
+<\Cell_11>
+<Cell_12>
+## Get the sentence vectors for test dataframe
+test_matrix =  get_sentence_vector(test_df)
+<\Cell_12>
+<Cell_13>
+test_df_converted = pd.DataFrame(np.array(test_matrix), index = test_df.index)
+test_df_converted.columns = ["col_"+ str(i) for i in range(test_df_converted.shape[1])]
+
+test_df_converted.head()
+<\Cell_13>
+<Cell_14>
+# Get sentence vector for echo dot
+eco_dot_matrix = get_sentence_vector(eco_dot_data)
+<\Cell_14>
+<Cell_15>
+ecodot_review_df_converted = pd.DataFrame(np.array(eco_dot_matrix), index = eco_dot_data.index)
+ecodot_review_df_converted.columns = ["col_"+ str(i) for i in range(ecodot_review_df_converted.shape[1])]
+
+ecodot_review_df_converted.head()
+<\Cell_15>
+<Cell_16>
+column_mapping = ColumnMapping(
+    embeddings={'small_subset': train_df_converted.columns[:10]}
+)
+<\Cell_16>
+<Cell_17>
+# Here we measure drift on the small subset between train and test imdb records
+report = Report(metrics=[
+    EmbeddingsDriftMetric('small_subset')
+])
+
+report.run(reference_data = train_df_converted[:500], current_data = test_df_converted[500:1000], 
+           column_mapping = column_mapping)
+report
+<\Cell_17>
+<Cell_18>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = model(
+                              threshold = 0.55,
+                              bootstrap = None,
+                              quantile_probability = 0.95,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = train_df_converted[:500], current_data = test_df_converted[500:1000],  
+           column_mapping = column_mapping)
+report
+<\Cell_18>
+<Cell_19>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = mmd(
+                              threshold = 0.015,
+                              bootstrap = None,
+                              quantile_probability = 0.95,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = train_df_converted[:500], current_data = test_df_converted[500:1000],  
+           column_mapping = column_mapping)
+report
+<\Cell_19>
+<Cell_20>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = ratio(
+                              component_stattest = 'wasserstein',
+                              component_stattest_threshold = 0.1,
+                              threshold = 0.2,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = train_df_converted[:500], current_data = test_df_converted[500:1000],  
+           column_mapping = column_mapping)
+report
+<\Cell_20>
+<Cell_21>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = distance(
+                              dist = 'euclidean', #"euclidean", "cosine", "cityblock" or "chebyshev"
+                              threshold = 0.2,
+                              pca_components = None,
+                              bootstrap = None,
+                              quantile_probability = 0.95
+                          )
+                         )
+])
+
+report.run(reference_data = train_df_converted[:500], current_data = test_df_converted[500:1000],  
+           column_mapping = column_mapping)
+report
+<\Cell_21>
+<Cell_22>
+# import MiniLM v2 from sentence transformer
+
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer('all-MiniLM-L6-v2')
+<\Cell_22>
+<Cell_23>
+# Encode only a fraction
+ref_embeddings = model.encode(imdb_5k_data["review"][: 100].tolist() )
+<\Cell_23>
+<Cell_24>
+ref_df = pd.DataFrame(ref_embeddings)
+ref_df.columns = ['col_' + str(x) for x in ref_df.columns]
+ref_df.head(5)
+<\Cell_24>
+<Cell_25>
+# Similarly encode only a fraction
+cur_embeddings = model.encode( eco_dot_data.tolist()[:100] )
+<\Cell_25>
+<Cell_26>
+cur_df = pd.DataFrame(cur_embeddings)
+cur_df.columns = ['col_' + str(x) for x in cur_df.columns]
+cur_df.head(5)
+<\Cell_26>
+<Cell_27>
+column_mapping = ColumnMapping(
+    embeddings={'small_subset': ref_df.columns[:10]}
+)
+<\Cell_27>
+<Cell_28>
+report = Report(metrics=[
+    EmbeddingsDriftMetric('small_subset')
+])
+
+report.run(reference_data = ref_df[:50], current_data = cur_df[:50], 
+           column_mapping = column_mapping)
+report
+<\Cell_28>
+<Cell_29>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = model(
+                              threshold = 0.55,
+                              bootstrap = None,
+                              quantile_probability = 0.95,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = ref_df[:50], current_data = cur_df[:50], 
+           column_mapping = column_mapping)
+report
+<\Cell_29>
+<Cell_30>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = mmd(
+                              threshold = 0.015,
+                              bootstrap = None,
+                              quantile_probability = 0.95,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = ref_df[:50], current_data = ref_df[:50],  
+           column_mapping = column_mapping)
+report
+<\Cell_30>
+<Cell_31>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = ratio(
+                              component_stattest = 'wasserstein',
+                              component_stattest_threshold = 0.1,
+                              threshold = 0.2,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = ref_df[:50], current_data = ref_df[:50],  
+           column_mapping = column_mapping)
+report
+<\Cell_31>
+<Cell_32>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = distance(
+                              dist = 'euclidean', #"euclidean", "cosine", "cityblock" or "chebyshev"
+                              threshold = 0.2,
+                              pca_components = None,
+                              bootstrap = None,
+                              quantile_probability = 0.95
+                          )
+                         )
+])
+
+report.run(reference_data = ref_df[:50], current_data = ref_df[:50],  
+           column_mapping = column_mapping)
+report
+<\Cell_32>

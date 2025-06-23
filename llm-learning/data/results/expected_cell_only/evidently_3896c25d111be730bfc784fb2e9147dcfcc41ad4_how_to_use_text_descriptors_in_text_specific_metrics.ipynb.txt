@@ -1,0 +1,20 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage
+drift_report = Report(metrics=[
+    ColumnDriftMetric(column_name=TextLength().for_column("Review_Text")),
+    ColumnDriftMetric(column_name=TriggerWordsPresence(words_list=['blouse', 'shirt']).for_column("Review_Text")),
+    
+])
+
+drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+drift_report

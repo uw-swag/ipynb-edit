@@ -1,0 +1,20 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    import nbformat as nbf
+
+    # Create a data sampler
+    def data_sampler(df, ratio=0.8):
+        train, test = train_test_split(df, test_size=1-ratio)
+        return train, test
+
+    # Collate notebook
+    def collate_nb(nb_list):
+        nb = nbf.v3.new_notebook()
+        for nb_path in nb_list:
+            with open(nb_path, 'r') as f:
+                nb.append(nbf.v3.read(f, as_version=4))
+        nbf.write(nb, 'notebook.ipynb')
+    ```

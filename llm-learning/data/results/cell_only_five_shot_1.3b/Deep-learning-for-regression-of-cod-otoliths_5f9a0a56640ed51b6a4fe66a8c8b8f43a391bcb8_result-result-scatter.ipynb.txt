@@ -1,0 +1,29 @@
+
+    '''
+    import numpy as np
+import seaborn as sns
+from scipy.stats import norm 
+
+#df_all = [l_all,l_middle,m_min,m_middle,m_max,m_all,b4_min,b4_middle,b4_max,b5_min,b6_min,b6_middle,b6_max]
+df_all = [b4_min, b5_min, b6_min, m_min, l_min, b4_middle, b5_middle, b6_middle, m_middle, l_middle, b4_max, b5_max, b6_max, m_max, l_max, m_all, l_all]
+figure, axes = plt.subplots(7,2, figsize=(15,30)) 
+plt.rcParams['figure.dpi'] = 150
+
+df_values = np.array([])
+weight_acc = np.zeros(13)
+weights = np.zeros(13)
+
+mu_matrix = pd.DataFrame(0, index=np.arange(1, 14), columns=column_names)
+std_matrix = pd.DataFrame(0, index=np.arange(1, 14), columns=column_names)
+for j in range(1, 14):
+    sns.set_style('whitegrid')
+    age1 = np.array([])
+    for i in range(0,len(all)):
+        data1 = df_all[i]
+        age1 = np.append( age1, data1[y_true.age==j] )
+        df_values = np.append(df_values, age1 -j)
+        
+        mu_age, std_age = norm.fit(data1[y_true.age==j]-j) #returns location scale
+        #mu_age = str(round(mu_age, 2))
+        ##std_age = str(round(std_age, 2))
+        mu_matrix.iloc[j-1, i]

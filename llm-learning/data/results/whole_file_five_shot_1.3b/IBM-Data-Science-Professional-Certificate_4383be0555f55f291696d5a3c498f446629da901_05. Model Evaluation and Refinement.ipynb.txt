@@ -1,0 +1,45 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Data exploration
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+
+    # Data preprocessing
+    # Fill missing values
+    df = df.fillna(df.mean())
+
+    # Convert categorical variables to numerical variables
+    df = pd.get_dummies(df)
+
+    # Feature scaling
+    sc = StandardScaler()
+    df = sc.fit_transform(df)
+
+    # Apply PCA
+    pca = PCA(n_components=2)
+    df = pca.fit_transform(df)
+
+    # Apply KMeans clustering
+    kmeans = KMeans(n_clusters=3)
+    df = kmeans.fit_transform(df)
+
+    # Visualize the clusters
+    plt.scatter(df[:, 0], df[:, 1], c=kmeans.labels_)
+    plt.show()
+
+    # Save the clusters to a new dataframe
+    new_df = pd.DataFrame(df, columns=['Cluster1', 'Cluster2', 'Cluster3'])
+    new_df.to_csv('clusters.csv', index=False)
+    ```
+    This script performs a major upload of data analysis with Python. It starts by loading a dataset, then performs a series of data exploration and preprocessing steps. The dataset is then scaled, PCA is applied, and KMeans clustering is applied to the data. The clusters are then visualized and saved to a new dataframe.

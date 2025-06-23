@@ -1,0 +1,14 @@
+```
+    # Authenticate and create the PyDrive client.
+    # This only needs to be done once per notebook.
+    auth.authenticate_user()
+    gauth = GoogleAuth()
+    gauth.credentials = GoogleCredentials.get_application_default()
+    drive = GoogleDrive(gauth)
+
+    textfile = drive.CreateFile()
+    textfile.SetContentFile('matches_v3.txt')
+    textfile.Upload()
+    ```
+    '''
+    ### End of Response

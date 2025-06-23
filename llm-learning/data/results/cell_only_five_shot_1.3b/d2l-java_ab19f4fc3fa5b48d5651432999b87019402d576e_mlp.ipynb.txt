@@ -1,0 +1,50 @@
+
+    The code you provided is a simplified version of a neural network model, and it's a good example of how to simplify and remove duplicated code. Here's a simplified version of the code:
+
+    ```python
+    NDManager manager = NDManager.newBaseManager();
+    NDArray x = manager.arange(-8.0f, 8.0f, 0.1f);
+    x.setRequiresGradient(true);
+    NDArray y = Activation.relu(x);
+
+    int xLength = (int) x.size();
+    int yLength = (int) y.size();
+
+    float[] X = new float[xLength];
+    float[] Y = new float[yLength];
+
+    X = x.toFloatArray();
+    Y = y.toFloatArray();
+
+    Table data = Table.create("Data").addColumns(
+        FloatColumn.create("X", X), 
+        FloatColumn.create("relu(x)", Y)
+    );
+    render(LinePlot.create("", data, "x", "relu(X)"), "text/html");
+
+    NDArray res = x.getGradient();
+
+    int xLength = (int) x.size();
+    int yLength = (int) res.size();
+
+    float[] X = new float[xLength];
+    float[] Y = new float[yLength];
+
+    X = x.toFloatArray();
+    Y = res.toFloatArray();
+
+    Table data = Table.create("Data").addColumns(
+        FloatColumn.create("X", X), 
+        FloatColumn.create("grad of relu", Y)
+    );
+    render(LinePlot.create("", data, "x", "grad of relu"), "text/html");
+
+    NDArray y = Activation.sigmoid(x);
+    int yLength = (int) y.size();
+    float[] Y = new float[yLength];
+
+    Y = y.toFloatArray();
+
+    Table data = Table.create("Data").addColumns(
+        FloatColumn.create("X", X), 
+        FloatColumn

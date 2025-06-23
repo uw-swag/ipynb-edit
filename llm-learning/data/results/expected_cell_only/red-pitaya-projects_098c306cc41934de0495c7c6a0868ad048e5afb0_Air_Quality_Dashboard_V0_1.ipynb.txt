@@ -1,0 +1,22 @@
+%matplotlib notebook
+import matplotlib
+
+from ipywidgets import interact, interactive, fixed, interact_manual
+import ipywidgets as widgets
+from ipywidgets import Button, HBox, VBox
+import random
+import threading
+from IPython.display import display, clear_output
+import time
+import math
+from redpitaya.overlay.mercury import mercury as FPGA
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+from datetime import datetime, date
+import pandas as pd
+
+overlay = FPGA()
+ANALOG_TEMP = FPGA.analog_in(1) # define which pin will be used for temperature sensor

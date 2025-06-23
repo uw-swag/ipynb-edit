@@ -1,0 +1,85 @@
+<Cell_0>
+from redpitaya.overlay.mercury import mercury as overlay
+fpga = overlay()
+<\Cell_0>
+<Cell_1>
+osc0 = fpga.osc(1, 1.0)
+<\Cell_1>
+<Cell_2>
+# data rate decimation 
+osc0.decimation = 8000
+
+# trigger timing [sample periods]
+N = osc0.buffer_size
+osc0.trigger_pre  = 0
+osc0.trigger_post = N
+
+# disable hardware trigger sources
+osc0.trig_src = 0
+<\Cell_2>
+<Cell_3>
+# synchronization and trigger sources are the default,
+# which is the module itself
+osc0.reset()
+osc0.start()
+osc0.trigger()
+# wait for data
+while (osc0.status_run()): pass
+print ('triggered')
+
+import matplotlib.pyplot as plt
+
+# show only the part of the buffer requested by pre/post trigger timing
+data = osc0.data(N)
+plt.plot(data)
+plt.show()
+<\Cell_3>
+<Cell_4>
+data
+<\Cell_4>
+<Cell_5>
+import IPython.display as ipd
+sr = 18050 # sample rate
+ipd.Audio(data, rate=sr) # load a NumPy array
+<\Cell_5>
+<Cell_6>
+import librosa.display
+<\Cell_6>
+<Cell_7>
+X = librosa.stft(data)
+Xdb = librosa.amplitude_to_db(abs(X))
+plt.figure(figsize=(14, 5))
+librosa.display.specshow(Xdb, sr=sr, x_axis='time', y_axis='hz')
+<\Cell_7>
+<Cell_8>
+chn = 4
+channels = [fpga.analog_in(ch) for ch in range(chn)]
+<\Cell_8>
+<Cell_9>
+import numpy as np
+buffer = np.zeros( 10, dtype=np.int16 )
+for i in buffer:
+    print(i)
+<\Cell_9>
+<Cell_10>
+T = 0.01 # sampling period
+x=[]
+y=[ [], [], [], [] ]
+
+# take 20000 samples while simultaneously plotting the plot
+for i in range(20):
+    buffer.append(channels[0].read())
+    
+#    time.sleep(T)
+<\Cell_10>
+<Cell_11>
+
+
+adc = pyb.ADC('X1')
+buf = array.array('H', bytearray(20000))
+timerADC = pyb.Timer(4, freq=2000000) 
+t1=pyb.micros(); n=adc.read_timed(buf,timerADC); t2=pyb.micros()
+print("20000 ADC readings done after %u us." %(t2-t1))
+print("Mean time for each ADC reading = %15.13f us" % ((t2-t1)/20000.0))
+print("ADC reading = %15.13f ksamples/s" % (1000/((t2-t1)/20000.0)))
+<\Cell_11>

@@ -1,0 +1,131 @@
+from evidently.descriptors import LLMJudgeDescriptor, NegativityLLMJudge, PIILLMJudge, DeclineLLMJudge
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+
+import requests
+from io import BytesIO
+
+from sklearn import datasets, ensemble, model_selection
+from evidently.ui.workspace.cloud import CloudWorkspace
+
+from evidently import ColumnMapping
+from evidently.report import Report
+
+from evidently.metrics import ColumnSummaryMetric
+
+from evidently.metric_preset import DataQualityPreset, TextOverviewPreset, TextEvals
+response = requests.get("https://raw.githubusercontent.com/evidentlyai/evidently/main/examples/how_to_questions/chat_df.csv")
+csv_content = BytesIO(response.content)
+assistant_logs = pd.read_csv(csv_content, index_col=0, parse_dates=['start_time', 'end_time'])
+assistant_logs.index = assistant_logs.start_time
+assistant_logs.index.rename('index', inplace=True)
+pd.set_option('display.max_colwidth', None)
+assistant_logs[["question", "response"]].head()
+column_mapping = ColumnMapping(
+    datetime='start_time',
+    datetime_features=['end_time'],
+    text_features=['question', 'response'],
+    categorical_features=['organization', 'model_ID', 'region', 'environment', 'feedback'],
+)
+report = Report(metrics=[
+    TextEvals(column_name="question"),
+    TextEvals(column_name="response")
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMJudge()   
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMJudge(), 
+        DeclineLLMJudge()
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMJudge(include_category=True)   
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMJudge(include_reasonning=False), 
+        DeclineLLMJudge(include_score=True)
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+from evidently.features.llm_judge import BinaryClassificationPromptTemplate
+custom_judge = LLMJudgeDescriptor(
+    subcolumn="category",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="Conciseness",
+        non_target_category="Ok",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+custom_judge = LLMJudgeDescriptor(
+    subcolumn="score",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="Conciseness",
+        non_target_category="Ok",
+        uncertainty="unknown",
+        include_reasoning=True,
+        include_score=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+

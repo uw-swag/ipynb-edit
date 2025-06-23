@@ -1,0 +1,17 @@
+```python
+    from nannyml.calibration import Calibration
+
+    # Assuming you have a calibration object 'calibration'
+    if not isinstance(calibration, Calibration):
+        raise ValueError("The calibration object should be an instance of the Calibration class.")
+
+    # Check if the calibration metric is set
+    if not hasattr(calibration, 'calibration_metric'):
+        raise ValueError("The calibration object should have a 'calibration_metric' attribute.")
+
+    # Check if the calibration metric is a valid metric
+    valid_metrics = ['accuracy', 'precision', 'recall', 'f1_score', 'roc_auc']
+    if calibration.calibration_metric not in valid_metrics:
+        raise ValueError(f"The calibration metric '{calibration.calibration_metric}' is not a valid metric. Valid metrics are: {valid_metrics}")
+    ```
+    This code checks if the calibration metric is set and if it's a valid metric. If not, it raises an error.

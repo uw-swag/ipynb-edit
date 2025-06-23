@@ -1,0 +1,52 @@
+```python
+    # Updated naming & bug fix
+    # Original Code:
+    '''
+    # %pip install flaml[openai]==1.2.0 datasets
+    import os
+
+    if "OPENAI_API_KEY" not in os.environ:
+        os.environ["OPENAI_API_KEY"] = "<your OpenAI API key here>"
+    # openai.api_type = "azure"
+    # openai.api_base = "https://<your_endpoint>.openai.azure.com/"
+    # openai.api_version = "2023-3-01"
+    import datasets
+
+    seed = 41
+    data = datasets.load_dataset("openai_humaneval")["test"].shuffle(seed=seed)
+    n_tune_data = 20
+    tune_data = [
+        {
+            "prompt": data[x]["prompt"],
+            "test": data[x]["test"],
+            "entry_point": data[x]["entry_point"],
+        }
+        for x in range(n_tune_data)
+    ]
+    test_data = [
+        {
+            "prompt": data[x]["prompt"],
+            "test": data[x]["test"],
+            "entry_point": data[x]["entry_point"],
+        }
+        for x in range(n_tune_data, len(data))
+    ]
+
+    print(tune_data[1]["prompt"])
+    print(tune_data[1]["test"])
+    import signal
+    import subprocess
+    import sys
+
+    def timeout_handler(signum, frame):
+        raise TimeoutError("Timed out!")
+
+    signal.signal(signal.SIGALRM, timeout_handler)
+    max_exec_time = 3  # seconds
+
+    def execute_code(code):
+        code = code.strip()
+        with open("codetest.py", "w") as fout:
+            fout.write(code)
+        try:
+            signal.alarm(max_exec_time)

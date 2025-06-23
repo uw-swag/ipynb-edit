@@ -1,0 +1,126 @@
+<Cell_0>
+
+<\Cell_0>
+<Cell_1>
+
+<\Cell_1>
+<Cell_2>
+%load_ext autoreload
+%autoreload 3
+%matplotlib inline
+import numpy as np
+import matplotlib.pyplot as plt
+import torch
+import pickle
+import sys
+import os
+sys.path.append('../fit')
+import cd
+
+
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+
+from torchtext import data
+from torchtext import datasets
+from os.path import join
+<\Cell_2>
+<Cell_3>
+%load_ext autoreload
+%autoreload 4
+%matplotlib inline
+<\Cell_3>
+<Cell_4>
+%reload_ext autoreload
+<\Cell_4>
+<Cell_5>
+from torchtext.data import TabularDataset
+<\Cell_5>
+<Cell_6>
+dataset_path = '../data'
+<\Cell_6>
+<Cell_7>
+inputs = data.Field(lower=True)
+answers = data.Field(sequential=False, unk_token=None)
+tv_datafields = [ ("text", inputs), ("answers", answers)]
+<\Cell_7>
+<Cell_8>
+train, dev, test = TabularDataset.splits(
+                           path=dataset_path, # the root directory where the data lies
+                           train='train_decoy_SST.csv', validation="dev_decoy_SST.csv", test = "test_decoy_SST.csv",
+                           format='csv', 
+
+                           skip_header=False, # if your csv header has a header, make sure to pass this to ensure it doesn't get proceesed as data!
+                           fields=tv_datafields)
+<\Cell_8>
+<Cell_9>
+dataset_path = '../data'
+<\Cell_9>
+<Cell_10>
+train, dev, test = TabularDataset.splits(
+                           path=dataset_path, # the root directory where the data lies
+                           train='train_decoy_SST_' +str(100.0)+'.csv', validation="dev_decoy_SST.csv", test = "test_decoy_SST.csv",
+                           format='csv', 
+                           skip_header=False, # if your csv header has a header, make sure to pass this to ensure it doesn't get proceesed as data!
+                           fields=tv_datafields)
+<\Cell_10>
+<Cell_11>
+len(train)
+<\Cell_11>
+<Cell_12>
+vector_cache = '../data/.vector_cache/input_vectors.pt'
+word_vectors = 'glove.6B.300d'
+<\Cell_12>
+<Cell_13>
+inputs.build_vocab(train, dev, test)
+if word_vectors:
+    if os.path.isfile(vector_cache):
+        inputs.vocab.vectors = torch.load(vector_cache)
+    else:
+        inputs.vocab.load_vectors(word_vectors)
+        os.makedirs(os.path.dirname(vector_cache), exist_ok=True)
+        torch.save(inputs.vocab.vectors, vector_cache)
+answers.build_vocab(train)
+<\Cell_13>
+<Cell_14>
+train_iter, dev_iter, test_iter = data.BucketIterator.splits(
+    (train, dev, test), batch_size=3, sort_key=lambda x: len(x.text), sort = True, device=torch.device(0), shuffle = True)
+<\Cell_14>
+<Cell_15>
+L
+<\Cell_15>
+<Cell_16>
+for batch_idx, batch in enumerate(train_iter):
+    if batch_idx >20000:
+        break
+<\Cell_16>
+<Cell_17>
+batch.text.shape
+<\Cell_17>
+<Cell_18>
+class_decoy = (inputs.vocab.stoi['text'], inputs.vocab.stoi['video'])
+<\Cell_18>
+<Cell_19>
+model_path = "../models/init_models"
+model_list = os.listdir(model_path)
+model = torch.load(join(model_path, model_list[0]), map_location=torch.device(0)).eval()
+<\Cell_19>
+<Cell_20>
+from cd import *
+<\Cell_20>
+<Cell_21>
+((batch.text ==class_decoy[0]) + (batch.text == class_decoy[1])).argmax(dim = 0)
+<\Cell_21>
+<Cell_22>
+
+<\Cell_22>
+<Cell_23>
+batch.text
+<\Cell_23>
+<Cell_24>
+batch.text
+<\Cell_24>
+<Cell_25>
+
+<\Cell_25>

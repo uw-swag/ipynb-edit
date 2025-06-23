@@ -1,0 +1,14 @@
+```java
+    import org.nd4j.linalg.api.ndarray.INDArray;
+    import org.nd4j.linalg.api.ndarray.INDArrayFactory;
+    import org.nd4j.linalg.factory.Nd4j;
+
+    // Sample once from a normal distribution
+    public INDArray getRandomNormal(float mean, float sd) {
+        return Nd4j.randomNormal(mean, sd, new int[]{1}, Nd4j.getDefaultDataType());
+    }
+    ```
+
+    In the code above, we are using the `Nd4j.randomNormal` method to generate a random number from a normal distribution. The `mean` and `sd` parameters are the mean and standard deviation of the normal distribution, respectively. The `new int[]{1}` parameter indicates that we want to generate a 1-dimensional array, and `Nd4j.getDefaultDataType()` is used to get the default data type of ND4J.
+
+    Please note that the `INDArray` returned by `getRandomNormal` is a one-dimensional array, and it contains a single float value.

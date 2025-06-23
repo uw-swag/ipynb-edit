@@ -1,0 +1,47 @@
+
+    [
+    Commit Message: "Adding more data preprocessing steps"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # Removing outliers
+    olympic = olympic[(np.abs(stats.zscore(olympic)) < 3).all(axis=1)]
+    <\Cell_0>
+    # Removing duplicates
+    olympic.drop_duplicates(inplace=True)
+    # Removing missing values
+    olympic.dropna(inplace=True)
+    # Converting data types
+    olympic['year'] = olympic['year'].astype(int)
+    olympic['medal'] = olympic['medal'].astype('category')
+    olympic['gender'] = olympic['gender'].astype('category')
+    olympic['sport'] = olympic['sport'].astype('category')
+    olympic['country'] = olympic['country'].astype('category')
+    <\Cell_0>
+    # Adding id to the dataset, for analysis 
+    olympic['id'] = range(0, len(olympic))
+    <\Cell_0>
+    # Converting categorical variables to numerical
+    olympic = pd.get_dummies(olympic)
+    <\Cell_0>
+    # Checking for missing values
+    print(olympic.isnull().sum())
+    <\Cell_0>
+    # Checking the summary statistics
+    print(olympic.describe(include='all'))
+    <\Cell_0>
+    # Checking the data types
+    print(olympic.dtypes)
+    <\Cell_0>
+    # Checking the unique values
+    print(olympic.nunique())
+    <\Cell_0>
+    # Checking the first few rows
+    print(olympic.head())
+    <\Cell_0>
+    # Checking the last few rows
+    print(olympic.tail())
+    <\Cell_0>
+    # Checking the summary statistics
+    print(olympic.describe(include='all'))
+    <\Cell_

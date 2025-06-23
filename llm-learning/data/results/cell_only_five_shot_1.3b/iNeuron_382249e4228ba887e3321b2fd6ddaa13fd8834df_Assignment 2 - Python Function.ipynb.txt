@@ -1,0 +1,50 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Loading the dataset
+    df = pd.read_csv('student_scores.csv')
+
+    # Splitting the dataset into features and target variable
+    X = df.iloc[:, :-1].values
+    Y = df.iloc[:, 1].values
+
+    # Splitting the dataset into the Training set and Test set
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2, random_state = 0)
+
+    # Training the model
+    regressor = LinearRegression()
+    regressor.fit(X_train, Y_train)
+
+    # Predicting the Test set results
+    Y_pred = regressor.predict(X_test)
+
+    # Comparing Actual vs Predicted
+    df = pd.DataFrame({'Actual': Y_test, 'Predicted': Y_pred})
+    print(df)
+
+    # Evaluating the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(Y_test, Y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(Y_test, Y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(Y_test, Y_pred)))
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Adding new notebook for data analysis"
+    Original Code Cells:
+    '''
+    
+
+
+    '''
+    ]
+
+    ### Response:
+    ### Data Analysis Notebook
+
+    ## Introduction
+    This notebook is designed to provide a comprehensive analysis of the data. The dataset used in this analysis is a hypothetical dataset related to the scores of students in a class. The dataset contains two columns: 'Hours' and 'S

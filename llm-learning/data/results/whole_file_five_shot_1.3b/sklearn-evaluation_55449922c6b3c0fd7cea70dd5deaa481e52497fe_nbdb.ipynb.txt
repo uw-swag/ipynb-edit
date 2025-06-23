@@ -1,0 +1,71 @@
+```
+    [
+    Commit Message: "Migration of docs to jupyter-book (#93)"
+    Original Code Cells:
+    '''
+    from pathlib import Path
+
+    # to train models in parallel
+    from ploomber import DAG
+    from ploomber.tasks import NotebookRunner
+    from ploomber.products import File
+    from ploomber.executors import Parallel, Serial
+
+    # to produce parameter grid
+    from sklearn.model_selection import ParameterGrid
+
+    # to create SQLite database
+    from sklearn_evaluation import NotebookDatabase
+
+    # %% tags=["parameters"]
+    upstream = None
+    product = None
+
+    # %%
+    from sklearn import datasets
+
+    # %%
+    ca_housing = datasets.fetch_california_housing(as_frame=True)
+    df = ca_housing['frame']
+    df.to_csv(product['data'], index=False)
+    '''
+    ]
+
+    ### Response:
+    ```
+    [
+    Commit Message: "Migration of docs to jupyter-book (#93)"
+    Original Code Cells:
+    '''
+    from pathlib import Path
+
+    # to train models in parallel
+    from ploomber import DAG
+    from ploomber.tasks import NotebookRunner
+    from ploomber.products import File
+    from ploomber.executors import Parallel, Serial
+
+    # to produce parameter grid
+    from sklearn.model_selection import ParameterGrid
+
+    # to create SQLite database
+    from sklearn_evaluation import NotebookDatabase
+
+    # %% tags=["parameters"]
+    upstream = None
+    product = None
+
+    # %%
+    from sklearn import datasets
+
+    # %%
+    ca_housing = datasets.fetch_california_housing(as_frame=True)
+    df = ca_housing['frame']
+    df.to_csv(product['data'], index=False)
+    '''
+    ]
+
+    ### Response:
+    ```
+    [
+    Commit Message: "Migration of docs to jup

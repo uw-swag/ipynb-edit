@@ -1,0 +1,42 @@
+```python
+    import numpy as np
+    import tensorflow as tf
+    import gym
+    import matplotlib.pyplot as plt
+
+    # Cart-Pole problem
+    env = gym.make('CartPole-v0')
+
+    # Hyperparameters
+    GAMMA = 0.99
+    LR = 0.001
+    EPSILON_DECAY = 0.999
+    EPSILON_MIN = 0.01
+    BATCH_SIZE = 32
+    NUM_EPISODES = 500
+    MAX_STEPS = 200
+
+    # Initialize the policy
+    policy_input = tf.placeholder(shape=[None, 4], dtype=tf.float32)
+    W1 = tf.get_variable("W1", shape=[4, 20], initializer=tf.contrib.layers.xavier_initializer())
+    b1 = tf.get_variable("b1", shape=[20], initializer=tf.constant_initializer(0.01))
+    layer1 = tf.nn.relu(tf.matmul(policy_input, W1) + b1)
+
+    W2 = tf.get_variable("W2", shape=[20, 2], initializer=tf.contrib.layers.xavier_initializer())
+    b2 = tf.get_variable("b2", shape=[2], initializer=tf.constant_initializer(0.01))
+    policy = tf.matmul(layer1, W2) + b2
+
+    # Initialize the variables
+    init = tf.global_variables_initializer()
+
+    # Training
+    with tf.Session() as sess:
+        sess.run(init)
+
+        for i in range(NUM_EPISODES):
+            total_reward = 0
+            s = env.reset()
+
+            for j in range(MAX_STEPS):
+                a = sess.run(policy, feed_dict={policy_input: s})
+                s, r, done, _ = env.step(a

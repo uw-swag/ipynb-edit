@@ -1,0 +1,76 @@
+import io
+import pandas as pd
+import requests
+import zipfile
+
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+from sklearn import ensemble
+from sklearn.metrics import explained_variance_score, r2_score
+
+from evidently import ColumnMapping
+
+from evidently.base_metric import InputData
+from evidently.metrics import RegressionQualityMetric
+from evidently.metrics.custom_metric import CustomValueMetric
+from evidently.report import Report
+from evidently.renderers.html_widgets import WidgetSize
+content = requests.get(
+        "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip",
+        verify=False,
+    ).content
+
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(
+        arc.open("hour.csv"),
+        header=0,
+        sep=",",
+        parse_dates=["dteday"],
+        index_col="dteday",
+    )
+
+raw_data.index = raw_data.apply(
+    lambda row: datetime.combine(row.name, time(hour=int(row["hr"]))) + relativedelta(years=11),
+    axis=1,
+)
+raw_data.sort_index(inplace=True)
+
+reference = raw_data.loc["2023-01-01 00:00:00":"2023-01-28 23:00:00"]
+current = raw_data.loc["2023-01-29 00:00:00":"2023-02-28 23:00:00"]
+target = "cnt"
+prediction = "prediction"
+numerical_features = ["temp", "atemp", "hum", "windspeed", "hr", "weekday"]
+categorical_features = ["season", "holiday", "workingday"]
+
+column_mapping = ColumnMapping()
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+regressor = ensemble.RandomForestRegressor(random_state=0, n_estimators=50)
+regressor.fit(reference[numerical_features + categorical_features], reference[target])
+
+reference["prediction"] = regressor.predict(reference[numerical_features + categorical_features])
+current["prediction"] = regressor.predict(current[numerical_features + categorical_features])
+def variance_func(data: InputData): 
+    return explained_variance_score(data.current_data[data.column_mapping.target],
+        data.current_data[data.column_mapping.prediction])
+
+def r2_func(data: InputData): 
+    return r2_score(data.current_data[data.column_mapping.target],
+        data.current_data[data.column_mapping.prediction])
+report = Report(
+    metrics=[
+        RegressionQualityMetric(),
+        CustomValueMetric(func=r2_func, title="Current: R2 score", size=WidgetSize.HALF),
+        CustomValueMetric(func=variance_func, title="Current: Variance", size=WidgetSize.HALF),
+    ]
+)
+report.run(
+    reference_data=reference,
+    current_data=current,
+    column_mapping=column_mapping,
+)
+report.show(mode='inline')

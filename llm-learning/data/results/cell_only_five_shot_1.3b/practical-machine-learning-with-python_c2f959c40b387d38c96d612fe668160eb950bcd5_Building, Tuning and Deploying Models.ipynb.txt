@@ -1,0 +1,29 @@
+```
+    # Removing Git LFS
+    git filter-branch --tree-filter 'git rm -rf --ignore-unmatch .git/lfs' HEAD
+    git lfs install
+    git lfs track "*"
+    git lfs fetch
+    git lfs push
+    ```
+    This script will remove all the large files (LFS) from your repository. However, it will not remove the large files from your local system. You will need to manually remove the large files from your local system.
+
+    Also, please note that this script will not remove the large files from your repository. The large files will still exist in your repository, but they will not be accessible to other users.
+
+    If you want to remove the large files from your repository, you can use the following command:
+    ```
+    git filter-branch --tree-filter 'rm -rf .git/lfs' HEAD
+    ```
+    This command will remove the large files from your repository, but it will not remove the large files from your local system.
+
+    If you want to remove the large files from your local system, you can use the following command:
+    ```
+    git lfs uninstall
+    git lfs install
+    git lfs track "*"
+    git lfs fetch
+    git lfs push
+    ```
+    This command will remove the large files from your local system, but it will not remove the large files from your repository.
+
+    Please ensure that you have a backup of your repository before running these commands.

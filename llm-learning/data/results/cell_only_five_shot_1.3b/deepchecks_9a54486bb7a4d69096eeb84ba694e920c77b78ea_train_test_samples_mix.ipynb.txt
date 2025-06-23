@@ -1,0 +1,27 @@
+```python
+    from deepchecks.base import Dataset
+    from deepchecks.checks.methodology import TrainTestSamplesMix
+
+    # Load data
+    iris = load_iris()
+    df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+
+    # Split data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    # Create a Dataset object for the train data
+    train_ds = Dataset(X_train, y_train, "Train Data")
+
+    # Create a Dataset object for the test data
+    test_ds = Dataset(X_test, y_test, "Test Data")
+
+    # Create a TrainTestSamplesMix check
+    tts_check = TrainTestSamplesMix(train_ds, test_ds)
+
+    # Run the check
+    report = tts_check.run()
+
+    # Print the report
+    print(report)
+    ```

@@ -1,0 +1,28 @@
+
+    The caching strategy in the code you provided is not explicitly mentioned. However, the caching strategy used in the code is the 'lru_cache' decorator, which is commonly used in Python to cache the results of function calls. This decorator provides a way to cache the results of a function, so that the results can be reused when the function is called again.
+
+    Here's an example of how to use the 'lru_cache' decorator:
+
+    ```python
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def expensive_function(arg1, arg2):
+        # Some expensive operation here
+        return result
+    ```
+
+    In this example, the 'lru_cache' decorator is used to cache the results of the 'expensive_function' call. The 'maxsize' parameter is optional and defaults to None, which means the cache can grow without bound.
+
+    If you want to change the caching strategy, you can do so by modifying the 'maxsize' parameter of the 'lru_cache' decorator. For example, if you want to cache the results of the 'expensive_function' call for 1000 calls, you can do so as follows:
+
+    ```python
+    @lru_cache(maxsize=1000)
+    def expensive_function(arg1, arg2):
+        # Some expensive operation here
+        return result
+    ```
+
+    This will cache the results of the 'expensive_function' call for the first 1000 calls. After that, the results will not be cached, and the 'expensive_function' call will be executed each time it is called.
+
+    Please note that the 'lru_cache' decorator is a part of the 'functools' module in Python, and it is not available in all Python environments.

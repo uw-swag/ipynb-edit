@@ -1,0 +1,22 @@
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(columns=["Review_Text", "Title"], descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+summary_report = Report(metrics=[
+    ColumnSummaryMetric(column_name=SemanticSimilarity().on(["Review_Text", "Title"]))
+])
+
+summary_report.run(reference_data=reviews_ref[:10], current_data=reviews_cur[:10], column_mapping=column_mapping)
+summary_report

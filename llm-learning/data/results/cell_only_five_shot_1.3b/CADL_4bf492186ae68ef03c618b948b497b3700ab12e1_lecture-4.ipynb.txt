@@ -1,0 +1,26 @@
+```
+    # Create some noise, centered at gray
+    img_noise = inception.preprocess(
+        (np.random.randint(100, 150, size=(224, 224, 3))))[np.newaxis]
+    print(img_noise.min(), img_noise.max())
+    ```
+
+    The error message suggests that the output of the preprocessing function is not of the same type as the input, which is expected. The preprocessing function is designed to accept input of type 'float32' or 'float64' and return output of the same type.
+
+    The solution is to ensure that the input to the preprocessing function is of the same type as the output. In this case, the input is a numpy array of type 'int64', so the output should also be an 'int64' array.
+
+    The preprocessing function is defined as:
+    ```python
+    def preprocess(input_image):
+        # your code here
+    ```
+
+    The input_image should be of type 'float32' or 'float64'. You can convert the input_image to the correct type by using the numpy function `astype`.
+
+    The corrected code would be:
+    ```python
+    # Create some noise, centered at gray
+    img_noise = inception.preprocess(
+        (np.random.randint(100, 150, size=(224, 224, 3))).astype('float32'))[np.newaxis]
+    print(img_noise.min(), img_noise.max())
+    ```

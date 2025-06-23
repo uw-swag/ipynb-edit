@@ -1,0 +1,28 @@
+
+    The code you provided is a part of a larger process that involves reading and processing data from an EDF (Electroencephalogram) file, extracting features from the data, and finally reducing the dimensionality of the features using Principal Component Analysis (PCA).
+
+    The `read_and_store_data` function reads the EDF files and stores the data in a pandas DataFrame. It also sorts the patients and their corresponding EDF and seizure files.
+
+    The `featureExtraction` function extracts features from the data. It computes time-domain features (mean, variance, skewness, kurtosis, standard deviation, median, zero-crossing rate, co-variance, root mean square, peak to peak, and sample entropy) and frequency-domain features (delta power, theta power, alpha power, beta power, gamma power) for each chunk of data.
+
+    The `psd` function computes the power spectral density (PSD) for each channel.
+
+    The `ComputeCorrelation` function computes the correlation between two channels.
+
+    The `leftRightHemisphericChannels` function separates the left and right hemispheres of the data.
+
+    The `featureNormalization` function normalizes the features.
+
+    The `dimentionalityReduction` function reduces the dimensionality of the features using PCA.
+
+    The final part of the code reads the data, separates the left and right hemispheres, extracts features, and reduces the dimensionality of the features.
+
+    The progress bar is added to the feature extraction process using the `tqdm` library.
+
+    The final features are stored in a pandas DataFrame and are ready for further processing.
+
+    Please note that the `tqdm` library is not installed in this code, so you need to install it using pip:
+
+    ```
+    pip install tqdm
+    ```

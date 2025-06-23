@@ -1,0 +1,38 @@
+```python
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import numpy as np
+    import networkx as nx
+    from functools import reduce
+    from lib.util import fetch_tweets
+
+    gw = fetch_tweets("germanwings-crash")
+
+    gw.info()
+    gw.head()
+
+    bool_columns = ["is_rumor", "is_source_tweet", "is_truncated", 
+                    "has_smile_emoji", "user.verified", "user.has_bg_img", 
+                    "user.default_pic", "sensitive", "has_place", "has_coords", "user.notifications"]
+
+    gw[bool_columns].astype(bool).describe(include="bool")
+
+    for col in gw.columns:
+        if len(gw[col].unique()) == 1:
+            gw.drop(col, inplace=True, axis = 1)
+
+    gw.describe()
+
+    def agg_tweets_by_thread(df):
+        # ...
+        # Your code here
+        # ...
+
+    gw_thrds = agg_tweets_by_thread(gw)
+    gw_thrds.columns
+    gw_thrds.describe()
+
+    fn = "data/threads/germanwings-crash.csv"
+    gw_thrds.to_csv(fn, index=False)
+    "Wrote data to %s" % fn
+    ```

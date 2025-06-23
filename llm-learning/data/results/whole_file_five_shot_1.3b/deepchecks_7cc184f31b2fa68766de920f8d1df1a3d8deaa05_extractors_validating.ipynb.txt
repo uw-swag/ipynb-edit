@@ -1,0 +1,11 @@
+```python
+    # Split VisionData and remove Formatters
+    from visiondata.data_formatter import DataFormatter
+
+    # Split the data
+    train_data, test_data = VisionData.split(0.8)
+
+    # Remove formatters
+    train_data = [item for item in train_data if not isinstance(item, DataFormatter)]
+    test_data = [item for item in test_data if not isinstance(item, DataFormatter)]
+    ```

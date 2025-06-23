@@ -1,0 +1,29 @@
+```python
+    from deepchecks.tabular.base import Dataset
+    from deepchecks.tabular.checks import IndexTrainTestLeakage
+    import pandas as pd
+
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Split the data
+    base_data = df.iloc[:1000]
+    core_data = df.iloc[1000:]
+
+    # Create a base dataset
+    base_ds = Dataset(base_data, label='target')
+
+    # Create a core dataset
+    core_ds = Dataset(core_data, label='target')
+
+    # Create a check
+    check = IndexTrainTestLeakage(base_ds, core_ds)
+
+    # Run the check
+    report = check.run()
+
+    # Print the report
+    print(report)
+    ```
+
+    This script splits the data into a base dataset and a core dataset. The base dataset is the first 1000 rows of the data, and the core dataset is the remaining rows. The `IndexTrainTestLeakage` check is then run on the base and core datasets, and the report is printed.

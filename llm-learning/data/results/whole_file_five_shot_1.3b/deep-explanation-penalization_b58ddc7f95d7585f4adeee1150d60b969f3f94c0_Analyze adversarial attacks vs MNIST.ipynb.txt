@@ -1,0 +1,33 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    # Load ISIC 2018 dataset
+    df = pd.read_csv('ISIC_2018_Task3_Training_Data.csv')
+
+    # Add columns for ISIC Grad Codes
+    df['ISIC_Grad_Codes'] = df['ISIC_No'].apply(lambda x: [i for i in range(1, 12) if x in i])
+
+    # Convert list of grad codes to string
+    df['ISIC_Grad_Codes'] = df['ISIC_Grad_Codes'].apply(lambda x: ','.join(map(str, x)))
+
+    # Add a new column for the number of grad codes
+    df['num_grad_codes'] = df['ISIC_Grad_Codes'].apply(lambda x: len(x.split(',')))
+
+    # Add a new column for the most common grad code
+    df['most_common_grad_code'] = df.groupby('ISIC_No')['num_grad_codes'].transform('max')
+
+    # Add a new column for the most common grad code
+    df['most_common_grad_code'] = df['most_common_grad_code'].apply(lambda x: x[0])
+
+    # Add a new column for the most common grad code
+    df['most_common_grad_code'] = df['most_common_grad_code'].apply(lambda x: ','.join(map(str, x.split(','))))
+
+    # Add a new column for the most common grad code
+    df['most_common_grad_code'] = df['most_common_grad_code'].apply(lambda x: x[0])
+
+    # Add a new column for the most common grad code
+    df['most_common_grad_code'] = df['most_common_grad_code'].apply(lambda x: ','.join(map(str, x.split(','))))
+
+    # Add a new column for the most common grad code
+    df['most_common_grad_code'] = df['most_common_grad_code'].apply(lambda x:

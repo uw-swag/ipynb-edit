@@ -1,0 +1,53 @@
+```
+    ## This code cell will not be shown in the HTML version of this notebook
+    ## import autograd functionality to bulid function's properly for optimizers
+    import autograd.numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+
+    import sys
+    sys.path.append('../../')
+    from mlrefined_libraries import nonlinear_superlearn_library as nonlib
+
+    ## import autograd functionality
+    from autograd import grad
+
+    ## this is needed to compensate for %matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib notebook
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+
+    ## This code cell will not be shown in the HTML version of this notebook
+    def activation1(w):
+        a = 1/(1 + np.exp(-5*w))
+        return a
+
+    def activation2(w):
+        a = np.maximum(0,w)
+        return a
+
+    ## create input and functions to plot
+    w = np.linspace(-5,5,100)
+    a = activation1(w)
+    deg = 20
+    # a2 = my_act(w)
+    a2 = activation2(w)
+
+    ## create derivatives to plot
+    der = grad(activation1)
+    b = np.array([der(v) for v in w])
+    der2 = grad(activation2)
+    b2 =  np.array([der2(v) for v in w])
+
+    ## figure construction ###
+    ## initialize figure
+    fig = plt.figure(figsize = (8,5))
+
+    ## create subplot with 1 panel
+    gs = gridspec.GridSpec(2, 2) 
+    ax = plt.subplot(gs[0]); 
+    ax.plot(w,a)
+    ax = plt.subplot(gs[1]); 

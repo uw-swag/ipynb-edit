@@ -1,0 +1,70 @@
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+reference_data = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+current_data.iloc[:2000, 3:5] = np.nan
+current_data.iloc[:2000, 12] = np.nan
+from evidently.tests import TestNumberOfNulls
+from evidently.tests import TestShareOfNulls
+from evidently.tests import TestNumberOfColumnsWithNulls
+from evidently.tests import TestShareOfColumnsWithNulls
+from evidently.tests import TestNumberOfRowsWithNulls
+from evidently.tests import TestShareOfRowsWithNulls
+from evidently.tests import TestNumberOfDifferentNulls
+
+suite = TestSuite(tests=[
+    TestNumberOfNulls(),
+    TestShareOfNulls(),
+    TestNumberOfColumnsWithNulls(),
+    TestShareOfColumnsWithNulls(),
+    TestNumberOfRowsWithNulls(),
+    TestShareOfRowsWithNulls(),
+    TestNumberOfDifferentNulls(),
+])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+from evidently.tests import TestColumnNumberOfNulls
+from evidently.tests import TestColumnShareOfNulls
+from evidently.tests import TestColumnNumberOfDifferentNulls
+
+suite = TestSuite(tests=[
+    TestColumnNumberOfNulls(column_name='native-country'),
+    TestColumnShareOfNulls(column_name='native-country'),
+    TestColumnNumberOfDifferentNulls(column_name='native-country'),
+])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+# set all ages less than 20 to 0 and greater than 30 to INF
+current_data.loc[current_data['age'] < 20, 'age'] = 0
+current_data.loc[current_data['age'] > 30, 'age'] = np.inf
+
+# run tests for age and specify a custom null-value
+suite = TestSuite(tests=[
+    TestColumnNumberOfNulls(column_name='age'),
+    TestColumnShareOfNulls(column_name='age'),
+    TestColumnNumberOfDifferentNulls(column_name='age'),
+    # add 0 value to default null-values list
+    TestColumnNumberOfNulls(column_name='age', null_values=[0], replace=False),
+    TestColumnShareOfNulls(column_name='age', null_values=[0], replace=False),
+    TestColumnNumberOfDifferentNulls(column_name='age', null_values=[0], replace=False),
+    # use 0 and null valaues from Pandas as null-values list
+    TestColumnNumberOfNulls(column_name='age', null_values=[0, None], replace=True),
+    TestColumnShareOfNulls(column_name='age', null_values=[0, None], replace=True),
+    TestColumnNumberOfDifferentNulls(column_name='age', null_values=[0], replace=True),
+])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+

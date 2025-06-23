@@ -1,0 +1,53 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Load the data
+    df = pd.read_csv('eda_results.csv')
+
+    # Check the first few rows of the data
+    print(df.head())
+
+    # Check the summary statistics of the data
+    print(df.describe())
+
+    # Check the distribution of the target variable
+    sns.countplot(df['target'])
+    plt.show()
+
+    # Check the correlation matrix
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Check the distribution of the features
+    df.hist(bins=20, figsize=(15, 10))
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    sns.boxplot(x='target', y='feature1', data=df)
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    sns.boxplot(x='target', y='feature2', data=df)
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    sns.boxplot(x='target', y='feature3', data=df)
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    sns.boxplot(x='target', y='feature4', data=df)
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    sns.boxplot(x='target', y='feature5', data=df)
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    sns.boxplot(x='target', y='feature6', data=df)
+    plt.show()
+
+    # Check the distribution of the features based on the target variable
+    s

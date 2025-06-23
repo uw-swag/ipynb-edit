@@ -1,0 +1,35 @@
+```python
+    # Setup the environment
+    import os
+    import sys
+    import nbformat
+    from IPython.display import display, HTML
+
+    # Ensure that the notebook is running in a Jupyter environment
+    if 'google.colab' in sys.modules:
+        !pip install -q nbformat
+        !pip install -q git+https://github.com/jupyter/nbgitpuller.git
+
+    # Import the necessary libraries
+    import nbformat
+    from nbgitpuller import NBGitPuller
+
+    # Set the notebook directory
+    notebook_path = 'path/to/your/notebook.ipynb'
+
+    # Check if the notebook is already up-to-date
+    puller = NBGitPuller(notebook_path)
+    if puller.is_up_to_date():
+        print('Notebook is already up-to-date.')
+    else:
+        print('Notebook is not up-to-date. Pulling changes...')
+        puller.pull()
+        print('Notebook has been updated.')
+
+    # Load the notebook
+    with open(notebook_path, 'r') as f:
+        nb = nbformat.read(f, as_version=4)
+
+    # Display the notebook
+    display(nb)
+    ```

@@ -1,0 +1,35 @@
+
+    Here is the updated code. I have added a new method `showImages` to display the images. This method is used to display the images in a JFrame.
+
+```java
+import java.awt.image.BufferedImage;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class Main {
+    // ...
+
+    public static void showImages(Image[] imageArr, int numImages, int width, int height, int channels, ImageManager manager) {
+        JFrame frame = new JFrame("Image Viewer");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(width, height);
+
+        for (int i = 0; i < numImages; i++) {
+            BufferedImage img = imageArr[i].getBufferedImage();
+            ImageIcon icon = new ImageIcon(img);
+            JLabel label = new JLabel(icon);
+            frame.add(label);
+        }
+
+        frame.setVisible(true);
+    }
+
+    // ...
+}
+```
+
+In the `showImages` method, a JFrame is created to display the images. Each image is converted to a BufferedImage and then an ImageIcon is created from it. This ImageIcon is then added to a JLabel in the JFrame. The JFrame is then made visible.
+
+Please note that this method is only for local testing and it may not work properly on a remote server.

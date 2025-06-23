@@ -1,0 +1,12 @@
+```python
+    import pandas as pd
+from sklearn.datasets import load_iris
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+train_len = round(0.67*len(iris_df))
+df_train = iris_df[:train_len]
+df_test = iris_df[train_len:]
+from deepchecks.suites import integrity_suite
+integrity_suite().run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    The code above is a Python script that imports necessary libraries, loads the iris dataset, and then runs a suite of integrity checks on the training and testing datasets. The integrity suite checks for missing values, duplicate rows, and inconsistent data types.

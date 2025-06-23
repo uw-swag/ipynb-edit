@@ -1,0 +1,15 @@
+```
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # Assuming df is your DataFrame and 'time' is the column you want to plot
+    df['time'] = pd.to_datetime(df['time'])
+    df.set_index('time', inplace=True)
+
+    plt.figure(figsize=(14,7))
+    plt.plot(df['value'])
+    plt.title('Live Plotting with Serial Data')
+    plt.xlabel('Time')
+    plt.ylabel('Value')
+    plt.show()
+    ```

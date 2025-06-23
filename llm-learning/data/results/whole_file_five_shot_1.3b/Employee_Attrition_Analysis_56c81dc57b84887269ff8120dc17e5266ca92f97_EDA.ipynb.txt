@@ -1,0 +1,29 @@
+```
+    # import dependencies
+    from getpass import getpass
+    import sqlalchemy
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+
+    # read in table from database
+    attrition_df = pd.read_sql('SELECT * FROM cleaned_data', connection)
+    attrition_df
+    ```

@@ -1,0 +1,37 @@
+```python
+    <Cell_0>
+    from pyspark.sql import SparkSession
+    from pyspark.ml.feature import VectorAssembler
+    from pyspark.ml.feature import StringIndexer
+
+    spark = SparkSession.builder.appName("FirstSparkApplication").getOrCreate()
+
+    training_dataset = spark.read.format("csv").option("inferSchema", True).option("header", "true").load('dataset/titanic_train.csv')
+
+    # Preprocessing
+    # Replacing the names with title
+    feature_df = training_dataset.replace(["Mme", 
+                                           "Mlle","Ms",
+                                           "Major","Dr", "Capt","Col","Rev",
+                                           "Lady","Dona", "the Countess","Countess", "Don", "Sir", "Jonkheer","Master"],
+                                          ["Mrs", 
+                                           "Miss", "Miss",
+                                           "Ranked","Ranked","Ranked","Ranked","Ranked",
+                                           "Royalty","Royalty","Royalty","Royalty","Royalty","Royalty","Royalty","Royalty"])
+
+    # Indexing categorical columns
+    parchIndexer = StringIndexer(inputCol="Parch", outputCol="Parch_Ind").fit(feature_df)
+    sibspIndexer = StringIndexer(inputCol="SibSp", outputCol="SibSp_Ind").fit(feature_df)
+    passangerIndexer = StringIndexer(inputCol="PassengerClasses", outputCol="PassengerClasses_Ind").fit(feature_df)
+    survivedIndexer = StringIndexer(inputCol="Survived", outputCol="Survived_Ind").fit(feature_df)
+
+    # Assembling features
+    assembler = VectorAssembler(
+      inputCols = ["PassengerClasses","SibSp","Parch"],
+      outputCol = "features")
+
+    # Transforming data
+    transformed_data = assembler.transform(feature_df)
+
+    # Selecting features
+   

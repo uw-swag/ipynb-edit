@@ -1,0 +1,34 @@
+```python
+    # code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir('../../notebook_format')
+    from formats import load_style
+    load_style()
+    os.chdir(path)
+    import numpy as np
+    import pandas as pd
+    df = pd.read_excel("sales-funnel.xlsx")
+    df.head()
+    df.pivot_table(index = ['Manager', 'Rep'], values = ['Price'])
+    df.pivot_table(index = ['Manager', 'Rep'], values = ['Price'], aggfunc = [np.mean, len])
+    df.pivot_table(index = ['Manager','Rep'], values = ['Price'],
+                   columns = ['Product'], aggfunc = [np.sum])
+    df.pivot_table(index = ['Manager', 'Rep'], values = ['Price', 'Quantity'],
+                   columns = ['Product'], aggfunc = [np.sum], fill_value = 0)
+    df.pivot_table(index = ['Manager', 'Rep', 'Product'],
+                   values = ['Price', 'Quantity'], aggfunc = [np.sum], margins = True)
+    df['Status'] = df['Status'].astype('category')
+    df['Status'] = df['Status'].cat.set_categories(['won', 'pending', 'presented', 'declined'])
+    df.pivot_table(index = ['Manager', 'Status'], values = ['Price'],
+                   aggfunc = [np.sum], fill_value = 0, margins = True)
+    table = df.pivot_table(index = ['Manager','Status'], 
+                           columns = ['Product'], 
+                           values = ['Quantity','Price'],
+                           aggfunc = {'Quantity': len, 'Price': [np.sum, np.mean]}, 
+                           fill_value = 0)
+    table.query("Status == ['pending','won']")
+    ```
+    This code is for loading the format for the notebook, reading an excel file, performing pivot table

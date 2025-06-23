@@ -1,0 +1,20 @@
+
+    The code you've provided is a collection of Jupyter notebooks that are used to perform various tasks related to image processing, machine learning, and data analysis. Here's a brief explanation of what each cell does:
+
+1. `import os`: This line imports the `os` module, which provides a way of using operating system dependent functionality.
+
+2. `os.mkdir('img_align_celeba')`: This line creates a new directory named 'img_align_celeba'.
+
+3. The next few lines are used to download and save images from a URL.
+
+4. `help(os.listdir)`: This line displays the help for the `os.listdir` function, which returns a list of the files in a directory.
+
+5. `[file_i for file_i in os.listdir('img_align_celeba') if '.jpg' in file_i]`: This line creates a list of all .jpg files in the 'img_align_celeba' directory.
+
+6. `[file_i for file_i in os.listdir('img_align_celeba') if '.jpg' in file_i and '00000' in file_i]`: This line creates a list of all .jpg files in the 'img_align_celeba' directory that start with '00000'.
+
+7. `[file_i for file_i in os.listdir('img_align_celeba') if '.jpg' in file_i or '.png' in file_i or '.jpeg' in file_i]`: This line creates a list of all .jpg, .png, or .jpeg files in the 'img_align_celeba' directory.
+
+8. `files = [os.path.join('img_align_celeba', file_i) for file_i in os.listdir('img_align_celeba') if '.jpg' in file_i]`: This line creates a list of all .jpg files in the 'img_align_celeba' directory.
+
+9. `img = plt.imread(files[0])`: This line reads an image file into a NumPy array.

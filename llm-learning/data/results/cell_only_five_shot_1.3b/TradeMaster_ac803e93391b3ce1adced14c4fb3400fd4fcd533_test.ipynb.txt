@@ -1,0 +1,52 @@
+```python
+    # Update Docker
+    # Docker is a platform that allows developers to package an application with all of its dependencies into a single object, which can run on any machine that has Docker installed.
+
+    # First, you need to install Docker. If you're using a Unix-like system, you can download it from the Docker website.
+
+    # Once Docker is installed, you can create a Dockerfile. This file contains instructions for Docker to build an image.
+
+    # Here's a simple Dockerfile for a Python application:
+
+    FROM python:3.7
+    WORKDIR /app
+    ADD . /app
+    RUN pip install --no-cache-dir -r requirements.txt
+    CMD ["python", "app.py"]
+
+    # Build the Docker image:
+    docker build -t my-python-app .
+
+    # Run the Docker image:
+    docker run -p 4000:80 my-python-app
+
+    # Update DeepTrader
+    # DeepTrader is a Python library for backtesting trading strategies.
+
+    # First, you need to install DeepTrader. You can do this using pip:
+
+    pip install deep-trader
+
+    # After installing DeepTrader, you can use it to backtest your strategy. Here's a simple example:
+
+    from deep_trader import Trader
+    from deep_trader.strategy import Strategy
+
+    class MyStrategy(Strategy):
+        def __init__(self, feed, info):
+            super(MyStrategy, self).__init__(feed, info)
+            self.buy()
+
+        def on_bar(self, bar):
+            if not self.position:
+                if self.feed.get_price('AAPL') > self.feed.get_price('GOOG'):
+                    self.buy()
+
+    feed = DataFeed()
+    feed.add_data_source('AAPL', 'yahoo')
+    feed.add_data_source('GOOG', 'yahoo')
+
+    trader = Trader(feed)
+    trader.run_strategy(MyStrategy)
+
+    # This will run your strategy and

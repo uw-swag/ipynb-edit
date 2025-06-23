@@ -1,0 +1,36 @@
+```
+    # Summary Table
+    # ------------
+    # - Batch Size: 512
+    # - Epochs: 16
+    # - Learning Rate: 0.01
+    # - Optimizer: Adam
+    # - Metric: Accuracy
+    # - Loss Function: Cross Entropy
+    # - Device: GPU
+
+    # Fix Typo
+    # --------
+    # - Cell_0: %reload_ext
+    # - Cell_1: fastai
+    # - Cell_2: fastai.vision
+    # - Cell_3: fastai.metrics
+    # - Cell_4: path = untar_data(URLs.PETS)
+    # - Cell_5: path_images = path/'images'
+    # - Cell_6: get_image_files(path_images)
+    # - Cell_7: batchsize = 64
+    # - Cell_8: epoch = 16
+    # - Cell_9: np.random.seed(55)
+    # - Cell_10: regex_pattern = r'/([^/]+)_\d+.jpg$'
+    # - Cell_11: def get_databunch():
+    # - Cell_12: return ImageDataBunch.from_name_re(path_images, filenames, 
+    # - Cell_13: regex_pattern, ds_tfms=get_transforms(), 
+    # - Cell_14: size=224, bs=batchsize).normalize(imagenet_stats)
+    # - Cell_15: def get_learner(databunch):
+    # - Cell_16: return cnn_learner(databunch, models.resnet34, 
+    # - Cell_17: pretrained=False, 
+    # - Cell_18: metrics=accuracy, callback_fns=ShowGraph).to_fp16()
+    # - Cell_19: batchsize = 512
+    # - Cell_20: learner.fit_one_cycle(epoch)
+    # - Cell_21: batchsize = 2
+   

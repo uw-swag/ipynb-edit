@@ -1,0 +1,12 @@
+
+This script is a PyTorch implementation of a U-Net model for image segmentation. The script starts by importing necessary libraries and defining some constants. It then loads the image files, codes, and labels from the specified paths. The image files are split into training and validation sets based on a 'valid.txt' file. The labels are generated based on the codes.
+
+The script then prepares the data for training by transforming the images and labels. The data is normalized using the ImageNet statistics. The data is split into a training set and a validation set.
+
+The script then defines the U-Net model and trains it for 12 epochs. The model is saved with the name 'unet-resnet34-2'.
+
+The script then unfreezes the model and trains it for 10 more epochs. The model is saved with the name 'unet-resnet34-720-2'.
+
+Finally, the script shows the results of the trained model.
+
+Please note that the script assumes that the 'get_y_fn' function is defined and returns the labels for each image. The 'get_transforms' function is also assumed to be defined and returns the transformations to be applied to the images. The 'models.resnet34' function is a pre-defined model in PyTorch that uses the ResNet architecture. The 'metrics' function is also assumed to be defined and returns the metrics to be used during training. The 'wd' variable is the weight decay parameter.

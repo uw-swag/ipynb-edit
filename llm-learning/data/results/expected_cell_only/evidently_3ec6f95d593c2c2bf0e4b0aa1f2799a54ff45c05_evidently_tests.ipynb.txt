@@ -1,0 +1,38 @@
+#dataset-level tests
+classification_performance_dataset_tests = TestSuite(tests=[
+    TestAccuracyScore(),
+    TestPrecisionScore(),
+    TestRecallScore(),
+    TestF1Score(),
+    TestPrecisionByClass(label=0),
+    TestPrecisionByClass(label=1),
+    TestPrecisionByClass(label=2),
+    TestRecallByClass(label=0),
+    TestRecallByClass(label=1),
+    TestRecallByClass(label=2),
+    TestF1ByClass(label=0),
+    TestF1ByClass(label=1),
+    TestF1ByClass(label=2),
+])
+
+classification_performance_dataset_tests.run(reference_data=iris_ref, current_data=iris_cur)
+classification_performance_dataset_tests
+#dataset-level tests
+prob_classification_performance_dataset_tests = TestSuite(tests=[
+    TestAccuracyScore(),
+    TestPrecisionScore(),
+    TestRecallScore(),
+    TestF1Score(),
+    TestRocAuc(),
+    TestLogLoss(),
+    TestPrecisionByClass(label=0),
+    TestPrecisionByClass(label=1),
+    TestRecallByClass(label=0),
+    TestRecallByClass(label=1),
+    TestF1ByClass(label=0),
+    TestF1ByClass(label=1),
+
+])
+
+prob_classification_performance_dataset_tests.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+prob_classification_performance_dataset_tests

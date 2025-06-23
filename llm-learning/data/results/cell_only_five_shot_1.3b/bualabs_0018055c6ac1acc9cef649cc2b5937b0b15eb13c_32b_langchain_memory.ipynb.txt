@@ -1,0 +1,52 @@
+```
+    # ConversationBufferWindowMemory
+
+    The `ConversationBufferWindowMemory` class is used to store the context of a conversation. It is used in the context of the `Conversation` class.
+
+    ## Parameters
+
+    - `window_size`: The size of the window. The context is stored in the context of the most recent `window_size` messages.
+
+    - `memory_key`: The key to use for storing the context in the memory.
+
+    ## Methods
+
+    - `save_context(input_context, output_context)`: Save the context of the conversation.
+
+    - `get_context(input_context)`: Get the context of the conversation.
+
+    - `clear()`: Clear the memory.
+
+    ## Example
+
+    ```python
+    memory = ConversationBufferWindowMemory(window_size=2, memory_key="my_memory")
+    memory.save_context({"input": "Hi"}, {"output": "What's up"})
+    memory.save_context({"input": "Not much, just hanging"}, {"output": "Cool"})
+    print(memory.get_context({"input": "Hi"}))
+    print(memory.get_context({"input": "Not much, just hanging"}))
+    memory.clear()
+    ```
+    ```
+    ## Output
+
+    ```
+    {'input': 'Hi', 'output': 'What\'s up'}
+    {'input': 'Not much, just hanging', 'output': 'Cool'}
+    ```
+    ```
+    ## Note
+
+    The `ConversationBufferWindowMemory` class is used to store the context of a conversation. It is used in the context of the `Conversation` class.
+
+    ## Parameters
+
+    - `window_size`: The size of the window. The context is stored in the context of the most recent `window_size` messages.
+
+    - `memory_key`: The key to use for storing the context in the memory.
+
+    ## Methods
+
+    - `save_context(input_context, output_context)`: Save the context of the conversation.
+
+    - `get_context(input_context)`

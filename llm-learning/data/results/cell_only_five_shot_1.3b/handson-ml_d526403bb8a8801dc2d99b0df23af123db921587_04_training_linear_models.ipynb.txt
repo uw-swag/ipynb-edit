@@ -1,0 +1,18 @@
+```python
+    from sklearn.linear_model import SGDRegressor
+    import tensorflow as tf
+
+    # Define the model
+    sgd_reg = tf.keras.models.Sequential([
+        tf.keras.layers.Dense(1, input_shape=[1, 1])
+    ])
+
+    # Compile the model
+    sgd_reg.compile(loss="mean_squared_error", optimizer="sgd", metrics=["mean_absolute_error", "mean_squared_error"])
+
+    # Fit the model
+    sgd_reg.fit(X, y.ravel(), epochs=1000, verbose=0)
+
+    # Predict
+    sgd_reg.predict([[1.5]])
+    ```

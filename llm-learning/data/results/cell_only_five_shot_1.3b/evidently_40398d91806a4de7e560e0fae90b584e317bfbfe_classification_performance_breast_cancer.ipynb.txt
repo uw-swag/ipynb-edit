@@ -1,0 +1,19 @@
+```python
+    import unittest
+    from your_module import function_to_test  # replace with the actual module and function
+
+    class TestYourFunction(unittest.TestCase):
+        def test_input_type(self):
+            with self.assertRaises(TypeError):
+                function_to_test(10)
+
+        def test_output_type(self):
+            self.assertEqual(type(function_to_test(10)), int)
+
+        def test_output_value(self):
+            self.assertEqual(function_to_test(10), 12)  # replace 12 with the expected output
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+    This code will test the `function_to_test` function with different types of inputs and verify that the output is of the expected type and value.

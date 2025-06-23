@@ -1,0 +1,21 @@
+```python
+    import bme680
+import time
+import threading
+from smbus import SMBus
+i2cbus = SMBus(0)
+print("Display initial temperature, pressure, humidity, and gas.")
+
+try:
+    sensor = bme680.BME680(bme680.I2C_ADDR_PRIMARY,i2cbus)
+except (RuntimeError, IOError):
+    sensor = bme680.BME680(bme680.I2C_ADDR_SECONDARY,i2cbus)
+
+#Print each initial reading
+for name in dir(sensor.data):
+    value = getattr(sensor.data, name)
+
+    if not name.startswith('_'):
+        print('{}: {}'.format(name, value))
+
+```

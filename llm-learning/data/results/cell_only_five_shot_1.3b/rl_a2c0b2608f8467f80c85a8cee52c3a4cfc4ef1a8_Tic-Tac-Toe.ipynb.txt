@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update and re-run deep learning model"
+    Original Code Cells:
+    '''
+    import random
+from collections import defaultdict, deque
+from itertools import product, chain
+import copy
+import time
+import pdb
+
+import numpy as np
+import pandas as pd
+
+from tensorflow import keras
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense, Activation, Dropout
+from tensorflow.keras.regularizers import l1
+from tensorflow.keras.models import Sequential, load_model
+
+from IPython.display import clear_output
+
+LEARNING_RATE = 0.4
+DISCOUNT_RATE = 0.05
+EXPLORATION_RATE = 0.1
+QUEUE_LEN = 1000
+INPUT_DIM=9
+
+class DeepRLagent:
+    """Deep learning agent
+    Instead of updating a V dict in training, add experienced reward values to pandas dataframe
+    then train neural net to predict boards based on the experienced values
+    """
+    
+    def __init__(self, 
+                 game, 
+                 player='O',
+                 learning_rate=LEARNING_RATE,
+                 discount_rate=DISCOUNT_RATE,
+                 exploration_rate=EXPLORATION_RATE
+                ):
+        self.game = game
+        self.player = player
+        self.learning_rate = learning_rate
+        self.discount_rate = discount_rate
+        self.exploration_rate = exploration_rate
+        self.queue = deque(maxlen=1000)
+        self.V_model = self.build_ols_model(input_size = INPUT_DIM,
+                                            n_hidden_layers=3, 
+                                            largest_layer_size=256,
+                                            activation='tanh',
+                                            reg_penalty=0.0,
+                                            dropout=0.0,
+                                            verbose=False)        
+        
+    def build_ols_model(self,
+                        input_size = INPUT_DIM, 
+                        n_hidden_

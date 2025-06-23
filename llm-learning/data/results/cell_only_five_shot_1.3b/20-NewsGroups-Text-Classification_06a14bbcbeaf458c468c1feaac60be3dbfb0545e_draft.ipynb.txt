@@ -1,0 +1,33 @@
+```python
+    %matplotlib inline
+    import pandas as pd
+    import numpy as np
+    from sklearn.datasets import fetch_20newsgroups
+
+    # Load the 20 Newsgroups dataset
+    train_bunch = fetch_20newsgroups(subset='train')
+
+    # Print the size of the dataset
+    print('train_bunch size :', len(train_bunch))
+
+    # Print the description of the dataset
+    print('Description :',train_bunch.DESCR)
+
+    # Print the number of documents and categories
+    print("%d documents" % len(train_bunch.filenames))
+    print("%d categories" % len(train_bunch.target_names))
+
+    # Print the categories
+    for i,val in enumerate(train_bunch.target_names):
+        print(i+1,val)
+
+    # Convert the dataset into a pandas DataFrame
+    train_df = pd.DataFrame(data=np.c_[train_bunch.data, train_bunch.target], 
+                            columns=train_bunch.feature_names + 'target')
+
+    # Print the first document
+    print(train_bunch.data[0])
+
+    # Now, you can use the DataFrame 'train_df' to perform your machine learning analysis.
+    # For example, you can use it to create a model that predicts the category of a new document.
+    ```

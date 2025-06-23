@@ -1,0 +1,14 @@
+```python
+    from IPython.display import display, HTML
+    import tables
+
+    # Assuming that 'forest' is your trained model and 'feature_list' is a list of feature names
+    # 'format' is set to 'grid' for a grid-like table
+
+    # Print the feature importances
+    display(HTML(tables.feature_importances(forest, feature_list, format='grid').to_html()))
+    ```
+
+    This code will display the feature importances in a HTML table format in the Jupyter notebook. The 'tables' module is used to create the HTML table, and the 'feature_importances' function is used to get the feature importances.
+
+    Please replace 'forest', 'feature_list' with your actual model and feature list.

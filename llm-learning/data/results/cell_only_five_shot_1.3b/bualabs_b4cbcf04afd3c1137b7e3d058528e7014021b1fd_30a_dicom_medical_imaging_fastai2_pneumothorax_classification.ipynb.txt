@@ -1,0 +1,15 @@
+
+    The code you provided is a part of a larger project, and it's not clear what the purpose of the code is. However, I can see that the code is augmenting the data by flipping the images. If you want to change this to not flipping the images, you can modify the `aug_transforms` function to not include the `augment_transforms` function. Here's how you can do it:
+
+```python
+def getDataLoaders(bs, size):
+    pneumothorax = DataBlock(blocks=(ImageBlock(cls=PILDicom), CategoryBlock), 
+                         get_items=get_dicom_files, 
+                         get_y=label_func, 
+                         batch_tfms=[*aug_transforms(size=size, do_flip=False)]
+                         )
+    dls = pneumothorax.dataloaders(path/'dicom-images-train', bs=bs)
+    return dls
+```
+
+In this code, `do_flip=False` is used to prevent the images from being flipped. If you want to flip the images, you can remove this line or change it to `True`.

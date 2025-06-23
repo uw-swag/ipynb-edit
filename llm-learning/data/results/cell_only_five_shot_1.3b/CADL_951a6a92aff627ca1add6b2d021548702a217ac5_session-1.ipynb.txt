@@ -1,0 +1,21 @@
+```
+    # Now compute the standard deviation by calculating the
+    # square root of the expected squared differences
+    std_img_op = tf.sqrt(tf.reduce_mean(subtraction * subtraction, reduction_indices=0))
+
+    # Now calculate the standard deviation using your session
+    std_img = sess.run(std_img_op)
+
+    # Now calculate some statistics about each of our images
+    values = tf.reduce_sum(flattened, reduction_indices=1)
+
+    # Then create another operation which sorts those values
+    # and then calculate the result:
+    idxs_op = tf.nn.top_k(values, k=100)[1]
+    idxs = sess.run(idxs_op)
+
+    # Then finally use the sorted indices to sort your images:
+    sorted_imgs = np.array([imgs[idx_i] for idx_i in idxs])
+    ```
+
+    This code is used to calculate the standard deviation of the difference between the mean image and the image in the dataset, and then sort the images based on their values.

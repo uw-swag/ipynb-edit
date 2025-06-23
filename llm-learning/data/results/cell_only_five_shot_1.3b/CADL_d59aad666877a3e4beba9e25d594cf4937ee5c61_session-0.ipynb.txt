@@ -1,0 +1,19 @@
+
+    The function `imcrop_tosquare` is currently cropping the image to a square, but it's not always doing this. It's always cropping to the full image, regardless of whether the image's width or height is greater than its length.
+
+    Here's the corrected function:
+
+    ```python
+    def imcrop_tosquare(img):
+        if img.shape[0] > img.shape[1]:
+            extra = (img.shape[0] - img.shape[1]) // 2
+            crop = img[extra:-extra, :]
+        elif img.shape[1] > img.shape[0]:
+            extra = (img.shape[1] - img.shape[0]) // 2
+            crop = img[:, extra:-extra]
+        else:
+            crop = img
+        return crop
+    ```
+
+    This function now correctly crops the image to a square shape. If the image's width is greater than its height, it crops the image vertically to the middle. If the image's height is greater than its width, it crops the image horizontally to the middle. If the image's width and height are equal, it simply returns the original image.

@@ -1,0 +1,26 @@
+```python
+    # importing all existing checks for demonstration simplicity
+from deepchecks.checks import *
+from deepchecks import Suite
+from sklearn.metrics import precision_score, recall_score, make_scorer
+
+# The Suite's first argument is its name, and then all of the check objects.
+# Some checks can receive arguments when initialized (all check arguments have default values)
+# Each check can have an optional condition(/s)
+# Multiple conditions can be applied subsequentially
+new_custom_suite = Suite('Simple Suite For Model Performance',
+    ModelInfo(),
+    # use custom scorers for performance report:
+    PerformanceReport().add_condition_train_test_performance_degradation_ratio_not_greater_than(threshold=0.15\
+                     ).add_condition_test_performance_not_less_than(0.8),
+    ConfusionMatrixReport(),
+    SimpleModelComparison(simple_model_type='constant', \
+                          alternative_scorers={'Recall (Multiclass)': make_scorer(recall_score, average=None), \
+                                               'Precision (Multiclass)': make_scorer(precision_score, average=None)} \
+                         ).add_condition_ratio_not_less_than(0.9)
+                        )
+# Let's see the suite:
+new_custom_suite
+    ```
+
+    The code above is a demonstration of how to create a custom suite of DeepChecks checks for model performance. The suite includes checks for model information, performance report, confusion matrix report, and simple model comparison. The performance degradation condition is set to a threshold of 0.15, and the test performance should not be less than 0.8. The ratio of the model comparison should not be less than 0.9.

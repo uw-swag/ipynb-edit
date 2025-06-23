@@ -1,0 +1,20 @@
+```python
+    # Remove metrics dependence from analyzers (#299)
+    # Original Code Cells:
+    '''
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    spark = SparkSession.builder.getOrCreate()
+
+    # Load data
+    df = spark.read.json("data.json")
+
+    # Remove metrics dependence from analyzers
+    df = df.withColumn("analyzer", col("analyzer") - col("metrics"))
+
+    # Write data
+    df.write.json("data_without_metrics.json")
+    '''
+    ```
+    ###

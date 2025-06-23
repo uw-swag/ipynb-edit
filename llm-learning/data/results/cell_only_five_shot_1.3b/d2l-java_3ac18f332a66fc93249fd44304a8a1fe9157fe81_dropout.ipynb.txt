@@ -1,0 +1,32 @@
+
+    The issue seems to be with the convergence of the model. The model might be getting stuck in a local minimum, which is not a good practice. You can try to increase the number of epochs or use a different optimizer.
+
+    Here is the modified code:
+
+    ```java
+    int numEpochs = 100;
+    int trainIter = 100;
+    int testIter = 100;
+
+    // ...
+
+    try (Model model = Model.newInstance("mlp")) {
+        model.setBlock(net);
+
+        try (Trainer trainer = model.newTrainer(config)) {
+
+            trainer.initialize(new Shape(1, 784));
+            trainer.setMetrics(new Metrics());
+
+            for (int i = 0; i < numEpochs; i++) {
+                trainer.fit(trainIter, testIter);
+            }
+
+            Metrics metrics = trainer.getMetrics();
+
+            // ...
+        }
+    }
+    ```
+
+    This should help to solve the issue of the model getting stuck in a local minimum.

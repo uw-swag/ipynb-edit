@@ -1,0 +1,15 @@
+```python
+    ## Obtain predictions on (userID,itemID) pairs (60586,54775) and (52681,36519) in Movielens 10m dataset
+    # output = model.predict([60586,52681],[54775,36519]) # Movielens 10m dataset
+
+    # Obtain prediction on the full test set
+    predictions_ndarr = model.predict(test['userID'].values,test['itemID'].values)
+    ```
+    ## Compute test RMSE 
+    eval_rmse = rmse(test, predictions_ndarr)
+    ## Compute test MAE 
+    eval_mae = mae(test, predictions_ndarr)
+
+    print("RMSE:\t%f" % eval_rmse,
+          "MAE:\t%f" % eval_mae, sep='\n')
+    ```

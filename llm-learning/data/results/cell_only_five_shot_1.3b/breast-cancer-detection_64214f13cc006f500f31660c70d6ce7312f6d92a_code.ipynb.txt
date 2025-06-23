@@ -1,0 +1,48 @@
+
+    from sklearn.preprocessing import StandardScaler
+
+    # Initialize a scaler, then apply it to the features
+    scaler = StandardScaler()
+    scaled_features = scaler.fit_transform(df.drop('winner', axis=1))
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(scaled_features, df['winner'], test_size=0.2, random_state=42)
+
+    # Create Decision Tree classifer object
+    dt_classifier = DecisionTreeClassifier(c)
+
+    # Train Decision Tree Classifer
+    dt_classifier.fit(X_train,y_train)
+
+    # Predict the response for test dataset
+    y_pred = dt_classifier.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+
+    # Model Precision
+    print("Precision:",metrics.precision_score(y_test, y_pred))
+
+    # Model Recall
+    print("Recall:",metrics.recall_score(y_test, y_pred))
+
+    # Feature Importance
+    print("Feature Importance:", dt_classifier.feature_importances_)
+
+    # Confusion Matrix
+    print("Confusion Matrix:", metrics.confusion_matrix(y_test, y_pred))
+
+    # Classification Report
+    print("Classification Report:", metrics.classification_report(y_test, y_pred))
+
+    # ROC Curve
+    print("ROC Curve:", metrics.roc_curve(y_test, y_pred))
+
+    # AUC Score
+    print("AUC Score:", metrics.auc(y_test, y_pred))
+
+    # Cross Validation Score
+    print("Cross Validation Score:", cross_val_score(dt_classifier, scaled_features, df['winner'], cv=5))
+
+    # Grid Search
+    print("Grid Search:", grid_search

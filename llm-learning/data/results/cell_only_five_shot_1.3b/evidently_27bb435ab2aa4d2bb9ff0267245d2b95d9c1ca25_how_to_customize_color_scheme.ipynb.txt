@@ -1,0 +1,19 @@
+```python
+    from sklearn.preprocessing import LabelEncoder
+
+    # Assuming you have a DataFrame df with a column 'classification'
+    le = LabelEncoder()
+
+    # Fit and transform the 'classification' column
+    df['classification'] = le.fit_transform(df['classification'])
+
+    # Check the transformed 'classification' column
+    print(df['classification'].head())
+    ```
+    The above code will transform the 'classification' column in the DataFrame 'df' from string labels to numerical labels using the LabelEncoder from sklearn.preprocessing.
+
+    The LabelEncoder() function is a simple and efficient way to convert categorical variables into a format that could be provided to ML algorithms. It transforms the data by assigning a unique integer to each unique value in the data.
+
+    The fit_transform() function is a combination of fit() and transform() methods. It first fits the LabelEncoder on the data and then transforms the data.
+
+    The transformed 'classification' column can be used in subsequent machine learning models.

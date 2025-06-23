@@ -1,0 +1,32 @@
+
+    # e = epoch number
+    for e in range(epoch):
+        # b = batch number
+        for b in range((n-1)//bs + 1):
+            # set_trace()
+            start_b = b*bs
+            end_b = start_b+bs
+            xb = x_train[start_b:end_b]
+            yb = y_train[start_b:end_b]
+            loss = loss_func(model(xb), yb)
+            acc = accuracy(model(xb), yb)
+            
+            # Backpropagation
+            loss.backward()
+            losses.append(loss.item())
+            metrics.append(acc)
+            
+            # Update Wight and Bias with SGD
+            with torch.no_grad():
+                for l in model.parameters():
+                    if l.requires_grad:
+                        l.data -= l.grad * lr
+                        l.grad.zero_()
+
+x = torch.arange(n//bs+1).numpy()
+fig,ax = plt.subplots(figsize=(9, 9))
+ax.plot(x, losses, label="Loss")
+ax.plot(x, metrics, label="Accuracy")
+ax.legend(loc='upper right')
+
+    '''

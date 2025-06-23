@@ -1,0 +1,23 @@
+```python
+    import gmplot
+    import pandas as pd
+
+    # Assuming you have a dataframe df with latitude and longitude columns
+    df = pd.DataFrame(data={
+        'lat': [40.7128, 40.7128, 40.7128, 40.7128],
+        'lon': [-74.0060, -73.9792, -74.0060, -73.9843],
+    })
+
+    # Create a gmplot map object
+    gmap = gmplot.GoogleMapPlotter(df['lat'].mean(), df['lon'].mean(), apikey="YOUR_API_KEY")
+
+    # Plot a heatmap on the map
+    gmap.heatmap(df['lat'], df['lon'])
+
+    # Plot the map
+    gmap.draw("mymap.html")
+    ```
+
+    Replace "YOUR_API_KEY" with your actual Google Maps API key.
+
+    This code will create a heatmap of the latitude and longitude data, with the center of the map being the mean of the latitudes and longitudes of the data.

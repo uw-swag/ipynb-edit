@@ -1,0 +1,26 @@
+```python
+    from deepchecks import Dataset
+    from deepchecks.checks.methodology.boosting_overfit import BoostingOverfit
+
+    train_ds = Dataset(train_df, label='target')
+    validation_ds = Dataset(val_df, label='target')
+    from sklearn.ensemble import AdaBoostClassifier
+
+    clf = AdaBoostClassifier(random_state=0)
+    clf.fit(train_ds.features_columns, train_ds.label_col)
+    BoostingOverfit().run(train_ds, validation_ds, clf)
+    ```
+
+    The code above is a Python script that uses the Deepchecks library to perform an overfit check on an AdaBoost classifier. The overfit check is a method used to detect overfitting in machine learning models, which is a common problem in many machine learning algorithms.
+
+    The code first imports the necessary libraries and classes. It then creates a dataset from the training and validation dataframes, and a AdaBoost classifier. The classifier is then trained on the training dataset and the overfit check is run on the training and validation datasets.
+
+    The overfit check returns a report of the results, which can be used to identify overfitting in the model.
+
+    Please note that you need to have the Deepchecks library installed in your Python environment. If not, you can install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    Also, please replace `train_df`, `val_df`, and `target` with your actual dataframes and target column.

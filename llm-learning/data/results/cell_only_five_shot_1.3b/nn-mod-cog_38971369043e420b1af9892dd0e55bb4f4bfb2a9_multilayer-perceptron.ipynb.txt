@@ -1,0 +1,31 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.neural_network import Hopfield_Network
+
+    # Load iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Initialize the Hopfield network
+    hn = Hopfield_Network(n_iter=10, random_state=42)
+
+    # Train the network
+    hn.fit(X_train)
+
+    # Predict the classes of the test set
+    y_pred = hn.predict(X_test)
+
+    # Print the accuracy of the network
+    print("Accuracy:", np.mean(y_pred == y_test))
+
+    # Plot the weights of the network
+    plt.imshow(hn.coefs_[0], interpolation='nearest', cmap=plt.cm.hot)
+    plt.show()
+    ```

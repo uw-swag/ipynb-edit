@@ -1,0 +1,44 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Display the first 5 rows of the dataset
+    print(df.head())
+
+    # Check for missing values
+    print(df.isnull().sum())
+
+    # Check the summary statistics of the dataset
+    print(df.describe())
+
+    # Visualize the distribution of the target variable
+    sns.countplot(df['target_variable'])
+    plt.show()
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target_variable', axis=1), df['target_variable'], test_size=0.2, random_state=42)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+    ```
+    This is a basic setup for a Jupyter notebook. It loads a dataset, checks for missing values, displays the summary statistics, visualizes the distribution of the target variable, splits the dataset into a training and testing set, creates a linear regression model, trains the model, makes predictions, and evaluates the model.

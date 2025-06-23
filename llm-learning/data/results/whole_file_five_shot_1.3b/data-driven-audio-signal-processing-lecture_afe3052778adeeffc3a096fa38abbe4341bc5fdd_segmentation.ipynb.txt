@@ -1,0 +1,45 @@
+```
+    # @title: Segments Function
+    # @param {type:"array"} signal: The input signal to be split into segments.
+    # @param {type:"int"} segment_size: The size of each segment. Default is 32.
+    # @param {type:"int"} hop_size: The hop size between segments. Default is 16.
+    # @param {type:"function"} window: The window function to apply to the segments. Default is None.
+    # @return: A numpy array containing the split segments.
+
+    # Calculate total number of segments
+    nseg = (len(signal) - segment_size) // hop_size + 1
+
+    # Split signal into segments
+    segments = [signal[n*hop_size:n*hop_size+segment_size]
+                for n in range(nseg)]
+
+    # Apply window function to segments
+    if window is not None:
+        segments = window(segment_size).reshape(1, -1) * segments
+
+    return np.array(segments)
+
+    # @title: Plot Signal
+    # @param {type:"array"} x: The input signal to be plotted.
+    # @param {type:"matplotlib.axes.AxesSubplot"} ax: The axes to plot on.
+    # @param {type:"str"} title: The title of the plot.
+
+    # Plot signal
+    def plot_signal(x, ax, title):
+        ax.stem(x)
+        ax.set_xlabel(r'$k$')
+        ax.set_title(title)
+        ax.set_xlim([0, len(x)-1])
+        ax.grid()
+
+    # @title: Recover Signal
+    # @param {type:"array"} xn1: The input segments to be recovered.
+    # @return: A numpy array containing the recovered signal.
+
+    # Recover signal from segments
+    def recover_signal(xn1):
+        xr = np.hstack(xn1)
+        return xr
+
+    # @title: Segments with Hanning Window
+    # @param {type:"array"} signal: The

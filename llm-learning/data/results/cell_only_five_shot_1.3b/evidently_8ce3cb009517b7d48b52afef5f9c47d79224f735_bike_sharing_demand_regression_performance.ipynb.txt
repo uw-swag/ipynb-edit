@@ -1,0 +1,14 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, NumTargetDriftTab, RegressionPerformanceTab, ProfileTab
+dashboard = Dashboard(ref_data, prod_data, column_mapping=column_mapping, tabs=[RegressionPerformanceTab, ProfileTab])
+dashboard.save('regression_perfomance_mnth.html')
+
+    ```
+
+    In the updated code, we have added the `ProfileTab` to the list of tabs in the `Dashboard`. The `ProfileTab` provides a detailed view of the data distribution, correlation, and distribution of the target variable. This can be useful for understanding the data and for identifying potential issues with the data.

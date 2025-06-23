@@ -1,0 +1,79 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextEvals
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric, ColumnSummaryMetric
+
+from evidently.descriptors import TextLength, IncludesWords, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment, RegExp, SemanticSimilarity
+#NO descriptors
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text")
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+#NO descriptors, several columns
+
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text"),
+    TextEvals(column_name="Title"),
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ]),
+    TextEvals(column_name="Title", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+summary_report = Report(metrics=[
+    ColumnSummaryMetric(column_name=SemanticSimilarity(with_column="Title").on("Review_Text"))
+])
+
+summary_report.run(reference_data=reviews_ref[:10], current_data=reviews_cur[:10], column_mapping=column_mapping)
+summary_report
+

@@ -1,0 +1,56 @@
+
+    '''
+    Commit Message: "remove autoreload magic"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+%matplotlib inline 
+<\Cell_1>
+<Cell_2>
+df = pd.read_csv('./data/training_data.csv')
+df.head(5)
+<\Cell_2>
+<Cell_3>
+print(df['title'][1])
+print('-----')
+print(df['description'][1])
+print('Published at:', df['publishedAt'][1])
+<\Cell_3>
+<Cell_4>
+# Number of clickbait and non-clickbait articles
+df['label'].value_counts()
+<\Cell_4>
+<Cell_5>
+# Plotting the number of author fields that are Null
+df['author'].isnull().value_counts().plot('barh')
+<\Cell_5>
+<Cell_6>
+# The number of characters in the description field
+df['description'].apply(len).mean()
+<\Cell_6>
+<Cell_7>
+# Comparing the number of description characters in clickbait to news
+df['description'].apply(len).groupby(df['label']).mean()
+<\Cell_7>
+<Cell_8>
+# TEST YOUR KNOWLEDGE
+# Can you write a one-liner to compute the number of clickbait articles
+# written by each author? Hint: you might find the .sum() function helpful!
+<\Cell_8>
+<Cell_9>
+df['full_content'] = (df.description + df.title)
+df.head(1)
+<\Cell_9>
+<Cell_10>
+from sklearn.feature_extraction.text import CountVectorizer
+vectorizer = CountVectorizer()
+<\Cell_10>
+<Cell_11>
+sentence = ["Literally just 8 really really cute dogs"]
+vectorizer.fit(sentence)
+print(vectorizer.vocabulary_) #

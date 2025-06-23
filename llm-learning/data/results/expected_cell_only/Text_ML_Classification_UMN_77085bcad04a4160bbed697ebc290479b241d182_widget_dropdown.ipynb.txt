@@ -1,0 +1,18 @@
+
+
+import ipywidgets as widgets
+
+#Dropdown Widget
+selection = widgets.Dropdown(
+        options=['1', '2', '3'], # Rather than a list of strings, reference available models
+        value='2',
+        description='Available Models:',
+        disabled=False,
+    )
+display(selection)
+# Recall the value
+selection.value
+#Insert value in function
+
+model_time = selection.value
+model, vectorizer = estimator_load_model(model_time)

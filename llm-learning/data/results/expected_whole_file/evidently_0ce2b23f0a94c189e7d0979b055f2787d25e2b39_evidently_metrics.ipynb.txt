@@ -1,0 +1,88 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.options import DataDriftOptions
+from evidently.report import Report
+from evidently.metrics import ColumnDriftMetric, DataDriftTable, DatasetDriftMetric, ColumnRegExpMetric
+<\Cell_1>
+<Cell_2>
+#Dataset for Data Quality and Integrity
+adult_data = datasets.fetch_openml(name='adult', version=2, as_frame='auto')
+adult = adult_data.frame
+
+adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+adult_cur.iloc[:2000, 3:5] = np.nan
+<\Cell_2>
+<Cell_3>
+#dataset-level metrics
+data_drift_dataset_report = Report(metrics=[
+    DatasetDriftMetric(),
+    DataDriftTable()    
+])
+
+data_drift_dataset_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_report
+<\Cell_3>
+<Cell_4>
+#report in a JSON format
+data_drift_dataset_report.json()
+<\Cell_4>
+<Cell_5>
+#report as a python object
+data_drift_dataset_report.as_dict()
+<\Cell_5>
+<Cell_6>
+#column-level metrics
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnDriftMetric('education'),
+    ColumnDriftMetric('marital-status')
+])
+
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_report
+<\Cell_6>
+<Cell_7>
+#column-level metrics
+data_integrity_column_report = Report(metrics=[
+    ColumnRegExpMetric(column_name="relationship", reg_exp=r".*child.*")
+])
+
+data_integrity_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_column_report
+<\Cell_7>
+<Cell_8>
+#simple metric parameters
+data_integrity_column_report = Report(metrics=[
+    ColumnRegExpMetric(column_name="education", reg_exp=r".*-.*", top=5),
+    ColumnRegExpMetric(column_name="relationship", reg_exp=r".*child.*")
+])
+
+data_integrity_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_column_report
+<\Cell_8>
+<Cell_9>
+#options
+stat_test_option = DataDriftOptions(all_features_stattest='psi')
+
+data_drift_column_report = Report(metrics=[
+    ColumnDriftMetric('age'),
+    ColumnDriftMetric('age', options=stat_test_option),
+])
+data_drift_column_report.run(reference_data=adult_ref, current_data=adult_cur)
+
+data_drift_column_report
+<\Cell_9>

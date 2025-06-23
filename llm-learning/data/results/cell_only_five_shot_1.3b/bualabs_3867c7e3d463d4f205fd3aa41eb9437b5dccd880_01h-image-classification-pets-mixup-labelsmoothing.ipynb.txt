@@ -1,0 +1,13 @@
+```python
+    # Label Smoothing
+    y_smooth = y + np.random.normal(size=y.shape)
+    y_smooth /= np.sum(y_smooth, axis=-1, keepdims=True)
+
+    # Mixup
+    alpha = np.random.beta(1.0, 1.0)
+    x_mix = alpha * x + (1 - alpha) * x_smooth
+
+    # Train model
+    model.fit(x_mix, y)
+    ```
+    Credits: "Label Smoothing and Mixup are used for regularizing the model during training."

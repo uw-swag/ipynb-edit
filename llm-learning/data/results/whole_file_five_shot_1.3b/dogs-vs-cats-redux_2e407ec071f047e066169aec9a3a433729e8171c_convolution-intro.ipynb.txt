@@ -1,0 +1,30 @@
+
+    '''
+    Commit Message: "[DEL] Irrelevant files"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %matplotlib inline
+    import math,sys,os,numpy as np
+    from numpy.linalg import norm
+    from PIL import Image
+    from matplotlib import pyplot as plt, rcParams, rc
+    from scipy.ndimage import imread
+    from skimage.measure import block_reduce
+    import cPickle as pickle
+    from scipy.ndimage.filters import correlate, convolve
+    from ipywidgets import interact, interactive, fixed
+    from ipywidgets.widgets import *
+    rc('animation', html='html5')
+    rcParams['figure.figsize'] = 3, 6
+    %precision 4
+    np.set_printoptions(precision=4, linewidth=100)
+    <\Cell_0>
+    '''
+    from tensorflow.examples.tutorials.mnist import input_data
+    mnist = input_data.read_data_sets("MNIST_data/")
+    images, labels = mnist.train.images, mnist.train.labels
+    images = images.reshape((55000,28,28))
+    np.savez_compressed("MNIST_data/train", images=images, labels=labels)
+    '''
+    '''

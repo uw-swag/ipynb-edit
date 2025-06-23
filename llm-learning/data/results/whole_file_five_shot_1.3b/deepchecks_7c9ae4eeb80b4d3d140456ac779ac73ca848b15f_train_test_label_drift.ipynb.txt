@@ -1,0 +1,49 @@
+```python
+    # Adding labels and detection encoder classes
+    from deepchecks.vision.dataset import VisionDataset
+    from torchvision import models
+    import torchvision
+    import torch
+
+    # Adding labels and detection encoder classes
+    class LabelsAndEncoder:
+        def __init__(self, num_classes):
+            self.num_classes = num_classes
+            self.encoder = torch.nn.Embedding(num_classes, 1)
+
+        def forward(self, x):
+            return self.encoder(x)
+
+    class DetectionEncoder:
+        def __init__(self, num_classes):
+            self.num_classes = num_classes
+            self.encoder = torch.nn.Embedding(num_classes, 1)
+
+        def forward(self, x):
+            return self.encoder(x)
+
+    # Create a dataset with labels and detection encoder
+    class CustomDataset(VisionDataset):
+        def __init__(self, dataloader, label_type, num_classes):
+            super().__init__(dataloader, label_type)
+            self.label_encoder = LabelsAndEncoder(num_classes)
+            self.detection_encoder = DetectionEncoder(num_classes)
+
+        def __getitem__(self, index):
+            x, y = self.dataloader[index]
+            y = self.label_encoder(y)
+            return x, y
+
+    # Create a dataloader with custom dataset
+    dataloader = CustomDataset(dataloader, 'object_detection', num_classes)
+
+    # Create a dataset with labels and detection encoder
+    train_ds = VisionDataset(dataloader, label_type='object_detection')
+    test_ds = VisionDataset(dataloader, label_type='object_detection')
+
+    # Create a check
+    check = TrainTestLabelDrift()
+
+    # Run the check
+    check.run(train_ds, test_ds)
+    ```

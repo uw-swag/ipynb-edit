@@ -1,0 +1,34 @@
+```python
+    # Importação das bibliotecas
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import confusion_matrix, accuracy_score
+    from sklearn.tree import DecisionTreeClassifier
+    import graphviz
+    from sklearn.tree import export_graphviz
+    #conda install -c conda-forge python-graphviz (para evitar warnings)
+
+    # Carregamento da base de dados e definição dos previsores (variáveis independentes - X) e classe (variável dependente - y)
+    credit = pd.read_csv('Credit.csv')
+    credit.shape
+
+    # Visualizando o cabeçalho 
+    credit.head()
+
+    # Formato de matriz
+    previsores = credit.iloc[:,0:20].values
+    classe = credit.iloc[:,20].values
+
+    # Conversão dos atributos categóricos para atributos numéricos, passando o 
+    # índice de cada atributo categórico
+    labelencoder = LabelEncoder()
+    previsores[:,0] = labelencoder.fit_transform(previsores[:,0])
+    previsores[:,2] = labelencoder.fit_transform(previsores[:,2])
+    previsores[:, 3] = labelencoder.fit_transform(previsores[:, 3])
+    previsores[:, 5] = labelencoder.fit_transform(previsores[:, 5])
+    previsores[:, 6] = labelencoder.fit_transform(previsores[:, 6])
+    previsores[:, 8] = labelencoder.fit_transform(previsores[:, 8])
+    previsores[:, 9] = labelencoder.fit_transform(previsores[:, 9])
+    previsores[:, 11] = labelencoder.fit_transform(previsores[:, 11])
+    previsores

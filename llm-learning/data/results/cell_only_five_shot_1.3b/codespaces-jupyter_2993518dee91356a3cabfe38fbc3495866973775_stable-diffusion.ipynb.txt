@@ -1,0 +1,32 @@
+```python
+    import torch
+from transformers import CLIPTextModel, CLIPTokenizer
+
+class CLIPModel:
+    def __init__(self):
+        self.model = CLIPTextModel.from_pretrained("openai/clip-vit-base-patch-32")
+        self.tokenizer = CLIPTokenizer.from_pretrained("openai/clip-vit-base-patch-32")
+
+    def encode(self, text):
+        inputs = self.tokenizer(text, return_tensors="pt")
+        return self.model(**inputs)
+
+    def similarity(self, text1, text2):
+        inputs1 = self.encode(text1)
+        inputs2 = self.encode(text2)
+        return torch.nn.functional.cosine_similarity(inputs1[0], inputs2[0])
+
+clip_model = CLIPModel()
+
+print(clip_model.similarity("This is a test", "This is another test"))
+    ```
+
+    This code uses the CLIP model from the Hugging Face library to encode text and calculate the cosine similarity between two texts.
+
+    Please note that you need to have the Hugging Face Transformers library installed. You can install it using pip:
+
+    ```bash
+    pip install transformers
+    ```
+
+    And you need to have a Hugging Face account to download the CLIP model. You can create one at https://huggingface.co/

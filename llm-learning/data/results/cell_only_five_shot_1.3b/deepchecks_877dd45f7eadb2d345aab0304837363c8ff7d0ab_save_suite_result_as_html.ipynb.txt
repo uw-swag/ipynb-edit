@@ -1,0 +1,46 @@
+
+    ## Documentation Update
+
+    ### Table of Contents
+
+    1. [Introduction](#introduction)
+    2. [Installation](#installation)
+    3. [Usage](#usage)
+    4. [Contributing](#contributing)
+    5. [License](#license)
+
+    ## Introduction
+
+    This is the documentation for the MLP library. The MLP library is a deep learning library that provides a simple and efficient way to implement multilayer perceptron (MLP) models. It is designed to be user-friendly and easy to use, with a focus on performance and ease of use.
+
+    ## Installation
+
+    To install the MLP library, you can use pip, the Python package installer, to install it. Here is the command to install the library:
+
+    ```
+    pip install mlp
+    ```
+
+    ## Usage
+
+    The MLP library provides a simple and efficient way to implement MLP models. Here is a basic example of how to use the library:
+
+    ```python
+    from mlp.dataset import MNISTDataProvider
+    from mlp.layers import MLP, Tanh, Softmax
+    from mlp.optimisers import SGDOptimiser
+    from mlp.costs import CECost
+    from mlp.schedulers import LearningRateFixed
+
+    rng = numpy.random.RandomState([2015,10,10])
+
+    nhid = 100
+    learning_rate = 0.2
+    max_epochs = 30
+    cost = CECost()
+
+    train_dp = MNISTDataProvider(dset='train', batch_size=10, max_num_batches=100, randomize=True)
+    valid_dp = MNISTDataProvider(dset='valid', batch_size=10000, max_num_batches=-10, randomize=False)
+    test_dp = MNISTDataProvider(dset='eval', batch_size=10000, max_num_batches=-10, randomize=False)
+
+    model = MLP(cost=cost

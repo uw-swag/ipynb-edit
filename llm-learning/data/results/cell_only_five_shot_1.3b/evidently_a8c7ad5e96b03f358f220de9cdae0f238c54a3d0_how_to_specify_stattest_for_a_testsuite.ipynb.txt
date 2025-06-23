@@ -1,0 +1,41 @@
+```python
+    import numpy as np
+    from scipy.stats import norm
+
+    def maximum_mean_discrepancy(X, Y, alpha=0.05):
+        """
+        Compute the maximum mean discrepancy (MMD) between two distributions.
+
+        Parameters:
+        X (ndarray): First distribution.
+        Y (ndarray): Second distribution.
+        alpha (float): Significance level.
+
+        Returns:
+        float: MMD between X and Y.
+        """
+        # Compute pairwise distances
+        D1 = np.sum(X**2, axis=1)[:, None] + np.sum(Y**2, axis=1) - 2 * np.dot(X, Y.T)
+        D1 = np.where(D1 > 0, D1, np.inf)
+        D2 = np.sum(X**2, axis=1)[None, :] + np.sum(Y**2, axis=1)[:, None] - 2 * np.dot(X.T, Y)
+        D2 = np.where(D2 > 0, D2, np.inf)
+
+        # Compute maximum mean discrepancy
+        mmd = np.max(D1 + D2 - 3 * np.trace(X @ Y.T))
+
+        # Compute significance level
+        z = norm.ppf(1 - alpha / 2)
+
+        # Compute empirical CDF
+        F_X = np.sum(X**2, axis=1) / np.sum(X**2)
+        F_Y = np.sum(Y**2, axis=1) / np.sum(Y**2)
+
+        # Compute empirical distribution function
+        F_empirical = np.sum(F_X[:, None] * F_Y, axis=1)
+
+        # Compute MMD at significance level
+        mmd_at_alpha = np.max(F_empirical - z * np.sqrt((F_X * (1 - F_X) + F_Y * (1 - F_Y)) / 2))
+
+        return mmd, mmd_at_alpha
+
+    # Example

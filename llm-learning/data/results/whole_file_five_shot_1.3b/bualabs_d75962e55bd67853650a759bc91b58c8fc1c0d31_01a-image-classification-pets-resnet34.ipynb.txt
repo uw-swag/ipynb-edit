@@ -1,0 +1,67 @@
+```python
+    # Change to normalize using imagenet_stats
+    data.normalize(imagenet_stats)
+
+    # Normalize using imagenet_stats
+    data.normalize(imagenet_stats)
+
+    # Show batch
+    data.show_batch(rows=3, figsize=(12, 9))
+
+    # Print classes
+    print(data.classes)
+
+    # Print class distribution
+    print(data.c)
+
+    # Length of classes
+    print(len(data.classes))
+
+    # Create a learner
+    learner = cnn_learner(data, models.resnet34, metrics=error_rate)
+
+    # Fit one cycle
+    learner.fit_one_cycle(4)
+
+    # Save the model
+    learner.save('stage-1')
+
+    # Interpretation
+    interp = ClassificationInterpretation.from_learner(learner)
+
+    # Plot top losses
+    interp.plot_top_losses(9, figsize=(12,9))
+
+    # Plot confusion matrix
+    interp.plot_confusion_matrix(figsize=(12,12), dpi=60)
+
+    # Most confused
+    interp.most_confused(min_val=2)
+
+    # Plot losses
+    learner.recorder.plot_losses()
+
+    # Plot learning rate
+    learner.recorder.plot_lr()
+
+    # Plot metrics
+    learner.recorder.plot_metrics()
+
+    # Load the model
+    # learner.load('stage-1')
+
+    # Unfreeze the model
+    learner.unfreeze()
+
+    # Find the learning rate
+    learner.lr_find()
+
+    # Plot learning rate
+    learner.recorder.plot()
+
+    # Fit one cycle with new learning rate
+    learner.fit_one_cycle(3, max_lr=slice(1e-6, 5e-5))
+
+    # Save the model
+    learner.save('stage-2')
+

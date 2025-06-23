@@ -1,0 +1,25 @@
+```python
+    import numpy as np
+    from sklearn.calibration import CalibratedClassifierCV
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+
+    # Load iris dataset
+    iris = load_iris()
+    X, y = iris.data, iris.target
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Calibrate the model
+    calibrated = CalibratedClassifierCV(cv=2)
+    calibrated.fit(X_train, y_train)
+
+    # Check the calibration score
+    score = calibrated.score(X_test, y_test)
+    print(f"Calibration score: {score}")
+
+    # If the score is less than 0.95, it's a warning
+    if score < 0.95:
+        print("Warning: Calibration score is less than 0.95. This might be due to the model's noise or the data's imbalance.")
+    ```

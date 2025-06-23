@@ -1,0 +1,27 @@
+```python
+    from pyadlml.preprocessing import RawEncoder
+
+    enc_raw = RawEncoder()
+    raw = enc_raw.fit_transform(data.df_devices)
+
+    # Now, you can use the 'raw' data for further processing.
+    # For example, you can create a new feature that represents the length of each text message.
+    raw['text_length'] = raw['message'].apply(len)
+
+    # You can then use this new feature to train a model.
+    # For example, you can use a logistic regression model to predict whether a text message is spam.
+    from sklearn.linear_model import LogisticRegression
+
+    X = raw.drop('spam', axis=1)
+    y = raw['spam']
+
+    model = LogisticRegression()
+    model.fit(X, y)
+
+    # You can then use this model to predict the spam status of new, unseen text messages.
+    new_messages = ['This is a new message.', 'This is another message.']
+    new_X = enc_raw.transform(new_messages)
+    predictions = model.predict(new_X)
+
+    # The 'predictions' variable now contains the predicted spam status for the new messages.
+    ```

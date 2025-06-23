@@ -1,0 +1,50 @@
+```python
+    # Importing the necessary libraries
+    import tensorflow as tf
+    import tensorflow_hub as hub
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_absolute_error
+    from google.colab import files
+    import io
+
+    # Uploading the dataset
+    uploaded = files.upload()
+    for fn in uploaded:
+        print('Uploaded file "{name}" with length {length} bytes'.format(
+              name=fn, length=len(uploaded[fn])))
+
+    # Loading the dataset
+    df = pd.read_csv(io.BytesIO(uploaded['your_file.csv']))
+
+    # Preprocessing the data
+    # Assuming that your data has been preprocessed and split into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Loading the model
+    model = hub.load("https://tfhub.dev/google/tf2-preview/nnlm-en-dim50/1")
+
+    # Making predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    mae = mean_absolute_error(y_test, y_pred)
+    print("Mean Absolute Error: ", mae)
+
+    # Saving the model
+    model.save("my_model")
+
+    # Loading the saved model
+    saved_model = tf.keras.models.load_model("my_model")
+
+    # Making predictions with the saved model
+    saved_y_pred = saved_model.predict(X_test)
+
+    # Comparing the predictions
+    print("Original predictions: ", y_pred[:5])
+    print("Saved model predictions: ", saved_y_pred[:5])
+
+    # Saving the figure
+    plt.figure(figsize=(12, 6))

@@ -1,0 +1,52 @@
+```
+    <Cell_0>
+    import numpy as np
+    import os
+    import pandas as pd
+    import pprint
+    import shutil
+    import time, timeit
+    import urllib
+    import yaml
+    import json
+    import uuid
+    import matplotlib
+    import matplotlib.pyplot as plt
+
+    from azure.common.client_factory import get_client_from_cli_profile
+    from azure.mgmt.compute import ComputeManagementClient
+    import azureml.core
+    from azureml.core import Workspace
+    from azureml.core.run import Run
+    from azureml.core.experiment import Experiment
+    from azureml.core.webservice import AciWebservice, Webservice
+    from azureml.core.model import Model
+    from azureml.core.image import ContainerImage
+    from azureml.core.compute import AksCompute, ComputeTarget
+
+    import pydocumentdb
+    import pydocumentdb.document_client as document_client
+
+    import pyspark
+    from pyspark.ml import Pipeline, PipelineModel
+    from pyspark.ml.evaluation import RegressionEvaluator
+    from pyspark.ml.feature import StringIndexer
+    from pyspark.ml.recommendation import ALS
+    from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+    from pyspark.sql import Row
+
+    from reco_utils.dataset.cosmos_cli import find_collection, read_collection, read_database, find_database
+    from reco_utils.dataset.spark_splitters import spark_random_split
+
+    print("PySpark version:", pyspark.__version__)
+    print("Azure SDK version:", azureml.core.VERSION)
+    <\Cell_0>
+    <Cell_1>
+    # Select the services names
+    short_uuid = str(uuid.uuid4())[:4]
+    prefix = "reco" + short_uuid
+    data = "mvl"
+    algo = "als"
+
+    # Add your subscription ID
+   

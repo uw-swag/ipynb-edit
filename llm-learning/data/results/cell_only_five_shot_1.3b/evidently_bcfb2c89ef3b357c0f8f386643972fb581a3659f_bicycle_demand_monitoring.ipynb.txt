@@ -1,0 +1,19 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets, ensemble
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, NumTargetDriftTab, RegressionPerformanceTab
+
+# Load data from UCI repository directly
+raw_data = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip', compression='zip', header=0, sep=',', parse_dates=['datetime'], index_col='datetime')
+
+target = 'count'
+prediction = 'cnt'
+numerical_features = ['temp', 'atemp', 'humidity', 'windspeed', 'season', 'holiday', 'workingday', 'hour', 'weekday']
+categorical_features = []
+
+    '''

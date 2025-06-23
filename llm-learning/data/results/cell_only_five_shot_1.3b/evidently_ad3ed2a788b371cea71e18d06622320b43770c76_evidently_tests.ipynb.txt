@@ -1,0 +1,17 @@
+```python
+    from pydantic import BaseModel, Field
+
+    class ColorOptions(BaseModel):
+        primary_color: str = Field(..., title="Primary Color")
+        fill_color: str = Field(..., title="Fill Color")
+        zero_line_color: str = Field(..., title="Zero Line Color")
+        current_data_color: str = Field(..., title="Current Data Color")
+        reference_data_color: str = Field(..., title="Reference Data Color")
+
+    color_scheme = ColorOptions()
+    color_scheme.primary_color = "#5a86ad"
+    color_scheme.fill_color = "#fff4f2"
+    color_scheme.zero_line_color = "#016795"
+    color_scheme.current_data_color = "#c292a1" 
+    color_scheme.reference_data_color = "#017b92"
+    ```

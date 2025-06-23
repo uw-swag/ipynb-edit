@@ -1,0 +1,36 @@
+```python
+    <Cell_0>
+    from sklearn.cluster import KMeans
+    from sklearn.ensemble import IsolationForest
+    from sklearn.mixture import GaussianMixture
+    from sklearn.neighbors import LocalOutlierFactor
+    from sklearn.datasets import make_moons
+    import matplotlib.pyplot as plt
+
+    # Unsupervised learning content
+    X, y = make_moons(n_samples=200, noise=0.1)
+
+    plt.scatter(X[:, 0], X[:, 1])
+    plt.show()
+
+    # Clustering
+    clf = KMeans(n_clusters=2)
+    clf.fit(X)
+    print(clf.labels_)
+
+    # Anomaly detection
+    clf = IsolationForest()
+    clf.fit(X)
+    print(clf.predict(X))
+
+    # Density estimation
+    gmm = GaussianMixture(n_components=2)
+    gmm.fit(X)
+    print(gmm.means_)
+
+    # Gaussian mixtures
+    clf = LocalOutlierFactor(n_neighbors=20, contamination=0.01)
+    clf.fit(X)
+    print(clf.negative_outlier_factor_)
+    <\Cell_0>
+    ```

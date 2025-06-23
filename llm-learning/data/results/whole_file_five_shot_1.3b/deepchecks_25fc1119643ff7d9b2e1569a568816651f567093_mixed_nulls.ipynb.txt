@@ -1,0 +1,22 @@
+```python
+    from deepchecks.checks import NbLinks
+    import pandas as pd
+
+    # Example 1: MixedNulls check
+    data = {'col1': ['sog', '1', 'cat', None, None]}
+    dataframe = pd.DataFrame(data=data)
+    result = MixedNulls().run(dataframe)
+    print(result)
+
+    # Example 2: NbLinks check
+    data = {'col1': ['nan', None, 'null', 'Nan', '1', 'cat'], 'col2':['', '', 'None', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+    dataframe = pd.DataFrame(data=data)
+    result = NbLinks().run(dataframe)
+    print(result)
+    ```
+
+    The `NbLinks` check in Deepchecks is used to detect the number of links in a text. It's a simple check that counts the number of occurrences of the word "link" in the text.
+
+    The `MixedNulls` check in Deepchecks is used to detect null values in a DataFrame. It's a more complex check that checks for null values in the DataFrame, and if they are not null, it checks if they are null values in the text.
+
+    In the examples above, the `MixedNulls` check is used to detect null values in the DataFrame, and the `NbLinks` check is used to detect the number of links in the text.

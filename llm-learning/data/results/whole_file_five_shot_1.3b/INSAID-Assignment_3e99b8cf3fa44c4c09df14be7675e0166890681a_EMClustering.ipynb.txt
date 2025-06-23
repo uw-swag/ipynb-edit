@@ -1,0 +1,29 @@
+```python
+    # Regression Utility
+    def regression_utility(X, Y, test_size=0.2, random_state=42):
+        X_Train, X_Test, Y_Train, Y_Test = train_test_split(X, Y, test_size=test_size, random_state=random_state)
+        X_Train = np.expand_dims(X_Train, axis=2)
+        X_Test = np.expand_dims(X_Test, axis=2)
+        print(X_Train.shape, X_Test.shape)
+        print(Y_Train.shape, Y_Test.shape)
+
+        Regression_Model = VGG(length, num_channel, model_width, problem_type=problem_type, output_nums=feature_number).VGG19()
+        Regression_Model.compile(loss='mean_absolute_error', optimizer='adam', metrics=['mean_squared_error'])
+        Regression_Model.summary()
+
+        Regression_Model.fit(X_Train, Y_Train, epochs=500, batch_size=128, verbose=1, validation_split=0.2, shuffle=True, callbacks=callbacks)
+
+        Predictions = Regression_Model.predict(X_Test, verbose=1)
+        Error = mean_absolute_error(Y_Test, Predictions)
+        print(f"MAE: {Error}")
+
+        history_plot(history)
+
+        return Predictions, Error
+
+    # Clustering Utility
+    def clustering_utility(X, n_clusters=3, random_state=42):
+        clustering = KMeans(n_clusters=n_clusters, random_state=random_state)
+        clustering.fit(X)
+        return clustering
+    ```

@@ -1,0 +1,50 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your dataset
+    # For example, you might need to handle missing values, outliers, etc.
+
+    # Split the data into features and target variable
+    X = df.drop('target_variable', axis=1)
+    y = df['target_variable']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a Linear Regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    # This step depends on the specifics of your problem
+    # For example, you might need to calculate the mean squared error, R-squared, etc.
+
+    # Print the coefficients of the model
+    print('Coefficients: \n', model.coef_)
+
+    # Plot the actual vs predicted values
+    plt.scatter(y_test, y_pred)
+    plt.xlabel('Actual')
+    plt.ylabel('Predicted')
+    plt.title('Actual vs Predicted')
+    plt.show()
+
+    # Print the R-squared value
+    print('R-squared:', metrics.r2_score(y_test, y_pred))
+    ```
+    This is a simple example of a Linear Regression model in Python using scikit-learn. The model is trained on a dataset, and then used to make predictions on unseen data

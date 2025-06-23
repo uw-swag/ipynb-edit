@@ -1,0 +1,54 @@
+
+    ## Step 1: Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+
+    ## Step 2: Loading the dataset
+    df = pd.read_csv('data.csv')
+
+    ## Step 3: Data Understanding
+    # Checking the first few rows of the data
+    print(df.head())
+
+    # Checking the statistical summary of the data
+    print(df.describe())
+
+    # Checking the distribution of the data
+    df.hist(bins=50, figsize=(20,15))
+    plt.show()
+
+    # Checking the correlation between the variables
+    corr_matrix = df.corr()
+    sns.heatmap(corr_matrix, annot=True)
+    plt.show()
+
+    ## Step 4: Data Preprocessing
+    # Handling missing values
+    df = df.dropna()
+
+    # Feature Scaling
+    scaler = StandardScaler()
+    df_scaled = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    ## Step 5: Dimensionality Reduction
+    # Applying PCA
+    pca = PCA(n_components=2)
+    df_pca = pca.fit_transform(df_scaled)
+
+    ## Step 6: Clustering
+    # Applying KMeans
+    kmeans = KMeans(n_clusters=3)
+    kmeans.fit(df_pca)
+
+    ## Step 7: Visualization
+    # Visualizing the clusters
+    plt.scatter(df_pca[:,0], df_pca[:,1], c=kmeans.labels_.astype(float), cmap='rainbow')
+    plt.show()
+
+    ## Step 8: Evaluation
+    # Evaluating the

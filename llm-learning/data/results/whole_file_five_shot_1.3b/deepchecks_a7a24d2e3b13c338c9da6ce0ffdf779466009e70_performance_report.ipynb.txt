@@ -1,0 +1,46 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#558)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.base import Dataset
+import matplotlib.pyplot as plt
+from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+from sklearn.datasets import load_iris
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import PerformanceReport
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+clf = AdaBoostClassifier()
+frame = iris.frame
+X = iris.data
+Y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(
+            X, Y, test_size=0.33, random_state=42)
+train_ds = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=iris.feature_names,
+            label='target')
+test_ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+            features=iris.feature_names,
+            label='target')
+_ = clf.fit(X_train, y_train)
+<\Cell_1>
+<Cell_2>
+check = PerformanceReport()
+check.run(train_ds, test_ds, clf)
+<\Cell_2>
+<Cell_3>
+from sklearn.datasets import load_diabetes
+
+diabetes = load_diabetes(as_frame=True)
+clf = AdaBoostRegressor()
+
+frame = diabetes.frame
+X = diabetes.data
+Y = diabetes.target
+X_train, X_test, y_train, y_test = train_test_split(
+            X, Y, test_size=0.33, random_state=42)
+train_ds = Dataset(pd.concat([X_train, y_train], axis=

@@ -1,0 +1,42 @@
+```python
+    ## Refactoring notebook folder structure
+
+    ## Step 1: Import necessary libraries
+    import os
+    import shutil
+
+    ## Step 2: Define the source and destination directories
+    source_dir = "/path/to/source/directory"
+    dest_dir = "/path/to/destination/directory"
+
+    ## Step 3: Iterate over all files in the source directory
+    for filename in os.listdir(source_dir):
+        ## Step 4: Get the file extension
+        ext = os.path.splitext(filename)[1]
+
+        ## Step 5: Create a new directory for each file extension
+        if not os.path.exists(dest_dir + ext):
+            os.makedirs(dest_dir + ext)
+
+        ## Step 6: Move the file to the corresponding directory
+        shutil.move(source_dir + filename, dest_dir + ext)
+    ```
+    This script will move all files with their corresponding extensions from the source directory to the destination directory.
+
+    Please replace "/path/to/source/directory" and "/path/to/destination/directory" with the actual paths of your source and destination directories.
+
+    Also, this script assumes that the source directory contains only files with their corresponding extensions. If your source directory contains other types of files, you may need to modify the script accordingly.
+
+    Please note that this script will overwrite files with the same name in the destination directory. If you want to keep the original files, you should modify the script to copy files instead of moving them.
+
+    Also, this script does not handle subdirectories. If your source directory contains subdirectories, you may need to modify the script to handle them as well.
+
+    Finally, this script is a simple example and may not cover all edge cases. You may need to adjust it to suit your specific needs.
+
+    ## Step 7: Run the script
+    You can run the script from a Jupyter notebook cell or from a Python script.
+
+    Please note that running this script may have unintended side effects, so it's important to test it thoroughly before running it on your data.
+
+    ## Step 8: Review the results
+   

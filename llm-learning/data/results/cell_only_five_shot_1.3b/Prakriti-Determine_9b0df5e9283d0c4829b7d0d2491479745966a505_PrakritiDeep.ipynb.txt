@@ -1,0 +1,30 @@
+```python
+    import tensorflow as tf
+from tensorflow import keras
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+
+# Assuming you have a DataFrame df with columns 'column1', 'column2', etc.
+# Replace 'column1', 'column2', etc. with the actual column names in your DataFrame
+df = pd.read_csv('your_data.csv')
+
+# Split the data into features (X) and target (y)
+X = df[['column1', 'column2', 'column3', 'column4', 'column5']]
+y = df['target']
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test))
+
+# Predict on the test set
+predictions = model.predict(X_test)
+
+# Convert predictions to class labels
+predicted_classes = np.argmax(predictions, axis=1)
+
+# Print the predicted class
+print(predicted_classes)
+
+```

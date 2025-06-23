@@ -1,0 +1,17 @@
+```python
+    from sklearn.datasets import load_diabetes
+    from sklearn.ensemble import AdaBoostRegressor
+    from databricks.datasets import Dataset
+
+    # Load the diabetes dataset
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    # Create a Dataset object
+    train = Dataset(diabetes, label='target')
+
+    # Create an AdaBoostRegressor object
+    clf = AdaBoostRegressor()
+
+    # Fit the model
+    clf.fit(train.features_columns(), train.label_col())
+    ```

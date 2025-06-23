@@ -1,0 +1,45 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D
+    from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.optimizers import Adam
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+    # Creating a Sequential Model
+    model = Sequential()
+
+    # Adding layers to the model
+    model.add(Conv2D(64, (3, 3), input_shape = (64, 64, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size = (2, 2)))
+
+    model.add(Conv2D(64, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size = (2, 2)))
+
+    model.add(Flatten())
+    model.add(Dense(64))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(1))
+    model.add(Activation('sigmoid'))
+
+    # Compiling the model
+    model.compile(loss = 'binary_crossentropy', optimizer = 'adam', metrics = ['accuracy'])
+
+    # Image Data Augmentation
+    train_datagen = ImageDataGenerator(
+        rescale = 1./255,
+        shear_range = 0.2,
+        zoom_range = 0.2,
+        horizontal_flip = True)
+
+    test_datagen = ImageDataGenerator(rescale = 1./255)
+
+    # Loading the dataset
+    # Assuming you have a dataset in the form of a directory with sub-directories for each class
+    # Each sub-directory will contain the images of the class
+    # The

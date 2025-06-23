@@ -1,0 +1,22 @@
+```python
+    # Rename notebooks directory
+    import os
+    import shutil
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Define the old and new names
+    old_name = "notebooks"
+    new_name = "example-notebooks"
+
+    # Get the path to the notebooks directory
+    notebooks_path = os.path.join(cwd, old_name)
+
+    # Check if the old name exists
+    if os.path.exists(notebooks_path):
+        # Rename the directory
+        os.rename(notebooks_path, os.path.join(cwd, new_name))
+    else:
+        print(f"The directory {old_name} does not exist.")
+    ```

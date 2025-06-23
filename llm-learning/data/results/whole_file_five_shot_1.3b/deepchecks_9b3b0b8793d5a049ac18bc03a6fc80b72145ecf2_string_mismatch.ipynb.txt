@@ -1,0 +1,56 @@
+
+<Cell_2>
+import pandas as pd
+
+data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+df = pd.DataFrame(data=data)
+r = StringMismatch().run(df)
+<\Cell_2>
+<Cell_3>
+#implement here Exercise 1
+<\Cell_3>
+<Cell_4>
+import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import matplotlib.cm as cm
+from mlp.dataset import MNISTDataProvider
+
+def show_mnist_image(img):
+    fig = plt.figure()
+    gs = gridspec.GridSpec(1, 1)
+    ax1 = fig.add_subplot(gs[0,0])
+    ax1.imshow(img, cmap=cm.Greys_r)
+    plt.show()
+
+<\Cell_4>
+<Cell_5>
+# An example for a single MNIST image
+mnist_dp = MNISTDataProvider(dset='valid', batch_size=1, max_num_examples=2, randomize=False)
+
+for batch in mnist_dp:
+    features, targets = batch
+    show_mnist_image(features.reshape(28, 28))
+<\Cell_5>
+<Cell_6>
+#implement here Exercise 1
+<\Cell_6>
+<Cell_7>
+
+<\Cell_7>
+
+<\Cell_8>
+<Cell_9>
+#implement here Exercise 1
+<\Cell_9>
+<Cell_10>
+#implement here Exercise 1
+<\Cell_10>
+<Cell_11>
+#implement here Exercise 1
+<\Cell_11>
+<Cell_12>
+#implement here Exercise 1
+<\Cell_12>
+<Cell_13>
+#implement here Exercise 1
+<\Cell_13>

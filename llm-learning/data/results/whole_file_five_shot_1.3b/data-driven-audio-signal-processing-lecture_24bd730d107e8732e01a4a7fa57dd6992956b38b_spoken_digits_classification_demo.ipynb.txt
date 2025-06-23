@@ -1,0 +1,55 @@
+```
+    # Machine Learning
+    import os
+    import glob
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import soundfile as sf
+
+    from librosa.feature import mfcc
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report
+
+    from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.layers import Input, Dense, Dropout, Conv2D, Activation, Flatten, MaxPooling2D
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.callbacks import EarlyStopping
+
+    path = '../mnt/data/INT/free-spoken-digit-dataset/recordings/'  # path to dataset
+
+    X = list()
+    Y = list()
+
+    audiofiles = glob.glob(path, recursive=True)
+    for filepath in audiofiles:
+        x, fs = sf.read(filepath)
+        x = x / np.max(np.abs(x))
+        X.append(x)
+        Y.append(int(os.path.basename(filepath)[0]))
+
+    return X, Y, fs
+
+
+# load examples
+X_raw, Y, fs = load_examples(path + '*.wav')
+
+# determine maximum length of the examples
+lengths = [len(x) for x in X_raw]
+F = np.max(lengths)
+
+# append zeros to examples to equalize lengths
+X_raw = [np.concatenate((sample, np.zeros(F - len(sample))))
+         for sample in X_raw]
+X_raw = np.array(X_raw)
+Y = np.array(Y)
+
+print('Total number of examples: {}'.format(X.shape[0]))
+print('Dimension of feature vectors: {}'.format(X.shape[1:]))
+
+# one-hot encoding of class labels
+Y1h = to_categorical(Y, 10)
+
+model = dnn_model()
+model.

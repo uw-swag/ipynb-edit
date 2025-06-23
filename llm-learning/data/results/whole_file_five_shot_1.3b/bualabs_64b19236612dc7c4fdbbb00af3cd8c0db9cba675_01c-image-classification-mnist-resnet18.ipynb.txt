@@ -1,0 +1,58 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.MNIST)
+path
+<\Cell_2>
+<Cell_3>
+path.ls()
+<\Cell_3>
+<Cell_4>
+(path/'training').ls()
+<\Cell_4>
+<Cell_5>
+filenames = get_image_files(path/'training/5')
+len(filenames), filenames[:10]
+<\Cell_5>
+<Cell_6>
+batchsize = 64
+np.random.seed(0)
+transform = get_transforms(do_flip=False)
+
+databunch = ImageDataBunch.from_folder(path, train='training', valid_pct=0.2, size=28, 
+                                       ds_tfms=transform, bs=batchsize, num_workers=8).normalize()
+<\Cell_6>
+<Cell_7>
+databunch.show_batch(rows=3, figsize=(10, 10))
+<\Cell_7>
+<Cell_8>
+databunch.classes
+<\Cell_8>
+<Cell_9>
+learner = cnn_learner(databunch, models.resnet18, metrics=accuracy)
+<\Cell_9>
+<Cell_10>
+learner.fit_one_cycle(4)
+<\Cell_10>
+<Cell_11>
+learner.lr_find()
+<\Cell_11>
+<Cell_12>
+learner.recorder.plot()
+<\Cell_12>
+<Cell_13>
+lear

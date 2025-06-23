@@ -1,0 +1,39 @@
+
+    The code you provided is a live plotting of temperature data collected from an XADC (analog to digital converter) device. The data is collected every second and appended to a pandas DataFrame. The DataFrame is then plotted using matplotlib.
+
+    However, there are a few issues with your code:
+
+    1. The `!xadc_get_value_temp` command is not defined in your code. You need to replace this with the actual command to get the temperature data from your XADC device.
+
+    2. The `keep_running` variable is not set to `False` in the `collect_data` function. This will cause the loop to run indefinitely.
+
+    3. The `t1.start()` line should be outside the `collect_data` function. This is because the `t1` thread should not be started until after the `collect_data` function has been called.
+
+    4. The `plt.show()` line should be outside the `collect_data` function. This is because the plotting function should not be called until after the `collect_data` function has been called.
+
+    Here is the corrected code:
+
+    ```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+    import time
+    import threading
+
+    filename = str(date.today()) + " temperature data.csv"
+    headers = ["Temperature (oC)","Date"]
+    try:
+        df = pd.read_csv(filename,names=headers,skiprows = 1)
+    except:
+        df = pd.DataFrame()
+
+    keep_running = True
+
+    def collect_data():
+        while keep_running:
+            global df
+            clean_data_table = pd.DataFrame()
+            current_temp = !xadc_get_value_temp  # replace with actual command to get temperature data
+            temp_value = float(current_temp[0][:5])
+            print('Collecting temperatures. '+ str(len(df.index)) +' value(s) recorded.')
+            clean_data_table['Temperature (oC)'] = [temp_value]

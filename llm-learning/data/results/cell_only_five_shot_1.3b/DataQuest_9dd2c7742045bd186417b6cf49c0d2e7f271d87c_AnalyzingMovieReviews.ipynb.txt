@@ -1,0 +1,50 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, accuracy_score
+
+    # Load the data
+    df = pd.read_csv('movie_reviews.csv')
+
+    # Preprocess the data
+    df['text'] = df['text'].apply(lambda x: x.lower())
+    df['text'] = df['text'].apply(lambda x: ' '.join(x.lower().split()))
+
+    # Vectorize the text
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(df['text'])
+    y = df['sentiment']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a Naive Bayes classifier
+    clf = MultinomialNB()
+    clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print('Accuracy:', accuracy_score(y_test, y_pred))
+
+    # Save the model
+    import joblib
+    joblib.dump(clf, 'movie_reviews_classifier.pkl')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Guided Project: Analyzing Movie Reviews, 51% done"
+    Original Code Cells:
+    '''
+    # Load the pre-trained model
+    clf = joblib.load('movie_reviews_classifier.pkl')
+
+    # Predict the sentiment of a new review
+    new_review = ['This movie is so good, I recommend it.']
+    X_

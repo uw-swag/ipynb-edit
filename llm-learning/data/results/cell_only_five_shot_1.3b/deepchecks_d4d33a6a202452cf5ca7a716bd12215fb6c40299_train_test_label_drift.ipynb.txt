@@ -1,0 +1,22 @@
+```python
+    from deepchecks.vision.datasets.classification.mnist import (
+    load_dataset, 
+    load_model
+)
+    train_ds = load_dataset(train=True, object_type='Dataset')
+    test_ds = load_dataset(train=False, object_type='Dataset')
+
+    # Label drift fixes
+    # Assuming that the labels in the dataset are integers
+    # We can convert them to categorical labels
+    train_ds.labels = pd.Categorical(train_ds.labels)
+    test_ds.labels = pd.Categorical(test_ds.labels)
+
+    # If the labels are not already categorical, we can convert them to categorical
+    if not isinstance(train_ds.labels, pd.Categorical):
+        train_ds.labels = pd.Categorical(train_ds.labels)
+    if not isinstance(test_ds.labels, pd.Categorical):
+        test_ds.labels = pd.Categorical(test_ds.labels)
+    ```
+
+    This code will convert the labels in the dataset to categorical labels. If the labels are already categorical, it will do nothing.

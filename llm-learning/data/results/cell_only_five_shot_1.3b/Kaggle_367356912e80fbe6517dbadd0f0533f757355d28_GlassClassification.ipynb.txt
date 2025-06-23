@@ -1,0 +1,11 @@
+```python
+    from sklearn.model_selection import cross_val_score
+
+    rf = RandomForestClassifier(criterion='gini', n_estimators=100, min_samples_leaf=1, min_samples_split=4)
+
+    # 5-Fold Cross Validation
+    scores = cross_val_score(rf, X, y, cv=5)
+
+    print("Cross-validation scores: {}".format(scores))
+    print("Mean cross-validation score: {}".format(scores.mean()))
+    ```

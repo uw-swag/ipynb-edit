@@ -1,0 +1,41 @@
+```python
+    # 0.4.0 version bump 🚀  (#766)
+
+    # Changes:
+    # 1. Added a new check `MixedDataTypes` to detect rare data types.
+    # 2. Updated the data types of the columns to a more diverse set of data types.
+
+    # Please review the changes and make sure they fit your needs.
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "0.3.0 version bump 🚀  (#756)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.checks import MixedDataTypes
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+data = {'col1': ['foo', 'bar', 'cat']}
+dataframe = pd.DataFrame(data=data)
+MixedDataTypes().add_condition_rare_type_ratio_not_in_range().run(dataframe)
+<\Cell_1>
+<Cell_2>
+data = {'col1': ['str', '1.0', 1, 2 , 2.61 , 't', 1, 1, 1,1,1], 'col2':['', '', '1.0', 'a', 'b', 'c', 'a', 'a', 'a', 'a','a'],
+        'col3': [1,2,3,4,5,6,7,8, 9,10,11], 'col4': [1,2,3,4,5, 6, 7,8,'a',10,12]}
+dataframe = pd.DataFrame(data=data)
+MixedDataTypes().add_condition_rare_type_ratio_not_in_range().run(dataframe)
+<\Cell_2>
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # 0.3.0 version bump 🚀  (#756)
+
+    # Changes:
+    # 1. Added a new check `MixedDataTypes` to detect rare data types.
+    # 2

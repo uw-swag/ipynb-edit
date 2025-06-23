@@ -1,0 +1,66 @@
+
+    '''
+    ## Table of Contents
+    
+    1. [Installation](#installation)
+    2. [Usage](#usage)
+    3. [Contributing](#contributing)
+    4. [License](#license)
+
+    ## Installation
+    
+    You can install the `deepml` package using pip:
+
+    ```bash
+    pip install deepml
+    ```
+
+    ## Usage
+
+    Here is a basic usage of the `deepml` package:
+
+    ```python
+    import torch
+    import torchvision
+    from torchvision import transforms
+
+    import numpy as np
+    from matplotlib import pyplot as plt
+
+    import matplotlib as mpl
+
+    mpl.rcParams['text.color'] = 'white'
+
+    from deepml.train import Learner
+    from torch.nn import CrossEntropyLoss
+
+    criterion = CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.0001)
+    learner = Learner(model, optimizer, 'net', use_gpu=True, classes=classes)
+
+    from deepml.metrics.classification import Accuracy, Precision, Recall, FScore
+
+    metrics = [('acc', Accuracy()), ('fscore', FScore())]
+
+    learner.fit(criterion, train_loader=trainloader, val_loader=testloader, epochs=2, metrics=metrics)
+    learner.show_predictions(testloader, samples=30, cols=6, figsize=(20, 20))
+    ```
+
+    ## Contributing
+
+    Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+    ## License
+
+    The `deepml` package is licensed under the MIT License. See `LICENSE` for details.
+    '''
+
+    ## Code
+
+    Here is the code with the documentation improvements:
+
+    ```python
+    ## Table of Contents
+
+    1. [Installation](#installation)
+    

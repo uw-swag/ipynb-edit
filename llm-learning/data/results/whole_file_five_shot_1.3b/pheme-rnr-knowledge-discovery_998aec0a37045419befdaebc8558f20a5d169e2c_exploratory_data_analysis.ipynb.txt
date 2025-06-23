@@ -1,0 +1,42 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Add visualization of tweets"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Import dependencies for this notebook
+import pandas as pd
+import numpy as np
+import networkx as nx
+import seaborn as sns  # seaborn-0.9.0
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from datetime import datetime
+from lib.util import fetch_tweets, to_unix_tmsp
+<\Cell_0>
+<Cell_1>
+# Specifies the event name and the date of the event
+events = {
+    "germanwings-crash": datetime(2015, 3, 24),
+    "ferguson": datetime(2014, 8, 9),
+    "ottawashooting": datetime(2014, 10, 22),
+    "charliehebdo": datetime(2015, 1, 7),
+    "sydneysiege": datetime(2014, 12, 15)
+}
+
+# Combine all PHEME events into one dataframe
+tweets = pd.concat([ fetch_tweets(name) for name in events ])
+tweets[["is_source_tweet","is_rumor"]] = tweets[["is_source_tweet", "is_rumor"]].astype(bool)
+
+# So what does this data look like anyway?
+tweets.describe()
+<\Cell_1>
+<Cell_2>
+divided by one binary categorical variable and grouped by other categorical variables.
+<\Cell_2>
+<Cell_3>
+y = tweets['is_rumor']
+X = tweets[["sentimentscore", "FirstPersonPronoun", "ThirdPersonPronoun", "hashtags_count", "tweet_length", "user_mentions", "urls_count", "media_count"]]
+X = (X - X.mean()) / X.std()

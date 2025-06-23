@@ -1,0 +1,74 @@
+import serial
+import time
+import csv
+import re
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import pandas as pd
+import numpy as np
+from datetime import datetime, date
+from IPython.display import clear_output
+import ipywidgets as widgets
+import concurrent.futures
+import threading
+ 
+portPath = "/dev/ttyACM0"       # Must match value shown on Arduino IDE
+baud = 115200                   # Must match Arduino baud rate
+timeout = 5                     # Seconds
+filename = str(date.today()) + " data.csv"
+max_num_readings = 8
+num_signals = 1
+ 
+ 
+ 
+def create_serial_obj(portPath, baud_rate, tout):
+    """
+    Given the port path, baud rate, and timeout value, creates and returns a pyserial object.
+    """
+    return serial.Serial(portPath, baud_rate, timeout = tout)
+x = df['Date']
+y1 = df['PM 0.3']
+y2 = df['PM 0.5']
+y3 = df['PM 1.0']
+y4 = df['PM 2.5']
+y5 = df['PM 5.0']
+y6 = df['PM 10.0']
+
+# plot
+plt.cla()
+plt.plot(x,y1, label='PM 0.3')
+plt.plot(x,y2, label='PM 0.5')
+plt.plot(x,y3, label='PM 1.0')
+plt.plot(x,y4, label='PM 2.5')
+plt.plot(x,y5, label='PM 5.0')
+plt.plot(x,y6, label='PM 10.0')
+
+plt.legend()
+# beautify the x-labels
+plt.gcf().autofmt_xdate()
+plt.show()
+#plt.ioff()
+keep_running = True
+
+def collect_data():
+    while keep_running == True:
+        global df
+        serial_data = read_serial_data(serial_obj)
+        print("Reading Data")
+        clean_data =  clean_serial_data(serial_data)
+        clean_data_table = pd.DataFrame([sub.split(",") for sub in clean_data],
+                                        columns=["PM 0.3","PM 0.5","PM 1.0","PM 2.5","PM 5.0","PM 10.0",
+                                                 "Temp","Pressure","Humidity","BME680 VOC","QM9 VOC",
+                                                 "MiCS5524 VOC","CO2","CCS811 VOC"])
+        clean_data_table['Date'] = [datetime.now()]
+        df = df.append(clean_data_table)
+        time.sleep(1)
+t1
+t1=threading.Thread(target=collect_data)
+t1.start()
+keep_running = False
+t1
+df[headers]
+df[headers] #Make sure the DataFrame is in the correct order
+df.to_csv(filename,names=headers)
+df

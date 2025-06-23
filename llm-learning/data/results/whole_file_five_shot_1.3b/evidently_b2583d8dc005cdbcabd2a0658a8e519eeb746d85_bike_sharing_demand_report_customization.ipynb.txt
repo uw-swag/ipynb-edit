@@ -1,0 +1,55 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Updated examples with options to new options interface"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+import requests
+import zipfile
+import io
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab, DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.widgets.widget import Widget, RED, GREY
+<\Cell_0>
+<Cell_1>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0), DataDriftTab()], options=[opt])
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+dashboard.show()
+<\Cell_1>
+<Cell_2>
+import plotly.express as px
+<\Cell_2>
+<Cell_3>
+dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_3>
+<Cell_4>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+dashboard.show()
+<\Cell_4>
+<Cell_5>
+dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_5>
+<Cell_6>
+dashboard.show()
+<\Cell_6>
+<Cell_7>
+dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_7>
+<Cell_8>
+dashboard.show()
+<\Cell_8>
+<Cell_9>
+dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_9>
+<Cell_10>
+dashboard.show()
+<\Cell_10>
+<Cell_11>
+dashboard.save('bike_sharing_demand_model_perfomance.html')

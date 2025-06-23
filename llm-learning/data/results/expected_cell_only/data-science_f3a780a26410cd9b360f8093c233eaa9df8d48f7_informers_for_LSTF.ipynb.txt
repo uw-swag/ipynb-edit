@@ -1,0 +1,17 @@
+!git clone https://github.com/zhouhaoyi/Informer2020.git
+% cd Informer2020
+!ls
+! pip install -r requirements.txt
+import pandas as pd
+f=pd.read_csv("/content/Informer2020/data/ETT/ETTh1.csv")
+f.head()
+m1=pd.read_csv("/content/Informer2020/data/ETT/ETTm1.csv")
+m1.head()
+# run code in local machine as it takes time and colab doesnt support full requirements
+# ETTh1
+!python -u main_informer.py --model informer --data ETTh1 --attn prob
+# ETTh2
+!python -u main_informer.py --model informer --data ETTh2 --attn prob
+# ETTm1
+python -u main_informer.py --model informer --data ETTm1 --attn prob
+

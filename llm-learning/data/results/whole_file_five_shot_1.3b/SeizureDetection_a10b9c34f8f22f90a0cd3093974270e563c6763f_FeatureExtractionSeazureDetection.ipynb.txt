@@ -1,0 +1,35 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import configparser 
+    from sklearn import preprocessing
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.model_selection import cross_val_score
+
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    dataset = config['DATASET'].get('dataset')
+    sample_rate = config['DATASET'].getint('sample_rate')
+    time_window = config['DATASET'].getint('time_window')
+    test_ratio = config['TRAINING'].getfloat('test_ratio')
+    pca_tolerance = config['PCA'].getfloat('pca_tolerance')
+    smote_neighbors = config['SMOTE'].getint('smote_neighbors')
+    k_fold = config['CLASSIFICATION'].getint('k_fold')
+    knn_neighbors = config['CLASSIFICATION'].getint('knn_neighbors')
+    step = time_window*sample_rate
+
+    df = read_and_store_data(dataset, sample_rate)
+    df = leftRightHemisphericChannels(df)
+    features = pd.DataFrame(featureExtraction (df, sample_rate, step))
+    del df
+    features = featureNormalization(features)
+    reduced_features = dimentionalityReduction(features, pca_tolerance)
+    del features
+    smote_features = utils.shuffle(oversamplingSMOTE(reduced_features.drop('seizure', axis = 1), reduced_features['seizure'], smote_neighbors))
+    smote_features.reset_index(drop = True, inplace = True)
+    del reduced_features
+
+    train_dat, test_dat, train_ind, test_ind = createTrainingAndTestDatasets(smote_features, test_ratio)
+    perfInd = ['Accuracy', 'Sensitivity', 'Specificity', 'Precision', 'F1 Score', 'MCC', 'Kappa']
+    results = pd.DataFrame(

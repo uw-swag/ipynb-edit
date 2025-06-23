@@ -1,0 +1,8 @@
+#Dataset for Data Quality and Integrity
+adult_data = datasets.fetch_openml(name='adult', version=2, as_frame='auto', parser='auto')
+adult = adult_data.frame
+
+adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+adult_cur.iloc[:2000, 3:5] = np.nan

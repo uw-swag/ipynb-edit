@@ -1,0 +1,33 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Guided Project: Predicting Car Prices, 3 of 6 in progress"
+    Original Code Cells:
+    '''
+    print('Convert missing values (?) with np.NaN then set the type to float')
+numeric_cars.replace(to_replace='?', value=np.nan, inplace=True)
+numeric_cars.astype('float', inplace=True)
+numeric_cars.head(10)
+print("All remaining NaN's will be filled with the mean of its respective column")
+print(numeric_cars.mean())
+numeric_cars = numeric_cars.fillna(numeric_cars.mean())
+print("Then, verify that all NaN's have been removed by showing the number of NaN's for each column.")
+
+# not_numeric_count = len(numeric_cars) - numeric_cars.count(axis=0, level=None, numeric_only=False)
+# percentage_not_numeric = (not_numeric_count / len(numeric_cars)) * 100
+# percentage_not_numeric
+print(numeric_cars.head(10))
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a part of a guided project to predict car prices. Here's a brief explanation of the code:
+
+    1. The first part of the code replaces any missing values (?) with NaN (Not a Number) and then converts the data type of the numeric columns to float.
+
+    2. The next part of the code calculates the mean of each column in the dataframe and fills the NaN values with the mean of the respective column.
+
+    3. The final part of the code verifies that all NaN values have been removed by showing the first 10 rows of the dataframe.
+
+    This is a basic example of a guided project, but it can be extended to include more complex data preprocessing steps, feature engineering, model selection, and evaluation.

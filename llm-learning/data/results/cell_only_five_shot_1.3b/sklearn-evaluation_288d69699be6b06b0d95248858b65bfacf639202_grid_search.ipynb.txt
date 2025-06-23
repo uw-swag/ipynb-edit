@@ -1,0 +1,36 @@
+```
+    import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn import datasets
+from sklearn_evaluation import plot
+
+data = datasets.make_classification(n_samples=200, n_features=10,
+                                    n_informative=4, class_sep=0.5)
+
+X = data[0]
+y = data[1]
+hyperparameters = {
+    'n_estimators': [1, 10, 50, 100],
+    'criterion': ['gini', 'entropy'],
+    'max_features': ['sqrt', 'log2'],
+}
+est = RandomForestClassifier(n_estimators=5)
+clf = GridSearchCV(est, hyperparameters, cv=3)
+clf.fit(X, y)
+
+grid_scores = clf.cv_results_
+plot.grid_search(clf.cv_results_, change='n_estimators', kind='bar')
+plot.grid_search(clf.cv_results_, change='n_estimators',
+                 subset={'n_estimators': [10, 50, 100],
+                         'criterion': 'gini'},
+                 kind='bar')
+plot.grid_search(clf.cv_results_, change=('n_estimators', 'criterion'),
+                 subset={'max_features': 'sqrt'})
+
+    ```
+
+    ### Explanation:
+    The code is converting the Jupyter notebook from the original format to the myst format. The notebook contains a series of cells, each containing a different code snippet. The myst format is a markdown-like format that allows for more readable and easier to maintain code.
+
+    The first cell imports the necessary libraries and loads the dataset. The second cell defines the hyperparameters for the RandomForestClassifier and the GridSearchCV. The third cell fits the model to the data. The fourth cell generates a bar plot of the grid search results for the 'n_estimators' parameter. The fifth cell filters the grid search results

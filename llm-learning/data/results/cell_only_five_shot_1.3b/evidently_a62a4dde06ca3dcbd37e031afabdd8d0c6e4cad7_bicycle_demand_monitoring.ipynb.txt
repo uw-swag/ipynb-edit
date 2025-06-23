@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+
+    # Load the data
+    raw_data = pd.read_csv('train.csv', header=0, sep=',', parse_dates=['datetime'], index_col='datetime')
+
+    # Rename the columns
+    raw_data.columns = ['temperature', 'pressure', 'humidity', 'wind_speed', 'wind_direction', 'solar_radiation', 'rain']
+
+    # Fill missing values
+    raw_data = raw_data.fillna(raw_data.mean())
+
+    # Check for any missing values
+    if raw_data.isnull().values.any():
+        print("Missing values found")
+    else:
+        print("No missing values found")
+
+    # Normalize the data
+    raw_data = (raw_data - raw_data.min()) / (raw_data.max() - raw_data.min())
+
+    # Save the data
+    raw_data.to_csv('normalized_train.csv')
+    ```

@@ -1,0 +1,33 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # imports from custom library
+    import sys
+    sys.path.append('../../')
+    from mlrefined_libraries import superlearn_library as superlearn
+    from mlrefined_libraries import math_optimization_library as optlib
+
+    # demos for this notebook
+    regress_plotter = superlearn.lin_regression_demos
+    optimizers = optlib.optimizers
+    static_plotter = optlib.static_plotter.Visualizer()
+    datapath = '../../mlrefined_datasets/superlearn_datasets/'
+
+    # import autograd functionality to bulid function's properly for optimizers
+    import autograd.numpy as np
+
+    # import timer
+    from datetime import datetime 
+
+    # this is needed to compensate for %matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib notebook
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+
+    # Major Leagues Predictability
+    major_league_countries = ['England','France','Germany','Italy','Spain']
+    countries = countries[countries.name.isin(major_league_countries)]
+    countries.head()
+    ```

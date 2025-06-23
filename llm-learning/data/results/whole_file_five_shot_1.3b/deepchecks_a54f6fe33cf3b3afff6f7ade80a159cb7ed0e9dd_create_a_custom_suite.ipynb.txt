@@ -1,0 +1,45 @@
+```
+    ## Code: simple_model_check.py
+    from deepchecks.base import BaseCheck
+    from deepchecks.utils.data_types import is_dataframe
+    import pandas as pd
+    import numpy as np
+
+    class SimpleModelCheck(BaseCheck):
+        def __init__(self, name='Simple Model Check', **kwargs):
+            super().__init__(name=name, **kwargs)
+
+        def run(self, model, train_dataset, test_dataset):
+            if not is_dataframe(train_dataset.data):
+                raise ValueError("Train dataset should be a pandas DataFrame.")
+            if not is_dataframe(test_dataset.data):
+                raise ValueError("Test dataset should be a pandas DataFrame.")
+
+            # Perform model check
+            model.fit(train_dataset.data.drop('target', axis=1), train_dataset.data['target'])
+            predictions = model.predict(test_dataset.data.drop('target', axis=1))
+            score = model.score(test_dataset.data.drop('target', axis=1), test_dataset.data['target'])
+
+            # Add check results to the check results dictionary
+            self.results['model_score'] = score
+
+            return self.results
+
+    ## Code: simple_model_performance.py
+    from deepchecks.base import BaseCheck
+    from deepchecks.utils.data_types import is_dataframe
+    import pandas as pd
+    import numpy as np
+
+    class SimpleModelPerformance(BaseCheck):
+        def __init__(self, name='Simple Model Performance', **kwargs):
+            super().__init__(name=name, **kwargs)
+
+        def run(self, model, train_dataset, test_dataset):
+            if not is_dataframe(train_dataset.data):
+                raise ValueError("Train dataset should be a pandas DataFrame.")
+            if not is_dataframe(test_dataset.data):
+                raise ValueError("Test dataset should be a pandas DataFrame.")
+
+            # Perform model performance check
+            predictions = model.predict(test_dataset.data.drop('target', axis=1

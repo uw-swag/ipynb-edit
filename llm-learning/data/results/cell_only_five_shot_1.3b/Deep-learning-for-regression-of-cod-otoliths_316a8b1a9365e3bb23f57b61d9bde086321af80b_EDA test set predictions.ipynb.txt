@@ -1,0 +1,27 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import confusion_matrix
+
+    def plot_confusion_matrix(y_true, y_pred):
+        # Create a confusion matrix
+        cm = confusion_matrix(y_true, y_pred)
+
+        # Create a heatmap from the confusion matrix
+        sns.heatmap(cm, annot=True, fmt="d")
+        plt.title('Confusion Matrix')
+        plt.ylabel('Actual')
+        plt.xlabel('Predicted')
+        plt.show()
+
+    # Assuming you have a trained model and a test dataset
+    y_pred = model.predict(X_test)
+
+    # Convert the predictions to binary class labels
+    y_pred = [1 if p > 0.5 else 0 for p in y_pred]
+
+    # Plot the confusion matrix
+    plot_confusion_matrix(y_true, y_pred)
+    ```
+
+    This code will create a confusion matrix and a heatmap from the confusion matrix. The confusion matrix is a table that is often used to describe the performance of a classification model (or "classifier") on a set of data for which the true values are known. The confusion matrix itself is relatively simple to understand, and the interpretation of the matrix values is based on the specifics of the classification problem.

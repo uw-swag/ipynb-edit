@@ -1,0 +1,36 @@
+```python
+    # More results and EDA
+    # ------------------
+
+    ## 1. More data
+    # Let's increase the number of rows we read from the CSV file.
+    data = pd.read_csv('../input/new-york-city-taxi-fare-prediction/train.csv', nrows=100000)
+
+    ## 2. Exploratory Data Analysis
+    # Let's check the distribution of the 'fare_amount' column.
+    sns.distplot(data['fare_amount'])
+    plt.show()
+
+    # Check the correlation between different features.
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(data.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Check the distribution of the 'pickup_longitude' and 'pickup_latitude' features.
+    plt.figure(figsize=(12, 6))
+    data.plot(kind='scatter', x='pickup_longitude', y='pickup_latitude', alpha=0.4)
+    plt.show()
+
+    # Check the distribution of the 'dropoff_longitude' and 'dropoff_latitude' features.
+    plt.figure(figsize=(12, 6))
+    data.plot(kind='scatter', x='dropoff_longitude', y='dropoff_latitude', alpha=0.4)
+    plt.show()
+
+    # Check the distribution of the 'passenger_count' feature.
+    plt.figure(figsize=(6, 6))
+    sns.countplot(data['passenger_count'])
+    plt.show()
+
+    # Check the distribution of the 'abs_lon_change' and 'abs_lat_change' features.
+    plt.figure(figsize=(12, 6))
+    data.plot(kind='scatter', x='abs_lon_change', y='abs_lat_change', alpha=0.4)

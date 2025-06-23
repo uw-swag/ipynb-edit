@@ -1,0 +1,46 @@
+```python
+    import torch
+
+    # Create a simple model
+    class Model(torch.nn.Module):
+        def __init__(self):
+            super(Model, self).__init__()
+            self.linear = torch.nn.Linear(1, 1)
+
+        def forward(self, x):
+            y_pred = self.linear(x)
+            return y_pred
+
+    model = Model()
+
+    # Create some dummy data
+    x_train = torch.tensor([[1.0], [2.0], [3.0]], dtype=torch.float32)
+    y_train = torch.tensor([[1.0], [2.0], [3.0]], dtype=torch.float32)
+
+    # Define the optimizer
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+    # Train the model
+    for epoch in range(1000):
+        y_pred = model(x_train)
+        loss = (y_pred - y_train).pow(2).sum()
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+
+    # Now, the model is trained, but the model parameters are not stored in the model object.
+    # This is a common issue when using PyTorch, and it's not something that can be easily fixed.
+    # The model parameters are stored in the optimizer, but not in the model object.
+    # This is a known issue in PyTorch.
+
+    # To fix this, you can use the `torch.save` function to save the model parameters.
+    torch.save(model.state_dict(), 'model.pth')
+
+    # Then, you can load the model parameters and use them to make predictions.
+    model = Model()
+    model.load_state_dict(torch.load('model.pth'))
+    y_pred = model(x_train)
+
+    # Now, the model parameters are loaded into the model object, and you can use them to make predictions.
+    ```
+    This code is a simple demonstration of how to save

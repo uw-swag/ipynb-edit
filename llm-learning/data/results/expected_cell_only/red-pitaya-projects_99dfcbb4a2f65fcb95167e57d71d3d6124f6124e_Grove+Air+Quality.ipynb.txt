@@ -1,0 +1,61 @@
+from redpitaya.overlay.mercury import mercury as FPGA
+overlay = FPGA()
+ANALOG_TEMP = FPGA.analog_in(0) # define which pin will be used for temperature sensor
+# Temperature vs. NTC resistance 
+import math
+import matplotlib.pyplot as plt
+import time
+from redpitaya.overlay.mercury import mercury as FPGA
+
+def res_to_temp(Rntc):
+    B = 4275; # B value of the thermistor
+    return (1.0/(math.log10(Rntc/100000.0)/B+1/298.15)-273.15) #convert to temperature via datasheet 
+temp = [ res_to_temp(R) for R in range(10000,300000,100)]
+plt.plot(range(10000,300000,100), temp)
+plt.xlabel('Rntc[ohm]')
+plt.ylabel('Temperature[*C]')
+plt.show()
+def temp():
+    Va0=ANALOG_TEMP.read() # read voltage of sensor
+    R0 = 100000;       # R0 = 100k
+    Rntc = 3.3/(Va0)-1.0 
+    Rntc = 100000.0*Rntc # thermistor resistance
+    return (res_to_temp(Rntc),Va0);
+r=temp()
+
+print("voltage={:.2f}V temp {:.2f}℃".format(r[1],r[0]) )
+r
+ANALOG_Alcohol = FPGA.analog_in(2) # define which pin will be used for alcohol sensor
+
+sensorValue = 0
+ 
+#Get a average data by testing 100 times
+i = 1
+while i <= 100:
+    sensorValue = sensorValue + ANALOG_Alcohol.read()
+    i += 1
+sensorValue = sensorValue/100.0;
+
+sensor_volt = sensorValue/1024*5.0;
+RS_air = sensor_volt/(5.0-sensor_volt); #Get the value of RS via in a clear air - omit *R16
+
+print("sensor_volt ={:.2f}V RS_air = {:.2f}".format(sensor_volt,RS_air) )
+ANALOG_Alcohol = FPGA.analog_in(2) # define which pin will be used for alcohol sensor
+ANALOG_Alcohol.read()
+Air_Quality_Sensor_Data = FPGA.analog_in(1) # define which pin will be used for alcohol sensor
+
+AQsensorValue = 0
+ 
+#Get a average data by testing 100 times
+i = 1
+while i <= 100:
+    AQsensorValue = sensorValue + Air_Quality_Sensor_Data.read()
+    i += 1
+AQsensorValue = AQsensorValue/100.0;
+
+AQsensor_volt = AQsensorValue/1024*3.3;
+AQ_RS_air = AQsensor_volt/(3.3-AQsensor_volt); #Get the value of RS via in a clear air - omit *R16
+
+print(AQsensorValue,AQsensor_volt,AQ_RS_air)
+Air_Quality_Sensor_Data = FPGA.analog_in(1) # define which pin will be used for alcohol sensor
+Air_Quality_Sensor_Data.read()

@@ -1,0 +1,56 @@
+```python
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Split the data into training/testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create linear regression object
+    regr = LinearRegression()
+
+    # Train the model using the training sets
+    regr.fit(X_train, y_train)
+
+    # Make predictions using the testing set
+    y_pred = regr.predict(X_test)
+
+    # The coefficients
+    print('Coefficients: \n', regr.coef_)
+
+    # The mean squared error
+    print('Mean squared error: %.2f'
+          % metrics.mean_squared_error(y_test, y_pred))
+
+    # The coefficient of determination: 1 is perfect prediction
+    print('Coefficient of determination: %.2f'
+          % metrics.r2_score(y_test, y_pred))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Regression bias (#222)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    df = pd.read_csv('data.csv')
+    df.head()
+    '''
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already correct and it should work as expected. The `df.head()` command is used to display the first five rows of the DataFrame.
+
+    If you're still getting regression bias, it might be due to the data you're using. You might need to preprocess your data, handle missing values, or normalize your features.
+
+    Here's a simple way to handle missing values:
+
+    ```python
+    df = df.dropna()  # or df.fillna(df.mean())
+    ```
+
+    And here's how you can normalize your features:
+
+    ```python
+    from sklearn.preprocessing import

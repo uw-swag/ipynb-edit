@@ -1,0 +1,58 @@
+```
+    // Import necessary libraries
+    import ai.djl.ndarray as nd
+    import ai.djl.ndarray.types as ndt
+    import ai.djl.nn as nn
+    import ai.djl.training as tr
+    import ai.djl.training.loss as tl
+    import ai.djl.training.optimizer as opt
+
+    # Define the model
+    class Corr2dModel(nn.Module):
+        def __init__(self):
+            super(Corr2dModel, self).__init__()
+            self.corr2d = nn.Corr2d()
+
+        def forward(self, x):
+            return self.corr2d(x)
+
+    # Create an instance of the model
+    model = Corr2dModel()
+
+    # Define the loss function
+    class Corr2dLoss(tl.Loss):
+        def __init__(self):
+            super(Corr2dLoss, self).__init__()
+
+        def forward(self, output, target):
+            return tl.loss(output, target)
+
+    # Create an instance of the loss function
+    loss = Corr2dLoss()
+
+    # Define the optimizer
+    optimizer = opt.SGD(learning_rate=0.01)
+
+    # Define the training process
+    trainer = tr.Trainer(model, loss, optimizer)
+
+    # Define the dataset
+    class Corr2dDataset(tr.Dataset):
+        def __init__(self, x, y):
+            self.x = x
+            self.y = y
+
+        def __getitem__(self, index):
+            return self.x[index], self.y[index]
+
+        def __len__(self):
+            return len(self.x)
+
+    # Create an instance of the dataset
+    dataset = Corr2dDataset(x, y)
+
+    # Define the training configuration
+    config = tr.EasyTrainConfig(loss=tl.loss.Loss.softmax_cross_entropy)
+
+    # Train the model
+   

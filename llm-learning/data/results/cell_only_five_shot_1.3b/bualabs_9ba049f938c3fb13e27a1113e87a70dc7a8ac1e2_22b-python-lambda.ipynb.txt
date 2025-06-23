@@ -1,0 +1,48 @@
+```python
+    import boto3
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from imblearn.under_sampling import RandomUnderSampler
+
+    # Load the data
+    s3 = boto3.client('s3', region_name='us-west-2')
+    s3.download_file('my-bucket', 'my-data.csv', 'my-data.csv')
+    df = pd.read_csv('my-data.csv')
+
+    # Preprocess the data
+    # ...
+
+    # Split the data into training and validation sets
+    x_train, x_val, y_train, y_val = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    # Standardize the data
+    sc = StandardScaler()
+    x_train = sc.fit_transform(x_train)
+    x_val = sc.transform(x_val)
+
+    # Train a logistic regression model
+    model = LogisticRegression()
+    model.fit(x_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(x_val)
+
+    # Evaluate the model
+    print(metrics.classification_report(y_val, y_pred))
+    print(metrics.confusion_matrix(y_val, y_pred))
+
+    # Train a random forest model
+    rf = RandomForestClassifier(n_estimators=100, random_state=42)
+    rf.fit(x_train, y_train)
+
+    # Make predictions
+    y_pred_rf = rf.predict(x_val)
+
+    # Evaluate the model
+    print(metrics.classification_report(y_val, y_pred_rf))
+   

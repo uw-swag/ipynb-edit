@@ -1,0 +1,14 @@
+```
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Assuming x, y, yhat are numpy arrays
+    fig,ax = plt.subplots(figsize=(9, 9))
+    ax.set_xlim([-30, 30])
+    ax.set_ylim([-100, 300])
+    ax.scatter(x, y, label="y")
+    ax.plot(x.numpy(), yhat.numpy(), label="yhat", color='red')
+    ax.plot(x.numpy(), ((y - yhat).pow(2)/len(y)).numpy(), label="RMSE", color='purple')
+    ax.legend(loc='upper right')
+    plt.show()
+    ```

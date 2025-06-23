@@ -1,0 +1,40 @@
+```
+    class ColumnDriftMetric:
+        def __init__(self, column_name, display_name=None):
+            self.column_name = column_name
+            self.display_name = display_name or column_name
+
+        def for_column(self, column_name):
+            return ColumnDriftMetric(column_name, self.display_name)
+
+        def run(self, reference_data, current_data, column_mapping):
+            # Implement your drift metric here
+            pass
+
+    class TextLength:
+        def run(self, reference_data, current_data, column_mapping):
+            # Implement your text length metric here
+            pass
+
+    class TriggerWordsPresence:
+        def __init__(self, words_list):
+            self.words_list = words_list
+
+        def run(self, reference_data, current_data, column_mapping):
+            # Implement your trigger words presence metric here
+            pass
+
+    class Report:
+        def __init__(self, metrics):
+            self.metrics = metrics
+
+        def run(self, reference_data, current_data, column_mapping):
+            for metric in self.metrics:
+                metric.run(reference_data, current_data, column_mapping)
+    ```
+
+    In the above code, we have created a new class `ColumnDriftMetric`, `TextLength`, and `TriggerWordsPresence`. These classes represent different types of metrics that can be used to measure the drift in a column of a dataframe. The `ColumnDriftMetric` class has a `run` method that implements the actual computation of the metric. The `TextLength`, `TriggerWordsPresence`, and `Report` classes also have a `run` method that can be used to compute the metric for a specific column.
+
+    The `Report` class is used to run all the metrics in a list. The `run` method will call the `run` method of each metric in the list.
+
+    The `ColumnDriftMetric` class also has a `for_column` method that allows you to specify a display name for the metric. If no display name is provided, it defaults to the same as the column name

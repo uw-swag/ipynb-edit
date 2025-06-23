@@ -1,0 +1,40 @@
+```python
+    from deepchecks.checks.integrity import LabelAmbiguity
+    from deepchecks.base import Dataset
+    import pandas as pd
+    from deepchecks.datasets.classification.phishing import load_data
+
+    phishing_dataframe = load_data(as_train_test=False, data_format='Dataframe')
+    phishing_dataset = Dataset(phishing_dataframe, label='target', features=['urlLength', 'numDigits', 'numParams', 'num_%20', 'num_@', 'bodyLength', 'numTitles', 'numImages', 'numLinks', 'specialChars'])
+
+    ## Splitting the dataset
+    from deepchecks.base.samplers import hold_out_train_test
+    train_dataset, test_dataset = hold_out_train_test(phishing_dataset, test_size=0.2)
+
+    ## Checking for label ambiguity
+    label_ambiguity_check = LabelAmbiguity(train_dataset)
+    label_ambiguity_check.run()
+
+    ## Checking for feature ambiguity
+    feature_ambiguity_check = LabelAmbiguity(train_dataset)
+    feature_ambiguity_check.run()
+
+    ## Checking for feature distribution
+    feature_distribution_check = LabelAmbiguity(train_dataset)
+    feature_distribution_check.run()
+
+    ## Checking for feature correlation
+    feature_correlation_check = LabelAmbiguity(train_dataset)
+    feature_correlation_check.run()
+
+    ## Checking for feature missing values
+    feature_missing_values_check = LabelAmbiguity(train_dataset)
+    feature_missing_values_check.run()
+
+    ## Checking for feature outliers
+    feature_outliers_check = LabelAmbiguity(train_dataset)
+    feature_outliers_check.run()
+
+    ## Checking for feature categorical imbalance
+    feature_categorical_imbalance_check = LabelAmbiguity(train_dataset)
+    feature_categorical_imbalance

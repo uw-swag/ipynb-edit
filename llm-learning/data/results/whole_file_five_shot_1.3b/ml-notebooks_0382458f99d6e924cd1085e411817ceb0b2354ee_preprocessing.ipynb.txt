@@ -1,0 +1,44 @@
+```
+    # Human Activity Recognition Notebook
+
+    This notebook demonstrates the use of a Convolutional Neural Network (CNN) for the task of human activity recognition. The notebook starts with importing necessary libraries and loading the dataset.
+
+    The dataset is a CSV file containing information about the Pokemon game. The dataset contains 151 features (attributes) and 11 classes (labels). The labels are the activities performed by the players.
+
+    The notebook then normalizes the features and labels, and shuffles the data to ensure that the training and testing sets are split randomly.
+
+    The notebook then trains three different models: a baseline model without any preprocessing, a model with feature normalization, and a model with feature standardization.
+
+    The notebook then evaluates the performance of each model on the testing set and prints the accuracy of each model.
+
+    The notebook also includes a function to print the classification report for each model, which provides a more detailed summary of the performance of the model.
+
+    The notebook ends with the prediction of the model on the testing set and the actual labels.
+
+    This notebook is a good example of how to use Keras to build a Convolutional Neural Network for a classification task.
+
+    Please note that the performance of the models can vary depending on the random seed and the randomness of the shuffle operation.
+
+    The code for the notebook is as follows:
+
+    ```python
+    # imports, etc...
+    import math
+    import csv
+    import numpy as np
+    from sklearn import metrics
+    from sklearn.utils import shuffle
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout
+    from keras.utils.np_utils import to_categorical
+
+    np.random.seed(1337) # l337 4 lyf3
+
+    features, labels = ([], [])
+    with open('../data/Pokemon.csv') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            features.append([*row[5:11]]) 
+            labels.append(row[2])
+
+    # remove column names

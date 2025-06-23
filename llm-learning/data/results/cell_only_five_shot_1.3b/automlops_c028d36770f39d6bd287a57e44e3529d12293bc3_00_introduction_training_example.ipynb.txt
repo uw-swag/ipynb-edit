@@ -1,0 +1,18 @@
+```
+    AutoMLOps.generate(project_id=PROJECT_ID, 
+                   pipeline_params=pipeline_params, 
+                   use_ci=True, 
+                   schedule_pattern='59 11 * * 0',
+                   naming_prefix=MODEL_ID,
+                   base_image='us-docker.pkg.dev/vertex-ai/training/tf-gpu.2-11.py310:latest', # includes required cuda pacakges
+                   custom_training_job_specs = [{
+                       'component_spec': 'train_model',
+                       'display_name': 'train-model-accelerated',
+                       'machine_type': 'a2-highgpu-1g',
+                       'accelerator_type': 'NVIDIA_TESLA_A100',
+                       'accelerator_count': 2
+                   }]
+)
+    ```
+
+    In the above code, I have changed the 'accelerator_count' parameter from 1 to 2. This is because the 'accelerator_count' parameter specifies the number of accelerators to use for the training job. In this case, I have used 2 GPUs.

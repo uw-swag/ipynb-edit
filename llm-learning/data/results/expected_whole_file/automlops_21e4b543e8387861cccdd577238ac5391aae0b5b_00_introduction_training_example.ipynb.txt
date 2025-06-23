@@ -1,0 +1,502 @@
+<Cell_0>
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+<\Cell_0>
+<Cell_1>
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+<\Cell_1>
+<Cell_2>
+!pip3 install google-cloud-automlops --user
+<\Cell_2>
+<Cell_3>
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+<\Cell_3>
+<Cell_4>
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+<\Cell_4>
+<Cell_5>
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+<\Cell_5>
+<Cell_6>
+! gcloud config set project $PROJECT_ID
+<\Cell_6>
+<Cell_7>
+!python3 -m data.load_data_to_bq --project $PROJECT_ID --file data/Dry_Beans_Dataset.csv
+<\Cell_7>
+<Cell_8>
+from AutoMLOps import AutoMLOps
+<\Cell_8>
+<Cell_9>
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery', 
+        'pandas',
+        'pyarrow',
+        'db_dtypes',
+        'fsspec',
+        'gcsfs'
+    ]
+)
+def create_dataset(
+    bq_table: str,
+    data_path: str,
+    project_id: str
+):
+    """Custom component that takes in a BQ table and writes it to GCS.
+
+    Args:
+        bq_table: The source biquery table.
+        data_path: The gcs location to write the csv.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    import pandas as pd
+    from sklearn import preprocessing
+    
+    bq_client = bigquery.Client(project=project_id)
+
+    def get_query(bq_input_table: str) -> str:
+        """Generates BQ Query to read data.
+
+        Args:
+        bq_input_table: The full name of the bq input table to be read into
+        the dataframe (e.g. <project>.<dataset>.<table>)
+        Returns: A BQ query string.
+        """
+        return f'''
+        SELECT *
+        FROM `{bq_input_table}`
+        '''
+
+    def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+        """Loads data from bq into a Pandas Dataframe for EDA.
+        Args:
+        query: BQ Query to generate data.
+        client: BQ Client used to execute query.
+        Returns:
+        pd.DataFrame: A dataframe with the requested data.
+        """
+        df = client.query(query).to_dataframe()
+        return df
+
+    dataframe = load_bq_data(get_query(bq_table), bq_client)
+    le = preprocessing.LabelEncoder()
+    dataframe['Class'] = le.fit_transform(dataframe['Class'])
+    dataframe.to_csv(data_path, index=False)
+<\Cell_9>
+<Cell_10>
+@AutoMLOps.component(
+    packages_to_install=[
+        'scikit-learn==1.2.0',
+        'pandas',
+        'joblib',
+        'tensorflow'
+    ]
+)
+def train_model(
+    data_path: str,
+    model_directory: str
+):
+    """Custom component that trains a decision tree on the training data.
+
+    Args:
+        data_path: GS location where the training data.
+        model_directory: GS location of saved model.
+    """
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    import tensorflow as tf
+    import pickle
+    import os
+    
+    def save_model(model, uri):
+        """Saves a model to uri."""
+        with tf.io.gfile.GFile(uri, 'w') as f:
+            pickle.dump(model, f)
+    
+    df = pd.read_csv(data_path)
+    labels = df.pop('Class').tolist()
+    data = df.values.tolist()
+    x_train, x_test, y_train, y_test = train_test_split(data, labels)
+    skmodel = DecisionTreeClassifier()
+    skmodel.fit(x_train,y_train)
+    score = skmodel.score(x_test,y_test)
+    print('accuracy is:',score)
+
+    output_uri = os.path.join(model_directory, f'model.pkl')
+    save_model(skmodel, output_uri)
+<\Cell_10>
+<Cell_11>
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ]
+)
+def deploy_model(
+    model_directory: str,
+    project_id: str,
+    region: str
+):
+    """Custom component that uploads a saved model from GCS to Vertex Model Registry
+       and deploys the model to an endpoint for online prediction.
+
+    Args:
+        model_directory: GS location of saved model.
+        project_id: Project_id.
+        region: Region.
+    """
+    from google.cloud import aiplatform
+
+    aiplatform.init(project=project_id, location=region)
+    # Check if model exists
+    models = aiplatform.Model.list()
+    model_name = 'beans-model'
+    if 'beans-model' in (m.name for m in models):
+        parent_model = model_name
+        model_id = None
+        is_default_version=False
+        version_aliases=['experimental', 'challenger', 'custom-training', 'decision-tree']
+        version_description='challenger version'
+    else:
+        parent_model = None
+        model_id = model_name
+        is_default_version=True
+        version_aliases=['champion', 'custom-training', 'decision-tree']
+        version_description='first version'
+
+    serving_container = 'us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.1-2:latest'
+    uploaded_model = aiplatform.Model.upload(
+        artifact_uri=model_directory,
+        model_id=model_id,
+        display_name=model_name,
+        parent_model=parent_model,
+        is_default_version=is_default_version,
+        version_aliases=version_aliases,
+        version_description=version_description,
+        serving_container_image_uri=serving_container,
+        serving_container_ports=[8080],
+        labels={'created_by': 'automlops-team'},
+    )
+
+    endpoint = uploaded_model.deploy(
+        machine_type='n1-standard-4',
+        deployed_model_display_name='deployed-beans-model')
+<\Cell_11>
+<Cell_12>
+@AutoMLOps.pipeline #(name='automlops-pipeline', description='This is an optional description')
+def pipeline(bq_table: str,
+             model_directory: str,
+             data_path: str,
+             project_id: str,
+             region: str,
+            ):
+
+    create_dataset_task = create_dataset(
+        bq_table=bq_table,
+        data_path=data_path,
+        project_id=project_id)
+
+    train_model_task = train_model(
+        model_directory=model_directory,
+        data_path=data_path).after(create_dataset_task)
+
+    deploy_model_task = deploy_model(
+        model_directory=model_directory,
+        project_id=project_id,
+        region=region).after(train_model_task)
+<\Cell_12>
+<Cell_13>
+import datetime
+pipeline_params = {
+    'bq_table': f'{PROJECT_ID}.test_dataset.dry-beans',
+    'model_directory': f'gs://{PROJECT_ID}-bucket/trained_models/{datetime.datetime.now()}',
+    'data_path': f'gs://{PROJECT_ID}-bucket/data.csv',
+    'project_id': f'{PROJECT_ID}',
+    'region': 'us-central1'
+}
+<\Cell_13>
+<Cell_14>
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=True,
+#                    schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)
+<\Cell_14>
+<Cell_15>
+AutoMLOps.go(project_id=PROJECT_ID,
+             pipeline_params=pipeline_params,
+             run_local=False,
+             schedule_pattern='59 11 * * 0'
+)
+<\Cell_15>
+<Cell_16>
+AutoMLOps.generate(project_id=PROJECT_ID, 
+                   pipeline_params=pipeline_params, 
+                   run_local=False, 
+                   schedule_pattern='0 */12 * * *',
+                   base_image='us-docker.pkg.dev/vertex-ai/training/tf-gpu.2-11.py310:latest', # includes required cuda pacakges
+                   custom_training_job_specs = [{
+                       'component_spec': 'train_model',
+                       'display_name': 'train-model-accelerated',
+                       'machine_type': 'a2-highgpu-1g',
+                       'accelerator_type': 'NVIDIA_TESLA_A100',
+                       'accelerator_count': '1'
+                   }]
+)
+<\Cell_16>
+<Cell_17>
+AutoMLOps.go(project_id=PROJECT_ID, # required
+             pipeline_params=pipeline_params, # required
+             af_registry_location='us-central1', # default
+             af_registry_name='vertex-mlops-af', # default
+             base_image='python:3.9-slim', # default
+             cb_trigger_location='us-central1', # default
+             cb_trigger_name='automlops-trigger', # default
+             cloud_run_location='us-central1', # default
+             cloud_run_name='run-pipeline', # default
+             cloud_tasks_queue_location='us-central1', # default
+             cloud_tasks_queue_name='queueing-svc', # default
+             csr_branch_name='automlops', # default
+             csr_name='AutoMLOps-repo', # default
+             custom_training_job_specs=None, # default
+             gs_bucket_location='us-central1', # default
+             gs_bucket_name=None, # default
+             pipeline_runner_sa=None, # default
+             run_local=True, # default
+             schedule_location='us-central1', # default
+             schedule_name='AutoMLOps-schedule', # default
+             schedule_pattern='No Schedule Specified', # default
+             vpc_connector='No VPC Specified' # default
+)
+<\Cell_17>
+<Cell_18>
+!pip3 install kfp<2.0.0 google-cloud-aiplatform
+<\Cell_18>
+<Cell_19>
+from kfp.v2 import compiler, dsl
+from kfp.v2.dsl import Artifact, Dataset, Input, Metrics, Model, Output, OutputPath
+from AutoMLOps import AutoMLOps
+<\Cell_19>
+<Cell_20>
+AutoMLOps.clear_cache()
+<\Cell_20>
+<Cell_21>
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-bigquery', 
+        'pandas',
+        'pyarrow',
+        'db_dtypes'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/create_dataset.yaml'
+)
+def create_dataset(
+    bq_table: str,
+    output_data_path: OutputPath('Dataset'),
+    project: str
+):
+    """Custom component that takes in a BQ table and writes it to GCS.
+
+    Args:
+        bq_table: The source biquery table.
+        output_data_path: The gcs location to write the csv.
+        project: The project ID.
+    """
+    from google.cloud import bigquery
+    import pandas as pd
+    bq_client = bigquery.Client(project=project)
+
+    def get_query(bq_input_table: str) -> str:
+        """Generates BQ Query to read data.
+
+        Args:
+        bq_input_table: The full name of the bq input table to be read into
+        the dataframe (e.g. <project>.<dataset>.<table>)
+        Returns: A BQ query string.
+        """
+        return f'''
+        SELECT *
+        FROM `{bq_input_table}`
+        '''
+
+    def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+        """Loads data from bq into a Pandas Dataframe for EDA.
+        Args:
+        query: BQ Query to generate data.
+        client: BQ Client used to execute query.
+        Returns:
+        pd.DataFrame: A dataframe with the requested data.
+        """
+        df = client.query(query).to_dataframe()
+        return df
+
+    dataframe = load_bq_data(get_query(bq_table), bq_client)
+    dataframe.to_csv(output_data_path)
+<\Cell_21>
+<Cell_22>
+@dsl.component(
+    packages_to_install=[
+        'scikit-learn==1.2.0',
+        'pandas',
+        'joblib',
+        'tensorflow'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/train_model.yaml'
+)
+def train_model(
+    output_model_directory: str,
+    dataset: Input[Dataset],
+    metrics: Output[Metrics],
+    model: Output[Model]
+):
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    import tensorflow as tf
+    import pickle
+    import os
+    
+    def save_model(model, uri):
+        """Saves a model to uri."""
+        with tf.io.gfile.GFile(uri, 'w') as f:
+            pickle.dump(model, f)
+    
+    df = pd.read_csv(dataset.path)
+    labels = df.pop('Class').tolist()
+    data = df.values.tolist()
+    x_train, x_test, y_train, y_test = train_test_split(data, labels)
+    skmodel = DecisionTreeClassifier()
+    skmodel.fit(x_train,y_train)
+    score = skmodel.score(x_test,y_test)
+    print('accuracy is:',score)
+    metrics.log_metric('accuracy', (score * 100.0))
+    metrics.log_metric('framework', 'Scikit Learn')
+    metrics.log_metric('dataset_size', len(df))
+
+    output_uri = os.path.join(output_model_directory, f'model.pkl')
+    save_model(skmodel, output_uri)
+    model.path = output_model_directory
+<\Cell_22>
+<Cell_23>
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ],
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/deploy_model.yaml'    
+)
+def deploy_model(
+    model: Input[Model],
+    project: str,
+    region: str,
+    vertex_endpoint: Output[Artifact],
+    vertex_model: Output[Model]
+):
+    from google.cloud import aiplatform
+    aiplatform.init(project=project, location=region)
+    # Check if model exists
+    models = aiplatform.Model.list()
+    model_name = 'beans-model'
+    if 'beans-model' in (m.name for m in models):
+        parent_model = model_name
+        model_id = None
+        is_default_version=False
+        version_aliases=['experimental', 'challenger', 'custom-training', 'decision-tree']
+        version_description='challenger version'
+    else:
+        parent_model = None
+        model_id=model_name
+        is_default_version=True
+        version_aliases=['champion', 'custom-training', 'decision-tree']
+        version_description='first version'
+
+    serving_container = 'us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.1-2:latest'
+    uploaded_model = aiplatform.Model.upload(
+        artifact_uri=model.uri,
+        model_id=model_id,
+        display_name=model_name,
+        parent_model=parent_model,
+        is_default_version=is_default_version,
+        version_aliases=version_aliases,
+        version_description=version_description,
+        serving_container_image_uri=serving_container,
+        serving_container_ports=[8080],
+        labels={'created_by': 'automlops-team'},
+    )
+
+    endpoint = uploaded_model.deploy(
+        machine_type='n1-standard-4',
+        deployed_model_display_name='deployed-beans-model')
+    vertex_endpoint.uri = endpoint.resource_name
+    vertex_model.uri = endpoint.resource_name
+<\Cell_23>
+<Cell_24>
+@AutoMLOps.pipeline
+def pipeline(bq_table: str,
+             output_model_directory: str,
+             project: str,
+             region: str,
+            ):
+
+    dataset_task = create_dataset(
+        bq_table=bq_table, 
+        project=project)
+
+    model_task = train_model(
+        output_model_directory=output_model_directory,
+        dataset=dataset_task.output)
+
+    deploy_task = deploy_model(
+        model=model_task.outputs['model'],
+        project=project,
+        region=region)
+<\Cell_24>
+<Cell_25>
+import datetime
+pipeline_params = {
+    'bq_table': f'{PROJECT_ID}.test_dataset.dry-beans',
+    'output_model_directory': f'gs://{PROJECT_ID}-bucket/trained_models/{datetime.datetime.now()}',
+    'project': f'{PROJECT_ID}',
+    'region': 'us-central1'
+}
+<\Cell_25>
+<Cell_26>
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=False,
+                   schedule_pattern='59 11 * * 0' # retrain every Sunday at Midnight
+)
+<\Cell_26>
+<Cell_27>
+AutoMLOps.go(project_id=PROJECT_ID, 
+             pipeline_params=pipeline_params, 
+             run_local=False,
+             schedule_pattern='59 11 * * 0'
+)
+<\Cell_27>
+<Cell_28>
+
+<\Cell_28>

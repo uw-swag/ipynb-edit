@@ -1,0 +1,53 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the dataset
+    compas = pd.read_csv('https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-2017.csv')
+
+    # Check the data
+    compas.head()
+
+    # Check for missing values
+    compas.isnull().sum()
+
+    # Check the data types
+    compas.dtypes
+
+    # Check the summary statistics
+    compas.describe()
+
+    # Check the distribution of the target variable
+    sns.countplot(x='cj_decile', hue='is_recidivism', data=compas)
+
+    # Split the data into features and target variable
+    X = compas.drop('cj_decile', axis=1)
+    y = compas['cj_decile']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train a logistic regression model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Check the feature importance
+    feature_importance

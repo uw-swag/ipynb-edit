@@ -1,0 +1,9 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import current_timestamp
+
+    spark = SparkSession.builder.appName("Stopwatch Example").getOrCreate()
+
+    df = spark.range(10)
+    df.select(current_timestamp().alias('current_timestamp')).show()
+    ```

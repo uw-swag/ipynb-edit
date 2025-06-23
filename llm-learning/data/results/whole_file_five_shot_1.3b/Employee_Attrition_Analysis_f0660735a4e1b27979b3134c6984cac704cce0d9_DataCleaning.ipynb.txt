@@ -1,0 +1,57 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add pickle serialization and logistic regression route for flask"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# dependencies
+import pandas as pd
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+<\Cell_0>
+<Cell_1>
+# read in csv
+file_path = "../resources/IBM_employee_data.csv"
+attrition_df = pd.read_csv(file_path)
+attrition_df.head()
+<\Cell_1>
+<Cell_2>
+# determine if any missing values and data types for columns
+attrition_df.info()
+<\Cell_2>
+<Cell_3>
+# column names
+attrition_df.columns
+<\Cell_3>
+<Cell_4>
+# make a list of columns with object data types
+attrition_cat = attrition_df.dtypes[attrition_df.dtypes == "object"].index.tolist()
+attrition_cat
+<\Cell_4>
+<Cell_5>
+# join lists together to be encoded
+attrition_cat = attrition_cat.merge(encode_df,left_index=True, right_index=True)
+attrition_cat.head()
+<\Cell_5>
+<Cell_6>
+# find the amount of Yes/No values in the Attrition columns
+attrition_df.head()
+<\Cell_6>
+<Cell_7>
+# apply label encoder on target variable "Attrition"
+enc = LabelEncoder()
+
+attrition_df.to_csv("cleaned_data.csv")
+<\Cell_7>
+<Cell_8>
+# look at dataframe to confirm encoding was successful
+attrition_df.head()
+<\Cell_8>
+<Cell_9>
+# send to csv to use in both Machine Learning Models
+attrition_df.to_csv("cleaned_data.csv")
+<\Cell_9>
+<Cell_10>
+# see if the dataframe is the same as the original dataframe
+attrition_df.head()
+<

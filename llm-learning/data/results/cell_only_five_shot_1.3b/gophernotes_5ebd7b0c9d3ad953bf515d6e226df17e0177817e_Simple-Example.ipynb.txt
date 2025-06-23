@@ -1,0 +1,40 @@
+```go
+    package main
+
+    import (
+        "fmt"
+        "time"
+    )
+
+    func main() {
+        fmt.Println("Hello, world!")
+
+        messages := make(chan string)
+
+        go func() {
+            time.Sleep(1 * time.Second)
+            messages <- "ping"
+        }()
+
+        msg := <-messages
+        fmt.Println(msg)
+    }
+    ```
+
+    ### Installation
+    You can install the Go programming language from the official website: https://golang.org/doc/install
+
+    After installing Go, you can use the `go run` command to run your Go programs. For example, to run the above code, you would use the following command:
+
+    ```
+    go run main.go
+    ```
+
+    This will output:
+
+    ```
+    Hello, world!
+    ping
+    ```
+
+    Please note that the `go run` command is used to run the Go program, not the Go language itself. The Go language is a statically typed, compiled language, and the `go run` command is used to compile and run the Go program.

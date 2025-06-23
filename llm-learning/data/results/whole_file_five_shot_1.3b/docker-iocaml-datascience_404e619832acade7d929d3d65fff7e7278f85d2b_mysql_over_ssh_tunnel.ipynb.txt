@@ -1,0 +1,37 @@
+```
+    #!/bin/bash
+    # Create a new SSH tunnel
+    ssh -L 3306:localhost:3306 -p 2222 user@hostname
+
+    # Connect to MySQL over the SSH tunnel
+    mysql -h localhost -P 3306 -u username -p
+    ```
+    This script creates a new SSH tunnel from port 2222 on the local machine to port 3306 on the remote machine. It then connects to MySQL on the remote machine using the username and password provided.
+
+    Please replace `user@hostname`, `3306`, `localhost`, `username`, and `-p` with your actual values.
+
+    Note: This script should be run on the local machine. The remote machine must have MySQL installed and running on the specified port.
+
+    Also, this script assumes that you have the necessary permissions to create a new SSH tunnel and to connect to MySQL over the SSH tunnel.
+
+    If you're using a different SSH client, you may need to adjust the command to match your client's syntax. For example, in PuTTY, you would use the following command:
+
+    `puttygen`
+
+    This will generate a new SSH key pair, which you can add to your remote machine's authorized keys.
+
+    After generating the key, you can add it to the remote machine's authorized keys using the following command:
+
+    `cat ~/.ssh/id_rsa.pub | ssh user@hostname 'cat >> ~/.ssh/authorized_keys'`
+
+    This command will add the public key of the local machine's SSH key pair to the remote machine's authorized keys.
+
+    Please replace `user@hostname`, `3306`, `localhost`, `username`, and `-p` with your actual values.
+
+    Also, this script assumes that you have the necessary permissions to create a new SSH tunnel and to connect to MySQL over the SSH tunnel.
+
+    If you're using a different SSH client, you may need to adjust the command to match your client's syntax. For example, in PuTTY, you would use the following command:
+
+    `puttygen`
+
+    This will generate a new SSH key pair

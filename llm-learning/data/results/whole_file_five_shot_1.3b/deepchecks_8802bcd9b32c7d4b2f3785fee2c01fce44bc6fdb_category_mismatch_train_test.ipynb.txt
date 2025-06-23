@@ -1,0 +1,26 @@
+
+    The code provided is deleting notebooks. The notebooks are used to present the results of the data analysis and model training. They are not necessary for the execution of the code. They are here for the purpose of demonstrating the process of data analysis and model training.
+
+    Here's the code without the notebooks:
+
+    ```python
+    from deepchecks.tabular.checks.integrity.new_category import CategoryMismatchTrainTest
+    from deepchecks.tabular import Dataset
+    import pandas as pd
+
+    train_data = {"col1": ["somebody", "once", "told", "me"] * 10}
+    test_data = {"col1": ["the","world","is", "gonna", "role", "me","I", "I"] * 10}
+    train = Dataset(pd.DataFrame(data=train_data), cat_features=["col1"])
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1"])
+
+    CategoryMismatchTrainTest().run(train, test)
+
+    train_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": ['a','b','b','q']*10}
+    test_data = {"col1": ["a","b","d"] * 10, "col2": ['a', '2', '1']*10}
+    train = Dataset(pd.DataFrame(data=train_data), cat_features=["col1","col2"])
+    test = Dataset(pd.DataFrame(data=test_data), cat_features=["col1", "col2"])
+
+    CategoryMismatchTrainTest().run(train, test)
+    ```
+
+    The code above will run the checks for the `CategoryMismatchTrainTest` class, which is a custom check for comparing categorical features in the training and test datasets. The check will return a summary of the mismatches, which can be used to further investigate the issue.

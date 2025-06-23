@@ -1,0 +1,31 @@
+```
+    ## Code: Fixed condition for early stopping
+
+    ## Explanation:
+    Early stopping is a technique to prevent overfitting in machine learning models. It works by setting an arbitrary large number as a threshold for the model's performance on a holdout validation set. If the model's performance on the validation set stops improving for a certain number of epochs, the training process is stopped.
+
+    ## Fix:
+    In the code, the EarlyStopping callback is added to the model.fit() function. The callback is set to monitor the 'accuracy' metric and to have a patience of 15 epochs. This means that the model will stop training if the 'accuracy' metric has not improved for 15 epochs.
+
+    ## Result:
+    The model is now training for 100 epochs, but it will stop training if the 'accuracy' metric has not improved for 15 epochs. This is a good practice to prevent overfitting.
+
+    ## Note:
+    The code provided is a simple example of how to use the EarlyStopping callback in a Keras model. In a real-world scenario, you would need to adjust the code to fit your specific needs.
+    '''
+    ## Code:
+    ```
+    from tensorflow.keras.callbacks import EarlyStopping
+
+    callback = EarlyStopping(monitor='val_loss', patience=10)
+
+    history = model.fit(X_train, Y_train, validation_data=(X_test, Y_test), callbacks=[callback], epochs=100, batch_size=128)
+    ```
+    '''
+    ## Explanation:
+    The code above is a modification of the previous one. The EarlyStopping callback is set to monitor the 'val_loss' metric and to have a patience of 10. This means that the model will stop training if the 'val_loss' metric has not improved for 10 epochs.
+
+    ## Result:
+    The model is now training for 100 epochs, but it will stop training if the 'val_loss' metric has not improved for 10 epochs. This is a good practice to prevent overfitting.
+
+    ## Note:

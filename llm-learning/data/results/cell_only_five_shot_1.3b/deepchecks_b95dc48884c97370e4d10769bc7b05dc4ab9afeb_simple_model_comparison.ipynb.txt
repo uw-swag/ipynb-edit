@@ -1,0 +1,16 @@
+```
+    np.random.seed(42)
+
+    iris = load_iris(as_frame=True)
+    x = iris.data
+    y = iris.target
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                       features=iris.feature_names)
+    test_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                     features=iris.feature_names)
+    clf = AdaBoostClassifier()
+    clf.fit(x_train, y_train)
+    ```
+    The `label_name` parameter is not used in the `Dataset` constructor. It's used in the `fit` method of the model.

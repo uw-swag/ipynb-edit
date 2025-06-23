@@ -1,0 +1,34 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.cluster import KMeans
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the data
+    data = pd.read_csv('WiMLDS_Conference.csv')
+
+    # Preprocess the data
+    data = data.dropna()
+    data = data.drop(['Unnamed: 0'], axis=1)
+    data = data.apply(lambda x: x.str.replace('"', '') if isinstance(x, object) else x)
+    data = data.apply(lambda x: x.str.replace(',', '') if isinstance(x, object) else x)
+    data = data.apply(lambda x: x.str.replace('\n', '') if isinstance(x, object) else x)
+    data = data.apply(lambda x: x.str.strip() if isinstance(x, object) else x)
+
+    # Standardize the data
+    scaler = StandardScaler()
+    data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+
+    # Perform PCA
+    pca = PCA(n_components=2)
+    data = pca.fit_transform(data)
+
+    # Perform KMeans clustering
+    kmeans = KMeans(n_clusters=3)
+    data = kmeans.fit_predict(data)
+
+    # Plot the clusters
+    plt.scatter(data[:, 0], data[:, 1], c=data)
+    plt.show()
+    ```

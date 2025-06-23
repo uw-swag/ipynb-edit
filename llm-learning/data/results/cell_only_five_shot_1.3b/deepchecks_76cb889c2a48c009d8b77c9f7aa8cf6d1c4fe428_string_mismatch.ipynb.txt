@@ -1,0 +1,10 @@
+```python
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+
+    # Limit the output size
+    StringMismatch(max_similarity_threshold=0.8).run(df)
+    ```

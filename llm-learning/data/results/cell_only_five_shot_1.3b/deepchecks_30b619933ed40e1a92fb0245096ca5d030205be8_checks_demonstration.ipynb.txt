@@ -1,0 +1,33 @@
+
+Here's the updated code with the Iris checks added:
+
+```python
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+from sklearn.ensemble import AdaBoostClassifier
+from mlchecks.checks.overview import dataset_info, model_info
+
+from mlchecks.checks.integrity import mixed_nulls
+from mlchecks.checks.integrity.is_single_value import is_single_value
+from mlchecks.checks import string_mismatch
+from mlchecks.checks.leakage import DataSampleLeakageReport, data_sample_leakage_report
+
+from mlchecks.checks import IndexTrainValidationLeakage, index_train_validation_leakage
+
+from mlchecks.checks.performance import ClassificationReport, ConfusionMatrixReport
+
+# Checks that were in demo but aren't in master yet:
+# from mlchecks.checks.integrity.rare_format_detection import RareFormatDetection, rare_format_detection
+# from mlchecks.checks.overfit import train_validation_difference_overfit
+# from mlchecks.checks.integrity.dataset_drift import dataset_drift
+lending_club_path = DATASET_PATHS['Lending_Club']
+df_train = pd.read_csv(os.path.join(lending_club_path, 'train.csv'))
+df_train.issue_d = pd.to_datetime(df_train.issue_d)
+df_val = pd.read_csv(os.path.join(lending_club_path, 'test.csv'))
+df_val.issue_d = pd.to_datetime(df_val.issue_d)
+lending_club_model = joblib.load(os.path.join(lending_club_path, 'model.joblib'))
+# dataset metadata (manaul)
+
+categorical_features = ['addr_state',
+ 'application_type',
+ 'disbursement_

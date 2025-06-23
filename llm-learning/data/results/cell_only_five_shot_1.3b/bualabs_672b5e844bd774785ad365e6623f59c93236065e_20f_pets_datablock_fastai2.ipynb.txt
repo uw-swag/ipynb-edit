@@ -1,0 +1,32 @@
+```python
+    import tensorflow as tf
+    from tensorflow.contrib.learn.python.learn import tfmd
+    from tensorflow.contrib.learn.python.learn.datasets import tfmd
+
+    # Load dataset
+    data_set, metadata = tfmd.load(
+        module_path='tfmd_examples/mnist',
+        module_name='mnist',
+        data_dir='/tmp/data/',
+        data_key='train',
+        download=True,
+        as_supervised=True,
+        with_info=True,
+        cache_dir='/tmp/data/',
+    )
+
+    # Create a model
+    model = tf.estimator.DNNClassifier(
+        feature_columns=[tf.feature_column.numeric_column('x', shape=[28, 28])],
+        hidden_units=[100, 100],
+        n_classes=10,
+    )
+
+    # Train the model
+    model.train(input_fn=lambda: data_set.train.batch(100), steps=10000)
+
+    # Evaluate the model
+    eval_result = model.evaluate(input_fn=lambda: data_set.test.batch(100), steps=10)
+
+    print('Test set accuracy:', eval_result['accuracy'])
+    ```

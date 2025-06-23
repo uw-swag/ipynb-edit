@@ -1,0 +1,15 @@
+import pandas as pd
+%matplotlib inline
+df = pd.read_csv('./data/all_data.csv')
+df.head()
+import pickle
+CLASSIFIER_PATH = './classifiers/clickbait_svc_v1'
+with open(CLASSIFIER_PATH, 'rb') as f:
+    classifier = pickle.load(f)
+df['description'] = df['description'].fillna('')
+df['title'] = df['title'].fillna('')
+df['text'] = df['description'] + df['title']
+predicted_labels = classifier.predict(df['text'])
+df = df.assign(label=predicted_labels)
+(df.groupby('source')['label'].sum() / df.groupby('source').size()).plot('barh')
+df.groupby('source').get_group('financial-times')

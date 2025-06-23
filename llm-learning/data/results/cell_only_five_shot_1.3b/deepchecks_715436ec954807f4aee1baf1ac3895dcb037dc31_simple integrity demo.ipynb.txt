@@ -1,0 +1,34 @@
+```python
+    class RareFormatDetection:
+        def __init__(self, min_occurrence, min_freq):
+            self.min_occurrence = min_occurrence
+            self.min_freq = min_freq
+
+        def check(self, data):
+            # Count the occurrences of each value
+            value_counts = data.value_counts()
+
+            # Get the values that occur less than the minimum frequency
+            rarest_values = value_counts[value_counts < self.min_freq].index.tolist()
+
+            # Get the values that occur less than the minimum occurrence
+            rare_values = value_counts[value_counts < self.min_occurrence].index.tolist()
+
+            # If there are any rarest values, return True
+            if rarest_values:
+                return True
+
+            # If there are any rare values, return False
+            if rare_values:
+                return False
+
+            # If there are no rarest or rare values, return None
+            return None
+
+    # Example usage:
+    data = pd.Series([1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5])
+    min_occurrence = 3
+    min_freq = 2
+    detection = RareFormatDetection(min_occurrence, min_freq)
+    print(detection.check(data))  # Output: True
+    ```

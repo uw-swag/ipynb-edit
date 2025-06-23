@@ -1,0 +1,47 @@
+```
+    #prepare for RDS connection
+    !pip install psycopg2
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+    #reflect existing database into new model?  Unsure if this is the correct direction
+    attrition_df=pd.read_sql('SELECT * FROM og_dataset', connection)
+    # determine if any missing values and data types for columns
+    attrition_df.info()
+    len(attrition_cat)
+    # Write cleaned attrition to table in RDS, drop index
+    attrition_df.to_sql('cleaned_data', engine, index=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Sent encoded data to Db and ran supervised ML model"
+    Original Code Cells:
+    '''
+    #prepare for RDS connection
+    !pip install psycopg2
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+    #reflect existing database into new model?  Unsure if this is the correct direction
+    attrition_df=pd.read_sql('SELECT *

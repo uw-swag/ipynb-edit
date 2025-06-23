@@ -1,0 +1,70 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Implemented MLP section 3.1. (#82)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+// Import necessary libraries
+import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.components.Layout;
+import tech.tablesaw.plotly.components.Scatter;
+import tech.tablesaw.plotly.components.XAxis;
+import tech.tablesaw.plotly.components.YAxis;
+
+// Create a new figure
+Figure figure = new Figure();
+
+// Add a layout to the figure
+Layout layout = new Layout(
+    title = "MLP Section 3.1",
+    xAxis = new XAxis(title = "Epochs"),
+    yAxis = new YAxis(title = "Loss")
+);
+
+// Add a scatter plot to the figure
+Scatter scatter = new Scatter(
+    x = data.getColumn("Epochs"),
+    y = data.getColumn("Loss"),
+    mode = "lines",
+    name = "Loss"
+);
+
+// Add the scatter plot to the figure
+figure.addTrace(scatter);
+
+// Add the layout to the figure
+figure.setLayout(layout);
+
+// Render the figure
+String html = figure.render();
+
+// Print the HTML
+System.out.println(html);
+
+<\Cell_0>
+<Cell_1>
+// Saved in the d2l-java package for later use
+class Timer {
+    // Record multiple running times.
+    private ArrayList<Double> times;
+    private long tik;
+    
+    public Timer() {
+        times = new ArrayList();
+        start();
+    }
+
+    public void start() {
+        tik = System.nanoTime();
+    }
+    
+    public double stop() {
+        times.add(nanoToSec(System.nanoTime() - tik));
+        return times.get(times.size() - 1);
+    }
+
+    // Return average time
+    public double avg() {
+        return sum() / times.size();
+    }

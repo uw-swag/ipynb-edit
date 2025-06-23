@@ -1,0 +1,71 @@
+
+    '''
+    # coef = k/m
+    T = 1.  # Total time.
+    dt = 0.001
+    ticks = int(T / dt)  # Number of time steps.
+
+    sigma = 1.0
+    mu = 100.0
+    tau = 0.05
+    verbose=1
+
+    def market_gen(gen, lag=16):
+        
+        buffer = []
+        diffbuffer = []
+
+
+        # fill buffer
+        dt, last, _ = next(gen)
+        for i in range(lag):
+            prev = last
+            dt, last, _  = next(gen)
+            buffer.append(last-mu)
+            diffbuffer.append(last-prev)
+
+        # yield first group of lag vals and diffs
+        yield buffer+diffbuffer
+
+        while(True):
+            prev = last
+            dt, last, _ = next(gen)
+            buffer.pop(0)
+            buffer.append(last-mu)
+            diffbuffer.pop(0)
+            diffbuffer.append(last-prev)
+            yield buffer+diffbuffer
+
+    def ou_market_gen():
+        return market_gen(gen=ou_gen(dt=dt,
+                                 sigma=sigma,
+                                 mu=mu,
+                                 tau=tau,
+                                 verbose=1
+                                ),
+                      lag=16)
+
+    gen = ou_market_gen()
+
+    time_series=[]
+    stock_series=[]
+    for i in range(1256):
+        z = next(gen)
+        time_series.append(i)
+        stock_series.append(z[15])
+
+    df = pd.DataFrame({'dateindex': time_series, 'stock': stock_series})
+
+    make_figure(df['dateindex'], df['stock'],
+                title='Simulated Stock Price Data: Ornstein-Uhlenbeck Process',
+                xtitle='Timesteps',
+                ytitle='Value'
+               )
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    # coef = k/

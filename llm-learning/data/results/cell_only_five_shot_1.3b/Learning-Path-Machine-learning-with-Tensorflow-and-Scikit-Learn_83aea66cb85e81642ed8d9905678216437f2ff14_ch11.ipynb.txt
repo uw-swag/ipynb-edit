@@ -1,0 +1,47 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from mpl_toolkits.mplot3d import Axes3D
+    from scipy.optimize import minimize
+    from scipy.optimize import fsolve
+
+    # Function to calculate Hessian matrix
+    def hessian_matrix(f, x0):
+        h = 10e-6  # Step size
+        n = len(x0)  # Number of variables
+        J = np.zeros((n, n))
+        for i in range(n):
+            x1 = x0.copy()
+            x1[i] += h
+            x2 = x0.copy()
+            x2[i] -= h
+            J[:, i] = (f(x1) - f(x2)) / (2 * h)
+        return J
+
+    # Function to calculate gradient
+    def gradient(f, x0):
+        h = 10e-6  # Step size
+        n = len(x0)  # Number of variables
+        g = np.zeros(n)
+        for i in range(n):
+            x1 = x0.copy()
+            x1[i] += h
+            x2 = x0.copy()
+            x2[i] -= h
+            g[i] = (f(x1) - f(x2)) / (2 * h)
+        return g
+
+    # Function to solve the system of equations
+    def system_of_equations(x0):
+        n = len(x0)  # Number of variables
+        A = np.eye(n)
+        b = np.zeros(n)
+        x = np.linalg.solve(A, b)
+        return x
+
+    # Function to plot the contour plot
+    def plot_contour_plot(f, x0, title):
+        x = np.linspace(-10, 10, 400)
+        y = np.linspace(-10, 10, 400)
+        X, Y = np.meshgrid(x, y)
+        Z = f(

@@ -1,0 +1,42 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+<\Cell_0>
+<Cell_1>
+#Dataset for Data Drift calculation
+adult_data = datasets.fetch_openml(name='adult', version=2, as_frame=True)
+adult = adult_data.frame
+
+adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+adult_cur.iloc[:2000, 3:5] = np.nan
+<\Cell_1>
+<Cell_2>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+<\Cell_2>
+<Cell_3>
+%%timeit
+data_drift_report.run(reference_data=adult_ref, current_data=adult_cur)
+<\Cell_3>
+<Cell_4>
+%%timeit
+data_drift_report.save('timeit_test.json')
+<\Cell_4>
+<Cell_5>
+from evidently.suite import base_suite
+
+base_suite.USE_UJSON = True
+<\Cell_5>
+<Cell_6>
+%%timeit
+data_drift_report.save('timeit_test.json')
+<\Cell_6>

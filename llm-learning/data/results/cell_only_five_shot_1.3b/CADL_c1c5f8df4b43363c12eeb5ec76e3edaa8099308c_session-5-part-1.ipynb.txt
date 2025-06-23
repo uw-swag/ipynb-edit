@@ -1,0 +1,47 @@
+
+    ## Adding Session 5s HW
+
+    ## Session 5s HW:
+    ## 1. Create a SparkSession.
+    ## 2. Load the iris dataset.
+    ## 3. Perform a VectorAssembler to combine the features into a single vector.
+    ## 4. Perform a StandardScaler to standardize the features.
+    ## 5. Perform a PCA to reduce the dimensionality of the data.
+    ## 6. Plot the explained variance ratio.
+
+    ## Code:
+
+    ```python
+    # 1. Create a SparkSession.
+    spark = (SparkSession.
+             builder.
+             master('local[*]').
+             appName('PCA').
+             config(conf = SparkConf()).
+             getOrCreate())
+
+    # 2. Load the iris dataset.
+    iris = load_iris()
+    df = spark.createDataFrame(iris.data, iris.feature_names)
+
+    # 3. Perform a VectorAssembler to combine the features into a single vector.
+    vectorAssembler = VectorAssembler(inputCols=iris.feature_names, outputCol="features")
+    df = vectorAssembler.transform(df)
+
+    # 4. Perform a StandardScaler to standardize the features.
+    standardScaler = StandardScaler(inputCol="features", outputCol="scaledFeatures")
+    df = standardScaler.transform(df)
+
+    # 5. Perform a PCA to reduce the dimensionality of the data.
+    pca = PCA(k=2, inputCol="scaledFeatures", outputCol="pcaFeatures")
+    df = pca.transform(df)
+
+    # 6. Plot the explained variance ratio.
+    pcaModel = PCA(k=2)
+    pcaModel = pcaModel.fit(df)
+    temp_df = pcaModel.transform(df)
+    temp_df.select("pcaFeatures").show()
+    ```
+
+    ## Explanation:
+    ## This code will load the

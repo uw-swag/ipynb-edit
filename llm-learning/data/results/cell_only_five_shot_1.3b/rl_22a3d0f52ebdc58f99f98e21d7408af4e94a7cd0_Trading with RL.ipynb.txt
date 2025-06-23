@@ -1,0 +1,44 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import plotly.graph_objects as go
+    import random
+
+    # Simulate market data
+    startindex = 100
+    amplitude = 1
+    stockprice = startindex + amplitude
+    trend = 0.001
+    forcemult = 0.0001
+    stocktrend = 0.0
+
+    trendindex = startindex
+    trendseries = []
+    stockseries = []
+    date = []
+    for i in range(1000):
+        acceleration = trendindex - stockprice
+        stocktrend = stocktrend + acceleration * forcemult
+        stockprice *= (1+stocktrend)
+        stockseries.append(stockprice)
+        trendseries.append(trendindex)
+        date.append(i)
+        trendindex *= (1 + trend)
+
+    trendseries = pd.DataFrame({'dateindex': date, 'trend' : trendseries, 'stock': stockseries})
+
+    # Plotting the trend and stock price
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(y=trendseries['trend'], x=trendseries['dateindex'], name='Trend'))
+    fig.add_trace(go.Scatter(y=trendseries['stock'], x=trendseries['dateindex'], name='Stock Price'))
+    fig.show()
+
+    # Adding random perturbation
+    random_perturbation = pd.DataFrame(np.random.normal(0, 1, size=(1000, 1)), columns=['Perturbation'])
+    perturbed_trendseries = trendseries.copy()
+    perturbed_trendseries['trend'] = perturbed_trendseries['trend'] + random_perturbation['Perturbation']
+
+    # Plotting the perturbed trend and stock price
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(y=perturbed_trendseries['trend'], x=perturbed_trendseries['dateindex'], name='P

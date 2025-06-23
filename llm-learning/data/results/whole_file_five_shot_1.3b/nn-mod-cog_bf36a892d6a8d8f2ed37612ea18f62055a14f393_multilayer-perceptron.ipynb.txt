@@ -1,0 +1,58 @@
+```python
+    # Import necessary libraries
+    from keras.models import Sequential
+    from keras.layers import Dense, Activation
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(2, input_dim=2, kernel_initializer='random_uniform'))
+    model.add(Dense(2, kernel_initializer='random_uniform'))
+    model.add(Activation('relu'))
+
+    # Compile the model
+    model.compile(optimizer='rmsprop',
+                  loss='binary_crossentropy',
+                  metrics=['accuracy'])
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add forward pass math single-perceptron"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Define a function to generate a single-perceptron model
+def single_perceptron(X, y, learning_rate, epochs):
+    '''
+    Parameters:
+    X: ndarray, shape = [n_samples, n_features]
+        input data
+    y: ndarray, shape = [n_samples, 1]
+        target values
+    learning_rate: float
+        learning rate for gradient descent
+    epochs: int
+        number of epochs to train the model
+    
+    Returns:
+    weights: ndarray, shape = [n_features, 1]
+        weights of the single-perceptron model
+    '''
+    # Initialize weights randomly
+    weights = np.random.rand(X.shape[1], 1)
+    
+    # Perform gradient descent
+    for i in range(epochs):
+        for j in range(X.shape[0]):
+            z = np.dot(X[j, :], weights)
+            y_pred = 1 / (1 + np.exp(-z))
+            error = y[j] - y_pred
+            weights = weights + learning_rate * error * X[j, :]
+    
+    return weights
+<\Cell_0>
+<Cell_1>
+#

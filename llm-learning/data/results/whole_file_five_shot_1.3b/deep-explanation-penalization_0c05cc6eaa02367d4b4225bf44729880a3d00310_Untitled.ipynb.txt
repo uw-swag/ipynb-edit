@@ -1,0 +1,25 @@
+```python
+    import cv2
+
+    # Dilation
+    kernel = np.ones((5,5),np.uint8)
+    dilation = cv2.dilate(edges, kernel, iterations = 1)
+
+    # Segmentation
+    sure_bg = cv2.distanceTransform(dilation, 2, 5)
+    sure_bg = np.uint8(sure_bg)
+    sure_bg = cv2.erode(sure_bg, kernel, iterations = 1)
+
+    # Background to unknown
+    sure_fg = cv2.subtract(sure_bg, edges)
+
+    # Foreground to object
+    markers = cv2.watershed(img)
+    img[markers == -1] = [255, 0, 0]
+
+    # Display the image
+    plt.imshow(img)
+    plt.show()
+    ```
+
+    This code will add dilation to the segmentation process to actually penalize the detection of certain features. The dilation process is used to increase the size of the foreground objects, which in turn helps in detecting more objects.

@@ -1,0 +1,37 @@
+```python
+    # Importing necessary libraries
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    # Defining the model
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.fc1 = nn.Linear(784, 128)
+            self.fc2 = nn.Linear(128, 64)
+            self.fc3 = nn.Linear(64, 10)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+            return x
+
+    # Creating a new instance of the model
+    net = Net()
+
+    # Defining a loss function and an optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.SGD(net.parameters(), lr=0.01)
+
+    # Training the model
+    for epoch in range(10):
+        for batch_idx, (data, target) in enumerate(train_loader):
+            optimizer.zero_grad()
+            output = net(data.view(data.size(0), -1))
+            loss = criterion(output, target)
+            loss.backward()
+            optimizer.step()
+    ```
+    This code defines a simple neural network model with two hidden layers. The model is trained using the training data and the loss function is cross entropy loss.

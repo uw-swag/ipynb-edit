@@ -1,0 +1,42 @@
+```python
+    # Import necessary libraries
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+
+    # Define a simple neural network
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.fc1 = nn.Linear(10, 5)
+            self.fc2 = nn.Linear(5, 1)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = self.fc2(x)
+            return x
+
+    # Initialize the network and the optimizer
+    net = Net()
+    optimizer = optim.SGD(net.parameters(), lr=0.01)
+
+    # Define a dummy input and target
+    input = torch.randn(10)
+    target = torch.randn(1)
+
+    # Forward pass
+    output = net(input)
+
+    # Compute the loss
+    criterion = nn.MSELoss()
+    loss = criterion(output, target)
+
+    # Backward pass and optimization step
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    # Print the loss
+    print('Loss:', loss.item())
+    ```
+    This notebook demonstrates the use of the SGD optimizer in PyTorch. The SGD optimizer is a simple yet powerful optimization algorithm that can be used to train a neural network. The optimizer takes as input the parameters of the model to be optimized and the learning rate. The `zero_grad()` method is used to clear the gradients of the parameters, and the `step()` method is used to update the parameters. The `backward()` method computes the gradient of the loss with respect to the parameters.

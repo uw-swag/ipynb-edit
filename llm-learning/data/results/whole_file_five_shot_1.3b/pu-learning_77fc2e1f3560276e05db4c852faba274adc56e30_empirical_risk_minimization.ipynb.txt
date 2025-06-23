@@ -1,0 +1,49 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "add user interface for data distribution"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from data import load_scar, load_sar, load_pg
+
+train, valid, test, c = load_pg()
+<\Cell_1>
+<Cell_2>
+train_xs, train_ys, train_ss, train_es = train
+
+train_xs_labeled = train_xs[train_ss == 1]
+train_xs_unlabeled = train_xs[train_ss == 0]
+
+train_es_labeled = train_es[train_ss == 1]
+
+new_train_xs = []
+new_train_ys = []
+sample_weight = []
+
+# Labeled data is used as positive ($y=1$)
+for train_x_labeled, train_e_labeled in zip(train_xs_labeled, train_es_labeled):
+    new_train_xs.append(train_x_labeled)
+    new_train_ys.append(1)
+    sample_weight.append(1 / train_e_labeled)
+
+# Labeled data is used as negative ($y=0$) as well
+for train_x_labeled, train_e_labeled in zip(train_xs_labeled, train_es_labeled):
+    new_train_xs.append(train_x_labeled)
+    new_train_ys.append(0)
+    sample_weight.append(1 - 1 / train_e_labeled)
+
+# Unlabeled data is used as negative ($y=0$)
+for train_x_unlabeled in train_xs_unlabeled:
+    new_train_xs.append(train_x_unlabeled)
+    new_train_ys.append(0)
+    sample_weight.append(1)
+<\Cell_2>
+<Cell_3>
+from sklearn.linear_model import LogisticRegression
+
+clf = Logistic

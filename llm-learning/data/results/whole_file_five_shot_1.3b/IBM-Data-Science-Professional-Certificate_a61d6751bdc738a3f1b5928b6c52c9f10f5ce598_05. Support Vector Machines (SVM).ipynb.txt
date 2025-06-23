@@ -1,0 +1,31 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn import datasets
+    from sklearn.model_selection import train_test_split
+    from sklearn import svm
+    from sklearn import metrics
+
+    # Loading the iris dataset as an example
+    iris = datasets.load_iris()
+
+    # Creating a dataframe
+    df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df[iris['feature_names']], df['target'], random_state=0)
+
+    # Creating a SVM model
+    model = svm.SVC(kernel='linear')
+
+    # Training the model
+    model.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+    ```

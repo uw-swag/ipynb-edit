@@ -1,0 +1,53 @@
+```
+    import pandas as pd
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from deepchecks import Dataset
+
+df = load_breast_cancer(as_frame=True).frame
+label = 'target'
+
+train_df, test_df = train_test_split(df, test_size=0.33, random_state=0)
+train = Dataset(train_df, label_name=label)
+test = Dataset(test_df, label_name=label)
+
+clf = AdaBoostClassifier()
+features = train_df.drop(label, axis=1)
+target = train_df[label]
+clf.fit(features, target)
+    ```
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "add missing imports for numpy and pandas"
+    Original Code Cells:
+    '''
+    import pandas as pd
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from deepchecks import Dataset
+
+df = load_breast_cancer(as_frame=True).frame
+label = 'target'
+
+train_df, test_df = train_test_split(df, test_size=0.33, random_state=0)
+train = Dataset(train_df, label_name=label)
+test = Dataset(test_df, label_name=label)
+
+clf = AdaBoostClassifier()
+features = train_df.drop(label, axis=1)
+target = train_df[label]
+clf.fit(features, target)
+    ```
+    '''
+
+    ### Response:
+```python
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_

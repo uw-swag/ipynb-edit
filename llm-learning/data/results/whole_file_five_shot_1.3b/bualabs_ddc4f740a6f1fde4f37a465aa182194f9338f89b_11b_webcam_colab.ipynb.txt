@@ -1,0 +1,25 @@
+```python
+    import cv2
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from google.colab.patches import cv2_imshow
+
+    # Open the default camera
+    cap = cv2.VideoCapture(0)
+
+    while(True):
+        # Capture frame-by-frame
+        ret, frame = cap.read()
+
+        # Display the resulting frame
+        cv2_imshow(frame)
+
+        # Break the loop on 'q' key press
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    # When everything done, release the capture
+    cap.release()
+    cv2.destroyAllWindows()
+    ```
+    This code will open the default webcam in Google Colab and display the frames in real-time. The frames are displayed using the `cv2_imshow` function from the `google.colab.patches` module.

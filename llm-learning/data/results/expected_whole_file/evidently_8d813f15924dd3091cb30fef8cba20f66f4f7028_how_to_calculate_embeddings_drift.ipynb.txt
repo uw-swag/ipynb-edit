@@ -1,0 +1,167 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics import EmbeddingsDriftMetric
+
+from evidently.metrics.data_drift.embedding_drift_methods import model, distance, ratio, mmd
+
+from evidently.tests import TestEmbeddingsDrift
+from evidently.test_preset import DataDriftTestPreset, NoTargetPerformanceTestPreset
+from evidently.test_suite import TestSuite
+<\Cell_1>
+<Cell_2>
+#you might need to install pillow library to use datasets.fetch_lfw_people() from sklearn
+
+try:
+    import PIL
+except ImportError:
+    !pip install pillow
+<\Cell_2>
+<Cell_3>
+embeddings_data = datasets.fetch_lfw_people()
+embeddings_data = pd.DataFrame(embeddings_data['data'])
+embeddings_data.columns = ['col_' + str(x) for x in embeddings_data.columns]
+
+embeddings_data = embeddings_data.iloc[:5100, :31]
+
+embeddings_data_shifted = embeddings_data.copy()
+embeddings_data_shifted.iloc[2500:5000, :5] = 0
+<\Cell_3>
+<Cell_4>
+column_mapping = ColumnMapping(
+    embeddings={'small_subset': embeddings_data.columns[:10], 'big_subset': embeddings_data.columns[10:29]},
+    target=embeddings_data.columns[30]
+)
+<\Cell_4>
+<Cell_5>
+report = Report(metrics=[
+    EmbeddingsDriftMetric('small_subset')
+])
+
+report.run(reference_data = embeddings_data[:2500], current_data = embeddings_data[2500:5000], 
+           column_mapping = column_mapping)
+report
+<\Cell_5>
+<Cell_6>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = model(
+                              threshold = 0.55,
+                              bootstrap = None,
+                              quantile_probability = 0.95,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = embeddings_data_shifted[:2500], current_data = embeddings_data_shifted[2500:5000], 
+           column_mapping = column_mapping)
+report
+<\Cell_6>
+<Cell_7>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = mmd(
+                              threshold = 0.015,
+                              bootstrap = None,
+                              quantile_probability = 0.95,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = embeddings_data_shifted[:2500], current_data = embeddings_data_shifted[2500:5000],  
+           column_mapping = column_mapping)
+report
+<\Cell_7>
+<Cell_8>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = ratio(
+                              component_stattest = 'wasserstein',
+                              component_stattest_threshold = 0.1,
+                              threshold = 0.2,
+                              pca_components = None,
+                          )
+                         )
+])
+
+report.run(reference_data = embeddings_data_shifted[:2500], current_data = embeddings_data_shifted[2500:5000],  
+           column_mapping = column_mapping)
+report
+<\Cell_8>
+<Cell_9>
+report = Report(metrics = [
+    EmbeddingsDriftMetric('small_subset', 
+                          drift_method = distance(
+                              dist = 'euclidean', #"euclidean", "cosine", "cityblock" or "chebyshev"
+                              threshold = 0.2,
+                              pca_components = None,
+                              bootstrap = None,
+                              quantile_probability = 0.95
+                          )
+                         )
+])
+
+report.run(reference_data = embeddings_data_shifted[:2500], current_data = embeddings_data_shifted[2500:5000],  
+           column_mapping = column_mapping)
+report
+<\Cell_9>
+<Cell_10>
+from evidently.metric_preset import DataDriftPreset
+from evidently.metrics.data_drift.embedding_drift_methods import model, ratio
+report = Report(metrics=[
+    DataDriftPreset(embeddings=['small_subset', 'big_subset'],
+                    embeddings_drift_method={'small_subset': ratio(), 'big_subset': ratio(pca_components=5)})
+])
+
+report.run(reference_data=embeddings_data[:2500],
+    current_data=embeddings_data[2500:5000], 
+    column_mapping=column_mapping)
+report
+<\Cell_10>
+<Cell_11>
+tests = TestSuite(tests=[
+    TestEmbeddingsDrift(embeddings_name='small_subset')
+])
+
+tests.run(reference_data=embeddings_data[:2500],
+    current_data=embeddings_data[2500:5000], 
+    column_mapping=column_mapping)
+tests
+<\Cell_11>
+<Cell_12>
+tests = TestSuite(tests=[
+    DataDriftTestPreset(embeddings=['small_subset'])
+])
+
+tests.run(
+    reference_data=embeddings_data[:2500],
+    current_data=embeddings_data[2500:5000], 
+    column_mapping=column_mapping
+)
+tests
+<\Cell_12>
+<Cell_13>
+tests = TestSuite(tests=[
+    NoTargetPerformanceTestPreset(embeddings=['small_subset', 'big_subset'])
+])
+
+tests.run(
+    reference_data=embeddings_data[:2500],
+    current_data=embeddings_data[2500:5000], 
+    column_mapping=column_mapping
+)
+tests
+<\Cell_13>

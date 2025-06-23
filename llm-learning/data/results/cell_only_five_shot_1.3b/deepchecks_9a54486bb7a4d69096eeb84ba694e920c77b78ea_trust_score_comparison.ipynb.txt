@@ -1,0 +1,27 @@
+```
+    import pandas as pd
+import numpy as np
+from sklearn.ensemble import AdaBoostClassifier
+from deepchecks.datasets.classification.breast_cancer import load_data
+from deepchecks import Dataset
+
+label = 'target'
+
+train_df, test_df = load_data(data_format='Dataframe')
+train = Dataset(train_df, label=label)
+test = Dataset(test_df, label=label)
+
+clf = AdaBoostClassifier()
+features = train_df.drop(label, axis=1)
+target = train_df[label]
+clf = clf.fit(features, target)
+from deepchecks.checks import TrustScoreComparison
+
+TrustScoreComparison(min_test_samples=100).run(train, test, clf)
+from deepchecks.checks import TrustScoreComparison
+
+TrustScoreComparison(min_test_samples=100).add_condition_mean_score_percent_decline_not_greater_than(threshold=0.19).run(train, mod_test, clf)
+from deepchecks.checks.performance import MultiModelPerformanceReport
+
+    # Removed the logo from the Colab badge icon
+    ```

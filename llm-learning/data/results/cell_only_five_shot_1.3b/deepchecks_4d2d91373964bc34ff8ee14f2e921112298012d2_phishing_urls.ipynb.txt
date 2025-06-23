@@ -1,0 +1,50 @@
+```python
+    import numpy as np
+    np.random.seed(42)
+    wine_data = np.genfromtxt('winequality-red.csv', delimiter=';', names=True)
+    wine_data.dtype.names
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "WIP: Add linear regression model (#971)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    np.random.seed(42)
+    wine_data = np.genfromtxt('winequality-red.csv', delimiter=';', names=True)
+
+    # Assign the features to the X variable and the target to the y variable
+    X = wine_data['alcohol'].values.reshape(-1,1)
+    y = wine_data['quality'].values.reshape(-1,1)
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a linear regression model
+    regressor = LinearRegression()
+
+    # Fit the model to the training data
+    regressor.fit(X_train, y_train)
+
+    # Make predictions using the testing data
+    y_pred = regressor.predict(X_test)
+
+    # Compare actual output values with predicted values
+    df = pd.DataFrame({'Actual': y_test.flatten(), 'Predicted': y_pred.flatten()})
+    print(df)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean

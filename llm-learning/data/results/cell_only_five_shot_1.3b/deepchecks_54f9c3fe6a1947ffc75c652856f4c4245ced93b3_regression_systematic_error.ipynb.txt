@@ -1,0 +1,31 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+
+    data = pd.read_csv('http://www-bcf.usc.edu/~gareth/ISL/Advertising.csv', index_col=0)
+    lm = LinearRegression()
+
+    labels = data['Sales']
+    # 10-fold cross-validation with all features
+    features = data.drop('Sales', axis=1)
+    print(np.sqrt(-cross_val_score(lm, features, labels, cv=10, scoring='mean_squared_error')).mean())
+
+    # 10-fold cross-validation with two features (excluding Newspaper)
+    feature_cols = ['TV', 'Radio']
+    features = data[feature_cols]
+    print(np.sqrt(-cross_val_score(lm, features, labels, cv=10, scoring='mean_squared_error')).mean())
+    ```
+    The above code snippet is an example of how to perform 10-fold cross-validation with all features and two features (excluding Newspaper) in a linear regression model. The `cross_val_score` function is used to perform the cross-validation, and the mean squared error is used as the scoring metric.
+
+    Please note that the `cross_val_score` function is not available in the original code you provided. You might need to import it from `sklearn.model_selection`.
+
+    Also, the `read_df` function is not defined in the original code. You might need to define it to read the data.
+
+    The `deepcopy` function is not available in the original code. You might need to import it from `copy`.
+
+    The `find_optimal_features` function is not available in the original code. You might need to define it to find the optimal features.
+
+    The `find_optimal_features_subset` function is not available in the original code. You might need to define it to find the optimal features for a subset of homes.
+
+    The `feature_map` variable is not defined in the original code

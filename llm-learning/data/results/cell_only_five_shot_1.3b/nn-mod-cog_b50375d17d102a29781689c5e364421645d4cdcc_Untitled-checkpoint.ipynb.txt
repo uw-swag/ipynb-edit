@@ -1,0 +1,47 @@
+```python
+    # Importing necessary libraries
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # Assuming you have a dataset in pandas dataframe df
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Creating a perceptron classifier
+    perceptron = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+
+    # Training the perceptron
+    perceptron.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = perceptron.predict(X_test)
+
+    # Evaluating the accuracy of the model
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(f'Accuracy: {accuracy}')
+
+    # Refactoring the code
+    # We can refactor the code by removing the unnecessary imports and by using the class directly
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    perceptron = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+
+    perceptron.fit(X_train, y_train)
+
+    y_pred = perceptron.predict(X_test)
+
+    accuracy = accuracy_score(y_test, y_pred)
+
+    print(f'Acc

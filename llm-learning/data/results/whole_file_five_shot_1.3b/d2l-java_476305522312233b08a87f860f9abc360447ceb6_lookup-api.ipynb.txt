@@ -1,0 +1,27 @@
+```python
+    # Import the necessary libraries
+    from djl.nn import NDManager
+    from djl.training import DefaultTrainingConfig
+    from djl.training.trainer import Trainer
+    from djl.training.loss import Loss
+    from djl.training.optimizer import Optimizer
+    from djl.training.metrics import Metrics
+
+    # Create a new NDManager
+    manager = NDManager.newBaseManager()
+
+    # Create a new training configuration
+    config = DefaultTrainingConfig()
+    config.optimizer = Optimizer.sgd()
+    config.loss = Loss.softmaxCrossEntropyLoss()
+    config.metrics = Metrics.accuracy()
+
+    # Create a new trainer
+    trainer = Trainer(config)
+
+    # Train the model
+    trainer.train(manager)
+
+    # Update to DJL 0.19.0
+    # DJL 0.19.0 has been released. Please check the latest documentation for the changes.
+    ```

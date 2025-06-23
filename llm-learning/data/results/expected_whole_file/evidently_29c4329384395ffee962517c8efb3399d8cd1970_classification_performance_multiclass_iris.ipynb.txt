@@ -1,0 +1,84 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets, model_selection, linear_model, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+iris = datasets.load_iris()
+<\Cell_2>
+<Cell_3>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_3>
+<Cell_4>
+iris_frame['target'] = iris.target
+<\Cell_4>
+<Cell_5>
+train_data, test_data = model_selection.train_test_split(iris_frame, random_state=0)
+<\Cell_5>
+<Cell_6>
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = iris.feature_names
+categorical_features = []
+
+features = numerical_features + categorical_features
+<\Cell_6>
+<Cell_7>
+model = neighbors.KNeighborsClassifier(n_neighbors=1)
+<\Cell_7>
+<Cell_8>
+model.fit(train_data[features], train_data.target)
+<\Cell_8>
+<Cell_9>
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+<\Cell_9>
+<Cell_10>
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+<\Cell_10>
+<Cell_11>
+iris_column_mapping = ColumnMapping()
+
+iris_column_mapping.target = target
+iris_column_mapping.prediction = prediction
+iris_column_mapping.numerical_features = numerical_features
+<\Cell_11>
+<Cell_12>
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=1)])
+iris_model_performance_dashboard.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()
+<\Cell_12>
+<Cell_13>
+# iris_model_performance_dashboard.save('iris_model_performance.html')
+<\Cell_13>
+<Cell_14>
+iris_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=0)])
+iris_model_performance_dashboard.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+iris_model_performance_dashboard.show()
+<\Cell_14>
+<Cell_15>
+# iris_model_performance_dashboard.save('iris_model_performance.html')
+<\Cell_15>
+<Cell_16>
+iris_classification_performance_profile = Profile(sections=[ClassificationPerformanceProfileSection()])
+<\Cell_16>
+<Cell_17>
+iris_classification_performance_profile.calculate(train_data, test_data, column_mapping = iris_column_mapping)
+<\Cell_17>
+<Cell_18>
+iris_classification_performance_profile.json() 
+<\Cell_18>

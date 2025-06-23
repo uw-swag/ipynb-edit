@@ -1,0 +1,13 @@
+```
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Dense(units=1, input_shape=[1])  
+    ])
+
+    model.compile(optimizer='sgd', loss='mean_squared_error')
+
+    xs = np.array([-1.0,  0.0, 1.0, 2.0, 3.0, 4.0], dtype=float)
+    ys = np.array([-5.1, -0.3, 5.3, 9.9, 15.3, 19.7], dtype=float)
+
+    model.fit(xs, ys, epochs=200)
+    ```
+    The code you provided is a simple linear regression model using TensorFlow. The model is trained on the input data `xs` and the expected output `ys`. The model is then used to predict the output for new, unseen data.

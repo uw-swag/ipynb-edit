@@ -1,0 +1,25 @@
+```python
+    import tensorflow as tf
+
+    n_cells = 128  # number of LSTM cells
+    n_layers = 2  # number of LSTM layers
+
+    # Define the cell
+    cells = tf.nn.rnn_cell.BasicLSTMCell(num_units=n_cells, state_is_tuple=True, forget_bias=1.0)
+
+    # Define the multi-cell
+    multi_cells = tf.nn.rnn_cell.MultiRNNCell(
+        [cells] * n_layers, state_is_tuple=True)
+
+    # Define the initial state
+    initial_state = multi_cells.zero_state(tf.shape(X)[0], tf.float32)
+
+    # Define the output and state
+    outputs, state = tf.nn.rnn(cell=multi_cells, input=X, initial_state=initial_state)
+
+    # Define the final state
+    final_state = state
+
+    # Define the final output
+    final_output = outputs[-1]
+    ```

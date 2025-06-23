@@ -1,0 +1,42 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_absolute_error
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, BatchNormalization, Activation, add
+    from keras.optimizers import Adam
+    from keras.callbacks import EarlyStopping, ModelCheckpoint
+    from ResNet_1DCNN import ResNet
+    from google.colab import drive
+    from sklearn.preprocessing import LabelEncoder
+
+    # Load the dataset
+    dataset = pd.read_csv('Gender_H_W Dataset.csv')
+
+    # Perform EDA
+    print(dataset.shape)
+    print(dataset.head())
+    print(dataset.describe())
+    print(dataset.info())
+
+    # Preprocess the data
+    dummy_dataset = pd.DataFrame()
+    for i in range(0,len(dataset.columns)):
+        X = dataset[dataset.columns[i]]
+        if type(X[0]) == str:
+            Y = pd.get_dummies(X)
+            dummy_dataset = pd.concat([dummy_dataset, Y], axis=1)
+        else:
+            dummy_dataset = pd.concat([dummy_dataset, X], axis=1)
+
+    # Split the data into training and testing sets
+    X_Data = dummy_dataset.iloc[:,0:-1].values
+    Y_Data = dummy_dataset.iloc[:,-1].values
+    X_Train, X_Test, Y_Train, Y_Test = train_test_split(X_Data, Y_Data, test_size=0.2, random_state=42)
+
+    # One-hot encoding for classification mode
+    if Y_Train.shape[1] > 

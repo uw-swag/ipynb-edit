@@ -1,0 +1,50 @@
+```python
+    <Cell_0>
+    # All imports and setups 
+
+    %run ../common/import_all.py
+
+    import sys
+    sys.path.append('../../')
+
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense
+    from tensorflow.keras.optimizers import Adam
+
+    from common.setup_notebook import *
+
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+    <\Cell_0>
+    <Cell_1>
+    # Create a simple neural network
+
+    model = Sequential()
+    model.add(Dense(32, input_dim=30, activation='relu'))
+    model.add(Dense(16, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+
+    model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.01), metrics=['accuracy'])
+
+    # Train the model
+    model.fit(x_train, y_train, epochs=10, batch_size=32)
+
+    # Evaluate the model
+    _, accuracy = model.evaluate(x_test, y_test)
+    print('Accuracy: %.2f' % (accuracy*100))
+    <\Cell_1>
+    <Cell_2>
+    # Add more layers to the neural network
+
+    model = Sequential()
+    model.add(Dense(32, input_dim=30, activation='relu'))
+    model.add(Dense(64, activation='relu'))
+    model.add(Dense(32, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+
+    model.compile(loss='binary_crossentropy', optimizer=Adam(lr=0.01), metrics=['accuracy'])
+
+    # Train the model
+    model.fit(x_train, y_train, epochs

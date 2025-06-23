@@ -1,0 +1,22 @@
+```python
+    # Import necessary libraries
+    import ipywidgets as widgets
+    from IPython.display import display
+
+    # Create a 16i callback
+    def callback(x):
+        print('You selected "', x, '"')
+
+    # Create a dropdown
+    dropdown = widgets.dropdown(options=['Option 1', 'Option 2', 'Option 3'], description='Choose an option:',
+                                value='Option 1',
+                                disabled=False)
+
+    # Display the dropdown
+    display(dropdown)
+
+    # Attach the callback to the dropdown
+    dropdown.observe(callback, 'value')
+    ```
+
+    This code will create a dropdown menu with the options 'Option 1', 'Option 2', and 'Option 3'. When you select an option, the callback function will be triggered, and the selected option will be printed.

@@ -1,0 +1,23 @@
+```python
+    batchsize = 24
+    np.random.seed(42)
+
+    databunch = ImageDataBunch.from_folder(download_path, train='.', 
+                                           valid_pct=0.2, 
+                                           ds_tfms=get_transforms(), 
+                                           size=400, bs=batchsize).normalize()
+
+    databunch = ImageDataBunch.from_csv(path, csv_labels='cleaned.csv', 
+                                         valid_pct=0.2, 
+                                         ds_tfms=get_transforms(), 
+                                         size=400, bs=batchsize).normalize()
+
+    learner = cnn_learner(databunch, models.resnet50, metrics=accuracy)
+    interpretation = ClassificationInterpretation.from_learner(learner)
+    ```
+
+    คุณสมบัติ: การตั้งค่า figsize ให้มีความสัมพันธ์ 8x8 จะอนุญาต่อการทำงานของคุณ
+
+    คุณสมบัติ: เมื่อคุณตั้ง figsize ให้ 8x8 ก็คุณสามารถทำงานงานระหว่าง 8x8 ได้
+
+    คุณสมบัติ: 

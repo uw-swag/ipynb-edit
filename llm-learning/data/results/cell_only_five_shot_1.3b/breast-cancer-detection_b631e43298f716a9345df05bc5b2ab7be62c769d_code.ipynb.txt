@@ -1,0 +1,17 @@
+```python
+    from xgboost import XGBClassifier
+
+    # Initialize XGBClassifier
+    xgb_clf = XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+
+    # Fit the model
+    xgb_clf.fit(X_train, y_train)
+
+    # Predict the labels of the test set
+    y_pred = xgb_clf.predict(X_test)
+
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f'Accuracy: {accuracy}')
+    ```
+    This code will implement an XGBoost classifier for improved model performance. The classifier is initialized, then the model is trained on the training data. The model's predictions are made on the test data, and the accuracy of the model is evaluated.

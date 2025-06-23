@@ -1,0 +1,80 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    get_ipython().system('pip install git+https://github.com/evidentlyai/evidently.git')
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_openml
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+<\Cell_1>
+<Cell_2>
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+df.head()
+<\Cell_2>
+<Cell_3>
+df['num_feature_with_3_values'] = np.random.choice(3, df.shape[0])
+df['num_feature_with_2_values'] = np.random.choice(2, df.shape[0])
+<\Cell_3>
+<Cell_4>
+numerical_features = ['age', 'fnlwgt', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week', 'num_feature_with_3_values', 'num_feature_with_2_values']
+categorical_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'sex', 'native-country', 'class']
+column_mapping = ColumnMapping(numerical_features=numerical_features, categorical_features=categorical_features)
+<\Cell_4>
+<Cell_5>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+
+data_drift_report.run(
+    reference_data=df.sample(1000, random_state=0), 
+    current_data=df.sample(1000, random_state=10), 
+    column_mapping=column_mapping
+)
+data_drift_report
+<\Cell_5>
+<Cell_6>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+
+data_drift_report.run(
+    reference_data=df[df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=0), 
+    current_data=df[~df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=10), 
+    column_mapping=column_mapping
+)
+data_drift_report
+<\Cell_6>
+<Cell_7>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+
+data_drift_report.run(
+    reference_data=df.sample(30000, random_state=0), 
+    current_data=df.sample(30000, random_state=10), 
+    column_mapping=column_mapping
+)
+data_drift_report
+<\Cell_7>
+<Cell_8>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+data_drift_report.run(
+    reference_data=df[df.relationship.isin(['Husband', 'Wife'])].sample(30000, random_state=0, replace=True), 
+    current_data=df[~df.relationship.isin(['Husband', 'Wife'])].sample(30000, random_state=10, replace=True), 
+    column_mapping=column_mapping
+)
+data_drift_report
+<\Cell_8>
+<Cell_9>
+
+<\Cell_9>

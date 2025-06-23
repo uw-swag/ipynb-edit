@@ -1,0 +1,38 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Split the dataset into features and target variable
+    X = df.drop('target_column', axis=1)
+    y = df['target_column']
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the classifier
+    clf.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = clf.predict(X_test)
+
+    # Evaluate the classifier
+    accuracy = clf.score(X_test, y_test)
+    print(f'Accuracy: {accuracy:.2f}')
+
+    # Feature importance
+    feature_importances = clf.feature_importances_
+    print('Feature Importances:')
+    for feature, importance in zip(X.columns, feature_importances):
+        print(f'{feature}: {importance:.2f}')
+    ```
+
+    This code will load a dataset, split it into features and target variable, and then train a Random Forest Classifier on the training set. It will then make predictions on the testing set and evaluate the classifier. Finally, it will print the feature importances.

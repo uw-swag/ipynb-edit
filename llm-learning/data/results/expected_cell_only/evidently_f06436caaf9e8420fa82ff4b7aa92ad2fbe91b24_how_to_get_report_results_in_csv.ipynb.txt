@@ -1,0 +1,9 @@
+missing_values_dict = missing_values.as_dict()
+
+data = {}
+for result in missing_values_dict['metrics']:
+    data[result['result']['column_name']] = {
+        **{f"ref_{key}": val for key, val in result['result']['reference'].items()},
+        **{f"cur_{key}": val for key, val in result['result']['current'].items()}
+    }
+missing_values_frame.to_csv('missing_values_frame.csv', header='True', sep=',', index=True, index_label='column')

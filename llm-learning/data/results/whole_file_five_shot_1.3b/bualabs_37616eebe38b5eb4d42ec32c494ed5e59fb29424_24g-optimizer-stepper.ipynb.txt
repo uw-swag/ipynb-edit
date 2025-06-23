@@ -1,0 +1,33 @@
+```python
+    class OptimizerBase:
+        def __init__(self, params, lr, betas, eps, weight_decay):
+            self.params = params
+            self.lr = lr
+            self.betas = betas
+            self.eps = eps
+            self.weight_decay = weight_decay
+
+        def step(self):
+            raise NotImplementedError
+
+        def zero_grad(self):
+            for param in self.params:
+                param.grad.data.zero_()
+
+        def state_dict(self):
+            return {
+                'params': [param.data for param in self.params],
+                'lr': self.lr,
+                'betas': self.betas,
+                'eps': self.eps,
+                'weight_decay': self.weight_decay,
+            }
+
+        def load_state_dict(self, state_dict):
+            for param, new_param in zip(self.params, state_dict['params']):
+                param.data.copy_(new_param)
+
+        def __repr__(self):
+            return f'{self.__class__.__name__}({self.state_dict()})'
+    ```
+    这个类定义了一个基本的优化器基类，包含了一些基本的优化器方法，如`step`，`zero_grad`，`state_dict`和`load_state_dict`。这些方法在实际的优化器类中会被重写。

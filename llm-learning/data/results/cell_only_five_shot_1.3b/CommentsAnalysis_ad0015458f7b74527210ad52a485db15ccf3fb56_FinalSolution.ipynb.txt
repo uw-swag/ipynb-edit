@@ -1,0 +1,32 @@
+
+    # The code you provided is a function that fits a list of models to a dataset, and then makes predictions based on the average of the predictions of the models. The function is also able to return the predictions and the accuracy of the models.
+
+    # Here's a brief explanation of the code:
+
+    - The function `fit_predict_to_n_user` takes in a list of models, a comments DataFrame, and some parameters. It first checks if the unique IDs are in a cache file. If they are, it loads the unique IDs from the cache. If not, it calculates the unique and additional IDs based on the number of comments from each ID.
+
+    - It then splits the comments into a training set and a test set.
+
+    - It fits the models to the training set and makes predictions on the test set.
+
+    - The function also calculates the accuracy of the models and returns these values along with the predictions.
+
+    - If the `return_prediction` parameter is set to True, the function also returns the predictions DataFrame.
+
+    - The function is also able to return the accuracy of the models averaged over users.
+
+    - If the `predict_proba` parameter is set to True, the function uses the `predict_proba` method of the models to get the probabilities of the predictions.
+
+    - The function is also able to return the accuracy of the models averaged over users.
+
+    - Finally, the function calculates the median of the models' predictions and returns these values.
+
+    # Note: The function assumes that the `make_df_balanced` function is defined elsewhere in the code, and that the `accuracy_score` function is defined elsewhere in the code as well.
+
+    # Also, the function uses the `pickle` module to save the unique IDs to a file. This is done in a way that ensures that the unique IDs are not re-calculated if the function is run multiple times.
+
+    # Finally, the function uses the `np.floor` function to round the predictions to the nearest integer. This is done to ensure that the predictions are integers.
+
+    # The function also uses the `np.median` function to calculate the median of the predictions.
+
+    # The function uses the `np.mean` function

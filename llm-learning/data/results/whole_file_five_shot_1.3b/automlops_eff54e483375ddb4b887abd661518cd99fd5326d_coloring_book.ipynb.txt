@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message: "added version 2"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Check that package is installed correctly. The KFP SDK version should be >=1.6:
+!python3 -c "import kfp; print('KFP SDK version: {}'.format(kfp.__version__))"
+<\Cell_0>
+<Cell_1>
+import json
+import pandas as pd
+from kfp.v2 import compiler, dsl
+from kfp.v2.dsl import pipeline, component, Artifact, Dataset, Input, Metrics, Model, Output, InputPath, OutputPath
+from google.cloud import aiplatform
+from google.cloud import aiplatform_v1
+import datetime
+from IPython.core.magic import register_cell_magic
+
+from utils import OneClickMLOps
+
+@register_cell_magic
+def execute_and_save(file, cell):
+    'Run and save python code block to a file'
+    with open(file, 'wt') as fd:
+        fd.write(cell)
+    code = compile(cell, file, 'exec')
+    exec(code, globals())
+<\Cell_1>
+<Cell_2>
+@component(
+    packages_to_install=[
+        "google-cloud-bigquery", 
+        "pandas",
+        "pyarrow",
+        "db_dtypes"
+    ],
+    base_image="python:3.9",
+    output_component_file="create_dataset.yaml"
+)
+def create_dataset(
+    bq_table: str,
+    output_data_path: OutputPath("Dataset"),
+    project: str
+):
+    from google.cloud import bigquery
+    import pandas as pd
+    bq_client = bigquery.Client(project=project)
+
+
+    def get_query(bq_input_table: str) -> str:
+        """Generates BQ Query to read data.
+
+        Args:
+        bq_input_table: The full name of the bq input table to be read into

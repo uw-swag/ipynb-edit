@@ -1,0 +1,139 @@
+!pip3 install 'kfp>=2.0.0' google-cloud-aiplatform
+from kfp.dsl import Artifact, Metrics, Model, Output
+from google_cloud_automlops import AutoMLOps
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery'
+    ]
+)
+def create_dataset(
+    bq_table: str,
+    project_id: str
+):
+    """Custom component that creates an empty dataset resource.
+
+    Args:
+        bq_table: The source biquery table.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+    bq_data_name = bq_table.split('.')[-1]
+
+    dataset_query = f'''CREATE SCHEMA {bq_data_name}'''
+    job = bq_client.query(dataset_query)
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery'
+    ]
+)
+def train_model(
+    bq_table: str,
+    labels: str,
+    model_name: str,
+    model_type: str,
+    project_id: str
+):
+    """Custom component that trains a DNN classifier on the training data.
+
+    Args:
+        bq_table: Full uri of the BQ training data.
+        labels: The type and archictecture of tabular model to train, e.g., DNN classification.
+        model_name: Name for the model.
+        model_type: The column which are the labels.
+        project_id: Project id.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+    bq_data_name = bq_table.split('.')[-1]
+
+    model_query = f'''
+    CREATE OR REPLACE MODEL `{bq_data_name}.{model_name}`
+    OPTIONS(
+        model_type='{model_type}',
+        labels = ['{labels}'],
+        model_registry='vertex_ai'
+        )
+    AS
+    SELECT *
+    FROM `{bq_table}`
+    '''
+
+    job = bq_client.query(model_query)
+    print(job.errors, job.state)
+
+    while job.running():
+        from time import sleep
+
+        sleep(30)
+        print('Running ...')
+    print(job.errors, job.state)
+
+    tblname = job.ddl_target_table
+    tblname = f'{tblname.dataset_id}.{tblname.table_id}'
+    print(f'{tblname} created in {job.ended - job.started}')
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery', 
+        'pandas',
+        'pyarrow',
+        'db_dtypes'
+    ]
+)
+def evaluate_model(
+    bq_table: str,
+    metrics: Output[Metrics],
+    model_name: str,
+    project_id: str
+):
+    """Custom component that evaluates the model.
+
+    Args:
+        model_name: Name for the model.
+        project_id: Project id.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+    bq_data_name = bq_table.split('.')[-1]
+
+    eval_query = f'''
+    SELECT *
+    FROM
+      ML.EVALUATE(MODEL {bq_data_name}.{model_name})
+    ORDER BY  roc_auc desc
+    LIMIT 1'''
+
+    job = bq_client.query(eval_query)
+    results = job.result().to_dataframe()
+
+    for column in results:
+        metrics.log_metric(column, results[column].values[0])
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ]
+)
+def deploy_model(
+    machine_type: str,
+    model_name: str,
+    project_id: str,
+    region: str,
+    vertex_endpoint: Output[Artifact],
+    vertex_model: Output[Model]
+):
+    """Custom component that deploys the model.
+
+    Args:
+        model_name: Name for the model.
+        project_id: Project id.
+        region: Resource region.
+    """
+    from google.cloud import aiplatform
+    aiplatform.init(project=project_id, location=region)
+    model = aiplatform.Model(model_name=model_name)
+
+    endpoint = model.deploy(
+        machine_type=machine_type,
+        deployed_model_display_name=f'deployed-{model_name}')
+    vertex_endpoint.uri = endpoint.resource_name
+    vertex_model.uri = endpoint.resource_name

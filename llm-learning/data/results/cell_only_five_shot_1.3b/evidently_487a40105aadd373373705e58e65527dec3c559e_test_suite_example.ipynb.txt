@@ -1,0 +1,58 @@
+```python
+    try:
+        import evidently
+    except:
+        !pip install evidently
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new notebook for data cleaning and preprocessing."
+    Original Code Cells:
+    '''
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+
+    # Load data
+    df = pd.read_csv('data.csv')
+
+    # Split data into features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Save preprocessed data
+    pd.DataFrame(X_train).to_csv('train_data.csv', index=False)
+    pd.DataFrame(X_test).to_csv('test_data.csv', index=False)
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+
+    # Load data
+    df = pd.read_csv('data.csv')
+
+    # Split data into features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_

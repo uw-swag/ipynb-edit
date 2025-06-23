@@ -1,0 +1,57 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Deleting notebooks (#108)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from deepchecks.tabular.checks.methodology import *
+from deepchecks.tabular import Dataset
+<\Cell_0>
+<Cell_1>
+df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+df['x4'] = df['x1'] * 0.5 + df['x2']
+df['label'] = df['x2'] + 0.1 * df['x1']
+df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+<\Cell_1>
+<Cell_2>
+ds = Dataset(df, label='label')
+<\Cell_2>
+<Cell_3>
+my_check = SingleFeatureContribution(pcore_params={'sample': 10})
+my_check.run(dataset=ds)
+<\Cell_3>
+<Cell_4>
+<Cell_5>
+my_check = SingleFeatureContribution(pcore_params={'sample': 10})
+my_check.run(dataset=ds)
+<\Cell_5>
+<Cell_6>
+<Cell_7>
+<Cell_8>
+<Cell_9>
+<Cell_10>
+<Cell_11>
+<Cell_12>
+<Cell_13>
+<Cell_14>
+<Cell_15>
+<Cell_16>
+<Cell_17>
+<Cell_18>
+<Cell_19>
+<Cell_20>
+<Cell_21>
+<Cell_22>
+<Cell_23>
+<Cell_24>
+<Cell_25>
+<Cell_26>
+<Cell_27>
+<Cell_28>
+<Cell_29>

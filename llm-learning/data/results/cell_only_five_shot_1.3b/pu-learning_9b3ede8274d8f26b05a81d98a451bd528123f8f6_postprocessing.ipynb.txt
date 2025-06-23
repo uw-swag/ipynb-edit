@@ -1,0 +1,27 @@
+```python
+    from scar import load_scar
+
+    train, valid, test = load_scar()
+    from sklearn.linear_model import LogisticRegression
+
+    train_x, _, train_s = train
+
+    clf = LogisticRegression(random_state=0).fit(train_x, train_s)
+    from scar import C
+
+    test_x, test_y, _ = test
+
+    test_s_prob_hat = clf.predict_proba(test_x)[:, 1]
+
+    test_y_prob_hat = np.minimum(test_s_prob_hat / C, 1.0)
+    test_y_hat = (test_y_prob_hat > 0.5).astype(np.int32)
+    from sklearn.metrics import f1_score
+
+    f1_score(test_y, test_y_hat)
+    plot_x_y(test_x, test_y)
+    plot_x_y(test_x, test_y_hat)
+    plot_x_y_proba(test_x, test_y_prob_hat)
+
+    ```
+
+    The existing notebook is already updated with the new data processing code. The notebook now includes the logistic regression model, the test data, the predicted probabilities, and the F1 score. The plots are also updated to show the predicted and actual values.

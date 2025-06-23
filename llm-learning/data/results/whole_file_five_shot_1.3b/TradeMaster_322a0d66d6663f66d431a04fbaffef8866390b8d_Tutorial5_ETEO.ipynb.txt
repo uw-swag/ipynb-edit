@@ -1,0 +1,62 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update tutorial descriptions"
+    Original Code Cells:
+    '''
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings("ignore")
+
+import sys
+from pathlib import Path
+import os
+import torch
+
+ROOT = os.path.dirname(os.path.abspath("."))
+sys.path.append(ROOT)
+
+import argparse
+import os.path as osp
+from mmcv import Config
+from trademaster.utils import replace_cfg_vals
+from trademaster.nets.builder import build_net
+from trademaster.environments.builder import build_environment
+from trademaster.optimizers.builder import build_optimizer
+from trademaster.losses.builder import build_loss
+from trademaster.transition.builder import build_transition
+from trademaster.agents.builder import build_agent
+from trademaster.transition.builder import build_transition
+from trademaster.trainers.builder import build_trainer
+from trademaster.agents.builder import build_agent
+from trademaster.transition.builder import build_transition
+from trademaster.trainers.builder import build_trainer
+<\Cell_0>
+<Cell_1>
+dataset = build_dataset(cfg)
+<\Cell_1>
+<Cell_2>
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+train_environment = build_environment(cfg, default_args=dict(dataset=dataset, task="train"))
+<\Cell_2>
+<Cell_3>
+transition = build_transition(cfg)
+<\Cell_3>
+<Cell_4>
+trainer.train_and_valid()
+<\Cell_4>
+<Cell_5>
+trainer.test()
+<\Cell_5>
+<Cell_6>
+<Cell_7>
+trainer.test()
+<\Cell_7>
+<Cell_8>
+<Cell_9>
+trainer.train_and_valid()
+<\Cell_9>
+<Cell_10>
+<Cell_11>
+trainer.test()

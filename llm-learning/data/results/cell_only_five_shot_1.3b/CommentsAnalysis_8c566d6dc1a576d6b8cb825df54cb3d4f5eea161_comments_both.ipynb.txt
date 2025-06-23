@@ -1,0 +1,28 @@
+```python
+    import numpy as np
+    from keras.models import Sequential
+    from keras.layers import LSTM, Dense, Activation
+    from keras.optimizers import Adam
+    from sklearn.manifold import TSNE
+    import matplotlib.pyplot as plt
+
+    # Load the model
+    model = Sequential()
+    model.add(LSTM(256, input_shape=(max_len, len(char_set) + 1)))
+    model.add(Dense(len(char_set) + 1))
+    model.add(Activation('softmax'))
+
+    model.load_weights("model.h5")
+
+    # Use TSNE to reduce the dimensionality to 2D
+    tsne = TSNE(n_components=2)
+    X_reduced = tsne.fit_transform(model.layers[0].get_weights()[0])
+
+    # Plot the reduced data
+    plt.scatter(X_reduced[:, 0], X_reduced[:, 1])
+    for i, char in enumerate(char_set):
+        plt.annotate(char, (X_reduced[i, 0], X_reduced[i, 1]))
+    plt.show()
+    ```
+
+    This code will generate a scatter plot of the latent feature vectors in the LSTM model, using TSNE to reduce the dimensionality to 2D. The x-coordinates represent the first component of the latent feature vector, and the y-coordinates represent the second component. The points are annotated with the character that corresponds to each point.

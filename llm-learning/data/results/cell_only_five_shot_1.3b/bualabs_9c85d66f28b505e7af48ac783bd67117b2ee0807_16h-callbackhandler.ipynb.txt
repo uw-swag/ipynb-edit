@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+    from IPython.display import display, HTML
+    from ipywidgets import interact, widgets
+
+    # Create a dataframe
+    df = pd.DataFrame({
+        'Hour': range(16),
+        'Callback': ['Callback 1', 'Callback 2', 'Callback 3', 'Callback 4', 'Callback 5', 'Callback 6', 'Callback 7', 'Callback 8', 'Callback 9', 'Callback 10', 'Callback 11', 'Callback 12', 'Callback 13', 'Callback 14', 'Callback 15', 'Callback 16']
+    })
+
+    # Create a callback function
+    def update_callback(hour):
+        # This function will be called whenever the hour slider changes
+        # It will display the corresponding callback in the notebook
+        display(HTML(f'<h2>Callback for hour {hour}</h2>'))
+        display(HTML(f'<p>{df.loc[df["Hour"] == hour, "Callback"].values[0]}'))
+
+    # Create an interactive slider for the hour
+    slider = widgets.IntSlider(min=0, max=16, step=1, value=0, description='Hour:')
+
+    # Create a callback for the slider
+    slider.observe(update_callback, 'value')
+
+    # Display the slider and the callback
+    display(slider)
+    ```
+    This code will create a notebook with an interactive slider for the hour and a callback for each hour. The callback will display the corresponding callback in the notebook.

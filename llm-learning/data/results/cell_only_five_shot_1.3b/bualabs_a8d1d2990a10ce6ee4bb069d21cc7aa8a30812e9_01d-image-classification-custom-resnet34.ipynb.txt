@@ -1,0 +1,58 @@
+```
+    # Finished coding 01d main flow
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to load and preprocess data"
+    Original Code Cells:
+    '''
+    batchsize = 64
+np.random.seed(0)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+databunch = ImageDataBunch.from_folder(path_images, train='.', 
+                                       valid_pct=0.2, 
+                                       ds_tfms=get_transforms(), 
+                                       size=224, bs=batchsize).normalize(imagenet_stats)
+
+learner = cnn_learner(databunch, models.resnet50, metrics=accuracy)
+learner.save('resnet50-1')
+learner.save('resnet50-2')
+
+    '''
+    ]
+
+    ### Response:
+    # Added code to load and preprocess data
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to fine-tune the model"
+    Original Code Cells:
+    '''
+    batchsize = 64
+np.random.seed(0)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+databunch = ImageDataBunch.from_folder(path_images, train='.', 
+                                       valid_pct=0.2, 
+                                       ds_tfms=get_transforms(), 
+                                       size=224, bs=batchsize).normalize(imagenet_stats)
+
+learner = cnn_learner(databunch, models.resnet50, metrics=accuracy)
+learner.save('resnet50-1')
+learner.save('resnet50-2')
+
+    '''
+    ]
+
+    ### Response:
+    # Added code to fine-tune the model
+
+    ### Instruction:
+    [
+    Commit Message: "Added code to evaluate the model"
+    Original Code Cells:
+    '''
+    batchsize = 64
+np.random

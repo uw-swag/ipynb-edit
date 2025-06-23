@@ -1,0 +1,28 @@
+```python
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from keras.models import Sequential
+    from keras.layers import LSTM, Dense, Dropout
+
+    # Assuming you have a DataFrame 'df' with columns 'A', 'B', 'C'
+    model = Sequential()
+    model.add(LSTM(128, input_shape=(1, 3), activation='relu'))
+    model.add(Dropout(0.2))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error', optimizer='adam')
+
+    X = df['A'].values.reshape(-1, 1, 3)
+    y = df['B'].values
+
+    model.fit(X, y, epochs=100, batch_size=1, verbose=2)
+
+    # Predicting on new data
+    X_test = df['A'].values.reshape(-1, 1, 3)
+    y_pred = model.predict(X_test)
+
+    # Plotting the results
+    plt.plot(y_pred)
+    plt.show()
+    ```

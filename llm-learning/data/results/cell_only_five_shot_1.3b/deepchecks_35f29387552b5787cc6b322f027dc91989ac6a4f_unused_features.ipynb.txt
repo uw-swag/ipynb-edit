@@ -1,0 +1,30 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Assuming df is your DataFrame and 'target' is your target variable
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Initialize a Random Forest Classifier
+    rfc = RandomForestClassifier(random_state=42)
+
+    # Fit the model to the training data
+    rfc.fit(X_train, y_train)
+
+    # Get the feature importances
+    feature_importances = rfc.feature_importances_
+
+    # Create a DataFrame for the feature importances
+    feature_importances_df = pd.DataFrame({'feature': X.columns, 'importance': feature_importances})
+    feature_importances_df = feature_importances_df.sort_values('importance', ascending=False)
+
+    # Print the feature importances
+    print(feature_importances_df)
+    ```
+    This code will print the feature importances sorted in descending order. The `random_state` parameter in the `RandomForestClassifier` is set to a fixed value (42) for reproducibility.

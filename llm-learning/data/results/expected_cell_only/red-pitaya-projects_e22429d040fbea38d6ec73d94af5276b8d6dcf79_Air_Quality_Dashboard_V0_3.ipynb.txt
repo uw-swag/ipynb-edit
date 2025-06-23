@@ -1,0 +1,12 @@
+button = widgets.Button(description='Reset Values to 1')
+def on_button_clicked(_):
+    air_data.reset_ref_values()
+    #Reset all the reference values to their current value
+    pms5003_data = air_data.pms5003.read()
+    pms_ref_0_3 = pms5003_data.pm_per_1l_air(0.3)
+    pms_ref_0_5 = pms5003_data.pm_per_1l_air(0.5)
+    pms_ref_1_0 = pms5003_data.pm_per_1l_air(1.0)
+# linking button and function together using a button's method
+button.on_click(on_button_clicked)
+# displaying button
+button

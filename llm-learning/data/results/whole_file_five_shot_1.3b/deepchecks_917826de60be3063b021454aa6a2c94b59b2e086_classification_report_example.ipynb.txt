@@ -1,0 +1,21 @@
+```
+    from mlchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from mlchecks.checks.performance import ClassificationReport
+
+    clf = AdaBoostClassifier()
+    frame = iris.frame
+    X = iris.data
+    Y = iris.target
+    ds = Dataset(frame, 
+                features=iris.feature_names,
+                label='target')
+    clf.fit(X, Y)
+
+    check = ClassificationReport()
+    check.run(ds, clf)
+    ```
+    '''
+    ]

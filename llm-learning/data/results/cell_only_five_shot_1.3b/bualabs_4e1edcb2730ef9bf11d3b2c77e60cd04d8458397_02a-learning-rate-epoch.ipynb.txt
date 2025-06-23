@@ -1,0 +1,22 @@
+```python
+    from sklearn.model_selection import GridSearchCV
+
+    # Define the hyperparameters to tune
+    hyperparameters = {
+        'learning_rate': [0.01, 0.1, 1, 10],
+        'epochs': [5, 10, 20, 50]
+    }
+
+    # Initialize the GridSearchCV object
+    grid_search = GridSearchCV(estimator=model, param_grid=hyperparameters, cv=5)
+
+    # Fit the GridSearchCV object to the data
+    grid_search.fit(X_train, y_train)
+
+    # Print the best parameters found
+    print("Best parameters found: ", grid_search.best_params_)
+
+    # Print the best model found
+    print("Best model found: ", grid_search.best_estimator_)
+    ```
+    This code uses the `GridSearchCV` function from the `sklearn.model_selection` module to perform hyperparameter tuning. The hyperparameters to tune are 'learning_rate' and 'epochs', and the GridSearchCV object is fit to the training data. The best parameters and model found are then printed.

@@ -1,0 +1,26 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from deepchecks.tabular.checks.methodology import *
+from deepchecks.tabular.base import Dataset
+
+# Split the data into base and core
+base_data = data.iloc[:1000]
+core_data = data.iloc[1000:]
+
+# Create a base dataset
+base_dataset = Dataset(data=base_data, label='target')
+
+# Create a core dataset
+core_dataset = Dataset(data=core_data, label='target')
+
+# Run the checks
+base_dataset.run_checks([MethodologyCheck()])
+core_dataset.run_checks([MethodologyCheck()])
+
+# Plot the results
+base_dataset.plot()
+core_dataset.plot()
+    ```

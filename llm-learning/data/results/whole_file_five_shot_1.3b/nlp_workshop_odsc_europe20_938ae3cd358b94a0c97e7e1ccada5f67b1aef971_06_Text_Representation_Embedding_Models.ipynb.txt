@@ -1,0 +1,44 @@
+```
+    ## Text Representation Learning
+
+    Text representation learning is the process of converting text into a form that can be used for further processing. This is often done by converting the text into a numerical form, which can then be used for further processing.
+
+    There are several types of text representation learning:
+
+    1. **Word Embeddings**: These are a type of word representation that allows words with similar meaning to have a similar representation. The representation is a vector in a high-dimensional space.
+
+    2. **Character Embeddings**: These are a type of character representation that allows characters with similar meaning to have a similar representation. The representation is a vector in a high-dimensional space.
+
+    3. **Sequence Embeddings**: These are a type of sequence representation that allows sequences of words or characters to have a similar representation. The representation is a vector in a high-dimensional space.
+
+    The goal of text representation learning is to learn a representation that can be used for various tasks, such as text classification, text generation, and more.
+
+    ## Example: Word Embeddings
+
+    Let's consider a simple example of word embeddings. We will use the GloVe word embeddings, which are pre-trained word embeddings.
+
+    ```python
+    from gensim.models import KeyedVectors
+
+    # Load the GloVe word embeddings
+    glove_vectors = KeyedVectors.load_word2vec_format('glove.6B.100d.txt.w2v', binary=False)
+
+    # Get the vector for a word
+    word_vector = glove_vectors['computer']
+
+    # Print the vector
+    print(word_vector)
+    ```
+
+    This will print the vector for the word 'computer'. You can see that the vector is a 100-dimensional vector, where each dimension represents a different word in the vocabulary.
+
+    ## Example: Character Embeddings
+
+    Character embeddings are a type of word representation that allows characters with similar meaning to have a similar representation.
+
+    Here is an example of character embeddings:
+
+    ```python
+    from gensim.models import KeyedVectors
+
+    # Load the GloVe word

@@ -1,0 +1,18 @@
+```python
+    from google.cloud import bigquery
+
+    # Instantiate a BigQuery client
+    client = bigquery.Client()
+
+    # Construct a BigQuery dataset reference
+    dataset_ref = client.dataset("my_dataset")
+
+    # API request - fetch the table
+    table = client.get_table(dataset_ref.table("my_table"))
+
+    # Create an index on the table
+    index_name = "my_index"
+    index_description = "This is my index"
+    table_reference = dataset_ref.table(table.table_id)
+    client.create_index(table_reference, [index_name], index_description)
+    ```

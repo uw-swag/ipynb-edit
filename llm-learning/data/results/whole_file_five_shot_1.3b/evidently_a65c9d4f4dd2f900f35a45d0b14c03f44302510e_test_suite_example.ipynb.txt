@@ -1,0 +1,21 @@
+```python
+    import pytest
+    from evidently import ColumnMapping
+    from evidently.v2.test_suite import TestSuite
+    from evidently.v2.tests import TestAccuracyScore, TestPrecisionScore, TestF1Score, TestRecallScore, TestRocAuc, TestLogLoss
+
+    suite = TestSuite(tests=[
+        TestAccuracyScore(),
+        TestPrecisionScore(),
+        TestF1Score(),
+        TestRecallScore(),
+        TestRocAuc(),
+        TestLogLoss()
+    ])
+
+    suite.run(reference_data=None, current_data=test_data, column_mapping=ColumnMapping(target='target', prediction='preds'))
+    suite.save_html("example.html")
+    suite.save_json("example.json")
+
+    # Add your tests here
+    ```

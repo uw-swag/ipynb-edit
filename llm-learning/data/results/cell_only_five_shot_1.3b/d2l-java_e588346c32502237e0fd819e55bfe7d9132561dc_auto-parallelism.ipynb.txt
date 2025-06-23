@@ -1,0 +1,21 @@
+```
+    public NDArray run(NDArray X){
+    
+    for(int i=0; i < 10; i++){
+        X = X.dot(X);
+    }
+    return X;
+}
+
+NDManager manager = NDManager.newBaseManager();
+NDArray x_cpu = manager.randomUniform(0f, 1f, new Shape(2000, 2000), DataType.FLOAT32, Device.cpu());
+NDArray x_gpu = manager.randomUniform(0f, 1f, new Shape(6000, 6000), DataType.FLOAT32, Device.gpu());
+    ```
+
+    The code above is a simple function that multiplies a 2D NDArray by itself 10 times. The function is designed to run on both CPU and GPU. The `NDManager.newBaseManager()` is used to create a new manager. The `randomUniform()` function is used to generate a 2D array of random floats on the CPU and GPU.
+
+    The `Shape` object is used to specify the size of the array, and `DataType.FLOAT32` is used to specify the data type of the array. The `Device.cpu()` and `Device.gpu()` are used to specify the device on which the array will be created.
+
+    The function `run()` is then called with the `x_cpu` array as an argument, and the result is stored in `x_gpu`.
+
+    Please note that the code above is a simple example and may not be suitable for a production environment. It's also important to consider the performance of the code and the specific requirements of the task.

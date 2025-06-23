@@ -1,0 +1,15 @@
+```python
+    import tensorflow as tf
+
+    # Check if GPU is available
+    print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+
+    # Check if GPU is working
+    try:
+        from tensorflow.python.client import device_lib
+        print(device_lib.list_local_devices())
+        print("GPU is working")
+    except RuntimeError as e:
+        print(e)
+        print("No GPU available. Please run the code on a machine with a GPU.")
+    ```

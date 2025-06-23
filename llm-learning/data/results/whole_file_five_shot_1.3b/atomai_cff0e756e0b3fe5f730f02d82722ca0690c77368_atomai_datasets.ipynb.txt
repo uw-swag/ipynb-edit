@@ -1,0 +1,45 @@
+```
+    Commit Message: "Created using Colaboratory"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install -q git+https://github.com/pycroscopy/atomai --upgrade
+<\Cell_0>
+<Cell_1>
+import atomai as aoi
+import matplotlib.pyplot as plt
+<\Cell_1>
+<Cell_2>
+dataset1 = aoi.utils.datasets.stem_smbfo()
+<\Cell_2>
+<Cell_3>
+dataset1.keys()
+<\Cell_3>
+<Cell_4>
+dataset1['Sm_10_0'].keys()
+<\Cell_4>
+<Cell_5>
+for k, d in dataset1.items():
+    _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 5))
+    y, x = d["xy_COM"].T  # get center of the mass for each unit cell
+    ax1.imshow(d["main_image"], origin="lower", cmap='gray')
+    ax1.set_title("Sm " + k.split("_")[1] + "%")
+    ax2.scatter(x, y, c=d["Pxy"][:, 0], s=3, cmap='RdBu_r')
+    ax2.set_title("Px")
+    ax3.scatter(x, y, c=d["Pxy"][:, 1], s=3, cmap='RdBu_r')
+    ax3.set_title("Py")
+    plt.show()
+<\Cell_5>
+<Cell_6>
+dataset2 = aoi.utils.datasets.stem_graphene()
+<\Cell_6>
+<Cell_7>
+dataset2.keys()
+<\Cell_7>
+<Cell_8>
+n = 3  # number of STEM movie
+
+imgdata = dataset2[n]['image_data']
+print(imgdata.shape, '\n')
+metadata = dataset2

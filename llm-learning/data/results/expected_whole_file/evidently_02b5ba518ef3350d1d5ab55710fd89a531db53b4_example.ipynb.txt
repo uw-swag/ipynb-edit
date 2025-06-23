@@ -1,0 +1,26 @@
+<Cell_0>
+import uuid
+
+from evidently_service.dashboards import DashboardConfig, Dashboard
+from evidently_service.dashboards import DashboardValue
+from evidently_service.dashboards import ReportFilter
+from evidently_service.workspace import Workspace
+<\Cell_0>
+<Cell_1>
+workspace = Workspace("workspace")
+
+config = DashboardConfig(
+    id=uuid.uuid4(),
+    name="sample_dashboard",
+    filter=ReportFilter(metadata_values={"type": "DataDriftPreset"}),
+    value=DashboardValue(metric_id="DatasetDriftMetric", field_path="share_of_drifted_columns"),
+)
+<\Cell_1>
+<Cell_2>
+dashboard = Dashboard(config)
+for report in workspace.get_project(workspace.list_projects()[0].id).reports.values():
+    dashboard.add_report(report)
+<\Cell_2>
+<Cell_3>
+dashboard.show()
+<\Cell_3>

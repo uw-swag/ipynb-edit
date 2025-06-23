@@ -1,0 +1,36 @@
+```
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.feature_selection import SelectKBest, f_classif
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    # Load the dataset
+    data_path = 'data/ex2data2.txt'
+    data = pd.read_csv(data_path, header=None, names = ["x1","x2","y"])
+
+    # Feature selection
+    X = data.iloc[:, :-1]
+    y = data.iloc[:, -1]
+
+    # Apply SelectKBest class to extract top 10 best features
+    bestfeatures = SelectKBest(score_func=f_classif, k=10)
+    fit = bestfeatures.fit(X,y)
+
+    # Create a dataframe with the scores and the features
+    dfscores = pd.DataFrame(fit.scores_)
+    dfcolumns = pd.DataFrame(X.columns)
+
+    # Concatenate two dataframes for better visualization 
+    featureScores = pd.concat([dfcolumns,dfscores],axis=1)
+    featureScores.columns = ['Feature','Score']
+
+    # Print the best features
+    print(featureScores.nlargest(10,'Score'))
+    <\Cell_0>
+    ```
+    This code will print the 10 best features based on the F-classification score. The F-classification score is a measure of how well the features are related to the output variable. The score is calculated based on the correlation between the features and the output variable.

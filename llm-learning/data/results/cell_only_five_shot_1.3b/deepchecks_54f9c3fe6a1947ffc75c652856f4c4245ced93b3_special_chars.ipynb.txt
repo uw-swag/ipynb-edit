@@ -1,0 +1,48 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Creating a simple dataframe
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': np.random.randn(8),
+        'D': np.random.randn(8)
+    })
+
+    # Printing the dataframe
+    print(df)
+
+    # Grouping the dataframe by 'A' and 'B' and applying a function to 'C' and 'D'
+    grouped = df.groupby(['A', 'B']).agg({'C': 'mean', 'D': 'sum'})
+
+    # Printing the grouped dataframe
+    print(grouped)
+
+    # Creating a new dataframe with the grouped data
+    new_df = pd.DataFrame(grouped)
+
+    # Printing the new dataframe
+    print(new_df)
+
+    # Creating a new column in the new dataframe
+    new_df['E'] = new_df['C'] + new_df['D']
+
+    # Printing the new dataframe
+    print(new_df)
+
+    # Creating a new column in the new dataframe with a lambda function
+    new_df['F'] = new_df['E'].apply(lambda x: x**2 if x > 0 else 0)
+
+    # Printing the new dataframe
+    print(new_df)
+
+    # Creating a new column in the new dataframe with a lambda function and a condition
+    new_df['G'] = new_df['F'].apply(lambda x: 'Positive' if x > 0 else 'Negative')
+
+    # Printing the new dataframe
+    print(new_df)
+
+    # Creating a new column in the new dataframe with a lambda function and a condition
+    new_df['H'] = new_df['E'].apply(lambda x: '

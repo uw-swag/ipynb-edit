@@ -1,0 +1,15 @@
+```python
+    from sklearn.linear_model import SGDClassifier
+
+    # Define the model
+    model = SGDClassifier(loss='log', penalty='l2', alpha=1e-3, max_iter=1000, random_state=0)
+
+    # Fit the model
+    model.fit(X_train, y_train)
+
+    # Predict the labels of the test set
+    y_pred = model.predict(X_test)
+
+    # Print the model's accuracy
+    print("Model Accuracy: ", accuracy_score(y_test, y_pred))
+    ```

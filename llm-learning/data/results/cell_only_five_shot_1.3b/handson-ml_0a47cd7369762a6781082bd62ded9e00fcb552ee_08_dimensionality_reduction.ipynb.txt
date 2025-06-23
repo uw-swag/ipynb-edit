@@ -1,0 +1,32 @@
+```python
+    import urllib.request
+    import os
+    import tarfile
+    import random
+
+    url = "http://download.tensorflow.org/example_images/flower_photos.tgz"
+    filename = "flower_photos.tgz"
+
+    if not os.path.exists(filename):
+        urllib.request.urlretrieve(url, filename)
+
+    tar = tarfile.open(filename, "r:gz")
+    tar.extractall()
+    tar.close()
+
+    data_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'flower_photos')
+    if not os.path.exists(data_dir):
+        os.makedirs(data_dir)
+
+    for class_dir in os.listdir(data_dir):
+        if not os.path.exists(os.path.join(data_dir, class_dir, 'images')):
+            os.makedirs(os.path.join(data_dir, class_dir, 'images'))
+
+        for image in os.listdir(os.path.join(data_dir, class_dir)):
+            if image.endswith('.jpg') or image.endswith('.png'):
+                src = os.path.join(data_dir, class_dir, image)
+                dst = os.path.join(data_dir, class_dir, 'images', image)
+                os.rename(src, dst)
+
+    print("Downloaded and extracted ladybug image to avoid exception in Colab!")
+    ```

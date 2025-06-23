@@ -1,0 +1,28 @@
+```
+    from mlchecks.checks.integrity.data_duplicates import data_duplicates
+    from mlchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    # Create a DataFrame
+    ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],"col2":[1,2,1,2,1,2,1,2,1,2],"col3":[2,3,4,4,4,3,4,5,6,4]})
+
+    # Create a CheckSuite
+    check_suite = CheckSuite(
+        checks=[
+            data_duplicates(ds),
+            data_duplicates(ds, n_to_show=2),
+            data_duplicates(ds, columns=["col1"]),
+            data_duplicates(ds, ignore_columns=["col3"]),
+        ],
+        name="Data Duplicates Check Suite",
+        timestamp=datetime.now(),
+    )
+
+    # Run the checks
+    check_suite.run()
+
+    # Print the results
+    print(check_suite.get_results_summary())
+    ```
+    This script will run the data_duplicates check on the DataFrame ds and print the results.

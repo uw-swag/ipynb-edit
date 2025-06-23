@@ -1,0 +1,50 @@
+
+Here are the changes I made:
+
+1. Removed the examples with dashboards and profiles from the sample_notebooks.
+2. Updated the README to include an example with test generators usage to how_to_questions.
+3. Added an example with test generators usage to how_to_questions.
+
+The updated code is as follows:
+
+```python
+import pandas as pd
+import requests
+import zipfile
+import io
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import DataQualityTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataQualityProfileSection
+
+content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday']) #, index_col='dteday')
+
+ref_data = raw_data[:120]
+prod_data = raw_data[120:150]
+
+target = 'cnt'
+prediction = 'prediction'
+datetime = 'dteday'
+
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', 'weathersit']
+
+features = numerical_features + categorical_features
+model = RandomForestRegressor(random_state = 0)
+model.fit(ref_data[features], ref_data[target])
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+
+column_mapping = ColumnMapping(target,
+                               'prediction',
+                               datetime=datetime,
+                               task='regression',
+                               numerical_features=numerical_features,
+                               categ

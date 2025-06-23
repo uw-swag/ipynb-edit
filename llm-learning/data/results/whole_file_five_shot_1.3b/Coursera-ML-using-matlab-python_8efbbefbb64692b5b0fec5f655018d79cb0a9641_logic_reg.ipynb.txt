@@ -1,0 +1,56 @@
+
+    '''
+    Commit Message: "Add files via upload"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    #load data from file
+    def load_data(filename):
+        data = []
+        file = open(filename)
+        for line in file.readlines():
+            lineArr = line.strip().split(',')
+            col_num = len(lineArr)
+            temp = []
+            for i in xrange(col_num):
+                temp.append(float(lineArr[i]))
+            data.append(temp)
+        return np.array(data)
+
+    
+    data = load_data('ex2data2.txt')
+    print data.shape
+    print data[:5]
+
+    X = data[:,:-1]
+    y = data[:,-1:]
+    print X.shape
+    print y.shape
+    print X[:5]
+    print y[:5]
+
+
+    <\Cell_0>
+    <Cell_1>
+    import matplotlib.pyplot as plt
+    label0 = np.where(y == 0)
+    plt.scatter(X[label0,0],X[label0,1],marker='x',color = 'r',label = '0')
+    label1 = np.where(y == 1)
+    plt.scatter(X[label1,0],X[label1,1],marker='o',color = 'b',label = '1')
+    plt.xlabel('Exam 1 score')
+    plt.ylabel('Exam 2 score')
+    plt.legend(loc = 'upper left')
+    plt.show()
+
+    <\Cell_1>
+    <Cell_2>
+    #add polynomial features to our data matrix (similar to polynomial regression).
+    def mapFeature(X1,X2):
+        degree = 6
+        out = np.ones((X1.shape[0],1))
+        end = 0
+        for i in np.arange(1,degree+1,1):
+            for j in np.

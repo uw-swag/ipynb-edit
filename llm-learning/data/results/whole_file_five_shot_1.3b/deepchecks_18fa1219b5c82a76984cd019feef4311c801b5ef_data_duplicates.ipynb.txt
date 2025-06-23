@@ -1,0 +1,17 @@
+```python
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    # Create a DataFrame
+    df = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2], "col2":[1,2,1,2,1,2,1,2,1,2],"col3":[2,3,4,4,4,3,4,5,6,4]})
+
+    # Create a Suite
+    suite = Suite(DataDuplicates())
+
+    # Run the Suite
+    suite.run(df)
+    ```
+
+    The above code will run the DataDuplicates check on the DataFrame `df`. The `DataDuplicates` check will identify and report any duplicate rows in the DataFrame.

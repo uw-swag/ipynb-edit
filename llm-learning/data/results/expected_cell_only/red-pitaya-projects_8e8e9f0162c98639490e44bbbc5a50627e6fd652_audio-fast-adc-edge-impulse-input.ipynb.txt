@@ -1,0 +1,12 @@
+audio_data_returned = record_audio()
+
+# Add the files you want to upload to Edge Impulse
+files = ['float_wave_test_raw.wav']
+file = files[0] #save the first one
+save_audio(audio_data_returned, file, sr = 3000)
+
+upload_audio2edge_impulse(files, label = 'edge-impulse')
+plot_audio(audio_data_returned)
+audio_data_returned = record_audio()
+save_audio(audio_data_returned, file, sr = 3000)
+upload_audio2edge_impulse(files, label = 'background-noise')

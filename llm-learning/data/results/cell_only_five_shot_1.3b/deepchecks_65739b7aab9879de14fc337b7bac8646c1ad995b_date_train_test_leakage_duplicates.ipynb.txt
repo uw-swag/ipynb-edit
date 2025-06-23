@@ -1,0 +1,40 @@
+```yaml
+    name: Links Checks
+
+    on:
+      push:
+        branches:
+          - master
+
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Run links-checks
+          run: |
+            python -m links_checks
+
+        - name: Upload coverage to Codecov
+          uses: codecov/codecov-action@v1
+          with:
+            token: ${{ secrets.CODECOV_TOKEN }}
+            name: links-checks
+            flags: unittests
+            files: links_checks/
+    ```
+
+    This is a GitHub action that runs the `links-checks` script on every push to the `master` branch. The action uses the `actions/checkout@v2` action to checkout the code, the `actions/setup-python@v2` action to set up Python, and the `pip` command to install the `links-checks` script and its dependencies. The `codecov/codecov-action@v1` action is used to upload the coverage report to Codecov.

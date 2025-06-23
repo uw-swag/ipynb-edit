@@ -1,0 +1,34 @@
+```python
+    #@title Authorization Form
+    ACCOUNT_ID = "ACCOUNT_ID" #@param {type:"string"}
+    AUTH_TOKEN = "AUTH_TOKEN" #@param {type:"string"}
+    MATERIALS_PROJECT_API_KEY = "MATERIALS_PROJECT_API_KEY" #@param {type:"string"}
+    ORGANIZATION_ID  = "ORGANIZATION_ID" #@param {type:"string"}
+
+    import os
+    if "COLAB_JUPYTER_IP" in os.environ:
+        os.environ.update(
+            dict(
+                ACCOUNT_ID=ACCOUNT_ID,
+                AUTH_TOKEN=AUTH_TOKEN,
+                MATERIALS_PROJECT_API_KEY=MATERIALS_PROJECT_API_KEY,
+                ORGANIZATION_ID=ORGANIZATION_ID,
+            )
+        )
+
+        !GIT_BRANCH="bugfix/SOF-5578-WIP"; export GIT_BRANCH; export NEED_GIT_LFS=true; curl -s "https://raw.githubusercontent.com/Exabyte-io/api-examples/${GIT_BRANCH}/scripts/env.sh" | bash
+        from utils.initialize_settings import get_notebook_info
+        os.chdir(os.path.join("api-examples", os.path.dirname(get_notebook_info()["notebook_path"])))
+    from utils.settings import ENDPOINT_ARGS
+    from utils.generic import display_JSON
+
+    from exabyte_api_client.endpoints.materials import MaterialEndpoints
+
+    #@title Example of API call
+    #@markdown This is an example of how to call an API endpoint.
+    #@param {type:"string"} endpoint_name The name of the endpoint to call.
+    endpoint_name = "get_all_materials" #@param {type:"string"}
+
+    #@markdown Call the API endpoint.
+    try:
+        result = MaterialEndpoints

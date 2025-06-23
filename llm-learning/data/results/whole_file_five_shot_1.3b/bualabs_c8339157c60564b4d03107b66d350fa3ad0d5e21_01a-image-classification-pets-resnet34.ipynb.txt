@@ -1,0 +1,8 @@
+```python
+    from fastai.metrics import accuracy
+
+    learner.metrics = accuracy
+    learner.fit_one_cycle(4)
+    learner.metrics = error_rate
+    learner.fit_one_cycle(3, max_lr=slice(1e-6, 5e-5))
+    ```

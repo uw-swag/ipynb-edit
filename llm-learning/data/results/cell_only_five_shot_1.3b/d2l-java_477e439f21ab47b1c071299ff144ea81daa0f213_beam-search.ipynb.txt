@@ -1,0 +1,46 @@
+```python
+    import djl
+    import djl.nn as nn
+    import djl.training as training
+    from djl.nn import Hyperparameter
+
+    # Upgrade to djl 0.13.0
+    # This is a breaking change from 0.12.0, so you need to upgrade your code accordingly.
+    # For more details, please refer to the release notes: https://docs.djl.ai/0.13/upgrade_0.13.0/
+
+    # Create a new session
+    session = djl.Session()
+
+    # Define a simple model
+    model = nn.Sequential([
+        nn.Convolution2D(3, 6, kernel_size=5, stride=1, padding=2),
+        nn.ReLU(),
+        nn.MaxPool2D(2, 2),
+        nn.Convolution2D(6, 16, kernel_size=5, stride=1, padding=2),
+        nn.ReLU(),
+        nn.MaxPool2D(2, 2),
+        nn.Flatten(),
+        nn.Linear(16 * 5 * 5, 120),
+        nn.ReLU(),
+        nn.Linear(120, 84),
+        nn.ReLU(),
+        nn.Linear(84, 10)
+    ])
+
+    # Define the hyperparameters
+    hyperparameters = {
+        'lr': Hyperparameter(0.01),
+        'momentum': Hyperparameter(0.9),
+        'weight_decay': Hyperparameter(0.0005)
+    }
+
+    # Define the training process
+    trainer = training.Trainer(session, model, hyperparameters)
+
+    # Train the model
+    for epoch in range(10):
+        for batch in trainer.iterate(train_dataset, epochs=1):
+            loss = trainer.train()
+            print(f'Epoch: {epoch}, Loss: {loss}')
+
+    # Evalu

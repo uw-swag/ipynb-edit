@@ -1,0 +1,51 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added functions for the example"
+    Original Code Cells:
+    '''
+    from redpitaya.overlay.mercury import mercury as overlay
+    import IPython.display as ipd
+    import matplotlib.pyplot as plt
+
+    #Audio processing requirements
+    import numpy as np
+    from scipy.io.wavfile import write
+
+    in2.rate = 3000 #125
+    in2.start()
+    in2.trigger()
+    in2.upload()
+    print('Uploaded file(s) to Edge Impulse\n', res.status_code, res.content)
+<\Cell_8>
+<Cell_9>
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+
+# show the part of the buffer requested by pre/post trigger timing - in this example the whole buffer.
+
+plt.plot(data)
+plt.show()
+<\Cell_9>
+<Cell_10>
+# Install requests via: `pip3 install requests`
+import requests
+import os
+from app_key import * #Import personal keys for the Edge Impulse project
+
+# Add the files you want to upload to Edge Impulse using the API, and print the response.
+res = requests.post(url='https://ingestion.edgeimpulse.com/api/training/files',
+                    headers={
+                        'x-label': label,
+                        'x-api-key': api_key,
+                    },
+                    files=(('data', (os.path.basename(i), open(i, 'rb'), 'audio/wav')) for i in files)
+                    )
+
+if (res.status_code == 200):
+    print('Uploaded file(s) to Edge Impulse\n', res.status_code, res.content)
+else:
+    print('Failed to upload file(s) to Edge Impulse\n',
+          res.status_code, res.content)
+<\Cell_10>
+<Cell_11>

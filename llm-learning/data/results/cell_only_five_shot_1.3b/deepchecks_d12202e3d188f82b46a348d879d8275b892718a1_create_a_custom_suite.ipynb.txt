@@ -1,0 +1,26 @@
+```
+    from deepchecks import Dataset
+
+    # Ensure that the dataframe is not null
+    assert df_train is not None, "df_train is null"
+    assert df_test is not None, "df_test is null"
+
+    # Create a dataset for training
+    ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use_default_index=False)
+
+    # Create a dataset for testing
+    ds_test = Dataset(df_test, label_name=label_col, cat_features=[])
+
+    # Ensure that the datasets are not null
+    assert ds_train is not None, "ds_train is null"
+    assert ds_test is not None, "ds_test is null"
+
+    # Ensure that the datasets are of the same type
+    assert type(ds_train) == type(ds_test), "ds_train and ds_test are not of the same type"
+
+    # Ensure that the datasets have the same structure
+    assert ds_train.info() == ds_test.info(), "ds_train and ds_test have different structure"
+
+    # Ensure that the datasets have the same data
+    assert ds_train.data.equals(ds_test.data), "ds_train and ds_test have different data"
+    ```

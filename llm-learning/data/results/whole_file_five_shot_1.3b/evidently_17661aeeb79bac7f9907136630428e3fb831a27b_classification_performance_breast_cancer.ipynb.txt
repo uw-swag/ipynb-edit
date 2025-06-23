@@ -1,0 +1,46 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName('movie_recommendation').getOrCreate()
+
+    # Load data
+    data = spark.read.csv('path_to_your_data', inferSchema=True, header=True)
+
+    # Preprocess data
+    # This step depends on the specifics of your data and what you want to achieve
+    # For example, you might want to fill missing values, normalize numerical features, etc.
+
+    # Save preprocessed data
+    data.write.csv('path_to_save_preprocessed_data')
+
+    # Create user-item interaction matrix
+    user_item_matrix = data.groupBy('user_id', 'item_id').pivot('rating').sum('rating').na.fill(0)
+
+    # Save user-item interaction matrix
+    user_item_matrix.write.csv('path_to_save_user_item_matrix')
+
+    # Create item-features matrix
+    item_features_matrix = data.groupBy('item_id').agg(
+        F.collect_list('feature').alias('features')
+    ).withColumn('features', F.explode(F.col('features')))
+
+    # Save item-features matrix
+    item_features_matrix.write.csv('path_to_save_item_features_matrix')
+
+    # Create user-features matrix
+    user_features_matrix = data.groupBy('user_id').agg(
+        F.collect_list('feature').alias('features')
+    ).withColumn('features', F.explode(F.col('features')))
+
+    # Save user-features matrix
+    user_features_matrix.write.csv('path_to_save_user_features_matrix')
+
+    # Create user-item interaction matrix with implicit feedback
+    user_item_matrix_implicit = data.groupBy('user_id', 'item_id').sum('rating').na.fill(0)
+
+   

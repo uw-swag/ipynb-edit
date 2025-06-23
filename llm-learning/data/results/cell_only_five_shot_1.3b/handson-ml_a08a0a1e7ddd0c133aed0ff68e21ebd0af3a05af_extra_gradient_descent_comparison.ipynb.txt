@@ -1,0 +1,21 @@
+```
+    # Move Gradient Descent comparison notebook to 'extra_' and remove .py version
+    ## Importing necessary libraries
+    import os
+    import shutil
+
+    ## Finding the current working directory
+    cwd = os.getcwd()
+
+    ## Finding the notebook file
+    notebook_file = [f for f in os.listdir(cwd) if f.endswith('.ipynb')][0]
+
+    ## Moving the notebook file to the 'extra_' directory
+    shutil.move(os.path.join(cwd, notebook_file), os.path.join(cwd, 'extra_' + notebook_file))
+
+    ## Removing the .py version of the notebook
+    os.remove(os.path.join(cwd, notebook_file.replace('.ipynb', '.py')))
+    ```
+    '''
+    '''
+

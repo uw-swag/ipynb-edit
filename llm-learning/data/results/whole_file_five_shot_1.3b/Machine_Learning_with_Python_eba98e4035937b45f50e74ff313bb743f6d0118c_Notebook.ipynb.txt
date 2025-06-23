@@ -1,0 +1,56 @@
+```
+    '''
+    Commit Message: "Simple Linear Regression"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# primary data structure libraries
+import numpy as np
+import pandas as pd       
+
+# primary machine learning library
+from sklearn import linear_model
+from sklearn.metrics import r2_score
+
+# primary plotting library
+import matplotlib as mpl
+import matplotlib.pyplot as plt        
+
+# optional: for ggplot-like style of plots
+mpl.style.use(['ggplot'])        
+
+# using the inline backend
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv("FuelConsumption.csv")
+
+# take a look at the dataset
+df.head()
+<\Cell_1>
+<Cell_2>
+# summarize the data
+df.describe()
+<\Cell_2>
+<Cell_3>
+cdf = df[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB','CO2EMISSIONS']]
+cdf.head(9)
+<\Cell_3>
+<Cell_4>
+viz = cdf[['CYLINDERS','ENGINESIZE','CO2EMISSIONS','FUELCONSUMPTION_COMB']]
+viz.hist(figsize=(6,6))
+plt.show()
+<\Cell_4>
+<Cell_5>
+plt.scatter(cdf.FUELCONSUMPTION_COMB, cdf.CO2EMISSIONS,  color='blue')
+plt.xlabel("FUELCONSUMPTION_COMB")
+plt.ylabel("Emission")
+plt.show()
+<\Cell_5>
+<Cell_6>
+plt.scatter(cdf.ENGINESIZE, cdf.CO2EMISSIONS,  color='blue')
+plt.xlabel("Engine size")
+plt.ylabel("Emission")
+plt.show()
+<\Cell_6>
+<

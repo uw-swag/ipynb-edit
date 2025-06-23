@@ -1,0 +1,56 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from skimage import data
+    from skimage.transform import resize
+
+    # Load the logo
+    logo = data.logo()
+
+    # Resize the logo
+    logo_resized = resize(logo, (100, 100))
+
+    # Display the logo
+    plt.imshow(logo_resized)
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "index logo update"
+    Original Code Cells:
+    '''
+    plt.imshow(logo_resized)
+    plt.show()
+    '''
+    ]
+
+    ### Response:
+    The code you provided is used to display the resized logo using matplotlib. The `plt.imshow()` function is used to display an image, and `plt.show()` is used to display the plot.
+
+    If you want to update the index of the logo, you can modify the code to do so. For example, you can add a counter to the filename of the logo. Here's an example:
+
+    ```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from skimage import data
+    from skimage.transform import resize
+
+    # Load the logo
+    logo = data.logo()
+
+    # Resize the logo
+    logo_resized = resize(logo, (100, 100))
+
+    # Display the logo
+    plt.imshow(logo_resized)
+    plt.show()
+
+    # Update the filename
+    filename = "logo_{}.png".format(i)
+
+    # Save the logo
+    plt.imsave(filename, logo_resized)
+    ```
+
+    In this code, `i` is the index of the logo. The filename is updated to include this index, and the logo is saved with this filename.

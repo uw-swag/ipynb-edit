@@ -1,0 +1,27 @@
+```python
+    from pyspark.sql import SparkSession
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Text Processing").getOrCreate()
+
+    # Read the text file
+    df = spark.read.text("path_to_your_file.txt")
+
+    # Show the dataframe
+    df.show()
+
+    # Count the number of words
+    df.selectExpr("explode(split(value, ' ')) as word").count()
+
+    # Count the number of unique words
+    df.select("word").distinct().count()
+
+    # Count the number of occurrences of a specific word
+    df.select("word").where("word = 'your_word'").count()
+
+    # Write the dataframe to a new file
+    df.write.text("path_to_new_file.txt")
+
+    # Stop the SparkSession
+    spark.stop()
+    ```

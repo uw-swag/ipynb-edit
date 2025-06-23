@@ -1,0 +1,31 @@
+```python
+    import os
+    import shutil
+
+    # Define the path to the home directory
+    home_dir = os.path.expanduser("~")
+
+    # Define the path to the .kaggle folder
+    kaggle_dir = os.path.join(home_dir, ".kaggle")
+
+    # Check if the .kaggle folder exists
+    if not os.path.exists(kaggle_dir):
+        # If the .kaggle folder does not exist, create it
+        os.makedirs(kaggle_dir)
+
+    # Check if the kaggle.json file exists in the .kaggle folder
+    kaggle_json_path = os.path.join(kaggle_dir, "kaggle.json")
+    if not os.path.exists(kaggle_json_path):
+        # If the kaggle.json file does not exist, create it
+        with open(kaggle_json_path, "w") as f:
+            f.write("")
+
+    # Check if the kaggle-api-terms.txt file exists in the .kaggle folder
+    kaggle_api_terms_path = os.path.join(kaggle_dir, "kaggle-api-terms.txt")
+    if not os.path.exists(kaggle_api_terms_path):
+        # If the kaggle-api-terms.txt file does not exist, create it
+        with open(kaggle_api_terms_path, "w") as f:
+            f.write("")
+    ```
+
+    This script will create a .kaggle folder in the home directory if it does not already exist. It will also create a kaggle.json, kaggle-api-terms.txt, and a kaggle-api-terms.txt file in the .kaggle folder.

@@ -1,0 +1,16 @@
+```python
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs.colors import ColourSchema
+    from evidently.dashboard.tabs.data_drift import DataDrift
+
+    # Define a dashboard with two tabs: ColourSchema and DataDrift
+    dashboard = Dashboard(tabs=[ColourSchema(), DataDrift()])
+
+    # You can then use the dashboard to generate a report
+    report = dashboard.calculate(data_drift_report)
+    report.save("data_drift_report.html")
+
+    # You can also use the dashboard to generate a visualization
+    visualization = dashboard.generate()
+    visualization.save("data_drift_visualization.html")
+    ```

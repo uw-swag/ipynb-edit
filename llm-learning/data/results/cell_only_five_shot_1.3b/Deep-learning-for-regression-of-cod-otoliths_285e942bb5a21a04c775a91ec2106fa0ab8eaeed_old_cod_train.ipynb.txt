@@ -1,0 +1,50 @@
+```python
+    from keras.preprocessing.image import ImageDataGenerator
+    from sklearn.model_selection import KFold
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import cv2
+
+    # Load your data
+    X, y = load_your_data()
+
+    # Define the image generator
+    datagen = ImageDataGenerator(
+        rotation_range=15,
+        width_shift_range=0.1,
+        height_shift_range=0.1,
+        horizontal_flip=True,
+        zoom_range=0.2,
+    )
+
+    # Define the KFold object
+    kf = KFold(n_splits=5)
+
+    # Define the list to store the test predictions
+    test_predictions = []
+
+    # Perform 5-fold cross-validation
+    for train_index, test_index in kf.split(X):
+        X_train, X_test = X[train_index], X[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+
+        # Train the model
+        model.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test))
+
+        # Make predictions on the test set
+        predictions = model.predict(X_test)
+
+        # Append the test predictions to the list
+        test_predictions.append(predictions)
+
+    # Calculate the average test predictions
+    avg_test_predictions = np.mean(test_predictions, axis=0)
+
+    # Print the images augmented by the model
+    for i in range(10):  # assuming there are 10 images
+        plt.imshow(cv2.cvtColor(X[i], cv2.COLOR_BGR2RGB))
+        plt.show()
+        plt.imshow(cv2.cvtColor(avg_test_predictions[i], cv2.COLOR_BGR2RGB))
+        plt.show()
+
+    # Reading images separated into 1 of 3 exposure

@@ -1,0 +1,63 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Importing datasets
+    df_train = pd.read_csv('../input/train.csv')
+    df_test = pd.read_csv('../input/test.csv')
+
+    # Checking the datasets
+    print(df_train.head())
+    print(df_test.head())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Update 02. Data Preprocessing.ipynb"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Data preprocessing
+    # Dropping irrelevant columns
+    df_train = df_train.drop(['column_to_drop'], axis=1)
+
+    # Filling missing values
+    df_train = df_train.fillna(df_train.mean())
+
+    # Encoding categorical variables
+    df_train = pd.get_dummies(df_train)
+
+    # Splitting the dataset
+    from sklearn.model_selection import train_test_split
+    X_train, X_val, y_train, y_val = train_test_split(df_train.drop('target_column', axis=1), df_train['target_column'], test_size=0.2, random_state=42)
+
+    # Checking the preprocessed dataset
+    print(X_train.head())
+    print(X_val.head())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Update 03. Model Training.ipynb"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Model training
+    from sklearn.ensemble import RandomForestRegressor
+
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+
+    # Model evaluation
+    from sklearn.metrics import mean_squared_

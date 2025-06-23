@@ -1,0 +1,14 @@
+
+    The function `LDA` and `LDA_Kfold` are defined, but the function `CompleteLDA` is not. This function is supposed to call both `LDA` and `LDA_Kfold`, but it seems like there is a missing parameter.
+
+    The missing parameter is `results`. The function `CompleteLDA` is supposed to take a parameter `results`, but it is not being used anywhere in the function.
+
+    Here is the corrected version of `CompleteLDA`:
+
+    ```python
+    def CompleteLDA(train_dat, test_dat, train_ind, test_ind, results, features, kf, perfInd):
+        LDA(train_dat, train_ind, test_dat, test_ind, results)
+        LDA_Kfold(features, kf, perfInd, results)
+    ```
+
+    This function now correctly calls `LDA` and `LDA_Kfold`, and passes the `results` parameter to these functions.

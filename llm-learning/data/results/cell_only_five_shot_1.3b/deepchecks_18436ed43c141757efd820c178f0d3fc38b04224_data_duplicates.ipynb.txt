@@ -1,0 +1,51 @@
+```python
+    # Set up code checking
+    from learntools.machine_learning.exercise_5 import *
+
+    # Code you have previously used to load data
+    import pandas as pd
+    from sklearn.tree import DecisionTreeRegressor
+
+    # Path of the file to read
+    iowa_file_path = './train.csv'
+
+    home_data = pd.read_csv(iowa_file_path)
+    y = home_data.SalePrice
+    predictor_columns = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+    X = home_data[predictor_columns]
+
+    # Specify Model
+    iowa_model = DecisionTreeRegressor()
+    # Fit Model
+    iowa_model.fit(X, y)
+
+    X.head()
+    print("First in-sample predictions:", iowa_model.predict(X.head()))
+    print("Actual target values for those homes:", y.head().tolist())
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Moving examples into docs (#495)"
+    Original Code Cells:
+    '''
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Set up code checking
+    from learntools.machine_learning.exercise_5 import *
+
+    # Code you have previously used to load data
+    import pandas as pd
+    from sklearn.tree import DecisionTreeRegressor
+
+    # Path of the file to read
+    iowa_file_path = './train.csv'
+
+    home_data = pd.read_csv(iowa_file_path)
+    y = home_data.SalePrice
+    predictor_columns = ['LotArea', 'YearBuilt', '1stFlrSF', '2ndFlrSF', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd']
+    X = home_data[predictor_columns]
+
+    # Specify Model

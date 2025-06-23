@@ -1,0 +1,28 @@
+```python
+    import gc
+    import os
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.svm import SVC
+    from sklearn.metrics import accuracy_score
+
+    # Load data
+    data_path = os.path.join(os.getcwd(), 'data')
+    fr_vecs = pd.read_csv(os.path.join(data_path, 'giga-fren-fr.vecs'))
+    en_vecs = pd.read_csv(os.path.join(data_path, 'giga-fren-en.vecs'))
+
+    # Clean up
+    del fr_vecs
+    del en_vecs
+    gc.collect()
+
+    # Run the model
+    X = pd.concat([fr_vecs, en_vecs], axis=1)
+    y = pd.Series(range(X.shape[0]))
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+    model = SVC(kernel='linear')
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    print("Accuracy: {:.2f}%".format(acc * 100))
+    ```

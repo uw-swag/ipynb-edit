@@ -1,0 +1,34 @@
+```
+    from kfp.v2 import compiler
+    from kfp.v2.dsl import Pipeline
+
+    pipeline = Pipeline(name='my-pipeline')
+
+    evaluate_model_op = evaluate_model(
+        dataset_id='my-dataset',
+        model_name='my-model',
+        project_id='my-project'
+    )
+
+    forecast_op = forecast(
+        bq_forecast_table='my-bq-table',
+        confidence_lvl='0.95',
+        dataset_id='my-dataset',
+        forecast_horizon='30',
+        project_id='my-project'
+    )
+
+    pipeline.apply(evaluate_model_op)
+    pipeline.apply(forecast_op)
+
+    compiler.compile(pipeline)
+    ```
+
+    This is a simple example of a Kubeflow Pipelines pipeline. The pipeline consists of two steps:
+
+    1. The `evaluate_model` step, which evaluates a model.
+    2. The `forecast` step, which forecasts a model.
+
+    The pipeline is then compiled and run using the Kubeflow Pipelines SDK.
+
+    Please replace the placeholders with your actual values.

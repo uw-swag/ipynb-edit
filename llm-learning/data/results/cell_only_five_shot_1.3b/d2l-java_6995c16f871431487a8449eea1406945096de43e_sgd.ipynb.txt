@@ -1,0 +1,44 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import SGDClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Initialize SGD classifier
+    sgd_clf = SGDClassifier(max_iter=1000, tol=1e-3, random_state=42)
+
+    # Train the classifier
+    sgd_clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = sgd_clf.predict(X_test)
+
+    # Compute accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    # Print the accuracy
+    print(f"Accuracy: {accuracy}")
+
+    # Plot the decision boundary
+    h = .02  # step size in the mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z =

@@ -1,0 +1,52 @@
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Improved model architecture"
+    Original Code Cells:
+    '''
+    %load solutions/adult_classification.py
+    import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+from torch.utils.data import DataLoader
+from sklearn.metrics import auc,average_precision_score, roc_curve,roc_auc_score,precision_recall_curve, f1_score
+from torch.utils.data import Subset
+from torchvision import  transforms
+import pickle as pkl
+from os.path import join as oj
+from tqdm import tqdm_notebook
+import matplotlib.pyplot as plt
+import torch.optim as optim
+from torch.optim import lr_scheduler
+import os
+import argparse
+from torch import nn
+from numpy.random import randint
+import torchvision.models as models
+import time
+import copy
+from tqdm import tqdm
+sys.path.append('../code/')
+import cd
+import sys
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+from copy import deepcopy
+import pandas as pd
+import seaborn as sns
+sns.set()
+import torch.nn.functional as F
+from os.path import join as oj
+pd.set_option('precision', 2)
+%matplotlib inline
+save_path = "../results_for_export"
+trained_model_folder = '../models/ISIC/feature_models/'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'pkl'  in fname]) 
+# other models were trained badly
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_

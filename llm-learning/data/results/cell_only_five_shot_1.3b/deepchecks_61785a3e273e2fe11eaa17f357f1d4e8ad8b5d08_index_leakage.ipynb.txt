@@ -1,0 +1,24 @@
+```
+    from mlchecks.base import Dataset
+    from mlchecks.checks import IndexTrainValidationLeakage, index_train_validation_leakage
+    import pandas as pd
+    %load_ext autoreload
+    %autoreload 2
+
+    class MyCustomCheck(Dataset):
+        def __init__(self, name, **kwargs):
+            super().__init__(name, **kwargs)
+
+        def check(self, data):
+            # Your custom check logic here
+            # For example, check if the 'Age' column in the dataframe is not null
+            if data['Age'].isnull().any():
+                return IndexTrainValidationLeakage(
+                    index=self.index,
+                    message="Age column is null",
+                )
+            return IndexTrainValidationLeakage(index=self.index)
+
+    # Register your custom check
+    index_train_validation_leakage.register(MyCustomCheck())
+    ```

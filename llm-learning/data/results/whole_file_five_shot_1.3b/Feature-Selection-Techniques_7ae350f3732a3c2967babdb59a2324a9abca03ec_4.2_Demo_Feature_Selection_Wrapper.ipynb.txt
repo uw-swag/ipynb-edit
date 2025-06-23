@@ -1,0 +1,37 @@
+
+    '''
+    '''
+<\Cell_10>
+<Cell_11>
+# Plot the number of games in each RelativeEloDiff bin.
+sns.set(font_scale=1.25)
+fig, ax = plt.subplots(figsize=(10, 6))
+# Plot the number of games in each RelativeEloDiff bin.
+indexes = reduced_merged_relative_elo_diff_win_rates.index.astype(str)
+values = reduced_merged_relative_elo_diff_win_rates.values
+ax.bar(indexes, values)
+ax.set_title("Mean White Win Rate for Each RelativeEloDiff Bin")
+ax.set_xlabel(f"Relative Rating Difference (% From Median of Players)")
+ax.set_ylabel("Mean White Win Rate (%)")
+plt.show()
+
+<\Cell_11>
+<Cell_12>
+# Count the number of games where White won in each RelativeEloDiff bin.
+merged_relative_elo_diff_win_rates = (
+    df[df["Result"] == "1-0"]["RelativeEloDiff"].value_counts().compute()
+)
+print("Number of Games Where White Won in Each RelativeEloDiff Bin:")
+display(merged_relative_elo_diff_win_rates)
+
+<\Cell_12>
+<Cell_13>
+# Plot the number of games in each RelativeEloDiff bin.
+sns.set(font_scale=1.25)
+fig, ax = plt.subplots(figsize=(10, 6))
+# Plot the number of games in each RelativeEloDiff bin.
+indexes = reduced_merged_relative_elo_diff_counts.index.astype(str)
+values = reduced_relative_elo_diff_counts.values
+ax.bar(indexes, values)
+ax.set_title("Distribution of Relative Rating Difference on Lichess in 2022")
+ax.set_xlabel(f"Relative Rating

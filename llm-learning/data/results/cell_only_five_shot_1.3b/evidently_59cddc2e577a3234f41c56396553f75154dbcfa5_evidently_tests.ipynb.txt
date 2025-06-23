@@ -1,0 +1,23 @@
+
+The original code is fetching the adult dataset from the openml repository. The adult dataset contains information about the people in the adult population, including their age, work class, education, occupation, etc.
+
+The code is then filtering the dataset to only include people who have a 'Some-college' or 'HS-grad' or 'Bachelors' education. The filtered dataset is then assigned to the variable 'adult_cur'.
+
+The code then selects the first 2000 rows of the 'adult_cur' dataset and sets the first 3 columns to NaN.
+
+The original code was trying to fetch the adult dataset and then filter it based on the education column. The 'parser' parameter was set to 'auto', which means that the dataset will be fetched and parsed automatically. However, the 'fetch_openml' function does not support the 'parser' parameter.
+
+The corrected code is as follows:
+
+```python
+#Dataset for Data Quality and Integrity
+adult_data = datasets.fetch_openml(name='adult', version=2, as_frame='auto')
+adult = adult_data.frame
+
+adult_ref = adult[~adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+adult_cur = adult[adult.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+adult_cur.iloc[:2000, 3:5] = np.nan
+```
+
+In this corrected code, the 'fetch_openml' function is used to fetch the adult dataset. The 'as_frame' parameter is set to 'auto' to convert the dataset to a pandas DataFrame. The 'parser' parameter is not used in this case, as it is not supported by the 'fetch_openml' function. The 'adult' DataFrame is then filtered based on the 'education' column to include only those who have a 'Some-college' or 'HS-grad' or 'Bachelors' education. The first 2000 rows of the 'adult_cur' DataFrame are then set to NaN.

@@ -1,0 +1,39 @@
+```
+    # This code is executed using Colaboratory, a free cloud-based Python notebook.
+    # Please run this code in a local Jupyter notebook.
+    
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load your data
+    # Uncomment the line below and replace 'your_data.csv' with your own data file
+    data = pd.read_csv('your_data.csv')
+
+    # Preprocess your data
+    # Uncomment the line below and replace 'your_preprocessing_steps' with your own preprocessing steps
+    data = your_preprocessing_steps(data)
+
+    # Split your data into features and target
+    X = data.drop('target', axis=1)
+    y = data['target']
+
+    # Split your data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train your model
+    clf = DecisionTreeClassifier(criterion = 'entropy', min_samples_split = 10, max_depth = 3)
+    clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test)
+
+    # Print the classification distribution
+    print( 'classification distribution: ', np.bincount(y_pred) )
+
+    # Print the accuracy score
+    print( 'accuracy score: ', accuracy_score(y_test, y_pred) )
+    ```

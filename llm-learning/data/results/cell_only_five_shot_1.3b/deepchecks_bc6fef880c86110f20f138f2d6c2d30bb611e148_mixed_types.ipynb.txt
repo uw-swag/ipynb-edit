@@ -1,0 +1,29 @@
+```python
+    # Let's first create the analysis and reference datasets NannyML needs.
+    reference = datadf.loc[datadf['partition'] == 'reference'].reset_index(drop=True)
+    reference.drop(['week'], axis=1, inplace=True)
+    analysis = datadf.loc[datadf['partition'] == 'analysis'].reset_index(drop=True)
+    analysis.drop(['y_true', 'week'], axis=1, inplace=True)
+    data = pd.concat([reference, analysis], ignore_index=True)
+
+    # Let's create the model metadata object
+    metadata = nml.extract_metadata(data = reference, model_name='3d_rotation', model_type='classification_binary')
+    metadata.timestamp_column_name = 'ordered'
+    metadata.target_column_name = 'y_true'
+
+    # Let's compute univariate drift
+    univariate_calculator = nml.UnivariateStatisticalDriftCalculator(model_metadata=metadata, chunk_size=DPP)
+    univariate_calculator.fit(reference_data=reference)
+    # let's compute (and visualize) results across all the dataset.
+    univariate_results = univariate_calculator.calculate(data=data)
+
+    # let's create plot with results
+    for feature in metadata.features:
+        figure = univariate_results.plot(kind='feature_drift', metric='statistic', feature_label=feature.label)
+        figure.show()
+    #     figure.write_image(file=f"butterfly-univariate-drift-{feature.label}.svg")
+
+    # Checking mixed types
+    mixed_types_check = nml.check_mixed_types(data)
+    print(mixed_types_check)
+    ```

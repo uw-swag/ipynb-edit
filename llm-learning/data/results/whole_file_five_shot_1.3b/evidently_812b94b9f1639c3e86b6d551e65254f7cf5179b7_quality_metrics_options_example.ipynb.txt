@@ -1,0 +1,21 @@
+```python
+    # Add metrics
+    def add_metrics(self, metrics_dict, metric_name, metric_value):
+        if metric_name in metrics_dict:
+            metrics_dict[metric_name] += metric_value
+        else:
+            metrics_dict[metric_name] = metric_value
+        return metrics_dict
+
+    # Initialize metrics dictionary
+    metrics_dict = {}
+
+    # Add metrics
+    metrics_dict = add_metrics(metrics_dict, 'loss', self.loss.item())
+    metrics_dict = add_metrics(metrics_dict, 'accuracy', self.accuracy.item())
+    metrics_dict = add_metrics(metrics_dict, 'f1_score', self.f1_score.item())
+    metrics_dict = add_metrics(metrics_dict, 'precision', self.precision.item())
+    metrics_dict = add_metrics(metrics_dict, 'recall', self.recall.item())
+
+    return metrics_dict
+    ```

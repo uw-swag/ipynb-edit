@@ -1,0 +1,26 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    class DataAnalysis:
+        def __init__(self, data_path):
+            self.data_path = data_path
+            self.titanic = pd.read_csv(self.data_path + 'titanic.csv')
+
+        def plot_titanic(self):
+            # Plotting survival rate by gender
+            plt.figure(figsize=(10,6))
+            self.titanic.groupby('Sex')['Survived'].sum().plot(kind='bar')
+            plt.title('Survival Rate by Gender')
+            plt.xlabel('Gender')
+            plt.ylabel('Survival Rate')
+            plt.show()
+
+            # Plotting survival rate by class
+            plt.figure(figsize=(10,6))
+            self.titanic.groupby('Pclass')['Survived'].sum().plot(kind='bar')
+            plt.title('Survival Rate by Class')
+            plt.xlabel('Class')
+            plt.ylabel('Survival Rate')
+            plt.show()
+    ```

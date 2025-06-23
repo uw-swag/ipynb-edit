@@ -1,0 +1,48 @@
+```python
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    from sklearn.cluster import KMeans
+    from sklearn.preprocessing import StandardScaler
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import silhouette_score
+
+    # Load the data
+    data = pd.read_csv('customer_segmentation.csv')
+
+    # Preprocess the data
+    data = data.drop(['CustomerID'], axis=1)
+    data = data.fillna(data.mean())
+    scaler = StandardScaler()
+    data = pd.DataFrame(scaler.fit_transform(data), columns=data.columns)
+
+    # Create a list of the number of clusters to test
+    num_clusters = list(range(2, 11))
+
+    # Create a list to hold the silhouette scores
+    sil_scores = []
+
+    # Test the number of clusters
+    for num in num_clusters:
+        kmeans = KMeans(n_clusters=num, random_state=42)
+        kmeans.fit(data)
+
+        # Append the silhouette score to the list
+        sil_scores.append(silhouette_score(data, kmeans.labels_))
+
+    # Plot the silhouette scores
+    plt.figure(figsize=(10, 4))
+    plt.plot(num_clusters, sil_scores, 'bx-')
+    plt.xlabel('Number of clusters')
+    plt.ylabel('Silhouette Score')
+    plt.title('Silhouette Score vs. Number of Clusters')
+    plt.show()
+
+    # Determine the optimal number of clusters
+    optimal_clusters = num_clusters[sil_scores.index(max(sil_scores))]
+
+    # Create a KMeans model with the optimal number of clusters
+    kmeans = KMeans(n_clusters=optimal_clusters, random_state=42)
+    kmeans.fit(data)
+
+    #

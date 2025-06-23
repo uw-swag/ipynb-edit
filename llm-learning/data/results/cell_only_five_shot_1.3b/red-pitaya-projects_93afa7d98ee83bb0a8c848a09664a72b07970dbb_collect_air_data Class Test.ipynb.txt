@@ -1,0 +1,29 @@
+```python
+    import sys #Import from the folder above
+sys.path.append("..")
+
+import collect_air_data
+import time
+
+air_data = collect_air_data.collect_air_object()
+#Manage relative values of PMS here
+pms_ref_0_3 = air_data.pms_ref_0_3
+pms_ref_0_5 = air_data.pms_ref_0_5
+pms_ref_1_0 = air_data.pms_ref_1_0
+
+# Adding a new sensor setup
+pms_ref_2_0 = air_data.pms_ref_2_0
+
+# Updating the sensor values
+pms_ref_0_3 = pms_ref_0_3 * 2
+pms_ref_0_5 = pms_ref_0_5 * 2
+pms_ref_1_0 = pms_ref_1_0 * 2
+pms_ref_2_0 = pms_ref_2_0 * 2
+
+# Printing the updated sensor values
+print("PMS_ref_0_3: ", pms_ref_0_3)
+print("PMS_ref_0_5: ", pms_ref_0_5)
+print("PMS_ref_1_0: ", pms_ref_1_0)
+print("PMS_ref_2_0: ", pms_ref_2_0)
+
+    ```

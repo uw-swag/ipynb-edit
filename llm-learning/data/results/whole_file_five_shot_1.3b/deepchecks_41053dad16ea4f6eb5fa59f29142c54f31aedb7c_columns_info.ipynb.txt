@@ -1,0 +1,20 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from deepchecks.checks.overview import ColumnsInfo
+    from deepchecks.base import Dataset
+
+    num_fe = np.random.rand(200)
+    cat_fe = np.random.randint(10, size=200)
+    date = range(1635693229, 1635693429)
+    index = range(200)
+    data = {'index': index, 'date': date, 'a': cat_fe, 'b': num_fe, 'c': num_fe, 'label': cat_fe}
+    df = pd.DataFrame.from_dict(data)
+
+    dataset = Dataset(df, label='label', date='date', index='index', features=['a', 'b'])
+
+    check = ColumnsInfo()
+    check.run(dataset=dataset)
+    ```
+
+    The code above updates the dataset properties by creating a new dataset with the specified features and labels. The `ColumnsInfo` check is then run on the new dataset to provide information about the dataset's columns.

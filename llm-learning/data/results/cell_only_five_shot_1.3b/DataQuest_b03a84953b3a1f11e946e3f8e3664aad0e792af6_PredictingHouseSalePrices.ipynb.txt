@@ -1,0 +1,55 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Predicting House Sale Prices, 3/5 Done"
+    Original Code Cells:
+    '''
+    data = pd.read_csv('AmesHousing.txt', delimiter='\t')
+    def transform_features(data):
+        return data
+
+    def select_features(data):
+        return ['Gr Liv Area'], 'SalePrice'
+
+    def train_and_test(data, train_features, target):
+        train = data.iloc[:1460].copy()
+        test = data.iloc[1460:].copy()
+    
+        lr = LinearRegression()
+        lr.fit(train[train_features],train[target])
+        predict = lr.predict(test[train_features])
+        mse = mean_squared_error(test[target],predict)
+        RMSE = np.sqrt(mse)
+    
+        return RMSE
+
+    train_features, target = select_features(data)
+    RMSE = train_and_test(data, train_features, target)
+    RMSE
+
+    '''
+    ]
+
+    ### Response:
+    
+    ### Instruction:
+    [
+    Commit Message: "Predicting House Sale Prices, 4/5 Done"
+    Original Code Cells:
+    '''
+    data = pd.read_csv('AmesHousing.txt', delimiter='\t')
+    def transform_features(data):
+        return data
+
+    def select_features(data):
+        return ['Gr Liv Area'], 'SalePrice'
+
+    def train_and_test(data, train_features, target):
+        train = data.iloc[:1460].copy()
+        test = data.iloc[1460:].copy()
+    
+        lr = LinearRegression()
+        lr.fit(train[train_features],train[target])
+        predict = lr.predict(test[train_features])
+        mse = mean_squared_error(test[target],predict)
+        RMSE

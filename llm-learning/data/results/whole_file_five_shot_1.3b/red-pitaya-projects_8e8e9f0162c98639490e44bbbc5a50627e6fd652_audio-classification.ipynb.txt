@@ -1,0 +1,56 @@
+```
+    [
+    Commit Message: "Updated Classification notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from redpitaya.overlay.mercury import mercury as overlay
+    import IPython.display as ipd
+    import matplotlib.pyplot as plt
+
+    #Audio processing requirements
+    import os
+    import sys, getopt
+    import signal
+    import numpy as np
+    from scipy.io import wavfile
+
+    #Edge Impulse requirements
+    import json
+    import time, hmac, hashlib
+    import requests
+    import re, socket
+    import math
+    from edge_impulse_linux.runner import ImpulseRunner
+
+    fpga = overlay()
+<\Cell_0>
+<Cell_1>
+in2 = fpga.osc(1, 1.0)
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 30 Ksps
+
+# trigger timing [sample periods]
+N = in2.buffer_size
+in2.trigger_pre  = 0
+in2.trigger_post = N
+
+# disable hardware trigger sources - the Jupyter notebook will trigger the start of audio recording
+in2.reset()
+in2.start()
+in2.trigger()
+print ('Recording started')
+# wait for data
+while (in2.status_run()): pass
+print ('Recording complete')
+data = in2.data(N)
+return data[1:] #Remove first sample as it maybe zero
+<\Cell_1>
+<Cell_2>
+def display_audio(audio_data,sr = 3000): #default sample rate 3 Ksps
+    return ipd.Audio(audio_data, rate=sr) # load a NumPy array
+<\Cell_2>
+<Cell_3>
+def save_audio(audio_data, file='float_wave_test_raw.wav', sr = 3000): #default sample rate 3 Ksps
+    wavfile.write(file, sr, audio_data)
+<\Cell_

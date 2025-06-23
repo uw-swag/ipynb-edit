@@ -1,0 +1,36 @@
+```java
+    import ai.djl.ndarray.*;
+    import ai.djl.training.DefaultTrainingConfig;
+    import ai.djl.training.EasyTrain;
+    import ai.djl.training.Trainer;
+    import ai.djl.training.dataset.ArrayDataset;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.util.ProgressBar;
+
+    NDManager manager = NDManager.newBaseManager();
+    NDArray x = manager.create(3f);
+    NDArray y = manager.create(2f);
+
+    // Define the model
+    Model model = Model.newInstance("ai.djl.mnist.conv2d.v1");
+
+    // Define the training config
+    TrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
+        .optOptimizer(Optimizer.sgd())
+        .addEvaluator(new Accuracy())
+        .setEpoch(epoch)
+        .setBatch(batchSize)
+        .setLearningRate(learningRate)
+        .setL2(l2)
+        .setMomentum(momentum)
+        .setWeightDecay(weightDecay)
+        .setDevice(Device.gpu());
+
+    // Define the dataset
+    Dataset trainingSet = new ArrayDataset(x, y);
+
+    // Train the model
+    Trainer trainer = model.newTrainer(config);
+    trainer.train(trainingSet, new ProgressBar());
+    ```

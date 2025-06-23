@@ -1,0 +1,27 @@
+
+    The error message you're seeing is due to the fact that the maximum number of circles that can be displayed on a folium map is 3000. This limit is set by the folium library and is not configurable. The error message is suggesting that you're trying to add more than 3000 circles to the map.
+
+    To fix this issue, you can either reduce the number of circles you're adding to the map, or increase the limit. However, this will depend on the specifics of your data and what you're trying to achieve with the map.
+
+    If you're trying to add more than 3000 circles, you might need to use a different method to visualize your data. For example, you could use a scatter plot map instead of a circle for each earthquake, or you could use a heat map to visualize the distribution of earthquake magnitudes.
+
+    Here's an example of how you might add a scatter plot map to the map:
+
+    ```python
+    # Your code here: Add a scatter plot map to visualize earthquake magnitude and depth
+    m_4 = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    earthquakes['marker_color'] = pd.cut(earthquakes['Magnitude'], bins=4, 
+                              labels=['yellow', 'orange', 'red', 'purple'])
+
+    for idx, e in earthquakes.iterrows():    
+        Circle(location=[e['Latitude'], e['Longitude']], 
+               popup=("{} ({})").format(e['Magnitude'],e['DateTime'].year),
+               radius=e['Magnitude']**5.5,           
+               color=e['marker_color']).add_to(m_4)
+
+    scatter = folium.Map(location=[35,136], tiles='cartodbpositron', zoom_start=5)
+
+    for idx, e in earthquakes.iterrows():    
+        folium.Circle(location=[e['Latitude'], e['Longitude']], 
+                      popup=("{} ({})").format

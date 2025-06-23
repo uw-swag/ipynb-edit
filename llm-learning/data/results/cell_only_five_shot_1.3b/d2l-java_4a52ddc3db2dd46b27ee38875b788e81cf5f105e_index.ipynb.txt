@@ -1,0 +1,42 @@
+```python
+    import djl
+    from djl.nn import Hyperparameter
+    from djl.nn import Module
+    from djl.nn import Sequential
+    from djl.training import Trainer, TrainerDevice
+    from djl.training.loss import Loss
+    from djl.training.optimizer import Optimizer
+
+    # Initialize the local device to run the model on
+    device = TrainerDevice(TrainerDevice.Type.CPU)
+
+    # Define the hyperparameters
+    hyperparameters = Hyperparameter(lr=0.001, batch_size=32)
+
+    # Define the model
+    model = Sequential()
+    model.add(Module(name="fc1", fn=djl.nn.linear.Linear(input_size=784, output_size=512), with_bias=True))
+    model.add(Module(name="fc2", fn=djl.nn.linear.Linear(input_size=512, output_size=256), with_bias=True))
+    model.add(Module(name="fc3", fn=djl.nn.linear.Linear(input_size=256, output_size=10), with_bias=True))
+
+    # Define the loss function
+    loss = Loss(name="loss", fn=djl.nn.loss.SoftmaxCrossEntropyLoss())
+
+    # Define the optimizer
+    optimizer = Optimizer(name="optimizer", fn=djl.training.optimizer.SGD(hyperparameters))
+
+    # Initialize the trainer
+    trainer = Trainer(device=device, loss=loss, optimizer=optimizer)
+
+    # Load the dataset
+    # This is a placeholder for your actual dataset loading code
+    # You should replace this with your actual dataset loading code
+    dataset = ...
+
+    # Train the model
+    for epoch in range(10):
+        for batch in dataset:
+            # Forward pass
+            outputs = model(batch)
+            # Compute the loss
+            loss_value = loss(outputs, batch

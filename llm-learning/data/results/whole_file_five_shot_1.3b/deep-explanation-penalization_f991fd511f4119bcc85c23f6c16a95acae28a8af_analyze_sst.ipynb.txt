@@ -1,0 +1,46 @@
+
+    '''
+    Commit Message: "adjusted paths for demo"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+# sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+trained_model_folder = '../models/SST'
+save_path = '../results_for_export'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) 
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+<\Cell_1>
+<Cell_2>
+
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+# results = results[results.bias == 'Genderbias']
+# results = results[results.bias == 'Article']
+# results = results[results.bias == 'Decoy']
+<\Cell_2>
+<Cell_3>
+
+results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]] 
+results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+results["final_test_loss"] = [min(x) for x in results["losses_test"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+

@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import tensorflow as tf
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import confusion_matrix
+    import matplotlib.pyplot as plt
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.manifold import TSNE
+    from keras.datasets import audio_mnist
+    from keras.utils import to_categorical
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+    from keras.layers import Conv2D, MaxPooling2D
+    from keras.optimizers import Adam
+    from keras.callbacks import ModelCheckpoint
+    from sklearn.metrics import f1_score
+    from sklearn.metrics import classification_report
+
+    # Load the data
+    (x_train, y_train), (x_test, y_test) = audio_mnist.load_data()
+
+    # Reshape the data
+    x_train = x_train.reshape(x_train.shape[0], 1, x_train.shape[1], x_train.shape[2])
+    x_test = x_test.reshape(x_test.shape[0], 1, x_test.shape[1], x_test.shape[2])
+
+    # Normalize the data
+    x_train = x_train.astype('float32') / 255
+    x_test = x_test.astype('float32') / 255
+
+    # One-hot encode the labels
+    y_train = to_categorical(y_train, 10)
+    y_test = to_categorical(y_test, 10)
+
+    # Define the model
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(1, x_train.shape[2], x_train.shape[3])))
+    model.add(Conv2

@@ -1,0 +1,26 @@
+```python
+    import numpy as np
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Flatten
+
+    # Set the batch size to 1
+    batch_size = 1
+
+    # Create a sequential model
+    model = Sequential([
+        Dense(64, activation='relu', input_shape=(2,)),
+        Dense(64, activation='relu'),
+        Dense(1)
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mse')
+
+    # Generate dummy data
+    x = np.random.random((1000, 2))
+    y = np.random.random((1000, 1))
+
+    # Fit the model
+    model.fit(x, y, batch_size=batch_size, epochs=5)
+    ```

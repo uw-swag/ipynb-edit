@@ -1,0 +1,33 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import scipy as sp
+
+    # create points and sort them by 
+    n = 20
+    points = np.random.randint(100, size=(n, 2))
+    o = np.argsort(points[:,0])
+    points = points[o,:]
+
+
+    # triangulate
+    tri = sp.spatial.Delaunay(points)
+
+
+    # plot
+    plt.triplot(points[:,0], points[:,1], tri.simplices)
+    plt.plot(points[:,0], points[:,1], 'o')
+
+    for i in range(len(points)):
+        plt.annotate(i, (points[i,0], points[i,1]))
+
+    plt.show()
+
+    neighbors = []
+
+    for k in range(len(tri.simplices)):
+        simplex = tri.simplices[k]
+        neighbors.append(np.sort(simplex))
+
+    neighbors
+    ```

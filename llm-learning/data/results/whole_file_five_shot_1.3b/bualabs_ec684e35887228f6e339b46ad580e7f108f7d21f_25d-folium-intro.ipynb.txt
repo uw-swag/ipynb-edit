@@ -1,0 +1,51 @@
+```
+    # Update height of iframe to 640
+    <Cell_0>
+    <Cell_1>
+    # ! pip install geopandas
+    # ! pip install git+https://github.com/python-visualization/folium
+    # ! pip install kaggle --upgrade
+    <\Cell_1>
+    <Cell_2>
+    import pandas as pd
+    import geopandas as gpd
+
+    import folium
+    from folium import *
+    from folium.plugins import *
+
+    import os
+    from pathlib import Path
+    <\Cell_2>
+    <Cell_3>
+    from IPython.display import IFrame, HTML
+
+    def embed_map(m, file_name):    
+        # # VM
+        # m.save(file_name)
+        # return IFrame(src=file_name, width='100%', height='640px')
+
+        # Colab
+        return m
+    <\Cell_3>
+    <Cell_4>
+    dataset = 'alexisbcook/geospatial-learn-course-data'
+
+    # Google Colab
+    config_path = Path('/content/drive')
+    data_path = Path('/content/datasets/')/dataset
+    from google.colab import drive
+    drive.mount(str(config_path))
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+    # VM
+    # config_path = Path(os.getenv("HOME"))
+    # data_path = config_path/"datasets"/dataset
+    # data_path.mkdir(parents=True, exist_ok=True)
+    # os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/.kaggle"
+
+    # !kaggle datasets download {dataset} -p "{data_path}" --unzip
+    <\Cell_4>
+    <Cell_5>
+    # Create a map
+    m_1 = folium.Map(location=[42.32,-71.0589], tiles='

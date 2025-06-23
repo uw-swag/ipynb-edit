@@ -1,0 +1,18 @@
+```python
+    # Removing old notebooks
+    import os
+    import shutil
+    import glob
+
+    # Get the list of all notebook files
+    notebook_list = glob.glob('*.ipynb')
+
+    # Remove all notebooks
+    for notebook in notebook_list:
+        shutil.rmtree(notebook)
+
+    # Removing temporary directory
+    import tempfile
+    tempfile.tempdir = tempfile.gettempdir()
+    os.rmdir(tempfile.tempdir)
+    ```

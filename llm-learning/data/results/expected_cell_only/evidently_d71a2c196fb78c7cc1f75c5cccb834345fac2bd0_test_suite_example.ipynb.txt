@@ -1,0 +1,71 @@
+import pandas as pd
+import numpy as np
+
+from evidently.test_suite import TestSuite
+from evidently.tests import TestNumberOfColumns
+from evidently.tests import TestNumberOfDriftedColumns
+from evidently.tests import TestValueMAE
+from evidently.tests import TestValueMeanError
+from evidently.tests import TestAccuracyScore
+from evidently.tests import TestPrecisionScore
+from evidently.tests import TestF1Score
+from evidently.tests import TestRecallScore
+from evidently.tests import TestRocAuc
+from evidently.tests import TestLogLoss
+from evidently.tests import TestTPR
+from evidently.tests import TestTNR
+from evidently.tests import TestFPR
+from evidently.tests import TestFNR
+from evidently.tests import TestPrecisionByClass
+from evidently.tests import TestRecallByClass
+from evidently.tests import TestF1ByClass
+from evidently import ColumnMapping
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+suite = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    # TestNumberOfDriftedColumns(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite
+suite_with_reference = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    TestNumberOfDriftedColumns(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite_with_reference.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite_with_reference

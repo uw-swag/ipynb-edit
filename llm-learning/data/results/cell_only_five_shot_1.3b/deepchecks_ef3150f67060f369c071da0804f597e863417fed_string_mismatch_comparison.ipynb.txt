@@ -1,0 +1,32 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import confusion_matrix, accuracy_score
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Loading the dataset and creating the features (independent variables) and the target (dependent variable)
+    credit = pd.read_csv('Credit.csv')
+    credit.head()
+    features = credit.iloc[:,0:20].values
+    target = credit.iloc[:,20].values
+
+    # Transforming categorical attributes into numerical attributes, passing the index of each categorical attribute
+    labelencoder = LabelEncoder()
+    features[:,0] = labelencoder.fit_transform(features[:,0])
+    features[:,2] = labelencoder.fit_transform(features[:,2])
+    features[:,3] = labelencoder.fit_transform(features[:,3])
+    features[:,5] = labelencoder.fit_transform(features[:,5])
+    features[:,6] = labelencoder.fit_transform(features[:,6])
+    features[:,8] = labelencoder.fit_transform(features[:,8])
+    features[:,9] = labelencoder.fit_transform(features[:,9])
+    features[:,11] = labelencoder.fit_transform(features[:,11])
+    features[:,13] = labelencoder.fit_transform(features[:,13])
+    features[:,14] = labelencoder.fit_transform(features[:,14])
+    features[:,16] = labelencoder.fit_transform(features[:,16])
+    features[:,18] = labelencoder.fit_transform(features[:,18])
+    features[:,19] = labelencoder.fit_transform(features[:,19])
+
+    # Splitting the dataset into training and testing sets (30% for testing and 70% for training)
+    X_train, X_test, y_train, y_test =

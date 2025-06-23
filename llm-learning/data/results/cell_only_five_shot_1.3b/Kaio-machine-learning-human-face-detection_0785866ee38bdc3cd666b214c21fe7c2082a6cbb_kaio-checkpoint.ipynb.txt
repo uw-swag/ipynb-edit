@@ -1,0 +1,21 @@
+```python
+    # Adding PDF report generation
+    def generate_pdf(self, data, filename):
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size = 15)
+        for d in data:
+            pdf.cell(200, 10, txt = d, ln = True, align = 'C')
+        pdf.output(filename)
+
+    # Fixed the project execution
+    def execute_project(self, project_config):
+        # Fixed the project execution
+        # ...
+        # ...
+        # ...
+
+        # Adding PDF report generation
+        data = ["Project execution completed successfully", "Execution time: " + str(execution_time), "Execution date: " + str(execution_date)]
+        self.generate_pdf(data, "project_report.pdf")
+    ```

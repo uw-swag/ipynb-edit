@@ -1,0 +1,24 @@
+```python
+    ## Create a new notebook
+    from azureml.core import Workspace, Dataset
+
+    # Load the workspace from the saved config file
+    ws = Workspace.from_config()
+
+    # Get a reference to the dataset
+    dataset = Dataset.get_by_name(ws, 'my_dataset')
+
+    # Create a new notebook
+    notebook_name = '05a_new_notebook'
+    notebook = ws.notebooks[notebook_name]
+
+    # If the notebook does not exist, create it
+    if notebook is None:
+        notebook = ws.create_notebook_by_path(notebook_name)
+
+    # Get the URL of the new notebook
+    notebook_url = notebook.url
+
+    # Display the notebook URL
+    print(notebook_url)
+    ```

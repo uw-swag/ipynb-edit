@@ -1,0 +1,52 @@
+```python
+    # This is an example of how to use the `settings.json` file in a TensorFlow project.
+    # The `settings.json` file is used to store project-specific settings, such as the paths to the data files.
+
+    import os
+    import json
+
+    # Load the settings from the `settings.json` file.
+    with open(os.path.join(os.path.dirname(__file__), 'settings.json')) as f:
+        settings = json.load(f)
+
+    # Use the settings to load your data.
+    data_path = settings['data_path']
+    data = pd.read_csv(os.path.join(data_path, 'data.csv'))
+
+    # Now you can use the `data` object in your TensorFlow project.
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Adding TensorFlow version check (#535)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # This is an example of how to use the `settings.json` file in a TensorFlow project.
+    # The `settings.json` file is used to store project-specific settings, such as the paths to the data files.
+
+    import os
+    import json
+    import tensorflow as tf
+
+    # Check the TensorFlow version.
+    if tf.__version__ != '2.0.0':
+        raise ValueError('TensorFlow version is not supported. Please use TensorFlow 2.0.')
+
+    # Load the settings from the `settings.json` file.
+    with open(os.path.join(os.path.dirname(__file__), 'settings.json')) as f:
+        settings = json.load(f)
+
+    # Use the settings to load your data.
+    data_path = settings['data_path']
+    data = pd.read_csv(os.path.join(data_path, 'data.csv'))
+
+    # Now you can use the `data` object in your TensorFlow project.
+    ```
+
+    ### Instruction:

@@ -1,0 +1,30 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras import layers
+
+    # Define a simple sequential model
+    model = tf.keras.models.Sequential([
+        layers.Dense(64, activation='relu', input_shape=(10,)),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(10)
+    ])
+
+    # Compile the model
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(0.001),
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        metrics=['accuracy'],
+    )
+
+    # Train the model
+    model.fit(
+        # Your data here
+        x_train,
+        y_train,
+        epochs=5,
+        validation_data=(x_val, y_val)
+    )
+
+    # Evaluate the model
+    model.evaluate(x_test, y_test, verbose=2)
+    ```

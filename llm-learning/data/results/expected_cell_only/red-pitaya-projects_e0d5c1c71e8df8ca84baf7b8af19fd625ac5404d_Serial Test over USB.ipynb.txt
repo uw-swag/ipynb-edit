@@ -1,0 +1,80 @@
+import serial
+import time
+import csv
+import re
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import pandas as pd
+import numpy as np
+from datetime import datetime
+ 
+portPath = "/dev/ttyACM4"       # Must match value shown on Arduino IDE
+baud = 115200                   # Must match Arduino baud rate
+timeout = 5                     # Seconds
+filename = "data.csv"
+max_num_readings = 8
+num_signals = 1
+ 
+ 
+ 
+def create_serial_obj(portPath, baud_rate, tout):
+    """
+    Given the port path, baud rate, and timeout value, creates and returns a pyserial object.
+    """
+    return serial.Serial(portPath, baud_rate, timeout = tout)
+def is_number(string):
+    """
+    Given a string returns True if the string represents a number.
+    Returns False otherwise.
+    """
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+        
+def clean_serial_data(data):
+    """
+    Given a list of serial lines (data). Removes all characters.
+    Returns the cleaned list of lists of digits.
+    Given something like: ['0.5000,33\r\n', '1.0000,283\r\n']
+    Returns: [[0.5,33.0], [1.0,283.0]]
+    """
+    clean_data = []
+    
+    for line in data:
+        line_data = float(line.strip())
+        #line_data = re.findall("\d*\.\d*|\d*",line) # Find all digits
+        #line_data = [float(element) for element in line_data if is_number(element)] # Convert strings to float
+        if line_data >= 0.0:
+            clean_data.append(line_data)
+        
+        clean_data.append(datetime.now())
+    return clean_data
+print("Cleaning data...")
+clean_data =  clean_serial_data(serial_data)
+clean_data
+clean_data_table = [clean_data]
+pd_data_new_row = pd.DataFrame(clean_data_table,columns=["Co2","Date & Time"])
+pd_data_new_row
+headers = ["Co2","Date & Time"]
+pd_data_new_row.to_csv(filename,names=headers)
+df = pd.read_csv(filename,names=headers,skiprows = 1)
+df
+dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+df.get_value(0, 'Date & Time')
+dateparse(df.get_value(0, 'Date & Time'))
+df = pd.read_csv(filename, parse_dates=['Date & Time'], date_parser=dateparse,index_col=0)
+df
+type(df.get_value(0, 'Co2'))
+df.get_value(0, 'Co2')
+type(df.get_value(0, 'Date & Time'))
+x = df['Date & Time']
+y = df['Co2']
+
+# plot
+plt.plot(x,y)
+# beautify the x-labels
+plt.gcf().autofmt_xdate()
+
+plt.show()

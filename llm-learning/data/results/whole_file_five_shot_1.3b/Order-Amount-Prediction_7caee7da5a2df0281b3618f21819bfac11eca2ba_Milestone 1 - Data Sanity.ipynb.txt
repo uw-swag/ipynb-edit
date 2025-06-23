@@ -1,0 +1,25 @@
+```
+    import pandas as pd
+    import requests
+    import bs4
+    from bs4 import BeautifulSoup
+
+    df = pd.read_csv('../data/Final.csv')
+    df.describe()
+    df.shape
+    df.info()
+    df.isnull().sum()
+    df.fillna('NaN', inplace=True)
+    df['ORDER_CREATION_DATE'] = pd.to_datetime(df['ORDER_CREATION_DATE'])
+    df['REQUESTED_DELIVERY_DATE'] = pd.to_datetime(df['REQUESTED_DELIVERY_DATE'])
+    df[df['ORDER_CREATION_DATE'] > df['REQUESTED_DELIVERY_DATE']].shape[0]
+    df[df['ORDER_AMOUNT'].str.contains('-')].shape[0]
+    df['ORDER_AMOUNT'] = df['ORDER_AMOUNT'].str.replace('-', '')
+    df[df['ORDER_AMOUNT'].str.contains(',')].shape[0]
+    df['ORDER_AMOUNT'] = df['ORDER_AMOUNT'].str.replace(',', '.')
+    df[df['ORDER_CREATION_DATE'] == df['REQUESTED_DELIVERY_DATE']].shape[0]
+    df['ORDER_CURRENCY'].value_counts()
+    df['amount_in_usd'] = df.apply(lambda x: float(x['ORDER_AMOUNT']) * float(convert_currency('1', x['ORDER_CURRENCY'])), axis=1)
+    df[df['amount_in_usd'] == '0'].shape[0]
+    df['uniue_cust_id'] = df['CUSTOMER_NUMBER'] + df['COMPANY_CODE']
+    ```

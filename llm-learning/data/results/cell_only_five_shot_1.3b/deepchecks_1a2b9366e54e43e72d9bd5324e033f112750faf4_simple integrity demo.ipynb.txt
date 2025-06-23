@@ -1,0 +1,24 @@
+```python
+    # Adding suite functionality (#73)
+    def suite(self):
+        suite = unittest.TestSuite()
+        suite.addTest(unittest.makeSuite(TestClass))
+        return suite
+
+    if __name__ == '__main__':
+        runner = unittest.TextTestRunner()
+        runner.run(suite())
+    ```
+    This code is a simple example of a test suite in Python. It creates a test suite and adds a test to it. The test suite is then run.
+
+    Please replace `TestClass` with the actual class you want to test.
+
+    The test suite is a collection of tests that are run together. Each test is an instance of a class that inherits from `unittest.TestCase`.
+
+    The `addTest` method of a `unittest.TestSuite` object is used to add tests to the suite. The `unittest.makeSuite` function is used to create a test suite from a class.
+
+    The `unittest.TextTestRunner` is a test runner that runs tests using a text-based formatter.
+
+    The `runner.run(suite())` line runs the test suite.
+
+    Please note that this is a simple example and real-world test suites can be much more complex.

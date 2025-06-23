@@ -1,0 +1,14 @@
+```python
+    # load necessary libraries
+    import pandas as pd
+    import sqlalchemy
+
+    # create engine
+    engine = sqlalchemy.create_engine('mysql+pymysql://root:root@localhost:3306/ignis_tech_solution_task')
+
+    # read data from the table
+    df = pd.read_sql_table("auth_user", engine)
+
+    # view the data
+    print(df)
+    ```

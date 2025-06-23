@@ -1,0 +1,14 @@
+```python
+    import matplotlib.pyplot as plt
+    from sklearn.inspection import permutation_importance
+
+    # Compute importance
+    result = permutation_importance(classifier, X_test, y_test, n_repeats=10, random_state=random_state, n_jobs=2)
+    importance = result.importances_mean
+
+    # Plot feature importance
+    plt.boxplot(importance.reshape(-1,1), vert=False, labels=X.columns)
+    plt.show()
+    ```
+
+    This code will create a boxplot of the feature importances. The x-axis represents the feature names, and the y-axis represents the importance. The boxplot will show the distribution of the feature importances across the different classes.

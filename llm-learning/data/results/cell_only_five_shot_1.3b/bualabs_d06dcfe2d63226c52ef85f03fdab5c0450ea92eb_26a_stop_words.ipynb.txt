@@ -1,0 +1,17 @@
+```python
+    # Importing necessary libraries
+    import nltk
+    from nltk.corpus import stopwords
+    nltk.download('stopwords')
+
+    # Creating a list of English stop words
+    stop_words = set(stopwords.words('english'))
+
+    # Example usage:
+    text = "This is an example sentence for NLP stop words."
+    word_tokens = nltk.word_tokenize(text)
+    filtered_sentence = [w for w in word_tokens if not w in stop_words]
+
+    print(filtered_sentence)
+    ```
+    This code will print out the same sentence, but with all the stop words removed.

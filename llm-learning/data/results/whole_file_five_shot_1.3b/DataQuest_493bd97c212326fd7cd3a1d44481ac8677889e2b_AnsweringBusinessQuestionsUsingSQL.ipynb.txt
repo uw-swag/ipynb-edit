@@ -1,0 +1,42 @@
+```
+    <Cell_0>
+    %pylab inline 
+    import numpy.linalg as LA
+    from scipy.spatial.distance import cdist
+
+
+    # Set some default values of the the matplotlib plots
+    plt.rcParams['figure.figsize'] = (8.0, 8.0)  # Set default plot's sizes
+    plt.rcParams['axes.grid'] = True  # Show grid by default in figures
+    <\Cell_0>
+    <Cell_1>
+    from sklearn.datasets import fetch_lfw_people
+    dataset = fetch_lfw_people(min_faces_per_person=100)
+
+    X = dataset.images
+    y = dataset.target
+    label_to_name_mapping = dataset.target_names
+    image_shape = x[0].shape
+
+    print('Number of images in the dataset: {}'.format(len(x)))
+    print('Number of different persons in the dataset: {}'.format(len(np.unique(y))))
+    print('Each images size is: {}'.format(image_shape))
+
+    _, images_per_class = np.unique(y, return_counts=True)
+    fig, ax = plt.subplots()
+    ax.bar(label_to_name_mapping, images_per_class)
+    ax.set_xticklabels(label_to_name_mapping, rotation=-90);
+    ax.set_title('Images per person')
+    ax.set_ylabel('Number of images')
+
+
+    # plots the first 20 images in the dataset. 
+    fig, ax_array = plt.subplots(4, 5)
+    for i, ax in enumerate(ax_array.flat):
+        ax.imshow(x[i], cmap='gray')
+        ax.set_ylabel(label_to_name_mapping[y[i]])
+        ax.set_yticks([])
+        ax.set_xticks([])
+    <\Cell_1>
+    <Cell_2>
+    from sklearn.model_selection import train_test

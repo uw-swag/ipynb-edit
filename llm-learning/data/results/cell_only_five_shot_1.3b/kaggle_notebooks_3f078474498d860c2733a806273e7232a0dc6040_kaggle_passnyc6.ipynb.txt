@@ -1,0 +1,38 @@
+
+    '''
+    %%html
+<style> 
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+body {background-color: gainsboro;} 
+a {color: #37c9e1; font-family: 'Roboto';} 
+h1 {color: #37c9e1; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #aaa;} 
+h2, h3 {color: slategray; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #aaa;}
+h4 {color: #37c9e1; font-family: 'Roboto';}
+span {text-shadow: 4px 4px 4px #aaa;}
+div.output_prompt, div.output_area pre {color: slategray;}
+div.input_prompt, div.output_subarea {color: #37c9e1;}      
+div.output_stderr pre {background-color: gainsboro;}  
+div.output_stderr {background-color: slategrey;}               
+</style>
+import numpy as np 
+import pandas as pd
+import geopandas as gpd
+
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import matplotlib.colors as mcolors
+from descartes import PolygonPatch
+
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, median_absolute_error, mean_absolute_error
+from sklearn.metrics import r2_score, explained_variance_score
+from sklearn.preprocessing import OneHotEncoder
+
+from keras.models import Sequential, load_model, Model
+from keras.optimizers import SGD, RMSprop
+from keras.layers import Dense, Dropout, LSTM
+from keras.layers import Activation, Flatten, Input, BatchNormalization
+from keras.layers import

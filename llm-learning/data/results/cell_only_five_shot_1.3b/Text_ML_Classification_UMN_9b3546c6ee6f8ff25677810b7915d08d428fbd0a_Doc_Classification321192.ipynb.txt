@@ -1,0 +1,10 @@
+```
+    import os
+    import shutil
+
+    # Backup the current directory
+    backup_dir = os.path.join(os.path.dirname(__file__), 'backup')
+    if not os.path.exists(backup_dir):
+        os.makedirs(backup_dir)
+    shutil.copytree(os.curdir, os.path.join(backup_dir, os.path.basename(os.curdir)))
+    ```

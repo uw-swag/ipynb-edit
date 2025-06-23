@@ -1,0 +1,31 @@
+
+    The code you provided is a Jupyter notebook that uses the EventStore, Spark, and PySpark libraries to connect to an EventStore database, load an event table, and create a temporary view. It then uses the dsx_ml library to save a model, and finally, it uses the saved model to make predictions.
+
+    However, the code is not complete and it seems to be missing some parts. For example, the model variable is not defined, and the test variable is not defined either.
+
+    To make the code work with the Dev Edition and IBM Cloud, you would need to replace the `ip` and `endpoint` variables with the appropriate values for your environment, and you would need to define the `model`, `test`, and `model_name` variables.
+
+    Also, you would need to replace the `os.environ['DSX_TOKEN']` with the appropriate token for your environment.
+
+    Here is a basic example of how you might define these variables:
+
+    ```python
+    ip = "9.30.167.102"
+    endpoint = ip + ':1101'
+    ConfigurationReader.setConnectionEndpoints(endpoint)
+    dbName = "TESTDB"
+    sparkSession = SparkSession.builder.appName("EventStore SQL in Python").getOrCreate()
+    eventSession = EventSession(sparkSession.sparkContext, dbName)
+    # ... rest of your code ...
+    model = ... # define your model here
+    test = ... # define your test data here
+    model_name = "Event_Store_IOT_Sensor_Temperature_Prediction_Model"
+    ```
+
+    After defining these variables, you can run the code as is. The `model` and `test` variables would need to be defined in the code.
+
+    For the Dev Edition and IBM Cloud, you would need to replace the `ip` and `endpoint` variables with the appropriate values for your environment, and you would need to define the `model`, `test`, and `model_name` variables.
+
+    Also, you would need to replace the `os.environ['DSX_TOKEN']` with the appropriate token for your environment.
+
+    Here is a basic example

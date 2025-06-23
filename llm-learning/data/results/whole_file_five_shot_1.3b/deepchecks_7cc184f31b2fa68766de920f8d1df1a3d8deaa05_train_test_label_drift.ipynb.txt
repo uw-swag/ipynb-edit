@@ -1,0 +1,46 @@
+```
+    [
+    Commit Message: "Split VisionData and remove Formatters (#966)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.vision.dataset import VisionData
+from deepchecks.vision.checks import TrainTestLabelDrift
+<\Cell_0>
+<Cell_1>
+from deepchecks.vision.datasets.classification.mnist import load_dataset
+
+mnist_dataloader_train = load_dataset(train=True, batch_size=64)
+mnist_dataloader_test = load_dataset(train=False, batch_size=1000)
+<\Cell_1>
+<Cell_2>
+from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter
+
+train_ds = VisionData(mnist_dataloader_train, label_formatter=ClassificationLabelFormatter())
+test_ds = VisionData(mnist_dataloader_test, label_formatter=ClassificationLabelFormatter())
+<\Cell_2>
+<Cell_3>
+check = TrainTestLabelDrift()
+check.run(train_ds, test_ds)
+<\Cell_3>
+<Cell_4>
+import torch
+
+full_mnist = torch.utils.data.ConcatDataset([mnist_dataloader_train.dataset, mnist_dataloader_test.dataset])
+
+<\Cell_4>
+<Cell_5>
+train_dataset, test_dataset = torch.utils.data.random_split(full_mnist, [60000,10000], generator=torch.Generator().manual_seed(42))
+<\Cell_5>
+<Cell_6>
+from torch.utils.data._utils.collate import default_collate
+import numpy as np
+
+np.random.seed(42)
+
+def collate_test(batch):
+    modified_batch = []
+    for item in batch:
+        image, label = item
+        if label == 0:
+            if np.random.randint(1

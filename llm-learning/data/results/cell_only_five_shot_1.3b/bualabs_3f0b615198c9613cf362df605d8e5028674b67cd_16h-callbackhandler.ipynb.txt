@@ -1,0 +1,40 @@
+```python
+    class TestCallback(Callback):
+        _order = 1
+        def after_step(self):
+            print(f'n_iter = {self.n_iter}')
+            if self.n_iter > 10: 
+                raise CancelTrainException()
+
+
+    class Runner:
+        def __init__(self, model, data, callbacks=None):
+            self.model = model
+            self.data = data
+            self.callbacks = callbacks or []
+
+        def run(self):
+            for self.n_iter, batch in enumerate(self.data.data_loader):
+                inputs, targets = self.data.get_batch(batch)
+                outputs = self.model(inputs)
+                loss = self.data.loss(outputs, targets)
+                self.data.gradients = self.model.backward(outputs, targets)
+                for callback in self.callbacks:
+                    callback.after_step()
+    ```
+
+    The Runner class is a simple runner for training models. It takes a model, data, and a list of callbacks as input. The model is trained in a loop, and for each step, it calls the after_step method of all callbacks.
+
+    The TestCallback class is a simple callback that prints the number of iterations after each step. If the number of iterations exceeds 10, it raises a CancelTrainException.
+
+    The Runner class and the TestCallback class are used as follows:
+
+    ```python
+    model = ... # your model
+    data = ... # your data
+    callbacks = [TestCallback()] # list of callbacks
+    runner = Runner(model, data, callbacks)
+    runner.run()
+    ```
+
+    This will print the number of iterations after each step, and if the number of iterations exceeds 10, it will raise a CancelTrainException.

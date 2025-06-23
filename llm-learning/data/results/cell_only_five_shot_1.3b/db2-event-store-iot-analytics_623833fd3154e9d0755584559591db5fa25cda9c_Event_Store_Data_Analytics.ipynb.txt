@@ -1,0 +1,13 @@
+```python
+    import os
+    import json
+    materials_in = []
+    input_folder = "materials_list"
+    for file in os.listdir(input_folder):
+        with open(f"{input_folder}/{file}", "r") as f:
+            data = f.read()
+            materials_in.append(json.loads(data))
+
+    # Now materials_in is a list of dictionaries, where each dictionary represents a material
+    # You can now use the materials_in list to perform any operations you need
+    ```

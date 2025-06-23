@@ -1,0 +1,51 @@
+```python
+    from sklearn.pipeline import Pipeline
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import StandardScaler, OneHotEncoder
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    import numpy as np
+
+    # Cargar el dataset Titanic
+    titanic = pd.read_csv('titanic.csv')
+
+    # Definir las columnas a usar
+    num_cols = ['Age', 'Fare']
+    cat_cols = ['Pclass', 'Sex', 'Embarked']
+
+    # Definir los transformadores
+    num_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())
+    ])
+
+    cat_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='most_frequent')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))
+    ])
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', num_transformer, num_cols),
+            ('cat', cat_transformer, cat_cols)
+        ])
+
+    # Definir el pipeline
+    pipeline = Pipeline(steps=[
+        ('preprocessor', preprocessor),
+        ('classifier', RandomForestClassifier())
+    ])
+
+    # Dividir el dataset en entrenamiento y prueba
+    X_train, X_test, y_train, y_test = train_test_split(titanic.drop('Survived', axis=1),
+                                                        titanic['Survived'],
+                                                        test_size=0.2,
+                                                        random_state=42)
+
+    # Entrenar el pipeline
+    pipeline.fit(X_train, y_train)
+
+    #

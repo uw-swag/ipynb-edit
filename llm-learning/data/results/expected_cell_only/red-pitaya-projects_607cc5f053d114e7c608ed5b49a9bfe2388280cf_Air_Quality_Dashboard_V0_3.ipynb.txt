@@ -1,0 +1,50 @@
+%matplotlib notebook
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+import collect_air_data
+import time
+from datetime import datetime
+import pandas as pd
+from ipywidgets import interact, interactive, fixed, interact_manual
+import ipywidgets as widgets
+from ipywidgets import Button, HBox, VBox
+import os
+
+air_data = collect_air_data.collect_air_object()
+#Manage relative values of PMS here
+pms_ref_0_3 = air_data.pms_ref_0_3
+pms_ref_0_5 = air_data.pms_ref_0_5
+pms_ref_1_0 = air_data.pms_ref_1_0
+
+#Make a CSV Data folder
+try:
+    os.makedirs("CSV-Data")
+except OSError:
+    pass
+button = widgets.Button(description='Reset Values to 1')
+def on_button_clicked(_):
+    air_data.reset_ref_values()
+    #Reset all the reference values to their current value
+    pms5003_data = air_data.pms5003.read()
+    pms_ref_0_3 = pms5003_data.pm_per_1l_air(0.3)
+    pms_ref_0_5 = pms5003_data.pm_per_1l_air(0.5)
+    pms_ref_1_0 = pms5003_data.pm_per_1l_air(1.0)
+# linking button and function together using a button's method
+button.on_click(on_button_clicked)
+
+button2 = widgets.Button(description='Clear and Restart Plot')
+def on_button2_clicked(_):
+    global df
+    df = pd.DataFrame()
+# linking button and function together using a button's method
+button.on_click(on_button_clicked)
+button2.on_click(on_button2_clicked)
+
+# displaying button
+HBox([button,button2])
+#Save the data frame to a CSV file
+df.index.name = 'timestamp'
+filename = "CSV-Data/Fresh Air" + str(datetime.now()) + ".csv"
+df.to_csv(filename)

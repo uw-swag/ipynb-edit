@@ -1,0 +1,38 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add mean, var to agg features"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Import dependencies for this notebook
+import pandas as pd
+import numpy as np
+import networkx as nx
+import seaborn as sns  # Must be seaborn-0.9.0
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+from lib.util import fetch_tweets
+<\Cell_0>
+<Cell_1>
+tweets = fetch_tweets("germanwings-crash")
+tweets[["is_source_tweet","is_rumor"]] = tweets[["is_source_tweet", "is_rumor"]].astype(bool)
+tweets.created = pd.to_datetime(tweets.created * 1e6)
+tweets.describe()
+<\Cell_1>
+<Cell_2>
+twts_event_rumor = tweets[["event", "tweet_id", "is_rumor"]].groupby(["event", "is_rumor"]) \
+    .agg(len) \
+    .rename(columns={"tweet_id": "total"}) \
+    .reset_index()
+
+plt.figure(figsize=(8,6))
+plt.title("Proportion of Rumor to Non-rumor Tweets by News Event")
+ax = sns.barplot(x="event", y="total", hue="is_rumor", data=twts_event_rumor)
+<\Cell_2>
+<Cell_3>
+tweets
+# Z = (data - data.mean()) / data.std()  # normalaize
+# X = pd.concat([y, Z.iloc[:,0:12]], axis=1)
+# X = pd.melt(X, id_vars="is_rumor", var_name="features", value_name="value")
+# plt.figure(figsize=(12,

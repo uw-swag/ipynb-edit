@@ -1,0 +1,23 @@
+```python
+    tf.reset_default_graph()
+
+    from tensorflow.contrib.layers import fully_connected
+
+    n_inputs = 3
+    n_hidden = 2  # codings
+    n_outputs = n_inputs
+
+    learning_rate = 0.01
+
+    X = tf.placeholder(tf.float32, shape=[None, n_inputs])
+    hidden = fully_connected(X, n_hidden, activation_fn=None)
+    outputs = fully_connected(hidden, n_outputs, activation_fn=None)
+
+    mse = tf.reduce_mean(tf.square(outputs - X))
+
+    optimizer = tf.train.AdamOptimizer(learning_rate)
+    training_op = optimizer.minimize(mse)
+
+    init = tf.initialize_all_variables()
+    ```
+    The `tf.reduce_sum` function is replaced by `tf.reduce_mean` to calculate the mean squared error (MSE) rather than the sum of squared errors (SSE).

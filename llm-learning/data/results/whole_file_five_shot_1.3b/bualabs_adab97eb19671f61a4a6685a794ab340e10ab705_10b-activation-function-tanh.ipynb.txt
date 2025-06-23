@@ -1,0 +1,29 @@
+```python
+    import torch
+import matplotlib.pyplot as plt
+
+# Create a tensor with values from -10 to 10 with a step of 0.01
+x = torch.arange(-10., 10., 0.01)
+
+# Define the sigmoid activation function
+activation = torch.nn.Sigmoid()
+# Apply the sigmoid activation function to the tensor
+y1 = activation(x)
+
+# Define the tanh activation function
+activation = torch.nn.Tanh()
+# Apply the tanh activation function to the tensor
+y2 = activation(x)
+
+# Set the y-limits to -1 to 1 and the x-limits to -3 to 3
+plt.ylim(top=1.2, bottom=-1.2)
+plt.xlim(right=3, left=-3)
+
+# Create a legend for the two functions
+plt.legend(['Sigmoid', 'Tanh'], loc='upper left')
+
+# Show the plot
+plt.plot(x.numpy(), y1.numpy())
+plt.plot(x.numpy(), y2.numpy())
+plt.show()
+    ```

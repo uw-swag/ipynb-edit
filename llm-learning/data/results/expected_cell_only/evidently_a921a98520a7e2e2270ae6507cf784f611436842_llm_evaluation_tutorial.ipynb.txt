@@ -1,0 +1,49 @@
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+from evidently.metric_preset import TextEvals
+from evidently.descriptors import *
+from evidently.metrics import *
+from evidently.tests import *
+from evidently.features.llm_judge import BinaryClassificationPromptTemplate
+report = Report(metrics=[
+
+    TextEvals(column_name="response", descriptors=[
+        DeclineLLMEval(),
+        PIILLMEval(include_reasoning=True), 
+    ])
+])
+
+report.run(reference_data= None,
+           current_data= assistant_logs[:10],
+           column_mapping=column_mapping)
+report 
+custom_judge = LLMEval(
+    subcolumn="category",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="Conciseness",
+        non_target_category="Ok",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge
+    ])
+])
+
+report.run(reference_data= None,
+           current_data= assistant_logs[:10],
+           column_mapping=column_mapping)
+report 

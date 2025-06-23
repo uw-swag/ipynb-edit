@@ -1,0 +1,30 @@
+```
+    ## Pandas is used for data manipulation and analysis
+    import pandas as pd
+
+    ## Cudf is used for GPU-accelerated data manipulation
+    import cudf
+
+    ## Enable cudf.pandas extension
+    %load_ext cudf.pandas
+
+    ## Import cudf as pd
+    import pandas as pd
+
+    ## Import necessary libraries
+    import requests
+    from io import StringIO
+
+    ## Fetch data from a URL
+    url = "https://github.com/plotly/datasets/raw/master/tips.csv"
+    content = requests.get(url).content.decode("utf-8")
+
+    ## Read the data into a cudf DataFrame
+    tips_df = pd.read_csv(StringIO(content))
+
+    ## Calculate the tip percentage
+    tips_df["tip_percentage"] = tips_df["tip"] / tips_df["total_bill"] * 100
+
+    ## Display the average tip by dining party size
+    print(tips_df.groupby("size").tip_percentage.mean())
+    ```

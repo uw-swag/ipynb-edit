@@ -1,0 +1,20 @@
+```
+    import numpy as np
+
+from deepchecks.vision.base import VisionData
+from deepchecks.vision.checks.performance import MeanAverageRecallReport
+from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+from deepchecks.vision.datasets.detection import coco
+from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+check = MeanAverageRecallReport()
+result = check.run(test_ds, yolo, prediction_formatter=det_formatter)
+result
+check = MeanAverageRecallReport().add_condition_test_average_recall_not_less_than(0.4)
+result = check.run(test_ds, yolo, prediction_formatter=det_formatter)
+result.show(show_additional_outputs=False)
+
+```
+
+The code above is a part of a larger codebase and it's splitting the VisionData and removing formatters. The VisionData class is used to load and preprocess data, and the formatters are used to format the data for visualization. The MeanAverageRecallReport is a check that calculates the mean average recall for a given dataset and model. The code splits the VisionData and removes the formatters before running the check.

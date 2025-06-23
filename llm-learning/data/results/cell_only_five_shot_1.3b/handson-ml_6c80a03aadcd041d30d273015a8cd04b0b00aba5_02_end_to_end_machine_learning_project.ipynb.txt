@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Update notebooks 1 to 8 to latest library versions (in particular Scikit-Learn 0.20)"
+    Original Code Cells:
+    '''
+    from sklearn.preprocessing import Imputer
+
+imputer = Imputer(strategy="median")
+from future_encoders import OrdinalEncoder
+from future_encoders import OneHotEncoder
+
+cat_encoder = OneHotEncoder()
+housing_cat_1hot = cat_encoder.fit_transform(housing_cat)
+housing_cat_1hot
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+
+num_pipeline = Pipeline([
+        ('imputer', Imputer(strategy="median")),
+        ('attribs_adder', CombinedAttributesAdder()),
+        ('std_scaler', StandardScaler()),
+    ])
+
+housing_num_tr = num_pipeline.fit_transform(housing_num)
+from future_encoders import ColumnTransformer
+num_attribs = list(housing_num)
+cat_attribs = ["ocean_proximity"]
+
+old_num_pipeline = Pipeline([
+        ('selector', OldDataFrameSelector(num_attribs)),
+        ('imputer', Imputer(strategy="median")),
+        ('attribs_adder', CombinedAttributesAdder()),
+        ('std_scaler', StandardScaler()),
+    ])
+
+old_cat_pipeline = Pipeline([
+        ('selector', OldDataFrameSelector(cat_attribs)),
+        ('cat_encoder', OneHotEncoder(sparse=False)),
+    ])
+from sklearn.ensemble import RandomForestRegressor
+
+forest_reg = RandomForestRegressor(random_state=42)
+forest_reg.fit(housing_prepared, housing_labels)
+param_grid = [
+        {'preparation__num__imputer__strategy': ['mean', 'median', 'most_frequent

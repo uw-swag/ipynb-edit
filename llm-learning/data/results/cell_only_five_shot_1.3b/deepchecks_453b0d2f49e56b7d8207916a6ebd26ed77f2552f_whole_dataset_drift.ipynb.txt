@@ -1,0 +1,34 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, accuracy_score
+
+    # Assuming you have a DataFrame df with 'text' and 'label' columns
+    X = df['text']
+    y = df['label']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Convert text data into numerical data
+    vectorizer = CountVectorizer()
+    X_train_vectorized = vectorizer.fit_transform(X_train)
+    X_test_vectorized = vectorizer.transform(X_test)
+
+    # Train a Multinomial Naive Bayes classifier
+    clf = MultinomialNB()
+    clf.fit(X_train_vectorized, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test_vectorized)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    print('Accuracy:', accuracy_score(y_test, y_pred))
+
+    # Save the model
+    from sklearn.externals import joblib
+    joblib.dump(clf, 'mlc_225_classifier.pkl')
+    ```
+    This code will train a Multinomial Naive Bayes classifier on the text data in the 'text' column of the DataFrame, and then it will evaluate the model using a classification report and accuracy score. The trained model is then saved to a file named 'mlc_225_classifier.pkl'.

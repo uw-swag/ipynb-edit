@@ -1,0 +1,33 @@
+```python
+    # Section 8.7: BPTT (Backpropagation Through Time)
+    ## (#90)
+
+    ## BPTT (Backpropagation Through Time)
+
+    ## 8.7. BPTT
+
+    ## BPTT is a method used to train recurrent neural networks (RNNs) that is particularly useful for training RNNs with long sequences.
+
+    ## BPTT works by backpropagating the error gradient through the network, starting from the final time step and working backwards.
+
+    ## The main idea behind BPTT is to compute the gradient of the loss function with respect to the hidden state at each time step, and then use this gradient to update the weights of the network.
+
+    ## This method is particularly useful when the sequence length is long, as it allows the network to learn from the entire sequence at once.
+
+    ## The BPTT algorithm is implemented in the `bptt` function in the `rnn_utils.py` module.
+
+    ## The `bptt` function takes as input a sequence of inputs, a sequence of hidden states, and a sequence of cell states, and returns a sequence of output values and a sequence of cell states.
+
+    ## The output values are computed as the sum of the input values and the weighted sum of the hidden and cell states.
+
+    ## The cell states are updated as the weighted sum of the input and hidden states, and the hidden states are updated as the weighted sum of the input and the cell states.
+
+    ## The function is used in the `train_rnn` function in the `rnn_trainer.py` module.
+
+    ## The `train_rnn` function takes as input a sequence of inputs, a sequence of hidden states, a sequence of cell states, and a sequence of output values, and returns a sequence of new hidden states and cell states.
+
+    ## The new hidden states are computed as the weighted sum of the input and the output values, and the cell states are updated as the weighted sum of the input, hidden states, and the output values.
+
+    ## The function is used in the `train_rnn` function in the `rnn_trainer.py` module.
+
+    ##

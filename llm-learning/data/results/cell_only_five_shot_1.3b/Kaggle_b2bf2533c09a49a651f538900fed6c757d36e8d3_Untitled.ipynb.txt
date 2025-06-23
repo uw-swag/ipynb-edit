@@ -1,0 +1,53 @@
+
+    # Load the dataset
+    df = pd.read_csv('HRAnalytics.csv')
+
+    # Check the first few rows of the dataset
+    print(df.head())
+
+    # Check the summary statistics of the dataset
+    print(df.describe())
+
+    # Check the number of missing values in each column
+    print(df.isnull().sum())
+
+    # Check the distribution of the target variable
+    print(df['Attrition'].value_counts())
+
+    # Check the correlation between different features
+    plt.figure(figsize=(12,10))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    # Check the distribution of the Age column
+    plt.figure(figsize=(6,4))
+    sns.distplot(df['Age'], bins=30)
+    plt.show()
+
+    # Check the distribution of the Salary column
+    plt.figure(figsize=(6,4))
+    sns.distplot(df['Salary'], bins=30)
+    plt.show()
+
+    # Check the distribution of the PerformanceRating column
+    plt.figure(figsize=(6,4))
+    sns.distplot(df['PerformanceRating'], bins=30)
+    plt.show()
+
+    # Check the distribution of the PromotionLast5Years column
+    plt.figure(figsize=(6,4))
+    sns.distplot(df['PromotionLast5Years'], bins=30)
+    plt.show()
+
+    # Check the distribution of the Department column
+    plt.figure(figsize=(6,4))
+    sns.countplot(df['Department'])
+    plt.show()
+
+    # Check the distribution of the Gender column
+    plt.figure(figsize=(6,4))
+    sns.countplot(df['Gender'])
+    plt.show()
+
+    # Check the distribution of the EmployeeCount column
+    plt.figure(figsize=(6,4))

@@ -1,0 +1,44 @@
+
+    ### Instruction:
+    [
+    Commit Message: "removing useless git LFS"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import text_normalizer as tn
+    import model_evaluation_utils as meu
+
+    np.set_printoptions(precision=2, linewidth=80)
+<\Cell_0>
+<Cell_1>
+dataset = pd.read_csv(r'movie_reviews.csv')
+
+reviews = np.array(dataset['review'])
+sentiments = np.array(dataset['sentiment'])
+
+# extract data for model evaluation
+test_reviews = reviews[35000:]
+test_sentiments = sentiments[35000:]
+sample_review_ids = [7626, 3533, 13010]
+
+# normalize dataset
+norm_test_reviews = tn.normalize_corpus(test_reviews)
+<\Cell_1>
+<Cell_2>
+sentiment_polarity = [afn.score(review) for review in test_reviews]
+pos_score = neg_score = token_count = obj_score = 0
+# aggregate final scores and final sentiment
+final_score = sum(scores['compound'] for review, scores in zip(test_reviews, test_sentiments)) / len(test_reviews)
+final_sentiment = 'positive' if final_score >= 0.05 else 'negative'
+<\Cell_2>
+<Cell_3>
+meu.display_model_performance_metrics(true_labels=test_sentiments, predicted_labels=predicted_sentiments, 
+                                  classes=['positive', 'negative'])
+<\Cell_3>
+<Cell_4>
+predicted_sentiments = [analyze_sentiment_vader_lexicon(review, threshold=0.4, verbose=True) for review in test_reviews]
+<\Cell_4>
+<Cell_5>
+meu.display_model_performance_metrics(true_labels=test_

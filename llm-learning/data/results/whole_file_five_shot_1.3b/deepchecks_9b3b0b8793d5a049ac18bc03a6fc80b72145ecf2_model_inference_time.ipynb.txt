@@ -1,0 +1,31 @@
+```python
+    <Cell_0>
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.model_selection import train_test_split
+
+    from deepchecks import Dataset
+    from deepchecks.checks.methodology import ModelInferenceTimeCheck
+    <\Cell_0>
+    <Cell_1>
+    iris = load_iris(as_frame=True)
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    train_ds = Dataset(train, features=iris.feature_names, label='target')
+    test_ds = Dataset(test, features=iris.feature_names, label='target')
+
+    clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+    <\Cell_1>
+    <Cell_2>
+    # NBVAL_SKIP
+    check = ModelInferenceTimeCheck()
+    check.run(test_ds, clf)
+    <\Cell_2>
+    <Cell_3>
+    # NBVAL_SKIP
+    check = ModelInferenceTimeCheck().add_condition_inference_time_is_not_greater_than(0.00001)
+    check.run(test_ds, clf)
+    <\Cell_3>
+    ```
+
+    The code above is an example of how to use the `ModelInferenceTimeCheck` from the `deepchecks` library to check the inference time of a model. The `ModelInferenceTimeCheck` is a check that verifies that the model's inference time is not greater than a certain threshold. If the inference time is greater than the threshold, the check will fail.

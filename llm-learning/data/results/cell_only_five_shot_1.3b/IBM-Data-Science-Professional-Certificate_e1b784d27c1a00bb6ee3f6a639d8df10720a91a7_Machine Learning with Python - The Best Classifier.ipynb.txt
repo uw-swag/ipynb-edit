@@ -1,0 +1,13 @@
+```python
+    # Plot the model accuracy for a different number of neighbors
+    plt.plot(range(1, ds), mean_acc, 'g')
+    plt.fill_between(range(1, ds), mean_acc - 1 * std_acc, mean_acc + 1 * std_acc, alpha=0.10)
+    plt.fill_between(range(1, ds), mean_acc - 3 * std_acc, mean_acc + 3 * std_acc, alpha=0.10, color="green")
+    plt.legend(('Accuracy ', '+/- 1xstd', '+/- 3xstd'))
+    plt.ylabel('Accuracy ')
+    plt.xlabel('Depth (d)')
+    plt.tight_layout()
+    plt.show()
+
+    print(f"The best accuracy was with {mean_acc.max()} with d={mean_acc.argmax()+2}")  # best is with d=1, but use 2 so +2 instead of +1 in print statement
+    ```

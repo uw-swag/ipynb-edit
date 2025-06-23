@@ -1,0 +1,16 @@
+```python
+    def two_step(step1, step2, step3):
+        # Step 1: 1-DNF
+        # Convert the first step to a DNF form
+        dnf1 = step1.to_dnf()
+
+        # Step 2: Iterable SVM
+        # Convert the DNF form to an iterable SVM
+        svm1 = dnf1.to_svm()
+
+        # Step 3: F1'
+        # Apply F1' to the iterable SVM
+        f1_prime = svm1.apply_f1_prime()
+
+        return f1_prime
+    ```

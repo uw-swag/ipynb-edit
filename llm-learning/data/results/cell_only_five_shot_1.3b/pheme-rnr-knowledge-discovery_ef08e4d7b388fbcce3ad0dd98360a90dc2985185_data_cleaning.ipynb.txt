@@ -1,0 +1,34 @@
+```
+    def convertTrueFalseTo01(X):
+        X[X==True]=1.0
+        X[X==False]=0.0
+        X[X=='True']=1.0
+        X[X=='False']=0.0
+        return X
+
+    def standardize_cols(X, mu=None, sigma=None):
+        # Standardize each column with mean 0 and variance 1
+        n_rows, n_cols = X.shape
+
+        if mu is None:
+            mu = np.mean(X, axis=0)
+
+        if sigma is None:
+            sigma = np.std(X, axis=0)
+            sigma[sigma < 1e-8] = 1.
+
+        return (X - mu) / sigma, mu, sigma
+
+    gw_thrds_values=gw_thrds_without_rumor_tag.values
+    n,d=gw_thrds_values.shape
+    gw_thrds_values=convertTrueFalseTo01(gw_thrds_values[:,1:d])
+    n,d=gw_thrds_values.shape
+
+    gw_thrds_rumortags_values=convertTrueFalseTo01(gw_thrds_rumortags.values)
+    print(gw_thrds_values)
+    gw_thrds_values,_,_=standardize_cols(gw_thrds_values.astype(float))
+
+    n,d=gw_thrds_values.shape
+    print(gw_thrds_values.shape)
+
+    ```

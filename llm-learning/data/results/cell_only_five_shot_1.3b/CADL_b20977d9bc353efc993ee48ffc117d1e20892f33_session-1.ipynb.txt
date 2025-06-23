@@ -1,0 +1,12 @@
+```python
+    import tensorflow as tf
+
+    subtraction = imgs - mean_img_4d
+
+    # Now compute the standard deviation by calculating the
+    # square root of the sum of squared differences
+    std_img_op = tf.sqrt(tf.reduce_sum(subtraction * subtraction, reduction_indices=0))
+
+    # Now calculate the standard deviation using your session
+    std_img = sess.run(std_img_op)
+    ```

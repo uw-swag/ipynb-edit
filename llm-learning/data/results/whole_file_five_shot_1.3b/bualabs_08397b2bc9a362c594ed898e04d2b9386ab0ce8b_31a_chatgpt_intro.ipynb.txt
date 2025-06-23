@@ -1,0 +1,47 @@
+```python
+    import openai
+    import os
+    from getpass import getpass
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    openai.api_key = token
+
+    # list models
+    models = openai.Model.list()
+    print(models.data)    
+
+    # print the first model's id
+    print(len(models.data))
+    print(models.data[0].id)
+
+    # create a completion
+    completion = openai.Completion.create(model="ada", prompt="Hello world")
+
+    # print the completion
+    print(completion.choices[0].text)
+
+    # print the completion
+    print(completion.choices[0].text)
+
+    # create a chat completion
+    messages = [{"role": "user", "content": "Hello World"}]
+    completion2 = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
+        temperature=0, 
+        request_timeout=3.0,
+    )
+
+    # print the completion
+    print(completion2.choices[0].message["content"])
+
+    # get completion
+    def get_completion(prompt, model="gpt-3.5-turbo"):
+        messages = [{"role": "user", "content": prompt}]
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            temperature=0, # this is the degree of randomness of the model's output
+        )
+        return response.choices[0].message["content"]
+    ```

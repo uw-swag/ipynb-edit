@@ -1,0 +1,15 @@
+```
+    #MACHINE LEARNING AND TESTING
+
+    X = train_DF.drop('Survived', axis = 1)
+    Y = train_DF['Survived']
+    X_test = test_DF.drop('PassengerId', axis = 1).copy()
+
+    # Using RandomForestClassifier
+
+    rfc = RandomForestClassifier()
+    rfc.fit(X,Y)
+    Y_test = rfc.predict(X_test)
+    rfc.score(X,Y)
+
+    ```

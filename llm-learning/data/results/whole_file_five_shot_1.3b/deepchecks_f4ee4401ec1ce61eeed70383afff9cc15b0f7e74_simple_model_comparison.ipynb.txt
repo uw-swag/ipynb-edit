@@ -1,0 +1,26 @@
+```
+    <Cell_0>
+from deepchecks.datasets.classification.phishing import load_data, load_fitted_model
+
+train_dataset, test_dataset = load_data()
+model = load_fitted_model()
+<\Cell_0>
+<Cell_1>
+from deepchecks.checks.performance import SimpleModelComparison
+
+# Using tree model as a simple model, and changing the tree depth from the default 3 to 5
+check = SimpleModelComparison(simple_model_type='tree', max_depth=5)
+check.run(train_dataset, test_dataset, model)
+<\Cell_1>
+<Cell_2>
+check = SimpleModelComparison()
+result = check.run(train_dataset, test_dataset, model)
+result.value
+<\Cell_2>
+<Cell_3>
+check = SimpleModelComparison(simple_model_type='tree')
+check.add_condition_gain_not_less_than(0.9)
+result = check.run(train_dataset, test_dataset, model)
+result.show(show_additional_outputs=False)
+<\Cell_3>
+```

@@ -1,0 +1,24 @@
+```python
+    # Predict on test data
+    y_pred = learn.predict(data.test_ds)
+
+    # Metrics Calculation
+    r2 = round(metrics.r2_score(y_test, y_pred),2)
+    Adj_r2 = round(1-(1-r2)*(9-1)/(9-1-1),2)
+
+    #Display results
+    print(color.BOLD + '\nR2 score is ',r2)
+
+    print(color.BOLD + '\nAdjusted R2 score is ',Adj_r2)
+
+    print(color.BOLD + '\nMean Absolute Error is',round(metrics.mean_absolute_error(y_test,y_pred),2))
+
+    print(color.BOLD + '\nMean Squared Error is',round(metrics.mean_squared_error(y_test,y_pred),2))
+
+    print(color.BOLD + '\nRoot Mean Squared Error is',round(np.sqrt(metrics.mean_squared_error(y_test,y_pred)),2))
+
+    # Export the model using joblib library
+    joblib.dump(learn.model, "image_similarity_model.pkl")
+    print(f"Exported model to directory {learn.path}")
+    ```
+    The above code will predict the test data, calculate the metrics, and export the model.

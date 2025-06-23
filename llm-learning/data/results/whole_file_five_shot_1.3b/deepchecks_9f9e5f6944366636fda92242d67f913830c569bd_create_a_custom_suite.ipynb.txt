@@ -1,0 +1,26 @@
+```python
+    # importing all existing checks for demonstration simplicity
+    from deepchecks.checks import *
+    from deepchecks import Suite
+    from sklearn.metrics import precision_score, recall_score, make_scorer
+
+    # The Suite's first argument is its name, and then all of the check objects.
+    # Some checks can receive arguments when initialized (all check arguments have default values)
+    # Each check can have an optional condition(/s)
+    # Multiple conditions can be applied subsequentially
+    new_custom_suite = Suite('Simple Suite For Model Performance',
+        ModelInfo(),
+        # use custom scorers for performance report:
+        PerformanceReport().add_condition_train_test_relative_degradation_not_greater_than(threshold=0.15\
+                     ).add_condition_test_performance_not_less_than(0.8),
+        ConfusionMatrixReport(),
+        SimpleModelComparison(simple_model_type='constant', \
+                              alternative_scorers={'Recall (Multiclass)': make_scorer(recall_score, average=None), \
+                                                   'Precision (Multiclass)': make_scorer(precision_score, average=None)} \
+                             ).add_condition_gain_not_less_than(0.3)
+    )
+    # Let's see the suite:
+    new_custom_suite
+    ```
+
+    The code above is a demonstration of how to add widgets support in the docs. The `deepchecks` library provides a wide range of checks and widgets that can be used to analyze the performance of a model. The `Suite` class in `deepchecks` allows you to add multiple checks to a suite, and the `run` method allows you to execute the suite on a model. The `add` and `remove` methods allow you to add and remove checks from the suite, respectively. The `clean_conditions` method allows you to remove all conditions from a check, and the `name` property allows you to change the name of the suite.

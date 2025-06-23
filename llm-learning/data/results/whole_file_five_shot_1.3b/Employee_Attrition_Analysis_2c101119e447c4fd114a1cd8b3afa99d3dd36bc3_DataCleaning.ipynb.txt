@@ -1,0 +1,50 @@
+```
+    #prepare for RDS connection
+    # !pip install psycopg2
+    # dependencies
+    import pandas as pd
+    import sqlalchemy
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+    from getpass import getpass
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+    # create SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+
+    # read in table from sql 
+    attrition_df = pd.read_sql('SELECT * FROM og_dataset', connection)
+
+    # view dataframe
+    attrition_df.head()
+
+    # determine if there are any missing values and data types for columns
+    attrition_df.info()
+
+    # column names
+    attrition_df.columns
+
+    # ambiguous/unnecessary columns - only going to keep MonthlyIncome
+    attrition_df[["Daily Rate", "Hourly Rate", "Monthly Income", "Monthly Rate", "Standard Hours", "Over 18"]]
+
+    # these columns are either unique identifiers, ambiguous or constant thru each column
+    columns_to_drop = ["Daily Rate", "Hourly Rate", "Monthly Rate", "Standard Hours", "Employee Count", 
+                       "Employee Number", "Over 18"]
+
+    attrition_df.drop(columns=columns_to_drop, inplace=True)
+
+    # number of columns now down from 35 to 28
+    len(attrition_df.columns)
+
+   

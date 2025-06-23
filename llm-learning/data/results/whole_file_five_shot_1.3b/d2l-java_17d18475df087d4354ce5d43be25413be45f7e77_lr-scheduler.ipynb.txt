@@ -1,0 +1,37 @@
+```
+    [
+    Commit Message: "bump of D2L Java book version to 0.8.0 (#58)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.7.0-SNAPSHOT
+    %maven ai.djl:basicdataset:0.7.0-SNAPSHOT
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+
+    %maven ai.djl.mxnet:mxnet-engine:0.7.0-SNAPSHOT
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+    <\Cell_0>
+    <Cell_1>
+    %load ../utils/plot-utils
+    %load ../utils/Functions.java
+    %load ../utils/GradDescUtils.java
+    %load ../utils/Accumulator.java
+    %load ../utils/StopWatch.java
+    %load ../utils/Training.java
+    %load ../utils/TrainingChapter11.java
+    %load ../utils/FashionMnistUtils.java
+    <\Cell_1>
+    <Cell_2>
+    import ai.djl.Model;
+    import ai.djl.basicdataset.FashionMnist;
+    import ai.djl.engine.Engine;
+    import ai.djl.metric.Metrics;
+    import ai.djl.ndarray.types.Shape;
+    import ai.djl.nn.Activation;
+    import ai.djl.nn.Blocks;
+    import ai.djl.nn.SequentialBlock;
+    import ai.djl.nn.convolutional.Conv2d;
+    import ai.djl.nn

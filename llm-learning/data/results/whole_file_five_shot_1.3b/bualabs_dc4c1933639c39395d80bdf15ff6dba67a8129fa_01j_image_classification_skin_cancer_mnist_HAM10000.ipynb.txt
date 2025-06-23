@@ -1,0 +1,58 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Added links to several articles."
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+# ! nvidia-smi
+<\Cell_1>
+<Cell_2>
+# Colab
+
+! pip install kaggle --upgrade -q
+! pip install fastai2 -q
+<\Cell_2>
+<Cell_3>
+from fastai2.basics import *
+from fastai2.vision.all import *
+from fastai2.callback.all import *
+from fastai2.callback.cutmix import CutMix
+<\Cell_3>
+<Cell_4>
+np.random.seed(42)
+<\Cell_4>
+<Cell_5>
+dataset = 'kmader/skin-cancer-mnist-ham10000'
+
+# Google Colab
+config_path = Path('/content/drive')
+data_path_base = Path('/content/datasets/')
+
+data_path = data_path_base/dataset
+
+from google.colab import drive
+drive.mount(str(config_path))
+os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+# # VM
+# config_path = Path(os.getenv("HOME"))
+# data_path = config_path/"datasets"/dataset
+
+# data_path.mkdir(parents=True, exist_ok=True)
+# os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/.kaggle"
+<\Cell_5>
+<Cell_6>
+# !kaggle datasets download {dataset} -p "{data_path}" --unzip
+<\Cell_6>
+<Cell_7>
+data_path.ls()
+<\Cell_7>
+<Cell_8>
+# (data_path/"ham10000_images_part_1").ls()
+<\Cell_8>

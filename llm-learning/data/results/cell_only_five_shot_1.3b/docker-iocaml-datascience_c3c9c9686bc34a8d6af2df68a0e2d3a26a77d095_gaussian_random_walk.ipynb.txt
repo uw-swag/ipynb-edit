@@ -1,0 +1,40 @@
+```python
+    # Adding examples
+    # Let's add some examples to our RBM model
+    # We'll use the same dataset as before
+    Xtr, Xtst, Ytr, Ytst = movielens.load_data()
+
+    # First we initialize the model class
+    model = RBM(
+        n_users=Xtr.shape[0],
+        possible_ratings=np.unique(Xtr),
+        visible_units=Xtr.shape[1],
+        hidden_units=600,
+        training_epoch=30,
+        minibatch_size=60,
+        keep_prob=0.9,
+        with_metrics=True
+    )
+
+    # Model Fit
+    with Timer() as train_time:
+        model.fit(Xtr)
+
+    print("Took {:.2f} seconds for training.".format(train_time.interval))
+
+    # Plot the train RMSE as a function of the epochs
+    line_graph(values=model.rmse_train, labels='train', x_name='epoch', y_name='rmse_train')
+
+    # Now let's predict some ratings
+    predictions = model.predict(Xtst)
+
+    # And compute some evaluation metrics
+    map_at_k_value = map_at_k(Ytst, predictions, k=5)
+    ndcg_at_k_value = ndcg_at_k(Ytst, predictions, k=5)
+    precision_at_k_value = precision_at_k(Ytst, predictions, k=5)
+    recall_at_k_value = recall_at_k(Ytst, predictions, k=5)
+
+    print("Mean Average Precision at k: {}".format(map_at_k_value))
+    print("Normalized Discounted Cumulative Gain at k: {}".format(ndcg_at_k_value))
+    print("Precision at k: {}".format(precision_at_k_value))
+    print("Recall at k: {}".format(recall_at_

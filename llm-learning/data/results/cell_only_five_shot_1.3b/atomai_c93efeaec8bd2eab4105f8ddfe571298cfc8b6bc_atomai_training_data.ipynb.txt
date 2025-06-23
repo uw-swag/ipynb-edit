@@ -1,0 +1,29 @@
+
+    Here's the updated code with the notebook version bumped to 0.2.5:
+
+    ```python
+    # For a single class case, we still need to explicitly specify the single channel
+    labels_all = labels_all[..., None] if np.ndim(labels_all) == 3 else labels_all
+    # Specify size, dimensions
+    batch_size = len(labels_all) # here we will pass through the augmentor all data at once
+    dim1, dim2, ch = labels_all.shape[1:]
+    # Define image distortion/noise parameters
+    zoom = 1.1 # zoom factor
+    poisson = [30, 40] # P noise range (scaled units)
+    gauss = [20, 100] # G noise range (scaled units)
+    blur = [1, 40] # Blurring range (scaled units)
+    contrast = [5, 14] # contrast range (< 10 is brighter, > 10 is darker)
+    salt_and_pepper = [1, 10] # min/max amount of salted/peppered pixels (scaled units)
+    # Run the augmentor
+    imaug = utils.datatransform(
+        batch_size=batch_size, width=dim1, height=dim2, n_channels=ch,
+        dim_order_in='channel_last', dim_order_out='channel_first', 
+        gauss=gauss, poisson=poisson, salt_and_pepper=salt_and_pepper,
+        contrast=contrast, blur=blur, zoom=zoom, rotation=True,
+        squeeze_channels=True, seed=42)
+    images_all, labels_all = imaug.run(images_all, labels_all)
+
+    print(images_all.shape, labels_all.shape)
+    ```
+
+    The version bump is done by changing the version number in the commit message. In this case, the version number is "0.2.5".

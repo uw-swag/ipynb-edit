@@ -1,0 +1,33 @@
+```python
+    # This is an example of how to use the `autograd` library to build a function that can be used to optimize a model.
+    # In this case, we're using the `sigmoid` function as our cost function, and we're using the `gradient_descent` method to optimize it.
+
+    import autograd.numpy as np
+
+    # Define the sigmoid function
+    def sigmoid(t):
+        return 1 / (1 + np.exp(-t))
+
+    # Define the cost function
+    def cost_function(w):
+        return (sigmoid(w[0]) - 0.5) ** 2 + (sigmoid(w[1]) - 0.5) ** 2
+
+    # Initialize the weights
+    w = np.array([0.0, 0.0])
+
+    # Define the gradient of the cost function
+    def cost_gradient(w):
+        return np.array([2 * (sigmoid(w[0]) - 0.5), 2 * (sigmoid(w[1]) - 0.5)])
+
+    # Define the gradient descent method
+    def gradient_descent(w, learning_rate, max_its):
+        for _ in range(max_its):
+            w -= learning_rate * cost_gradient(w)
+        return w
+
+    # Run the gradient descent method
+    w = gradient_descent(w, learning_rate=0.1, max_its=1000)
+
+    # Print the optimized weights
+    print(f"Optimized weights: {w}")
+    ```

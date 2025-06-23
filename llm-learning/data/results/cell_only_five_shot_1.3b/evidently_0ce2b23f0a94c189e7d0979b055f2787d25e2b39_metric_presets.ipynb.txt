@@ -1,0 +1,49 @@
+```python
+    import numpy as np
+from sklearn.datasets import fetch_openml
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+curr.head()
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDrift
+
+
+report = Report(metrics=[
+    DataDrift(),
+])
+
+
+report.run(reference_data=ref, current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+report
+report.save_html('test_save.html')
+report.save_json('test_save.json')
+from evidently.metric_preset import classification_performance
+from evidently.metric_preset import regression_performance
+from evidently.metric_preset import data_quality
+regression_report = Report(metrics=[
+    regression_performance.RegressionPerformance(),
+])
+
+
+regression_report.run(reference_data=ref, current_data=curr, 
+                      column_mapping=ColumnMapping(target='target', prediction='preds'))
+regression_report
+data_quality_report = Report(metrics=[
+    data_quality.DataQuality(),
+])
+
+
+data_quality_report.run(reference_data=ref, current_data=curr, 
+                      column_mapping=ColumnMapping(target='target', prediction='preds

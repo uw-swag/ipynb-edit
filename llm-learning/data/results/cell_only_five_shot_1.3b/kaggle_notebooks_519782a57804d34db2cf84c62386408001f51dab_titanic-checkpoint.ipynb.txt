@@ -1,0 +1,39 @@
+```
+    # ------------- PREPROCESSING ---------------------
+    # Assign columns to clean and combine
+    cols_to_clean = ['abstract','full_text']
+    df_clean = clean_dataframe_for_rec(all_text, cols_to_clean, for_BERT=True)
+    df_clean.head()
+
+    # ------------- RECOMMEND ---------------------
+    # TF-IDF with tokenization_method of 'nltk', 'bert', 'scibert', or 'none'
+    results = recommend_with_tfidf(df_clean,
+                                   text_col='cleaned_text',
+                                   id_col='cord_uid',
+                                   title_col='title',
+                                   tokenization_method='scibert')
+
+    # Organize results as an easy-to-read table
+    rec_table = organize_results_as_tabular(df_clean,
+                                            results,
+                                            id_col='cord_uid',
+                                            k=5)
+    rec_table.head()
+
+    # Get full information for any particular recommendation
+    rec_info = get_full_info(all_text, rec_id)
+    rec_info
+    rec_info['url']
+    rec_info['title']
+
+    # ------------- KAGGLE ---------------------
+    # Load the titanic dataset
+    titanic = pd.read_csv('titanic.csv')
+    titanic.head()
+
+    # ------------- SBERT ---------------------
+    # Load the sberbank dataset
+    sberbank = pd.read_csv('kaggle_sberbank.csv')
+    sberbank.head()
+    ```
+    '''

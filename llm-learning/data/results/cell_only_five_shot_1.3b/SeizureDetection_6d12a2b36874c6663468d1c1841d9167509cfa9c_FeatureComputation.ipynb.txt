@@ -1,0 +1,40 @@
+```
+    # Fix warning divide with zero
+    import warnings
+    warnings.filterwarnings("ignore", category=RuntimeWarning)
+
+    # Import necessary libraries
+    import pywt
+    import numpy as np
+    import pandas as pd
+    from pyentrp import entropy
+    from tqdm.notebook import tqdm
+    from scipy import integrate, signal, stats
+
+    def leftRightHemisphericChannels(df):
+        ndf = pd.DataFrame()
+        ndf['AvgLeftHemisphere'] = (df['F3-C3']+df['C3-P3'])/2
+        ndf['AvgRightHemisphere'] = (df['F4-C4']+df['C4-P4'])/2
+        ndf['seizure'] = df['seizure']
+        return ndf
+
+    def computeTimeDomainFeatures(signal):
+        mean = np.mean(signal)
+        var = np.var(signal)
+        skew = stats.skew(signal)
+        kurt = stats.kurtosis(signal)
+        std = np.std(signal)
+        median = np.median(signal)
+        zcr = ((signal[:-1] * signal[1:]) < 0).sum()
+        cv = stats.variation(signal)
+        rms = np.sqrt(signal.dot(signal)/signal.size)
+        p2p = signal.max() - signal.min()
+        sampEn = entropy.sample_entropy(signal, 1)[0]
+        return mean, var, skew, kurt, std, median, zcr, cv, rms, p2p, sampEn
+
+    def psd(x, fs, win):
+        bands = [0.5, 4, 8, 12, 30, 100]
+        freqs, psd = signal.welch(x, fs, nperseg = win)
+        avg_power=[]
+        while len(bands)>1:
+            idx = np.logical_and(freqs >= bands[0], freqs <= bands[1

@@ -1,0 +1,37 @@
+```python
+    #@title Collaborative Filtering
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.metrics.pairwise import cosine_similarity
+    from scipy import sparse
+
+    # Load the data
+    ratings = pd.read_csv('ratings.csv')
+    movies = pd.read_csv('movies.csv')
+    ratings = pd.merge(movies, ratings).drop(['genres', 'original_title', 'overview', 'tagline', 'homepage', 'id'], axis=1)
+
+    # Create a pivot table
+    movie_matrix = ratings.pivot(index='user_id', columns='title', values='rating').fillna(0)
+
+    # Create a sparse matrix
+    movie_matrix_sparse = sparse.csr_matrix(movie_matrix.values)
+
+    # Calculate the cosine similarity
+    cosine_sim = cosine_similarity(movie_matrix_sparse)
+
+    # Function to get recommendations
+    def get_recommendations(title, cosine_sim=cosine_sim):
+        idx = indices[title]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:16]
+        movie_indices = [i[0] for i in sim_scores]
+        return movie_matrix.iloc[movie_indices]
+
+    # Get movie recommendations
+    movies_recommended = get_recommendations('Titanic')
+
+    # Print the recommended movies
+    print(movies_recommended)
+    ```
+    '''

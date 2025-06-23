@@ -1,0 +1,45 @@
+```python
+    # Upgraded to djl 0.13.0 (#176)
+    # Upgraded to DataPoints.java
+    # Upgraded to Training.java
+
+    NDManager manager = NDManager.newBaseManager();
+
+    NDArray trueW = manager.create(new float[]{2, -3.4f});
+    float trueB = 4.2f;
+
+    DataPoints dp = DataPoints.syntheticData(manager, trueW, trueB, 1000);
+    NDArray features = dp.getX();
+    NDArray labels = dp.getY();
+
+    // Saved in the utils file for later use
+    public ArrayDataset loadArray(NDArray features, NDArray labels, int batchSize, boolean shuffle) {
+        return new ArrayDataset.Builder()
+                  .setData(features) // set the features
+                  .optLabels(labels) // set the labels
+                  .setSampling(batchSize, shuffle) // set the batch size and random sampling
+                  .build();
+    }
+
+    int batchSize = 10;
+    ArrayDataset dataset = loadArray(features, labels, batchSize, false);
+
+    Model model = Model.newInstance("lin-reg");
+
+    SequentialBlock net = new SequentialBlock();
+    Linear linearBlock = Linear.builder().optBias(true).setUnits(1).build();
+    net.add(linearBlock);
+
+    model.setBlock(net);
+
+    Loss l2loss = Loss.l2Loss();
+
+    Tracker lrt = Tracker.fixed(0.03f);
+    Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+
+    DefaultTrainingConfig config = new DefaultTrainingConfig(l2loss)
+        .optOptimizer(sgd) // Optimizer (loss function)
+        .optDevices(Device.getDevices(1)) // single GPU
+        .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+
+    Trainer trainer = model.newTrain

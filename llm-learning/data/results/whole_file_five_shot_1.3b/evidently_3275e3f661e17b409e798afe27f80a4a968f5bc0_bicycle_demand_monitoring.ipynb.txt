@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import requests
+    import zipfile
+    import io
+
+    from datetime import datetime, time
+    from sklearn import datasets, ensemble
+
+    from evidently import ColumnMapping
+    from evidently.report import Report
+    from evidently.metric_preset import DataDriftPreset, TargetDriftPreset, RegressionPreset
+
+    content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip").content
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+        raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+    raw_data.index = raw_data.apply(lambda row: datetime.combine(row.name, time(hour=int(row['hr']))), axis=1)
+
+    target = 'cnt'
+    prediction = 'prediction'
+    numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'hr', 'weekday']
+    categorical_features = ['season', 'holiday', 'workingday']
+
+    reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+    current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+
+    regressor = ensemble.RandomForestRegressor(random_state=0, n_estimators=50)
+    regressor.fit(reference[numerical_features + categorical_features], reference[target])
+
+    ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+    current_prediction = regressor.predict(current[numerical_features + categorical_features])
+
+   

@@ -1,0 +1,43 @@
+```python
+    import time
+    from pyspark.sql import SparkSession
+    from pyspark.ml.recommendation import ALS
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName('movielens').getOrCreate()
+
+    # Load user data
+    users = spark.read.format('csv').option('header', 'true').load('path/to/users.csv')
+
+    # Load movie data
+    movies = spark.read.format('csv').option('header', 'true').load('path/to/movies.csv')
+
+    # Load ratings
+    ratings = spark.read.format('csv').option('header', 'true').load('path/to/ratings.csv')
+
+    # Join users and movies
+    user_movie = users.join(movies, 'user_id')
+
+    # Create ALS model
+    als = ALS(userCol='user_id', itemCol='movie_id', ratingCol='rating', coldStart='drop')
+
+    # Train model
+    start_time = time.time()
+    model = als.fit(ratings)
+    train_time = time.time() - start_time
+
+    print("Took {} seconds for training.".format(train_time))
+
+    # Make predictions
+    predictions = model.transform(user_movie)
+
+    # Evaluate model
+    evaluator = RegressionEvaluator(metricName='rmse', labelCol='rating', predictionCol='prediction')
+    rmse = evaluator.evaluate(predictions)
+
+    print("Root Mean Squared Error (RMSE) on validation data = {}".format(rmse))
+
+    # Shutdown the SparkSession
+    spark.stop()
+    ```

@@ -1,0 +1,55 @@
+
+<Cell_0>
+# code for loading the format for the notebook
+import os
+
+# path : store the current path to convert back to it later
+path = os.getcwd()
+os.chdir('../notebook_format')
+from formats import load_style
+load_style()
+<\Cell_0>
+<Cell_1>
+os.chdir(path)
+%matplotlib inline
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+plt.rcParams['figure.figsize'] = 8, 6 # change default figure size
+
+# magic so that the notebook will reload external python modules
+%load_ext autoreload 
+%autoreload 2
+<\Cell_1>
+<Cell_2>
+y = np.array([ 0, 1, 2, 2 ])
+
+def one_hot_encode(y):
+    class_num = np.unique(y).shape[0]
+    y_encode = np.zeros( ( y.shape[0], class_num ) )
+    for idx, val in enumerate(y):
+        y_encode[ idx, val ] = 1.0
+    
+    return y_encode
+
+y_encode = one_hot_encode(y)
+y_encode
+<\Cell_2>
+<Cell_3>
+X = np.array([[0.1, 0.5],
+              [1.1, 2.3],
+              [-1.1, -2.3],
+              [-1.5, -2.5]])
+
+W = np.array([[0.1, 0.2, 0.3],
+              [0.1, 0.2, 0.3]])
+
+bias = np.array([0.01, 0.1, 0.1])
+
+print('Inputs X:\n', X)
+print('\nWeights W:\n', W)
+print('\nbias:\n', bias)
+<\Cell_3>
+<Cell_4>
+def net_input( X, W, b ):
+    return X.dot(W) + b

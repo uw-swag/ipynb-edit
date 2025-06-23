@@ -1,0 +1,32 @@
+```
+    The code you provided is using the Deep Learning Library (DML) to load and process data for a Neural Machine Translation (NMT) model. 
+
+    The `loadDataNMT` function is used to load the data for the NMT model. This function returns a `Pair` object, which contains two elements:
+
+    1. `ArrayDataset`: This is a dataset that contains the input and output data for the NMT model. The input data is the source language text, and the output data is the target language text.
+
+    2. `Pair<Vocab, Vocab>`: This is a pair of two `Vocab` objects, which represent the source and target language vocabularies.
+
+    The `getKey` and `getValue` methods of the `Pair` object are used to get the input and output data respectively.
+
+    The `getData` and `getLabels` methods of the `ArrayDataset` object are used to get the input and output data for each batch.
+
+    The `NDArray` objects in the code are used to represent numerical data arrays.
+
+    The `System.out.println` statements are used to print the input and output data for each batch.
+
+    The `NDManager` class is used to manage the GPU resources.
+
+    The `manager.newBaseManager(Functions.tryGpu(0))` line creates a new `NDManager` object with the default GPU device.
+
+    The `Functions.tryGpu(0)` line attempts to use the first GPU device. If a GPU device is available, it is used, otherwise, the default device is used.
+
+    The `NDArray X = batch.getData().get(0);` line gets the input data for the current batch.
+
+    The `NDArray xValidLen = batch.getData().get(1);` line gets the length of the input data for the current batch.
+
+    The `NDArray Y = batch.getLabels().get(0);` line gets the output data for the current batch.
+
+    The `NDArray yValidLen = batch.getLabels().get(1);` line gets the length of the output data for the current batch.
+
+    The `break` statement is used to stop the execution of

@@ -1,0 +1,119 @@
+@AutoMLOps.component
+def deploy_model(
+    model_directory: str,
+    project_id: str,
+    region: str
+):
+    """Custom component that trains a decision tree on the training data.
+
+    Args:
+        model_directory: GS location of saved model.
+        project_id: Project_id.
+        region: Region.
+    """
+    from google.cloud import aiplatform
+
+    aiplatform.init(project=project_id, location=region)
+    # Check if model exists
+    models = aiplatform.Model.list()
+    model_name = 'beans-model'
+    if 'beans-model' in (m.name for m in models):
+        parent_model = model_name
+        model_id = None
+        is_default_version=False
+        version_aliases=['experimental', 'challenger', 'custom-training', 'decision-tree']
+        version_description='challenger version'
+    else:
+        parent_model = None
+        model_id = model_name
+        is_default_version=True
+        version_aliases=['champion', 'custom-training', 'decision-tree']
+        version_description='first version'
+
+    serving_container = 'us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.1-0:latest'
+    uploaded_model = aiplatform.Model.upload(
+        artifact_uri=model_directory,
+        model_id=model_id,
+        display_name=model_name,
+        parent_model=parent_model,
+        is_default_version=is_default_version,
+        version_aliases=version_aliases,
+        version_description=version_description,
+        serving_container_image_uri=serving_container,
+        serving_container_ports=[8080],
+        labels={'created_by': 'automlops-team'},
+    )
+
+    endpoint = uploaded_model.deploy(
+        machine_type='n1-standard-4',
+        deployed_model_display_name='deployed-beans-model')
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_kfp_spec=False,
+                   run_local=False,
+                   schedule_pattern='0 */12 * * *'
+)
+AutoMLOps.go(project_id=PROJECT_ID,
+             pipeline_params=pipeline_params,
+             use_kfp_spec=False,
+             run_local=False,
+             schedule_pattern='0 */12 * * *'
+)
+@dsl.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ],
+    base_image='python:3.9',
+    output_component_file=f'{AutoMLOps.OUTPUT_DIR}/deploy_model.yaml',
+)
+def deploy_model(
+    model: Input[Model],
+    project: str,
+    region: str,
+    vertex_endpoint: Output[Artifact],
+    vertex_model: Output[Model]
+):
+    from google.cloud import aiplatform
+    aiplatform.init(project=project, location=region)
+    # Check if model exists
+    models = aiplatform.Model.list()
+    model_name = 'beans-model'
+    if 'beans-model' in (m.name for m in models):
+        parent_model = model_name
+        model_id = None
+        is_default_version=False
+        version_aliases=['experimental', 'challenger', 'custom-training', 'decision-tree']
+        version_description='challenger version'
+    else:
+        parent_model = None
+        model_id=model_name
+        is_default_version=True
+        version_aliases=['champion', 'custom-training', 'decision-tree']
+        version_description='first version'
+
+    serving_container = 'us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.1-0:latest'
+    uploaded_model = aiplatform.Model.upload(
+        artifact_uri=model.uri,
+        model_id=model_id,
+        display_name=model_name,
+        parent_model=parent_model,
+        is_default_version=is_default_version,
+        version_aliases=version_aliases,
+        version_description=version_description,
+        serving_container_image_uri=serving_container,
+        serving_container_ports=[8080],
+        labels={'created_by': 'automlops-team'},
+    )
+
+    endpoint = uploaded_model.deploy(
+        machine_type='n1-standard-4',
+        deployed_model_display_name='deployed-beans-model')
+    vertex_endpoint.uri = endpoint.resource_name
+    vertex_model.uri = endpoint.resource_name
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   use_kfp_spec=True,
+                   run_local=False,
+                   schedule_pattern='0 */12 * * *'
+)
+

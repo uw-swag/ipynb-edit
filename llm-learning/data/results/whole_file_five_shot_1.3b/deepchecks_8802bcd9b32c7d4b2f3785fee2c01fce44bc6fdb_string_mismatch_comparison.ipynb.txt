@@ -1,0 +1,20 @@
+```
+    # Deleting notebooks (#1088)
+    # Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.tabular.checks import StringMismatchComparison
+import pandas as pd
+
+data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+<\Cell_0>
+
+    '''
+    ## Code Explanation:
+    # The code is deleting the notebooks. The notebooks are used to display the results of the comparison.
+    # The comparison is done using the StringMismatchComparison check, which compares two dataframes and highlights the rows where the strings do not match.
+    # The notebooks are deleted by simply commenting out the code.
+    ```

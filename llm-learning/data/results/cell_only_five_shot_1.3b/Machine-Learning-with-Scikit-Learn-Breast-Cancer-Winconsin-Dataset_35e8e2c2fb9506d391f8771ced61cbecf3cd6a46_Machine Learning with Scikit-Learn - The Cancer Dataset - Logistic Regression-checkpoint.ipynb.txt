@@ -1,0 +1,44 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    # Loading the breast cancer data set
+    data = load_breast_cancer()
+
+    # Converting the data into a pandas dataframe
+    df = pd.DataFrame(np.c_[data['data'], data['target']], columns=np.append(data['feature_names'], ['target']))
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df[data['feature_names']], df['target'], test_size=0.2, random_state=42)
+
+    # Creating a logistic regression model
+    model = LogisticRegression()
+
+    # Training the model
+    model.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print("Confusion Matrix:", confusion_matrix(y_test, y_pred))
+
+    # Implementing hyperparameter tuning
+    from sklearn.model_selection import GridSearchCV
+
+    parameters = {'C': [0.1, 1, 10, 100, 1000], 'penalty': ['l1', 'l2']}
+    grid_search = GridSearchCV(model, parameters, cv=5)
+    grid_search.fit(X_train, y_train)
+
+    print("Best parameters:", grid_search.best_params_)
+    print("Best model:", grid_search.best_estimator_)
+
+    # Predicting on unseen data
+    unseen_data = pd.read_csv('unseen_data.csv')
+   

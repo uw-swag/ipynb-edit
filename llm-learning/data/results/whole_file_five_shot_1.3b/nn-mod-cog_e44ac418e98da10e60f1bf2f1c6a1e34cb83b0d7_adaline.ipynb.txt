@@ -1,0 +1,31 @@
+
+    The error in the Adaline algorithm is due to the fact that the `fit` function is not correctly implementing the weight update rule. The weight update rule in Adaline is `w[1:] += eta*(X.T @ gradient)`, but in the current code, the `w[1:]` is not being updated correctly. This is likely due to the fact that the `gradient` is not being correctly calculated.
+
+    The `gradient` is calculated as `2*(y - output)`, but in the current code, this is not being correctly calculated. The `gradient` is not being correctly calculated in the `fit` function.
+
+    The corrected code is as follows:
+
+    ```python
+    def fit(X, y, eta=0.001, n_iter=1):
+        '''loop over exemplars and update weights'''
+        mse_iteration = []
+        w = random_weights(X, random_state=1)
+        for pair in range(n_iter):
+            output = net_input(X, w)
+            gradient = 2*(y - output)
+            w[1:] += eta*(X.T @ gradient)
+            w[0] += eta*gradient.sum()
+            mse = (((y - output)**2).sum())/len(y)
+            mse_iteration.append(mse)
+        return w, mse_iteration
+    ```
+
+    The error in the Perceptron algorithm is due to the fact that the `fit` function is not correctly implementing the weight update rule. The weight update rule in Perceptron is `w[1:] += eta*gradient`, but in the current code, the `w[1:]` is not being updated correctly. This is likely due to the fact that the `gradient` is not being correctly calculated.
+
+    The `gradient` is calculated as `2*(y - output)`, but in the current code, this is not being correctly calculated. The `gradient` is not being correctly calculated in the `fit` function.
+
+    The corrected code is as follows:
+
+    ```python
+    def fit(X, y, eta=0.001, n_iter=1):
+        '''loop over exemplars and

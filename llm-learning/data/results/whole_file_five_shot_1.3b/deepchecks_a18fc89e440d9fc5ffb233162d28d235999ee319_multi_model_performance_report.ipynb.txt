@@ -1,0 +1,24 @@
+
+The code you've provided is merging the performance report, class imbalance, and train/test overfitting into one check. 
+
+The `MultiModelPerformanceReport` is a Deepchecks check that generates a report for multiple models. It's used to evaluate the performance of different models on a dataset. 
+
+The `run` method of `MultiModelPerformanceReport` takes three arguments:
+
+1. `train_dataset`: A `Dataset` object containing the training data.
+2. `test_dataset`: A `Dataset` object containing the test data.
+3. `models`: A list of models to evaluate.
+
+The `run` method will generate a report for each model, including performance metrics, class imbalance, and overfitting issues.
+
+In your code, you're using the `MultiModelPerformanceReport` to evaluate the performance of three different models: AdaBoost, RandomForest, and DecisionTree. 
+
+The performance metrics and class imbalance are evaluated on the training data, and the overfitting issues are evaluated on the test data.
+
+The `run` method will return a list of `Report` objects, one for each model. You can access the results of each report using the `.results` attribute.
+
+Please note that the `MultiModelPerformanceReport` is a part of the Deepchecks library, which is not installed by default. You need to install it using pip:
+
+```bash
+pip install deepchecks
+```

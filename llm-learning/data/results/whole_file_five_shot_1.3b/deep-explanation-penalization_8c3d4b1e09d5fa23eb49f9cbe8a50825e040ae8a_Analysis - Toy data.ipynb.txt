@@ -1,0 +1,37 @@
+
+    [
+    Commit Message: "cleaning up code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+import csv
+import pickle as pkl
+from tqdm import tqdm
+from os.path import join as oj
+import sys
+from autograd import grad
+from matplotlib import gridspec
+from matplotlib.backends.backend_inline import FigureCanvas
+from matplotlib.figure import Figure
+%matplotlib inline
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+results_folder = "../results"
+fnames = sorted([oj(results_folder, fname) for fname in os.listdir(results_folder) if 'sort' in fname]) # filenames in the directory
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in tqdm(fnames) ] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+results["final_acc"] = [max(x) for x in results["acc_test"]]
+results["min_test_loss"] = [x[-1]for x in results["losses_test"]]
+results["num_epochs"] = [len(x) for x in results["losses_test"]]
+results["min_train_loss"] = [min(x) for x in results["losses_train"]]
+results = results[ results.duplicated(subset = ['repeats','learning_rate', 'num_noise_chars','noise', 'num_in_train', 'num_neurons','weight','num_epochs','string_length'],keep ='last') == False]
+<\Cell_1>
+<Cell_2>
+results.groupby(['weight']).mean()[['final_acc','min_train_loss', 'min_test_loss' ]].sort_values

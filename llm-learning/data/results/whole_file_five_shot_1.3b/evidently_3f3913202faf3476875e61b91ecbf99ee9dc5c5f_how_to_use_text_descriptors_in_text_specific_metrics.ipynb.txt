@@ -1,0 +1,38 @@
+```python
+    from textblob import TextBlob
+
+    def text_feature_descriptors(text):
+        """
+        This function takes a string of text as input and returns a dictionary of descriptors.
+        The descriptors are derived from the textblob library.
+
+        :param text: str, the text to be processed
+        :return: dict, a dictionary of descriptors
+        """
+        blob = TextBlob(text)
+        return {
+            "word_count": blob.word_count,
+            "sentence_count": blob.sentence_count,
+            "avg_sentence_length": blob.sentences.average_length,
+            "avg_syllables_per_word": blob.words.average_syllables,
+            "polarity": blob.sentiment.polarity,
+            "subjectivity": blob.sentiment.subjectivity,
+        }
+
+    # Test the function
+    text = "Hello, world! This is a test text."
+    print(text_feature_descriptors(text))
+    ```
+    The function `text_feature_descriptors` takes a string of text as input and returns a dictionary of descriptors. The descriptors are derived from the `textblob` library.
+
+    The function uses the `TextBlob` class from `textblob` to process the text. The descriptors are then returned as a dictionary.
+
+    The descriptors include:
+    - `word_count`: the number of words in the text
+    - `sentence_count`: the number of sentences in the text
+    - `avg_sentence_length`: the average length of sentences in the text
+    - `avg_syllables_per_word`: the average number of syllables per word in the text
+    - `polarity`: the polarity of the text (between -1 and 1)
+    - `subjectivity`: the subjectivity of the text (between 0 and 1)
+
+    The function is then tested with a simple string.

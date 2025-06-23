@@ -1,0 +1,44 @@
+```python
+    import sys
+    sys.path.append("..")
+
+    import bme680
+    import threading
+    import time
+
+    # The bme680 board has a primary and alternate I2C address
+    sensor = bme680.BME680()
+
+    # Print each initial reading
+    for name in dir(sensor.data):
+        value = getattr(sensor.data, name)
+        if not name.startswith('_'):
+            print('{}: {}'.format(name, value))
+
+    # Define a worker thread to poll the sensor
+    continue_worker_thread = True
+
+    def work():
+        while continue_worker_thread == True:
+            if sensor.get_sensor_data():
+                output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
+                    sensor.data.temperature,
+                    sensor.data.pressure,
+                    sensor.data.humidity)
+                # Only print gas data if the heater is stable
+                if sensor.data.heat_stable:
+                    print('{0},{1} Ohms'.format(
+                        output,
+                        sensor.data.gas_resistance))
+                else:
+                    print(output)
+
+            time.sleep(1)
+
+    # Start polling for values
+    thread = threading.Thread(target=work)
+    thread.start()
+
+    # Stop the worker thread
+    continue_worker_thread = False
+    ```

@@ -1,0 +1,64 @@
+```
+    import sqlite3
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+%matplotlib inline
+
+conn = sqlite3.connect('chinook.db')
+cur = conn.cursor() 
+
+# Q1: What are the top 10 most popular songs in the Chinook database?
+top_songs = cur.execute("""
+SELECT name, COUNT(*) as count
+FROM tracks
+JOIN invoices ON tracks.invoice_id = invoices.invoice_id
+GROUP BY tracks.name
+ORDER BY count DESC
+LIMIT 10
+""")
+
+# Q2: What is the average length of the songs in the Chinook database?
+avg_song_length = cur.execute("""
+SELECT AVG(milliseconds/60000) as avg_length
+FROM tracks
+""")
+
+# Q3: What is the total revenue generated from the Chinook database?
+total_revenue = cur.execute("""
+SELECT SUM(total) as total_revenue
+FROM invoices
+""")
+
+# Q4: What is the total number of customers in the Chinook database?
+total_customers = cur.execute("""
+SELECT COUNT(*) as total_customers
+FROM customers
+""")
+
+# Q5: What is the total number of playlists in the Chinook database?
+total_playlists = cur.execute("""
+SELECT COUNT(*) as total_playlists
+FROM playlists
+""")
+
+# Q6: What is the total number of tracks in the Chinook database?
+total_tracks = cur.execute("""
+SELECT COUNT(*) as total_tracks
+FROM tracks
+""")
+
+# Q7: What is the total number of albums in the Chinook database?
+total_albums = cur.execute("""
+SELECT COUNT(*) as total_albums
+FROM albums
+""")
+
+# Q8: What is the total number of employees in the Chinook database?
+total_employees = cur.execute("""
+SELECT COUNT(*) as total_employees
+FROM employees
+""")
+
+# Q

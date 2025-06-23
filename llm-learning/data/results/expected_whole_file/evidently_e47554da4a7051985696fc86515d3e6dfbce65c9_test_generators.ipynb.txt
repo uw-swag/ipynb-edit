@@ -1,0 +1,75 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import numpy as np
+from sklearn.datasets import fetch_openml
+
+from evidently.tests import TestColumnQuantile, TestColumnValueMin, TestColumnShareOfMissingValues
+from evidently.test_suite import TestSuite
+from evidently.tests.base_test import generate_column_tests
+<\Cell_1>
+<Cell_2>
+#datasets generation 
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+
+data.frame['target'] = data.frame['education-num']
+data.frame['preds'] = data.frame['education-num'].values + np.random.normal(0, 6, data.frame.shape[0])
+
+reference_data = data.frame[:20000]
+current_data = data.frame[20000:]
+<\Cell_2>
+<Cell_3>
+suite = TestSuite(tests=[
+    TestColumnQuantile(column_name="education-num", quantile=quantile) for quantile in [0.5, 0.9, 0.99]
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_3>
+<Cell_4>
+suite = TestSuite(tests=[
+    TestColumnValueMin(column_name=column_name, gt=0) for column_name in ["age", "fnlwgt", "education-num"]
+])
+
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_4>
+<Cell_5>
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues)])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_5>
+<Cell_6>
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="all", parameters={"lt": 0.5})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_6>
+<Cell_7>
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="all", parameters={"lt": 0.5})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_7>
+<Cell_8>
+suite = TestSuite(tests=[generate_column_tests(TestColumnValueMin, columns="num")])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_8>
+<Cell_9>
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="cat", parameters={"lt": 0.1})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_9>
+<Cell_10>
+suite = TestSuite(tests=[generate_column_tests(TestColumnValueMin, columns=["age", "fnlwgt", "education-num"], 
+                                               parameters={"gt": 0})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+<\Cell_10>
+<Cell_11>
+
+<\Cell_11>

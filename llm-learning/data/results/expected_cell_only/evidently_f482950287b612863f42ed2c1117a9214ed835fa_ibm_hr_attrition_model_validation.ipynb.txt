@@ -1,0 +1,34 @@
+from evidently.dashboard import Dashboard
+from evidently.tabs import ProbClassificationPerformanceTab
+from evidently.pipeline.column_mapping import ColumnMapping
+DATA_DIR = "ibm-hr-analytics/" #full path to directory with the input data 
+              
+dataset_path = os.path.join(DATA_DIR, "WA_Fn-UseC_-HR-Employee-Attrition.csv")
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'Attrition'
+column_mapping.prediction = ['yes', 'no']
+
+column_mapping.numerical_features = ['Age','DailyRate', 'DistanceFromHome', 'Education',
+       'EmployeeNumber', 'EnvironmentSatisfaction', 'HourlyRate',
+       'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+       'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike',
+       'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel',
+       'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
+       'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
+       'YearsWithCurrManager']
+
+column_mapping.categorical_features = ['b_travel_Non-Travel',
+       'b_travel_Travel_Frequently', 'b_travel_Travel_Rarely',
+       'department_Human Resources', 'department_Research & Development',
+       'department_Sales', 'edu_field_Human Resources',
+       'edu_field_Research & Development', 'edu_field_Sales', 'gender_bin',
+       'job_role_Healthcare Representative', 'job_role_Human Resources',
+       'job_role_Laboratory Technician', 'job_role_Manager',
+       'job_role_Manufacturing Director', 'job_role_Research Director',
+       'job_role_Research Scientist', 'job_role_Sales Executive',
+       'job_role_Sales Representative', 'marital_Divorced', 'marital_Married',
+       'marital_Single', 'overtime_No', 'overtime_Yes']
+dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab()])
+dashboard.calculate(rf_merged_train, rf_merged_test, column_mapping = column_mapping)
+dashboard.show()

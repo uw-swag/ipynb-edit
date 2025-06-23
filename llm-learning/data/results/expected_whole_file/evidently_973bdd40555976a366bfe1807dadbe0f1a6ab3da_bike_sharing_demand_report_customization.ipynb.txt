@@ -1,0 +1,188 @@
+<Cell_0>
+import pandas as pd
+import requests
+import zipfile
+import io
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab, DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import RegressionPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+<\Cell_2>
+<Cell_3>
+ref_data = raw_data.loc['2011-01-01 00:00:00':'2011-04-30 23:00:00']
+prod_data = raw_data.loc['2011-05-01 00:00:00':'2011-05-30 23:00:00']
+<\Cell_3>
+<Cell_4>
+ref_data
+<\Cell_4>
+<Cell_5>
+target = 'cnt'
+prediction = 'prediction'
+datetime = 'dteday'
+
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed']
+categorical_features = ['season', 'holiday', 'workingday', 'weathersit']
+
+features = numerical_features + categorical_features
+<\Cell_5>
+<Cell_6>
+model = RandomForestRegressor(random_state = 0)
+<\Cell_6>
+<Cell_7>
+model.fit(ref_data[features], ref_data[target])
+<\Cell_7>
+<Cell_8>
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+<\Cell_8>
+<Cell_9>
+column_mapping = ColumnMapping(target,
+                               'prediction',
+                               numerical_features=numerical_features,
+                               categorical_features=categorical_features)
+<\Cell_9>
+<Cell_10>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=1)])
+<\Cell_10>
+<Cell_11>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+<\Cell_11>
+<Cell_12>
+dashboard.show()
+<\Cell_12>
+<Cell_13>
+from evidently.options import DataDriftOptions
+<\Cell_13>
+<Cell_14>
+opt = DataDriftOptions(nbinsx=20, confidence=0.99)
+<\Cell_14>
+<Cell_15>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0), DataDriftTab()], options=[opt])
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+dashboard.show()
+<\Cell_15>
+<Cell_16>
+opt = DataDriftOptions(nbinsx={'temp':20, 'atemp': 20, 'hum':20}, 
+                       confidence={'temp':0.99, 'atemp': 0.85, 'hum':0.8})
+<\Cell_16>
+<Cell_17>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0), DataDriftTab()], options=[opt])
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+dashboard.show()
+<\Cell_17>
+<Cell_18>
+RegressionPerformanceTab.list_widgets()
+<\Cell_18>
+<Cell_19>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    "Regression Model Performance Report.",
+    "Reference: Error Distribution",
+    "Current: Error Distribution",
+])])
+<\Cell_19>
+<Cell_20>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+<\Cell_20>
+<Cell_21>
+dashboard.show()
+<\Cell_21>
+<Cell_22>
+import plotly.express as px
+<\Cell_22>
+<Cell_23>
+figure = px.line(ref_data, x=ref_data.index, y='cnt', title='Time Series with Rangeslider')
+figure.update_xaxes(rangeslider_visible=True)
+figure.show()
+<\Cell_23>
+<Cell_24>
+import json
+from typing import Optional
+ 
+from evidently.model.widget import BaseWidgetInfo 
+from evidently.widgets.widget import Widget, RED, GREY
+<\Cell_24>
+<Cell_25>
+class TSRangesliderWidget(Widget):
+    
+    def __init__(self, title: str, column: str, use_current=False, fig_size=1):
+        self.title = title
+        self.column = column
+        self.use_current = use_current
+        self.fig_size = fig_size
+
+    def calculate(self,
+                  reference_data: pd.DataFrame,
+                  current_data: pd.DataFrame,
+                  column_mapping,
+                  analyzers_results) -> Optional[BaseWidgetInfo]:
+        
+        if self.use_current == True:
+            frame = current_data
+        else: frame = reference_data
+
+        figure = px.line(frame, x=frame.index, y=self.column, color_discrete_sequence=[RED, GREY])
+        figure.update_xaxes(rangeslider_visible=True)
+
+        figure_json = json.loads(figure.to_json())
+
+        return BaseWidgetInfo(
+            title=self.title,
+            type="big_graph",
+            size=self.fig_size,
+            params={
+                "data": figure_json['data'],
+                "layout": figure_json['layout']
+            },
+        )
+<\Cell_25>
+<Cell_26>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    "Regression Model Performance Report.",
+    TSRangesliderWidget('Reference: Target with Rangeslider', 'cnt', fig_size=1),
+    TSRangesliderWidget('Current: Target with Rangeslider', 'cnt', use_current=True, fig_size=1),
+    "Reference: Error Distribution",
+    "Current: Error Distribution",
+])])
+<\Cell_26>
+<Cell_27>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+<\Cell_27>
+<Cell_28>
+dashboard.show()
+<\Cell_28>
+<Cell_29>
+from evidently.tabs.base_tab import Tab, Verbose
+
+class TimeSeriesTab(Tab):
+    widgets = [
+        (TSRangesliderWidget('Reference: Target with Rangeslider', 'cnt', fig_size=2), Verbose.ALWAYS),
+        (TSRangesliderWidget('Current: Target with Rangeslider', 'cnt', use_current=True, fig_size=2), Verbose.ALWAYS),
+        (TSRangesliderWidget('Reference: Temp with Rangeslider', 'temp', fig_size=1), Verbose.FULL),
+        (TSRangesliderWidget('Reference: Temp with Rangeslider', 'temp', use_current=True, fig_size=1), Verbose.FULL),
+    ]
+<\Cell_29>
+<Cell_30>
+dashboard = Dashboard(tabs=[TimeSeriesTab(verbose_level=0)])
+<\Cell_30>
+<Cell_31>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+dashboard.show()
+<\Cell_31>
+<Cell_32>
+#dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_32>

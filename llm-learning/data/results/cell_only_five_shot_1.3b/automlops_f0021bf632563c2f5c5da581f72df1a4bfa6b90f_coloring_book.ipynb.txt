@@ -1,0 +1,50 @@
+```python
+    from utils import AutoMLOps
+    import json
+    import pandas as pd
+    from kfp.v2 import compiler, dsl
+    from kfp.v2.dsl import pipeline, component, Artifact, Dataset, Input, Metrics, Model, Output, InputPath, OutputPath
+    from google.cloud import aiplatform
+    from google.cloud import aiplatform_v1
+    import datetime
+
+    from utils import AutoMLOps
+
+    # Define the pipeline
+    @dsl.pipeline(
+        name='AutoML-pipeline',
+        description='A pipeline for AutoML training and evaluation'
+    )
+    def auto_ml_pipeline(
+        project_id: str = 'my-project',
+        dataset_id: str = 'my-dataset',
+        model_id: str = 'my-model',
+        region: str = 'us-central1',
+        pipeline_root: str = 'gs://my-bucket/pipeline-root',
+        pipeline_params: dict = dsl.Parameter(
+            name='pipeline_params',
+            type=dict,
+            description='Parameters for the pipeline'
+        )
+    ):
+        # Load the dataset
+        dataset = aiplatform.common.gcp.datasets.get(project_id, dataset_id)
+
+        # Load the model
+        model = aiplatform.common.gcp.models.get(project_id, model_id)
+
+        # Define the training job
+        training_job = aiplatform.common.gcp.ml.create_training_job(
+            project=project_id,
+            job_name='my-job',
+            pipeline_package_path='gs://my-bucket/pipeline-package',
+            region=region,
+            model=model,
+            dataset=dataset,
+            pipeline_root=pipeline_root,
+            pipeline_params=pipeline_params,
+            compute_target='my-compute-target',
+            machine_type='n1-standard-4',
+            disk_type='pd-standard',
+            disk_size=5,
+            vm_size=

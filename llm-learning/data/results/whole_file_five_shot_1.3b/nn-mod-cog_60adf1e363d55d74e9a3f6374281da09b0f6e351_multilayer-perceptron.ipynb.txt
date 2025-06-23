@@ -1,0 +1,63 @@
+```python
+    ## ~~ Initialize parameters ~~##
+    W1 = np.random.uniform(size=(n_features,n_neurons))
+    b1 = np.random.uniform(size=(1,n_neurons))
+    W2 = np.random.uniform(size=(n_neurons,n_output))
+    b2 = np.random.uniform(size=(1,n_output))
+    
+    parameters = {"W1": W1,
+                  "b1": b1,
+                  "W2": W2,
+                  "b2": b2}
+    
+    return parameters
+
+def linear_function(W, X, b):
+    """computes net input as dot product
+    
+    Args:
+        W (ndarray): weight matrix
+        X (ndarray): matrix of features
+        b (ndarray): vector of biases
+        
+    Returns:
+        Z (ndarray): weighted sum of features
+        """
+    
+    return (X @ W)+  b
+
+def sigmoid_function(Z):
+    """computes sigmoid activation element wise
+    
+    Args:
+        Z (ndarray): weighted sum of features
+    
+    Returns: 
+        S (ndarray): neuron activation
+    """
+    
+    return 1/(1+np.exp(-Z)) 
+
+def cost_function(A, y):
+    """computes squared error
+    
+    Args:
+        A (ndarray): neuron activation
+        y (ndarray): vector of expected values
+    
+    Returns:
+        E (float): total squared error"""
+    
+    return (np.mean(np.power(A - y,2)))/2
+
+def predic(X, W1, W2, b1, b2):
+    """computes predictions with learned parameters
+    
+    Args:
+        X (ndarray): matrix of features
+        W1 (ndarray): weight matrix for the first layer
+        W2 (ndarray): weight matrix for the second layer
+        b1 (ndarray): bias vector for the first layer
+        b2 (ndarray): bias vector for the second layer
+        
+    Returns

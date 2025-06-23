@@ -1,0 +1,14 @@
+```
+    # Add backpropagation by class section
+    learner.model.eval()
+    x, y = databunch.valid_ds[index]
+    xb, _ = databunch.one_item(x)
+    xb_image = Image(databunch.denorm(xb)[0])
+    xb_image.show()
+    y
+    xb = xb.cuda()
+    hook_a, hook_g = hooked_backward()
+    acts = hook_a.stored[0].cpu()
+    avg_acts = acts.mean(0)
+    show_heatmap(xb_image, avg_acts)
+    ```

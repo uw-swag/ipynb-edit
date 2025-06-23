@@ -1,0 +1,21 @@
+```python
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    ```
+
+    The `nblinks` parameter in the `StringMismatchComparison` function is used to specify the number of links to highlight in the comparison. The default value is 1, which means only one link will be highlighted. If you want to highlight multiple links, you can set this parameter to a higher value.
+
+    However, the `nblinks` parameter is not available in the current version of Deepchecks. You can use the `highlight_links` parameter to highlight links in the comparison.
+
+    Here is an example of how to use the `highlight_links` parameter:
+
+    ```python
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data), highlight_links=2)
+    ```
+
+    This will highlight the first and third links in the comparison.

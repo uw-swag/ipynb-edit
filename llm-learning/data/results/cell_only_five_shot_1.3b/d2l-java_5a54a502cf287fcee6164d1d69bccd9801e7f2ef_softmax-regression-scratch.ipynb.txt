@@ -1,0 +1,26 @@
+
+    The code you provided is a part of a machine learning project. Here's a refactoring of the `trainEpochCh3` method and the `Animator` class.
+
+    Refactoring of `trainEpochCh3` method:
+    1. The `ParamConsumer` interface is not used in the method. It's not necessary to pass parameters to the `accept` method.
+    2. The `Accumulator` class is not used in the method. It's not necessary to create an instance of it.
+    3. The `gc.close()` statement is not necessary. The GradientCollector is automatically closed when the GradientCollector is no longer needed.
+    4. The `metric.add(new float[]{l.sum().toType(DataType.FLOAT32, false).getFloat(), accuracy(yHat, y), (float)y.size()});` line is unnecessary. The `metric.add()` method already adds the values to the correct indices.
+
+    Refactoring of `Animator` class:
+    1. The `add` method is not used in the `Animator` class. It's not necessary to add a single metric to the table.
+    2. The `show` and `update` methods are not used in the `Animator` class. They're not necessary to display the graph.
+    3. The `add` method in the `Animator` class is not used. It's not necessary to add accuracy, train accuracy, and train loss metrics for a given epoch.
+
+    Here's the refactored code:
+
+    Refactored `trainEpochCh3` method:
+    ```java
+    public float[] trainEpochCh3(NDArrayFunction net, Iterable<Batch> trainIter, NDArrayFunction2 loss, ParamConsumer updater) {
+        Accumulator metric = new Accumulator(3); // trainLossSum, trainAccSum, numExamples
+        for (Batch batch : trainIter) {
+            NDArray X = batch.getData().head();
+            NDArray y = batch.getLabels().head();
+            X = X.reshape(new Shape(-1, numInputs));
+            
+           

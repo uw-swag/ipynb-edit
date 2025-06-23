@@ -1,0 +1,36 @@
+
+    The code you provided is a part of a training loop for a machine learning model. The model is a simple linear regression model, and the training loop is for training and evaluating the model.
+
+    The refactoring you're suggesting is to refactor the `train` method to make it more modular and reusable. Here's how you could refactor the `train` method:
+
+    1. Extract the common parts of the training loop into a separate method, such as `trainStep`.
+    2. Remove the `trainLoss` and `testLoss` arrays and their related code.
+    3. Remove the `epochCount` array and its related code.
+    4. Replace the `for` loop in the `train` method with a call to `trainStep`.
+
+    Here's how you could refactor the `train` method:
+
+    ```java
+    public void train(float lambd){
+        // ... existing code ...
+
+        for(int epoch = 1; epoch <= numEpochs; epoch++){
+            trainStep(epoch, lambd);
+        }
+
+        // ... existing code ...
+    }
+
+    public void trainStep(int epoch, float lambd){
+        NDArray testL = Training.squaredLoss(Training.linreg(testData.getX(), params.get(0), params.get(1)), testData.getY());
+        NDArray trainL = Training.squaredLoss(Training.linreg(trainData.getX(), params.get(0), params.get(1)), trainData.getY());
+
+        epochCount[epoch/5 - 1] = epoch;  
+        trainLoss[epoch/5 -1] = trainL.mean().log10().getFloat();
+        testLoss[epoch/5 -1] = testL.mean().log10().getFloat();
+
+        // ... existing code ...
+    }
+    ```
+
+    This refactoring makes the `train` method more modular and reusable. It also makes the code easier to read and maintain.

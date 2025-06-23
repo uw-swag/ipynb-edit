@@ -1,0 +1,61 @@
+```
+    # ! pip install langchain
+    # !pip install openai
+
+    from langchain.chat_models import ChatOpenAI
+    from langchain.chains import ConversationChain
+    from langchain.memory import ConversationBufferMemory
+
+    import os
+    from getpass import getpass
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    # print ('token is', token)
+
+    os.environ["OPENAI_API_KEY"] = token
+
+    chatllm = ChatOpenAI(temperature=0.0)
+    memory = ConversationBufferMemory()
+    conversation = ConversationChain(
+        llm=chatllm, 
+        memory = memory,
+        verbose=True
+    )
+
+    conversation.predict(input="Hello, my name is Ken")
+    conversation.predict(input="What is 1+1?")
+    conversation.predict(input="What is my name?")
+
+    print(memory.buffer)
+
+    memory.load_memory_variables({})
+
+    memory.save_context({"input": "Roses are blue."}, 
+                        {"output": "Violets are red."})
+
+    print(memory.buffer)
+
+    memory.load_memory_variables({})
+
+    memory.save_context({"input": "A poetic twist"}, 
+                        {"output": "from what's often said."})
+
+    memory.load_memory_variables({})
+
+    from langchain.memory import ConversationBufferWindowMemory
+
+    memory = ConversationBufferWindowMemory(k=1)      
+
+    memory.save_context({"input": "Roses are blue."}, 
+                        {"output": "Violets are red."})
+    memory.save_context({"input": "A poetic twist"}, 
+                        {"output": "from what's often said."})
+
+    memory.load_memory_variables({})
+
+    from langchain.llms import OpenAI
+    llm = ChatOpenAI(temperature=0.0)
+
+    memory = ConversationTokenBufferMemory(llm=llm, max_token_limit=60)
+
+    memory

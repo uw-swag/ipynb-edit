@@ -1,0 +1,50 @@
+```
+    ## Stratified Sampling
+
+    Stratified sampling is a method of sampling where the population is divided into several subgroups, and each subgroup is then randomly selected from among the subgroups. The selection process is stratified, meaning that the selection is based on the characteristics of the subgroups.
+
+    The stratification process is carried out in two steps:
+
+    1. **Stratification**: The population is divided into several subgroups based on some characteristic. This characteristic is usually a categorical variable.
+
+    2. **Sampling**: Each subgroup is then randomly selected from among the subgroups.
+
+    The stratification process ensures that the selection process is not biased, and that the sample is representative of the population.
+
+    The stratification process is also known as stratified sampling.
+
+    ## Example
+
+    Suppose we have a dataset of students, and we want to divide the students into two groups: those who are in the first grade and those who are in the second grade. We can use stratified sampling to randomly select students from these two groups.
+
+    The stratification process would be:
+
+    1. **Stratification**: Divide the students into two groups based on the grade.
+
+    2. **Sampling**: Randomly select students from the two groups.
+
+    This process ensures that the sample is representative of the entire population.
+
+    ## Code
+
+    ```python
+    import pandas as pd
+
+    # Assume we have a DataFrame 'df' with columns 'grade' and 'student_id'
+    df = pd.DataFrame({
+        'grade': ['first', 'second', 'first', 'second', 'first', 'second'],
+        'student_id': ['a', 'b', 'c', 'd', 'e', 'f']
+    })
+
+    # Stratify by 'grade' and sample with replacement
+    sample = df.groupby('grade').apply(lambda x: x.sample(frac=1, replace=True)).reset_index(drop=True)
+
+    print(sample)
+    ```
+
+    This code will print a DataFrame with a random sample of students from each grade.
+
+    ```
+    ## Conclusion
+
+    Str

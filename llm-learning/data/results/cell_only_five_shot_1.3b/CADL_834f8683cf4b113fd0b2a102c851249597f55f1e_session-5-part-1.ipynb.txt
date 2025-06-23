@@ -1,0 +1,57 @@
+```python
+    import os
+
+    if not os.path.exists('imgs'):
+        os.makedirs('imgs')
+
+    t_i = 0
+    batch_i = 0
+    epoch_i = 0
+    n_files = len(files)
+    while epoch_i < n_epochs:
+
+        batch_i += 1
+        batch_xs = sess.run(batch) / 255.0
+        batch_zs = np.random.uniform(
+            0.0, 1.0, [batch_size, n_latent]).astype(np.float32)
+
+        real_cost, fake_cost = sess.run([
+            loss_D_real, loss_D_fake],
+            feed_dict={
+                X: batch_xs,
+                Z: batch_zs})
+        real_cost = np.mean(real_cost)
+        fake_cost = np.mean(fake_cost)
+    
+        if (batch_i % 20) == 0:
+            print(batch_i, 'real:', real_cost, '/ fake:', fake_cost)
+
+        gen_update = True
+        dis_update = True
+
+        if real_cost > (equilibrium + margin) or \
+           fake_cost > (equilibrium + margin):
+            gen_update = False
+
+        if real_cost < (equilibrium - margin) or \
+           fake_cost < (equilibrium - margin):
+            dis_update = False
+
+        if not (gen_update or dis_update):
+            gen_update = True
+            dis_update = True
+
+        if gen_update:
+            sess.run(opt_g,
+                feed_dict={
+                    Z: batch_zs,
+                    lr_g: learning_rate})
+        if dis_update:
+            sess.run(opt_d,
+                feed_dict={
+                    X: batch_xs,
+                    Z: batch_zs,
+                    lr_d: learning_rate})
+
+        if batch_i % (n_files // batch_size) == 0:
+            batch_i = 0

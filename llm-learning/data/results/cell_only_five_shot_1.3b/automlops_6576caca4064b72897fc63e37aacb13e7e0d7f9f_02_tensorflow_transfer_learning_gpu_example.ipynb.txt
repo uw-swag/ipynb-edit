@@ -1,0 +1,29 @@
+```python
+    ## Updated Documentation
+    # The `state_bucket` function is used to bucketize the state data. This function is used to group the states by their respective buckets.
+    # The buckets are created based on the state's population, area, and gdp_per_capita.
+    # The buckets are then used to filter the states based on their respective buckets.
+
+    def state_bucket(df, state_col, pop_col, area_col, gdp_col):
+        # Check if the dataframe is not empty
+        if df.empty:
+            print("The dataframe is empty")
+            return
+
+        # Check if the columns exist in the dataframe
+        if state_col not in df.columns or pop_col not in df.columns or area_col not in df.columns or gdp_col not in df.columns:
+            print("One or more columns do not exist in the dataframe")
+            return
+
+        # Bucketize the data
+        df[state_col + '_bucket'] = pd.cut(df[pop_col], 
+                                            bins=[0, 100000, 500000, 1000000, 5000000, df[pop_col].max()], 
+                                            labels=[1, 2, 3, 4, 5])
+        df[state_col + '_bucket'] = df[state_col + '_bucket'].astype(int)
+
+        df[area_col + '_bucket'] = pd.cut(df[area_col], 
+                                            bins=[0, 1000, 100000, 500000, 1000000, 5000000, df[area_col].max()], 
+                                            labels=[1, 2, 3, 4, 5])
+        df[area_col + '_bucket'] = df[area_col + '_bucket'].astype(int)
+
+        df[gdp_col + '_bucket'] = pd.cut(df[gdp_col], 

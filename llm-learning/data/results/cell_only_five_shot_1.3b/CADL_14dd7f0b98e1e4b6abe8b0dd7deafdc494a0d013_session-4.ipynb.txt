@@ -1,0 +1,19 @@
+```python
+    # Let's explicity use the CPU, since we don't gain anything using the GPU
+# when doing Deep Dream (it's only a single image, benefits come w/ many images).
+device = '/cpu:0'
+
+# We'll now explicitly create a graph
+g = tf.Graph()
+
+# And here is a context manager.  We use the python "with" notation to create a context
+# and create a session that only exists within this indent,  as soon as we leave it,
+# the session is automatically closed!  We also tel the session which graph to use.
+# We can pass a second context after the comma,
+# which we'll use to be explicit about using the CPU instead of a GPU.
+with tf.Session(graph=g) as sess, g.device(device):
+    
+    # Now load the graph_def, which defines operations and their values into `g`
+    tf.import_graph_def(net['graph_def'], name='net')
+
+    ```

@@ -1,0 +1,12 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, CatTargetDriftTab
+iris_frame['target'] = iris.target
+iris_data_and_target_drift_report = Dashboard(iris_frame[:75], iris_frame[75:], 
+                                              column_mapping = None, tabs=[DriftTab, CatTargetDriftTab])
+iris_data_and_target_drift_report.show()
+iris_data_drift_report.save('reports/iris_data_and_target_drift.html')

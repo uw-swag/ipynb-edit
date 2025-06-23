@@ -1,0 +1,42 @@
+
+    import os
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from matplotlib import rcParams
+    import seaborn as sns
+    import tensorflow as tf
+    from tensorflow                   import keras
+    from sklearn.linear_model         import LogisticRegression
+    from sklearn.pipeline             import Pipeline
+    from imblearn.over_sampling       import RandomOverSampler
+    from sklearn.ensemble             import AdaBoostClassifier
+    from IPython.display              import set_matplotlib_formats
+    from sklearn.preprocessing        import MinMaxScaler
+    from sklearn.preprocessing        import StandardScaler
+    from sklearn_pandas               import DataFrameMapper
+    from sklearn.tree                 import DecisionTreeClassifier
+    from sklearn.ensemble             import RandomForestClassifier
+    from sklearn.neighbors            import KNeighborsClassifier
+    from sklearn.neighbors            import NeighborhoodComponentsAnalysis
+    from sklearn.model_selection      import train_test_split
+    from sklearn.linear_model         import SGDClassifier
+    from sklearn.svm                  import SVC
+    from sklearn.naive_bayes          import GaussianNB
+
+    rcParams["figure.figsize"] = 7, 6
+    plt.rcParams['axes.titlesize'] = 20
+    set_matplotlib_formats('pdf', 'svg')
+    print(tf.__version__)
+
+    %matplotlib inline
+    sns.set_style("whitegrid")
+    os.listdir(os.getcwd())
+    base_df = pd.read_csv("dataset/Loan dataset.csv",
+                          encoding= "unicode_escape")
+
+    theme_colors = ["#ff8e1c", "#1cff7b"]
+    font = 13
+    # We named the data frame base_df instead of df because we will need it
+    # without any one hot encoding or scaling
+    base_df.sample(n= 10).style.highlight_null(color

@@ -1,0 +1,44 @@
+```python
+    #@title Recommender Systems
+    #@markdown This is a simple example of a recommender system using the surprise library.
+
+    # Import necessary libraries
+    from surprise import Dataset
+    from surprise import Reader
+    from surprise import KNNWithMeans
+    from surprise.model_selection import cross_validate
+
+    # Load the movielens-100k dataset
+    reader = Reader(line_format='user item rating timestamp', sep=',', skip_lines=1)
+    data = Dataset.load_from_file('ratings.csv', reader=reader)
+
+    # Use the user_based flag to switch to user-based collaborative filtering
+    algo = KNNWithMeans(k=50, sim_options={'name': 'pearson_baseline', 'user_based': True})
+
+    # Run 5-fold cross-validation and print results
+    cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new notebook"
+    Original Code Cells:
+    '''
+    #@title Recommender Systems
+    #@markdown This is a simple example of a recommender system using the surprise library.
+
+    # Import necessary libraries
+    from surprise import Dataset
+    from surprise import Reader
+    from surprise import KNNWithMeans
+    from surprise.model_selection import cross_validate
+
+    # Load the movielens-100k dataset
+    reader = Reader(line_format='user item rating timestamp', sep=',', skip_lines=1)
+    data = Dataset.load_from_file('ratings.csv', reader=reader)
+
+    # Use the user_based flag to switch to user-based collaborative filtering
+    algo = KNNWithMeans(k=50, sim_options={'name': 'pearson_baseline', 'user_based': True})
+
+    # Run 5-fold cross-validation and print results
+    cross_validate(algo, data, measures=['RMSE', 'MAE'], cv=5, verbose

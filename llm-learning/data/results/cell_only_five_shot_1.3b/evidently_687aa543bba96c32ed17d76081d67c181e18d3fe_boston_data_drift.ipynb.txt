@@ -1,0 +1,13 @@
+```python
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs.data_drift import DataDriftTab
+    from evidently.profile import Profile
+    from evidently.profile.sections.data_drift import DataDriftProfileSection
+
+    boston_data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+    boston_data_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:])
+    boston_data_drift_profile = Profile(sections=[DataDriftProfileSection])
+    boston_data_drift_profile.calculate(boston_frame[:200], boston_frame[200:])
+    ```
+
+    The code above is a refactoring of the given code. The original code was calculating the data drift and the data drift profile for a subset of the data. The refactored code calculates both for the entire data frame.

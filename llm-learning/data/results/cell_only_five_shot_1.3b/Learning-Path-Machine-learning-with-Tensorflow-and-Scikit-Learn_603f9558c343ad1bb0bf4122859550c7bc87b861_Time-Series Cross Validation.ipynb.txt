@@ -1,0 +1,31 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.metrics import confusion_matrix, accuracy_score
+    from sklearn.tree import DecisionTreeClassifier
+    import graphviz
+    from sklearn.tree import export_graphviz
+
+    # Loading the dataset and defining the independent variables (X) and the dependent variable (y)
+    credit = pd.read_csv('Credit.csv')
+    credit.shape
+    credit.head()
+    previsors = credit.iloc[:,0:20].values
+    class_label = credit.iloc[:,20].values
+
+    # Converting categorical attributes to numerical attributes, passing the index of each categorical attribute
+    label_encoder = LabelEncoder()
+    previsors[:,0] = label_encoder.fit_transform(previsors[:,0])
+    previsors[:,2] = label_encoder.fit_transform(previsors[:,2])
+    previsors[:,3] = label_encoder.fit_transform(previsors[:,3])
+    previsors[:,5] = label_encoder.fit_transform(previsors[:,5])
+    previsors[:,6] = label_encoder.fit_transform(previsors[:,6])
+    previsors[:,8] = label_encoder.fit_transform(previsors[:,8])
+    previsors[:,9] = label_encoder.fit_transform(previsors[:,9])
+    previsors[:,11] = label_encoder.fit_transform(previsors[:,11])
+    previsors[:,13] = label_encoder.fit_transform(previsors[:,13])
+    previsors[:,14] = label_encoder.fit_transform(previsors[:,14])
+    previsors[:,16] = label_encoder.fit_transform(previsors[:,16])
+    previsors[:,18]

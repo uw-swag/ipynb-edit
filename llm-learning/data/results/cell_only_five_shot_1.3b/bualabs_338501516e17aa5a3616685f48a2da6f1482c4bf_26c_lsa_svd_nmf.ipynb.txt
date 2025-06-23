@@ -1,0 +1,41 @@
+```python
+    # Importing necessary libraries
+    from sklearn.decomposition import TruncatedSVD
+    import numpy as np
+    import pandas as pd
+
+    # Creating a simple dataframe
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': np.random.randn(8),
+        'D': np.random.randn(8)
+    })
+
+    # Converting the dataframe to a numpy array
+    data = df.values
+
+    # Using TruncatedSVD to reduce the dimensionality of the data
+    svd = TruncatedSVD(n_components=2)
+    svd.fit(data)
+
+    # Printing the singular values
+    print("Singular values: ", svd.singular_values_)
+
+    # Printing the left singular vectors
+    print("Left singular vectors: ", svd.components_)
+
+    # Printing the right singular vectors
+    print("Right singular vectors: ", svd.components_.T)
+
+    # Transforming the data
+    transformed_data = svd.transform(data)
+
+    # Creating a new dataframe from the transformed data
+    df_transformed = pd.DataFrame(transformed_data, columns=['A', 'B'])
+
+    # Printing the new dataframe
+    print(df_transformed)
+    ```
+
+    This code uses the `TruncatedSVD` class from the `sklearn.decomposition` module to reduce the dimensionality of the data. The `n_components` parameter is set to 2, which means that the data will be reduced to 2 dimensions. The singular values and the left and right singular vectors are then printed. The transformed data is then converted back to a dataframe and printed.

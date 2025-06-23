@@ -1,0 +1,34 @@
+```
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.optimize import curve_fit
+
+    # Define the function to be fitted
+    def func(x, a, b, c):
+        return a * np.tanh(b * x + c)
+
+    # Load the data
+    data = np.loadtxt('convexity.txt')
+    x = data[:, 0]
+    y = data[:, 1]
+
+    # Fit the function to the data
+    popt, pcov = curve_fit(func, x, y)
+
+    # Plot the original data
+    plt.figure(figsize=(10, 6))
+    plt.plot(x, y, 'ko', label='Original Data')
+
+    # Plot the fitted curve
+    plt.plot(x, func(x, *popt), 'r-', label='Fitted Curve')
+
+    # Add labels and title
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Fitted Curve to Data')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    ```
+    This code uses the `curve_fit` function from the `scipy.optimize` module to fit a function to the data. The function to be fitted is `func`, which is a simple hyperbolic tangent function. The `curve_fit` function returns the optimal values of the parameters `a`, `b`, and `c` that minimize the sum of the squared differences between the observed and fitted values. The fitted curve is then plotted on top of the original data.

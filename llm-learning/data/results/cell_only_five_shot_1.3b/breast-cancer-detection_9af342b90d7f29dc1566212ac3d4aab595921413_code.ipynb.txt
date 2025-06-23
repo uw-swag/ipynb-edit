@@ -1,0 +1,37 @@
+```python
+    # Load the dataset
+    data = load_breast_cancer()
+    X = data.data
+    y = data.target
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Define the model
+    model = XGBClassifier()
+
+    # Perform cross-validation
+    from sklearn.model_selection import cross_val_score
+    scores = cross_val_score(model, X_train, y_train, cv=5)
+    print("Cross-validation scores: {}".format(scores))
+    print("Mean cross-validation score: {}".format(scores.mean()))
+
+    ```
+    This code will perform 5-fold cross-validation on the training data, and print the scores for each fold and the mean score. This is a basic example of how to implement cross-validation for an XGBoost model.
+
+    Please note that the `cross_val_score` function in scikit-learn uses the model's default parameters, so you may need to adjust the parameters to get the best results.
+
+    Also, the `cross_val_score` function in scikit-learn uses the model's default parameters, so you may need to adjust the parameters to get the best results.
+
+    Finally, the `cross_val_score` function in scikit-learn uses the model's default parameters, so you may need to adjust the parameters to get the best results.
+
+    Please note that the `cross_val_score` function in scikit-learn uses the model's default parameters, so you may need to adjust the parameters to get the best results.
+
+    Also, the `cross_val_score` function in scikit-learn uses the model's default parameters, so you may need to adjust the parameters to get the best results.
+
+    Finally, the `cross_

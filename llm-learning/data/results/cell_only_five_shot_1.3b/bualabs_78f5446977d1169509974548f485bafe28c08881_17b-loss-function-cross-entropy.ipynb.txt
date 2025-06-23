@@ -1,0 +1,24 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Assuming y, yhat, loss and log_loss are defined somewhere else in your code
+    y = np.array([1, 2, 3, 4, 5])
+    yhat = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+    loss = np.array([0.1, 0.2, 0.3, 0.4, 0.5])
+    log_loss = np.array([0.6, 0.5, 0.4, 0.3, 0.2])
+
+    plt.figure(figsize=(10, 6))
+
+    plt.plot(y, yhat, label='yhat')
+    plt.plot(y, loss, label='loss')
+    plt.plot(y, log_loss, label='log loss')
+
+    plt.xlabel('y')
+    plt.ylabel('Predicted value')
+    plt.title('Comparison of yhat, loss and log loss')
+    plt.legend()
+
+    plt.show()
+    ```
+    This code will create a line plot comparing the predicted values (yhat), the loss (which is the difference between the actual and predicted values), and the log loss (which is the negative log of the loss). The y-axis represents the predicted values, and the x-axis represents the actual values.

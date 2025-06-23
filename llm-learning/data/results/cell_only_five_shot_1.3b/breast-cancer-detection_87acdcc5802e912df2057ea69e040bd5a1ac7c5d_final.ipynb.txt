@@ -1,0 +1,16 @@
+```python
+    from xgboost import XGBClassifier
+
+    # Initialize XGBoost classifier
+    xgb_clf = XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+
+    # Fit the model
+    xgb_clf.fit(X_train, y_train)
+
+    # Predict on the test set
+    y_pred = xgb_clf.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+    ```
+    This code cell implements an optimized XGBoost Classifier for improved model performance. The classifier is initialized, then fitted to the training data. The model is then used to make predictions on the test set, and the results are evaluated.

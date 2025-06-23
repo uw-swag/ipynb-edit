@@ -1,0 +1,27 @@
+```yaml
+    name: Links Checks
+
+    on:
+      push:
+        branches:
+          - master
+
+    jobs:
+      links-check:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Setup Node.js
+          uses: actions/setup-node@v1
+          with:
+            node-version: 12
+
+        - name: Install Dependencies
+          run: npm ci
+
+        - name: Links Check
+          run: npm run links-check
+    ```

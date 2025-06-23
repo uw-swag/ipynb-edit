@@ -1,0 +1,76 @@
+<Cell_0>
+import os
+os.system('cat /root/stopwatch.bit > /dev/xdevcfg')
+<\Cell_0>
+<Cell_1>
+import mmap
+import os
+import time
+import numpy as np
+
+axi_gpio_regset = np.dtype([
+    ('gpio1_data'   , 'uint32'),
+    ('gpio1_control', 'uint32'),
+    ('gpio2_data'   , 'uint32'),
+    ('gpio2_control', 'uint32')
+])
+
+memory_file_handle = os.open('/dev/mem', os.O_RDWR)
+axi_mmap = mmap.mmap(fileno=memory_file_handle, length=mmap.PAGESIZE, offset=0x40000000)
+axi_numpy_array = np.recarray(1, axi_gpio_regset, buf=axi_mmap)
+axi_array_contents = axi_numpy_array[0]
+
+freq = 124998750 #FPGA Clock Frequency Hz
+<\Cell_1>
+<Cell_2>
+axi_array_contents.gpio1_data = 0x02 #clear timer
+axi_array_contents.gpio1_data = 0x01 #start timer
+time.sleep(34.2) # Count to the maximim LED (8 MSB value)
+axi_array_contents.gpio1_data = 0x00 #stop timer
+print("Clock count: ", axi_array_contents.gpio2_data, " calculated time: ", axi_array_contents.gpio2_data/freq, " Seconds")
+<\Cell_2>
+<Cell_3>
+os.system('cat /root/stopwatch.bit > /dev/xdevcfg')
+<\Cell_3>
+<Cell_4>
+freq = 2500000 #FPGA Clock Frequency Hz
+
+axi_array_contents.gpio1_data = 0x02 #clear timer
+axi_array_contents.gpio1_data = 0x01 #start timer
+time.sleep(3) # Count to the maximim LED (8 MSB value)
+axi_array_contents.gpio1_data = 0x00 #stop timer
+print("Clock count: ", axi_array_contents.gpio2_data, " calculated time: ", axi_array_contents.gpio2_data/freq, " Seconds")
+<\Cell_4>
+<Cell_5>
+housekeeping_regset = np.dtype([
+    ('id'          , 'uint32'),
+    ('dna_lo'      , 'uint32'),
+    ('dna_hi'      , 'uint32'),
+    ('digital_loop', 'uint32'),
+    ('ex_cd_p'     , 'uint32'),
+    ('ex_cd_n'     , 'uint32'),
+    ('ex_co_p'     , 'uint32'),
+    ('ex_co_n'     , 'uint32'),
+    ('ex_ci_p'     , 'uint32'),
+    ('ex_ci_n'     , 'uint32'),
+    ('reserved_2'  , 'uint32'),
+    ('reserved_3'  , 'uint32'),
+    ('led_control' , 'uint32')
+])
+<\Cell_5>
+<Cell_6>
+#Test original
+os.system('cat /opt/redpitaya/fpga/fpga_0.94.bit > /dev/xdevcfg')
+
+fd = os.open('/dev/mem', os.O_RDWR)
+m = mmap.mmap(fileno=fd, length=mmap.PAGESIZE, offset=0x40000000)
+hk_array = np.recarray(1, housekeeping_regset, buf=m)
+housekeeping_control = hk_array[0]
+
+for i in range(10):
+    housekeeping_control.led_control = 0xff
+    time.sleep(0.2)
+    housekeeping_control.led_control = 0x00
+    time.sleep(0.2)
+housekeeping_control
+<\Cell_6>

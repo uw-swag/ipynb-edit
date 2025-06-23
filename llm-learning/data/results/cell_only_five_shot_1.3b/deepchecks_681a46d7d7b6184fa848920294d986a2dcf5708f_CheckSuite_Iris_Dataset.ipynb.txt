@@ -1,0 +1,18 @@
+
+    Here is the updated code:
+
+    ```python
+    from deepchecks.suites import overall_check_suite
+    OverallSuite = overall_check_suite()
+    from deepchecks import CheckSuite
+    from deepchecks.checks import *
+    MyModelSuite = CheckSuite('Suite For Model Performance',
+        ModelInfo(),
+        PerformanceReport(),
+        TrainTestDifferenceOverfit(),
+        ConfusionMatrixReport(),
+        SimpleModelComparison(simple_model_type='constant').add_condition_ratio_not_less_than(0.9)
+    )
+    ```
+
+    The commit message "Renaming checksuite to suite (#206)" is updated to reflect the change. The original code was "from deepchecks.suites import overall_check_suite", which was renamed to "OverallSuite".

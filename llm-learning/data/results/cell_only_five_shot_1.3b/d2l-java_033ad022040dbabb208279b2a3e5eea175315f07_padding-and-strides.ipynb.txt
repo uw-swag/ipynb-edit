@@ -1,0 +1,39 @@
+```
+    // %mavenRepo snapshots https://oss.sonatype.org/content/repositories/snapshots/
+
+    %maven ai.djl:api:0.6.0
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+    %maven net.java.dev.jna:jna:5.3.0
+    %maven ai.djl.mxnet:mxnet-engine:0.6.0
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+
+    // Import the necessary libraries
+    import ai.djl.Model;
+    import ai.djl.ndarray.types.Shape;
+    import ai.djl.training.DefaultTrainingConfig;
+    import ai.djl.training.EasyTrain;
+    import ai.djl.training.Trainer;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.util.Conv2D;
+    import ai.djl.training.util.NDArray;
+    import ai.djl.training.util.NDList;
+
+    // Create a Conv2D block
+    Conv2D.Builder blockBuilder = Conv2D.builder()
+        .setKernel(new Shape(3, 3))
+        .optPad(new Shape(1, 1))
+        .optBias(false)
+        .setNumFilters(1)
+        .build();
+
+    // Create a model
+    Model model = Model.newInstance("conv2D");
+    model.setBlock(blockBuilder.build());
+
+    // Create a trainer
+    Trainer trainer = model.newTrainer(new DefaultTrainingConfig(Loss.l2Loss()));
+    trainer.initialize(X.getShape());
+
+    // Forward pass
+    NDArray yHat = trainer.forward(

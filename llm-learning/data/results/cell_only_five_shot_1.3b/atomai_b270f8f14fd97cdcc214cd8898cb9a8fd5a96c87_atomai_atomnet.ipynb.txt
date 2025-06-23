@@ -1,0 +1,19 @@
+```
+    # Remove example notebooks from root
+    import os
+    import shutil
+
+    example_notebooks = [
+        'example1.ipynb',
+        'example2.ipynb',
+        # Add other notebook names here
+    ]
+
+    for notebook in example_notebooks:
+        notebook_path = os.path.join('root_directory', notebook)
+        if os.path.exists(notebook_path):
+            os.remove(notebook_path)
+        else:
+            print(f'Notebook {notebook} not found.')
+    ```
+    This code will remove all notebooks from the 'root_directory' that are in the `example_notebooks` list. Replace 'root_directory' with the path to your root directory.

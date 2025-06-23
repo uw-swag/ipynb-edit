@@ -1,0 +1,27 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from skimage.draw import ellipse
+    from skimage.transform import AffineTransform
+
+    # Create a lattice mask
+    lattice_mask = np.zeros((100, 100))
+    for i in range(10):
+        for j in range(10):
+            x, y = ellipse(50, 50, i*10, j*10, 30, shape=(100, 100))
+            lattice_mask[x, y] = 1
+
+    # Create an affine transformation
+    transform = AffineTransform(scale=(1, 1), rotation=0, translation=(0, 0))
+
+    # Apply the transformation to the lattice mask
+    transformed_mask = transform.warp(lattice_mask, lattice_mask.shape)
+
+    # Plot the original and transformed masks
+    fig, ax = plt.subplots(1, 2, figsize=(10, 10))
+    ax[0].imshow(lattice_mask, cmap='gray')
+    ax[0].set_title('Original Lattice Mask')
+    ax[1].imshow(transformed_mask, cmap='gray')
+    ax[1].set_title('Transformed Lattice Mask')
+    plt.show()
+    ```

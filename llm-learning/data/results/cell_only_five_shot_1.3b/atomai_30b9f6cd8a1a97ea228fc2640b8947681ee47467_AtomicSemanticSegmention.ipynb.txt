@@ -1,0 +1,17 @@
+```
+    import wget
+
+    download_link1 = 'https://drive.google.com/uc?id=1-4-IQ71m--OelQb1891GnbG1Ako1-DKh'
+    download_link2 = 'https://drive.google.com/uc?id=18JK9GcMPMWHmHtwArujVQRLr6N4VIM_j'
+    wget.download(download_link1, 'training_data.npy')
+    wget.download(download_link2, 'validation_data.npy')
+
+    # Load train/test data (this is a simple dataset generated just from a single image)
+    dataset = np.load('training_data.npy')
+    images = dataset['X_train']
+    labels = dataset['y_train']
+    images_test = dataset['X_test']
+    labels_test = dataset['y_test']
+    # Load validation data (data from different experiment)
+    expdata = np.load("validation_data.npy")
+    ```

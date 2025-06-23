@@ -1,0 +1,34 @@
+```
+    # Create a Dockerfile
+    FROM python:3.7-slim
+
+    WORKDIR /app
+
+    # Install dependencies
+    RUN pip install --no-cache-dir pandas cudf requests
+
+    # Copy the current directory contents into the container at /app
+    COPY . /app
+
+    # Make port 80 available to the world outside this container
+    EXPOSE 80
+
+    # Run app.py when the container launches
+    CMD ["python", "app.py"]
+    ```
+
+    This Dockerfile creates a Docker image that uses Python 3.7 and installs the necessary dependencies. It then copies the current directory contents into the Docker image at /app. The EXPOSE instruction makes port 80 available to the outside world. The CMD instruction specifies the command to run when a container is started from this image.
+
+    The Dockerfile is then used to build a Docker image and run a container from it. The container runs the Python script `app.py`, which is the script you've provided.
+
+    Please note that the Dockerfile assumes that the Python script `app.py` is in the same directory as the Dockerfile. If it's in a different location, you'll need to adjust the COPY command accordingly.
+
+    Also, the Dockerfile is using a slim base image (`python:3.7-slim`) to save space. If you want to use a full Python image, you can replace `python:3.7-slim` with `python:3.7`.
+
+    Finally, the `%%time` magic command is used to time the execution of the code. This is a Jupyter magic command that measures the execution time of the code block.
+
+    The `requests` library is used to download the tips dataset from a URL, and `cudf` is used to perform computations on the GPU.
+
+    The code reads the CSV file, calculates the tip percentage, and then prints the average tip percentage by dining party size.
+
+    Please note that the code assumes that the CSV file is in the same directory as the Dockerfile. If it's in a different location, you'll need to adjust the COP

@@ -1,0 +1,56 @@
+
+    [
+    Commit Message: "Implement Random Forest and XGBoost Classifiers for improved model performance"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# INecessary libraries for data manipulation and visualization
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Dataset for the project
+from sklearn.datasets import load_breast_cancer
+
+# Tools for splitting data and preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Metrics for evaluating model performance
+from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+# Machine learning models for classification
+from sklearn.svm import SVC
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+
+# Assuming cancer_df is your DataFrame
+# Generating a color palette based on the unique values in the 'mean radius' column
+unique_values = cancer_df["mean radius"].nunique()
+palette = sns.color_palette("hsv", unique_values)
+
+# Plotting the countplot with rotated x-axis labels
+plt.figure(figsize=(20, 8))
+ax = sns.countplot(data=cancer_df, x="mean radius", palette=palette)
+ax.tick_params(labelrotation=90)
+plt.show()
+<\Cell_0>
+<Cell_1>
+cancer_df.info()
+<\Cell_1>
+<Cell_2>
+cancer_df.describe()
+<\Cell_2>
+<Cell_3>
+cancer_df.corr()
+<\Cell_3>
+<Cell_4>
+cancer_df.mean()
+<\Cell_4>
+<Cell_5>
+cancer_df.std()
+<\Cell_5>
+<Cell_6

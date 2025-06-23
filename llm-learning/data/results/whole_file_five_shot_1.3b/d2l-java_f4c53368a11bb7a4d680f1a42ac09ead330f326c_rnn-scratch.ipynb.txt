@@ -1,0 +1,44 @@
+```
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.index.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.util.Pair;
+    import ai.djl.Device;
+    import ai.djl.training.loss.*;
+    import ai.djl.training.*;
+    import ai.djl.engine.*;
+
+    public class RNNModelScratch {
+        public int vocabSize;
+        public int numHiddens;
+        public NDList params;
+        public TriFunction<Integer, Integer, Device, NDList> initState;
+        public TriFunction<NDArray, NDList, NDList, Pair> forwardFn;
+
+        public RNNModelScratch(
+                int vocabSize,
+                int numHiddens,
+                Device device,
+                TriFunction<Integer, Integer, Device, NDList> getParams,
+                TriFunction<Integer, Integer, Device, NDList> initRNNState,
+                TriFunction<NDArray, NDList, NDList, Pair> forwardFn) {
+            this.vocabSize = vocabSize;
+            this.numHiddens = numHiddens;
+            this.params = getParams.apply(vocabSize, numHiddens, device);
+            this.initState = initRNNState;
+            this.forwardFn = forwardFn;
+        }
+
+        public Pair forward(NDArray X, NDList state) {
+            X = X.transpose().oneHot(this.vocabSize);
+            return this.forwardFn.apply(X, state, this.params);
+        }
+
+        public NDList beginState(int batchSize, Device device) {
+            return this.initState.apply(batchSize, this.numHiddens, device);
+        }
+    }
+
+    int numHiddens = 512;
+    TriFunction<Integer, Integer, Device, NDList> getParamsFn = (a, b, c) -> getParams(a, b, c);
+    TriFunction

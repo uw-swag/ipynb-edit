@@ -1,0 +1,43 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add missing imports"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn import datasets, ensemble
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.inspection import permutation_importance
+from evidently.report import Report
+from evidently.metrics import DataDriftTable
+from evidently.tests import TestShareOfDriftedColumns
+from evidently.plotly_report import PlotlyReport
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip", verify=False).content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+raw_data.index = raw_data.apply(lambda row: datetime.combine(row.name, time(hour=int(row['hr']))), axis=1)
+target = 'cnt'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday']
+
+reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+current = raw_data

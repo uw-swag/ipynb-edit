@@ -1,0 +1,45 @@
+```python
+    # Change the notebook name
+    import os
+    os.system('jupyter nbconvert --config-file="nbconfig.py" --execute --ExecutePreprocessor.timeout=-1 --execute')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add activation function"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is an example of how to add an activation function in Python using the `relu` function from the `tensorflow` library.
+
+    ```python
+    import tensorflow as tf
+
+    # Define a tensor with some values
+    x = tf.constant([1, 2, 3, 4, 5], name="x")
+
+    # Define a ReLU activation function
+    y = tf.nn.relu(x)
+
+    # Initialize the variables
+    init = tf.global_variables_initializer()
+
+    # Start a TensorFlow session
+    with tf.Session() as sess:
+        sess.run(init)
+
+        # Print the result
+        print(sess.run(y))
+    ```
+
+    This will output:
+
+    ```
+    [1 2 3 4 5]
+    ```
+
+    The `relu` function is a common activation function in neural networks. It takes its input and returns the maximum of the two inputs.

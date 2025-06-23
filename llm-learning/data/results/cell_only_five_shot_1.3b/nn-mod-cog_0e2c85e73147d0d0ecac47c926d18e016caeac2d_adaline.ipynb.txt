@@ -1,0 +1,40 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from mlrefined_libraries import superlearn_library as superlearn
+
+    # This is needed to compensate for matplotlib notebook's tendancy to blow up images when plotted inline
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    # Load dataset
+    data = np.loadtxt('../../mlrefined_datasets/superlearn_datasets/svm_demo_data.csv', delimiter=',')
+
+    # Define the input and output of our dataset - assuming arbitrary N > 2 here
+    x = data[:, :-1]
+    y = data[:, -1]
+    y.shape = (len(y), 1)
+
+    # Create instance of svm comparision demo
+    demo5 = superlearn.svm_margin_demo.Visualizer(data)
+
+    # Run all
+    demo5.svm_comparison()  # compute linear decision boundaries
+    demo5.svm_comparison_fig()  # plot linear decision boundaries
+
+    # Adaline notes
+    # Adaline is a type of linear classifier that is used for binary classification.
+    # It is a simple model that is used for learning decision boundaries.
+    # The main idea behind Adaline is to fit the data points in a linear fashion.
+    # The model is trained by updating the weights of the linear function.
+    # The weights are updated in a way that minimizes the error.
+    # The error is calculated as the Euclidean distance between the predicted and actual output.
+    # The weights are updated in a way that minimizes the error.
+    # The error is calculated as the Euclidean distance between the predicted and actual output.
+    # The weights are updated in a way that minimizes the error.
+    # The error is calculated as the Euclidean distance between the predicted and actual output.
+    # The weights are updated in a way that minimizes the error.
+    # The error is calculated as the Euclidean distance between the predicted and actual output.
+    # The weights are updated in a way that minimizes the error.
+   

@@ -1,0 +1,34 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Fix bug x not support more than 1 epoch in chart"
+    Original Code Cells:
+    '''
+    x = torch.arange(n//bs+1).numpy()
+    fig,ax = plt.subplots(figsize=(9, 9))
+    ax.grid(True)
+    ax.plot(x, losses, label="Loss")
+    ax.plot(x, metrics, label="Accuracy")
+    ax.legend(loc='upper right')
+
+    '''
+    ]
+
+    ### Response:
+    The issue with the code is that it's trying to plot `n//bs+1` points, but `n` is a variable that might not be defined in the scope where this code is running. 
+
+    You can fix this by ensuring that `n` is defined before you use it in the plot. Here's how you can do it:
+
+    ```python
+    if 'n' in locals() or 'n' in globals():
+        x = torch.arange(n//bs+1).numpy()
+        fig,ax = plt.subplots(figsize=(9, 9))
+        ax.grid(True)
+        ax.plot(x, losses, label="Loss")
+        ax.plot(x, metrics, label="Accuracy")
+        ax.legend(loc='upper right')
+    else:
+        print("Variable 'n' is not defined")
+    ```
+
+    This code checks if the variable `n` is defined in the current scope. If it's not, it prints a message and doesn't plot anything.

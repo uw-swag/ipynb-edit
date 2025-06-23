@@ -1,0 +1,17 @@
+```
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from mlchecks.checks.integrity.is_single_value import is_single_value, IsSingleValue
+
+    # Testing with a single value
+    print(is_single_value(pd.DataFrame(X)))
+    print(is_single_value(pd.DataFrame({'a':[3,4], 'b':[2,2], 'c':[None, None], 'd':['a', 4]})))
+
+    # Testing with multiple values
+    print(is_single_value(pd.DataFrame(X)))
+    print(is_single_value(pd.DataFrame({'a':[3,4,5,6], 'b':[2,2,3,4], 'c':[None, None, None, None], 'd':['a', 'b', 'c', 'd']})))
+    ```
+
+    The function `is_single_value` checks if a given dataframe has only one unique value in each column. If the dataframe has more than one unique value, it returns `False`. If the dataframe has only one unique value, it returns `True`.
+
+    The function is tested with a single value and multiple values in the dataframe.

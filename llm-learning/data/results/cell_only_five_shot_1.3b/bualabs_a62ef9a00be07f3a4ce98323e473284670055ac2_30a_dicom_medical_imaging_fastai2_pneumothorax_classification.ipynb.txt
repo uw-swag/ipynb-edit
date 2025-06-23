@@ -1,0 +1,35 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Added progressive resizing to 320."
+    Original Code Cells:
+    '''
+    pneumothorax = DataBlock(blocks=(ImageBlock(cls=PILDicom), CategoryBlock), 
+                         get_items=get_dicom_files, 
+                         get_y=label_func, 
+                         batch_tfms=[*aug_transforms(size=224)]
+                         )
+# pneumothorax.summary(path/'dicom-images-train')
+dls = pneumothorax.dataloaders(path/'dicom-images-train', bs=64)
+dls.show_batch(max_n=16)
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already using progressive resizing, which is a common practice in deep learning. The `aug_transforms` function is used to apply various transformations to the images, and the `size=224` argument is used to resize the images to a fixed size.
+
+    However, if you want to add progressive resizing to the code, you can do it like this:
+
+    ```python
+    from fastai.vision.transform import Resize
+
+    # Define the resize function
+    def resize_image(im, size):
+        return im.resize(size)
+
+    # Apply the resize function to the images
+    dls = dls.transform(resize_image, size=(320, 320))
+    ```
+
+    This will resize the images to a fixed size (320x320) and then apply the transformations.

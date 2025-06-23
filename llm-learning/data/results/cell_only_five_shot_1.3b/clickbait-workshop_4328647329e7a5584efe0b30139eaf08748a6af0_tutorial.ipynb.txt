@@ -1,0 +1,32 @@
+
+The code you provided is a part of a larger pipeline for text classification. Here's a brief explanation of the changes:
+
+1. The 'full_content' column is created by concatenating the 'description' and 'title' columns.
+2. The dataset is split into a training set and a testing set. The training set is 70% of the total data, and the testing set is the remaining 30%.
+3. A pipeline is created with a CountVectorizer and a LinearSVC. The pipeline is then used to predict the labels of the testing set.
+4. The accuracy of the predictions is calculated and printed.
+5. A confusion matrix is created and plotted, which shows the true and false positives, negatives, and totals.
+
+Please note that the code you provided is incomplete and does not include the part where the pipeline is trained and the model is saved. Also, the pipeline is not used to make predictions on new data, but is used to make predictions on the testing set.
+
+If you want to use the pipeline to make predictions on new data, you would need to do the following:
+
+1. Train the pipeline on the training set.
+2. Save the trained pipeline.
+3. Use the saved pipeline to make predictions on new data.
+
+Here's a simple example of how you might do this:
+
+```python
+# Train the pipeline
+pipeline.fit(training.full_content, training.label)
+
+# Save the trained pipeline
+joblib.dump(pipeline, 'pipeline.pkl')
+
+# Use the saved pipeline to make predictions on new data
+new_data = ["New video description"]
+predicted_label = pipeline.predict(new_data)
+```
+
+Please note that the 'joblib' module is used to save the trained pipeline. If you're using a different method to save the pipeline, you would need to replace 'joblib' with the appropriate module.

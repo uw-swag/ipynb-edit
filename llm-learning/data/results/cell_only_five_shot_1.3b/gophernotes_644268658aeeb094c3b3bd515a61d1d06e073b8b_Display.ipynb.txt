@@ -1,0 +1,50 @@
+```python
+    import autoref
+    import autoref.ref
+    import autoref.ref.types
+
+    def auto_ref(x):
+        if isinstance(x, (list, tuple, dict, set)):
+            return [auto_ref(i) for i in x]
+        elif isinstance(x, str):
+            return autoref.ref.get(x)
+        elif isinstance(x, (int, float)):
+            return x
+        else:
+            return x
+
+    def auto_ref_type(t):
+        if t in (list, tuple, dict, set):
+            return autoref.ref.types.List, autoref.ref.types.Tuple, autoref.ref.types.Dict, autoref.ref.types.Set
+        elif t == str:
+            return autoref.ref.types.Str
+        elif t in (int, float):
+            return autoref.ref.types.Num
+        else:
+            return t
+
+    def auto_ref_all(x):
+        if isinstance(x, (list, tuple, dict, set)):
+            return [auto_ref_all(i) for i in x]
+        elif isinstance(x, str):
+            return autoref.ref.get(x, autoref.ref.types.Str)
+        elif isinstance(x, (int, float)):
+            return autoref.ref.get(x, autoref.ref.types.Num)
+        else:
+            return x
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "use auto-rendering interfaces, as decided in #166 TODO: keep []xreflect.Type returned by eval(), to preserve interpreted methods"
+    Original Code Cells:
+    '''
+    import autoref
+    import autoref.ref
+    import autoref.ref.types
+
+    def auto_ref(x):
+        if isinstance(x, (list, tuple, dict, set)):
+            return [auto_ref(i) for i in x]
+        elif isinstance(x, str):
+            return autoref.ref.get(

@@ -1,0 +1,18 @@
+```python
+    import tensorflow as tf
+
+    # Define a custom metric
+    def custom_metric(y_true, y_pred):
+        # Calculate the mean squared error
+        mse = tf.reduce_mean(tf.square(y_true - y_pred))
+
+        # Return the custom metric
+        return mse
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mean_squared_error', metrics=[custom_metric])
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=10, validation_data=(X_val, y_val))
+    ```
+    The custom metric is now available for use in the model's `metrics` parameter.

@@ -1,0 +1,16 @@
+```
+    SequentialBlock net = new SequentialBlock();
+    net.add(Blocks.batchFlattenBlock(784));
+    net.add(new DenseLayer(256, new NormalInitializer(0.01f)));
+    net.add(new Activation(Activation.ActivationType.RELU));
+    net.add(new DropoutLayer(Dropout.DropoutType.DROPOUT, 0.5f));
+    net.add(new DenseLayer(256, new NormalInitializer(0.01f)));
+    net.add(new Activation(Activation.ActivationType.RELU));
+    net.add(new DropoutLayer(Dropout.DropoutType.DROPOUT, 0.5f));
+    net.add(new DenseLayer(10, new NormalInitializer(0.01f)));
+    net.setInitializer(new NormalInitializer(0.01f));
+    ```
+
+    The above code is a simple implementation of a neural network with two hidden layers. The network is trained using the Adam optimizer and the categorical cross-entropy loss function. The dropout rate is set to 0.5.
+
+    Please note that the code above is a simple example and may not be suitable for a production environment. It's also important to validate the model's performance on a separate validation dataset to ensure it generalizes well.

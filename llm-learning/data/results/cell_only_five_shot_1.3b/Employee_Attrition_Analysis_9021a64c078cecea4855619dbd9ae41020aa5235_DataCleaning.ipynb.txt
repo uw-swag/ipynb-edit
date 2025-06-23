@@ -1,0 +1,62 @@
+```python
+    # dependencies
+    import pandas as pd
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+    # read in csv
+    file_path = "../resources/IBM_employee_data.csv"
+    attrition_df = pd.read_csv(file_path)
+    attrition_df.head()
+
+    # Check for missing values
+    attrition_df.isnull().sum()
+
+    # Check the data types
+    attrition_df.dtypes
+
+    # Check the summary statistics
+    attrition_df.describe(include='all')
+
+    # Check the unique values
+    attrition_df.nunique()
+
+    # Check the number of employees
+    attrition_df.shape[0]
+
+    # Check the number of columns
+    attrition_df.shape[1]
+
+    # Check the first few rows of the dataframe
+    attrition_df.head()
+
+    # Check the last few rows of the dataframe
+    attrition_df.tail()
+
+    # Check the columns of the dataframe
+    attrition_df.columns
+
+    # Check the index of the dataframe
+    attrition_df.index
+
+    # Check the summary statistics of the dataframe
+    attrition_df.describe()
+
+    # Check the statistical summary of the dataframe
+    attrition_df.describe(include='all')
+
+    # Check the correlation of the dataframe
+    attrition_df.corr()
+
+    # Check the unique values in each column
+    for column in attrition_df.columns:
+        print(f"{column}: {attrition_df[column].unique()}")
+
+    # Check the value counts of each column
+    for column in attrition_df.columns:
+        print(f"{column}: {attrition_df[column].value_counts()}")
+
+    # Check the frequency of each value in each column
+    for column in attrition_df.columns:
+        print(f"{column}: {attrition_df[column].value_counts(normalize=True)}")
+
+    # Check the distribution of each column
+    import

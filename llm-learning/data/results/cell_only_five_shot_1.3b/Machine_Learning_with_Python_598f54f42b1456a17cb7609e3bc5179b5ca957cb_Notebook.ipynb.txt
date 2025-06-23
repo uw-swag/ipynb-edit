@@ -1,0 +1,33 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Load data
+    df = pd.read_csv('movie_data.csv')
+
+    # Create a count vectorizer object
+    count_vectorizer = CountVectorizer(stop_words='english')
+
+    # Fit and transform the data
+    count_data = count_vectorizer.fit_transform(df['genres'])
+
+    # Compute the cosine similarity matrix
+    cosine_sim = cosine_similarity(count_data, count_data)
+
+    # Function to get recommendations
+    def get_recommendations(title, cosine_sim=cosine_sim):
+        idx = df[df['title'] == title].index[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:11]
+        movie_indices = [i[0] for i in sim_scores]
+        return df['title'].iloc[movie_indices]
+
+    # Get movie recommendations
+    print(get_recommendations('The Dark Knight'))
+    ```
+
+    This script uses content-based filtering to recommend movies based on the genres of the movies. The `CountVectorizer` is used to convert the genres into a matrix of token counts, and then the cosine similarity matrix is computed. The `get_recommendations` function then returns the titles of the 10 movies with the highest cosine similarity to the input movie.
+
+    Please note that you need to have a 'movie_data.csv' file in the same directory as your script for this to work. The 'genres' column in the 'movie_data.csv' file should contain the genres of the movies.

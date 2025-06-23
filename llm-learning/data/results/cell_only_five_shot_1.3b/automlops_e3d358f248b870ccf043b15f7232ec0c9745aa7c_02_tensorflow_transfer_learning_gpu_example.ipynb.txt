@@ -1,0 +1,59 @@
+```python
+    # Standard Library Imports
+    from pathlib import Path
+
+    # Installed packages
+    import pandas as pd
+    from ipywidgets import widgets
+
+    # Our package
+    from ydata_profiling import ProfileReport
+    from ydata_profiling.utils.cache import cache_file
+
+    # AutoMLFlow
+    from autokeras import AutoModel
+    from autokeras.image import ImageClassifier
+
+    # Data
+    from sklearn.datasets import load_breast_cancer
+
+    # Model
+    automodel = ImageClassifier(
+        architecture='resnet50',
+        label_mode='categorical',
+        max_pool=2,
+        max_width=32,
+        max_height=32,
+        min_width=32,
+        min_height=32,
+        num_classes=2,
+        num_filters=16,
+        num_residual_units=2,
+        num_blocks=2,
+        use_batch_norm=True,
+        use_dropout=True,
+        use_activation=True,
+        use_residual=True,
+        use_attention=True,
+        use_norm=True,
+        use_add=True,
+        use_se=True,
+        use_cam=True,
+        use_cav=True,
+        use_lrelu=True,
+        use_prelu=True,
+        use_rrelu=True,
+        use_pixel_shuffle=True,
+        use_se_residual=True,
+        use_se_batch_norm=True,
+        use_se_dropout=True,
+        use_se_activation=True,
+        use_se_residual=True,
+        use_se_attention=True,
+        use_se_norm=True,
+        use_se_add=True,
+        use_se_se=True,
+        use_se_cav=True,
+        use_se_lrelu=True,
+        use_se_prelu=True,
+        use_se_rrelu=True,

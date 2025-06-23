@@ -1,0 +1,50 @@
+
+    Here's a refactoring of the given code. I've made the following changes:
+
+1. I've renamed the `TrainingChapter4` class to `TrainingUtils`.
+2. I've renamed the `DataPoints` class to `DataPointsUtils`.
+3. I've renamed the `plot-utils.ipynb` file to `PlotUtils`.
+4. I've removed the `.java` files as they are not related to the code.
+
+Here's the refactored code:
+
+```java
+import TrainingUtils;
+import DataPointsUtils;
+import PlotUtils;
+
+float epochLoss = 0f;
+float accuracyVal = 0f;
+
+for (int epoch = 1; epoch <= numEpochs; epoch++) {
+    
+    System.out.print("Running epoch " + epoch + "...... ");
+    // Iterate over dataset
+    for (Batch batch : trainIter.getData(manager)) {
+
+        NDArray X = batch.getData().head();
+        NDArray y = batch.getLabels().head();
+
+        try(GradientCollector gc = Engine.getInstance().newGradientCollector()) {
+            NDArray yHat = TrainingUtils.net(X); // net function call
+
+            NDArray lossValue = TrainingUtils.loss.evaluate(new NDList(y), new NDList(yHat));
+            NDArray l = lossValue.mul(batchSize);
+            
+            accuracyVal += TrainingUtils.accuracy(yHat, y);
+            epochLoss += l.sum().getFloat();
+            
+            gc.backward(l); // gradient calculation
+        }
+        
+        batch.close();
+        TrainingUtils.sgd(params, lr, batchSize); // updater
+    }
+    
+    trainLoss[epoch-1] = epochLoss/trainIter.size();
+    trainAccuracy[epoch-1] = accuracyVal/trainIter.size();
+
+    epochLoss = 0f;
+    accuracyVal = 0f;    
+    // testing now
+    for (Batch batch : testIter.getData(manager

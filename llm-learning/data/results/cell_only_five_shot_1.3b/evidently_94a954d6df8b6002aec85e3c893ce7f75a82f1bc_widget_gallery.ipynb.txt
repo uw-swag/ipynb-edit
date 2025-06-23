@@ -1,0 +1,28 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'Montreal'},
+                ],
+                'layout': {
+                    'title': 'Dash Data Visualization'
+                }
+            }
+        )
+    ])
+
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    ```
+
+    ### Explanation:
+    This code creates a simple Dash application with a graph component. The graph component is a bar chart with two bars, one for each city. The graph is saved to an HTML file named "example.html". The `dash_core_components` module is used for the Graph component, and the `dash_html_components` module is used for the HTML layout. The `app.run_server(debug=True)` line starts the Dash server, which will automatically reload the page if you make changes to the code.

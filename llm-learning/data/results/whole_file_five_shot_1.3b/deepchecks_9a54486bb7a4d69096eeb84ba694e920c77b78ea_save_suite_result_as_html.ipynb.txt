@@ -1,0 +1,63 @@
+
+    '''
+    [
+    Commit Message: "[issue-650] functionality split (#751)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.datasets.classification import iris
+
+train_dataset, test_dataset = iris.load_data()
+<\Cell_0>
+<Cell_1>
+from deepchecks.suites import full_suite
+
+suite = full_suite()
+<\Cell_1>
+<Cell_2>
+suite_result = suite.run(train_dataset=train_dataset, test_dataset=test_dataset)
+<\Cell_2>
+<Cell_3>
+suite_result.save_as_html('my_suite.html')
+<\Cell_3>
+<Cell_4>
+suite_result.save_as_html() # will save the result in output.html
+<\Cell_4>
+<Cell_5>
+# Removing outputs created. this cell should be hidden in nbpshinx using "nbsphinx: hidden" in the metadata
+import os
+os.remove('output.html')
+os.remove('my_suite.html')
+<\Cell_5>
+<Cell_6>
+import io
+
+html_out = io.StringIO()
+suite_result.save_as_html(file=html_out)
+<\Cell_6>
+<Cell_7>
+suite_result
+<\Cell_7>
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    [
+    Commit Message: "[issue-650] functionality split (#751)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.datasets.classification import iris
+
+train_dataset, test_dataset = iris.load_data()
+<\Cell_0>
+<Cell_1>
+from deepchecks.suites import full_suite
+
+suite = full_suite()
+<\Cell_1>
+<Cell_2>
+suite_result = suite.run(train_dataset=train_dataset, test_dataset

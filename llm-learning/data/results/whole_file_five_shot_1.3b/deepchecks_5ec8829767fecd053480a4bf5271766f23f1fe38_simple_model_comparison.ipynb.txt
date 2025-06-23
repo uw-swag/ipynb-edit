@@ -1,0 +1,39 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import SimpleModelComparison
+    from deepchecks.base import Dataset
+
+    np.random.seed(42)
+
+    iris = load_iris(as_frame=True)
+    x = iris.data
+    y = iris.target
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.33, random_state=42)
+    train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                       features=iris.feature_names,
+                       label='target')
+    test_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                     features=iris.feature_names,
+                     label='target')
+    clf = AdaBoostClassifier()
+    clf.fit(x_train, y_train)
+
+    check = SimpleModelComparison(simple_model_type='random')
+    result_random = check.run(train_ds, test_ds, clf)
+
+    check = SimpleModelComparison(simple_model_type='constant')
+    result_constant = check.run(train_ds, test_ds, clf)
+
+    check = SimpleModelComparison(simple_model_type='tree').add_condition_ratio_not_less_than(1.2)
+    result_tree = check.run(train_ds, test_ds, clf)
+
+    result_df = pd.concat([result_random, result_constant, result_tree], axis=1)
+    result_df['Number of samples'] = [x_train.shape[0], x_test.shape[0]]
+
+    print(result_df)
+    ```

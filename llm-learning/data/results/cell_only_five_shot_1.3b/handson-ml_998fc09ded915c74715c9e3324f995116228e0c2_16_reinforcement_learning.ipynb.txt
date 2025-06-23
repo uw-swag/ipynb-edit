@@ -1,0 +1,51 @@
+```python
+    import numpy as np
+    import gym
+    import time
+    import random
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.optimizers import Adam
+
+    # Ensure reproducibility
+    np.random.seed(0)
+    random.seed(0)
+
+    # Load the environment
+    env = gym.make('BipedalWalker-v2')
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(24, input_dim=env.observation_space.shape[0], activation='relu'))
+    model.add(Dense(24, activation='relu'))
+    model.add(Dense(env.action_space.n, activation='linear'))
+    model.compile(loss='mse', optimizer=Adam(lr=0.01))
+
+    # Train the model
+    for i in range(1000):
+        done = False
+        total_reward = 0
+        state = env.reset()
+        while not done:
+            action = model.predict(state)
+            new_state, reward, done, info = env.step(action)
+            model.train_on_batch(state, reward)
+            state = new_state
+            total_reward += reward
+
+    # Test the model
+    for i in range(10):
+        done = False
+        total_reward = 0
+        state = env.reset()
+        while not done:
+            action = model.predict(state)
+            new_state, reward, done, info = env.step(action)
+            state = new_state
+            total_reward += reward
+
+    print('Testing finished after {} timesteps'.format(i))
+    print('Total reward: ', total_reward)
+    ```
+
+    This code will train a policy gradient model for the BipedalWalker-v2 environment. The model is a simple neural network with two hidden layers, and the loss function is the mean squared error. The model is trained for 1000 episodes, and then the model is tested for 10 episodes

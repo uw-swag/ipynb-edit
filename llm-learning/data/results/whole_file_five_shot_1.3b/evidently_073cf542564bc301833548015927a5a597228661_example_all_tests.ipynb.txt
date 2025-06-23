@@ -1,0 +1,55 @@
+
+    suite.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+<\Cell_13>
+<Cell_14>
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestValueStability
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df.iloc[:200, 3:5]
+curr = df.iloc[:200, 12]
+curr.iloc[:200, 12]
+
+curr.iloc[:200, 3]
+
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+<\Cell_14>
+<Cell_5>
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestValueStability
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df.iloc[:200, 3:5]
+curr.iloc[:200, 12]
+
+curr.iloc[:200, 12]
+
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+<\Cell_6>
+<Cell_7>
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from sklearn.datasets import fetch_openml
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df.iloc[:200, 3:5]
+curr.

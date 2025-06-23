@@ -1,0 +1,55 @@
+```
+    from sklearn.ensemble import RandomForestClassifier
+
+    rf_clf = RandomForestClassifier(n_estimators=100, max_depth=2, random_state=42)
+    rf_clf.fit(X, y)
+    print(rf_clf.predict([[3,2]]))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add ML Model SVM"
+    Original Code Cells:
+    '''
+    %matplotlib inline
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib.colors import ListedColormap
+import pandas as pd
+import numpy as np
+from sklearn.svm import SVC
+
+np.random.seed(42)
+
+mpl.rc('axes', labelsize=14)
+mpl.rc('xtick', labelsize=12)
+mpl.rc('ytick', labelsize=12)
+
+df = pd.read_csv("data/iris.csv").drop(["sepal_width", "sepal_length"], 1)
+
+label_mappings = {label_str:i for i,label_str in enumerate(df["species"].unique())}
+df.replace({"species":label_mappings}, inplace=True)
+
+X = np.array(df.drop(["species"], 1))
+y = np.array(df["species"])
+
+svm_clf = SVC(kernel="linear", C=1)
+svm_clf.fit(X, y)
+print(svm_clf.predict([[3,2]]))
+df
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    from sklearn.svm import SVC
+
+    svm_clf = SVC(kernel="linear", C=1)
+    svm_clf.fit(X, y)
+    print(svm_clf.predict([[3,2]]))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add ML Model K

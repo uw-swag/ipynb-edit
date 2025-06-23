@@ -1,0 +1,47 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "add and update class 9 notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import seaborn as sns
+
+# allow plots to appear in the notebook
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+url = 'http://people.sc.fsu.edu/~jburkardt/datasets/regression/x01.txt'
+col_names = ['id', 'brain', 'body']
+mammals = pd.read_table(url, sep='\s+', skiprows=33, names=col_names, index_col='id')
+mammals.head()
+<\Cell_1>
+<Cell_2>
+mammals.describe()
+<\Cell_2>
+<Cell_3>
+# only keep rows in which the body weight is less than 200
+mammals = mammals[mammals.body < 200]
+mammals.shape
+<\Cell_3>
+<Cell_4>
+sns.lmplot(x='body', y='brain', data=mammals, ci=None, fit_reg=False)
+sns.plt.xlim(-10, 200)
+sns.plt.ylim(-10, 250)
+<\Cell_4>
+<Cell_5>
+sns.lmplot(x='body', y='brain', data=mammals, ci=None, col='universe')
+sns.plt.xlim(-10, 200)
+sns.plt.ylim(-10, 250)
+<\Cell_5>
+<Cell_6>
+sns.lmplot(x='body', y='brain', data=mammals, ci=None, col='universe', order=8)
+sns.plt.xlim(-10, 200)
+sns.plt.y

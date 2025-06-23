@@ -1,0 +1,32 @@
+```python
+    # Refactoring the column_mapping
+    def refactor_column_mapping(dataframe, column_mapping):
+        """
+        This function is used to refactor the column_mapping.
+        It checks if the column_mapping is a dictionary and if it's not, it converts it to a dictionary.
+        """
+        if not isinstance(column_mapping, dict):
+            raise ValueError("The column_mapping should be a dictionary.")
+
+        for old_column, new_column in column_mapping.items():
+            if old_column not in dataframe.columns:
+                raise ValueError(f"The old column {old_column} does not exist in the dataframe.")
+
+        return {v: k for k, v in column_mapping.items()}
+
+    # Refactoring the original code
+    iris_data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+    iris_data_drift_dashboard.calculate(iris_frame, iris_frame, column_mapping=None)
+
+    iris_data_drift_profile = Profile(sections=[DataDriftProfileSection])
+    column_mapping = {
+        "sepal_length": "sepal_length_refactored",
+        "sepal_width": "sepal_width_refactored",
+        "petal_length": "petal_length_refactored",
+        "petal_width": "petal_width_refactored"
+    }
+    refactored_column_mapping = refactor_column_mapping(iris_frame, column_mapping)
+    iris_data_drift_profile.calculate(iris_frame, iris_frame, column_mapping=refactored_column_mapping)
+    ```
+
+    This refactoring code will refactor the column_mapping to a dictionary, and then it will be used to calculate the DataDriftTab and DataDriftProfileSection.

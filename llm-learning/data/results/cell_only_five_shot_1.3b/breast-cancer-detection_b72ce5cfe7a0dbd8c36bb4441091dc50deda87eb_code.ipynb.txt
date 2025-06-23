@@ -1,0 +1,32 @@
+```python
+    # Decision Tree Classifier
+    from sklearn.tree import DecisionTreeClassifier
+
+    dt_classifier = DecisionTreeClassifier(random_state=51)
+    dt_classifier.fit(X_train, y_train)
+    y_pred_dt = dt_classifier.predict(X_test)
+    y_pred_dt
+
+    dt_classifier2 = DecisionTreeClassifier(random_state=51)
+    dt_classifier2.fit(X_train_sc, y_train)
+    y_pred_dt_sc = dt_classifier2.predict(X_test_sc)
+    y_pred_dt_sc
+
+    # Evaluating the model
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred_dt))
+    print("Classification Report: \n", classification_report(y_test, y_pred_dt))
+    print("Accuracy Score: \n", accuracy_score(y_test, y_pred_dt))
+
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred_dt_sc))
+    print("Classification Report: \n", classification_report(y_test, y_pred_dt_sc))
+    print("Accuracy Score: \n", accuracy_score(y_test, y_pred_dt_sc))
+
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred_knn))
+    print("Classification Report: \n", classification_report(y_test, y_pred_knn))
+    print("Accuracy Score: \n", accuracy_score(y_test, y_pred_knn))
+
+    print("Confusion Matrix: \n", confusion_matrix(y_test, y_pred_knn_sc))
+    print("Classification Report: \n", classification_report(y_test, y_pred_knn_sc))
+    print("Accuracy Score: \n", accuracy_score(y_test, y_pred_knn_sc))
+
+    print("Confusion Matrix: \n",

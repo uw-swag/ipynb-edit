@@ -1,0 +1,67 @@
+```python
+    import jax.lib.xla_bridge as jax_xla
+    jax_xla.enable_x64_hardware_backend()
+
+    import djl
+    from djl.nn import Hyperparameter
+    from djl.training import Trainer, TrainConfig
+    from djl.utils import download_url
+
+    # Download the model
+    url = "https://dl.fbaipublicfiles.com/djl/pretrained_models/pytorch/cv/resnet50/pytorch_model.bin"
+    download_url(url, "resnet50.pth")
+
+    # Load the model
+    model = djl.Model.load("resnet50.pth")
+
+    # Get the image classification task
+    task = model.get_task("image-classification")
+
+    # Get the input shape
+    input_shape = task.get_input_shape()
+
+    # Get the output shape
+    output_shape = task.get_output_shape()
+
+    # Get the hyperparameters
+    hyperparameters = model.get_hyperparameters()
+
+    # Get the training configuration
+    training_config = model.get_training_config()
+
+    # Get the training set
+    training_set = model.get_training_set()
+
+    # Get the validation set
+    validation_set = model.get_validation_set()
+
+    # Get the test set
+    test_set = model.get_test_set()
+
+    # Get the model
+    model = model.to_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+
+    # Get the device
+    device = model.get_device()
+

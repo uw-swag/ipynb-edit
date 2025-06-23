@@ -1,0 +1,20 @@
+```python
+    # Importing the necessary libraries
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    # Creating a DataFrame
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+
+    # Running the StringMismatch check
+    r = StringMismatch().run(df)
+
+    # Adding a condition to the check
+    c = StringMismatch().add_condition_no_variants()
+
+    # Deciding the conditions decision
+    c.conditions_decision(r)
+    ```
+
+    The code above is an example of how to use the `StringMismatch` check in Deepchecks, a library for data quality checks. The `StringMismatch` check is used to find strings that are not in a standard format (lowercase, no special characters, no numbers, etc.). The `add_condition_no_variants` method is used to add a condition to the check that will exclude variants of the strings. The `conditions_decision` method is used to decide the decision of the conditions.

@@ -1,0 +1,27 @@
+```python
+    # Rename multiple files in a directory
+    import os
+
+    # Specify the directory path
+    directory_path = "/path/to/your/directory"
+
+    # Specify the old and new names
+    old_names = {
+        "old_file1.txt": "new_file1.txt",
+        "old_file2.txt": "new_file2.txt",
+        # Add more files here
+    }
+
+    # Iterate over the old and new names
+    for old_name, new_name in old_names.items():
+        # Construct the old and new file paths
+        old_file_path = os.path.join(directory_path, old_name)
+        new_file_path = os.path.join(directory_path, new_name)
+
+        # Check if the old file exists
+        if os.path.exists(old_file_path):
+            # Rename the file
+            os.rename(old_file_path, new_file_path)
+        else:
+            print(f"File {old_name} not found.")
+    ```

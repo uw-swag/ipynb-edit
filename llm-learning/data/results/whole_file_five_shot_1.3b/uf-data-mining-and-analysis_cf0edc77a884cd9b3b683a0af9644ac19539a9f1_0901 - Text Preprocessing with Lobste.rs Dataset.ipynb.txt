@@ -1,0 +1,59 @@
+
+    ### Instruction:
+    [
+    Commit Message: "updating to remove solution"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import re
+
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from nltk.stem.porter import PorterStemmer
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv('../data/lobsters_full_2017_cleaned.csv')
+<\Cell_1>
+<Cell_2>
+df.head()
+<\Cell_2>
+<Cell_3>
+df = df.set_index('Unnamed: 0')
+<\Cell_3>
+<Cell_4>
+df.about.head()
+<\Cell_4>
+<Cell_5>
+sum(df.about.isnull()) / df.about.shape[0]
+<\Cell_5>
+<Cell_6>
+df.about.iloc[0]
+<\Cell_6>
+<Cell_7>
+print(df.about.iloc[0])
+<\Cell_7>
+<Cell_8>
+sample = df.sample(5)
+
+for idx, row in sample.iterrows():
+    print('Username: {}'.format(row.username))
+    print(row.about)
+    print()
+<\Cell_8>
+<Cell_9>
+%matplotlib inline
+df.about.map(lambda x: len(x)).hist()
+<\Cell_9>
+<Cell_10>
+import numpy as np
+type(np.nan)
+<\Cell_10>
+<Cell_11>
+df.about.map(lambda x: len(x) if isinstance(x, str) else 0).hist()
+<\Cell_11>
+<Cell_12>
+df['about_length'] = df.about.

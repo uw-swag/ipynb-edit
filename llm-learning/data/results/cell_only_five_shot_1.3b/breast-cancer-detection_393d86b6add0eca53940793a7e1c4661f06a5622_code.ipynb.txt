@@ -1,0 +1,22 @@
+```python
+    # Improve model performance by tuning hyperparameters
+    hparams = prepare_hparams(yaml_file,
+                              news_feature_file=news_feature_file,
+                              user_history_file=user_history_file,
+                              wordEmb_file=wordEmb_file,
+                              entityEmb_file=entityEmb_file,
+                              epochs=epoch,
+                              lr=0.01,
+                              batch_size=128,
+                              hidden_dim=100,
+                              dropout=0.5,
+                              weight_decay=0.001)
+
+    # Re-run the model with the new hyperparameters
+    if run_MIND_small:
+        input_creator = DKNTextIterator
+        model = DKN(hparams, input_creator)
+        model.fit(train_file, valid_file)
+        model.run_get_embedding(news_feature_file, infer_embedding_file)
+    ```
+    This code changes the hyperparameters of the model to improve its performance. The new hyperparameters include learning rate (`lr`), batch size (`batch_size`), hidden dimension (`hidden_dim`), dropout rate (`dropout`), and weight decay (`weight_decay`). The model is then re-run with these new hyperparameters.

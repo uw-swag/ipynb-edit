@@ -1,0 +1,44 @@
+```markdown
+    # cohttp.async
+
+    [![Build Status](https://travis-ci.org/dgr2/cohttp-async.svg?branch=master)](https://travis-ci.org/dgr2/cohttp-async)
+
+    A coroutine-based HTTP client library for Python.
+
+    ## Installation
+
+    You can install the latest version of `cohttp-async` from PyPI:
+
+    ```bash
+    pip install cohttp-async
+    ```
+
+    ## Example
+
+    Here is an example of how to use `cohttp-async` to make a GET request:
+
+    ```python
+    import asyncio
+    import aiohttp
+    from cohttp import ClientSession
+
+    async def fetch(session, url):
+        async with session.get(url) as response:
+            return await response.text()
+
+    async def main():
+        async with aiohttp.ClientSession() as session:
+            html = await fetch(session, 'http://python.org')
+            print(html)
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
+    ```
+
+    This will print the HTML of the Python homepage.
+
+    ## License
+
+    The `cohttp-async` library is licensed under the MIT License.
+    ```
+    '''

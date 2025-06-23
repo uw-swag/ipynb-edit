@@ -1,0 +1,16 @@
+```
+    #imports
+    import numpy as np
+    import pandas as pd
+    pd.options.display.max_columns = 50
+    from pandas import DataFrame, Series
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    sns.set_style('whitegrid')
+    %matplotlib inline
+    #Creating Factor Plot based on 'Embarked'
+    train_DF['Embarked'] = train_DF['Embarked'].fillna('S')
+    sns.factorplot('Embarked','Survived', data=train_DF, aspect = 5)
+    ```
+    The above code is used to create a factor plot for the 'Embarked' variable. The factorplot function from seaborn is used to create a factor plot. The 'Embarked' variable is divided into three categories: 'S', 'C', and 'Q', and the 'Survived' variable is used to create the plot. The 'aspect' parameter is set to 5 to make the plot more readable.

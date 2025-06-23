@@ -1,0 +1,23 @@
+```python
+    import pandas as pd
+    from sklearn.datasets import load_iris
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    train_len = round(0.67*len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:]
+
+    from deepchecks.suites import IntegrityCheckSuite
+
+    IntegrityCheckSuite.run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+    ```
+
+    The code above is a part of a Jupyter notebook and it's used to load the iris dataset, split it into a training set and a test set, and then run the IntegrityCheckSuite on the datasets.
+
+    The IntegrityCheckSuite is a suite of checks that can be run on datasets to ensure they are valid and complete. The suite includes checks for missing values, duplicate rows, and other common data quality issues.
+
+    The `run` method of the `IntegrityCheckSuite` class is used to execute the checks. The `train_dataset` and `test_dataset` parameters are used to specify the datasets to be checked.
+
+    The `check_datasets_policy` parameter is used to specify the policy for checking the datasets. The possible values are 'both', 'train', and 'test'. If 'both' is specified, the suite will check both the training and testing datasets. If 'train' is specified, the suite will only check the training dataset. If 'test' is specified, the suite will only check the testing dataset.
+
+    The `IntegrityCheckSuite.run` method returns a report of the results of the checks. This report can be used to understand the quality of the datasets and make necessary adjustments to ensure they are valid and complete.

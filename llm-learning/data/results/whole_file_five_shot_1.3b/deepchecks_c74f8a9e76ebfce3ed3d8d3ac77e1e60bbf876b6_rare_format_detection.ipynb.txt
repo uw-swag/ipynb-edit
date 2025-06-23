@@ -1,0 +1,40 @@
+
+    '''
+    <Cell_0>
+from datetime import datetime
+import numpy as np
+import pandas as pd
+from mlchecks import Dataset
+from mlchecks.checks.integrity.rare_format_detection import RareFormatDetection
+
+<\Cell_0>
+<Cell_1>
+pd.set_option('display.max_columns', None)
+<\Cell_1>
+<Cell_2>
+np.random.seed(42)
+<\Cell_2>
+<Cell_3>
+datelist = pd.date_range(start=datetime.today(), periods=200, freq='D', normalize=True)
+s_date = pd.Series([d.strftime('%Y-%m-%d') for d in datelist], name='date')
+
+emaillist = [''.join(np.random.choice(a=list('abcdefghijklmnopqrstuvwxyz'), p=[1/26]*26, size=np.random.choice(a=[6,7,8], p=[0.2, 0.5, 0.3]))) + '@gmail.com' for x in range(200)]
+s_email = pd.Series(emaillist, name='email')
+
+df = pd.DataFrame([s_date, s_email]).T
+<\Cell_3>
+<Cell_4>
+df.head()
+<\Cell_4>
+<Cell_5>
+ds = Dataset(df)
+check = RareFormatDetection()
+
+check.run(dataset=ds)
+<\Cell_5>
+<Cell_6>
+# Change dates to different format:
+df['date'].loc[0:2] = [datetime.strptime(d, '%Y-%m-%d').strftime('%Y-%b-%d') for d in df['date'].loc[0:2]]
+
+# Change emails to have mistakes in format
+df['email'].loc[[0,1]] = ['myname@gmail.com1', 'myname@gmail.co']

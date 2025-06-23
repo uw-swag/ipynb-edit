@@ -1,0 +1,43 @@
+```python
+    # Importe les librairies
+    import numpy as np
+    import pandas as pd
+    from pathlib import Path
+    import joblib
+
+    # Définit le modèle à importer et son chemin
+    model_folder = Path.cwd() / 'modele'
+    model_file = 'logistic-regression-gs.joblib'
+    model_path = Path(model_folder / model_file)
+
+    # Charge le modèle si le fichier 'joblib' est présent au bon emplacement
+    if not model_folder.is_dir():
+        raise FileNotFoundError(
+            f'Impossible de charger le modèle : le dossier \'{model_folder}\''
+            f' n\'existe pas.'
+        )
+    elif not model_path.is_file():
+        raise FileNotFoundError(
+            f'Impossible de charger le modèle : le fichier \'{model_file}\''
+            f' est manquant.'
+        )
+    else:
+        clf = joblib.load(model_path)
+        print('Chargement du modèle effectué avec succès.')
+
+    # Initialise le chemin du dossier contenant les fichiers à tester
+    data_folder = Path.cwd() / 'datasets'
+
+    # Initialise l'indice du fichier sélectionné
+    j=-1
+
+    # Vérifie la présence du dossier 'datasets', liste les fichiers CSV qu'il
+    # contient et récupère le choix utilisateur
+    if not data_folder.is_dir():
+        raise FileNotFoundError(f'Le dossier {data_folder} n\'existe pas.')
+    else:
+        csv_files = [x for x in list(data_folder.glob('*.csv')) if x.is_file()]
+        if len(csv_files) != 0:
+            print('Fichiers disponibles pour le test :')
+            for i, file in enumerate(csv_files):
+                print(f

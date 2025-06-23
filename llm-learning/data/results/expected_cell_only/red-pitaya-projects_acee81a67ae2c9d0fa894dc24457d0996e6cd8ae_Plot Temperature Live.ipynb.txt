@@ -1,0 +1,41 @@
+%matplotlib notebook
+import matplotlib
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+from IPython.display import display, clear_output
+from datetime import datetime, date
+import time
+import pandas as pd
+from subprocess import run, PIPE
+
+headers = ["Temperature (oC)","Time(Minutes)"]
+df = pd.DataFrame() #Create an empty data frame to append to later
+
+def animate(i):
+    global df
+    global plt
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    monitor_ams_output = run(["monitor","-ams"], stdout=PIPE).stdout
+    temp_value = float(monitor_ams_output.split(maxsplit=8)[7])
+    clean_data_table['Temperature (oC)'] = [temp_value]
+    clean_data_table['Time(Minutes)'] = [i/60]
+    df = df.append(clean_data_table)
+    
+    x = df['Time(Minutes)']
+    y1 = df['Temperature (oC)']
+    plt.cla()
+    plt.plot(x,y1)
+    plt.gcf().autofmt_xdate()
+    plt.xlabel('Time (Minutes)')
+    plt.ylabel('Temprature (C)')
+    plt.title("Temperature - Arcylic Case with Fan")
+#    plt.ylim(ymin=0,ymax=85)
+#    plt.xlim(xmin=0,xmax=10.0)
+
+ani = FuncAnimation(plt.gcf(), animate,interval=1000)
+plt.show()
+monitor_ams_output = run(["monitor","-ams"], stdout=PIPE).stdout
+temp_value = float(monitor_ams_output.split(maxsplit=8)[7])
+temp_value

@@ -1,0 +1,45 @@
+```python
+    import pandas as pd
+    import numpy as np
+    np.random.seed(42)
+
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    import warnings
+    from sklearn.exceptions import UndefinedMetricWarning
+    warnings.filterwarnings('ignore', category=UndefinedMetricWarning) 
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+
+    from deepchecks import Dataset
+
+    ds_train = Dataset(df_train, label=label_col, cat_features=[])
+    ds_test =  Dataset(df_test,  label=label_col, cat_features=[])
+
+    from deepchecks.suites import overall_check_suite
+
+    OverallSuite = overall_check_suite()
+
+    OverallSuite.run(train_dataset=ds_train, test_dataset=ds_test, model=rf_clf, check_datasets_policy='both')
+
+    # Lets have a look at all the checks and conditions so that we can edit them
+    OverallSuite
+
+    # Lets have a look at the conditions we want to change:
+    OverallSuite[4]
+
+    # Removing a condition
+    OverallSuite[4].remove_condition(0)
+
+    # print and see that the condition was removed
+    OverallSuite[4]
+
+    train_len = round(0.67*iris_df.shape[0])
+    alternative_train_df = Dataset(iris_df[:train_len],

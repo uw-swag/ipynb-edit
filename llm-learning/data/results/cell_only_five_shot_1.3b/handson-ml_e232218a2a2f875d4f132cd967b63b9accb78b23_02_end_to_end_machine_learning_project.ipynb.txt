@@ -1,0 +1,32 @@
+
+    The code you provided is using a function transformer instead of a class. The function transformer is a type of transformer that applies a function to the data. In this case, the function is the `CombinedAttributesAdder` class.
+
+    The `CombinedAttributesAdder` class is a transformer that combines the features of the data into a new feature. The new features are created by adding the bedrooms per room feature to the existing features.
+
+    The `Pipeline` class is used to chain the transformations. The `Pipeline` class is a transformer that chains a sequence of transformers and a final estimator. The sequence of transformers is applied in the order they are specified, and the final estimator is used to make final predictions.
+
+    The `Pipeline` class is a convenient way to apply a sequence of data processing steps to a dataset. It allows you to apply the same transformation to the whole dataset, and it also provides a simple way to save and load the pipeline.
+
+    Here is the updated code:
+
+    ```python
+    from sklearn.base import BaseEstimator, TransformerMixin
+    from sklearn.impute import SimpleImputer
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.pipeline import Pipeline
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import OneHotEncoder
+
+    class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
+        def __init__(self, add_bedrooms_per_room=True):
+            self.add_bedrooms_per_room = add_bedrooms_per_room
+        def fit(self, X, y=None):
+            return self
+        def transform(self, X, y=None):
+            rooms_per_household = X[:, 3] / X[:, 4]
+            population_per_household = X[:, 5] / X[:, 4]
+            if self.add_bedrooms_per_room:
+                bedrooms_per_room = X[:, 2] / X[:, 3]
+                return np.c_[X, rooms_per_household, population_per_household, bedrooms_per_room]
+            else:
+                return np.c_[X

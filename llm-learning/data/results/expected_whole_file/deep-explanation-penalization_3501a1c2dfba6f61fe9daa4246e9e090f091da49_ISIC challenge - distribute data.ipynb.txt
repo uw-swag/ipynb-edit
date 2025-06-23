@@ -1,0 +1,65 @@
+<Cell_0>
+
+
+import csv
+img_path = "./challenge\ISIC_2019_Training_Input\ISIC_2019_Training_Input"
+meta_file = "challenge\ISIC_2019_Training_GroundTruth.csv"
+list_of_meta = []
+with open(meta_file, newline='') as csvfile:
+    spamreader = csv.reader(csvfile, delimiter=',')
+    for row in spamreader:
+        list_of_meta.append(row)    
+#%%
+
+from shutil import copyfile
+from os.path import join as oj
+
+list_of_meta = list_of_meta[1:]
+from shutil import copyfile
+import numpy as np
+from os.path import isdir
+<\Cell_0>
+<Cell_1>
+from os import listdir
+<\Cell_1>
+<Cell_2>
+challenge_path = "./challenge"
+<\Cell_2>
+<Cell_3>
+if False:
+    new_list = []
+    for line in list_of_meta:
+        file_name = line[0]
+        cat = np.asarray([float(x) for x in line[1:]]).argmax()
+        new_list.append((file_name, cat))
+    for line in new_list:
+        new_folder = oj('challenge', str(line[1]))
+        old_file = oj(img_path,line[0] +'.jpg' )
+        copyfile(old_file, oj(new_folder, line[0] +'.jpg'))
+
+<\Cell_3>
+<Cell_4>
+folders = listdir(challenge_path)[:4]
+<\Cell_4>
+<Cell_5>
+folders
+<\Cell_5>
+<Cell_6>
+num_examples = np.empty((4))
+for i,folder in enumerate(folders):
+    num_examples[i] = len(listdir(oj(challenge_path, folder)))
+    print(folder, len(listdir(oj(challenge_path, folder))))
+<\Cell_6>
+<Cell_7>
+
+for i,folder in enumerate(folders):
+<\Cell_7>
+<Cell_8>
+num_examples /= num_examples.sum()
+<\Cell_8>
+<Cell_9>
+num_examples
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>

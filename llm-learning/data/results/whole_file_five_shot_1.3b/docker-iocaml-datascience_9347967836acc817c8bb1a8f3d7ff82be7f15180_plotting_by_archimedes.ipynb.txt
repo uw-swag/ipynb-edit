@@ -1,0 +1,18 @@
+```ocaml
+    (* User-defined Archimedes backend "iocaml" *)
+    module R = Archimedes.Backend.Register(struct
+      include Archimedes_cairo.B
+      let name = "iocaml"
+      let close ~options b =
+        Cairo.PNG.write_to_stream ~output:(output_string Iocaml.mime) (Cairo.get_target (Obj.magic b)) ;
+        close ~options b ; Iocaml.send_mime ~base64:true "image/png"
+    end)
+    ```
+
+    The above code defines a user-defined backend for Archimedes, which is a library for creating 2D graphics in OCaml. The backend is named "iocaml" and it uses the Cairo library to render the graphics.
+
+    The `A.init` function is used to initialize an Archimedes viewport with a width and height. The `A.Axes.box` function is used to add a box to the viewport, and the `A.fx` function is used to add a function to the viewport. The `A.close` function is used to close the viewport and send the rendered image to the Iocaml backend.
+
+    The `R` module is used to register the "iocaml" backend with Archimedes.
+
+    The final lines of the code are a simple example of using the "iocaml" backend with Archimedes. It creates a viewport, adds a box and a function to the viewport, and then closes the viewport and sends the rendered image to the Iocaml backend.

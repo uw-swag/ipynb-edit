@@ -1,0 +1,35 @@
+```python
+    # Example 1:
+    # Suppose we have a DataFrame df with columns 'A', 'B', 'C'
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500]
+    })
+
+    # We can use the 'apply' function to apply a function to each element in a DataFrame
+    df['A'] = df['A'].apply(lambda x: x * 2)
+
+    # The 'apply' function can also be used to apply a function to each element in a Series
+    df['B'] = df['B'].apply(lambda x: x / 10)
+
+    # We can also use the 'map' function to apply a function to each element in a Series
+    df['C'] = df['C'].map(lambda x: x / 100)
+
+    # The 'transform' function can also be used to apply a function to each element in a Series
+    df['D'] = df['A'].transform(lambda x: x ** 2)
+
+    # The 'applymap' function can also be used to apply a function to each element in a DataFrame
+    df = df.applymap(lambda x: x * 2)
+
+    # The 'map' function can also be used to apply a function to each element in a Series
+    df['E'] = df['B'].map(lambda x: x / 10)
+
+    # The 'transform' function can also be used to apply a function to each element in a Series
+    df['F'] = df['C'].transform(lambda x: x / 100)
+
+    # The 'apply' function can also be used to apply a function to each element in a DataFrame
+    df = df.apply(lambda x: x * 2)
+
+    # The 'map' function can also be used to apply a function to each element in a Series
+    df['G'] = df['D'].map(lambda x: x ** 

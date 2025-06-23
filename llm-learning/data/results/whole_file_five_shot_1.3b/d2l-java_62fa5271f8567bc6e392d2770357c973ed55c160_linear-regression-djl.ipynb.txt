@@ -1,0 +1,17 @@
+```python
+    from sklearn.linear_model import LinearRegression
+    from sklearn.utils import shuffle
+
+    class LinearRegressionModel:
+        def __init__(self):
+            self.model = LinearRegression()
+
+        def fit(self, X, y):
+            X, y = shuffle(X, y, random_state=0)
+            self.model.fit(X, y)
+
+        def predict(self, X):
+            return self.model.predict(X)
+    ```
+    '''
+    ]

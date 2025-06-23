@@ -1,0 +1,72 @@
+```
+    # ! pip install openai
+    import openai
+
+    import os
+    from getpass import getpass
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    # print ('token is', token)
+
+    openai.api_key = token
+
+    def get_completion(prompt, model="gpt-3.5-turbo"):
+        messages = [{"role": "user", "content": prompt}]
+        response = openai.ChatCompletion.create(
+            model=model,
+            messages=messages,
+            temperature=0, # this is the degree of randomness of the model's output
+        )
+        return response.choices[0].message["content"]
+
+    prompt = """
+    Translate the following English sentence to Thai. Use only basic word. Keep it short.
+    """
+    resp = get_completion(prompt)
+    print(resp)
+
+    prompt2 = """
+    Translate the text English sentence to Thai. 
+    The text is delimited by triple backticks
+
+    ```
+    Use only basic word. Keep it short.
+
+    ```
+
+    """
+    resp2 = get_completion(prompt2)
+    print(resp2)
+
+    prompt3 = """
+    Translate the text English sentence to Thai. 
+    The text is delimited by triple backticks
+
+    ```
+    Use only basic word. Keep it short.
+
+    ```
+
+    """
+    resp3 = get_completion(prompt3)
+    print(resp3)
+    ```
+    '''
+    ]
+
+    ### Response:
+    ```
+    # ! pip install openai
+    import openai
+
+    import os
+    from getpass import getpass
+
+    token = getpass('Enter OPENAI_API_KEY here: ')
+    # print ('token is', token)
+
+    openai.api_key = token
+
+    def get_completion(prompt, model="gpt-3.5-turbo"):
+        messages = [{"role": "user", "content": prompt}]
+        response = openai.Chat

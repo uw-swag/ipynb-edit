@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add more unittests (#315)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+
+from datetime import datetime
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ProbClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+iris = datasets.load_iris()
+<\Cell_1>
+<Cell_2>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_2>
+<Cell_3>
+iris_frame['target'] = iris.target
+<\Cell_3>
+<Cell_4>
+iris_frame.head()
+<\Cell_4>
+<Cell_5>
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = iris.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+<\Cell_5>
+<Cell_6>
+train_data, test_data = model_selection.train_test_split(iris_frame, random_state=0)
+<\Cell_6>
+<Cell_7>
+model = ensemble.RandomForestClassifier(random_state=0)
+<\Cell_7>
+<Cell_8>
+model.fit(train_data[features], train_data.target)
+<\Cell_8>
+<Cell_9>
+# make a data frame with predictions for each class
+
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = iris.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = iris.target_

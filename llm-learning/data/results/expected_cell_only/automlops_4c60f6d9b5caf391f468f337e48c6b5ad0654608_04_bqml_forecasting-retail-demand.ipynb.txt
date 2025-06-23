@@ -1,0 +1,87 @@
+!pip3 install 'kfp>=2.0.0'
+from kfp import dsl
+from kfp.dsl import Artifact, Dataset, Metrics, Output
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery', 
+        'pandas',
+        'pyarrow',
+        'db_dtypes'
+    ]
+)
+def evaluate_model(
+    dataset_id: str,
+    metrics: Output[Metrics],
+    model_name: str,
+    project_id: str
+):
+    """Evaluate the trained ARIMA model.
+
+    Args:
+        dataset_id: Destination BigQuery dataset.
+        model_name: Name for the model.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    query = f'''
+    SELECT
+      *
+    FROM
+      ML.EVALUATE(MODEL {dataset_id}.{model_name})
+    '''
+    query_job = bq_client.query(query)
+    results = query_job.result().to_dataframe()
+
+    for _, row in results.iterrows():
+        for m in ['log_likelihood', 'AIC', 'variance']:
+            metrics.log_metric(f'''Product id: {row['product_id']} | Metric: {m}''', row[m])
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery'
+    ]
+)
+def forecast(
+    bq_forecast_table: Output[Dataset],
+    confidence_lvl: float,
+    dashboard: Output[Artifact],
+    dataset_id: str,
+    forecast_horizon: int,
+    project_id: str
+):
+    """Custom component that runs a forecast for a given horizon period.
+
+    Args:
+        bq_forecast_table: Full uri of the BQ table forecast results.
+        confidence_lvl: Required confidence level.
+        dashboard: URL of the Looker dashboard.
+        dataset_id: Destination BigQuery dataset.
+        forecast_horizon: Number of days forward to forecast.
+        project_id: The project ID.
+    """
+    from google.cloud import bigquery
+    bq_client = bigquery.Client(project=project_id)
+
+    query = f'''DECLARE HORIZON STRING DEFAULT "{forecast_horizon}";
+    DECLARE CONFIDENCE_LEVEL STRING DEFAULT "{confidence_lvl}";
+
+    EXECUTE IMMEDIATE format("""
+        CREATE OR REPLACE VIEW {dataset_id}.arima_forecast AS (
+        SELECT
+          * , 
+          ROUND(forecast_value) AS forecast_value_rnd,
+          ROUND(forecast_value) - standard_error AS prediction_interval_lower_bound_rnd,
+          ROUND(forecast_value) - standard_error AS confidence_interval_lower_bound_rnd,
+          ROUND(forecast_value) + standard_error AS prediction_interval_upper_bound_rnd,
+          ROUND(forecast_value) + standard_error AS confidence_interval_upper_bound_rnd
+        FROM
+          ML.FORECAST(MODEL {dataset_id}.arima_model,
+                      STRUCT(%s AS horizon,
+                             %s AS confidence_level)
+                     )
+        )
+        """,HORIZON,CONFIDENCE_LEVEL)'''
+    job = bq_client.query(query)
+    bq_forecast_table.uri = f'bq://{project_id}.{dataset_id}.arima_forecast'
+    dashboard.uri = 'https://lookerstudio.google.com/reporting/526d02a9-37f5-404a-87a4-148343e1cc49'

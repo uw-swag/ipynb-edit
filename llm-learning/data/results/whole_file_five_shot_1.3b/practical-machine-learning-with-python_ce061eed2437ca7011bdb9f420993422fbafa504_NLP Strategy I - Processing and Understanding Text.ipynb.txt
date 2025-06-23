@@ -1,0 +1,40 @@
+```python
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize, sent_tokenize
+    from nltk.stem import PorterStemmer
+    from nltk.stem import WordNetLemmatizer
+    from nltk.corpus import wordnet
+
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+    nltk.download('wordnet')
+    nltk.download('stopwords')
+
+    def lemmatize_sentence(sentence):
+        res = []
+        for word, pos in nltk.pos_tag(nltk.word_tokenize(sentence)):
+            if pos.startswith('J'):
+                res.append(wordnet.ADJ + ' ' + word)
+            elif pos.startswith('V'):
+                res.append(wordnet.VERB + ' ' + word)
+            elif pos.startswith('N'):
+                res.append(wordnet.NOUN + ' ' + word)
+            elif pos.startswith('R'):
+                res.append(wordnet.ADV + ' ' + word)
+            else:
+                res.append(word)
+        return ' '.join(res)
+
+    def stem_sentence(sentence):
+        ps = PorterStemmer()
+        return ' '.join([ps.stem(word) for word in nltk.word_tokenize(sentence)])
+
+    text = "Your text goes here"
+    stop_words = set(stopwords.words('english'))
+    word_tokens = word_tokenize(text)
+    filtered_sentence = [w for w in word_tokens if not w in stop_words]
+    print(filtered_sentence)
+    print(lemmatize_sentence(text))
+    print(stem_sentence(text))
+    ```

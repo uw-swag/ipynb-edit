@@ -1,0 +1,28 @@
+```python
+    def check_suite(suite):
+        if isinstance(suite, list):
+            return [check_suite(x) for x in suite]
+        elif isinstance(suite, dict):
+            return {k: check_suite(v) for k, v in suite.items()}
+        elif isinstance(suite, tuple):
+            return [check_suite(x) for x in suite]
+        elif isinstance(suite, set):
+            return {check_suite(x) for x in suite}
+        elif isinstance(suite, int):
+            return suite
+        elif isinstance(suite, str):
+            return suite
+        else:
+            return suite
+
+    def flatten(lst):
+        for x in lst:
+            if isinstance(x, list):
+                for y in flatten(x):
+                    yield y
+            else:
+                yield x
+
+    def check_suite_flatten(suite):
+        return list(flatten(check_suite(suite)))
+    ```

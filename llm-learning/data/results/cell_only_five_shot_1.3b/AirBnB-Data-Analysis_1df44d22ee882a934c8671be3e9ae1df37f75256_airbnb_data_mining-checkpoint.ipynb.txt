@@ -1,0 +1,46 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.metrics import accuracy_score
+    from wordcloud import WordCloud
+
+    # Loading the dataset
+    df = pd.read_csv('train.csv')
+
+    # Data preprocessing
+    df['month'].value_counts().plot(kind='bar', color=['red', 'green', 'blue'], figsize=(8, 6))
+    plt.title('Entries Distribution per Month', fontsize=20)
+    plt.xlabel('Month')
+    plt.ylabel('Number of entries')
+    plt.show()
+
+    # Entries per month
+    months = df['month'].value_counts().keys().tolist()
+    values = df['month'].value_counts().tolist()
+
+    print('Entries per month:\n')
+    for i, month in enumerate(months):
+        print('{}: {}'.format(month, values[i]))
+
+    # Entries per neighbourhood
+    df['neighbourhood'].value_counts().plot(kind='bar', color=['red', 'black'], figsize=(8, 6))
+    plt.title('Entries per neighbourhood', fontsize=20)
+    plt.xlabel('Neighbourhood')
+    plt.ylabel('Number of entries')
+    plt.show()
+
+    # Entries per neighbourhood
+    neighbourhoods = df['neighbourhood'].value_counts().keys().tolist()
+    values = df['neighbourhood'].value_counts().tolist()
+
+    print('Entries per neighbourhood:\n')
+    for i, neighbourhood in enumerate(neighbourhoods):
+        print('{}: {}'.format(neighbourhood, values[i]))
+
+    # Top 5

@@ -1,0 +1,52 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('housing_prices.csv')
+
+    # Checking the dataset
+    df.head()
+
+    # Checking for missing values
+    df.isnull().sum()
+
+    # Checking the statistical details of the dataset
+    df.describe()
+
+    # Checking the distribution of the target variable
+    sns.distplot(df['SalePrice'])
+
+    # Correlation matrix
+    sns.heatmap(df.corr())
+
+    # Splitting the dataset into features and target variable
+    X = df.drop('SalePrice', axis=1)
+    y = df['SalePrice']
+
+    # Splitting the dataset into training and testing set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Building the model
+    lm = LinearRegression()
+    lm.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = lm.predict(X_test)
+
+    # Comparing actual output values with predicted values
+    df = pd.DataFrame({'Actual': y_test, 'Predicted': y_pred})
+    df1 = df.head(25)
+
+    # Evaluating the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+   

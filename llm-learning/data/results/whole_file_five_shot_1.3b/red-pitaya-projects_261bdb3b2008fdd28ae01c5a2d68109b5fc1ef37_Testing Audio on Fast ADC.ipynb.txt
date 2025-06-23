@@ -1,0 +1,18 @@
+
+The code cells you provided are related to audio recording and processing in Python using the Red Pitaya FPGA and the PyDub library. Here's a brief explanation of the code:
+
+1. The `redpitaya.overlay.mercury` module is used to connect to the Red Pitaya FPGA.
+2. The `fpga.osc(1, 1.0)` command is used to create an oscillator on the FPGA.
+3. The `in2.decimation = 41667` command is used to set the data rate decimation.
+4. The `in2.trigger_pre  = 0` and `in2.trigger_post = N` commands are used to set the trigger timing.
+5. The `in2.trig_src = 0` command is used to disable hardware trigger sources.
+6. The `in2.reset()`, `in2.start()`, and `in2.trigger()` commands are used to start the recording, trigger the start of audio recording, and trigger the start of audio recording.
+7. The `while (in2.status_run()): pass` command is used to wait for the data to be recorded.
+8. The `print ('Recording complete')` command is used to print a message when the recording is complete.
+9. The `data = in2.data(N)` command is used to get the recorded data.
+10. The `ipd.Audio(data, rate=sr)` command is used to play the recorded data.
+11. The `plt.plot(data)` command is used to plot the recorded data.
+12. The `ipd.Audio('/tmp/stream_files/data_file_2020-05-23_13-23-32.wav', rate=sr2)` command is used to save the recorded data to a file.
+13. The `pydub.AudioSegment.from_wav(file)` command is used to read an audio file.
+14. The `np.array(a.get_array_of_samples())` command is used to get the array of samples from the audio file.
+15. The `np.float32(y) / 2**

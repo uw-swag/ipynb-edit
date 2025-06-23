@@ -1,0 +1,56 @@
+<Cell_0>
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.style.use('ggplot')
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import ExtraTreesClassifier
+from sklearn.cross_validation import train_test_split
+import numpy as np
+
+from sklearn_evaluation.model_results import ClassificationModelResults
+<\Cell_0>
+<Cell_1>
+iris = load_iris()
+X = iris.data
+y = (iris.target == 0).astype(int) #Convert to binary classification
+
+# Add noisy features
+random_state = np.random.RandomState(0)
+n_samples, n_features = X.shape
+n_noisy = 800
+X = np.c_[X, random_state.randn(n_samples, n_noisy)]
+
+# Split into training and test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5, random_state=random_state)
+
+iris.feature_names.extend(['noisy_feature_{}'.format(n) for n in range(n_noisy)])
+feature_names = iris.feature_names
+target_names = [iris.target_names[0], 'non-'+iris.target_names[0]]
+
+ext = ExtraTreesClassifier()
+ext.fit(X_train, y_train)
+<\Cell_1>
+<Cell_2>
+mr = ClassificationModelResults(model=ext,
+                                y_true=y_test,
+                                y_pred=ext.predict(X_test),
+                                y_score=ext.predict_proba(X_test)[:,1],
+                                feature_names=feature_names,
+                                target_names=target_names)
+<\Cell_2>
+<Cell_3>
+mr.plots.confusion_matrix(normalize=True)
+<\Cell_3>
+<Cell_4>
+mr.plots.roc()
+<\Cell_4>
+<Cell_5>
+mr.plots.precision_recall()
+<\Cell_5>
+<Cell_6>
+mr.plots.feature_importances(n=10)
+<\Cell_6>
+<Cell_7>
+mr.tables.feature_importances(n=10)
+<\Cell_7>

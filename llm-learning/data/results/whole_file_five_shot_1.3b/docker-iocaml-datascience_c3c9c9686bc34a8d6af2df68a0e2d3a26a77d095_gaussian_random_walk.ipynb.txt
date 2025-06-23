@@ -1,0 +1,19 @@
+```python
+    # Example of saving and loading a model
+    # Save the model
+    model.save(dir_name='./models')
+
+    # Load the model
+    model = RBM(
+        n_users=Xtr.shape[0],
+        possible_ratings=np.unique(Xtr),
+        visible_units=Xtr.shape[1],
+        hidden_units=600,
+        training_epoch=30,
+        minibatch_size=60,
+        keep_prob=0.9,
+        with_metrics=True
+    )
+
+    model.load(dir_name='./models')
+    ```

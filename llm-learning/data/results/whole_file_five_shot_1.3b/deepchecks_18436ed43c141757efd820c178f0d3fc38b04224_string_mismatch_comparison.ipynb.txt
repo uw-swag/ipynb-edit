@@ -1,0 +1,55 @@
+```
+    ## Examples
+
+    ### Multiclass Classification
+
+    #### Loading a synthetic multiclass classification dataset
+
+    ```python
+    import nannyml as nml
+
+    reference_df = nml.load_synthetic_multiclass_classification_dataset()[0]
+    analysis_df = nml.load_synthetic_multiclass_classification_dataset()[1]
+    analysis_target_df = nml.load_synthetic_multiclass_classification_dataset()[2]
+    analysis_df = analysis_df.merge(analysis_target_df, on='identifier')
+    ```
+
+    #### Performance Calculator
+
+    ```python
+    calc = nml.PerformanceCalculator(
+        y_pred_proba={
+            'prepaid_card': 'y_pred_proba_prepaid_card',
+            'highstreet_card': 'y_pred_proba_highstreet_card',
+            'upmarket_card': 'y_pred_proba_upmarket_card'
+        },
+        y_pred='y_pred',
+        y_true='y_true',
+        timestamp_column_name='timestamp',
+        problem_type='classification_multiclass',
+        metrics=['roc_auc', 'f1', 'precision', 'recall', 'specificity', 'accuracy'],
+        chunk_size=6000)
+
+    calc.fit(reference_df)
+    ```
+
+    #### Calculating performance metrics
+
+    ```python
+    results = calc.calculate(analysis_df)
+    ```
+
+    #### Plotting performance metrics
+
+    ```python
+    for metric in calc.metrics:
+        figure = results.plot(kind='performance', plot_reference=True, metric=metric)
+        figure.show()
+    ```
+
+    #### Writing performance metrics to file
+
+    ```python
+    for metric in calc.metrics:
+        figure = results.plot(kind='performance', plot_reference=True, metric=metric)
+        figure.write_image(f'../_static/tutorials/performance

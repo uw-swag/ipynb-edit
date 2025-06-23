@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    comparison = StringMismatchComparison(threshold=0.7)
+    result = comparison.run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+
+    print(result)
+    ```
+
+    This code will run the StringMismatchComparison check on the two dataframes, comparing the 'col1' column. The threshold parameter is set to 0.7, which means that the check will only consider a string as a match if it's at least 70% similar to the compared string.

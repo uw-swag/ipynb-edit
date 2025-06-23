@@ -1,0 +1,34 @@
+```python
+    # if the assert test passes, you don't see anything
+    assert 1 + 1 == 2, "Python should know basic math"
+    # if it doesn't pass, you'll get an error and the code stops there
+    assert "Hello" == "hello", "Python is case sensitive"
+
+    def all_the_same(a_list):
+        # write code here to return True if all elements are the same, False otherwise
+        return all(x == a_list[0] for x in a_list)
+
+    # some basic tests with assert statements
+    assert all_the_same([1, 1, 1]) == True, "all the same"
+    assert all_the_same([1, 2, 1]) == False, "some different"
+    assert all_the_same(['a', 'a', 'a']) == True, "all the same - letters"
+    assert all_the_same([]) == True, "no elements = the same elements"
+
+    def strong_password(password):
+        # check if the password fulfills all conditions and return True or False
+        return len(password) >= 8 and not password.isdigit() and not password.isalpha() and any(c.islower() for c in password)
+
+    # some basic tests with assert statements
+    assert strong_password('A1213pokl') == False, "to short"
+    assert strong_password('bAse730onE') == True, "good password"
+    assert strong_password('asasasasasasasaas') == False, "only lowercase letters"
+    assert strong_password('QWERTYqwerty') == False, "no digits"
+    assert strong_password('123456123456') == False, "no letters"
+    assert strong_password('QwErTy911poqqqq') == True, "good password"
+
+    def most_freq_letter(text):
+        # write code here to return the right letter from the given text
+        return max(set(text), key=text.count)
+
+    # print the output of your function for "Hello World!"
+    print

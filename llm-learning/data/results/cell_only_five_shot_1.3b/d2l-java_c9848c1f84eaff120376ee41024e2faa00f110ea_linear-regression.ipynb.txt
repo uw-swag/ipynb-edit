@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added a function to calculate the Loss Function (#205)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # Here is the function to calculate the loss. This function takes the output of the network and the true label as input and returns the loss.
+    # The loss is calculated as the mean squared error between the output and the true label.
+
+    def calculate_loss(output, label):
+        return mx.ndarray.mean(mx.ndarray.square(output - label))
+
+    # Now, you can use this function to calculate the loss in your training and validation loops.
+    # For example, in the training loop:
+
+    for data, label in training_dataloader:
+        output = network(data)
+        loss = calculate_loss(output, label)
+        # ...
+
+    # And in the validation loop:
+
+    for data, label in validation_dataloader:
+        output = network(data)
+        val_loss = calculate_loss(output, label)
+        # ...
+
+    # The loss in the validation loop will be the same as the loss in the training loop.
+    # This is because the loss function is the same in both cases.
+
+    # The loss in the validation loop is used to monitor the performance of the network during the training process.
+    # If the loss in the validation loop is lower than the loss in the training loop, this means that the network is learning well.
+
+    # The loss in the validation loop is also used to stop the training process if the network is not improving.
+    # If the loss in the validation loop is not improving, this means that the network is not learning well.
+
+    # The loss in the validation loop is also used to save the best model during the training process.
+    # If the loss in the validation loop is lower than the loss in the validation loop of the previous epoch, this means that the current model is the best one.
+
+    # The loss in the validation loop is also used to save the model during the training process.
+    # If the loss in the validation loop is lower than the loss in the validation loop of the previous epoch, this means that the

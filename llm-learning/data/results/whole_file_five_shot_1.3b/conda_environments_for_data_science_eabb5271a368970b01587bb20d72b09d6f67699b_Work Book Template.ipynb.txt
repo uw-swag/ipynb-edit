@@ -1,0 +1,47 @@
+```
+    import os, os.path
+    import pandas as pd
+    import numpy as np
+    from PIL import Image
+    import matplotlib.pyplot as plt
+    from pathlib import Path
+    import dask
+
+    x = 1 #placeholder
+
+    def testFileExisits(locationPath):
+        print(locationPath)
+        assert os.path.exists(locationPath)
+
+    def createLocationPath(locationPath):
+        print(locationPath)
+        path = Path(locationPath)
+        path.mkdir(parents=True, exist_ok=True)
+        assert os.path.exists(locationPath)
+
+    def detectOS():
+        if (os.name == "nt"):
+            #Windows
+            print("This is Windows")
+        elif (os.name == "posix"):
+            #Linux
+            print("This is Linux")
+        else:
+            print("Unknown OS")
+
+    class exampleClass(object):
+    
+        def __init__(self, inputString):
+            self.savedString = inputString
+    
+        def printInput(self, inputString):
+            print(inputString)
+    
+        def printSavedInput(self):
+            print(self.savedString)
+
+    theObject = exampleClass("Hello World")
+    detectOS()
+    theObject.printSavedInput()
+    theObject.printInput("Hello Universe")
+    ```

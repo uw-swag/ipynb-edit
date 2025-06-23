@@ -1,0 +1,66 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "session4-solutions file added"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# K-Means Clustering
+
+# Importing the libraries
+<\Cell_0>
+<Cell_1>
+# Importing the cars.csv dataset
+
+#print first 10 rows of X
+
+
+#construct X
+
+
+# X = pd.DataFrame(X)
+# X = X.convert_objects(convert_numeric=True)
+
+#allot column names to X
+<\Cell_1>
+<Cell_2>
+#print first 5 rows of X
+<\Cell_2>
+<Cell_3>
+#describe X
+<\Cell_3>
+<Cell_4>
+# Eliminating null values
+<\Cell_4>
+<Cell_5>
+# Using the elbow method to find  the optimal number of clusters
+
+#import kmeans 
+
+
+wcss = []
+for i in range(1,11):
+    #initialise k means instance
+    
+    #fit the data
+    
+    
+    wcss.append(kmeans.inertia_)
+    
+#plot cluster vs wcss
+<\Cell_5>
+<Cell_6>
+# Applying k-means to the cars dataset
+kmeans = KMeans(n_clusters=3,init='k-means++',max_iter=300,n_init=10,random_state=0) 
+y_kmeans = kmeans.fit_predict(X)
+
+X = X.as_matrix(columns=None)
+<\Cell_6>
+<Cell_7>
+y_kmeans
+<\Cell_7>
+<Cell_8>
+# Visualising the clusters
+plt.scatter(X[y_kmeans == 0, 0], X[y_kmeans == 0,1],s=100,c='red',label='US')
+plt.scatter(X[y_kmeans == 1, 0], X[y_kmeans == 1,1],s=100,

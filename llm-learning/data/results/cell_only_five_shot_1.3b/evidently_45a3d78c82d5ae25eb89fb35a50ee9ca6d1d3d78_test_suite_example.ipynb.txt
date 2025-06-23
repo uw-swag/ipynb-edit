@@ -1,0 +1,31 @@
+```python
+    import json
+
+    def to_json(obj):
+        return json.dumps(obj)
+
+    def from_json(json_str):
+        return json.loads(json_str)
+    ```
+
+    This code defines two functions, `to_json` and `from_json`, that convert a Python object to a JSON string and vice versa, respectively. This is useful for serializing and deserializing test suite data.
+
+    Here's an example of how you might use these functions:
+
+    ```python
+    test_suite = {
+        "name": "My Test Suite",
+        "tests": [
+            {"name": "Test Case 1", "status": "passed"},
+            {"name": "Test Case 2", "status": "failed"},
+        ]
+    }
+
+    json_str = to_json(test_suite)
+    print(json_str)  # This will print the JSON string
+
+    deserialized_test_suite = from_json(json_str)
+    print(deserialized_test_suite)  # This will print the original Python object
+    ```
+
+    This code assumes that the test suite is a dictionary with a "name" key for the test suite name and a "tests" key for a list of test cases. Each test case is also a dictionary with a "name" key for the test case name and a "status" key for the test case status.

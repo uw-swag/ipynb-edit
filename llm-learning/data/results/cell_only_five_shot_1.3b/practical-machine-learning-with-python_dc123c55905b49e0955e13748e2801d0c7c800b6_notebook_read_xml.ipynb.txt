@@ -1,0 +1,45 @@
+
+    The code you provided is already clean and does not contain any unnecessary Git Large File Storage (LFS) related code. It's a simple Python script that uses the `xml.etree.ElementTree`, `xmltodict`, and `pandas` libraries to read XML files and convert them to nested dictionaries, respectively.
+
+    However, if you want to remove the LFS related code, you can simply remove the import statements for `xml.etree.ElementTree`, `xmltodict`, and `pandas`.
+
+    Here is the cleaned code:
+
+    ```python
+    # import required libraries
+    import xml.etree.ElementTree as ET
+    import xmltodict
+    import pandas as pd
+
+    def print_nested_dicts(nested_dict,indent_level=0):
+        """This function prints a nested dict object
+        Args:
+            nested_dict (dict): the dictionary to be printed
+            indent_level (int): the indentation level for nesting
+        Returns:
+            None
+        """
+        for key, val in nested_dict.items():
+            if isinstance(val, dict):
+                print("{0} : ".format(key))
+                print_nested_dicts(val,indent_level=indent_level+1)
+            elif isinstance(val,list):
+                print("{0} : ".format(key))
+                for rec in val:
+                    print_nested_dicts(rec,indent_level=indent_level+1)
+            else:
+                print("{0}{1} : {2}".format("\t"*indent_level,key, val))
+
+    def print_xml_tree(xml_root,indent_level=0):
+        """This function prints a nested dict object
+        Args:
+            xml_root (dict): the xml tree to be printed
+            indent_level (int): the indentation level for nesting
+        Returns:
+            None
+        """
+        for child in xml_root:
+            print("{0}tag:{1}, attribute:{2}".format(
+                        "\t"*indent_level,
+                        child.tag,
+                        child

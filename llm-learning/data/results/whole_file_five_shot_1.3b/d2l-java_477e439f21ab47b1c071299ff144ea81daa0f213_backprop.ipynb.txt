@@ -1,0 +1,32 @@
+```python
+    # Upgrade to djl 0.13.0
+    # This is a breaking change from 0.12.0.
+    # Please check the release notes for more details: https://github.com/djl-ai/djl/releases/tag/v0.13.0
+
+    import djl
+    from djl.nn import Hyperparameter
+
+    # Create a new session
+    session = djl.Session()
+
+    # Define the model
+    model = djl.Model.new("my-model")
+
+    # Add a new layer to the model
+    model.add_layer("embed", Hyperparameter(name="dim", shape=(10,), init="uniform", trainable=True))
+
+    # Compile the model
+    model.compile(djl.TrainingConfig(optimizer="sgd", loss="categorical_crossentropy", metrics=["accuracy"]))
+
+    # Train the model
+    model.train(train_dataset, epochs=10, batch_size=32)
+
+    # Evaluate the model
+    model.evaluate(test_dataset)
+
+    # Predict the model
+    model.predict(new_data)
+    ```
+
+    '''
+    ]

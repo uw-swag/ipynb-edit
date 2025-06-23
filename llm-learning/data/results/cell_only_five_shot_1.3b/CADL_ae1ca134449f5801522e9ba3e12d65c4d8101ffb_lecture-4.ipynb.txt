@@ -1,0 +1,28 @@
+```
+    def total_variation_loss(x):
+        h, w = x.get_shape().as_list()[1], x.get_shape().as_list()[2]
+        dx = tf.square(x[:, :h-1, :w-1, :] - x[:, :h-1, 1:, :])
+        dy = tf.square(x[:, :h-1, :w-1, :] - x[:, 1:, :w-1, :])
+        return tf.reduce_sum(tf.pow(dx + dy, 1.25))
+
+    with tf.Session(graph=g) as sess, g.device('/cpu:0'):
+        tv_loss = total_variation_loss(net_input)
+    ```
+
+    ### Explanation:
+    The issue with the total variation loss function is that it is trying to get the shape of the tensor as a list, but the shape is a tuple. The function should be called with the shape as a tuple (h, w) instead of as a list.
+
+    The corrected code is:
+
+    ```
+    def total_variation_loss(x):
+        h, w = x.get_shape().as_list()[1], x.get_shape().as_list()[2]
+        dx = tf.square(x[:, :h-1, :w-1, :] - x[:, :h-1, 1:, :])
+        dy = tf.square(x[:, :h-1, :w-1, :] - x[:, 1:, :w-1, :])
+        return tf.reduce_sum(tf.pow(dx + dy, 1.25))
+
+    with tf.Session(graph=g) as sess, g.device('/cpu:0'):
+        tv_loss = total_variation_loss(net_input)
+    ```
+
+    This code will work as expected.

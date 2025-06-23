@@ -1,0 +1,21 @@
+```
+    The error in the inference test set is likely due to the model not being trained properly. The model is not trained in the provided code, so it cannot make predictions on the test set. 
+
+    To fix this, you need to train the model using the training set and then use the trained model to make predictions on the test set.
+
+    Here is a simple example of how you can do this:
+
+    ```python
+    # Train the model
+    learn.fit_flat_cos(1, lr=slice(1e-4, 1e-2))
+
+    # Use the trained model to make predictions on the test set
+    dl = learn.dls.test_dl(tst_fns)
+    b = dl.one_batch()
+    b[0][1]
+    preds, _ = learn.get_preds(dl=dl)
+    preds = (preds[:,1,...]>best_thr).long().numpy()
+    preds.shape
+    ```
+
+    This will train the model and then use it to make predictions on the test set. The `best_thr` is a threshold that you need to set based on your specific problem.

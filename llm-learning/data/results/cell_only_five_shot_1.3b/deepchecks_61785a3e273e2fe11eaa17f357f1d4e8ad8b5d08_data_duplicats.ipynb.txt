@@ -1,0 +1,18 @@
+```python
+    from mlchecks.checks.integrity.data_duplicates import data_duplicates
+    from mlchecks.base import Dataset, CheckSuite
+    from datetime import datetime
+    import pandas as pd
+
+    # Modify the check without a function
+    def check_duplicates(ds):
+        return data_duplicates(ds)
+
+    # Create a new check suite
+    check_suite = CheckSuite(name="data_duplicates_check", checks=[check_duplicates])
+
+    # Run the check suite
+    check_suite.run()
+    ```
+
+    This code will modify the `data_duplicates` function without calling it as a function. Instead, it will create a new function `check_duplicates` that uses the `data_duplicates` function. Then, it creates a new `CheckSuite` with the new `check_duplicates` function and runs it.

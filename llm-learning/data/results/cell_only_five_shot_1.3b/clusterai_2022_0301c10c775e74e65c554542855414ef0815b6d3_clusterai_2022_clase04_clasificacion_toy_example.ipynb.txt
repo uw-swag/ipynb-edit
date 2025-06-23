@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Rename notebook"
+    Original Code Cells:
+    '''
+    %matplotlib inline
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.cluster import KMeans
+
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    kmeans = KMeans(n_clusters=3)
+    kmeans.fit(X)
+
+    fig = plt.figure(figsize=(10, 5))
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], kmeans.cluster_centers_[:, 2], s=200, c='red', label='Centroids')
+    ax.scatter(X[:, 0], X[:, 1], X[:, 2], c=y, cmap='viridis', s=20)
+    ax.set_title('Iris Clustering')
+    ax.set_xlabel('sepal length (cm)')
+    ax.set_ylabel('sepal width (cm)')
+    ax.set_zlabel('petal length (cm)')
+    plt.legend()
+    plt.show()
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a 3D scatter plot of the Iris dataset, where the clusters are represented by the centroids of the clusters. The original notebook is renamed to "clusterai_2022_clase04_clasificacion_toy_example.ipynb".
+
+    Here is the updated code:
+
+    ```python
+    %matplotlib inline
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import load_iris
+    from sklearn.cluster import KMe

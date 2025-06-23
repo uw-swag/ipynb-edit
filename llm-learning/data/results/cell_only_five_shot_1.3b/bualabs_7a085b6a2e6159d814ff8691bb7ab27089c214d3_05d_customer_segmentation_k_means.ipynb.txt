@@ -1,0 +1,13 @@
+```python
+    # Adjusted chart width.
+    plt.figure(figsize=(15, 6))
+    n = 0 
+    for x in ['Age' , 'Annual Income (k$)' , 'Spending Score (1-100)']:
+        n += 1
+        plt.subplot(1, 3, n)
+        plt.subplots_adjust(hspace=0.5, wspace=0.5)
+        sns.distplot(df[x], bins=25)
+        plt.title('Distplot of {}'.format(x))
+    plt.show()
+    ```
+    The width of the chart has been adjusted to fit the new width.

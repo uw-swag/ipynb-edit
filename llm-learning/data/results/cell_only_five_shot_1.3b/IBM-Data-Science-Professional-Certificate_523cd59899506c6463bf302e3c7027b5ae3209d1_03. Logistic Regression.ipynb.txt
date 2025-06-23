@@ -1,0 +1,36 @@
+
+    '''
+    #$HIDE_INPUT$
+    # Setup. Import libraries and load dataframes for Movielens data.
+    import numpy as np
+    import pandas as pd
+    from matplotlib import pyplot as plt
+    import tensorflow as tf
+    from tensorflow import keras
+    import os
+    import random
+
+    tf.set_random_seed(1); np.random.seed(1); random.seed(1) # Set random seeds for reproducibility
+
+    RUNNING_ON_KERNELS = 'KAGGLE_WORKING_DIR' in os.environ
+    input_dir = '../input' if RUNNING_ON_KERNELS else '../input/movielens_preprocessed'
+    ratings_path = os.path.join(input_dir, 'rating.csv')
+
+    ratings_df = pd.read_csv(ratings_path, usecols=['userId', 'movieId', 'rating', 'y'])
+
+    movies_df = pd.read_csv(os.path.join(input_dir, 'movie.csv'), usecols=['movieId', 'title', 'year'])
+
+    df = ratings_df.merge(movies_df, on='movieId').sort_values(by='userId')
+    df = df.sample(frac=1, random_state=1) # Shuffle
+
+    df.sample(5, random_state=1)
+
+    '''
+    '''
+    #$HIDE_INPUT$
+    # Rename multiple files in 03. Classification folder
+    os.rename('../input/03. Classification/', '../input/03. Classification_old/')
+    '''
+
+    '''
+

@@ -1,0 +1,37 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    import seaborn as sns
+    from keras.models import Sequential
+    from keras.layers import Dense, Mish
+
+    # Create a sequential model
+    model = Sequential()
+
+    # Add a Dense layer with 128 neurons and 'relu' activation function
+    model.add(Dense(128, input_dim=8, activation='relu'))
+
+    # Add a Dense layer with 64 neurons and 'mish' activation function
+    model.add(Dense(64, activation='mish'))
+
+    # Add a Dense layer with 10 neurons and 'softmax' activation function
+    model.add(Dense(10, activation='softmax'))
+
+    # Compile the model
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=10, batch_size=32)
+
+    # Predict on the test set
+    y_pred = model.predict(X_test)
+
+    # Convert the predictions to one-hot encoding
+    y_pred = np.argmax(y_pred, axis=1)
+
+    # Calculate the accuracy
+    accuracy = np.sum(y_pred == y_test) / len(y_test)
+
+    print(f'Accuracy: {accuracy}')
+    ```

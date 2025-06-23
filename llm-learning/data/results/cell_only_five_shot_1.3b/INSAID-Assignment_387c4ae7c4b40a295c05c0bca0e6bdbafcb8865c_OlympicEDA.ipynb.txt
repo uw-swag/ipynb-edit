@@ -1,0 +1,14 @@
+```python
+    # Trends over years in summer olympics 
+    sns.set(color_codes=True)                                               
+    sns.set_palette(sns.color_palette("muted"))
+    sns.distplot([tuple(olympic.year) for olympic in summer_olympics])
+    top_10_athletes = summer_olympics.groupby(['athlete'])['medal'].value_counts().sort_values(ascending=False).head(10)
+
+    # Visualization for Top 10 Athletes
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.barh(top_10_athletes.index, top_10_athletes.values, color='skyblue')
+    ax.set_xlabel('Number of Medals')
+    ax.set_title('Top 10 Athletes in Summer Olympics')
+    plt.show()
+    ```

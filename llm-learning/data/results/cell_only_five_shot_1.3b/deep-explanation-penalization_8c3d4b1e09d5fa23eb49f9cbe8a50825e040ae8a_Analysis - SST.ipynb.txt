@@ -1,0 +1,25 @@
+```python
+    # import necessary libraries
+    import os
+    import pandas as pd
+
+    # define the path to the trained model folder
+    trained_model_folder = '../models/SST'
+
+    # define the path to save the results
+    save_path = '../results_for_export'
+
+    # get the list of files in the trained model folder
+    fnames = sorted([os.path.join(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)])
+
+    # load the results
+    results = pd.read_csv(os.path.join(save_path, 'results.csv'))
+
+    # filter the results based on the bias column
+    results = results[results.bias == 'Genderbias']
+    results = results[results.bias == 'Article']
+    results = results[results.bias == 'Decoy']
+
+    # save the filtered results
+    results.to_csv(os.path.join(save_path, 'filtered_results.csv'), index=False)
+    ```

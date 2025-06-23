@@ -1,0 +1,18 @@
+```
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from mlchecks.checks.integrity.is_single_value import is_single_value, IsSingleValue
+
+    iris = load_iris()
+    X = iris.data
+    df = pd.DataFrame({'a':[3,4,1], 'b':[2,2,2], 'c':[None, None, None], 'd':['a', 4, 6]})
+    df
+
+    is_single_value(pd.DataFrame(X))
+    is_single_value(pd.DataFrame({'a':[3,4], 'b':[2,2], 'c':[None, None], 'd':['a', 4]}))
+    sv = IsSingleValue()
+    sv.run(df)
+    sv_ignore = IsSingleValue(ignore_columns=['b','c'])
+    sv_ignore.run(df)
+    ```
+    The code above checks the integrity of the dataframe by checking if all values in each column are single values.

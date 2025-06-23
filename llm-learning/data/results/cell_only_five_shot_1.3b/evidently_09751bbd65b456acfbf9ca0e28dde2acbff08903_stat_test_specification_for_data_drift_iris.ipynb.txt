@@ -1,0 +1,55 @@
+```python
+    from databricks.koalas import Koalas
+    from databricks.koalas.dataframe import DataFrame
+    from databricks.koalas.struct_type import StructType
+    from databricks.koalas.types import *
+
+    # Define the schema
+    schema = StructType([
+        StructField("id", IntegerType(), True),
+        StructField("name", StringType(), True),
+        StructField("age", IntegerType(), True),
+        StructField("gender", StringType(), True),
+        StructField("salary", DoubleType(), True),
+    ])
+
+    # Create a Koalas DataFrame
+    df = Koalas.read_csv("dbfs:/FileStore/tables/employee.csv", schema=schema)
+
+    # Apply DataDriftOptions
+    stat_test_option = DataDriftOptions(num_target_stattest_func='wasserstein', 
+                           cat_target_stattest_func='chisquare',
+                          )
+
+    # Apply DataDrift
+    df_dd = df.data_drift(stat_test_option)
+
+    # Print the DataFrame
+    df_dd.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Updated the examples for ColourSchema and Stattest customisation"
+    Original Code Cells:
+    '''
+    stat_test_option = DataDriftOptions(num_target_stattest_func='wasserstein', 
+                           cat_target_stattest_func='entropy',
+                          )
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from databricks.koalas import Koalas
+    from databricks.koalas.dataframe import DataFrame
+    from databricks.koalas.struct_type import StructType
+    from databricks.koalas.types import *
+
+    # Define the schema
+    schema = StructType([
+        StructField("id", IntegerType(), True),
+        StructField("name", StringType(), True),
+        StructField("age", IntegerType(), True),
+        Struct

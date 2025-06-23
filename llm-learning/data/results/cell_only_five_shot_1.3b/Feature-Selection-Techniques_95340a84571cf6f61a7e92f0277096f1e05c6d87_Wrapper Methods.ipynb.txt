@@ -1,0 +1,44 @@
+```python
+    # Wrapper methods in Python
+    # ------------------------
+    # A wrapper method is a function that encapsulates a call to another function.
+    # It provides a simple interface to the underlying function, and can be used to
+    # add functionality to existing functions.
+
+    # Here is an example of a wrapper method:
+
+    def wrapper_method(func):
+        def wrapper_func(*args, **kwargs):
+            # This is where you can add your own functionality before
+            # calling the original function.
+            print("This is before the function call.")
+
+            # Call the original function.
+            result = func(*args, **kwargs)
+
+            # This is where you can add your own functionality after
+            # calling the original function.
+            print("This is after the function call.")
+
+            # Return the result.
+            return result
+
+        return wrapper_func
+
+    # Now you can use the wrapper method like this:
+
+    @wrapper_method
+    def my_function(x, y):
+        return x + y
+
+    print(my_function(5, 10))
+
+    # This will output:
+    # This is before the function call.
+    # 15
+    # This is after the function call.
+    ```
+
+    In the above example, the `wrapper_method` function is a wrapper for the `my_function` function. It adds a print statement before and after the function call.
+
+    You can use this pattern to add functionality to existing functions, such as logging, error handling, or any other functionality you need.

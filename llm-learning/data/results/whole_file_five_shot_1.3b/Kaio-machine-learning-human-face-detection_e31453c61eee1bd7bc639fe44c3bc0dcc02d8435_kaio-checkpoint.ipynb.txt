@@ -1,0 +1,27 @@
+```
+    # Include the predict server path to access data and scripts
+    import os,sys
+    parentdir = os.path.dirname("../server/")
+    sys.path.append(parentdir)
+
+    # Imports to execute the analysis
+    from data import get_full_data, get_training, get_predict
+    from matplotlib import pyplot as plt
+    from sklearn import linear_model
+    from predicting import accuracy_score, performance_metric
+    import pandas as pd
+    import numpy as np
+
+    # Allows the use of display() for DataFrames
+    from IPython.display import display 
+
+    # Import supplementary visualizations code visuals.py
+    import visuals as vs
+
+    # Get X (Features) and Y (Target)
+    X, Y, df = get_full_data()
+
+    # Print the first few entries
+    display(X.head(100))
+    ```
+    This code is used to load the data and perform some initial analysis. It also includes a function to display some features of the data.

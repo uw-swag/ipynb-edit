@@ -1,0 +1,24 @@
+```python
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'sy'
+    dest_dir = '.'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Create the destination directory if it doesn't exist
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+
+    # Move each file from the source directory to the destination directory
+    for file in files:
+        shutil.move(os.path.join(source_dir, file), dest_dir)
+
+    # Print a message to confirm the files have been moved
+    print(f'Moved {len(files)} files from {source_dir} to {dest_dir}')
+    ```
+
+    This script will move all files from the 'sy' directory to the current directory. The 'sy' directory is assumed to contain the files you want to move.

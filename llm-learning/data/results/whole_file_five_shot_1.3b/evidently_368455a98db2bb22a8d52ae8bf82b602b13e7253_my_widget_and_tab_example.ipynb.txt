@@ -1,0 +1,44 @@
+```python
+    import os
+    import numpy as np
+    import pandas as pd
+    from keras.models import load_model
+    from keras.preprocessing import image
+    from tqdm.notebook import tqdm
+
+    # Load test dataset
+    test_df = pd.read_csv('/content/pharmaceutical-drugs-and-vitamins-dataset/Capsure Dataset/test_data.csv')
+
+    # Load class indices (assuming you have train_generator with class indices saved)
+    class_indices_inverse = {v: k for k, v in train_generator.class_indices.items()}
+
+    # Directory containing the saved models
+    model_dir = '/content/saved_models'
+
+    # Define batch size
+    batch_size = 32
+
+    # Function to process images in batches
+    def process_images_in_batches(image_paths, model, target_size, batch_size):
+        num_images = len(image_paths)
+        num_batches = (num_images + batch_size - 1) // batch_size  # Calculate number of batches
+
+        all_predictions = []
+
+        for batch_idx in tqdm(range(num_batches), desc="Processing batches"):
+            start_idx = batch_idx * batch_size
+            end_idx = min((batch_idx + 1) * batch_size, num_images)
+            batch_paths = image_paths[start_idx:end_idx]
+
+            batch_images = []
+            for img_path in batch_paths:
+                img = image.load_img(img_path, target_size=target_size)
+                img = image.img_to_array(img)
+                img = img / 255.0
+                batch_images.append(img)
+
+            batch_images = np.array(batch_images)
+            batch_predictions_probs = model.predict(batch_images, verbose=0)
+            batch_predictions = np.argmax(batch_predictions_probs, axis=1)
+
+            all_pred

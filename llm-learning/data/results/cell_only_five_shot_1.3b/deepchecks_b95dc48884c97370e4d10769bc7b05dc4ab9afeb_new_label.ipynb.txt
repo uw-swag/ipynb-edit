@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    from torch.utils.data import Dataset
+
+    class MyDataset(Dataset):
+        def __init__(self, data, label_name, label_type):
+            self.data = data
+            self.label_name = label_name
+            self.label_type = label_type
+
+        def __len__(self):
+            return len(self.data)
+
+        def __getitem__(self, idx):
+            sample = {col: self.data[col][idx] for col in self.data}
+            if self.label_name:
+                sample[self.label_name] = self.data[self.label_name][idx]
+            return sample
+
+    test_data = {"col1": [0, 1, 2, 3] * 10, "col2": [1,2,2,3]*10}
+    val_data = {"col1": [4, 5, 6, 7, 8, 9] * 10, "col2": [1, 4, 5]*10}
+    test = MyDataset(pd.DataFrame(data=test_data), label_name="col2", label_type="classification_label")
+    val = MyDataset(pd.DataFrame(data=val_data), label_name="col2", label_type="classification_label")
+    ```

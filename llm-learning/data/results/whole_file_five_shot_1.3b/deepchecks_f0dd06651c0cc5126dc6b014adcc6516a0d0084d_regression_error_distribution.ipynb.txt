@@ -1,0 +1,40 @@
+```
+    #@title Split many files in core and base
+    #@param {type:"string"}
+    CORE_FILE = "core_file.py" #@param {type:"string"}
+    BASE_FILE = "base_file.py" #@param {type:"string"}
+
+    # Split the code into two files: core and base
+    with open(CORE_FILE, 'w') as core_file, open(BASE_FILE, 'w') as base_file:
+        for cell in original_cells:
+            if '<Cell_' in cell:
+                if 'base' in cell:
+                    base_file.write(cell + '\n')
+                else:
+                    core_file.write(cell + '\n')
+    ```
+
+    ## Code Splitting
+    The code has been split into two files: `core_file.py` and `base_file.py`. The `core_file.py` contains the core functionality of the code, while the `base_file.py` contains the base functionality.
+
+    The `base_file.py` is split into the following cells:
+
+    ```python
+    from deepchecks.tabular.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.tabular.checks.performance import RegressionErrorDistribution
+    ```
+
+    The `core_file.py` is split into the following cells:
+
+    ```python
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+
+    train = Dataset(train_df, label='target', cat_features=['sex'])
+    test = Dataset(test_df, label='target', cat_features=['sex'])
+
+    clf = GradientBoostingRegressor(random_state=0)
+    _ = clf

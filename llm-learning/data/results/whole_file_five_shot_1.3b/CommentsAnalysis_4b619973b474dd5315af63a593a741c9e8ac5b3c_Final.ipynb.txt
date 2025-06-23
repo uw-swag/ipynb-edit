@@ -1,0 +1,55 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added navigation to ipynb"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn import linear_model as lm
+from sklearn.cross_validation import cross_val_score, train_test_split
+from sklearn.metrics import accuracy_score
+import seaborn as sns
+from stop_words import get_stop_words
+import Stemmer
+import pymorphy2
+from segtok import segmenter
+import re
+from functools import partial
+import pickle
+from gensim import corpora, models
+from gensim.models import word2vec
+import xgboost as xgb 
+%matplotlib inline
+
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Activation
+from keras.wrappers.scikit_learn import KerasClassifier
+from keras.utils import np_utils
+from keras.layers.advanced_activations import PReLU
+from keras.optimizers import SGD
+<\Cell_0>
+<Cell_1>
+data = pd.read_csv('data/comments_vrn.csv.gz')
+<\Cell_1>
+<Cell_2>
+data.shape
+<\Cell_2>
+<Cell_3>
+data.is_gum.value_counts()
+<\Cell_3>
+<Cell_4>
+data.head(3)
+<\Cell_4>
+<Cell_5>
+lenghts_word = np.array([len(m.split()) for m in data.text.values])
+<\Cell_5>
+<Cell_6>
+lenghts_word.mean(), np.median(lenghts_word)
+<\Cell_6>
+<Cell_7>
+comments = data[(lenghts_word < 50) & (lenghts_word > 4)]
+comments.shape

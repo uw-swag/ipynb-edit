@@ -1,0 +1,21 @@
+```python
+    # Importing the necessary libraries
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+    from pyspark.sql.types import *
+
+    # Creating a Spark Session
+    spark = SparkSession.builder.appName("Momentum").getOrCreate()
+
+    # Loading the data
+    df = spark.read.format("csv").option("header", "true").load("path_to_your_csv_file")
+
+    # Adding a new column "Momentum"
+    df = df.withColumn("Momentum", col("Your_Column_Name") * 11.6)
+
+    # Writing the data back to a csv file
+    df.write.format("csv").option("header", "true").save("path_to_save_csv_file")
+
+    # Stopping the Spark Session
+    spark.stop()
+    ```

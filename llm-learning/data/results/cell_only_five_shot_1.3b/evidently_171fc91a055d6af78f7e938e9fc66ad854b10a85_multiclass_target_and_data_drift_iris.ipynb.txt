@@ -1,0 +1,43 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Dropdown(
+            id='iris-dropdown',
+            options=[
+                {'label': 'Set 1', 'value': 'set1'},
+                {'label': 'Set 2', 'value': 'set2'},
+                {'label': 'Set 3', 'value': 'set3'}
+            ],
+            value='set1'
+        ),
+        dcc.Graph(id='iris-graph')
+    ])
+
+    @app.callback(
+        Output('iris-graph', 'figure'),
+        [Input('iris-dropdown', 'value')]
+    )
+    def display_graph(iris_set):
+        if iris_set == 'set1':
+            return {
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'Set 1'},
+                    {'x': [1, 2, 3], 'y': [10, 10, 10], 'type': 'bar', 'name': 'Set 2'},
+                    {'x': [1, 2, 3], 'y': [20, 20, 20], 'type': 'bar', 'name': 'Set 3'}
+                ],
+                'layout': {
+                    'title': 'Iris Data Drift'
+                }
+            }
+        elif iris_set == 'set2':
+            return {
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'line', 'name': 'Set 1'},
+                    {'x': [1, 2, 3], 'y': [10, 10, 10], 'type': 'line', 'name': 'Set 2'},
+                    {'x': [1, 2, 3], '

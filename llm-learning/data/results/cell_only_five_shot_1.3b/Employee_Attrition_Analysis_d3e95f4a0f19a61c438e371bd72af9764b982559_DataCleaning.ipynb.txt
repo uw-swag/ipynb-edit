@@ -1,0 +1,43 @@
+```python
+    # dependencies
+    import pandas as pd
+    import sqlalchemy
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+    from getpass import getpass
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+    # load data
+    attrition_df = pd.read_csv("clean_data.csv")
+
+    # remove attrition from this list as it is our target variable
+    attrition_cat = attrition_df.columns.tolist()
+    attrition_cat.remove("Attrition")
+
+    # columns that were pre-encoded with a ranking system that need to be encoded as well
+    ranking_system_col = ["Job Involvement", "Job Level", "Job Satisfaction", "Work Life Balance", 
+                          "Relationship Satisfaction", "Environment Satisfaction", "Stock Option Level",
+                         "Education Level", "Performance Rating"]
+    attrition_cat = attrition_cat + ranking_system_col
+
+    # amount of columns that will be encoded: 16
+    num_encoded_cols = len(attrition_cat)
+
+    # Create a OneHotEncoder instance
+    enc = OneHotEncoder(sparse=False)
+
+    # Fit and transform the OneHotEncoder using the categorical variable list
+    encode_df = pd.DataFrame(enc.fit_transform(attrition_df[attrition_cat]))
+
+    # Add the encoded variable names to the dataframe
+    encode_df.columns = enc.get_feature_names(attrition_cat)
+
+    # Merge one-hot encoded features and drop the originals
+    attrition_df = attrition_df.merge(encode_df,left_index=True, right_index=True)
+    attrition_df = attrition_df.drop(attrition_cat,1)
+
+    # find the amount of Yes/No values in the Attrition columns
+    attrition_df["Attrition"].value_counts()
+
+    # apply label encoder on target variable "Attrition"
+    enc = LabelEncoder()

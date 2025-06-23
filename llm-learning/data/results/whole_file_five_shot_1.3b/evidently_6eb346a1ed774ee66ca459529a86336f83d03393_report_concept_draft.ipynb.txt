@@ -1,0 +1,53 @@
+```python
+    # how_to_questions/metric_presets.py
+    class MetricPresets:
+        def __init__(self, name, metric, value):
+            self.name = name
+            self.metric = metric
+            self.value = value
+
+        def __str__(self):
+            return f"{self.name} - {self.metric}: {self.value}"
+
+    # how_to_questions/tests_and_test_presets.py
+    class TestsAndTestPresets:
+        def __init__(self, name, test, value):
+            self.name = name
+            self.test = test
+            self.value = value
+
+        def __str__(self):
+            return f"{self.name} - {self.test}: {self.value}"
+    ```
+
+    # how_to_questions/__init__.py
+    ```python
+    from .metric_presets import MetricPresets
+    from .tests_and_test_presets import TestsAndTestPresets
+    ```
+
+    # tests/how_to_questions/test_metric_presets.py
+    ```python
+    import pytest
+    from how_to_questions import MetricPresets
+
+    def test_metric_presets():
+        metric_preset = MetricPresets("Test", "Accuracy", 0.8)
+        assert metric_preset.name == "Test"
+        assert metric_preset.metric == "Accuracy"
+        assert metric_preset.value == 0.8
+
+    if __name__ == "__main__":
+        test_metric_presets()
+    ```
+
+    # tests/how_to_questions/test_tests_and_test_presets.py
+    ```python
+    import pytest
+    from how_to_questions import TestsAndTestPresets
+
+    def test_tests_and_test_presets():
+        test_preset = TestsAndTestPresets("Test", "Testing", 10)
+        assert test_preset.name == "Test"
+        assert test_preset.test == "Testing"
+        assert test_preset.value == 10

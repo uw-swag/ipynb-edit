@@ -1,0 +1,62 @@
+custom_judge = LLMEval(
+    subcolumn="category",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="concise",
+        non_target_category="verbose",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge(display_name="test")
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+multi_column_judge = LLMEval(
+        subcolumn="category",
+        additional_columns={"question": "question"},
+        template=BinaryClassificationPromptTemplate(
+            criteria=""""Relevance" refers to the response directly addresses the question and effectively meets the user's intent.  
+Relevant answer is an answer that directly addresses the question and effectively meets the user's intent.
+
+=====
+{question}
+=====
+            """,
+            target_category="Relevant",
+            non_target_category="Irrelevant",
+            include_reasoning=True,
+            pre_messages=[("system",
+                           "You are an expert evaluator assessing the quality of a Q&A system. Your goal is to determine if the provided answer is relevant to the question based on the criteria below.")],
+        ),
+        provider="openai",
+        model="gpt-4o-mini",
+        display_name="Relevancy"
+    )
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        multi_column_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+

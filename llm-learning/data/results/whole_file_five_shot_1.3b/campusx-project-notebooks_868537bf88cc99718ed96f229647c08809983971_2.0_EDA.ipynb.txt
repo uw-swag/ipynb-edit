@@ -1,0 +1,51 @@
+```
+    ### Code: new_notebooks/2.0_EDA.ipynb
+    ## Title: Exploratory Data Analysis
+    ## Description: This notebook will perform exploratory data analysis on the dataset.
+
+    ### 1. Importing necessary libraries
+    # Importing necessary libraries for data manipulation and visualization.
+
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    ### 2. Load the dataset
+    # Load the dataset from the specified path.
+
+    df = pd.read_csv('path_to_your_dataset.csv')
+
+    ### 3. Data Understanding
+    # Perform a basic data understanding.
+
+    # Print the first 5 rows of the dataframe.
+    print(df.head())
+
+    # Get the summary statistics of the dataframe.
+    print(df.describe())
+
+    ### 4. Data Visualization
+    # Perform data visualization to understand the data better.
+
+    # Plot a histogram for the 'Age' column.
+    plt.figure(figsize=(10,6))
+    sns.histplot(df['Age'], bins=30, color='blue')
+    plt.title('Age Distribution')
+    plt.xlabel('Age')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # Plot a histogram for the 'Income' column.
+    plt.figure(figsize=(10,6))
+    sns.histplot(df['Income'], bins=30, color='green')
+    plt.title('Income Distribution')
+    plt.xlabel('Income')
+    plt.ylabel('Frequency')
+    plt.show()
+
+    # Plot a correlation matrix.
+    plt.figure(figsize=(10,8))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.title('Correlation Matrix')
+    pl

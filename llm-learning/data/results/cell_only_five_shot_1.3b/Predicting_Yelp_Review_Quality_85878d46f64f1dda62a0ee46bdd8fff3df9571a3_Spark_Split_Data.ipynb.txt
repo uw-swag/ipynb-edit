@@ -1,0 +1,18 @@
+```
+    # Started EDA outline
+
+    # Import necessary libraries
+    import pyspark.sql.functions as F
+    from pyspark.sql.types import TimestampType, ArrayType
+
+    # Write the data to JSON format
+    text_data.coalesce(1).write.json(path='text_data.json')
+
+    # Write the data to CSV format
+    non_text_data.coalesce(1).write.csv(path='non_text_data.csv')
+
+    # Write the data to JSON format for the holdout set
+    holdout_data.coalesce(1).write.json(path='holdout_data.json')
+
+    # End of EDA outline
+    ```

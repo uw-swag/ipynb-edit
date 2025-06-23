@@ -1,0 +1,37 @@
+```python
+    ## Description:
+    This script is designed to perform association rule mining on the Online Retail dataset. The dataset contains transactions made by customers over a period of several months. The goal of this analysis is to identify associations between products that are frequently bought together.
+
+    ## Credit:
+    The dataset used in this script is derived from Kaggle's "Online Retail" dataset. The dataset is publicly available and can be found on Kaggle at the following link: https://www.kaggle.com/jr2ngb/online-retail-dataset.
+
+    ## Code:
+    '''
+    import pandas
+    import numpy
+    from mlxtend.preprocessing import OnehotTransactions
+    from mlxtend.frequent_patterns import apriori
+    from mlxtend.frequent_patterns import association_rules
+
+    pandas.set_option('display.max_rows', 10)
+    pandas.set_option('display.max_columns', 10)
+
+    numpy.random.seed(100)
+    data = pandas.read_excel("./datasets/Online Retail.xlsx", parse_dates=['InvoiceDate'])
+    data.head()
+    data.columns, data.shape
+    groupby_result = data.groupby(by=["CustomerID"])
+    groupby_result.count().reset_index()
+    groupby_result.groups[12347.0]
+    data[data.CustomerID == 12347.0]
+    groupby_result = data.groupby(by=["StockCode"])
+    product_id = groupby_result.count().reset_index()['StockCode'].astype("str")
+
+    def is_valid_productid(x):
+        return True
+
+    selcted_products = product_id[product_id.apply(is_valid_productid)]
+
+    data['StockCode'] = data['StockCode'].astype("str")
+    raw_transactions = data[data['StockCode'].isin(selcted_products)]
+    raw_transactions.reset_index

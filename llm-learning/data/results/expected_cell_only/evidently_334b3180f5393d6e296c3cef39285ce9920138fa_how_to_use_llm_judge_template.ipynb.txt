@@ -1,0 +1,88 @@
+from evidently.descriptors import LLMEval, NegativityLLMEval, PIILLMEval, DeclineLLMEval
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMEval()   
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMEval(), 
+        DeclineLLMEval()
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        NegativityLLMEval(include_category=True)   
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        PIILLMEval(include_reasoning=False), 
+        DeclineLLMEval(include_score=True)
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+custom_judge = LLMEval(
+    subcolumn="category",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="Conciseness",
+        non_target_category="Ok",
+        uncertainty="unknown",
+        include_reasoning=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 
+custom_judge = LLMEval(
+    subcolumn="score",
+    template = BinaryClassificationPromptTemplate(      
+        criteria = """Conciseness refers to the quality of being brief and to the point, while still providing all necessary information.
+            A concise response should:
+            - Provide the necessary information without unnecessary details or repetition.
+            - Be brief yet comprehensive enough to address the query.
+            - Use simple and direct language to convey the message effectively.
+        """,
+        target_category="Conciseness",
+        non_target_category="Ok",
+        uncertainty="unknown",
+        include_reasoning=True,
+        include_score=True,
+        pre_messages=[("system", "You are a judge which evaluates text.")],
+        ),
+    provider = "openai",
+    model = "gpt-4o-mini"
+)
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        custom_judge
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)][:10], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)][:10], 
+           column_mapping=column_mapping)
+report 

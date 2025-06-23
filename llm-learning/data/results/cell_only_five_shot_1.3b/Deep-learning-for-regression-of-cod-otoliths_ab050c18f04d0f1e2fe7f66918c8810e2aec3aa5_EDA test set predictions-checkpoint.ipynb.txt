@@ -1,0 +1,44 @@
+```python
+    import torch
+from effnet import create_model
+
+# Define the model
+model = create_model('efficientnet-b2', num_classes=9)
+
+# Print the model summary
+model.summary()
+
+# Compile the model
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Train the model
+model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=10)
+
+# Evaluate the model
+loss, accuracy = model.evaluate(X_test, y_test)
+
+print('Test accuracy:', accuracy)
+
+# Save the model
+model.save('my_model.h5')
+
+# Load the model
+loaded_model = keras.models.load_model('my_model.h5')
+
+# Predict on new data
+predictions = loaded_model.predict(new_data)
+
+# Predict on new data with custom input shape
+predictions = loaded_model.predict(new_data, batch_size=10)
+
+# Predict on new data with custom input shape and custom input shape
+predictions = loaded_model.predict(new_data, batch_size=10, target_size=(224, 224))
+
+# Predict on new data with custom input shape and custom input shape and custom input shape
+predictions = loaded_model.predict(new_data, batch_size=10, target_size=(224, 224), data_format='channels_first')
+
+# Predict on new data with custom input shape and custom input shape and custom input shape and custom input shape
+predictions = loaded_model.predict(new_data, batch_size=10, target_size=(224, 224), data_format='channels_first')
+
+# Predict on new data with custom input shape and custom input shape and custom input shape and custom input shape and custom input shape
+predictions = loaded_model.predict(new_data, batch_size=10, target_size=(224, 224), data_

@@ -1,0 +1,56 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from torch.utils.data import Dataset, DataLoader
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    # ...
+
+    # Split the data into training and testing sets
+    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+
+    # Define the model
+    class LinearRegressor(nn.Module):
+        def __init__(self, n_features):
+            super(LinearRegressor, self).__init__()
+            self.linear = nn.Linear(n_features, 1)
+
+        def forward(self, x):
+            return self.linear(x)
+
+    # Initialize the model
+    n_features = train_df.shape[1] - 1
+    model = LinearRegressor(n_features)
+
+    # Define the loss function and the optimizer
+    criterion = nn.MSELoss()
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+    # Train the model
+    epochs = 100
+    for epoch in range(epochs):
+        model.train()
+        optimizer.zero_grad()
+        predictions = model(train_df.drop('target', axis=1))
+        loss = criterion(predictions, train_df['target'])
+        loss.backward()
+        optimizer.step()
+
+    # Make predictions on the test set
+    model.eval()
+    with torch.no_grad():
+        predictions = model(test_df.drop('target', axis=1))
+
+    # Evaluate the model
+    mse_loss

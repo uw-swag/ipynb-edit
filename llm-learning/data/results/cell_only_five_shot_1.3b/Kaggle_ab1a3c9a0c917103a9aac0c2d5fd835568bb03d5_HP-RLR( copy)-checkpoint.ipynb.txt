@@ -1,0 +1,28 @@
+```python
+    from sklearn.linear_model import Ridge
+    from sklearn.model_selection import GridSearchCV
+
+    # Define the parameter values that should be searched
+    params = {'alpha': [1e-15, 1e-10, 1e-8, 1e-4, 1e-3,1e-2, 1, 5, 10, 20]}
+
+    # Instantiate the grid search model
+    ridge = Ridge()
+
+    # Instantiate the grid search
+    grid_search = GridSearchCV(ridge, params, scoring='neg_mean_squared_error', cv=5)
+
+    # Fit the grid search to the data
+    grid_search.fit(X_train, y_train)
+
+    # Print the best parameters
+    print("Best Parameters: ", grid_search.best_params_)
+
+    # Print the best score
+    print("Best Score: ", grid_search.best_score_)
+
+    # Predict the test set results
+    y_pred = grid_search.predict(X_test)
+
+    # Print the mean squared error of the predictions
+    print("Mean Squared Error: ", mean_squared_error(y_test, y_pred))
+    ```

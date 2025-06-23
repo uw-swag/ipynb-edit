@@ -1,0 +1,26 @@
+```python
+    # Import dependencies for this notebook
+    import pandas as pd
+    import numpy as np
+    import networkx as nx
+    import seaborn as sns  # Must be seaborn-0.9.0
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+    from lib.util import fetch_tweets
+
+    # Fetch tweets
+    tweets = fetch_tweets(query='python', count=100)
+
+    # Convert tweets to DataFrame
+    df = pd.DataFrame(tweets)
+
+    # Compute mean and variance for each tweet
+    df['mean'] = df['text'].apply(lambda x: np.mean(x))
+    df['var'] = df['text'].apply(lambda x: np.var(x))
+
+    # Aggregate mean and variance for each tweet
+    agg_df = df.groupby('id').agg({'mean': 'mean', 'var': 'mean'})
+
+    # Print the aggregated DataFrame
+    print(agg_df)
+    ```

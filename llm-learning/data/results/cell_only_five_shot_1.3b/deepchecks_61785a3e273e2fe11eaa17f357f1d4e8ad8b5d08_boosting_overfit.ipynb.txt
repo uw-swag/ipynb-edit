@@ -1,0 +1,19 @@
+
+    The code you provided is already correct. It uses the mlchecks library to check for overfitting in an AdaBoost classifier. The function `boosting_overfit` is used to evaluate the model's performance on the training and validation datasets.
+
+    If you want to modify the check without using a function, you can simply remove the function call from the code. Here's how you can do it:
+
+    ```python
+    from mlchecks import Dataset
+    from sklearn.ensemble import AdaBoostClassifier
+
+    train_ds = Dataset(train_df, label='target')
+    validation_ds = Dataset(val_df, label='target')
+
+    clf = AdaBoostClassifier(random_state=0)
+    clf.fit(train_ds.features_columns(), train_ds.label_col())
+    ```
+
+    This will create a new AdaBoost classifier and fit it to the training data.
+
+    Please note that the `boosting_overfit` function is not used in the provided code. If you want to modify the check without using a function, you can simply remove the function call from the code.

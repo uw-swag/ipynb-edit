@@ -1,0 +1,18 @@
+```python
+    import requests
+
+    def extract_webpage(url):
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.text
+        else:
+            return None
+
+    url = "https://www.example.com"
+    webpage_text = extract_webpage(url)
+    if webpage_text is not None:
+        print(webpage_text)
+    else:
+        print("Failed to retrieve webpage.")
+    ```
+    '''

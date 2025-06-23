@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, NumTargetDriftTab, ProfileTab
+
+# Load some data
+boston_data = datasets.load_boston()
+boston_frame = pd.DataFrame(boston_data.data, columns=boston_data.feature_names)
+boston_frame['TARGET'] = pd.Series(boston_data.target)
+
+# Create a column mapping
+column_mapping = {i: i for i in boston_frame.columns}
+
+# Create a profile report
+profile_report = Dashboard(boston_frame[:200], boston_frame[200:], column_mapping=column_mapping, tabs=[ProfileTab])
+profile_report.show()
+profile_report.save('reports/boston_data_profile.html')
+
+# Create a profile report with target variable
+profile_target_report = Dashboard(boston_frame[:200], boston_frame[200:], column_mapping=column_mapping, 
+                                 tabs=[ProfileTab, NumTargetDriftTab])
+profile_target_report.show()
+profile_target_report.save('reports/boston_data_profile_target.html')
+    ```

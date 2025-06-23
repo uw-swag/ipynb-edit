@@ -1,0 +1,25 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+
+    # Create a CountVectorizer object
+    vectorizer = CountVectorizer()
+
+    # Fit the vectorizer to the data and transform the data
+    X_train_counts = vectorizer.fit_transform(X_train)
+
+    # Transform the data again to get the term-document matrix
+    X_test_counts = vectorizer.transform(X_test)
+
+    # Create a Multinomial Naive Bayes object
+    clf = MultinomialNB()
+
+    # Train the model
+    clf.fit(X_train_counts, y_train)
+
+    # Predict the sentiment of the test data
+    y_pred = clf.predict(X_test_counts)
+
+    # Print the accuracy of the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    ```

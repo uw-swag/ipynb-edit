@@ -1,0 +1,43 @@
+```
+    # Create references to important directories we will use over and over
+    import os, sys
+    from importlib import reload
+    current_dir = os.getcwd()
+    LESSON_HOME_DIR = current_dir
+    DATA_HOME_DIR = current_dir+'/data/dogscats'
+    %cd $current_dir
+    #Allow relative imports to directories above lesson1/
+    sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
+    #import modules
+    from utils import *
+    import vgg16bn2
+    reload(vgg16bn2)
+    from vgg16bn2 import Vgg16
+
+    #Instantiate plotting tool
+    #In Jupyter notebooks, you will need to run this command before doing any plotting
+    %matplotlib inline
+    #Set constants. You can experiment with no_of_epochs to improve the model
+    batch_size=20
+    no_of_epochs=3
+    #Finetune the model
+    batches = vgg.get_batches(train_path, 
+                              gen=image.ImageDataGenerator(
+                                    rotation_range=10,
+                                    width_shift_range=0.1,
+                                    height_shift_range=0.1,
+                                    shear_range=0.1,
+                                    zoom_range=0.1,
+                                    horizontal_flip=True), 
+                              batch_size=batch_size)
+    val_batches = vgg.get_batches(valid_path, batch_size=batch_size)  # no data augmentation
+    vgg.finetune(batches)
+
+    #Not sure if we set this for all fits
+    vgg.model.optimizer.lr = 0.001
+    coverage = 1
+    vgg.model.summary()
+    vgg.model.load_weights(results_path+'ft_bn_sgd0.001_0.h5')
+    vgg.model.optimizer.lr = 0.0001
+    vgg.model.optimizer.moment

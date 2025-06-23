@@ -1,0 +1,58 @@
+
+    ## Adding files via upload
+    ## This requires the cluster to be started or at least pending.
+    ## it will return an "unknown cluster" error if the cluster is off.
+
+    ## Uploading the notebook
+    print("\tUploading the notebook to %s...\n\tThis can take a few moments..." %(upload_location_for_endtoend_notebook))
+
+    import_config = {
+      "path": upload_location_for_endtoend_notebook+'/als_movie_o16n.ipynb',
+      "format": "JUPYTER",
+      "language": "PYTHON",
+      "overwrite": "false"
+    }
+    response = requests.post(
+        BASE_URL + "workspace/import",
+        headers = my_header,
+        data=import_config,
+        files = {"content": notebook_data}
+    )
+    response.json()
+
+    if record_for_tests:
+        pm.record('nb_upload_code', response.status_code)
+        pm.record('nb_upload_json', response.json())
+
+    ## Checking the notebook
+    response = requests.get(
+        BASE_URL + "workspace/list",
+        headers = my_header,
+        json={
+            "path": upload_location_for_endtoend_notebook
+        }
+    )
+    response.json()
+
+    ## Checking the notebook's status
+    response = requests.get(
+        BASE_URL + "workspace/status",
+        headers = my_header,
+        json={
+            "path": upload_location_for_endtoend_notebook
+        }
+    )
+    response.json()
+
+    ## Checking the notebook's version
+    response = requests.get(
+        BASE_URL + "workspace/version",
+        headers = my_header,
+        json={
+            "path": upload_location_for_endtoend_notebook
+        }
+    )
+    response.json()
+
+    ## Checking the notebook's history
+    response

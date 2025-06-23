@@ -1,0 +1,31 @@
+```
+    from scipy.special import expit
+    import numpy as np
+    import altair as alt
+    import pandas as pd
+    z = np.arange(-5.0,5.0, 0.1)
+    a = expit(z)
+    df = pd.DataFrame({"a":a, "z":z})
+    df["z1"] = 0
+    df["a1"] = 0.5
+    sigmoid = alt.Chart(df).mark_line().encode(x="z", y="a")
+    threshold = alt.Chart(df).mark_rule(color="red").encode(x="z1", y="a1")
+    (sigmoid + threshold).properties(title='Chart 1')
+    ```
+
+    ### Response:
+    ```
+    import numpy as np
+    import keras
+    from keras.datasets import mnist
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+    from keras.layers import Conv2D, MaxPooling2D
+    from keras import backend as K
+
+    batch_size = 128 # model iterations before a gradient upgrade
+    num_classes = 10 # Numbers 0-9 
+    epochs = 12 # number of passes of the entire dataset
+    img_rows, img_cols = 28, 28 # wight/height
+    (x_train, y_train), (x_test, y_test) = mnist.load_data() # unpack data into training and test
+    ```

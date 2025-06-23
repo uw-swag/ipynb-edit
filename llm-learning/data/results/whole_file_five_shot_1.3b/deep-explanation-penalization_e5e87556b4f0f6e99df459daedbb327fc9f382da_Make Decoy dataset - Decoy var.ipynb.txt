@@ -1,0 +1,58 @@
+
+    ### Instruction:
+    [
+    Commit Message: "added SST annotated"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%matplotlib inline
+import os
+from os.path import join as oj
+import sys, time
+
+import csv
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+from copy import deepcopy
+from model import LSTMSentiment
+import matplotlib.pyplot as plt
+from os.path import isdir
+
+
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+from torchtext import data
+from torchtext import datasets
+from tqdm import tqdm_notebook, tqdm 
+import pickle
+<\Cell_0>
+<Cell_1>
+np.random.seed(123)
+<\Cell_1>
+<Cell_2>
+inputs = data.Field(lower= True)
+answers = data.Field(sequential=False, unk_token=None)
+pos_train, pos_dev, pos_test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label == 'positive')
+<\Cell_2>
+<Cell_3>
+neg_train, neg_dev, neg_test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label == 'negative')
+<\Cell_3>
+<Cell_4>
+def get_appended_dataset( dataset):
+    # load test set
+    list_of_idx = np.arange(len(test))
+    list_of_idx = np.random.permutation(list_of_idx)
+    list_of_new_train

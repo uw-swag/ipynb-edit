@@ -1,0 +1,45 @@
+```python
+    import torch
+    import matplotlib.pyplot as plt
+
+    # Create a 10x10 matrix with ones on the upper triangle and zeros elsewhere
+    mask = torch.triu(torch.ones(10, 10), diagonal=1).bool()
+
+    # Create a figure and a set of subplots
+    fig, ax = plt.subplots(1, 1)
+
+    # Plot the mask
+    ax.matshow(mask, cmap='Greys', fignum=fig.number)
+    plt.title('Mask')
+    plt.show()
+
+    # Create a transformer
+    class MaskedTransformer(torch.nn.Transformer):
+        def __init__(self, d_model, nhead, num_encoder_layers, num_decoder_layers, dim_feedforward=2048, dropout=0.1, activation="relu"):
+            super().__init__(d_model, nhead, num_encoder_layers, num_decoder_layers, dim_feedforward, dropout, activation)
+
+            # Create a masked linear layer
+            self.linear = torch.nn.Linear(d_model, d_model)
+
+        def forward(self, src, tgt=None, src_mask=None, tgt_mask=None):
+            # Apply the mask to the source and target sequences
+            src = src * src_mask.float()
+            tgt = tgt * tgt_mask.float()
+
+            # Apply the transformer
+            output = super().forward(src, tgt)
+
+            return output
+
+    # Create an instance of the transformer
+    transformer = MaskedTransformer(10, 1, 1, 1)
+
+    # Print the transformer
+    print(transformer)
+
+    # You can also visualize the transformer's weight matrix
+    plt.imshow(transformer.weight.data.cpu().numpy(), cmap='viridis')
+    plt.title('Transformer weight matrix')
+    plt.show()
+
+    # You can also visualize the transformer's

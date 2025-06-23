@@ -1,0 +1,29 @@
+```python
+    from deepchecks.base import Dataset
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import RegressionErrorDistribution
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(load_diabetes().data, load_diabetes().target, test_size=0.2, random_state=42)
+
+    # Create a dataset
+    train_ds = Dataset(X_train, y_train, task="regression")
+    test_ds = Dataset(X_test, y_test, task="regression")
+
+    # Create a model
+    model = GradientBoostingRegressor()
+
+    # Train the model
+    model.fit(train_ds)
+
+    # Evaluate the model
+    model.evaluate(test_ds)
+
+    # Create a check
+    check = RegressionErrorDistribution(model)
+
+    # Run the check
+    check.run()
+    ```

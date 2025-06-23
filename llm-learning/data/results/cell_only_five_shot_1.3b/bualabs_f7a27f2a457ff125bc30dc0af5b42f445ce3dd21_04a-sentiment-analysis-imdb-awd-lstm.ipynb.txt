@@ -1,0 +1,18 @@
+```python
+    # Add more tests to language model and classifier model
+    def test_language_model(self):
+        text = "I liked this movie because"
+        n_words = 40
+        n_sentences = 2
+        result = learner.predict(text, n_words=n_words, n_sentences=n_sentences)
+        self.assertEqual(len(result), n_words + n_sentences)
+
+    def test_classifier_model(self):
+        text = "I really loved that movie, it was awesome!"
+        result = learner.predict(text)
+        self.assertIn(result, ['positive', 'negative', 'neutral'])
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+    This code will add more tests to the language model and classifier model. The `test_language_model` function tests if the model can generate a sentence of the specified length, and the `test_classifier_model` function tests if the model can classify the given text as positive, negative, or neutral.

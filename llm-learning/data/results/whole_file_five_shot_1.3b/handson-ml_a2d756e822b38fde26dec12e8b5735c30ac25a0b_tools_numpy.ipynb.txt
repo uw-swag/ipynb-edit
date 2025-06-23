@@ -1,0 +1,15 @@
+```
+    from flask import Flask, request, jsonify
+    app = Flask(__name__)
+
+    @app.route('/predict', methods=['POST'])
+    def predict():
+        data = request.get_json()
+        # Here you can add your model prediction code
+        # ...
+        return jsonify(prediction)
+
+    if __name__ == '__main__':
+        app.run(host='0.0.0.0', port=9696)
+    ```
+    This code creates a Flask server that listens for POST requests at the /predict endpoint. The data from the request is expected to be a JSON object, which is then used to make a prediction. The prediction is then returned as a JSON response.

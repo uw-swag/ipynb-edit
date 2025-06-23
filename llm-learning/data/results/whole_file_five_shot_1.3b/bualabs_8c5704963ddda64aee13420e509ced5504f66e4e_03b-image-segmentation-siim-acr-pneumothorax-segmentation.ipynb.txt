@@ -1,0 +1,38 @@
+
+    '''
+    Commit Message: "Created fastai databunch."
+    Original Code Cells:
+    '''
+    <Cell_0>
+from fastai.vision.all import *
+from fastai.vision.data import *
+
+def get_data_files(path):
+    return get_image_files(path)
+
+def create_mask(mask_file):
+    mask = np.zeros((1024,1024), dtype=np.uint8)
+    mask_img = Image.open(mask_file)
+    mask = np.array(mask_img.resize((1024,1024)))
+    return mask
+
+def get_mask_files(path):
+    return get_image_files(path)
+
+def process_folder(path):
+    files = get_data_files(path)
+    masks = get_mask_files(path)
+    for f, m in zip(files, masks):
+        mask = create_mask(m)
+        yield f, mask
+
+def get_dataloaders(path):
+    return DataBlock(
+        blocks=(ImageBlock, MaskBlock), 
+        get_items=process_folder, 
+        split_by_random_order=True, 
+        get_y_fn=lambda x: x[1], 
+        batch_size=32).dataloaders(path)
+
+dls = get_dataloaders('/content/datasets/siim-acr-pneumothorax-segmentation/')
+<\Cell_0>

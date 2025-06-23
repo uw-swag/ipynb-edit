@@ -1,0 +1,40 @@
+```
+    # Implementing XGBoost Classifier for improved model performance
+
+    # Importing necessary libraries
+    import xgboost as xgb
+
+    # Defining the XGBoost classifier
+    xgb_clf = xgb.XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+
+    # Fitting the classifier with the training data
+    xgb_clf.fit(X_train, y_train)
+
+    # Making predictions on the test data
+    y_pred_xgb = xgb_clf.predict(X_test)
+
+    # Evaluating the model performance
+    print(classification_report(y_test, y_pred_xgb))
+    print(confusion_matrix(y_test, y_pred_xgb))
+    print(accuracy_score(y_test, y_pred_xgb))
+
+    # Implementing XGBoost Classifier for improved model performance
+
+    # Importing necessary libraries
+    import xgboost as xgb
+
+    # Defining the XGBoost classifier
+    xgb_clf = xgb.XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+
+    # Fitting the classifier with the training data
+    xgb_clf.fit(X_train_sc, y_train)
+
+    # Making predictions on the test data
+    y_pred_xgb_sc = xgb_clf.predict(X_test_sc)
+
+    # Evaluating the model performance
+    print(classification_report(y_test, y_pred_xgb_sc))
+    print(confusion_matrix(y_test, y_pred_xgb_sc))
+    print(accuracy_score(y_test, y_pred_xgb_sc))
+    ```
+    This code will implement an XGBoost classifier for improved model performance. The classifier is first defined, then fitted to the training data, and finally used to make predictions on the test data. The model performance is evaluated using various metrics such as the classification report, confusion matrix, and accuracy score.

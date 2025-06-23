@@ -1,0 +1,61 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    class EfficientNetV2(nn.Module):
+        def __init__(self, num_classes=1000):
+            super(EfficientNetV2, self).__init__()
+
+            self.model_name = 'EfficientNetV2'
+
+            # Load pretrained model
+            self.model = torchvision.models.efficientnet_v2(pretrained=True)
+
+            # Replace last layer
+            num_ftrs = self.model.classifier.in_features
+            self.model.classifier = nn.Linear(num_ftrs, num_classes)
+
+        def forward(self, x):
+            x = self.model(x)
+            return x
+
+    # Create a model instance
+    model = EfficientNetV2()
+
+    # Move model to the right device
+    model.to(device)
+
+    # Define a loss function
+    criterion = nn.CrossEntropyLoss()
+
+    # Define an optimizer
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+    # Train the model
+    for epoch in range(num_epochs):
+        for i, (images, labels) in enumerate(train_loader):
+            images = images.to(device)
+            labels = labels.to(device)
+
+            # Forward pass
+            outputs = model(images)
+            loss = criterion(outputs, labels)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+    # Test the model
+    model.eval()
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for images, labels in test_loader:
+            images = images.to(device)
+            labels = labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels

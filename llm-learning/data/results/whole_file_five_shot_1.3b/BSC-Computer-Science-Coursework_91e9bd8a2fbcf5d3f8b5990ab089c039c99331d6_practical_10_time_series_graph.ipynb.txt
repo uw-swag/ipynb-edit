@@ -1,0 +1,45 @@
+```python
+    <Cell_0>
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import pandas as pd
+    import numpy as np
+
+    print("System version: {}".format(sys.version))
+    print("Pandas version: {}".format(pd.__version__))
+    print("Seaborn version: {}".format(sns.__version__))
+    print("Matplotlib version: {}".format(plt.__version__))
+    print("Numpy version: {}".format(np.__version__))
+    <\Cell_0>
+    <Cell_1>
+    # Load the data
+    df = pd.read_csv('data/data_science_practice_dataviz.csv')
+    df.head()
+    <\Cell_1>
+    <Cell_2>
+    # Data Visualization
+    # Bar plot for the number of projects per department
+    sns.barplot(x='Department', y='Projects', data=df)
+    plt.show()
+
+    # Box plot for the salary distribution
+    sns.boxplot(x='Position', y='Salary', data=df)
+    plt.show()
+
+    # Pair plot for the correlation between different features
+    sns.pairplot(df)
+    plt.show()
+    <\Cell_2>
+    <Cell_3>
+    # Data Storytelling
+    # A story about the average salary distribution by position
+    avg_salary_by_position = df.groupby('Position')['Salary'].mean().reset_index()
+    avg_salary_by_position.plot(kind='bar', x='Position', y='Salary', legend=False)
+    plt.title('Average Salary by Position')
+    plt.xlabel('Position')
+    plt.ylabel('Salary')
+    plt.show()
+
+    # A story about the distribution of projects by department
+    project_distribution_by_department = df.groupby('Department')['Projects'].sum().reset_index()
+    project_distribution_by_department.plot(kind

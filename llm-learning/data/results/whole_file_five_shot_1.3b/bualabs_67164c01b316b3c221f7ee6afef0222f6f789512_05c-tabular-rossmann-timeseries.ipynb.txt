@@ -1,0 +1,57 @@
+
+
+    ### Instruction:
+    [
+    Commit Message: "Added links to bualabs website related articles."
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.tabular import *
+<\Cell_1>
+<Cell_2>
+# ! wget http://files.fast.ai/part2/lesson14/rossmann.tgz 
+# ! mv ./rossmann.tgz ~/.fastai/data
+# ! mkdir ~/.fastai/data/rossmann
+# ! tar -xvzf ~/.fastai/data/rossmann.tgz -C ~/.fastai/data/rossmann
+<\Cell_2>
+<Cell_3>
+path=Config().data_path()/Path('rossmann/')
+<\Cell_3>
+<Cell_4>
+path.ls()
+<\Cell_4>
+<Cell_5>
+table_names = ['train', 'store', 'store_states', 'state_names', 'googletrend', 'weather', 'test']
+tables = [pd.read_csv(path/f'{fname}.csv', low_memory=False) for fname in table_names]
+train, store, store_states, state_names, googletrend, weather, test = tables
+len(train),len(test)
+<\Cell_5>
+<Cell_6>
+train.head()
+<\Cell_6>
+<Cell_7>
+train.describe(include='all')
+<\Cell_7>
+<Cell_8>
+store.head()
+<\Cell_8>
+<Cell_9>
+store_states.head()
+<\Cell_9>
+<Cell_10>
+state_names.head()
+<\Cell_10>
+<Cell_11>
+googletrend.head()
+<\Cell_11>
+<Cell_12>
+weather.head()
+<\Cell_12>
+<Cell_13>
+test.

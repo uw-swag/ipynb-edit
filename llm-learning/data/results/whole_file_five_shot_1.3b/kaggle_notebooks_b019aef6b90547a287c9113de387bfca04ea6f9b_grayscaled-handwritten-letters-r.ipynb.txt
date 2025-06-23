@@ -1,0 +1,39 @@
+```
+    ## 1. Best letters model
+
+    The best letters model is a convolutional neural network (CNN) trained on the best_letters dataset. The model is designed to recognize the letters in the images.
+
+    The model architecture is as follows:
+
+    - Two convolutional layers with 32 filters each, a kernel size of 5x5, and 'same' padding.
+    - Leaky ReLU activation function is used after each convolutional layer.
+    - Max pooling is used after each convolutional layer to downsample the feature maps.
+    - Dropout is used to prevent overfitting.
+    - A global max pooling layer is used to reduce the spatial dimensions of the feature maps.
+    - Two dense layers with 1024 and 33 neurons respectively, and 'relu' activation function.
+    - A dropout layer is used to further prevent overfitting.
+    - A softmax activation function is used to output the probabilities of the 33 letters.
+
+    The model is trained for 100 epochs with a learning rate decay. The best model is saved every time the validation loss decreases.
+
+    The model's performance is evaluated on the test set.
+
+    ## 2. Gray letters model
+
+    The gray letters model is a convolutional neural network (CNN) trained on the gray_letters dataset. The model is designed to recognize the letters in the images.
+
+    The model architecture is similar to the best letters model, with the addition of a grayscale input layer.
+
+    The model is trained for 300 epochs with a learning rate decay. The best model is saved every time the validation loss decreases.
+
+    The model's performance is evaluated on the test set.
+
+    ## 3. Letters model
+
+    The letters model is a multi-layer perceptron (MLP) trained on the letters dataset. The model is designed to recognize the letters in the images.
+
+    The model architecture is as follows:
+
+    - A dense layer with 128 neurons, and 'relu' activation function.
+    - A batch normalization layer is used to normalize the activations of the previous layer.
+    - A dense layer with 256 neurons, and 'relu

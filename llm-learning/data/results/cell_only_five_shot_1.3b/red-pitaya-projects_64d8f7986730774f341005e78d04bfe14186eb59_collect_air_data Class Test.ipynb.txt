@@ -1,0 +1,64 @@
+```
+    ## Move the class demo to another notebook
+
+    ## Class Demo
+
+    ### Classification
+
+    #### Importing necessary libraries
+
+    ```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, confusion_matrix
+    ```
+
+    #### Loading the dataset
+
+    ```python
+    data = pd.read_csv('your_data.csv')
+    ```
+
+    #### Preprocessing the data
+
+    ```python
+    X = data.drop('target_column', axis=1)
+    y = data['target_column']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+    ```
+
+    #### Training the model
+
+    ```python
+    classifier = RandomForestClassifier(n_estimators=20, random_state=42)
+    classifier.fit(X_train, y_train)
+    ```
+
+    #### Making predictions
+
+    ```python
+    y_pred = classifier.predict(X_test)
+    ```
+
+    #### Evaluating the model
+
+    ```python
+    print('Accuracy:', accuracy_score(y_test, y_pred))
+    print('Confusion Matrix:', confusion_matrix(y_test, y_pred))
+    ```
+
+    ### Conclusion
+
+    This is a simple example of a classification problem using the RandomForestClassifier from sklearn. The model is trained on a dataset, and then it's used to make predictions. The accuracy and confusion matrix are then printed out.
+
+    ## Note:
+
+    Please replace 'your_data.csv' and 'target_column' with your actual data

@@ -1,0 +1,32 @@
+```
+    import pandas as pd
+from sklearn.datasets import load_iris
+import numpy as np
+
+from mlchecks import *
+from mlchecks.checks.overview.feature_importance import feature_importance
+
+# output can be saved for later user
+x = feature_importance(dataset, multi_class_classifier)
+
+from sklearn.ensemble import RandomForestClassifier
+
+# RandomForestClassifier is not a tree, so it is not currently supported
+clf = RandomForestClassifier()
+idx = iris.target != 2
+X = iris.data[idx]
+Y = iris.target[idx]
+clf.fit(X, Y)
+
+feature_importance(binary_dataset, clf)
+
+from sklearn.ensemble import AdaBoostClassifier
+
+# AdaBoostClassifier is not a tree, so it is not currently supported
+clf = AdaBoostClassifier()
+X = iris.data
+Y = iris.target
+clf.fit(X, Y)
+
+feature_importance(binary_dataset, clf)
+    ```

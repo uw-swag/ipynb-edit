@@ -1,0 +1,33 @@
+
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from deepchecks.checks.methodology import *
+from deepchecks.base import Dataset
+
+np.random.seed(42)
+<\Cell_0>
+<Cell_1>
+def generate_data():
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['x5'] = df['x2'].apply(lambda x: 'v1' if x < 0 else 'v2')
+    return df
+
+df_train = generate_data()
+ds_train = Dataset(df_train, label='x5')
+
+df_test = generate_data()
+df_test['x2'] = df_test['x2'] + 0.5 * df_test['x1']
+df_test['x3'] = 0.5 * df_test['x3'] + 0.5 * df_test['x2']
+df_test['x5'][:15] = 'v1'
+ds_test = Dataset(df_test, label='x5')
+<\Cell_1>
+<Cell_2>
+SingleFeatureContributionTrainTest().run(train_dataset=ds_train, test_dataset=ds_test)
+<\Cell_2>
+
+    '''

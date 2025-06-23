@@ -1,0 +1,23 @@
+```python
+    class CheckResult:
+        def __init__(self, passed, message=None):
+            self.passed = passed
+            self.message = message
+
+        def __str__(self):
+            return f"CheckResult(passed={self.passed}, message={self.message})"
+
+    def check_result(class_to_check, *args, **kwargs):
+        try:
+            result = class_to_check(*args, **kwargs)
+            return CheckResult(True)
+        except Exception as e:
+            return CheckResult(False, str(e))
+
+    # Usage
+    result = check_result(MyClass, arg1, arg2, arg3)
+    if result.passed:
+        print("All checks passed.")
+    else:
+        print(f"Checks failed: {result.message}")
+    ```

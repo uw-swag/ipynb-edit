@@ -1,0 +1,30 @@
+```python
+    from torch.utils.data import Dataset
+    import pandas as pd
+
+    class MyDataset(Dataset):
+        def __init__(self, data, label):
+            self.data = data
+            self.label = label
+
+        def __len__(self):
+            return len(self.data)
+
+        def __getitem__(self, idx):
+            x = self.data.iloc[idx, :-1].values.astype('float32')
+            y = self.data.iloc[idx, -1]
+            return {'inputs': x, 'targets': y}
+
+    test_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": ['a','b','b','q']*10}
+    val_data = {"col1": ["a","b","d"] * 10, "col2": ['a', '2', '1']*10}
+    test = MyDataset(pd.DataFrame(data=test_data), label="col2")
+    val = MyDataset(pd.DataFrame(data=val_data), label="col2")
+    ```
+
+    The code above fixes the bug in the `__getitem__` method of the `MyDataset` class. The `__getitem__` method is supposed to return a dictionary with 'inputs' and 'targets' keys, but it's currently returning a dictionary with 'inputs' and 'targets' keys, and the 'inputs' key is a numpy array.
+
+    The `astype('float32')` method is used to convert the 'inputs' key to a numpy array of float32 type. This is necessary because the `__getitem__` method of the `MyDataset` class expects the 'inputs' key to be a numpy array.
+
+    The `-1` in the `iloc` method is used to select all columns except the last one, which is the 'targets' key.
+
+    The `MyDataset` class is now correctly defined and can be used to create datasets for training and validation.

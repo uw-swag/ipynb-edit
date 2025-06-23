@@ -1,0 +1,27 @@
+```python
+    import os
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from PIL import Image
+
+    # Assume that you have a directory with images
+    image_dir = '/path/to/your/images'
+
+    # Get a list of all image files
+    image_files = [f for f in os.listdir(image_dir) if f.endswith('.jpg')]
+
+    # Loop through each image file
+    for image_file in image_files:
+        # Open the image file
+        img = Image.open(os.path.join(image_dir, image_file))
+
+        # Check if the image is broken
+        if img.mode != 'RGB':
+            # If the image is broken, fix it
+            img = img.convert('RGB')
+
+        # Save the fixed image
+        img.save(os.path.join(image_dir, image_file))
+    ```
+
+    This script will fix any broken images in the specified directory. It does this by converting any image that is not in the 'RGB' mode to the 'RGB' mode.

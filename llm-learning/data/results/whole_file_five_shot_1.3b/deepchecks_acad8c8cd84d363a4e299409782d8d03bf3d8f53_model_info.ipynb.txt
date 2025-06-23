@@ -1,0 +1,15 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+
+    clf = AdaBoostClassifier()
+    iris = load_iris()
+    X = iris.data
+    Y = iris.target
+    clf.fit(X, Y)
+
+    from deepchecks.checks.overview import ModelInfo
+
+    ModelInfo().run(clf)
+    ```
+    The commit message "Renaming MLChecks to deepchecks" is a simple change to reflect the new name of the library. The new name is "deepchecks" and the old name is "MLChecks".

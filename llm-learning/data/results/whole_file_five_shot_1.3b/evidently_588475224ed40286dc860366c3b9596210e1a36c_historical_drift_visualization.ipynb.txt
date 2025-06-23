@@ -1,0 +1,55 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Update examples (#685)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import json
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+
+import plotly.offline as py #working offline
+import plotly.graph_objs as go
+
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+
+import mlflow
+import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+py.init_notebook_mode()
+<\Cell_2>
+<Cell_3>
+content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'])
+<\Cell_3>
+<Cell_4>
+#observe data structure
+raw_data.head()
+<\Cell_4>
+<Cell_5>
+#set column mapping for Evidently Profile
+data_columns = ColumnMapping()
+data_columns.datetime = 'dteday'
+data_columns.numerical_features = ['weathersit', 'temp', 'atemp', 'hum', 'windspeed']
+<\Cell_5>
+<Cell_6>
+#set reference dates
+reference_dates = ('2011-01-01 00:00:00','2011-01-28 23:00:00')
+
+#set experiment batches dates
+experiment_batches = [
+    ('2011-02-01 00:00

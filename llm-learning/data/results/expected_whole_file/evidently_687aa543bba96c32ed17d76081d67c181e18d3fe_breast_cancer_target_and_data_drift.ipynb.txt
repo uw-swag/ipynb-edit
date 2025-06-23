@@ -1,0 +1,59 @@
+<Cell_0>
+import pandas as pd
+
+from datetime import datetime
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab, CatTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection, CatTargetDriftProfileSection
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+<\Cell_1>
+<Cell_2>
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+<\Cell_2>
+<Cell_3>
+bcancer_frame.head()
+<\Cell_3>
+<Cell_4>
+bcancer_frame['target'] = bcancer.target
+<\Cell_4>
+<Cell_5>
+date_list = pd.date_range(datetime.today(), periods = bcancer_frame.shape[0]).tolist()
+bcancer_frame['date'] = date_list
+<\Cell_5>
+<Cell_6>
+column_mapping = {}
+
+column_mapping['datetime'] = 'date'
+
+numerical_features = list(bcancer_frame.columns)
+numerical_features.remove('date')
+
+column_mapping['numerical_features'] = numerical_features
+column_mapping['target'] = 'target'
+<\Cell_6>
+<Cell_7>
+bcancer_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), CatTargetDriftTab()])
+bcancer_data_and_target_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping)
+<\Cell_7>
+<Cell_8>
+bcancer_data_and_target_drift_dashboard.show()
+<\Cell_8>
+<Cell_9>
+#bcancer_data_and_target_drift_dashboard.save('bcancer_data_and_target_drift.html')
+<\Cell_9>
+<Cell_10>
+bcancer_data_and_target_drift_profile = Profile(sections=[DataDriftProfileSection, CatTargetDriftProfileSection])
+<\Cell_10>
+<Cell_11>
+bcancer_data_and_target_drift_profile.calculate(bcancer_frame[:280], bcancer_frame[280:], 
+                                                column_mapping = column_mapping) 
+<\Cell_11>
+<Cell_12>
+bcancer_data_and_target_drift_profile.json()
+<\Cell_12>

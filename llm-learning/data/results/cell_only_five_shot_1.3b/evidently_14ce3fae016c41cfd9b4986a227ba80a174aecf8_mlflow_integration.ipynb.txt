@@ -1,0 +1,40 @@
+```python
+    import json
+    import pandas as pd
+    import requests
+    import zipfile
+    import io
+
+    from evidently.model_profile import Profile
+    from evidently.model_profile.sections import DataDriftProfileSection
+    from evidently.pipeline.column_mapping import ColumnMapping
+
+    import mlflow
+    import mlflow.sklearn
+    from mlflow.tracking import MlflowClient
+    #evaluate data drift with Evidently Profile
+    def eval_drift(reference, production, column_mapping):
+        data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+        data_drift_profile.calculate(reference, production, column_mapping=column_mapping)
+        report = data_drift_profile.json()
+        json_report = json.loads(report)
+
+        drifts = []
+
+        for feature in column_mapping.numerical_features + column_mapping.categorical_features:
+            drifts.append((feature, json_report['data_drift']['data']['metrics'][feature]['drift_score']))
+
+        return drifts
+    #run MLflow UI (it will be more convinient to run it directly from the terminal)
+    !mlflow ui
+    ```
+
+    The code above is a simple example of how to use the `mlflow` library to log metrics and use the MLflow UI to visualize the logged metrics. The `eval_drift` function is used to evaluate the data drift in a dataset. The `mlflow.sklearn` module is used to log the model to MLflow, and the `MlflowClient` is used to view the logged model in the MLflow UI.
+
+    Please note that you need to have the `mlflow` and `evidently` libraries installed in your Python environment. You can install them using pip:
+
+    ```bash
+    pip install mlflow evidently
+    ```
+
+    Also, make sure to run the MLflow UI from the command line, not from a Jupyter notebook cell.

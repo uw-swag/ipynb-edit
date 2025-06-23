@@ -1,0 +1,25 @@
+```python
+    import wordcloud
+    from wordcloud import STOPWORDS
+    from collections import Counter
+    import matplotlib.pyplot as plt
+
+    # Read the whole text
+    text = open('your_file.txt').read()
+
+    # Create and generate a word cloud image:
+    wordcloud = WordCloud(width = 800, height = 800, 
+                background_color ='white', 
+                stopwords = STOPWORDS, 
+                min_font_size = 10).generate(text)
+
+    # plot the WordCloud image                        
+    plt.figure(figsize = (8, 8), facecolor = None) 
+    plt.imshow(wordcloud) 
+    plt.axis("off") 
+    plt.tight_layout(pad = 0) 
+
+    plt.show() 
+    ```
+
+    Please replace 'your_file.txt' with the path to your text file. This code will create a word cloud for the given text file. The word cloud will be displayed in a new window.

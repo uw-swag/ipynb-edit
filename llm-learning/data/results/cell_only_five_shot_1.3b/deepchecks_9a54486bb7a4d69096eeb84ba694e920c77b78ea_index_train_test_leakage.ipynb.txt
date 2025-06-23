@@ -1,0 +1,17 @@
+```python
+    from deepchecks.base import Dataset
+    from deepchecks.checks import IndexTrainTestLeakage
+    import pandas as pd
+
+    # Assuming `df` is your DataFrame
+    dataset = Dataset(pd.DataFrame(df), label='target')
+
+    # Create a check
+    check = IndexTrainTestLeakage(index='index_name')
+
+    # Perform the check
+    report = check.perform(dataset)
+
+    # Print the report
+    print(report)
+    ```

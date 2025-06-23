@@ -1,0 +1,40 @@
+
+The code you provided is for training a model with the 'annot' in the filename. This is a common technique used in adversarial training, where the model is trained to minimize a loss function that is combined with a regularization term. The regularization term is a term that encourages the model to produce a small weight vector, which can be interpreted as a "good" or "annotated" model.
+
+However, the code you provided is incomplete and does not provide a complete solution. It is missing the part where the model is trained and the results are stored. Here is a complete version of the code:
+
+```python
+import os
+import pickle as pkl
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import auc
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.svm import LinearSVC
+
+# Load the dataset
+data_bc = load_breast_cancer()
+predictors = pd.DataFrame(data=data_bc.data, columns=data_bc.feature_names)
+target= data_bc["target"]
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(predictors, target, test_size = 0.2, random_state = 42,stratify=target)
+
+# Define the model
+linear_scv=LinearSVC()
+
+# Define the grid of parameters
+params = {
+    'C':[0.25,0,50,0.75,1],

@@ -1,0 +1,20 @@
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=1)])
+opt = DataDriftOptions(nbinsx=20, confidence=0.99)
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0), DataDriftTab()], options=[opt])
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+dashboard.show()
+opt = DataDriftOptions(nbinsx={'temp':20, 'atemp': 20, 'hum':20}, 
+                       confidence={'temp':0.99, 'atemp': 0.85, 'hum':0.8})
+import json
+from typing import Optional
+ 
+from evidently.model.widget import BaseWidgetInfo 
+from evidently.widgets.widget import Widget, RED, GREY
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    "Regression Model Performance Report.",
+    TSRangesliderWidget('Reference: Target with Rangeslider', 'cnt', fig_size=1),
+    TSRangesliderWidget('Current: Target with Rangeslider', 'cnt', use_current=True, fig_size=1),
+    "Reference: Error Distribution",
+    "Current: Error Distribution",
+])])
+dashboard = Dashboard(tabs=[TimeSeriesTab(verbose_level=0)])

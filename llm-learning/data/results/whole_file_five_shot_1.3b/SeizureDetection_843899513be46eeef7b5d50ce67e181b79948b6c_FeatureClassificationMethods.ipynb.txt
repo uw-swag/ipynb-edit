@@ -1,0 +1,28 @@
+
+    '''
+    ## LSTM model
+    lstm_model = Sequential()
+    lstm_model.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    lstm_model.add(Dropout(0.2))
+    lstm_model.add(LSTM(units=50, return_sequences=False))
+    lstm_model.add(Dropout(0.2))
+    lstm_model.add(Dense(units=1))
+
+    lstm_model.compile(optimizer='adam', loss='mean_squared_error')
+    lstm_model.fit(X_train, y_train, epochs=20, batch_size=32)
+
+    ## LSTM model with K-Fold
+    lstm_model_kf = Sequential()
+    lstm_model_kf.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    lstm_model_kf.add(Dropout(0.2))
+    lstm_model_kf.add(LSTM(units=50, return_sequences=False))
+    lstm_model_kf.add(Dropout(0.2))
+    lstm_model_kf.add(Dense(units=1))
+
+    lstm_model_kf.compile(optimizer='adam', loss='mean_squared_error')
+    lstm_model_kf.fit(X_train, y_train, epochs=20, batch_size=32)
+
+    ## LSTM model with K-Fold
+    lstm_model_kf = Sequential()
+    lstm_model_kf.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    lstm_model_kf

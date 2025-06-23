@@ -1,0 +1,48 @@
+```python
+    # Add more sample case
+    from examples.utils.generic import display_JSON
+    from examples.settings import ENDPOINT_ARGS, ACCOUNT_ID
+
+    from exabyte_api_client.endpoints.materials import MaterialEndpoints
+
+    # Assuming you have a function that returns a sample case
+    def get_sample_case():
+        # This function should return a sample case
+        return {
+            "case_id": "12345",
+            "case_name": "Sample Case",
+            "case_description": "This is a sample case",
+            "case_status": "Active"
+        }
+
+    # Get the sample case
+    sample_case = get_sample_case()
+
+    # Display the sample case
+    display_JSON(sample_case)
+
+    # Assuming you have a function that returns a list of sample cases
+    def get_sample_cases():
+        # This function should return a list of sample cases
+        return [
+            {
+                "case_id": "12345",
+                "case_name": "Sample Case 1",
+                "case_description": "This is a sample case 1",
+                "case_status": "Active"
+            },
+            {
+                "case_id": "67890",
+                "case_name": "Sample Case 2",
+                "case_description": "This is a sample case 2",
+                "case_status": "Inactive"
+            }
+        ]
+
+    # Get the list of sample cases
+    sample_cases = get_sample_cases()
+
+    # Display the list of sample cases
+    for case in sample_cases:
+        display_JSON(case)
+    ```

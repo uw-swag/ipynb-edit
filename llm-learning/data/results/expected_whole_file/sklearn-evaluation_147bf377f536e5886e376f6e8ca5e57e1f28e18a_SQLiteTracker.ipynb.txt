@@ -1,0 +1,178 @@
+<Cell_0>
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+from sklearn import datasets
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, RocCurveDisplay
+<\Cell_0>
+<Cell_1>
+# delete our example database, if any
+db = Path('my_experiments.db')
+
+if db.exists():
+    db.unlink()
+<\Cell_1>
+<Cell_2>
+from sklearn_evaluation import SQLiteTracker
+
+tracker = SQLiteTracker('my_experiments.db')
+<\Cell_2>
+<Cell_3>
+X, y = datasets.make_classification(200, 10, n_informative=5, class_sep=0.65)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+
+models = [RandomForestClassifier(), LogisticRegression(), DecisionTreeClassifier()]
+<\Cell_3>
+<Cell_4>
+for m in models:
+    model = type(m).__name__
+    print(f'Fitting {model}')
+
+
+    experiment = tracker.new_experiment()
+    m.fit(X_train, y_train)
+    y_pred = m.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    
+    # log a dictionary with log_dict
+    experiment.log_dict({'accuracy': acc, 'model': model, **m.get_params()})
+<\Cell_4>
+<Cell_5>
+svc = SVC()
+svc.fit(X_train, y_train)
+y_pred = svc.predict(X_test)
+acc = accuracy_score(y_test, y_pred)
+
+experiment = tracker.new_experiment()
+
+# log individual values
+experiment.log('accuracy', acc)
+experiment.log('model', type(svc).__name__)
+
+_ = experiment.log_dict(svc.get_params())
+<\Cell_5>
+<Cell_6>
+tracker
+<\Cell_6>
+<Cell_7>
+keys = tracker.get_parameters_keys()
+# show first 5 keys
+keys[:5]
+<\Cell_7>
+<Cell_8>
+print(tracker.get_sample_query())
+<\Cell_8>
+<Cell_9>
+ordered = tracker.query("""
+SELECT uuid,
+       json_extract(parameters, '$.model') AS model,
+       json_extract(parameters, '$.accuracy') AS accuracy
+FROM experiments
+ORDER BY accuracy DESC
+""")
+ordered
+<\Cell_9>
+<Cell_10>
+type(ordered)
+<\Cell_10>
+<Cell_11>
+%%capture
+
+def fit(model):
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    experiment = tracker.new_experiment()
+    experiment.log_dict({'accuracy': acc, 'model': type(model).__name__, **model.get_params()})
+    
+    # log plots     
+    experiment.log_confusion_matrix(y_test, y_pred)
+    experiment.log_classification_report(y_test, y_pred)
+    
+    # log generic matplotlib figure
+    roc = RocCurveDisplay.from_estimator(model, X_test, y_test)
+    experiment.log_figure('roc', roc.figure_)
+    
+fit(model=RandomForestClassifier(n_estimators=100))
+fit(model=RandomForestClassifier(n_estimators=10))
+<\Cell_11>
+<Cell_12>
+tracker.recent(2)
+<\Cell_12>
+<Cell_13>
+results = tracker.query("""
+SELECT uuid,
+       json_extract(parameters, '$.model') AS model,
+       json_extract(parameters, '$.accuracy') AS accuracy,
+       json_extract(parameters, '$.confusion_matrix') AS cm,
+       json_extract(parameters, '$.roc') AS roc
+FROM experiments
+ORDER BY created DESC
+LIMIT 2
+""", as_frame=False, render_plots=True)
+
+results
+<\Cell_13>
+<Cell_14>
+results.get("cm")
+<\Cell_14>
+<Cell_15>
+results.get("cm", index_by="accuracy")
+<\Cell_15>
+<Cell_16>
+# get the uuids for the latest 2 experiments
+uuid1, uuid2 = tracker.recent(2).index
+
+# get the experiments
+one = tracker.get(uuid1)
+another = tracker.get(uuid2)
+<\Cell_16>
+<Cell_17>
+one["confusion_matrix"] + another["confusion_matrix"]
+<\Cell_17>
+<Cell_18>
+one["confusion_matrix"] - another["confusion_matrix"]
+<\Cell_18>
+<Cell_19>
+one["classification_report"] + another["classification_report"]
+<\Cell_19>
+<Cell_20>
+one["roc"]
+<\Cell_20>
+<Cell_21>
+one.comment('This is some comment')
+<\Cell_21>
+<Cell_22>
+tracker.query("""
+SELECT uuid,
+       comment,
+       json_extract(parameters, '$.model') AS model,
+       json_extract(parameters, '$.accuracy') AS accuracy
+FROM experiments
+WHERE comment is not NULL
+""")
+<\Cell_22>
+<Cell_23>
+df = tracker.recent()
+df
+<\Cell_23>
+<Cell_24>
+df = tracker.recent(normalize=True)
+df
+<\Cell_24>
+<Cell_25>
+df = tracker.query("""
+SELECT uuid,
+       json_extract(parameters, '$.model') AS model,
+       json_extract(parameters, '$.accuracy') AS accuracy
+FROM experiments
+ORDER BY accuracy DESC
+LIMIT 3
+""")
+df
+<\Cell_25>

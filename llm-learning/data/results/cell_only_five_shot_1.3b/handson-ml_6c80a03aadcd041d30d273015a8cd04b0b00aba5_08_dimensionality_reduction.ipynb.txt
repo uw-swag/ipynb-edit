@@ -1,0 +1,49 @@
+
+    '''
+
+    plt.show()
+
+plot_digits(X_test, y_test)
+from sklearn.ensemble import AdaBoostClassifier
+
+ada_clf = AdaBoostClassifier(n_estimators=50, learning_rate=1, random_state=42)
+t0 = time.time()
+ada_clf.fit(X_train_reduced, y_train)
+t1 = time.time()
+
+print("%.2fs" % (t1 - t0))
+
+plot_digits(X_test, y_test)
+from sklearn.ensemble import GradientBoostingClassifier
+
+gb_clf = GradientBoostingClassifier(n_estimators=50, learning_rate=1, random_state=42)
+t0 = time.time()
+gb_clf.fit(X_train_reduced, y_train)
+t1 = time.time()
+
+print("%.2fs" % (t1 - t0))
+
+plot_digits(X_test, y_test)
+from sklearn.ensemble import RandomForestClassifier
+
+rf_clf = RandomForestClassifier(n_estimators=50, random_state=42)
+t0 = time.time()
+rf_clf.fit(X_train_reduced, y_train)
+t1 = time.time()
+
+print("%.2fs" % (t1 - t0))
+
+plot_digits(X_test, y_test)
+from sklearn.svm import SVC
+
+svm_clf = SVC(gamma="scale", random_state=42)
+t0 = time.time()
+svm_clf.fit(X_train_reduced, y_train)
+t1 = time.time()
+
+print("%.2fs" % (t1 - t0))
+
+plot_digits(X_test, y_test)
+from sklearn.neighbors import KNeighborsClassifier
+
+knn_clf = KNeighborsClassifier(n_neighbors=4, random_state=

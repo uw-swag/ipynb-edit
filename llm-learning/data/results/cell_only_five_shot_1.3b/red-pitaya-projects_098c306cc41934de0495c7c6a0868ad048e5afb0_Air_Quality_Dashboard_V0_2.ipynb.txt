@@ -1,0 +1,43 @@
+```python
+    # Import necessary libraries
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+    import pandas as pd
+    import datetime
+
+    # Load the data
+    df = pd.read_csv('CSV-Data/Fresh Air_2022-03-01_12-00-00.csv')
+
+    # Create a Dash app
+    app = dash.Dash(__name__)
+
+    # Create a layout for the dashboard
+    app.layout = html.Div([
+        html.H1('Fresh Air Dashboard'),
+        html.Div(id='live-update-text'),
+        dcc.Interval(
+            id='interval-component',
+            interval=1*1000, # in milliseconds
+            n_intervals=0
+        )
+    ])
+
+    # Update the dashboard
+    @app.callback(Output('live-update-text', 'children'),
+                  Input('interval-component', 'n_intervals'))
+    def update_metrics(n):
+        # Load the data
+        df = pd.read_csv('CSV-Data/Fresh Air_2022-03-01_12-00-00.csv')
+
+        # Update the data
+        df = df.tail(10)
+
+        # Return the updated data
+        return 'Data updated at {}'.format(datetime.datetime.now())
+
+    # Run the Dash app
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    ```

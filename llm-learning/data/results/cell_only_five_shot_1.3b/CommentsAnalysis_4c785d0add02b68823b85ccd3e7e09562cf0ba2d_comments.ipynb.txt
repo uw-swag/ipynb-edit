@@ -1,0 +1,39 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Added some text features and testing with human"
+    Original Code Cells:
+    '''
+    import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn import linear_model as lm
+from sklearn.cross_validation import cross_val_score
+import seaborn as sns
+from stop_words import get_stop_words
+import Stemmer
+import pymorphy2
+from segtok import segmenter
+import re
+%matplotlib inline
+plt.hist(lenghts_word[lenghts_word < 80], bins=100);
+print('{:.2f}% of comments are shorter than {} words'
+      .format(lenghts_word[lenghts_word < 80].shape[0] / lenghts_word.shape[0] * 100, 80))
+print('{:.2f}% of comments are longer than {} words'
+      .format(lenghts_word[lenghts_word > 3].shape[0] / lenghts_word.shape[0] * 100, 3))
+vectorizer = CountVectorizer(max_features=10000)
+X = vectorizer.fit_transform(data.text.values)
+y = data.is_gum.values
+lr = lm.LogisticRegression()
+np.random.seed(0)
+baseline_scores = cross_val_score(lr, X, y, cv=5)
+baseline_scores.mean(), baseline_scores.std()
+lr.fit(X, y)
+lr.fit(is_man, y)
+lr.coef_.argmax()
+vectorizer.get_feature_names()[1096]
+comments = data[(lenghts_word < 80) & (lenghts_word > 3)]
+comments.text.values[11311]
+comments.text.values

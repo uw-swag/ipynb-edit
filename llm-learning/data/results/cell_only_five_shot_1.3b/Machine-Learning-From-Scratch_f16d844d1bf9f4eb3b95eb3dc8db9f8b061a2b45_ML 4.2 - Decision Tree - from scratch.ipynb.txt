@@ -1,0 +1,26 @@
+
+    The code you've provided is a decision tree classifier implementation in Python using the scikit-learn library. The issue you're facing is that when the classifier is trained on an empty node, it creates a new node with no samples. This is likely causing the issue you're experiencing.
+
+    The `TreeNodeEnd` class is a special case of `TreeNode` where the node is an end node (i.e., it has no children). In this case, the node simply assigns the most frequent label in the dataset to its label. This is likely the reason why you're seeing empty nodes.
+
+    To fix this, you need to ensure that the dataset is not empty when training the classifier. You can do this by checking if the dataset is empty before training the classifier. If it is, you can return an empty tree.
+
+    Here's a modified version of your code that checks for an empty dataset:
+
+    ```python
+    class DescisionTreeClassifier:
+        def __init__(self, max_depth):
+            self.max_depth = max_depth
+    
+        def fit(self, data, labels):
+            if data.empty or data.shape[0] == 0:
+                self.root = TreeNodeEnd([], [], 0)
+            else:
+                unique_column_values = {i:list(np.unique(column)) for i,column in enumerate(data.T) }
+                unique_label_count = len(np.unique(labels))
+                self.root = TreeNode(data, labels, unique_label_count, self.max_depth)
+    
+        # ...
+    ```
+
+    This modification will ensure that the classifier does not create empty nodes when training.

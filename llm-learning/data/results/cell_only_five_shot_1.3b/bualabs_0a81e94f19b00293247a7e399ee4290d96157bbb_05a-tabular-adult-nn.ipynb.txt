@@ -1,0 +1,50 @@
+```python
+    import bs4 as bs
+    import urllib.request
+
+    source = urllib.request.urlopen('https://www.bualabs.com/').read()
+    soup = bs.BeautifulSoup(source,'lxml')
+
+    for paragraph in soup.find_all('p'):
+        links = paragraph.find_all('a', href=True)
+        for link in links:
+            print(link['href'])
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added links to bualabs website related articles."
+    Original Code Cells:
+    '''
+    import bs4 as bs
+    import urllib.request
+
+    source = urllib.request.urlopen('https://www.bualabs.com/').read()
+    soup = bs.BeautifulSoup(source,'lxml')
+
+    for paragraph in soup.find_all('p'):
+        links = paragraph.find_all('a', href=True)
+        for link in links:
+            print(link['href'])
+    '''
+    ]
+
+    ### Response:
+    The code provided will print out the URLs of the articles on the Bualabs website. However, it's important to note that this code is a simple example and might not work for all websites. The BeautifulSoup library is used to parse the HTML of the webpage, but it might not be able to find all the links if the website uses JavaScript to load the content.
+
+    If you want to extract all the links, you might need to use a more advanced tool or library, such as Selenium or Scrapy in Python.
+
+    Here's an example of how you might use Selenium to extract all the links:
+
+    ```python
+    from selenium import webdriver
+
+    driver = webdriver.Firefox()  # or webdriver.Chrome()
+    driver.get('https://www.bualabs.com/')
+
+    links = driver.find_elements_by_tag_name('a')
+    for link in links:
+        print(link.get_attribute('href'))
+
+    driver.quit()
+    ```

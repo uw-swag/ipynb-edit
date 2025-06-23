@@ -1,0 +1,3 @@
+content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'])

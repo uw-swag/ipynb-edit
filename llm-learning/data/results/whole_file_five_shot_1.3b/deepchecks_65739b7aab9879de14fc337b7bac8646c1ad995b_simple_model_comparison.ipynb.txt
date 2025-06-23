@@ -1,0 +1,16 @@
+```python
+    from deepchecks.tabular.datasets.classification.phishing import load_data, load_fitted_model
+
+    train_dataset, test_dataset = load_data()
+    model = load_fitted_model()
+
+    from deepchecks.tabular.checks.performance import SimpleModelComparison
+
+    check = SimpleModelComparison(simple_model_type='tree', max_depth=5)
+    result = check.run(train_dataset, test_dataset, model)
+    result.value
+
+    check = SimpleModelComparison()
+    result = check.run(train_dataset, test_dataset, model)
+    result.show(show_additional_outputs=False)
+    ```

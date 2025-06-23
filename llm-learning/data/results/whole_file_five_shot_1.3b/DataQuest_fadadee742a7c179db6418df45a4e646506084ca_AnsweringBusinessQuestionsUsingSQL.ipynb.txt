@@ -1,0 +1,37 @@
+```
+    import psycopg2
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from matplotlib import cm
+    %matplotlib inline
+
+    conn = psycopg2.connect(dbname='chinook', user='kitestring', host="/tmp/", password='Chlorine35%')
+    cur = conn.cursor() 
+
+    def run_query(query):
+        return pd.read_sql_query(query, conn)
+
+    def run_command(command):
+        conn.execute(command)
+
+    def show_tables():
+        query = "select table_name, table_type from information_schema.tables \
+                where table_type = 'BASE TABLE' AND table_schema = 'public';"
+        return run_query(query)
+
+    tables = show_tables()
+    tables
+
+    query = '''
+    SELECT
+        COUNT(t.*) AS TotalTracks
+    FROM track t;
+    '''
+    genre_check = run_query(query)
+    genre_check
+
+    # conn.close()
+    ```
+
+    This code is used to connect to a PostgreSQL database, run SQL queries, and display the results. The database connection is closed at the end.

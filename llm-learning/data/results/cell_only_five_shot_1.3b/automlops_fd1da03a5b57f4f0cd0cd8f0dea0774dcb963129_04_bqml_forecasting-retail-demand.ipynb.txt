@@ -1,0 +1,72 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import re
+
+    # Loading the data
+    df = pd.read_csv('your_data.csv')
+
+    # Function to fix the banner links
+    def fix_banner_links(text):
+        # Regex pattern to find banner links
+        pattern = r'\[(.*?)\]\((.*?)\)'
+        # Replacing the matched patterns with the second part of the first part
+        text = re.sub(pattern, r'\2', text)
+        return text
+
+    # Applying the function to the 'banner' column
+    df['banner'] = df['banner'].apply(fix_banner_links)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "fixed code formatting"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import pandas as pd
+    import re
+
+    # Loading the data
+    df = pd.read_csv('your_data.csv')
+
+    # Function to fix the code formatting
+    def fix_code_formatting(text):
+        # Regex pattern to find code blocks
+        pattern = r'```(.*?)```'
+        # Replacing the matched patterns with an empty string
+        text = re.sub(pattern, '', text)
+        return text
+
+    # Applying the function to the 'code' column
+    df['code'] = df['code'].apply(fix_code_formatting)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "fixed code formatting"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Importing necessary libraries
+    import pandas as pd
+    import re
+
+    # Loading the data
+    df = pd.read_csv('your_data.csv')
+
+    # Function to fix the code formatting
+    def fix_code_formatting(text):
+        # Regex pattern to find code blocks
+        pattern

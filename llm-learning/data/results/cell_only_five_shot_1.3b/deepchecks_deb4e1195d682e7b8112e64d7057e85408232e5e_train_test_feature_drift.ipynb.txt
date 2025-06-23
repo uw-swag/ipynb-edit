@@ -1,0 +1,49 @@
+```python
+    # Code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir(os.path.join('..', 'notebook_format'))
+    from formats import load_style
+    load_style(css_style = 'custom2.css')
+    os.chdir(path)
+
+    # 1. magic for inline plot
+    # 2. magic to print version
+    # 3. magic so that the notebook will reload external python modules
+    # 4. magic to enable retina (high resolution) plots
+    # https://gist.github.com/minrk/3301035
+    %matplotlib inline
+    %load_ext watermark
+    %load_ext autoreload
+    %autoreload 2
+    %config InlineBackend.figure_format = 'retina'
+
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import mean_squared_error
+
+    %watermark -a 'Ethen' -d -t -v -p numpy,pandas,matplotlib,sklearn
+
+    # Code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir(os.path.join('..', 'notebook_format'))
+    from formats import load_style
+    load_style(css_style = 'custom2.css')
+    os.chdir(path)
+
+    # 1. magic for inline plot
+    # 2. magic to print version
+    # 3. magic so that the notebook will reload external python modules
+    # 4. magic to enable retina (high resolution) plots
+    # https://gist.github.com/minrk/3301035
+    %matplotlib inline
+    %load_ext watermark
+    %load_ext autoreload
+    %autoreload 2
+    %config Inline

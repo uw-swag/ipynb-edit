@@ -1,0 +1,30 @@
+
+    The code you provided is a Jupyter notebook example. It uses the Deepchecks library to perform a systematic error check on a Gradient Boosting Regressor model. The systematic error check is a type of regression check that checks for systematic errors in the predicted values.
+
+    However, the code you provided is not complete and does not run. It is missing the part where the check is run. Here is the complete code:
+
+    ```python
+    #require "ocephes" ;;
+    # Format.printf "gamma = %g@." (Ocephes.gamma 4.0)
+
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RegressionSystematicError
+
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+    train_df['target'] = train_df['target'] + 150
+
+    train = Dataset(train_df, label='target', cat_features=['sex'])
+    test = Dataset(test_df, label='target', cat_features=['sex'])
+
+    clf = GradientBoostingRegressor(random_state=0)
+    _ = clf.fit(train.features_columns, train.label_col)
+
+    check = RegressionSystematicError()
+    _ = check.run(test, clf)
+    ```
+
+    This code will run the systematic error check on the model trained on the diabetes dataset.

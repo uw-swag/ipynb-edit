@@ -1,0 +1,40 @@
+
+    Rename the class or method as per your requirements. Here, I've renamed the `LearningRateTracker` to `Tracker`.
+
+    New Code Cells:
+    '''
+    import ai.djl.*;
+import ai.djl.engine.*;
+import ai.djl.ndarray.*;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.nn.*;
+import ai.djl.nn.core.Linear;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.GradientCollector;
+import ai.djl.training.Trainer;
+import ai.djl.training.dataset.ArrayDataset;
+import ai.djl.training.dataset.Batch;
+import ai.djl.training.evaluator.Accuracy;
+import ai.djl.training.listener.TrainingListener;
+import ai.djl.training.loss.L2Loss;
+import ai.djl.training.loss.Loss;
+import ai.djl.training.optimizer.Optimizer;
+import ai.djl.training.optimizer.learningrate.Tracker;
+import org.apache.commons.lang3.ArrayUtils;
+import tech.tablesaw.api.*;
+import tech.tablesaw.plotly.api.*;
+import tech.tablesaw.plotly.components.*;
+import tech.tablesaw.plotly.Plot;
+import tech.tablesaw.plotly.components.Figure;
+public void train_djl(float wd){
+    
+    InitParams initParams = new InitParams();
+    
+    NDList params = new NDList(initParams.getW(), initParams.getB());
+    
+    int numEpochs = 100;
+    float lr = 0.003f;
+    
+    trainLoss = new double[(numEpochs/5)];
+    testLoss = new double[(numEpochs/5)];
+    epochCount = new double[(numEpochs/5)];

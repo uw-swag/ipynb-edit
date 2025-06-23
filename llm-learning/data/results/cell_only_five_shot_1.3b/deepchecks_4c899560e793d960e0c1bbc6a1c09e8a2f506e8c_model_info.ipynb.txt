@@ -1,0 +1,16 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from deepchecks.checks.overview import ModelInfo
+
+    # Fix model info default params
+    clf = AdaBoostClassifier(learning_rate=1.2)
+
+    iris = load_iris()
+    X = iris.data
+    Y = iris.target
+    clf.fit(X, Y)
+
+    # Run ModelInfo check
+    ModelInfo().run(clf)
+    ```

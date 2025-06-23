@@ -1,0 +1,57 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    from helpers.data import summary
+    from helpers import constants as C
+
+    # Setting pandas options
+    pd.set_option("display.max_columns", None)
+
+    # Reading the csv file and sorting the data
+    df = pd.read_csv("data/processed/gurgaon_10k.csv").sort_values("PRICE").reset_index(drop=True)
+    print(df.shape)
+    df.head()
+
+    # Counting the frequency of property types
+    df["PROPERTY_TYPE"].value_counts()
+
+    # Listing all the column names
+    df.columns
+
+    # Dropping unnecessary columns
+    drop_cols = [
+        "SPID",
+        "TOTAL_LANDMARK_COUNT",
+        "LATITUDE",
+        "LONGITUDE",
+        "FACING",
+        "AGE",
+        "BHK_BED",
+        "FLOOR_NUM",
+        "TOTAL_FLOOR",
+        "BALCONY_NUM",
+        "FURNISH",
+        "LOCALITY_NAME",
+        "BUILDING_NAME",
+        "SOCIETY_NAME",
+        "ADDRESS",
+        "TRANSPORATION",
+        "ACCOMODATION",
+        "LEISURE",
+        "EDUCATION",
+        "HEALTH",
+        "OTHER",
+        "AMENITIES_SCORE",
+        "FEATURES_SCORE",
+    ]
+    drop_index = df.query("PROPERTY_TYPE==['farm house', 'serviced apartments']").index
+    df = df.drop(columns=drop_cols, index=drop_index, errors="ignore").reset_index(drop=True)
+
+    print(df.shape)
+    df.head()
+
+    # Converting the price column to lakh
+    df["PRICE"] = df["PRICE"].div

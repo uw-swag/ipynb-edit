@@ -1,0 +1,304 @@
+<Cell_0>
+import numpy as np
+from sklearn.datasets import fetch_openml
+<\Cell_0>
+<Cell_1>
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+curr.head()
+<\Cell_1>
+<Cell_2>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDrift
+
+
+report = Report(metrics=[
+    DataDrift(),
+])
+
+
+report.run(reference_data=ref, current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+report
+<\Cell_2>
+<Cell_3>
+report.save_html('test_save.html')
+<\Cell_3>
+<Cell_4>
+report.save_json('test_save.json')
+<\Cell_4>
+<Cell_5>
+from evidently.metric_preset import classification_performance
+from evidently.metric_preset import regression_performance
+from evidently.metric_preset import data_quality
+<\Cell_5>
+<Cell_6>
+regression_report = Report(metrics=[
+    regression_performance.RegressionPerformance(),
+])
+
+
+regression_report.run(reference_data=ref, current_data=curr, 
+                      column_mapping=ColumnMapping(target='target', prediction='preds'))
+regression_report
+<\Cell_6>
+<Cell_7>
+data_quality_report = Report(metrics=[
+    data_quality.DataQuality(),
+])
+
+
+data_quality_report.run(reference_data=ref, current_data=curr, 
+                      column_mapping=ColumnMapping(target='target', prediction='preds'))
+data_quality_report
+<\Cell_7>
+<Cell_8>
+data_quality_report = Report(metrics=[
+    data_quality.DataQuality(),
+])
+
+
+data_quality_report.run(reference_data=ref, current_data=curr, 
+                      column_mapping=ColumnMapping(target='target', prediction='preds'))
+data_quality_report
+<\Cell_8>
+<Cell_9>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics import DataIntegrityMetrics
+from evidently.metrics import ColumnRegExpMetric
+from evidently.metrics import DataIntegrityNullValuesMetrics
+from evidently.metrics import DataDriftTable
+from evidently.metrics import RegressionPerformanceMetrics
+from evidently.metrics import DataQualityMetrics
+from evidently.metrics import DataQualityStabilityMetrics
+from evidently.metrics import DataQualityValueListMetrics
+from evidently.metrics import DataQualityValueRangeMetrics
+from evidently.metrics import DataQualityValueQuantileMetrics
+from evidently.metrics import DataQualityCorrelationMetrics
+
+
+# make one feature drifted
+curr['education-num'] = 0
+data_mapping = ColumnMapping(target='target', prediction='preds')
+curr.head()
+<\Cell_9>
+<Cell_10>
+report = Report(metrics=[
+    DataDrift(),
+])
+
+report.run(reference_data=ref, current_data=curr, column_mapping=data_mapping)
+report
+<\Cell_10>
+<Cell_11>
+report = Report(metrics=[
+    DataDrift(),
+])
+error_message = 'No errors'
+
+try:
+    report.run(current_data=curr, reference_data=None, column_mapping=data_mapping)
+
+except ValueError as error:
+    error_message = error
+
+error_message
+<\Cell_11>
+<Cell_12>
+report = Report(metrics=[
+    DataDrift(),
+])
+error_message = 'No errors'
+
+try:
+    report.run(current_data=None, reference_data=ref, column_mapping=data_mapping)
+
+except ValueError as error:
+    error_message = error
+
+error_message
+<\Cell_12>
+<Cell_13>
+report = Report(metrics=[
+    RegressionPerformanceMetrics(),
+])
+
+report.run(reference_data=ref, current_data=curr, column_mapping=data_mapping)
+report
+<\Cell_13>
+<Cell_14>
+report = Report(metrics=[
+    RegressionPerformanceMetrics(),
+])
+
+report.run(current_data=curr, reference_data=None, column_mapping=data_mapping)
+report
+<\Cell_14>
+<Cell_15>
+report = Report(metrics=[
+    DataIntegrityMetrics(),
+    ColumnRegExpMetric(column_name="workclass", reg_exp=r".*-.*"),
+    DataIntegrityNullValuesMetrics(),
+])
+
+report.run(reference_data=ref, current_data=curr, column_mapping=data_mapping)
+report
+<\Cell_15>
+<Cell_16>
+report.run(current_data=curr, reference_data=None, column_mapping=data_mapping)
+report
+<\Cell_16>
+<Cell_17>
+report = Report(metrics=[
+    DataQualityMetrics(),
+    DataQualityStabilityMetrics(),
+    DataQualityValueListMetrics(column_name="relationship"),
+    DataQualityValueListMetrics(column_name="relationship", values=["Not-in-family", "Unmarried"]),
+    DataQualityValueRangeMetrics(column_name="age", left=0, right=50),
+    DataQualityValueQuantileMetrics(column_name="age", quantile=0.5),
+    DataQualityValueQuantileMetrics(column_name="age", quantile=0.9),
+    DataQualityValueQuantileMetrics(column_name="age", quantile=0.99),
+    DataQualityCorrelationMetrics()
+])
+
+report.run(current_data=curr, reference_data=ref, column_mapping=ColumnMapping(target='target', prediction='preds'))
+report
+<\Cell_17>
+<Cell_18>
+report = Report(metrics=[
+    DataQualityMetrics(),
+    DataQualityStabilityMetrics(),
+    DataQualityValueListMetrics(column_name="relationship", values=["Not-in-family", "Unmarried"]),
+    DataQualityValueRangeMetrics(column_name="age", left=0, right=50),
+    DataQualityValueQuantileMetrics(column_name="age", quantile=0.5),
+    DataQualityValueQuantileMetrics(column_name="age", quantile=0.9),
+    DataQualityValueQuantileMetrics(column_name="age", quantile=0.99),
+    DataQualityCorrelationMetrics()
+])
+
+report.run(current_data=curr, reference_data=None, column_mapping=data_mapping)
+report
+<\Cell_18>
+<Cell_19>
+import pandas as pd
+
+from datetime import datetime
+from sklearn import datasets
+from sklearn import ensemble
+from sklearn import model_selection
+
+from evidently.pipeline.column_mapping import ColumnMapping
+
+
+bcancer = datasets.load_breast_cancer()
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+bcancer_frame['target'] = bcancer.target
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+train_data, test_data = model_selection.train_test_split(bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+
+bcancer_column_mapping = ColumnMapping()
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = prediction
+bcancer_column_mapping.numerical_features = numerical_features
+<\Cell_19>
+<Cell_20>
+from evidently.report import Report
+from evidently.metrics import ClassificationPerformanceMetrics
+
+
+report = Report(metrics=[
+    ClassificationPerformanceMetrics(),
+])
+report.run(current_data=test_data, reference_data=train_data, column_mapping=bcancer_column_mapping)
+report
+<\Cell_20>
+<Cell_21>
+report.run(current_data=test_data, reference_data=None, column_mapping=bcancer_column_mapping)
+report
+<\Cell_21>
+<Cell_22>
+train_data, test_data = model_selection.train_test_split(bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = bcancer.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = bcancer.target_names
+
+# get labels for target: [0, 1, 0, 2] -> ['setosa', 'versicolor', 'setosa', 'virginica']
+
+train_data['target'] = [bcancer.target_names[x] for x in train_data['target']]
+test_data['target'] = [bcancer.target_names[x] for x in test_data['target']]
+
+# merge train and test data with predictions
+
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = bcancer.target_names.tolist()
+bcancer_column_mapping.numerical_features = numerical_features
+bcancer_column_mapping.pos_label = 'malignant'
+<\Cell_22>
+<Cell_23>
+from evidently.report import Report
+from evidently.metrics import ClassificationPerformanceMetrics
+from evidently.metrics import ClassificationPerformanceMetricsTopK
+from evidently.metrics import ClassificationPerformanceMetricsThreshold
+from evidently.metrics import DataQualityMetrics
+from evidently.metrics import DataIntegrityMetrics
+
+
+report = Report(metrics=[
+    #ClassificationPerformanceMetrics(),
+    #ClassificationPerformanceMetricsTopK(k=2),
+    ClassificationPerformanceMetricsThreshold(classification_threshold=0.4),
+])
+report.run(current_data=merged_test_data, reference_data=merged_train_data, column_mapping=bcancer_column_mapping)
+report
+<\Cell_23>
+<Cell_24>
+report.run(current_data=merged_test_data, reference_data=None, column_mapping=bcancer_column_mapping)
+report
+<\Cell_24>
+<Cell_25>
+from evidently.metric_preset import classification_performance
+report = Report(metrics=[
+    classification_performance.ClassificationPerformance(),
+])
+report.run(current_data=merged_test_data, reference_data=merged_train_data, column_mapping=bcancer_column_mapping)
+report
+<\Cell_25>
+<Cell_26>
+
+<\Cell_26>

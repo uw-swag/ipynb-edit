@@ -1,0 +1,44 @@
+```python
+    # Import necessary libraries
+    import os
+    import re
+
+    # Function to move GitBook docs to repo
+    def move_gitbook_docs_to_repo(source_path, target_path):
+        # Get all markdown files in source path
+        markdown_files = [f for f in os.listdir(source_path) if f.endswith('.md')]
+
+        # Iterate over each markdown file
+        for file in markdown_files:
+            # Read the markdown file
+            with open(os.path.join(source_path, file), 'r') as f:
+                content = f.read()
+
+            # Find all links to GitBook docs in the markdown file
+            links = re.findall(r'\[GitBook\]\((.*?)\)', content)
+
+            # Iterate over each link
+            for link in links:
+                # Download the GitBook doc
+                os.system(f'wget {link} -O {os.path.join(target_path, file)}')
+
+            # Remove the markdown file from source path
+            os.remove(os.path.join(source_path, file))
+
+    # Usage
+    source_path = '/path/to/gitbook/docs'
+    target_path = '/path/to/repo'
+    move_gitbook_docs_to_repo(source_path, target_path)
+    ```
+
+    This script will move all markdown files from the source path to the target path, and replace the links to GitBook docs in the markdown files with the actual files.
+
+    Please replace '/path/to/gitbook/docs' and '/path/to/repo' with your actual paths.
+
+    Also, this script assumes that you have wget installed and available in your system's PATH.
+
+    Please note that this script is a simple example and may not work for all markdown files or GitBook links. You may need to adjust the script to suit your specific needs.
+
+    Also, this script does not handle errors or edge cases. You may need to add error handling code to make it more robust.
+
+    Finally, this script does not handle file permissions. You may need to

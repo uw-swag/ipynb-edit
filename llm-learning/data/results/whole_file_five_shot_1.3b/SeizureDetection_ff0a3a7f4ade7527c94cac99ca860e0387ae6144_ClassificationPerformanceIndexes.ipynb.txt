@@ -1,0 +1,30 @@
+
+    '''
+    <Cell_0>
+from sklearn import metrics
+<\Cell_0>
+<Cell_1>
+'''
+TP : the number of segments that are correctly identified as ictal (x_true == x_pred == 1)
+TN : the number of EEG segments that are correctly classified as non-ictal (x_true == x_pred == 0)
+FP : the number of EEG segments that are incorrectly classified as ictal (x_true == 0 && x_pred == 1)
+FN : the segments that are incorrectly classified as non-ictal (x_true == 1 && x_pred == 0)
+'''
+def classificationPerformanceIndexes (true_arr, pred_arr):
+    (tn, fp, fn, tp) = metrics.confusion_matrix(true_arr, pred_arr).ravel()
+    acc = metrics.accuracy_score(true_arr, pred_arr)               # Accuracy
+    snv = tp/(tp + fn)                                             # Sensitivity or True Positive Rate (TPR)
+    spc = tn/(tn + fp)                                             # Specificity or True Negative Rate (TNR)
+    ppv = tp/(tp + fp)                                             # Precision or Positive Predictive Value (PPV)
+    f1 = metrics.f1_score(true_arr, pred_arr)                      # F1 score
+    mcc = metrics.matthews_corrcoef(true_arr, pred_arr)            # Matthews Correlation Coefficient
+    kappa = metrics.cohen_kappa_score(true_arr, pred_arr)          # Cohen’s Kappa    
+    return acc, snv, spc, ppv, f1, mcc, kappa
+<\Cell_1>
+<Cell_2>
+def printClassificationPerformanceIndexes(method, acc, snv, spc, ppv, f1, mcc, kappa):
+    print('Method:', method)
+    print('Accuracy:', acc)
+    print('Sensitivity:', snv)
+    print('Specificity:', spc)
+    print('Precision:',

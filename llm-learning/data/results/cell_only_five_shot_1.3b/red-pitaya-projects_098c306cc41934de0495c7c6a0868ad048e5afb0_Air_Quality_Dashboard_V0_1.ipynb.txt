@@ -1,0 +1,36 @@
+```python
+    # Create a second dashboard to show widgets
+    from ipywidgets import widgets
+
+    def update(val):
+        # Update the plot with the new value
+        plt.clf()
+        plt.plot(x, y)
+        plt.draw()
+
+    # Create a slider for the x-value
+    x_slider = widgets.IntSlider(min=0, max=10, step=1, value=0, description='X:')
+
+    # Create a slider for the y-value
+    y_slider = widgets.IntSlider(min=0, max=10, step=1, value=0, description='Y:')
+
+    # Create a button to update the plot
+    button = widgets.Button(description='Update')
+
+    # Create a display to show the plot
+    display(widgets.Output())
+
+    # Create a function to update the plot
+    def update_plot(x, y):
+        plt.clf()
+        plt.plot(x, y)
+        plt.draw()
+
+    # Connect the button to the update function
+    button.on_click(lambda x: update_plot(x, y))
+
+    # Create a widget to control the x-value
+    widgets.interact(update_plot, x=x_slider, y=y_slider)
+    ```
+
+    This code creates a second dashboard to show widgets. The sliders allow you to control the x and y values, and the button updates the plot with the new values.

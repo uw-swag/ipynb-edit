@@ -1,0 +1,28 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+
+    # Assume we have some raw text data
+    raw_text_data = [
+        "This is the first document.",
+        "This document is the second document.",
+        "And this is the third one.",
+        "Is this the first document?",
+    ]
+
+    # We can use the CountVectorizer to convert the text data into a matrix of token counts
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(raw_text_data)
+
+    # We can then use a Naive Bayes classifier to classify the documents
+    clf = MultinomialNB()
+    clf.fit(X, ["document1", "document2", "document3", "question1"])
+
+    # Now we can predict the class of a new, unseen document
+    new_doc = ["This is the fourth document."]
+    X_new = vectorizer.transform(new_doc)
+    predicted_class = clf.predict(X_new)
+
+    print(predicted_class)
+    ```
+    This is a simple example of how you might use the CountVectorizer and MultinomialNB classifiers to classify text documents. The CountVectorizer converts the text data into a matrix of token counts, and the MultinomialNB classifier is a simple Naive Bayes classifier.

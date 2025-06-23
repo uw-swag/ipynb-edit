@@ -1,0 +1,47 @@
+
+    The code you provided is a Jupyter notebook that uses the Event Store OLTP and SQL APIs to interact with an Event Store database. The notebook is set up to connect to a specific host and port, load a specific table from the database, and perform various operations on the data.
+
+    However, the code is not complete and it seems to be missing some parts. For example, it's missing the part where the notebook is set up to connect to the IBM Cloud.
+
+    Here's a complete version of the code, including the setup for the IBM Cloud:
+
+```python
+<Cell_0>
+# Set your host IP address
+HOST = "XXX.XXX.XXX.XXX"
+
+# Port will be 1100 for version 1.1.2 or later (5555 for version 1.1.1)
+PORT = "1100"
+
+# Database name
+DB_NAME = "TESTDB"
+
+# Table name
+TABLE_NAME = "IOT_TEMPERATURE"
+
+# Set up the IBM Cloud connection
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+from ibm_cloud_sdk_core.config_loader import ConfigLoader
+from ibm_cloud_sdk_core.config_manager import get_config_manager
+from ibm_cloud_sdk_core.resource_manager import ResourceManager
+
+config_loader = ConfigLoader()
+config_manager = get_config_manager()
+config_manager.set_default_cloud_config_loader(config_loader)
+
+resource_manager = ResourceManager(authenticator=IAMAuthenticator(apikey='your_api_key'))
+config_manager.set_default_service_url(resource_manager.api_endpoint)
+<\Cell_0>
+<Cell_1>
+%matplotlib inline  
+
+from eventstore.common import ConfigurationReader
+from eventstore.oltp import EventContext
+from eventstore.sql import EventSession
+from pyspark.sql import SparkSession
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn
+from scipy import stats
+import warnings

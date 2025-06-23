@@ -1,0 +1,22 @@
+```python
+    from sklearn.datasets import fetch_openml
+    import pandas as pd
+
+    # Fetch the dataset
+    dataset = fetch_openml('mnist_784')
+
+    # Convert the dataset into a pandas DataFrame
+    df = pd.DataFrame(dataset.data)
+
+    # Add the target column
+    df['target'] = dataset.target
+
+    # Check the first few rows of the DataFrame
+    print(df.head())
+
+    # Check the statistics of the DataFrame
+    print(df.describe())
+
+    # Check the shape of the DataFrame
+    print(df.shape)
+    ```

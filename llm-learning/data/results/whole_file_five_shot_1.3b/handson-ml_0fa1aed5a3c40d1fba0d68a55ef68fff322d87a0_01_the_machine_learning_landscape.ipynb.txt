@@ -1,0 +1,55 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Implementing a k-nearest neighbors regression model"
+    Original Code Cells:
+    '''
+    import sklearn.neighbors
+    model = sklearn.neighbors.KNeighborsRegressor(n_neighbors=3)
+    X = np.c_[country_stats["GDP per capita"]]
+    y = np.c_[country_stats["Life satisfaction"]]
+
+    # Train the model
+    model.fit(X, y)
+
+    # Make a prediction for Cyprus
+    X_new = np.array([[22587.0]])  # Cyprus' GDP per capita
+    print(model.predict(X_new)) # outputs [[ 5.76666667]]
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Implementing a decision tree regression model"
+    Original Code Cells:
+    '''
+    import sklearn.tree
+    model = sklearn.tree.DecisionTreeRegressor()
+    X = np.c_[country_stats["GDP per capita"]]
+    y = np.c_[country_stats["Life satisfaction"]]
+
+    # Train the model
+    model.fit(X, y)
+
+    # Make a prediction for Cyprus
+    X_new = np.array([[22587.0]])  # Cyprus' GDP per capita
+    print(model.predict(X_new)) # outputs [[ 5.76666667]]
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Implementing a random forest regression model"
+    Original Code Cells:
+    '''
+    import sklearn.ensemble
+    model = sklearn.ensemble.RandomForestRegressor()
+    X = np.c_[country_stats["GDP per capita"]]
+    y = np.c_[country_stats["Life satisfaction"]]

@@ -1,0 +1,51 @@
+```
+    ## Updated README.md
+
+    ## How to use
+
+    ### Code
+    ```python
+    import pandas as pd
+    import numpy as np
+    np.random.seed(22)
+
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Load Data
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+    # Train Model
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col]);
+    ```
+
+    ### Explanation
+
+    This code is a simple example of how to use the DeepChecks library to perform some basic data quality checks on a dataset. The dataset is loaded from the sklearn.datasets module, and a RandomForestClassifier is trained on it. The trained model is then used to make predictions on the test dataset.
+
+    The DeepChecks library provides a suite of checks that can be run on the data. In this case, we're using the full suite, which includes a wide range of checks for different types of data.
+
+    The suite is run on the training dataset and the test dataset, and the results are printed.
+
+    ## How to install
+
+    To install DeepChecks, you can use pip:
+
+    ```
+    pip install deepchecks
+    ```
+
+    ## How to run
+
+    To run the code, you can copy it into a Python script and run it.
+
+    ## How to contribute
+
+    Contributions to DeepChecks are welcome. If you have a feature you'd like to add, or if you'd like to fix a bug, please open an issue on the DeepChecks GitHub repository.
+
+    ## License
+

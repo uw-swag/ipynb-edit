@@ -1,0 +1,48 @@
+```
+    <Cell_0>
+    import pyspark as ps
+    from pyspark.sql import functions as F
+    from pyspark.sql.types import TimestampType, ArrayType
+    <\Cell_0>
+    <Cell_1>
+    spark = (ps.sql.SparkSession.builder
+            .appName("NLP")
+            .master('local[4]')
+            .getOrCreate()
+            )
+
+    sc = spark.sparkContext
+    <\Cell_1>
+    <Cell_2>
+    spark
+    <\Cell_2>
+    <Cell_3>
+    data_location = "/home/jovyan/work/Documents/Data_Science_Projects/Yelp_Reviews/data/full_data/analytics_ready/"
+    <\Cell_3>
+    <Cell_4>
+    filename = "text_data.json"
+    <\Cell_4>
+    <Cell_5>
+    df_non_text = spark.read.json(data_location + filename)
+    <\Cell_5>
+    <Cell_6>
+    df_non_text.createOrReplaceTempView("df_text")
+    <\Cell_6>
+    <Cell_7>
+    df_text.printSchema()
+    <\Cell_7>
+    <Cell_8>
+    df_text.show(5)
+    <\Cell_8>
+    <Cell_9>
+    df_text.count()
+    <\Cell_9>
+    <Cell_10>
+
+    <\Cell_10>
+    ```
+    The code above is a Spark-based PySpark code that reads a JSON file, creates a temporary view, prints the schema, and shows the first 5 rows of the dataframe. The count of the dataframe is also displayed.
+
+    The NLP-based feature engineering part of the code is not specified in the original code. However, it's important to note that NLP (Natural Language Processing) is a broad field and the specifics of feature engineering can vary greatly depending on the specifics of the data and the problem at hand. This could include things like tokenization, stopword removal, stemming, lemmatization, etc.
+
+    For example, in the

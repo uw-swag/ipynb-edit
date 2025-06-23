@@ -1,0 +1,40 @@
+```python
+    # Importing necessary libraries
+    import os
+    from werkzeug.utils import secure_filename
+
+    # Setting the upload folder
+    UPLOAD_FOLDER = 'uploads'
+
+    # Check if the upload folder exists, if not, create it
+    if not os.path.exists(UPLOAD_FOLDER):
+        os.makedirs(UPLOAD_FOLDER)
+
+    # Setting the allowed file types
+    ALLOWED_EXTENSIONS = {'txt', 'pdf', 'docx', 'png', 'jpg', 'jpeg', 'gif'}
+
+    # Function to check if the file is allowed
+    def allowed_file(filename):
+        return '.' in filename and \
+               filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+    # Function to handle the file upload
+    def upload_file():
+        # Get the file from the request
+        file = request.files['file']
+
+        # Check if the file is empty
+        if file.filename == '':
+            return jsonify({'message': 'No selected file'}), 400
+
+        # Check if the file is allowed
+        if not allowed_file(file.filename):
+            return jsonify({'message': 'Allowed file types are txt, pdf, docx, png, jpg, jpeg, gif'}), 400
+
+        # Save the file to the upload folder
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+
+        # Return a success message
+        return jsonify({'message': 'File uploaded successfully'}), 200
+    ```

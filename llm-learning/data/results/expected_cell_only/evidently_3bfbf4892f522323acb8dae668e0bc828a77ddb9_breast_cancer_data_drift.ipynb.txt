@@ -1,0 +1,22 @@
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab
+bcancer_data_drift = Dashboard(bcancer_frame[:280], bcancer_frame[280:], tabs=[DriftTab])
+bcancer_data_drift.save('reports/bcancer_data_drift_no_dates.html')
+date_list = pd.date_range(datetime.today(), periods = bcancer_frame.shape[0]).tolist()
+bcancer_frame['date'] = date_list
+column_mapping = {}
+
+column_mapping['datetime'] = 'date'
+
+numerical_features = list(bcancer_frame.columns)
+numerical_features.remove('date')
+column_mapping['numerical_features'] = numerical_features
+bcancer_data_drift = Dashboard(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping,
+                               tabs=[DriftTab])
+bcancer_data_drift.save('reports/bcancer_data_drift_with_dates.html')

@@ -1,0 +1,26 @@
+df.drop_duplicates(subset=['id'], keep='first', inplace=True)
+df.reset_index()
+print("The 100 most similar listing are: \n")
+for k, v in top100_most_similar.items():
+    index1, index2 = k
+    print("Id: {} - Id: {} - Similarity: {:.2f}".format(df.iloc[index1]['id'], df.iloc[index2]['id'], v))
+def recommend(item_id = 10988, num = 5):
+    id_list = df.index[df['id'] == item_id].tolist()
+    if (len(id_list) > 0):
+        listing_id = id_list[0]
+    else:
+        print('No such listing found')
+        return
+    
+    model_knn = NearestNeighbors(metric='cosine', algorithm='brute')
+    model_knn.fit(tfidf_data)
+
+    distances, indices = model_knn.kneighbors(tfidf_data[listing_id].reshape(1,-1), n_neighbors = num)    
+    print('Recommending {} listings similar to {}:'.format(num, listing_id))
+    
+    for i in range(0, len(distances.flatten())):
+        print('---------------------------------------------------------')
+        print("Recommended: {}\n".format(df.iloc[df.index[indices.flatten()[i]]]['name']))
+        print('Description: "{}"\n'.format(df.iloc[df.index[indices.flatten()[i]]]['description']))
+        print('(score: {})'.format(distances.flatten()[i]))   
+

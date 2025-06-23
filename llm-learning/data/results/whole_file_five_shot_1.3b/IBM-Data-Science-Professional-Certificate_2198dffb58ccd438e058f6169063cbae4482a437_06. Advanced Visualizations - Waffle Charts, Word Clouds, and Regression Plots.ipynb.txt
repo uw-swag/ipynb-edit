@@ -1,0 +1,46 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from wordcloud import WordCloud
+    from IPython.display import Image
+    from IPython.display import display
+    from sklearn.linear_model import LinearRegression
+    from sklearn.preprocessing import PolynomialFeatures
+
+    # Load the data
+    df = pd.read_csv('your_data.csv')
+
+    # Create a waffle chart
+    plt.figure(figsize=(10,8))
+    df.groupby('Category').size().plot(kind='waffle', autopct='%1.1f%%')
+    plt.title('Waffle Chart')
+    plt.show()
+
+    # Create a word cloud
+    wordcloud = WordCloud(width = 800, height = 800, 
+                background_color ='white', 
+                stopwords =停用词, 
+                min_font_size = 10).generate(str(df)) 
+    plt.figure(figsize = (8, 8), facecolor = None) 
+    plt.imshow(wordcloud) 
+    plt.axis("off") 
+    plt.tight_layout(pad = 0) 
+
+    plt.show()
+
+    # Create a regression plot
+    X = df['Feature1']
+    y = df['Feature2']
+
+    model = LinearRegression()
+    model.fit(X, y)
+
+    plt.scatter(X, y)
+    plt.plot(X, model.predict(X), color='red')
+    plt.title('Regression Plot')
+    plt.xlabel('Feature1')
+    plt.ylabel('Feature2')
+    plt.show()
+    ```

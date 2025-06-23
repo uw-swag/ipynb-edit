@@ -1,0 +1,51 @@
+
+    '''
+    Commit Message: "removing unnecessary git LFS"
+
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # import required libs
+    import os
+    import keras
+    import numpy as np
+    from keras import backend as K
+    from keras import applications
+    from keras.datasets import cifar10
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+
+    import matplotlib.pyplot as plt
+    params = {'legend.fontsize': 'x-large',
+              'figure.figsize': (15, 5),
+              'axes.labelsize': 'x-large',
+              'axes.titlesize':'x-large',
+              'xtick.labelsize':'x-large',
+              'ytick.labelsize':'x-large'}
+
+    plt.rcParams.update(params)
+
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    vgg_model = applications.VGG19(include_top=False, weights='imagenet')
+    <\Cell_1>
+    <Cell_2>
+    vgg_model.summary()
+    <\Cell_2>
+    <Cell_3>
+    batch_size = 128
+    num_classes = 10
+    epochs = 50
+
+    bottleneck_path = r'F:\work\kaggle\cifar10_cnn\bottleneck_features_train_vgg19.npy'
+    <\Cell_3>
+    <Cell_4>
+    # the data, shuffled and split between train and test sets
+    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+    <\Cell_4>
+    <Cell_5>
+    print('x_train shape:', x_train.shape)
+    print(x_train.shape[0], 'train samples')
+    print(x_test.shape[0], 'test samples')
+    <\Cell_5>

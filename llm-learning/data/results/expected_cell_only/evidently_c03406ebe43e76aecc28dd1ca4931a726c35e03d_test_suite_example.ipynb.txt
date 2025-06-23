@@ -1,0 +1,98 @@
+import pandas as pd
+import numpy as np
+
+from evidently.v2.metrics import DataIntegrityMetrics
+from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests import TestNumberOfColumns
+from evidently.v2.tests import TestNumberOfDriftedFeatures
+from evidently.v2.tests import TestValueMAE, TestValueMeanError
+from evidently.v2.tests import TestAccuracyScore
+from evidently import ColumnMapping
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+suite = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    # TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite.run(reference_data=None,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite
+suite_with_reference = TestSuite(tests=[
+    TestNumberOfColumns(gt=1),
+    TestNumberOfDriftedFeatures(),
+    TestValueMAE(),
+    TestValueMeanError(),
+])
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[:20000]
+curr = df[20000:]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+# pd.DataFrame([{'a': 1, 'c': datetime.now(), 'b': 2}])
+# pd.DataFrame([{'a': 2,'c': datetime.now(),  'b': None}, {'a': 1, 'b': 2}])
+suite_with_reference.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite_with_reference
+from sklearn import datasets, ensemble, model_selection
+bcancer = datasets.load_breast_cancer(as_frame=True)
+bcancer_frame = bcancer.frame
+bcancer_frame['target'] = bcancer.target
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+train_data, test_data = model_selection.train_test_split(
+    bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = prediction
+bcancer_column_mapping.numerical_features = numerical_features
+
+suite_classification = TestSuite(tests=[TestAccuracyScore()])
+
+suite_classification.run(reference_data=None, current_data=test_data, column_mapping=bcancer_column_mapping)
+suite_classification
+suite_classification_with_reference = TestSuite(tests=[TestAccuracyScore()])
+
+suite_classification_with_reference.run(reference_data=train_data, current_data=test_data, column_mapping=bcancer_column_mapping)
+suite_classification_with_reference
+suite_classification.save_html("example_classification.html")
+suite_classification_with_reference.save_html("example_classification_with_reference.html")
+suite_classification.json()
+suite_classification_with_reference.json()

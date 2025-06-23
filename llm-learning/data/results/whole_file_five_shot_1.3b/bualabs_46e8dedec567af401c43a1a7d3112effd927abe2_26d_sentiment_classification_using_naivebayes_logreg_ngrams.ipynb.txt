@@ -1,0 +1,20 @@
+```python
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+
+    # Create a CountVectorizer object
+    vectorizer = CountVectorizer(stop_words='english')
+
+    # Fit and transform the training data
+    X_train_dtm = vectorizer.fit_transform(corpus)
+
+    # Apply the Naive Bayes algorithm
+    nb_classifier = MultinomialNB()
+    nb_classifier.fit(X_train_dtm, y_train)
+
+    # Transform the test data
+    X_test_dtm = vectorizer.transform(corpus)
+
+    # Predict the sentiment of the test data
+    y_pred_class = nb_classifier.predict(X_test_dtm)
+    ```

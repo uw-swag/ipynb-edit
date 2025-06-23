@@ -1,0 +1,39 @@
+```python
+    # Example 1:
+    # This is a simple example of how to use the `fit` method in the `BaggingClassifier` and `BaggingRegressor` classes.
+    from sklearn.ensemble import BaggingClassifier
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+
+    # Load the breast cancer dataset
+    dataset = load_breast_cancer()
+    X = dataset.data
+    y = dataset.target
+
+    # Split the dataset into a training set and a test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a BaggingClassifier with KNeighborsClassifier and fit it to the training data
+    bagging = BaggingClassifier(KNeighborsClassifier(), n_estimators=10)
+    bagging.fit(X_train, y_train)
+
+    # Print the accuracy of the model on the test data
+    print("Accuracy:", bagging.score(X_test, y_test))
+
+    # Example 2:
+    # This is a simple example of how to use the `fit` method in the `GradientBoostingClassifier` class.
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+
+    # Load the breast cancer dataset
+    dataset = load_breast_cancer()
+    X = dataset.data
+    y = dataset.target
+
+    # Split the dataset into a training set and a test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a GradientBoostingClassifier and fit it to the training data
+    boost_class =

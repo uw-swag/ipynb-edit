@@ -1,0 +1,22 @@
+```python
+    import deepchecks
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+
+    r = StringMismatch().run(df)
+
+    # Check the result
+    print(r)
+
+    # Add conditions
+    c = StringMismatch().add_condition_no_variants()
+    c.conditions_decision(r)
+
+    # Print the result
+    print(c.result)
+    ```
+
+    The first part of the code imports the necessary libraries and creates a DataFrame. The second part of the code runs the StringMismatch check on the DataFrame and stores the result in 'r'. The third part of the code adds conditions to the check and decides on the result. The final part of the code prints the result.

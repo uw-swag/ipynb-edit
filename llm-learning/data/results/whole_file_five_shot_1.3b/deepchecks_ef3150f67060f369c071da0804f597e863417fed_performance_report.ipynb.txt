@@ -1,0 +1,40 @@
+```python
+    <Cell_0>
+from deepchecks.base import Dataset
+from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
+from sklearn.datasets import load_iris
+from deepchecks.checks.performance import PerformanceReport
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+clf = AdaBoostClassifier()
+frame = iris.frame
+X = iris.data
+Y = iris.target
+ds = Dataset(frame, 
+            features=iris.feature_names,
+            label_name='target')
+clf.fit(X, Y)
+<\Cell_1>
+<Cell_2>
+check = PerformanceReport()
+check.run(ds, clf)
+<\Cell_2>
+<Cell_3>
+check = PerformanceReport(alternative_scorers={'Recall - Micro': 'recall_micro'})
+check.run(ds, clf)
+<\Cell_3>
+<Cell_4>
+from sklearn.datasets import load_diabetes
+
+diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+train = Dataset(diabetes, label_name='target')
+clf = AdaBoostRegressor(random_state=0)
+clf.fit(train.features_columns, train.label_col)
+<\Cell_4>
+<Cell_5>
+check = PerformanceReport()
+check.run(train, clf)
+<\Cell_5>
+    ```

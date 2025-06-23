@@ -1,0 +1,40 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split 
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('https://raw.githubusercontent.com/jbrownlee/Datasets/master/housing.csv', 
+                     dtype={'Location': str, 'Housing Median Age': float, 'Total Rooms': int, 
+                            'Total Bedrooms': int, 'Population': int, 'Households': int, 
+                            'Median Household Income': float}, sep=',')
+
+    # Split into input and output variables
+    X = df[['Location', 'Housing Median Age', 'Total Rooms', 'Total Bedrooms', 'Population', 'Households', 'Median Household Income']]
+    Y = df['Median Household Income']
+
+    # Split into training and testing sets
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+    # Create linear regression object
+    regr = LinearRegression()
+
+    # Train the model using the training sets
+    regr.fit(X_train, Y_train)
+
+    # The coefficients
+    print('Coefficients: \n', regr.coef_)
+
+    # The mean squared error
+    print('Mean squared error: %.2f'
+          % metrics.mean_squared_error(Y_test, regr.predict(X_test)))
+
+    # The coefficient of determination: 1 is perfect prediction
+    print('Coefficient of determination: %.2f'
+          % metrics.r2_score(Y_test, regr.predict(X_test)))
+    ```
+    '''
+    }
+    ```

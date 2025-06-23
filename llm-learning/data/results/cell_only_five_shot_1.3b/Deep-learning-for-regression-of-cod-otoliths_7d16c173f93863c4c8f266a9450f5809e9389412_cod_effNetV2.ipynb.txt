@@ -1,0 +1,38 @@
+```python
+    import torch
+    from torchvision import models
+    import torch.nn as nn
+    import torch.optim as optim
+
+    class EfficientNetV2(nn.Module):
+        def __init__(self, num_classes=1000):
+            super(EfficientNetV2, self).__init__()
+            self.num_classes = num_classes
+            self.model_name = 'EfficientNetV2'
+            self.model = models.efficientnet_v2(pretrained=True)
+            self.model.classifier = nn.Linear(self.model.classifier[1].in_features, num_classes)
+
+        def forward(self, x):
+            x = self.model(x)
+            return x
+
+    # Instantiate the model
+    model = EfficientNetV2(num_classes=1000)
+
+    # Define loss function and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+    # Training loop
+    for epoch in range(num_epochs):
+        for i, data in enumerate(train_loader, 0):
+            inputs, labels = data
+            optimizer.zero_grad()
+            outputs = model(inputs)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
+    # Save the model
+    torch.save(model.state_dict(), 'model.pth')
+    ```

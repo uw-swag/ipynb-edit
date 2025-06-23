@@ -1,0 +1,353 @@
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+from torch.utils.data import DataLoader
+from sklearn.metrics import auc,average_precision_score, roc_curve,roc_auc_score,precision_recall_curve, f1_score
+from torch.utils.data import Subset
+from torchvision import  transforms
+import pickle as pkl
+from os.path import join as oj
+from tqdm import tqdm_notebook
+import matplotlib.pyplot as plt
+import torch.optim as optim
+from torch.optim import lr_scheduler
+import os
+import argparse
+from torch import nn
+from numpy.random import randint
+import torchvision.models as models
+import time
+import copy
+from tqdm import tqdm
+sys.path.append('../code/')
+import cd
+import sys
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+from copy import deepcopy
+import pandas as pd
+import seaborn as sns
+sns.set()
+import torch.nn.functional as F
+from os.path import join as oj
+pd.set_option('precision', 2)
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+save_path = "../results_for_export"
+trained_model_folder = '../models/ISIC/feature_models/'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'pkl'  in fname]) 
+# other models were trained badly
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() 
+
+<\Cell_2>
+<Cell_3>
+results.columns
+<\Cell_3>
+<Cell_4>
+results['final_acc'] = [max(x) for x in results['val_acc_history']] #TODO change so it 
+results['final_acc_train'] = [max(x)  for x in results['train_acc_history']]
+results['AUC (no patches)'] =[0 for x in results['regularizer_rate']]
+results['final_cd'] = [min(x) for x in results['train_cd_history']]
+results['final_test_loss'] = [min(x) for x in results['val_loss_history']]
+results['final_train_loss'] = [min(x) for x in results['train_loss_history']]
+results['F1 score (no patches)'] =[0 for x in results['regularizer_rate']]
+results['F1 score (patches)'] =[0 for x in results['regularizer_rate']]
+results['AUC (patches)'] =[0 for x in results['regularizer_rate']]
+<\Cell_4>
+<Cell_5>
+results = results[results.regularizer_rate <100]
+<\Cell_5>
+<Cell_6>
+results[['regularizer_rate',
+                       'final_acc', 
+                       'F1 score (no patches)',
+                       'AUC (patches)',
+                       'AUC (no patches)',
+                       'F1 score (patches)', 'pid', 'seed']].sort_values(by = ['seed','regularizer_rate'])
+<\Cell_6>
+<Cell_7>
+results[['regularizer_rate',
+                       'final_acc', 
+                       'AUC (no patches)',
+                       'F1 score (no patches)',
+                       'AUC (patches)',
+                       'F1 score (patches)']].groupby(['regularizer_rate',]).mean()
+<\Cell_7>
+<Cell_8>
+data_path = "../../../datasets"
+save_path = oj(data_path, "ISIC_features")
+from torch.utils.data import TensorDataset, ConcatDataset
+with open(oj(save_path, "cancer.npy"), 'rb') as f:
+    cancer_featuress = np.load(f)
+with open(oj(save_path, "not_cancer.npy"), 'rb') as f:
+    not_cancer_featuress = np.load(f)
+    
+cancer_targets = np.ones((cancer_featuress.shape[0])).astype(np.int64)
+not_cancer_targets = np.zeros((not_cancer_featuress.shape[0])).astype(np.int64)
+with open(oj(save_path, "not_cancer_cd.npy"), 'rb') as f:
+    not_cancer_cd= np.load(f)
+not_cancer_dataset = TensorDataset(torch.from_numpy(not_cancer_featuress).float(), torch.from_numpy(not_cancer_targets),torch.from_numpy(not_cancer_cd).float())
+
+cancer_dataset = TensorDataset(torch.from_numpy(cancer_featuress).float(), torch.from_numpy(cancer_targets),torch.from_numpy(-np.ones((len(cancer_featuress), 2, 25088))).float())
+complete_dataset = ConcatDataset((cancer_dataset, not_cancer_dataset))
+
+
+
+num_total = len(complete_dataset)
+num_train = int(0.8 * num_total)
+num_val = int(0.1 * num_total)
+num_test = num_total - num_train - num_val
+torch.manual_seed(0);
+train_dataset, test_dataset, val_dataset= torch.utils.data.random_split(complete_dataset, [num_train, num_test, num_val])
+
+
+datasets = {'train' : train_dataset, 'test':test_dataset, 'val': val_dataset}
+dataset_sizes = {'train' : len(train_dataset), 'test':len(test_dataset), 'val': len(val_dataset)}
+<\Cell_8>
+<Cell_9>
+test_filtered_dataset = torch.utils.data.Subset(complete_dataset, [idx for idx in test_dataset.indices if complete_dataset[idx][2][0,0] ==-1])
+<\Cell_9>
+<Cell_10>
+device = torch.device(0)
+long_model = models.vgg16(pretrained=True)
+# make conv untrainable - test if needed
+long_model.classifier[-1] = nn.Linear(4096, 2)
+long_model = long_model.to(device)
+model = long_model.classifier
+<\Cell_10>
+<Cell_11>
+def eval_model_on(model, dataset):
+    val_filtered_dataloader = torch.utils.data.DataLoader(dataset, batch_size=16,
+                                             shuffle=True, num_workers=4)
+    model.eval()
+    y = []
+    y_hat = []
+    softmax= torch.nn.Softmax()
+    with torch.no_grad() :
+        for inputs, labels, cd in val_filtered_dataloader:
+            y_hat.append((labels).cpu().numpy())
+            y.append(torch.nn.Softmax(dim=1)( model(inputs.cuda()))[:,0].detach().cpu().numpy())
+    y_hat = np.concatenate( y_hat, axis=0 )
+    y = np.concatenate( y, axis=0 )
+    return 1-y, y_hat
+
+<\Cell_11>
+<Cell_12>
+results_for_auc = results[['regularizer_rate','pid',]]
+
+f1_scores_pid = {}
+
+auc_scorespid = {}
+
+for index, row in results_for_auc.iterrows():
+
+    with open(oj(trained_model_folder, str(row['pid']) + '.pt'), 'rb') as f:
+
+        weights = torch.load(f)
+    model.load_state_dict(weights)
+#     model = long_model.classifier
+    y, y_hat = eval_model_on(model, test_filtered_dataset)
+    auc_scorespid[row['pid']] = roc_auc_score(y_hat, y)
+    f1_scores_pid[row['pid']] = np.asarray([f1_score(y_hat, y > x) for x in np.linspace(0.1,1, num = 20) ]).max()
+
+results['AUC (no patches)'] =[auc_scorespid[x] for x in results['pid']]
+results['F1 score (no patches)'] =[f1_scores_pid[x] for x in results['pid']]
+<\Cell_12>
+<Cell_13>
+results_for_auc = results[['regularizer_rate','pid',]]
+f1_scores_pid = {}
+auc_scorespid = {}
+
+for index, row in results_for_auc.iterrows():
+
+    with open(oj(trained_model_folder, str(row['pid']) + '.pt'), 'rb') as f:
+        weights = torch.load(f)
+    model.load_state_dict(weights)
+
+    y, y_hat = eval_model_on(model, test_dataset)
+    auc_scorespid[row['pid']] = roc_auc_score(y_hat, y)
+    f1_scores_pid[row['pid']] = np.asarray([f1_score(y_hat, y > x) for x in np.linspace(0.1,1, num = 20) ]).max()
+
+results['AUC (patches)'] =[auc_scorespid[x] for x in results['pid']]
+results['F1 score (patches)'] =[f1_scores_pid[x] for x in results['pid']]
+<\Cell_13>
+<Cell_14>
+
+import torchvision.models as models
+from PIL import Image
+device = torch.device("cuda")
+model_no_reg = models.vgg16(pretrained=True)
+model_no_reg.classifier[-1] = nn.Linear(4096, 2)
+model_no_reg = model_no_reg.eval()
+model_no_reg.classifier.load_state_dict(torch.load('../models/ISIC/feature_models/03003534103033476204.pt'));
+model_reg = models.vgg16(pretrained=True)
+model_reg.classifier[-1] = nn.Linear(4096, 2)
+model_reg = model_reg.eval()
+model_reg.classifier.load_state_dict(torch.load('../models/ISIC/feature_models/35353744220131105427.pt'));
+model_no_reg = model_no_reg.cuda()
+model_reg = model_reg.cuda()
+<\Cell_14>
+<Cell_15>
+# load the two imgs
+data_path = "../../../datasets/ISIC/raw_data/"
+img_path_nocancer = oj(data_path, "not_cancer")
+img_path_cancer = oj(data_path, "cancer")
+seg_path  = oj(data_path, "../segmentation")
+mean = np.asarray([0.485, 0.456, 0.406])
+std = np.asarray([0.229, 0.224, 0.225])
+<\Cell_15>
+<Cell_16>
+from torchvision.transforms import ToTensor, Compose, Normalize
+complete_dataset = torchvision.datasets.ImageFolder(data_path, transform=Compose([ToTensor(), Normalize(mean, std)]))
+num_total = len(complete_dataset)
+num_train = int(0.8 * num_total)
+num_val = int(0.1 * num_total)
+num_test = num_total - num_train - num_val
+torch.manual_seed(0);
+train_dataset, test_dataset, val_dataset= torch.utils.data.random_split(complete_dataset, [num_train, num_test, num_val])
+val_dataloader = torch.utils.data.DataLoader(val_dataset, batch_size=16,
+                                             shuffle=False, num_workers=4)
+<\Cell_16>
+<Cell_17>
+with torch.no_grad():
+    correct = 0
+    correct_noreg = 0
+    my_list = []
+    my_list_targets = []
+
+    for inputs, target in val_dataloader:
+
+        inputs = inputs.to(device)
+        target = 1- target.to(device) #switched classes for the dataset
+        out_reg = model_reg(inputs)
+        out_noreg = model_no_reg(inputs)
+        correct+= (out_reg.argmax(dim = 1) == target).sum().item()
+        correct_noreg+= (out_noreg.argmax(dim = 1) == target).sum().item()
+        example_idx = np.where(((out_reg.argmax(dim = 1) == target)*(out_noreg.argmax(dim = 1) != target)).cpu().numpy())[0]
+        
+        if len(example_idx) >0:
+            for idx in example_idx:
+
+                my_list.append(inputs[idx])
+                my_list_targets.append(target[idx].item())
+<\Cell_17>
+<Cell_18>
+sys.path.append("../../pytorch-cnn-visualizations/src")
+from vanilla_backprop import VanillaBackprop
+from smooth_grad import generate_smooth_grad
+from tqdm import tqdm_notebook
+from gradcam import GradCam
+from integrated_gradients import IntegratedGradients
+sys.path.append("../../pytorch-cnn-visualizations")
+from gradcam import GradCam
+import gradcam
+from misc_functions import get_example_params
+import torchvision.models as models
+from PIL import Image
+
+<\Cell_18>
+<Cell_19>
+
+model_no_reg = models.vgg16(pretrained=True)
+model_no_reg.classifier[-1] = nn.Linear(4096, 2)
+model_no_reg = model_no_reg.eval()
+model_no_reg.classifier.load_state_dict(torch.load('../models/ISIC/feature_models/03003534103033476204.pt'));
+model_reg = models.vgg16(pretrained=True)
+model_reg.classifier[-1] = nn.Linear(4096, 2)
+model_reg = model_reg.eval()
+model_reg.classifier.load_state_dict(torch.load('../models/ISIC/feature_models/35353744220131105427.pt'));
+<\Cell_19>
+<Cell_20>
+my_list_all = [val_dataset[i+20][0] for i in range(100) ]
+my_list_targets_all = [1-val_dataset[i+20][1] for i in range(100) ]
+<\Cell_20>
+<Cell_21>
+model_reg = model_reg.cuda()
+model_no_reg = model_no_reg.cuda()
+
+grad_cam_noreg = GradCam(model_no_reg, target_layer=29)
+grad_cam_reg = GradCam(model_reg, target_layer=29)
+<\Cell_21>
+<Cell_22>
+triples = []
+for img, target in tqdm_notebook(zip(my_list_all[:100], my_list_targets_all[:100])):
+    img.requires_grad= True
+    test_img = img.cuda()
+    test_img = test_img[None, :, :224, :224]
+    img_np = img[:, :224, :224].detach().cpu().numpy().transpose(1,2,0)*std[None, None, :] + mean[None, None, :]
+    reg_saliency = grad_cam_reg.generate_cam(test_img, target)
+    vanilla_saliency = grad_cam_noreg.generate_cam(test_img, target)
+    triples.append((img_np, vanilla_saliency, reg_saliency, target))
+<\Cell_22>
+<Cell_23>
+save_path = "../results_for_export"
+<\Cell_23>
+<Cell_24>
+
+sns.reset_orig()
+idxs = [1,4, 9]
+num_rows = len(idxs)
+
+fig, axes = plt.subplots(3,num_rows, figsize=  (4.2*3, num_rows*3))
+
+
+# axes[0,0].set_title( "Image")
+# axes[0,1].set_title( "Vanilla")
+# axes[0,2].set_title( "CDEP")
+for i, (idx) in enumerate(idxs):
+    original_img, vanilla_sal, reg_sal, true_class = triples[idx]
+
+    axes[i,0].imshow(np.clip(original_img,0,1))
+    axes[i,0].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    axes[i,1].imshow( vanilla_sal, cmap = plt.get_cmap("viridis"),)
+    axes[i,1].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    pcm = axes[i,2].imshow(reg_sal, cmap =plt.get_cmap("viridis"))
+#     pcm = axes[i,2].imshow(np.random.normal(size =(20,20)),
+#                             cmap=plt.get_cmap("viridis"))
+    axes[i,2].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+    if i ==1:
+        fig.colorbar(pcm, ax=axes[i,2])
+plt.tight_layout()
+
+fig.savefig(oj(save_path,"gradCAM"))
+<\Cell_24>
+<Cell_25>
+cancer_triples = [x for x in triples if x[3] ==1]
+<\Cell_25>
+<Cell_26>
+no_cancer_triples = [x for x in triples if x[3] ==0]
+<\Cell_26>
+<Cell_27>
+sns.reset_orig()
+num_rows = len(cancer_triples)
+fig, axes = plt.subplots(ncols=3, nrows = num_rows, figsize=  (3*3, num_rows*3))
+i_small  =0 
+for i, (original_img, vanilla_sal, reg_sal, true_class) in enumerate(no_cancer_triples[:num_rows]):
+
+
+
+    axes[i,0].imshow(np.clip(original_img,0,1))
+    axes[i,0].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    axes[i,1].imshow(vanilla_sal)
+    axes[i,1].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+    axes[i,2].imshow(reg_sal)
+    axes[i,2].tick_params(axis='both', which='both', bottom=False, left = False, top=False, labelbottom=False, labelleft = False)
+
+<\Cell_27>
+<Cell_28>
+
+<\Cell_28>

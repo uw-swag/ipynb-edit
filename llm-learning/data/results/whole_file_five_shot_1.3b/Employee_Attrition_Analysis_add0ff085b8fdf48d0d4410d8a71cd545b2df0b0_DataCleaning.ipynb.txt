@@ -1,0 +1,49 @@
+```
+    #prepare for RDS connection
+    !pip install psycopg2
+
+    # dependencies
+    import pandas as pd
+    import sqlalchemy
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+    from getpass import getpass
+    from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+
+    #reflect existing database into new model?  Unsure if this is the correct direction
+    attrition_df=pd.read_sql('SELECT * FROM og_dataset', connection)
+
+    # determine if any missing values and data types for columns
+    attrition_df.info()
+
+    # column names
+    attrition_df.columns
+
+    # these columns are either unique identifiers, ambiguous or constant thru each column
+    columns_to_drop = ["Daily Rate", "Hourly Rate", "Monthly Income", "Monthly Rate", "Standard Hours", "Over 18"]
+
+    # Write cleaned attrition to table in RDS, drop index
+    attrition_df.to_sql('cleaned_data', engine, index=False)
+
+    # MOVE TO TOP OF ML MODEL?
+    # Create a OneHotEncoder instance
+    enc = OneHotEncoder(sparse=False)
+
+    # Fit and transform the OneHotEncoder using the categorical variable list
+    encode_df = pd.DataFrame(enc.fit_transform(attrition_df[attrition_cat]))
+
+    # Add the encoded variable names to the

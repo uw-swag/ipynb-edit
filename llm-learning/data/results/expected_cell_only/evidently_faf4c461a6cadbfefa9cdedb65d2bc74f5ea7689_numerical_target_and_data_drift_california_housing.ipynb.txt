@@ -1,0 +1,58 @@
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.tabs import DataDriftTab, NumTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection, NumTargetDriftProfileSection
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+ca = fetch_california_housing(as_frame=True)
+ca_frame = ca.frame
+ca_frame.head()
+target = 'MedHouseVal'
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.numerical_features = numerical_features
+ref_data_sample = ca_frame[:15000].sample(1000, random_state=0)
+prod_data_sample = ca_frame[15000:].sample(1000, random_state=0)
+ca_target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab(verbose_level=1)])
+ca_target_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_target_drift_dashboard.show()
+# ca_target_drift_dashboard.save('ca_target_drift.html')
+ca_target_drift_dashboard = Dashboard(tabs=[NumTargetDriftTab(verbose_level=0)])
+ca_target_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_target_drift_dashboard.show()
+# ca_target_drift_dashboard.save('ca_target_drift.html')
+ca_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1)])
+ca_data_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_data_drift_dashboard.show()
+# ca_data_drift_dashboard.save('ca_data_drift.html')
+ca_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=0)])
+ca_data_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_data_drift_dashboard.show()
+# ca_data_drift_dashboard.save('ca_data_drift.html')
+ca_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1), 
+                                                     NumTargetDriftTab(verbose_level=1)])
+ca_data_and_target_drift_dashboard.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_data_and_target_drift_dashboard.show()
+# ca_data_and_target_drift_dashboard.save('ca_data_and_target_drift.html')
+ca_target_drift_profile = Profile(sections=[NumTargetDriftProfileSection()])
+ca_target_drift_profile.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_target_drift_profile.json()
+ca_data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+ca_data_drift_profile.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_data_drift_profile.json()
+ca_data_and_target_drift_profile = Profile(sections=[DataDriftProfileSection(), NumTargetDriftProfileSection()])
+ca_data_and_target_drift_profile.calculate(ref_data_sample, prod_data_sample, column_mapping=column_mapping)
+ca_data_and_target_drift_profile.json()
+

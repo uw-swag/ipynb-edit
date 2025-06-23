@@ -1,0 +1,17 @@
+```
+    from pyspark.sql import SparkSession
+
+    spark = SparkSession.builder.appName("census2010").getOrCreate()
+
+    census2010 = spark.read.csv("census2010.csv", header=True, inferSchema=True)
+
+    census2010.show()
+
+    print(census2010.count())
+
+    print(census2010.select("age").show())
+
+    print(census2010.groupBy("age").count().show())
+
+    spark.stop()
+    ```

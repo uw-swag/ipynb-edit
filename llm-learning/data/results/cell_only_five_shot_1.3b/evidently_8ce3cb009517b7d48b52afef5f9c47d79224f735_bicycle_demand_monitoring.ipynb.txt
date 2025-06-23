@@ -1,0 +1,39 @@
+
+    Here's an updated version of your code with the new Dashboard interface and added examples for Profile usage:
+
+```python
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets, ensemble
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, NumTargetDriftTab, RegressionPerformanceTab, ProfileTab
+
+# Create a new Dashboard instance
+regression_perfomance_dashboard = Dashboard(reference, None, 
+                                            column_mapping=column_mapping, tabs=[RegressionPerformanceTab, ProfileTab])
+
+# Save the Dashboard as an HTML file
+regression_perfomance_dashboard.save('regression_performance_at_training.html')
+
+# Repeat the process for the production data
+regression_perfomance_dashboard = Dashboard(reference, production, 
+                                            column_mapping=column_mapping, tabs=[RegressionPerformanceTab, ProfileTab])
+
+regression_perfomance_dashboard.save('regression_performance_after_week1.html')
+
+# Repeat the process for the production data after a week
+regression_perfomance_dashboard = Dashboard(reference, production.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                            column_mapping=column_mapping, tabs=[RegressionPerformanceTab, ProfileTab])
+
+regression_perfomance_dashboard.save('regression_performance_after_week2.html')
+
+# Repeat the process for the production data after a week
+regression_perfomance_dashboard = Dashboard(reference, production.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                            column_mapping=column_mapping, tabs=[RegressionPerformanceTab, ProfileTab])
+
+regression_perfomance_dashboard.save('regression_performance_after_week3.html')
+
+# Re

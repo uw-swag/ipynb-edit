@@ -1,0 +1,45 @@
+```python
+    #!/usr/bin/env python3
+    # -*- coding: utf-8 -*-
+    """
+    Clase 04: Introducción a la programación en Python
+    """
+
+    # Importación de librerías
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Datos de ejemplo
+    X = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]).reshape(-1, 1)
+    y = np.array([2, 4, 6, 8, 10, 12, 14, 16, 18, 20]).reshape(-1, 1)
+
+    # Creación de un modelo de regresión lineal
+    model = LinearRegression()
+    model.fit(X, y)
+
+    # Predicción de las etiquetas de los datos
+    y_pred = model.predict(X)
+
+    # Visualización de los datos
+    plt.scatter(X, y)
+    plt.plot(X, y_pred, color='red')
+    plt.title('Regresión Lineal')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.show()
+
+    # Comparación de los datos originales y los predichos
+    plt.scatter(X, y)
+    plt.plot(X, y_pred, color='red')
+    plt.title('Comparación de datos originales y predichos')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.show()
+
+    # Comparación de los errores de predicción
+    plt.scatter(X, y - y_pred)
+    plt.title('Comparación de errores de predicción')
+    plt

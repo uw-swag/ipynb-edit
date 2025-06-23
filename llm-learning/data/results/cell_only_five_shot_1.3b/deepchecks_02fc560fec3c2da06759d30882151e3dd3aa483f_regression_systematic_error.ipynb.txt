@@ -1,0 +1,41 @@
+```python
+    # Parameters used by papermill
+    # Select Movielens data size: 100k, 1m
+    MOVIELENS_DATA_SIZE = '100k'
+    SURPRISE_READER = 'ml-100k'
+    TMP_DIR = tmp_dir.name
+    MAX_TRIAL_NUM = 100
+    EXP_NAME = "movielens_" + MOVIELENS_DATA_SIZE + "_svd_model"
+    PRIMARY_METRIC = 'precision_at_k'
+    RATING_METRICS = ['rmse']
+    RANKING_METRICS = ['precision_at_k', 'ndcg_at_k']  
+    USERCOL = 'userID'
+    ITEMCOL = 'itemID'
+    RECOMMEND_SEEN = False
+    K = 10
+    RANDOM_STATE = 0
+    VERBOSE = True
+    NUM_EPOCHS = 30
+    BIASED = True
+
+    script_params = " ".join([
+        '--datastore', DATA_DIR,
+        '--train-datapath', TRAIN_FILE_NAME,
+        '--validation-datapath', VAL_FILE_NAME,
+        '--surprise-reader', SURPRISE_READER,
+        '--rating-metrics', " ".join(RATING_METRICS),
+        '--ranking-metrics', " ".join(RANKING_METRICS),
+        '--usercol', USERCOL,
+        '--itemcol', ITEMCOL,
+        '--k', str(K),
+        '--random-state', str(RANDOM_STATE),
+        '--epochs', str(NUM_EPOCHS),
+        '--primary-metric', PRIMARY_METRIC
+    ])
+
+    if BIASED:
+        script_params += ' --biased'
+    if VERBOSE:
+        script_params += ' --verbose'
+    if RECOMMEND_SEEN:
+        script_

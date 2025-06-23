@@ -1,0 +1,44 @@
+```python
+    # Move src to notebooks
+    import os
+    import shutil
+
+    src_dir = 'src'
+    dst_dir = 'notebooks'
+
+    if os.path.exists(dst_dir):
+        shutil.rmtree(dst_dir)
+
+    shutil.copytree(src_dir, dst_dir)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add missing imports"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, Conv3D, SeparableConv2D
+    from keras.optimizers import SGD
+    from keras.callbacks import TensorBoard
+    from keras.models import load_model
+    import os
+    import shutil
+    from utilities.gtsrb_loader.load_data import load_data
+    from utilities.gtsrb_loader.get_folderpath import get_folderpath
+    '''
+    ]
+
+    ### Response:
+    The missing imports are:
+
+    ```python
+    from keras.callbacks import TensorBoard
+    from keras.models import load_model
+    from utilities.gtsrb_loader.load_data import load_data
+    from utilities.gtsrb_loader.get_folderpath import get_folderpath
+    ```
+
+    These are used for loading data, getting folder paths, and for building and training a convolutional neural network model.

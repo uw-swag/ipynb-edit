@@ -1,0 +1,17 @@
+```python
+    # 업데이트 하고자 하는 사진의 링크를 정의
+    pic_link = "https://example.com/image.jpg"
+    
+    # 사진을 다운로드 받습니다.
+    import requests
+    import os
+
+    response = requests.get(pic_link)
+
+    # 저장할 파일 이름
+    file_name = os.path.basename(pic_link)
+
+    # 파일을 저장합니다.
+    with open(file_name, 'wb') as f:
+        f.write(response.content)
+    ```

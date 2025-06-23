@@ -1,0 +1,32 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.layers import Input, Dense, Conv2D, MaxPooling2D, UpSampling2D
+    from tensorflow.keras.models import Model
+
+    # Autoencoder model
+    def autoencoder(input_dim, encoding_dim):
+        # Encoder
+        encoder_inputs = Input(shape=(input_dim,))
+        x = Dense(encoding_dim, activation='relu')(encoder_inputs)
+        encoder_outputs = Dense(input_dim)(x)
+
+        # Decoder
+        decoder_inputs = Input(shape=(encoding_dim,))
+        x = Dense(input_dim, activation='relu')(decoder_inputs)
+        decoder_outputs = Dense(input_dim, activation='sigmoid')(x)
+
+        # Autoencoder
+        autoencoder = Model(encoder_inputs, encoder_outputs)
+        autoencoder.compile(optimizer='adam', loss='mse')
+
+        decoder_model = Model(decoder_inputs, decoder_outputs)
+        autoencoder.summary()
+        decoder_model.summary()
+
+        return autoencoder, decoder_model
+
+    # Example usage
+    autoencoder, decoder_model = autoencoder(input_dim=784, encoding_dim=32)
+    autoencoder.fit(x_train, x_train, epochs=50, batch_size=256, shuffle=True, validation_data=(x_test, x_test))
+    decoded_imgs = decoder_model.predict(x_test)
+    ```

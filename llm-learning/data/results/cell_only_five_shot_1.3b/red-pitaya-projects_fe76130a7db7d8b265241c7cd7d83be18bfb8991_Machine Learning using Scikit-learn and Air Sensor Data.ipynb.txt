@@ -1,0 +1,21 @@
+```python
+    import matplotlib.pyplot as plt
+    import serial
+
+    # Open serial port
+    ser = serial.Serial('COM3', 9600)
+
+    # Create figure and axis
+    fig, ax = plt.subplots()
+
+    # Read data from serial port
+    while True:
+        line = ser.readline()
+        data = float(line.decode('utf-8').strip())
+        ax.clear()
+        ax.plot(data)
+        plt.pause(0.01)
+
+    # Close serial port
+    ser.close()
+    ```

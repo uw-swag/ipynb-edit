@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+    from pyspark.sql import SparkSession
+    from pyspark.ml.feature import VectorAssembler
+    from pyspark.ml.linalg import Vector
+
+    # Create a SparkSession
+    spark = SparkSession.builder.master("local[*]").appName("DataDriftExample").getOrCreate()
+
+    # Load the data
+    df = spark.read.format("csv").option("header", "true").load("data.csv")
+
+    # Convert the data to a vector
+    vector_assembler = VectorAssembler(inputCols=["feature1", "feature2", "feature3"], outputCol="features")
+    df = vector_assembler.transform(df)
+
+    # Compute the data drift
+    df.select(vector_assembler.getOutputCol()).show()
+
+    # Compute the data drift statistics
+    df.select(vector_assembler.getOutputCol()).stat().approxQuantile("features", [0.25, 0.5, 0.75], 0.05)
+
+    # Compute the data drift distribution
+    df.select(vector_assembler.getOutputCol()).stat().approxQuantile("features", [0.25, 0.5, 0.75], 0.05).show()
+
+    # Compute the data drift entropy
+    df.select(vector_assembler.getOutputCol()).stat().entropy("features")
+
+    # Compute the data drift skewness
+    df.select(vector_assembler.getOutputCol()).stat().skewness("features")
+
+    # Compute the data drift kurtosis
+    df.select(vector_assembler.getOutputCol()).stat().kurtosis("features")
+
+    # Compute the data drift cdf
+    df.select(vector_assembler.getOutputCol()).stat().cumulativeDistribution("features", 0.25)
+
+    # Compute the data drift histogram
+    df.select(vector_assembler.getOutputCol()).stat().histogram("features")
+
+    # Compute

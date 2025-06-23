@@ -1,0 +1,35 @@
+```python
+    import torch
+    from torch.utils.data import DataLoader, Dataset
+    from torchvision import transforms
+    from torch.utils.data import random_split
+
+    class MyDataset(Dataset):
+        def __init__(self, dataframe, transform=None):
+            self.dataframe = dataframe
+            self.transform = transform
+
+        def __len__(self):
+            return len(self.dataframe)
+
+        def __getitem__(self, idx):
+            x = self.dataframe.iloc[idx, :-1].values.astype('float32')
+            y = self.dataframe.iloc[idx, -1]
+
+            if self.transform:
+                x = self.transform(x)
+
+            return x, y
+
+    def create_data_loader(df, batch_size, num_workers=0):
+        dataset = MyDataset(df, transform=transforms.ToTensor())
+        train_size = int(0.8 * len(dataset))
+        train, val = random_split(dataset, [train_size, len(dataset) - train_size])
+
+        train_loader = DataLoader(train, batch_size=batch_size, num_workers=num_workers, shuffle=True)
+        val_loader = DataLoader(val, batch_size=batch_size, num_workers=num_workers, shuffle=False)
+
+        return train_loader, val_loader
+    ```
+
+    This refactored code creates a custom PyTorch dataset and data loader. The `MyDataset` class inherits from `torch.utils.data.Dataset` and implements the `__init__`, `__len__`, and `__getitem__` methods. The `create_data_loader` function splits the dataset into a training set and a validation set, and then creates data loaders for both sets.

@@ -1,0 +1,11 @@
+```python
+    from keras.callbacks import TensorBoard
+
+    # TensorBoard callback
+    tensorboard = TensorBoard(log_dir='./logs', histogram_freq=1)
+
+    # Train the model
+    model.fit(X_train, Y_train, epochs=10, callbacks=[tensorboard])
+    ```
+
+    This code will start a TensorBoard server, which will log the performance of the model during training. The logs will be saved in the directory specified by the `log_dir` parameter. The `histogram_freq` parameter determines how often to log histograms of model weights.

@@ -1,0 +1,45 @@
+```python
+    <Cell_0>
+    %matplotlib inline
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from scipy import stats
+    import statsmodels.api as sm
+    import math
+    from __future__ import division
+
+    # turn off data table rendering
+    pd.set_option('display.notebook_repr_html', False)
+
+    sns.set_palette(['#00A99D', '#F5CA0C', '#B6129F', '#76620C', '#095C57'])
+    np.version.full_version, scipy.version.full_version, \
+    pd.version.version, sm.version.full_version
+    </Cell_0>
+    <Cell_1>
+    # Create a pie chart
+    labels = 'Python', 'Ruby', 'Java', 'C++', 'Go'
+    sizes = [21, 14, 12, 10, 8]
+    colors = ['gold', 'yellowgreen', 'lightcoral', 'lightskyblue', 'red']
+    plt.pie(sizes, labels=labels, colors=colors,
+        autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')
+    plt.show()
+    </Cell_1>
+    <Cell_2>
+    # Create a box plot
+    data = pd.DataFrame(np.random.randn(100, 4), columns=list('ABCD'))
+    data.plot(kind='box')
+    plt.show()
+    </Cell_2>
+    <Cell_3>
+    # Create a scatter plot
+    x = np.linspace(0, 10, 100)
+    y = np.sin(x)
+    plt.scatter(x, y)
+    plt.show()
+    </Cell_3>
+    <Cell_4>
+    # Create a bubble plot
+    df = pd.DataFrame({'

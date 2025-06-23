@@ -1,0 +1,32 @@
+```
+    from evidently.metric_preset import DataDriftPreset
+    from evidently.report import Report
+
+    # Define the metrics and color options
+    metrics = [DataDriftPreset()]
+    color_options = color_scheme
+
+    # Create a Report object
+    report = Report(metrics=metrics, color_options=color_options)
+
+    # Run the report
+    report.run(current_data=current_data, reference_data=reference_data)
+
+    # Define the tests and color options
+    test_preset = DataDriftTestPreset()
+    color_options = color_scheme
+
+    # Create a TestSuite object
+    data_quality_suite = TestSuite(
+        tests=[
+            test_preset,
+        ],
+        color_options=color_options,
+    )
+
+    # Run the tests
+    data_quality_suite.run(current_data=current_data, reference_data=reference_data)
+    ```
+
+    ### Explanation:
+    The code above is updating the metrics and tests parameters and options. The metrics are updated to include DataDriftPreset, which is a metric that calculates the difference between the distribution of a feature in two data sets. The tests are updated to include DataDriftTestPreset, which is a test that checks if the data drift is statistically significant. The color options are also updated to match the color scheme used in the report.

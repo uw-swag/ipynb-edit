@@ -1,0 +1,42 @@
+
+    The commit message "Updated naming & bug fix" is a good practice to update the commit message with the changes made in the code. This helps in keeping a track of the changes made in the code over time. The bug fix in the code is related to the data types of the columns in the dataframe. The original code was reading the 'day.csv' file as a pandas dataframe, but the data type of the 'dteday' column was not specified. The bug fix has been made to read the 'day.csv' file as a pandas dataframe and specify the data type of the 'dteday' column.
+
+    The updated code is as follows:
+
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+
+    from sklearn.ensemble import RandomForestRegressor
+
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DriftTab, NumTargetDriftTab, RegressionPerformanceTab
+    <\Cell_0>
+    <Cell_1>
+    raw_data = pd.read_csv('Bike-Sharing-Dataset/day.csv', header = 0, sep = ',', parse_dates=['dteday'])
+    <\Cell_1>
+    <Cell_2>
+    ref_data = raw_data[:120]
+    prod_data = raw_data[120:150]
+    <\Cell_2>
+    <Cell_3>
+    ref_data
+    <\Cell_3>
+    <Cell_4>
+    target = 'cnt'
+    datetime = 'dteday'
+
+    numerical_features = ['mnth', 'temp', 'atemp', 'hum', 'windspeed']
+    categorical_features = ['season', 'holiday', 'weekday', 'workingday', 'weathersit',]
+
+    features = numerical_features + categorical_features
+    <\Cell_4>
+    <Cell_5>
+    model = RandomForestRegressor(random_state = 0)
+    <\Cell_5>
+    <Cell_6>
+    model.fit(ref_data[features], ref_data[target])
+    <\Cell_6>
+    <Cell_7>
+    ref

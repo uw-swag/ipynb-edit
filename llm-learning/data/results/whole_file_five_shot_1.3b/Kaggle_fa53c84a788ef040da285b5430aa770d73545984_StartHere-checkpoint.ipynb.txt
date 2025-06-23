@@ -1,0 +1,43 @@
+
+    '''
+    Commit Message: "First Baseline Submission @250"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#From https://www.kaggle.com/mchirico/santas-uncertain-bags/santa-quick-look
+import pandas as pd
+import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+import matplotlib.pylab as pylab
+import seaborn as sns
+sns.set_style('whitegrid')
+np.random.seed(1234)
+data = pd.read_csv('gifts.csv')
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+def gifts(gType):
+    if gType == "horse":
+        return max(0, np.random.normal(5,2,1)[0])
+    elif gType == "ball":
+        return max(0, 1 + np.random.normal(1,0.3,1)[0])
+    elif gType == "bike":
+        return max(0, np.random.normal(20,10,1)[0])
+    elif gType == "train":
+        return max(0, np.random.normal(10,5,1)[0])
+    elif gType == "coal":
+        return 47 * np.random.beta(0.5,0.5,1)[0]
+    elif gType == "book":
+        return np.random.chisquare(2,1)[0]
+    elif gType == "doll":
+        return np.random.gamma(5,1,1)[0]
+    elif gType == "blocks":
+        return np.random.triangular(5,10,20,1)[0]
+    elif gType == "gloves":
+        return 3.0 + np.random.rand(1)[0] if np.random.rand(1) < 0.3 else np.random.rand(1)[0]
+    else :
+        print("Wrong Arguement")
+
+<\Cell_1>
+<Cell_2>

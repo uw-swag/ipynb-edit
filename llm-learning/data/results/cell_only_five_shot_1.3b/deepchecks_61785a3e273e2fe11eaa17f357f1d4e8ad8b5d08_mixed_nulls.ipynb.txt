@@ -1,0 +1,23 @@
+```
+    from mlchecks.checks import mixed_nulls
+    import pandas as pd
+    data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+    dataframe = pd.DataFrame(data=data)
+    mixed_nulls(dataframe)
+    ```
+
+    The function `mixed_nulls` checks for mixed nulls in the dataframe. It returns a list of rows where the null values are not unique.
+
+    The code you provided checks for mixed nulls in the 'col1' column. If the 'col1' column has mixed nulls, it will return a list of rows where the null values are not unique.
+
+    If you want to check for mixed nulls in other columns, you can replace 'col1' with the column name you want to check.
+
+    For example, if you want to check for mixed nulls in the 'col2' column, you can modify the code as follows:
+
+    ```
+    data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+    dataframe = pd.DataFrame(data=data)
+    mixed_nulls(dataframe, 'col2')
+    ```
+
+    This will return a list of rows where the null values in the 'col2' column are not unique.

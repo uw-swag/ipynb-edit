@@ -1,0 +1,8 @@
+```python
+    # Adding a name to the index
+    index_name = 'my_index'
+    if index_name not in ws.indexes:
+        ws.create_index(name=index_name, source_data=df, partition_key='partition')
+    else:
+        print(f'Index {index_name} already exists.')
+    ```

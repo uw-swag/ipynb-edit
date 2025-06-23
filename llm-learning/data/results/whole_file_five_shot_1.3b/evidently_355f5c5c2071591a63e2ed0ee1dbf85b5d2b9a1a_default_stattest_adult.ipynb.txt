@@ -1,0 +1,17 @@
+
+    The code you provided is a demonstration of how to use the `DataDriftTab` from the `evidently` library to analyze the data drift in a dataset. The `DataDriftTab` calculates the statistical measures of the data drift, which are then visualized in a dashboard.
+
+    However, the code you provided is incomplete. It seems like you're trying to use the `DataDriftTab` to analyze the data drift in a dataset, but you're not providing the data for the `DataDriftTab`. 
+
+    You should provide the data for the `DataDriftTab` to calculate the statistical measures of the data drift. 
+
+    Here's a complete example of how you can use the `DataDriftTab`:
+
+    ```python
+    data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+    data_drift_dashboard.calculate(df[df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=0), 
+                                   df[~df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=10), column_mapping=column_mapping)
+    data_drift_dashboard.show()
+    ```
+
+    In this example, the `DataDriftTab` is used to analyze the data drift between the two groups of data (those with 'Husband' and 'Wife' as their relationship, and those without). The statistical measures of the data drift are calculated and visualized in a dashboard.

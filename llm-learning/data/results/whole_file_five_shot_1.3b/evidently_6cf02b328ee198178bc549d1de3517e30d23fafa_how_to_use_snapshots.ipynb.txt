@@ -1,0 +1,58 @@
+```python
+    from nannyml.snapshots import Snapshot
+    from nannyml.thresholds import ConstantThreshold
+    from nannyml.models import Model
+    from nannyml.datasets import Dataset
+
+    # Create a dataset
+    dataset = Dataset.from_csv('data.csv')
+
+    # Create a model
+    model = Model.from_dataset(dataset)
+
+    # Create a snapshot
+    snapshot = Snapshot.from_model(model)
+
+    # Set a threshold
+    threshold = ConstantThreshold(lower=0.5, upper=0.9)
+
+    # Set the snapshot's thresholds
+    snapshot.set_thresholds(threshold)
+
+    # Set the snapshot's criteria
+    snapshot.set_criteria(criteria='accuracy')
+
+    # Set the snapshot's metrics
+    snapshot.set_metrics(metrics=['accuracy', 'precision', 'recall'])
+
+    # Set the snapshot's window size
+    snapshot.set_window_size(window_size=3)
+
+    # Set the snapshot's stride
+    snapshot.set_stride(stride=1)
+
+    # Set the snapshot's evaluation frequency
+    snapshot.set_evaluation_frequency(evaluation_frequency='epoch')
+
+    # Set the snapshot's save frequency
+    snapshot.set_save_frequency(save_frequency='epoch')
+
+    # Set the snapshot's load frequency
+    snapshot.set_load_frequency(load_frequency='epoch')
+
+    # Set the snapshot's save path
+    snapshot.set_save_path('snapshot_path')
+
+    # Set the snapshot's load path
+    snapshot.set_load_path('snapshot_path')
+
+    # Set the snapshot's verbose
+    snapshot.set_verbose(verbose=True)
+
+    # Set the snapshot's save frequency
+    snapshot.set_save_frequency(save_frequency='epoch')
+
+    # Set the snapshot's load frequency
+    snapshot.set_load_frequency(load_frequency='epoch')
+
+    # Set the snapshot'

@@ -1,0 +1,40 @@
+```python
+    # ! pip install geopandas
+    # ! pip install kaggle --upgrade
+
+    config_path = '/content/drive'
+    dataset = 'alexisbcook/geospatial-learn-course-data'
+    data_path = '/content/datasets/' + dataset
+
+    from google.colab import drive
+    drive.mount(config_path)
+
+    import os
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+    !kaggle datasets download {dataset} -p "{data_path}" --unzip
+
+    import geopandas as gpd
+
+    loans_filepath = data_path + "/kiva_loans/kiva_loans/kiva_loans.shp"
+
+    world_loans = gpd.read_file(loans_filepath)
+
+    world_loans.head()
+
+    world_filepath = gpd.datasets.get_path('naturalearth_lowres')
+    world = gpd.read_file(world_filepath)
+    world.head()
+
+    ax = world.plot(figsize=(18,10), color='none', edgecolor='black', zorder=3)
+    world_loans.plot(color='green', markersize=5, ax=ax)
+
+    PHL_loans = world_loans[world_loans.country=='Philippines']
+
+    gpd.io.file.fiona.drvsupport.supported_drivers['KML'] = 'rw'
+    PHL = gpd.read_file(f"{data_path}/Philippines_AL258.kml", driver='KML')
+    PHL.head()
+
+    ax = PHL.plot(figsize=(18,18), color='none', edgecolor='black', zorder=3)
+    PHL_loans.plot(color='green', markersize=5, ax=ax)
+    ```

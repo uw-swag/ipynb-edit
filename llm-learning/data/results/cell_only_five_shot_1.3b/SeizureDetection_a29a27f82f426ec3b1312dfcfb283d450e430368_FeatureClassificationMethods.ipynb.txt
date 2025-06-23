@@ -1,0 +1,27 @@
+```
+    def SVM_Kfold(X, kf, cols, results):
+        f = pd.DataFrame(columns = cols)
+        clf = svm.SVC()
+        for train, test in kf.split(X):
+            X_train, y_train = X.loc[train,:], X.loc[train,'seizure']
+            X_test, y_test = X.loc[test,:], X.loc[test,'seizure']
+            svm_ind = clf.fit(X_train, y_train).predict(X_test)
+            f.loc[f.shape[0], :] = classificationPerformanceIndexes (y_test, svm_ind)
+        results.loc['SVM Kfold', :] = np.array(f.mean(axis=0))
+
+    def KNN_Kfold(X, n_neighbors, kf, cols, results):
+        f = pd.DataFrame(columns = cols)
+        clf = neighbors.KNeighborsClassifier(n_neighbors)
+        for train, test in kf.split(X):
+            X_train, y_train = X.loc[train,:], X.loc[train,'seizure']
+            X_test, y_test = X.loc[test,:], X.loc[test,'seizure']
+            knn_ind = clf.fit(X_train, y_train).predict(X_test)
+            f.loc[f.shape[0], :] = classificationPerformanceIndexes (y_test, knn_ind)
+        results.loc['KNN Kfold', :] = np.array(f.mean(axis=0))
+
+    def NaiveBayes_Kfold(X, kf, cols, results):
+        f = pd.DataFrame(columns = cols)
+        clf = naive_bayes.GaussianNB()
+        for train, test in kf.split(X):
+            X_train, y_train = X.loc[train,:], X.loc[train,'seizure']
+            X_test

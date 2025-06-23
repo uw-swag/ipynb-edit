@@ -1,0 +1,55 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "removed redundant code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+<\Cell_0>
+<Cell_1>
+def readfile(filename):
+    data = pd.read_csv('salary_data.csv')
+    X = data.iloc[:, 0]
+    Y = data.iloc[:, 1]
+    plt.title('Salary VS Experience Data')
+    plt.scatter(X, Y)
+    plt.show()
+    return X, Y
+
+<\Cell_1>
+<Cell_2>
+def buildModel(X,Y):
+    
+    m = 0 # we can do something like this aw well --> np.random.random(x.shape[1])
+    c = 0
+
+    L = 0.0001  # The learning Rate
+    epochs = 1000  # The number of iterations to perform gradient descent
+    n = float(len(X)) # Number of elements in X
+
+# Performing Gradient Descent 
+# do derivative of 1/2n(sum((c+mX(i) - y(i)))**2)
+    for i in range(epochs): 
+        Y_pred = m*X + c  # The current predicted value of Y
+        D_m = (-2/n) * sum(X * (Y - Y_pred))  # Partial Derivative wrt m
+        D_c = (-2/n) * sum(Y - Y_pred)  # Partial Derivative wrt c
+        m = m - L * D_m  # Update m
+        c = c - L * D_c  # Update c
+    return (m, c)
+<\Cell_2>
+<Cell_3>
+def bestFitLine(X,m,c):
+    Y_pred = m*X + c
+    return Y_pred
+<\Cell_3>
+<Cell_4>
+#Plot graph
+def

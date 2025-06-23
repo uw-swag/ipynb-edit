@@ -1,0 +1,83 @@
+<Cell_0>
+import os
+from os.path import join as oj
+import sys, time
+sys.path.insert(1, oj(sys.path[0], '..'))  # insert parent path
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+use_biased= False
+<\Cell_1>
+<Cell_2>
+trained_model_folder = '../models/Decoy_models'
+save_path = '../results_for_export'
+if use_biased:
+    trained_model_folder = '../models/SST_biased_models'
+fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder)]) 
+# other models were trained badly
+
+<\Cell_2>
+<Cell_3>
+
+results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+results = results[results.which_adversarial != "bias_gender"]
+
+<\Cell_3>
+<Cell_4>
+
+results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]] # currently on test data - since not used for early stopping 
+results["final_cd"] = [min(x) for x in results["explanation_divergence"]]
+results["final_test_loss"] = [min(x) for x in results["losses_test"]]
+results["final_train_loss"] = [x[-1] for x in results["losses_train"]]
+results.use_individual =results.use_individual.fillna(False)
+results = results[results.signal_strength < 1000]
+<\Cell_4>
+<Cell_5>
+concise_out = results[['signal_strength', 'Test Accuracy','final_test_loss']].sort_values(["signal_strength"])#.groupby(by = ['signal_strength']).mean()
+<\Cell_5>
+<Cell_6>
+print(concise_out.to_latex(index  = False))
+<\Cell_6>
+<Cell_7>
+concise_out
+<\Cell_7>
+<Cell_8>
+if use_biased:
+    tex_name = 'cd_SST_bias_tex_gender.tex'
+else:
+    tex_name = 'cd_SST_decoy_tex.tex'
+with open(oj(save_path, tex_name), 'w') as f:
+          f.write(concise_out.to_latex(index  = False))
+concise_out = concise_out.reset_index()
+<\Cell_8>
+<Cell_9>
+plot = sns.lineplot(x ='signal_strength' , y='Test Accuracy', data = concise_out  );
+# plot.set(xscale="log")
+plt.ylim(60, 70)
+plot.set_xlabel("Regularization strength")
+plot.set_ylabel("Test Accuracy")
+plot.set_title("Regularizing with cd explanations");
+fig  = plot.get_figure()
+if use_biased:
+    fig.savefig(oj(save_path,"cd_SST_bias"))
+else:
+    fig.savefig(oj(save_path,"cd_SST_decoy"))
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>

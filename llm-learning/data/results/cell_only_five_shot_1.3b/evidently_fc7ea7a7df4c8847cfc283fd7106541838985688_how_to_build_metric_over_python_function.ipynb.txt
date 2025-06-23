@@ -1,0 +1,21 @@
+```python
+    # Define a custom metric
+    def custom_metric(y_true, y_pred):
+        # Calculate the custom metric here
+        # For example, we can calculate the mean squared error
+        mse = mean_squared_error(y_true, y_pred)
+        return mse
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(32, input_dim=input_dim, activation='relu'))
+    model.add(Dense(1, activation='linear'))
+
+    # Compile the model
+    model.compile(loss=custom_metric, optimizer='adam')
+    ```
+    In the above example, we define a custom metric `custom_metric` that calculates the mean squared error between the true labels and the predicted labels. We then define a model with a single hidden layer and compile it with this custom metric.
+
+    The `model.fit` function can then be used to train the model, and the `model.evaluate` function can be used to evaluate the model's performance on unseen data.
+
+    Please note that the actual implementation of the custom metric and the way to use it will depend on the specific problem you are trying to solve.

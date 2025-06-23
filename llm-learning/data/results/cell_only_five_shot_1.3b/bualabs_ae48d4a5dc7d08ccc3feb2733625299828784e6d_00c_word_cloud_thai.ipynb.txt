@@ -1,0 +1,25 @@
+```python
+    from wordcloud import WordCloud
+    import matplotlib.pyplot as plt
+
+    wordcloud = WordCloud(
+                          font_path=path, 
+                          relative_scaling = 0.3,
+                          min_font_size=1,
+                          background_color="white",
+                          width=1024,
+                          height=768,
+                          colormap='hsv', 
+                          scale=3,
+                          font_step=6,
+                          collocations=False,
+                          regexp=regexp,
+                          margin=2
+                          ).generate(text)
+
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.show()
+    ```
+
+    The code above generates a word cloud from the text. The parameters of the WordCloud function are adjusted to better suit the text. The 'relative_scaling' parameter is set to 0.3, which means that the size of the words will be proportional to their frequency in the text. The 'colormap' parameter is set to 'hsv', which means that the color of the words will be represented in the hue, saturation, value (HSV) color space. The 'scale' parameter is set to 3, which means that the size of the words will be 3 times larger than the default size. The 'font_step' parameter is set to 6, which means that the font size will be increased by 6 for each word. The 'collocations' parameter is set to False, which means that the words will not be placed close to each other. The 'regexp' parameter is set to None, which means that the words will be generated based on the regular expression pattern. The 'margin' parameter is set to 2, which means that the words will be placed 2 pixels outside the edge of the image.

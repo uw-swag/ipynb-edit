@@ -1,0 +1,50 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added a new feature in the notebook for chapter 16"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # New feature: A new cell to display the environment's state
+    def display_state(env):
+        plt.imshow(env.render(mode='rgb_array'))
+        plt.show()
+    <\Cell_0>
+    <Cell_1>
+    # Use the new feature
+    display_state(env)
+    <\Cell_1>
+    <Cell_2>
+    # New feature: A new cell to display the Q-values
+    def display_q_values(q_values):
+        plt.imshow(q_values.reshape(88, 80), interpolation='nearest', cmap='gray')
+        plt.show()
+    <\Cell_2>
+    <Cell_3>
+    # Use the new feature
+    display_q_values(q_values)
+    <\Cell_3>
+    <Cell_4>
+    # New feature: A new cell to display the action's distribution
+    def display_action_distribution(action_distribution):
+        plt.bar(range(len(action_distribution)), action_distribution)
+        plt.show()
+    <\Cell_4>
+    <Cell_5>
+    # Use the new feature
+    display_action_distribution(np.argmax(q_values, axis=1))
+    <\Cell_5>
+    <Cell_6>
+    # New feature: A new cell to display the reward distribution
+    def display_reward_distribution(reward_distribution):
+        plt.hist(reward_distribution, bins=100)
+        plt.show()
+    <\Cell_6>
+    <Cell_7>
+    # Use the new feature
+    display_reward_distribution(rewards)
+    <\Cell_7>
+    <Cell_8>
+    # New feature: A new cell to display the discounted reward distribution
+    def display_discounted_reward_distribution(discounted_reward_distribution):
+        plt.plot(discounted_

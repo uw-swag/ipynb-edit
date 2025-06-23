@@ -1,0 +1,26 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.cluster import KMeans
+    from sklearn.datasets import make_blobs
+
+    # Generating random data
+    X, _ = make_blobs(n_samples=500, centers=3, n_features=2, cluster_std=1.0, random_state=42)
+
+    # Defining the model
+    kmeans = KMeans(n_clusters=3, random_state=42)
+
+    # Fitting the model
+    kmeans.fit(X)
+
+    # Getting the cluster labels
+    labels = kmeans.predict(X)
+
+    # Plotting the clusters
+    plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis')
+    plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=300, c='red')
+    plt.show()
+    ```
+
+    This script uses the KMeans algorithm to cluster the given random data. The number of clusters is set to 3. The scatter plot is then created to visualize the clusters. The red dots represent the cluster centers.

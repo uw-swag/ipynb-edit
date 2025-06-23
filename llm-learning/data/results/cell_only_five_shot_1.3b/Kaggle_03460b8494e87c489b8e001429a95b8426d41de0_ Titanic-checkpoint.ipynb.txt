@@ -1,0 +1,9 @@
+```python
+    #Creating Dummy Plots based on 'Embarked'
+    train_DF['Embarked'] = train_DF['Embarked'].fillna('S')
+    sns.factorplot(x = 'Embarked', y = 'Survived', data=train_DF, size = 4, aspect = 5)
+
+    sns.countplot(x = 'Embarked', data = train_DF)
+    sns.countplot(x = 'Survived', hue = 'Embarked', data = train_DF)
+    ```
+    The above code is used to create a count plot for 'Embarked' and 'Survived'. The first plot is a factor plot which shows the survival rate based on the 'Embarked' category. The second plot is a count plot for 'Embarked' and the third plot is a count plot for 'Survived' with hue set to 'Embarked'. This will allow us to see the survival rate of passengers based on the 'Embarked' category.

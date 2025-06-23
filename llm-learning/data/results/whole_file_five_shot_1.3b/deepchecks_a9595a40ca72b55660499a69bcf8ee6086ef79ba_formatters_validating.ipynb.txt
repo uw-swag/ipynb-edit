@@ -1,0 +1,44 @@
+
+    '''
+    Commit Message: "fixing docs (#898)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from deepchecks.vision.datasets.detection.coco import load_dataset, load_model
+
+    data_loader = load_dataset(train=False, batch_size=1000, object_type='DataLoader')
+    model = load_model()
+    <\Cell_0>
+    <Cell_1>
+    from deepchecks.vision.utils import DetectionLabelFormatter,ImageFormatter, DetectionPredictionFormatter
+
+    label_formatter = DetectionLabelFormatter()
+    image_formatter = ImageFormatter()
+    pred_formatter = DetectionPredictionFormatter()
+    <\Cell_1>
+    <Cell_2>
+    from deepchecks.vision.utils.validation import validate_formatters
+
+    validate_formatters(data_loader, model, label_formatter, image_formatter, pred_formatter)
+    <\Cell_2>
+    <Cell_3>
+    import torch
+
+    def label_formatter_func(batch):
+        # Translate labels to deepchecks format.
+        # the label_id here is in the last position of the tensor, and the DetectionLabelFormatter expects it
+        # at the first position.
+        formatted_labels = []
+        for tensor in batch[1]:
+            tensor = torch.index_select(tensor, 1, torch.LongTensor([4, 0, 1, 2, 3])) if len(tensor) > 0 else tensor
+            formatted_labels.append(tensor)
+        return formatted_labels
+
+    label_formatter = DetectionLabelFormatter(label_formatter_func)
+
+    validate_formatters(data_loader, model, label_formatter, image_formatter, pred_formatter)
+    <\Cell_3>
+    <Cell_4>
+    def yolo_prediction_formatter(batch, model, device):
+        # Convert from yolo Detections object to List (per image) of Tensors of the shape [N, 6] with each row being 
+        # [

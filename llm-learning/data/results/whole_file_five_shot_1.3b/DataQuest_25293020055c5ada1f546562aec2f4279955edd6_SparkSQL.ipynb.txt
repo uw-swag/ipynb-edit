@@ -1,0 +1,38 @@
+```
+    <Cell_0>
+    # Find path to PySpark
+    import findspark
+    findspark.init()
+
+    # Import PySpark & initalize SparkContext object
+    import pyspark
+    sc = pyspark.SparkContext()
+
+    # Import SQLContext
+    from pyspark.sql import SQLContext
+
+    # Pass in the SparkContext object `sc`
+    sqlCtx = SQLContext(sc)
+
+    # Read JSON data into a DataFrame object `df`
+    df = sqlCtx.read.json("census_2010.json")
+    df.registerTempTable('census2010')
+    <\Cell_0>
+    <Cell_1>
+    tables = sqlCtx.tableNames()
+    print(tables)
+    <\Cell_1>
+    <Cell_2>
+    print(sqlCtx.sql("SELECT age FROM census2010 LIMIT 20").show())
+
+
+    <\Cell_2>
+    <Cell_3>
+    sqlCtx.sql('SELECT males, females FROM census2010 \
+                WHERE age > 5 AND age < 15').show()
+    <\Cell_3>
+    <Cell_4>
+    sqlCtx.sql('SELECT males, females FROM census2010').describe().show()
+    <\Cell_4>
+
+    ```

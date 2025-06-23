@@ -1,0 +1,48 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Implementing the Deep Q-Network (DQN) in TensorFlow"
+    Original Code Cells:
+    '''
+<\Cell_92>
+<Cell_93>
+import tensorflow as tf
+import numpy as np
+from collections import deque
+
+class ReplayMemory:
+    def __init__(self, maxlen):
+        self.maxlen = maxlen
+        self.buf = np.empty(shape=maxlen, dtype=np.object)
+        self.index = 0
+        self.length = 0
+        
+    def append(self, data):
+        self.buf[self.index] = data
+        self.length = min(self.length + 1, self.maxlen)
+        self.index = (self.index + 1) % self.maxlen
+    
+    def sample(self, batch_size, with_replacement=True):
+        if with_replacement:
+            indices = np.random.randint(self.length, size=batch_size) # faster
+        else:
+            indices = np.random.permutation(self.length)[:batch_size]
+        return self.buf[indices]
+<\Cell_93>
+<Cell_94>
+class DQN:
+    def __init__(self, n_inputs, n_hidden, n_outputs, learning_rate):
+        self.n_inputs = n_inputs
+        self.n_hidden = n_hidden
+        self.n_outputs = n_outputs
+        self.learning_rate = learning_rate
+        self.reward_sum = 0
+        self.rewards_buffer = deque(maxlen=10000)
+        self.gamma = 0.99
+        self.exploration_phase = False
+        self.exploration_phase_end = 100000
+        self.exploration_rate = 1.0
+        self.exploration_decay = 0.9999
+        self.memory = ReplayMemory(1000000)
+        self.q_network = self.build_q

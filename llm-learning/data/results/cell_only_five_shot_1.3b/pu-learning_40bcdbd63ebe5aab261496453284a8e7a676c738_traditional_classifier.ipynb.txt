@@ -1,0 +1,55 @@
+```python
+    from sklearn.linear_model import LogisticRegression
+    clf = LogisticRegression().fit(x, y)
+    y_hat = clf.predict(x)
+
+    def visualize_scatter_prob(x, y, y_hat):
+        import matplotlib.pyplot as plt
+        from utils import visualize_pn_data
+
+        fig, ax = plt.subplots()
+        scatter = ax.scatter(x, y, c=y_hat)
+        plt.colorbar(scatter)
+        plt.title('Scatter plot colored by predicted probabilities')
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.show()
+
+    visualize_scatter_prob(x, y, y_hat)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add functions to make a scatter plot colored by predicted probabilities"
+    Original Code Cells:
+    '''
+    from sklearn.linear_model import LogisticRegression
+    clf = LogisticRegression().fit(x, y)
+    y_hat = clf.predict(x)
+    from utils import visualize_pn_data
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from sklearn.linear_model import LogisticRegression
+    clf = LogisticRegression().fit(x, y)
+    y_hat = clf.predict(x)
+
+    def visualize_scatter_prob(x, y, y_hat):
+        import matplotlib.pyplot as plt
+        from utils import visualize_pn_data
+
+        fig, ax = plt.subplots()
+        scatter = ax.scatter(x, y, c=y_hat)
+        plt.colorbar(scatter)
+        plt.title('Scatter plot colored by predicted probabilities')
+        plt.xlabel('X')
+        plt.ylabel('Y')
+        plt.show()
+
+    visualize_scatter_prob(x, y, y_hat)
+    ```
+
+    ###

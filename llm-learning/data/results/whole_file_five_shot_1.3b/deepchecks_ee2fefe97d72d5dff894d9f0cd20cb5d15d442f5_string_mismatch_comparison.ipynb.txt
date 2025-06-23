@@ -1,0 +1,23 @@
+```python
+    from mlchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    ```
+
+    The `StringMismatchComparison` check is used to compare two dataframes and highlight the differences between the two columns. The check prioritizes columns according to the 'FI' (First In, First Out) order in the dataframe. The 'FI' order is determined by the order of the columns in the dataframe.
+
+    The 'FI' order is determined by the order of the columns in the dataframe. The first column in the dataframe is considered the first to be compared, the second column is the second to be compared, and so on.
+
+    The check will highlight the differences between the two columns in the dataframe. The differences will be highlighted in the form of a list of tuples, where each tuple contains the column name and the difference between the two columns.
+
+    The check will return a dataframe with the differences between the two columns. The dataframe will have two columns: 'Column Name' and 'Difference'. The 'Column Name' column will contain the name of the column, and the 'Difference' column will contain the difference between the two columns.
+
+    The check will return a dataframe with the differences between the two columns. The dataframe will have two columns: 'Column Name' and 'Difference'. The 'Column Name' column will contain the name of the column, and the 'Difference' column will contain the difference between the two columns.
+
+    The check will return a dataframe with the differences between the two columns. The dataframe will have two columns: 'Column Name' and 'Difference'. The 'Column Name' column will contain the name of the column, and the 'Difference' column will contain the difference between the two columns.
+
+    The check will return a data

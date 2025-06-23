@@ -1,0 +1,32 @@
+from evidently.ui.workspace.cloud import CloudWorkspace
+
+from evidently.report import Report
+
+from evidently import metrics
+from evidently.metric_preset import DataQualityPreset
+from evidently.metric_preset import DataDriftPreset
+
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+from evidently.test_preset import DataDriftTestPreset
+from evidently.tests.base_test import TestResult, TestStatus
+from evidently.ui.dashboards import DashboardPanelPlot
+from evidently.ui.dashboards import DashboardPanelTestSuite
+from evidently.ui.dashboards import PanelValue
+from evidently.ui.dashboards import PlotType
+from evidently.ui.dashboards import ReportFilter
+from evidently.ui.dashboards import TestFilter
+from evidently.ui.dashboards import TestSuitePanelType
+from evidently.renderers.html_widgets import WidgetSize
+#add a report to the project
+ws.add_report(project.id, data_report)
+#add a report together with datasets to the project
+ws.add_report(project.id, data_report, include_data=True)
+#download dataset from the project
+downloaded_data_from_the_project = ws.load_dataset(dataset_id = "YOUR_DATASET_ID") 
+downloaded_data_from_the_project.head()
+#when upload data to a project a column mapping might be specified as well
+ws.add_dataset(
+    adult_prod.iloc[100 : 200, :],
+    name = "dataset_uploaded_to_the_project",
+    project_id = project.id)

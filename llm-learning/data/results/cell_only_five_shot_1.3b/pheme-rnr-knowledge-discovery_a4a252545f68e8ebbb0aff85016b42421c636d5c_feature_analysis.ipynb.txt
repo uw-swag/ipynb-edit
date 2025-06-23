@@ -1,0 +1,37 @@
+
+    Here is the updated code with the addition of mean and var to the aggregated features.
+
+    ```python
+    from scipy.stats import pearsonr
+
+    corr = Z.apply(lambda x: pearsonr(x, y), axis=0, result_type='expand')\
+        .T \
+        .rename(columns={0: "coef", 1: "pval"}) \
+        .sort_values(by=["coef"], ascending=False)
+
+    plt.figure(figsize=(15,9))
+    plt.title("Correlation Between Features and Rumor Label (Germanwings Crash)")
+
+    labels = [index + " (p = %.2f)" % round(row.pval, 2) for index, row in corr.iterrows()]
+    ax = sns.barplot(y=labels, x=corr.coef, palette="Set2")
+    ax.set(xlabel="Pearson Correlation Coefficient", ylabel="Feature")
+
+    offset = 0.01
+    i = 0
+    for index, row in corr.iterrows():
+        ax.text(row.coef + (offset if row.coef > 0 else -offset), i, round(row.coef, 2), 
+                color="black",
+                ha="center",
+                fontsize='small')
+        i += 1
+
+    from sklearn.linear_model import LinearRegression
+
+    model = LinearRegression()
+    model.fit(Z,y)
+
+    coefs = pd.DataFrame(model.coef_, columns=["coef"], index=Z.columns).sort_values(by=["coef"], ascending=False)
+    plt.figure(figsize=(15,9))
+    plt.title("Regression Weights by Feature (Germanwings Crash)")
+    ax = sns.barplot(y=coefs.index, x=coefs.coef, palette="Set2")
+    ax.set(xlabel="Coefficient", ylabel=

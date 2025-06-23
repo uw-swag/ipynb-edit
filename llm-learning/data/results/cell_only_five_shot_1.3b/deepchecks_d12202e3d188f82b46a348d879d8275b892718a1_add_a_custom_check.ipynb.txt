@@ -1,0 +1,74 @@
+```python
+    import pandas as pd
+    from reco_utils.datasets import covid_utils
+
+    # Load the data
+    data = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    preprocessed_data = covid_utils.preprocess_data(data)
+
+    # Create the dataset
+    dataset = covid_utils.create_dataset(preprocessed_data)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adds new function to calculate the mean of a list"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_mean(lst):
+        return sum(lst) / len(lst)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Improves the code by adding type hints"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from typing import List
+
+    def calculate_mean(lst: List[float]) -> float:
+        return sum(lst) / len(lst)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adds new function to calculate the median of a list"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from typing import List
+
+    def calculate_mean(lst: List[float]) -> float:
+        return sum(lst) / len(lst)
+
+    def calculate_median(lst: List[float]) -> float:
+        sorted_lst = sorted(lst)
+        length = len(sorted_lst)
+        if length % 2 == 0:
+            return (sorted_lst[length // 2 - 1] + sorted_lst[length // 2]) / 2
+        else:
+            return sorted_lst[length // 2]
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adds new function

@@ -1,0 +1,29 @@
+```python
+    import gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+
+    # use creds to create a client to interact with the Google Drive API
+    scope = ['https://spreadsheets.google.com/feeds',
+             'https://www.googleapis.com/auth/drive']
+    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+    client = gspread.authorize(creds)
+
+    # Find a workbook by name and open the first sheet
+    # Make sure you use the right name here.
+    sheet = client.open("Test_Sheet").sheet1
+
+    # Extract and print all of the values
+    list_of_hashes = sheet.get_all_records()
+    print(list_of_hashes)
+    ```
+    This code will extract data from a Google Sheets document and print it out. You'll need to replace "Test_Sheet" with the name of your Google Sheets document.
+
+    Also, you'll need to replace 'client_secret.json' with the path to your own JSON file that contains your Google API credentials.
+
+    This code uses the gspread and oauth2client libraries. If you don't have these installed, you can do so with pip:
+
+    ```
+    pip install gspread oauth2client
+    ```
+
+    Note: This code will only work if you have the appropriate permissions to access the Google Sheets document.

@@ -1,0 +1,57 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "add data processing code to the existing notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+train, valid, test = load_scar()
+<\Cell_1>
+<Cell_2>
+x, y, s = train
+<\Cell_2>
+<Cell_3>
+from labeling import LabelingMechanism, label_frequency
+
+def get_sample(data, lm, is_train=False):
+    x, y, _ = data
+    if is_train:
+        lm.fit(x)
+    score = lm.propensity_score(x)
+    s = (y * (np.random.uniform(size=x.shape[0]) < score)).astype(int)
+    return x, y, s
+<\Cell_3>
+<Cell_4>
+lm = LabelingMechanism([0],[1], min_prob=0, max_prob=1)
+<\Cell_4>
+<Cell_5>
+train = get_sample(train, lm, is_train=True)
+valid = get_sample(valid, lm)
+test = get_sample(test, lm)
+<\Cell_5>
+<Cell_6>
+x, y, s = train
+<\Cell_6>
+<Cell_7>
+c = label_frequency(x, y, lm)
+print(c)
+<\Cell_7>
+<Cell_8>
+import json
+param = {"minx" : list(lm.minx),
+         "maxx" : list(lm.maxx),
+         "c" : c}
+json_file = open("sar/param.json", "w")
+json.dump(param, json_file)
+print(param)
+<\Cell_8>
+<Cell_9>
+from utils import plot_x_y
+plot_x_y(x, y)
+<\Cell_9>
+<Cell_10>

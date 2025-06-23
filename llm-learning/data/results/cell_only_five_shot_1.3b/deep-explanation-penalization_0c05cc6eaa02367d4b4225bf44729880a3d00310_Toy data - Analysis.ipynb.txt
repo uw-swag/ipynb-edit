@@ -1,0 +1,35 @@
+
+    ### Instruction:
+    [
+    Commit Message: "adding dilation to segmentation to actually penalize"
+    Original Code Cells:
+    '''
+    from tqdm import tqdm_notebook, tqdm
+    import pandas as pd
+    from os.path import join as oj
+    import sys, time
+    import matplotlib.pyplot as plt
+    import os
+    import csv
+    import numpy as np
+    import pickle as pkl
+    %matplotlib inline
+    %load_ext autoreload
+    %autoreload 2
+    results_folder = "../results"
+    fnames = sorted([oj(results_folder, fname) for fname in os.listdir(results_folder)]) # filenames in the directory
+    results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in tqdm(fnames) ] 
+    results = pd.concat(results_list, axis=1).T.infer_objects() # pandas dataframe w/ hyperparams and weights stored
+
+    results["final_acc"] = [max(x) for x in results["acc_test"]]
+    results["min_test_loss"] = [x[-1]for x in results["losses_test"]]
+    results["num_epochs"] = [len(x) for x in results["losses_test"]]
+    results["min_train_loss"] = [min(x) for x in results["losses_train"]]
+    results.learning_rate[results.learning_rate.isnull()] =0.001 # not been in the data
+    results.num_neurons[results.num_neurons.isnull()] =32 # not been in th|e data
+    results.num_noise_chars[results.num_noise_chars.isnull()] =4 # not been in the data
+    # delete with learning rate 001
+    #results = results[results.learning_rate !=0.0001]
+    #duplicates del
+
+    results = results[ results.duplicated(subset

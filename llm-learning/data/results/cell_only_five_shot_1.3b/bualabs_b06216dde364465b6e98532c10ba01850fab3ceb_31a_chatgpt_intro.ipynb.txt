@@ -1,0 +1,16 @@
+```python
+    import openai
+
+    # Set up the OpenAI API
+    openai.api_key = "YOUR_OPENAI_API_KEY"
+
+    # Use DALL-E to generate an image
+    image_resp = openai.Image.create(
+        prompt="cute puppy in stripe ninja suit, super realistic",
+        n=1,
+        size="256x256"
+    )
+
+    # Print the URL of the generated image
+    print(image_resp['data'][0]['url'])
+    ```

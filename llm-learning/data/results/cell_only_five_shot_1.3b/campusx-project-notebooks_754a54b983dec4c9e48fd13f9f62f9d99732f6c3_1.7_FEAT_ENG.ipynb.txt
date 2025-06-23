@@ -1,0 +1,10 @@
+```python
+    from sklearn.feature_selection import SelectKBest, chi2
+
+    # Select top 10 features
+    selector = SelectKBest(chi2, k=10)
+    X_new = selector.fit_transform(X, y)
+
+    # Create a dataframe with the new features
+    df_new = pd.DataFrame(X_new, columns=selector.get_support(indices=True))
+    ```

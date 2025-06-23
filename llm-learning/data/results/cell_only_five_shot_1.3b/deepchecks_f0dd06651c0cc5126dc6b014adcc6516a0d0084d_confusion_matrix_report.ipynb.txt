@@ -1,0 +1,38 @@
+```python
+    from deepchecks.tabular.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    import pandas as pd
+    from deepchecks.tabular.checks.performance import ConfusionMatrixReport
+
+    # Load the iris dataset
+    iris = load_iris()
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    df['target'] = iris.target
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    # Create a dataset from the training data
+    train_dataset = Dataset(X_train, y_train, features=iris.feature_names, label='target')
+
+    # Create a dataset from the testing data
+    test_dataset = Dataset(X_test, y_test, features=iris.feature_names, label='target')
+
+    # Create a AdaBoost classifier
+    clf = AdaBoostClassifier()
+
+    # Train the classifier
+    clf.fit(train_dataset)
+
+    # Make predictions on the testing data
+    y_pred = clf.predict(test_dataset)
+
+    # Create a confusion matrix report
+    report = ConfusionMatrixReport(test_dataset, y_pred)
+
+    # Print the report
+    print(report)
+
+    ```

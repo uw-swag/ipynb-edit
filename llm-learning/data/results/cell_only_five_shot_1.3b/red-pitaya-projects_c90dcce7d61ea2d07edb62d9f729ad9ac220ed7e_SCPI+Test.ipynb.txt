@@ -1,0 +1,57 @@
+```python
+    from azureml.core import Workspace, Dataset, Experiment, Run
+    from azureml.widgets import RunDetails
+
+    # Load the workspace from the saved config file
+    ws = Workspace.from_config()
+
+    # Get the experiment
+    experiment = Experiment(ws, 'your-experiment-name')
+
+    # Get the run
+    run = Run(experiment, 'your-run-id')
+
+    # Get the notebook
+    notebook = run.get_notebook()
+
+    # Add a new cell to the notebook
+    notebook.add_cell('<New Cell Type>', '<New Cell Name>', '<New Cell Content>')
+
+    # Save the notebook
+    notebook.save()
+
+    # Display the notebook
+    RunDetails(run).show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added dashboard notebooks"
+    Original Code Cells:
+    '''
+    from azureml.core import Workspace, Dataset, Experiment, Run
+    from azureml.widgets import RunDetails
+
+    ws = Workspace.from_config()
+
+    experiment = Experiment(ws, 'your-experiment-name')
+
+    run = Run(experiment, 'your-run-id')
+
+    notebook = run.get_notebook()
+
+    notebook.add_cell('<New Cell Type>', '<New Cell Name>', '<New Cell Content>')
+
+    notebook.save()
+
+    RunDetails(run).show()
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already set up to add a new notebook cell to the dashboard. It first loads the workspace from the saved config file, then gets the experiment and run. It then gets the notebook, adds a new cell to it, saves the notebook, and finally displays the notebook on the dashboard.
+
+    However, if you want to add a new cell to the dashboard without saving it, you can use the `add_cell` method without the `save` method. Here's how you can do it:
+
+    ```python
+   

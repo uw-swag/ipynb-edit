@@ -1,0 +1,65 @@
+import pandas as pd
+import numpy as np
+
+from evidently.v2.metrics import DataIntegrityMetrics
+from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests import TestNumberOfColumns
+from evidently.v2.tests import TestNumberOfDriftedFeatures
+from evidently.v2.tests import TestValueMAE, TestValueMeanError
+from evidently.v2.tests import TestAccuracyScore, TestPrecisionScore, TestF1Score, TestRecallScore, TestRocAuc, TestLogLoss
+from sklearn import datasets, ensemble, model_selection
+bcancer = datasets.load_breast_cancer(as_frame=True)
+bcancer_frame = bcancer.frame
+bcancer_frame['target'] = bcancer.target
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+train_data, test_data = model_selection.train_test_split(
+    bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+train_data['prediction'] = [bcancer.target_names[x] for x in train_predictions]
+test_data['prediction'] = [bcancer.target_names[x] for x in test_predictions]
+
+train_data['target'] = [bcancer.target_names[x] for x in train_data['target']]
+test_data['target'] = [bcancer.target_names[x] for x in test_data['target']]
+
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+train_data[bcancer.target_names] = model.predict_proba(train_data[features])
+test_data[bcancer.target_names] = model.predict_proba(test_data[features])
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = prediction
+bcancer_column_mapping.numerical_features = numerical_features
+
+tests = [TestAccuracyScore(), TestPrecisionScore(), TestF1Score(), TestRecallScore()]
+
+suite_classification = TestSuite(tests=tests)
+
+suite_classification.run(reference_data=None, current_data=test_data, column_mapping=bcancer_column_mapping)
+suite_classification
+suite_classification_with_reference = TestSuite(tests=tests)
+
+suite_classification_with_reference.run(reference_data=train_data, current_data=test_data, column_mapping=bcancer_column_mapping)
+suite_classification_with_reference
+bcancer_column_mapping_probas = ColumnMapping()
+
+bcancer_column_mapping_probas.target = target
+bcancer_column_mapping_probas.prediction = bcancer.target_names.tolist()
+bcancer_column_mapping_probas.numerical_features = numerical_features
+
+suite_classification_probas = TestSuite(tests=tests + [TestRocAuc(), TestLogLoss()])
+
+suite_classification_probas.run(reference_data=train_data, current_data=test_data, column_mapping=bcancer_column_mapping_probas)
+suite_classification_probas

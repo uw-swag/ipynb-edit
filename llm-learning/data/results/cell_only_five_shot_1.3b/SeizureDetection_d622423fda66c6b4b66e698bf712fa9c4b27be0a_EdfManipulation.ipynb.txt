@@ -1,0 +1,18 @@
+
+    The function `read_and_store_data` is designed to read and store data from an EDF (Electroencephalogram) file. The EDF file contains the data of a patient's electrophysiological recording. The function reads the EDF file, extracts the data for the specified channels, and stores it in a pandas DataFrame.
+
+    The function `readEdfFile` is a helper function that reads an EDF file and returns a numpy array containing the data for the specified channels. It uses the `EdfReader` class from the `pyedflib` library to read the EDF file and extract the data for the specified channels.
+
+    The function `get_seizure_period` is a helper function that determines the start and duration of a seizure in the EDF file. It uses the `EdfReader` class to read the EDF file and extract the start and duration of the seizure.
+
+    The function `read_and_store_data` is the main function that reads and stores the data from the EDF files. It reads the EDF files for each patient, extracts the data for the specified channels, and stores it in a pandas DataFrame. It uses the `EdfReader` class to read the EDF files and the `tqdm` function to display a progress bar.
+
+    The function `read_and_store_data` returns a pandas DataFrame containing the data for the specified channels. The DataFrame is sorted by patient and by time.
+
+    The function `read_and_store_data` uses the `getcwd` and `chdir` functions to change the current working directory and to navigate to the patient directory.
+
+    The function `read_and_store_data` uses the `listdir` function to get a list of the patient directories, the `path.isdir` function to check if a directory is a patient directory, and the `listdir` function to get a list of the EDF and seizure files.
+
+    The function `read_and_store_data` uses the `isfile` function to check if a file is an EDF file or a seizure file.
+
+    The function `read_and_store_data` uses the `EdfReader` class to read the EDF

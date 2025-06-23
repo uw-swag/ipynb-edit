@@ -1,0 +1,28 @@
+```python
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+train_len = round(0.67*len(iris_df))
+df_train = iris_df[:train_len]
+df_test = iris_df[train_len:]
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import integrity_check_suite
+<\Cell_2>
+<Cell_3>
+# Create a progress bar
+import tqdm
+
+# Use tqdm.notebook.tqdm(iterable) to create a progress bar
+integrity_check_suite().run(
+    train_dataset=tqdm.notebook.tqdm(df_train), 
+    test_dataset=tqdm.notebook.tqdm(df_test), 
+    check_datasets_policy='both'
+)
+<\Cell_3>
+```
+
+In the code above, we're using the `tqdm` library to create a progress bar. The `tqdm.notebook.tqdm(iterable)` function is used to create a progress bar for an iterable. This allows us to monitor the progress of the data processing tasks.

@@ -1,0 +1,81 @@
+<Cell_0>
+from pyspark.sql import SparkSession
+from pyspark.sql import functions as sf
+
+from evidently.spark.engine import SparkEngine
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metrics import ColumnDriftMetric, DataDriftTable, DatasetDriftMetric
+from evidently.metric_preset import DataDriftPreset
+
+from evidently.test_suite import TestSuite
+from evidently.tests import TestColumnDrift, TestShareOfDriftedColumns, TestNumberOfDriftedColumns
+from evidently.test_preset import DataDriftTestPreset
+<\Cell_0>
+<Cell_1>
+spark = SparkSession.builder.getOrCreate()
+<\Cell_1>
+<Cell_2>
+def spark_data_generation(n_rows=3000, n_columns=5):
+    return spark.range(n_rows).select(*[sf.rand().alias(str(i)) for i in range(n_columns)])
+<\Cell_2>
+<Cell_3>
+reference = spark_data_generation()
+current = spark_data_generation()
+<\Cell_3>
+<Cell_4>
+column_mapping = ColumnMapping()
+
+spark_drift_report = Report(metrics=[
+    DatasetDriftMetric(),
+    DataDriftTable()
+])
+
+spark_drift_report.run(reference_data=reference, current_data=current, column_mapping=column_mapping,
+                 engine=SparkEngine)
+<\Cell_4>
+<Cell_5>
+spark_drift_report.show()
+<\Cell_5>
+<Cell_6>
+column_mapping = ColumnMapping()
+
+spark_drift_preset_report = Report(metrics=[
+    DataDriftPreset()
+])
+
+spark_drift_preset_report.run(reference_data=reference, current_data=current, column_mapping=column_mapping,
+                 engine=SparkEngine)
+<\Cell_6>
+<Cell_7>
+spark_drift_preset_report.show()
+<\Cell_7>
+<Cell_8>
+column_mapping = ColumnMapping()
+
+drift_tests = TestSuite(tests=[
+    TestNumberOfDriftedColumns(),
+    TestShareOfDriftedColumns(),
+])
+
+drift_tests.run(reference_data=reference, current_data=current, column_mapping=column_mapping,
+                 engine=SparkEngine)
+<\Cell_8>
+<Cell_9>
+drift_tests.show()
+<\Cell_9>
+<Cell_10>
+column_mapping = ColumnMapping()
+
+drift_test_preset = TestSuite(tests=[
+    DataDriftTestPreset()
+])
+
+drift_test_preset.run(reference_data=reference, current_data=current, column_mapping=column_mapping,
+                 engine=SparkEngine)
+<\Cell_10>
+<Cell_11>
+drift_test_preset.show()
+<\Cell_11>

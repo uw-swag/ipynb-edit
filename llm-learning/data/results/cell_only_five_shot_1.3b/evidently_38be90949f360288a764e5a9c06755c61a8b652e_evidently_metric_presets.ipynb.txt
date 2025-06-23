@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import DataQuality
+from evidently.metric_preset import CatTargetDrift
+from evidently.metric_preset import NumTargetDrift
+from evidently.metric_preset import RegressionPerformance
+from evidently.metric_preset import ClassificationPerformance
+#Dataset for multiclass classifcation
+iris_data = datasets.load_iris(as_frame='auto')
+iris = iris_data.frame
+
+iris_ref = iris.sample(n=75, replace=False)
+iris_cur = iris.sample(n=75, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=3)
+model.fit(iris_ref[iris_data.feature_names], iris_ref.target)
+
+iris_ref['prediction'] = model.predict(iris_ref[iris_data.feature_names])
+iris_cur['prediction'] = model.predict(iris_cur[iris_data.feature_names])
+data_quality_report = Report(metrics=[
+    DataQuality(metric_preset=DataQuality.default_preset),
+])
+
+data_quality_report.run(reference_data=iris_ref, current_data=iris_cur)
+data_quality_report
+regression_performance_report = Report(metrics=[
+    RegressionPerformance(metric_preset=RegressionPerformance.default_preset),
+])
+
+regression_performance_report.run(reference_data=iris_ref.sort_index(), current_data=iris_cur.sort_index())
+regression_performance_report
+classification_performance_report = Report(metrics=[
+    ClassificationPerformance(metric_preset=ClassificationPerformance.default_preset),
+])
+
+classification_performance_report.run(

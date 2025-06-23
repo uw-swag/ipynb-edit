@@ -1,0 +1,47 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.ml.feature import StopWordsRemover
+    from pyspark.ml.feature import CountVectorizer
+    from pyspark.ml.feature import IDF
+    from pyspark.ml.classification import LogisticRegressionModel
+    from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("SST Annotated").getOrCreate()
+
+    # Load the SST dataset
+    sst = spark.read.text("sst.txt")
+
+    # Remove stop words
+    remover = StopWordsRemover(inputCol="text", outputCol="filtered_text")
+    sst = remover.transform(sst)
+
+    # Convert text to vector
+    vectorizer = CountVectorizer(inputCol="filtered_text", outputCol="features")
+    sst = vectorizer.transform(sst)
+
+    # Compute IDF
+    idf = IDF(inputCol="features", outputCol="idf_features")
+    sst = idf.fit(sst)
+
+    # Convert label to int
+    sst = sst.select("idf_features", sst["label"].cast("int"))
+
+    # Split the data into training and test sets
+    (trainingData, testData) = sst.randomSplit([0.7, 0.3])
+
+    # Train a Logistic Regression model
+    lr = LogisticRegression(featuresCol="idf_features", labelCol="label")
+    lrModel = lr.fit(trainingData)
+
+    # Make predictions on the test data
+    predictions = lrModel.transform(testData)
+
+    # Evaluate model
+    evaluator = MulticlassClassificationEvaluator(
+        labelCol="label", predictionCol="prediction", metricName="accuracy")
+    accuracy = evaluator.evaluate(predictions)
+    print("Model accuracy = " + str(accuracy))
+
+    # Shutdown the Spark session
+   

@@ -1,0 +1,52 @@
+import pandas as pd
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestFeatureValueMin, TestFeatureValueMax, TestFeatureValueMean, \
+TestFeatureValueMedian, TestFeatureValueStd,\
+TestMeanInNSigmas, TestValueRange, TestNumberOfOutRangeValues, TestShareOfOutRangeValues, TestValueList, \
+TestNumberOfOutListValues, TestShareOfOutListValues, TestNumberOfUniqueValues, TestMostCommonValueShare, \
+TestUniqueValuesShare
+import pandas as pd
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestShareOfDriftedFeatures, TestFeatureValueDrift, TestNumberOfDriftedFeatures
+from evidently import ColumnMapping
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+from evidently.test_preset import NoTargetPerformance, DataQuality, DataStability, DataDrift
+
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+ref = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+curr = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+curr['target'] = curr['education-num']
+curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+ref['target'] = ref['education-num']
+ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+curr.iloc[:2000, 3:5] = np.nan
+curr.iloc[:2000, 12] = np.nan
+
+suite = TestSuite(tests=[
+    TestShareOfDriftedFeatures(),
+    TestNumberOfDriftedFeatures(),
+    TestFeatureValueDrift(column_name='education-num'),
+    TestFeatureValueDrift(column_name='education')
+])
+
+suite.run(reference_data=ref,
+          current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+suite
+import pandas as pd
+import numpy as np
+
+from evidently.test_suite import TestSuite
+
+from evidently.tests import TestValueMAE, TestValueRMSE, TestValueMeanError, TestValueMAPE, \
+TestValueAbsMaxError, TestValueR2Score

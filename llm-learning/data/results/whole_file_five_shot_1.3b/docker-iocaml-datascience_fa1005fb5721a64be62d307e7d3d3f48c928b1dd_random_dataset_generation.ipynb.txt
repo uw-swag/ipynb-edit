@@ -1,0 +1,44 @@
+```ocaml
+    (*
+    Commit Message: ":pencil2: add a slap example"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#require "gsl";;
+#use "archimedes_iocaml.ml";;
+<\Cell_0>
+<Cell_1>
+let rng = Gsl_rng.make Gsl_rng.MT19937 ;; (* Mersenne Twister *)
+
+(* Generate positive examples *)
+let positive_xys =
+    Array.init 100 (fun _ -> Gsl_randist.bivariate_gaussian rng ~sigma_x:0.4 ~sigma_y:0.9 ~rho:0.4)
+    |> Array.map (fun (x, y) -> (x +. 0.5, y -. 0.1))
+
+(* Generate negative examples *)
+let negative_xys =
+    Array.init 100 (fun _ -> Gsl_randist.bivariate_gaussian rng ~sigma_x:0.6 ~sigma_y:1.2 ~rho:0.3)
+    |> Array.map (fun (x, y) -> (x -. 0.8, y +. 0.4))
+<\Cell_1>
+<Cell_2>
+let vp = A.init ["iocaml"] in
+A.Axes.box vp ;
+
+A.set_color vp A.Color.red ;
+A.Array.xy_pairs vp positive_xys ;
+
+A.set_color vp A.Color.blue ;
+A.Array.xy_pairs vp negative_xys ;
+
+A.close vp
+<\Cell_2>
+<Cell_3>
+
+<\Cell_3>
+
+    '''
+    )
+    ### Response:
+    The code you provided is a simple example of how to use the GSL library in OCaml to generate random data for visualization purposes. The data is generated as positive and negative examples, and then plotted using the Archimedes library.
+
+    However, the provided code is not a complete example. It only generates the positive and

@@ -1,0 +1,22 @@
+
+    The code you've provided is a set of examples for using the evidently library to analyze and visualize data drift in a dataset. Here's a brief explanation of what each section of code does:
+
+    1. `import pandas as pd`: This line imports the pandas library, which is a data manipulation library in Python.
+
+    2. `from sklearn import datasets`: This line imports the datasets module from the sklearn library, which contains various datasets that can be used for machine learning.
+
+    3. `from evidently.dashboard import Dashboard`: This line imports the Dashboard class from the evidently library, which is a tool for visualizing and analyzing data drift.
+
+    4. `from evidently.pipeline.column_mapping import ColumnMapping`: This line imports the ColumnMapping class from the evidently library, which is used to map columns in a data frame to the columns in a model.
+
+    5. `boston = datasets.load_boston()`: This line loads the Boston dataset from the sklearn datasets module.
+
+    6. `boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)`: This line converts the data in the Boston dataset into a pandas DataFrame, with the feature names as the column names.
+
+    7. `boston_data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])`: This line creates a new Dashboard object, and adds a DataDriftTab to it.
+
+    8. `boston_data_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:])`: This line calculates the data drift for the first 200 rows of the DataFrame.
+
+    9. `boston_data_drift_dashboard.show(mode="inline")`: This line shows the Dashboard in an inline mode, which means it will be displayed in the notebook.
+
+    10. `boston_data_drift_dashboard.save('reports/boston_data_drift_no_mapping.html')`: This line saves the Dashboard to a file named 'reports/boston_data

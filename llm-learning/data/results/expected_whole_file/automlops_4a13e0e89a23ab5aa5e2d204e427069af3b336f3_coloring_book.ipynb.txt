@@ -1,0 +1,331 @@
+<Cell_0>
+from utils import AutoMLOps
+<\Cell_0>
+<Cell_1>
+%%define_imports
+import json
+import pandas as pd
+from google.cloud import aiplatform
+from google.cloud import aiplatform_v1
+from google.cloud import bigquery
+from google.cloud import storage
+import datetime
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import roc_curve
+from sklearn.model_selection import train_test_split
+from joblib import dump
+import pickle
+import os
+<\Cell_1>
+<Cell_2>
+%%define_component
+AutoMLOps.makeComponent(
+    name="create_dataset",
+    description="Loads data from BQ and writes a dataframe as a csv to GCS.", # optional
+    params=[
+        {"name": "bq_table", "type": str}, # descriptions are optional
+        {"name": "data_path", "type": str, "description": "GS location where the training data is written."},
+        {"name": "project_id", "type": str, "description": "Project_id."}
+    ]
+)
+# Component code goes below:
+bq_client = bigquery.Client(project=project_id)
+
+def get_query(bq_input_table: str) -> str:
+    """Generates BQ Query to read data.
+
+    Args:
+    bq_input_table: The full name of the bq input table to be read into
+    the dataframe (e.g. <project>.<dataset>.<table>)
+    Returns: A BQ query string.
+    """
+    return f"""
+    SELECT *
+    FROM `{bq_input_table}`
+    """
+
+def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+    """Loads data from bq into a Pandas Dataframe for EDA.
+    Args:
+    query: BQ Query to generate data.
+    client: BQ Client used to execute query.
+    Returns:
+    pd.DataFrame: A dataframe with the requested data.
+    """
+    df = client.query(query).to_dataframe()
+    return df
+
+dataframe = load_bq_data(get_query(bq_table), bq_client)
+dataframe.to_csv(data_path)
+<\Cell_2>
+<Cell_3>
+%%define_component
+AutoMLOps.makeComponent(
+    name="train_model",
+    description="Trains a decision tree on the training data.",
+    params=[
+        {"name": "model_directory", "type": str, "description": "GS location of saved model."},
+        {"name": "data_path", "type": str, "description": "GS location where the training data."}
+    ]
+)
+# Component code goes below:
+def save_model(model, model_directory):
+    """Saves a model to uri."""
+    filename = f'model.pkl'
+    with open(filename, 'wb') as f:
+        pickle.dump(model, f)
+    
+    bucket_name = model_directory.split('/')[2]
+    prefix='/'.join(model_directory.split('/')[3:])
+    storage_client = storage.Client()
+    bucket = storage_client.get_bucket(bucket_name)
+    blob = bucket.blob(os.path.join(prefix, filename))
+    blob.upload_from_filename(filename)
+
+df = pd.read_csv(data_path)
+labels = df.pop("Class").tolist()
+data = df.values.tolist()
+x_train, x_test, y_train, y_test = train_test_split(data, labels)
+skmodel = DecisionTreeClassifier()
+skmodel.fit(x_train,y_train)
+score = skmodel.score(x_test,y_test)
+print('accuracy is:',score)
+
+output_uri = os.path.join(model_directory, f'model.pkl')
+save_model(skmodel, model_directory)
+<\Cell_3>
+<Cell_4>
+%%define_component
+AutoMLOps.makeComponent(
+    name="deploy_model",
+    description="Trains a decision tree on the training data.",
+    params=[
+        {"name": "model_directory", "type": str, "description": "GS location of saved model."},
+        {"name": "project_id", "type": str, "description": "Project_id."},
+        {"name": "region", "type": str, "description": "Region."}
+    ]
+)
+# Component code goes below:
+aiplatform.init(project=project_id, location=region)
+deployed_model = aiplatform.Model.upload(
+    display_name="beans-model-pipeline",
+    artifact_uri = model_directory,
+    serving_container_image_uri="us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.0-24:latest"
+)
+endpoint = deployed_model.deploy(machine_type="n1-standard-4")
+<\Cell_4>
+<Cell_5>
+AutoMLOps.makePipeline(
+    name="training-pipeline",
+    description="description", # optional
+    params=[
+        {"name": "bq_table", "type": str}, # descriptions are optional
+        {"name": "model_directory", "type": str, "description": "Description."},
+        {"name": "data_path", "type": str, "description": "Description."},
+        {"name": "project_id", "type": str, "description": "Description."},
+        {"name": "region", "type": str, "description": "Description."}
+    ],
+    pipeline=[{
+        "component_name": "create_dataset", "param_mapping": [
+            ("bq_table", "bq_table"), # (component_param, pipeline_param)
+            ("data_path", "data_path"),
+            ("project_id", "project_id")
+        ]
+    },
+    {
+        "component_name": "train_model", "param_mapping": [
+            ("model_directory", "model_directory"),
+            ("data_path", "data_path")
+        ]
+    },
+    {
+        "component_name": "deploy_model", "param_mapping": [
+            ("model_directory", "model_directory"),
+            ("project_id", "project_id"),
+            ("region", "region")
+        ]
+    }]
+)
+<\Cell_5>
+<Cell_6>
+pipeline_params = {
+    "bq_table": "sandbox-srastatter.mlops_boxer_test.dry-beans",
+    "model_directory": f"gs://mlops-boxer-test/trained_models/{datetime.datetime.now()}",
+    "data_path": "gs://mlops-boxer-test/data",
+    "project_id": "sandbox-srastatter",
+    "region": "us-central1"
+}
+<\Cell_6>
+<Cell_7>
+AutoMLOps.go(project_id='sandbox-srastatter', pipeline_params=pipeline_params, use_kfp_spec=False, run_local=True)
+<\Cell_7>
+<Cell_8>
+import json
+import pandas as pd
+from kfp.v2 import compiler, dsl
+from kfp.v2.dsl import pipeline, component, Artifact, Dataset, Input, Metrics, Model, Output, InputPath, OutputPath
+from google.cloud import aiplatform
+from google.cloud import aiplatform_v1
+import datetime
+
+from utils import AutoMLOps
+<\Cell_8>
+<Cell_9>
+@component(
+    packages_to_install=[
+        "google-cloud-bigquery", 
+        "pandas",
+        "pyarrow",
+        "db_dtypes"
+    ],
+    base_image="python:3.9",
+    output_component_file=f"{AutoMLOps.OUTPUT_DIR}/create_dataset.yaml"
+)
+def create_dataset(
+    bq_table: str,
+    output_data_path: OutputPath("Dataset"),
+    project: str
+):
+    from google.cloud import bigquery
+    import pandas as pd
+    bq_client = bigquery.Client(project=project)
+
+
+    def get_query(bq_input_table: str) -> str:
+        """Generates BQ Query to read data.
+
+        Args:
+        bq_input_table: The full name of the bq input table to be read into
+        the dataframe (e.g. <project>.<dataset>.<table>)
+        Returns: A BQ query string.
+        """
+        return f"""
+        SELECT *
+        FROM `{bq_input_table}`
+        """
+
+    def load_bq_data(query: str, client: bigquery.Client) -> pd.DataFrame:
+        """Loads data from bq into a Pandas Dataframe for EDA.
+        Args:
+        query: BQ Query to generate data.
+        client: BQ Client used to execute query.
+        Returns:
+        pd.DataFrame: A dataframe with the requested data.
+        """
+        df = client.query(query).to_dataframe()
+        return df
+
+    dataframe = load_bq_data(get_query(bq_table), bq_client)
+    dataframe.to_csv(output_data_path)
+<\Cell_9>
+<Cell_10>
+@component(
+    packages_to_install=[
+        "scikit-learn",
+        "pandas",
+        "joblib",
+        "tensorflow"
+    ],
+    base_image="python:3.9",
+    output_component_file=f"{AutoMLOps.OUTPUT_DIR}/train_model.yaml",
+)
+def train_model(
+    output_model_directory: str,
+    dataset: Input[Dataset],
+    metrics: Output[Metrics],
+    model: Output[Model]
+):
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import roc_curve
+    from sklearn.model_selection import train_test_split
+    from joblib import dump
+    import pandas as pd
+    import tensorflow as tf
+    import pickle
+    import os
+    
+    def save_model(model, uri):
+        """Saves a model to uri."""
+        with tf.io.gfile.GFile(uri, 'w') as f:
+            pickle.dump(model, f)
+    
+    df = pd.read_csv(dataset.path)
+    labels = df.pop("Class").tolist()
+    data = df.values.tolist()
+    x_train, x_test, y_train, y_test = train_test_split(data, labels)
+    skmodel = DecisionTreeClassifier()
+    skmodel.fit(x_train,y_train)
+    score = skmodel.score(x_test,y_test)
+    print('accuracy is:',score)
+    metrics.log_metric("accuracy",(score * 100.0))
+    metrics.log_metric("framework", "Scikit Learn")
+    metrics.log_metric("dataset_size", len(df))
+
+    output_uri = os.path.join(output_model_directory, f'model.pkl')
+    save_model(skmodel, output_uri)
+    model.path = output_model_directory
+<\Cell_10>
+<Cell_11>
+@component(
+    packages_to_install=[
+        "google-cloud-aiplatform"
+    ],
+    base_image="python:3.9",
+    output_component_file=f"{AutoMLOps.OUTPUT_DIR}/deploy_model.yaml",
+)
+def deploy_model(
+    model: Input[Model],
+    project: str,
+    region: str,
+    vertex_endpoint: Output[Artifact],
+    vertex_model: Output[Model]
+):
+    from google.cloud import aiplatform
+    aiplatform.init(project=project, location=region)
+    deployed_model = aiplatform.Model.upload(
+        display_name="beans-model-pipeline",
+        artifact_uri = model.uri,
+        serving_container_image_uri="us-docker.pkg.dev/vertex-ai/prediction/sklearn-cpu.0-24:latest"
+    )
+    endpoint = deployed_model.deploy(machine_type="n1-standard-4")
+    vertex_endpoint.uri = endpoint.resource_name
+    vertex_model.uri = deployed_model.resource_name
+<\Cell_11>
+<Cell_12>
+%%define_kfp_pipeline
+
+@dsl.pipeline(name='training-pipeline')
+def pipeline(bq_table: str,
+             output_model_directory: str,
+             project: str,
+             region: str,
+            ):
+
+    dataset_task = create_dataset(
+        bq_table=bq_table, 
+        project=project)
+
+    model_task = train_model(
+        output_model_directory=output_model_directory,
+        dataset=dataset_task.output)
+
+    deploy_task = deploy_model(
+        model=model_task.outputs["model"],
+        project=project,
+        region=region)
+
+<\Cell_12>
+<Cell_13>
+pipeline_params = {
+    "bq_table": "sandbox-srastatter.mlops_boxer_test.dry-beans",
+    "output_model_directory": f"gs://mlops-boxer-test/trained_models/{datetime.datetime.now()}",
+    "project": "sandbox-srastatter",
+    "region": "us-central1"
+}
+<\Cell_13>
+<Cell_14>
+AutoMLOps.go(project_id='sandbox-srastatter', pipeline_params=pipeline_params, use_kfp_spec=True, run_local=False, schedule='0 */12 * * *')
+<\Cell_14>
+<Cell_15>
+
+<\Cell_15>

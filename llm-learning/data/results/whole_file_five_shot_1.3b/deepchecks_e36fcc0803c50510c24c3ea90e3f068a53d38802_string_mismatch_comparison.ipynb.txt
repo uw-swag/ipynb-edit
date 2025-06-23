@@ -1,0 +1,35 @@
+```python
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    comparison = StringMismatchComparison()
+    result = comparison.run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+
+    print(result)
+    ```
+
+    The `StringMismatchComparison` check compares the values in two columns and highlights the rows where the values are different. The `run` method of the `StringMismatchComparison` class returns a `DeepChecksResult` object, which contains the comparison results.
+
+    The `DeepChecksResult` object can be printed to display the results.
+
+    The `StringMismatchComparison` check is not included in the default set of checks, so you need to add it to your suite. You can do this by calling the `add_check` method on your suite.
+
+    Here's an example of how to add the `StringMismatchComparison` check to your suite:
+
+    ```python
+    from deepchecks.base import Suite
+
+    suite = Suite()
+    suite.add_check(StringMismatchComparison())
+    ```
+
+    After adding the check to your suite, you can run it on your data using the `run` method:
+
+    ```python
+    result = suite.run(data)
+    ```
+
+    The `result` object will contain the comparison results.

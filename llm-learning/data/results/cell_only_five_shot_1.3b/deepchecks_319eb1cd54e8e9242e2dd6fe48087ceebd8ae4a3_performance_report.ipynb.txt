@@ -1,0 +1,9 @@
+```
+    from sklearn.datasets import load_diabetes
+
+    diabetes = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    train = Dataset(diabetes, label='target')
+    clf = AdaBoostRegressor(random_state=0)
+    clf.fit(train.features_columns(), train.label_col())
+    ```

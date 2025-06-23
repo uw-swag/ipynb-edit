@@ -1,0 +1,32 @@
+```
+    import pandas as pd
+
+    from sklearn import datasets
+
+    from evidently import ColumnMapping
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs import DataDriftTab, CatTargetDriftTab
+    from evidently.options import DataDriftOptions
+
+    from evidently.model_profile import Profile
+    from evidently.model_profile.sections import DataDriftProfileSection, CatTargetDriftProfileSection 
+    import warnings
+    warnings.filterwarnings('ignore')
+    warnings.simplefilter('ignore')
+    from sklearn.datasets import fetch_openml
+    data = fetch_openml(name='adult', version=2, as_frame='auto')
+    df = data.frame
+    df.head()
+    numerical_features = ['age', 'fnlwgt', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week']
+    categorical_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'sex', 'native-country', 'class']
+    column_mapping = ColumnMapping(numerical_features=numerical_features, categorical_features=categorical_features)
+    stat_test_option = DataDriftOptions(feature_stattest_func='psi')
+    data_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[stat_test_option])
+    data_drift_dashboard.calculate(df[:30000], df[30000:], column_mapping=column_mapping)
+    data_drift_dashboard.show()
+    feature_stattest_func = {x: 'wasserstein' for x in numerical_features}
+    for col in ['sex', 'class']:
+        feature_stattest_func[col] = 'z'
+    for col in ['workclass', 'education', 'marital-status']:
+        feature_stattest_func[col] = 'kl_div'
+    for col in ['occupation', 'relationship', 'race',  'native-country']

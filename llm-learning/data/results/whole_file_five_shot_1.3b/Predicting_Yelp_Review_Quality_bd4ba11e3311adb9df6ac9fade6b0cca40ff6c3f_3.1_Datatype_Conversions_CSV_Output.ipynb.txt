@@ -1,0 +1,42 @@
+```python
+    import nltk
+    from nltk.corpus import wordnet
+    from nltk.stem import WordNetLemmatizer
+    from gensim.models import Word2Vec
+    from gensim.models.phrases import Phrases
+    from nltk.corpus import stopwords
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import LatentDirichletAllocation
+    from sklearn.pipeline import Pipeline
+    from sklearn.metrics import adjusted_rand_score
+    from sklearn.preprocessing import MaxAbsScaler
+    from sklearn.model_selection import GridSearchCV
+    import re
+    import pandas as pd
+    import numpy as np
+
+    # Loading the data
+    df = pd.read_csv('your_data.csv')
+
+    # Preprocessing
+    stop_words = set(stopwords.words('english'))
+    lemmatizer = WordNetLemmatizer()
+
+    def clean_text(text):
+        text = re.sub(r'[^\w\s]', '', text)
+        text = text.lower()
+        text = ' '.join(lemmatizer.lemmatize(word) for word in text.split())
+        text = ' '.join(word for word in text.split() if word not in stop_words)
+        return text
+
+    df['processed_text'] = df['your_text_column'].apply(clean_text)
+
+    # GloVe and USE
+    glove_path = 'glove.6B.100d.txt'
+    glove = glove.KeyedVectors.load_word2vec_format(glove_path, binary=False)
+
+    # Use glove to create word2vec model
+    w2v_model = Word2Vec(df['processed_text'], size=100, window=5, min_count=1, workers=4)
+
+    # Use USE to create TF-IDF model
+    tfidf_vectorizer = TfidfVectorizer(max_features=20

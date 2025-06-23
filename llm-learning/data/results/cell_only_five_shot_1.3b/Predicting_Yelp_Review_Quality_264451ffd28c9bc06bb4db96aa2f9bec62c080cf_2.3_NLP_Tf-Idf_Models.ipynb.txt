@@ -1,0 +1,48 @@
+
+    ## Feature Engineering
+
+    ### 1. Bag of Words
+
+    # Convert text into a matrix of token counts
+    from sklearn.feature_extraction.text import CountVectorizer
+    vectorizer = CountVectorizer()
+    X = vectorizer.fit_transform(data['text'])
+
+    ### 2. TF-IDF
+
+    # Convert text into a matrix of token counts and then normalize the count data by the number of documents per term
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(data['text'])
+
+    ### 3. Word Embeddings
+
+    # Use pre-trained word embeddings like GloVe or Word2Vec
+    from gensim.models import KeyedVectors
+    model = KeyedVectors.load_word2vec_format('glove.6B.100d.txt.w2v', binary=False)
+    X = model[data['text']]
+
+    ### 4. N-grams
+
+    # Create n-grams for each text
+    from sklearn.feature_extraction.text import CountVectorizer
+    vectorizer = CountVectorizer(ngram_range=(1, 2))
+    X = vectorizer.fit_transform(data['text'])
+
+    ### 5. Stemming
+
+    # Reduce words to their root form
+    from nltk.stem import PorterStemmer
+    stemmer = PorterStemmer()
+    X = data['text'].apply(lambda x: ' '.join([stemmer.stem(word) for word in x.split()]))
+
+    ### 6. Lemmatization
+
+    # Reduce words to their base or root form
+    from nltk.stem import WordNetLemmatizer
+    lemmatizer = WordNetLemmatizer()
+    X = data['text'].apply(lambda x: ' '.join([lemmatizer.lemmatize(word) for word in x.split()]))
+
+    ### 7. Stopword Removal
+
+    #

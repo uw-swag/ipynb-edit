@@ -1,0 +1,36 @@
+```
+    # Update dataset properties (#249)
+
+    np.random.seed(42)
+
+    iris = load_iris(as_frame=True)
+    x = iris.data
+    y = iris.target
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.33, random_state=42)
+
+    # Update the dataset
+    train_ds = Dataset(pd.concat([x_train, y_train], axis=1),
+                       features=iris.feature_names,
+                       label='target')
+    val_ds = Dataset(pd.concat([x_test, y_test], axis=1),
+                     features=iris.feature_names,
+                     label='target')
+
+    # Update the classifier
+    clf = AdaBoostClassifier()
+    _ = clf.fit(x_train, y_train)
+    ```
+
+    ## Explanation
+    The code above is an example of updating the dataset and the classifier in the context of the Iris dataset.
+
+    The `Dataset` class is a custom class that is used to represent the dataset. The `features` attribute is a list of the feature names, and the `label` attribute is the name of the label column.
+
+    The `AdaBoostClassifier` is a class from the sklearn library that implements the AdaBoost algorithm.
+
+    The `np.random.seed(42)` line is used to set the seed for the random number generator. This ensures that the results of the code are reproducible.
+
+    The `load_iris(as_frame=True)` function is used to load the Iris dataset. The `as_frame=True` argument is used to convert the dataset to a pandas DataFrame.
+
+    The `train_test_split` function is used to split the dataset into a training set and a test set. The `test_size=0.33` argument is used to set the proportion of the dataset to include in the test split, and the `random_state=42` argument is used to set the seed for the random number

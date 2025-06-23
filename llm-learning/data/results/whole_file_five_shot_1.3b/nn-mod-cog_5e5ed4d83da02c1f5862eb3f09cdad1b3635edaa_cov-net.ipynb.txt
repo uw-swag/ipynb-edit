@@ -1,0 +1,53 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "begin cov-net; neocognitron"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import os
+    from os.path import join
+    import sys
+    import numpy as np
+    import pandas as pd
+    from matplotlib import pyplot as plt
+
+    import tensorflow as tf
+
+    %matplotlib notebook
+    #%matplotlib inline
+
+    models_data_folder = "/Users/amartinelli/Documents/models/"
+    <\Cell_0>
+    <Cell_1>
+    # dummy variables
+    #v1 = tf.get_variable("v1", shape=[3], initializer=tf.zeros_initializer)
+    #v2 = tf.get_variablea("v2", shape=[5], initializer=tf.zeros_initializer)
+    v1 = tf.Variable(tf.constant(0), name='v1')
+    v2 = tf.Variable(tf.constant(5), name='v2')
+
+    # dummy operations
+    inc_v1 = v1.assign(v1+1)
+    dec_v2 = v2.assign(v2-1)
+    <\Cell_1>
+    <Cell_2>
+    # Save variables
+
+    # def init op and saver
+    init_op = tf.global_variables_initializer()
+    saver = tf.train.Saver()
+
+    # run some operations and save sessions
+    with tf.Session() as sess:
+        sess.run(init_op)
+        inc_v1.op.run()
+        dec_v2.op.run()
+    
+        save_path = saver.save(sess,
+                    join(models_data_folder, 'tmp', "model.ckpt"))
+        print("Model saved in {}".format(save_path))
+    <\Cell_2>
+    <Cell_3>
+    # test behavior in new session (need to rerun initializer)
+    with tf.Session() as sess:
+        sess.

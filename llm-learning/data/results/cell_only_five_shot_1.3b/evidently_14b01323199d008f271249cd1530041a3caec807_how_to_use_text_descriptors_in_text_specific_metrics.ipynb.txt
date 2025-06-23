@@ -1,0 +1,37 @@
+```python
+    from sklearn.metrics import roc_curve, auc
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.inspection import permutation_importance
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    import pandas as pd
+    import numpy as np
+    import random
+
+    # Load your data
+    reviews = pd.read_csv('reviews.csv')
+
+    # Sample data
+    reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) #.dropna()
+    reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) #.dropna()
+
+    # Create a new variable for each variable having missing value with VariableName_NA 
+    # and flag missing value with 1 and other with 0
+
+    for var in ['Text', 'UserID']:
+        if reviews[var].isnull().any():
+            reviews[var+'_NA']=reviews[var].isnull()*1 
+
+    # Impute numerical missing values with mean
+    reviews[['Text', 'UserID']] = reviews[['Text', 'UserID']].fillna(reviews[['Text', 'UserID']].mean(),inplace=True)
+
+    # Impute categorical missing values with -9999
+    reviews[['Text', 'UserID']] = reviews[['Text', 'UserID']].fillna(value = -9999)
+
+    # Create label encoders for categorical features
+    for var in ['Text', 'UserID']:
+        number = LabelEncoder()
+        reviews[var] = number.fit_transform(reviews[var].astype('str'))
+
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(reviews[['Text', 'UserID']], reviews['Rating'], test

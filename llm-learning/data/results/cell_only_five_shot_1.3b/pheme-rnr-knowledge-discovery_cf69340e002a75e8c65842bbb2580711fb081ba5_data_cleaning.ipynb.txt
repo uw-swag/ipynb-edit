@@ -1,0 +1,15 @@
+```python
+    # Check if the column has only one unique value
+    for col in gw.columns:
+        if len(gw[col].unique()) == 1:
+            # Drop the column
+            gw.drop(col, inplace=True, axis = 1)
+
+    # Aggregate tweets by thread
+    gw_thrds = agg_tweets_by_thread(gw)
+    gw_thrds.columns
+    ```
+
+    The code above checks if a column in the DataFrame `gw` has only one unique value. If it does, it drops that column. The `agg_tweets_by_thread` function is a placeholder for the actual function that aggregates tweets by thread.
+
+    The `gw_thrds.columns` line is used to print the columns of the resulting DataFrame.

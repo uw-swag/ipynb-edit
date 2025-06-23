@@ -1,0 +1,45 @@
+```python
+    int ratio = 2;
+
+    for(int i=0; i < convArch.length; i++){
+        convArch[i][1] = convArch[i][1] / ratio;
+    }
+
+    Model model = Model.newInstance("vgg-tiny");
+    SequentialBlock newBlock = VGG(convArch);
+    model.setBlock(newBlock);
+    Loss loss = Loss.softmaxCrossEntropyLoss();
+
+    Tracker lrt = Tracker.fixed(lr);
+    Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+
+    DefaultTrainingConfig config = new DefaultTrainingConfig(loss).optOptimizer(sgd) // Optimizer (loss function)
+                .optDevices(Device.getDevices(1)) // single GPU
+                .addEvaluator(new Accuracy()) // Model Accuracy
+                .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+
+    trainer = model.newTrainer(config);
+    trainer.initialize(inputShape);
+    int batchSize = 128;
+    int numEpochs = 10;
+    double[] trainLoss;
+    double[] testAccuracy;
+    double[] epochCount;
+    double[] trainAccuracy;
+
+    epochCount = new double[numEpochs];
+
+    for (int i = 0; i < epochCount.length; i++) {
+        epochCount[i] = i+1;
+    }
+
+    FashionMnist trainIter = FashionMnist.builder()
+                        .optPipeline(new Pipeline().add(new Resize(224)).add(new ToTensor()))
+                        .optUsage(Dataset.Usage.TRAIN)
+                        .setSampling(batchSize, true)
+                        .build();
+
+    FashionMnist testIter = FashionMnist.builder()
+                        .optPipeline(new Pipeline().add(new Resize(224)).add(new ToTensor()))
+                        .optUsage(Dataset.Usage.TEST)
+                        .setSampling(

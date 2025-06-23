@@ -1,0 +1,23 @@
+```python
+    import mlchecks.checks.integrity.new_label as new_label
+    import mlchecks.base as mlchecks_base
+    import pandas as pd
+
+    # Create test and validation datasets
+    test_data = {"col1": ["somebody", "once", "told", "me"] * 10}
+    val_data = {"col1": ["the","world","is", "gonna", "role", "me"] * 10}
+    test = mlchecks_base.Dataset(pd.DataFrame(data=test_data), label="col1")
+    val = mlchecks_base.Dataset(pd.DataFrame(data=val_data), label="col1")
+
+    # Check for new label
+    new_label.new_label_train_validation(test, val)
+
+    # Create test and validation datasets with new label
+    test_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": ['a','b','b','q']*10}
+    val_data = {"col1": ["a","b","d"] * 10, "col2": ['a', '2', '1']*10}
+    test = mlchecks_base.Dataset(pd.DataFrame(data=test_data), label="col2")
+    val = mlchecks_base.Dataset(pd.DataFrame(data=val_data), label="col2")
+
+    # Check for new label
+    new_label.new_label_train_validation(test, val)
+    ```

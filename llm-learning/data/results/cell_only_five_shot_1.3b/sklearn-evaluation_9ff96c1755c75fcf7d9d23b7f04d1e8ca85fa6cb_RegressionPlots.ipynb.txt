@@ -1,0 +1,53 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    class RegressionPlot:
+        def __init__(self, data):
+            self.data = data
+
+        def scatter_plot(self, x, y, title="Scatter Plot", xlabel="X", ylabel="Y"):
+            plt.figure(figsize=(10, 6))
+            plt.scatter(x, y)
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+        def regression_plot(self, x, y, title="Regression Plot", xlabel="X", ylabel="Y"):
+            plt.figure(figsize=(10, 6))
+            sns.regplot(x, y)
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+        def residual_plot(self, x, y, title="Residual Plot", xlabel="X", ylabel="Y"):
+            plt.figure(figsize=(10, 6))
+            sns.residplot(x, y)
+            plt.title(title)
+            plt.xlabel(xlabel)
+            plt.ylabel(ylabel)
+            plt.show()
+
+        def correlation_matrix(self, data):
+            corr = data.corr()
+            sns.heatmap(corr, xticklabels=corr.columns.values, yticklabels=corr.columns.values, annot=True)
+            plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Module for data visualization (#67)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.

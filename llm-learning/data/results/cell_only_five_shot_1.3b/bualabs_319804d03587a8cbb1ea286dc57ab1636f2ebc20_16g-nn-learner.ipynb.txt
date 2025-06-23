@@ -1,0 +1,38 @@
+```
+    # Import necessary libraries
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras import layers
+
+    # Define the model
+    model = keras.Sequential()
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(10, activation='softmax'))
+
+    # Compile the model
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    # Load the dataset
+    # Assume that we have a function load_data() that returns the dataset
+    x_train, y_train, x_test, y_test = load_data()
+
+    # Train the model
+    model.fit(x_train, y_train, epochs=5)
+
+    # Evaluate the model
+    test_loss, test_acc = model.evaluate(x_test, y_test)
+    print('Test accuracy:', test_acc)
+
+    # Save the model
+    model.save('my_model.h5')
+
+    # Load the model
+    new_model = keras.models.load_model('my_model.h5')
+
+    # Use the model for prediction
+    prediction = new_model.predict(x_test)
+    ```
+    This is a simple example of a 16GB neural network model. The model is a sequential model with three layers, each with 64 neurons. The last layer is a dense layer with 10 neurons and uses softmax activation. The model is compiled with Adam optimizer and sparse categorical cross-entropy loss function. The model is trained for 5 epochs and then evaluated on the test set. The model is saved to a file 'my_model.h5' and then loaded for prediction.

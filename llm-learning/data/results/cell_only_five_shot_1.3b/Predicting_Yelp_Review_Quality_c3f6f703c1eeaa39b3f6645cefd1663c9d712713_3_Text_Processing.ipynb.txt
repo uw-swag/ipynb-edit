@@ -1,0 +1,30 @@
+```python
+    # Importing Gensim
+    import gensim
+    from gensim.models import Word2Vec
+
+    # Splitting the corpus into training and testing sets
+    sentences = list(map(lambda x: x.split(), corpus))
+    train_data = list(map(lambda x: gensim.models.TRAIN_TEST_SPLITS[int(x[1])], sentences))
+
+    # Training the Word2Vec model
+    model = Word2Vec(sentences, min_count=1)
+
+    # Printing the most similar words
+    print(model.wv.most_similar('happy'))
+    print(model.wv.most_similar('sad'))
+    print(model.wv.most_similar('angry'))
+
+    # Saving the model
+    model.save('reviews.model')
+
+    # Loading the model
+    model = gensim.models.Word2Vec.load('reviews.model')
+
+    # Printing the most similar words
+    print(model.wv.most_similar('happy'))
+    print(model.wv.most_similar('sad'))
+    print(model.wv.most_similar('angry'))
+    ```
+
+    This code will train a Word2Vec model on the provided corpus, and then print the most similar words to the words 'happy', 'sad', and 'angry'. The model is then saved and loaded for future use.

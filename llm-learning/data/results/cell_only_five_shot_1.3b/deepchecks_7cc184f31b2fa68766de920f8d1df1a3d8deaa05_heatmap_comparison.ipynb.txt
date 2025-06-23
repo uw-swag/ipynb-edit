@@ -1,0 +1,25 @@
+```python
+    from deepchecks.vision.dataset import VisionData
+    from deepchecks.vision.checks import TrainTestLabelDrift
+    from deepchecks.vision.datasets.detection.coco import load_dataset, yolo_label_formatter, yolo_image_formatter, LABEL_MAP
+
+    train_dataloader = load_dataset(train=True)
+    test_dataloader = load_dataset(train=False)
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter
+    from deepchecks.vision.utils.image_formatters import ImageFormatter
+
+    train_ds = VisionData(train_dataloader, label_formatter=DetectionLabelFormatter(yolo_label_formatter),
+                          image_formatter=ImageFormatter(yolo_image_formatter), label_map=LABEL_MAP)
+    test_ds = VisionData(test_dataloader, label_formatter=DetectionLabelFormatter(yolo_label_formatter),
+                         image_formatter=ImageFormatter(yolo_image_formatter), label_map=LABEL_MAP)
+
+    # Split VisionData and remove Formatters
+    train_ds_no_formatters = train_ds.remove_formatters()
+    test_ds_no_formatters = test_ds.remove_formatters()
+
+    # TrainTestLabelDrift check
+    train_check = TrainTestLabelDrift(train_ds_no_formatters, test_ds_no_formatters)
+    train_check.run()
+    ```
+
+    This code will split the `VisionData` object in the original code and remove the formatters. Then, it will run the `TrainTestLabelDrift` check on the new datasets without formatters.

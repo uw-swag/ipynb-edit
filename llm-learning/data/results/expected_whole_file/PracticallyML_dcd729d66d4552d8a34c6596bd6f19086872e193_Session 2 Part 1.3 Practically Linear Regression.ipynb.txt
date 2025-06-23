@@ -1,0 +1,124 @@
+<Cell_0>
+# conventional way to import pandas
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+# read CSV file from the 'data' subdirectory using a relative path
+data = pd.read_csv('data/Advertising.csv', index_col=0)
+
+# display the first 5 rows
+
+<\Cell_1>
+<Cell_2>
+# display the last 5 rows
+
+<\Cell_2>
+<Cell_3>
+# check the shape of the DataFrame (rows, columns)
+
+<\Cell_3>
+<Cell_4>
+# conventional way to import seaborn
+import seaborn as sns
+
+# allow plots to appear within the notebook
+%matplotlib inline
+<\Cell_4>
+<Cell_5>
+# visualize the relationship between the features and the response using scatterplots
+sns.pairplot(data, x_vars=['TV','Radio','Newspaper'], y_vars='Sales', size=7, aspect=0.7, kind='reg')
+<\Cell_5>
+<Cell_6>
+# create a Python list of feature names
+
+# use the list to select a subset of the original DataFrame
+
+# print the first 5 rows
+
+<\Cell_6>
+<Cell_7>
+# check the type and shape of X
+
+
+<\Cell_7>
+<Cell_8>
+# select a Series from the DataFrame
+
+# print the first 5 values
+
+<\Cell_8>
+<Cell_9>
+# check the type and shape of y
+
+<\Cell_9>
+<Cell_10>
+# You're free to use the internet! Check out how to split a dataset into train and test using Sklearn and use it here!
+# We would like you to do a 80:20 split.
+
+
+<\Cell_10>
+<Cell_11>
+# Print the shapes of the different numpy arrays you get after the split above!
+
+
+
+<\Cell_11>
+<Cell_12>
+# import the linear regression model! You're free to use the internet!
+
+# instantiate the model. Check what parameter are necessary for you.
+
+# fit the model to the training data (learn the coefficients)
+
+<\Cell_12>
+<Cell_13>
+# print the intercept and coefficients
+
+
+<\Cell_13>
+<Cell_14>
+# pair the feature names with the coefficients. You might learn a new function here :)
+
+
+<\Cell_14>
+<Cell_15>
+# make predictions on the testing set
+
+
+<\Cell_15>
+<Cell_16>
+# define true and predicted response values
+true = [100, 50, 30, 20]
+pred = [90, 50, 50, 30]
+<\Cell_16>
+<Cell_17>
+# calculate MAE by hand
+print((10 + 0 + 20 + 10)/4.)
+
+# calculate MAE using scikit-learn
+from sklearn import metrics
+print(metrics.mean_absolute_error(true, pred))
+<\Cell_17>
+<Cell_18>
+# calculate MSE by hand
+print((10**2 + 0**2 + 20**2 + 10**2)/4.)
+
+# calculate MSE using scikit-learn
+print(metrics.mean_squared_error(true, pred))
+<\Cell_18>
+<Cell_19>
+# calculate RMSE by hand
+import numpy as np
+print(np.sqrt((10**2 + 0**2 + 20**2 + 10**2)/4.))
+
+# calculate RMSE using scikit-learn
+print(np.sqrt(metrics.mean_squared_error(true, pred)))
+<\Cell_19>
+<Cell_20>
+# Compute RMSE from our trained model here!
+
+
+<\Cell_20>
+<Cell_21>
+
+<\Cell_21>

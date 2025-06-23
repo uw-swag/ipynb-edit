@@ -1,0 +1,33 @@
+```java
+    import ai.djl.Device;
+    import ai.djl.Model;
+    import ai.djl.ndarray.NDArray;
+    import ai.djl.ndarray.NDManager;
+    import ai.djl.ndarray.index.NDIndex;
+    import ai.djl.ndarray.types.DataType;
+    import ai.djl.ndarray.types.Shape;
+    import ai.djl.nn.Block;
+    import ai.djl.nn.ParameterList;
+    import ai.djl.nn.SequentialBlock;
+    import ai.djl.nn.core.Linear;
+    import ai.djl.training.DefaultTrainingConfig;
+    import ai.djl.training.Trainer;
+    import ai.djl.training.dataset.ArrayDataset;
+    import ai.djl.training.dataset.Batch;
+    import ai.djl.training.listener.TrainingListener;
+    import ai.djl.training.loss.Loss;
+    import ai.djl.training.optimizer.Optimizer;
+    import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+    import ai.djl.util.RandomUtils;
+    import ai.djl.training.EasyTrain;
+    import org.apache.commons.lang3.ArrayUtils;
+    import java.lang.*;
+    import ai.djl.metric.Metrics;
+    import ai.djl.training.evaluator.Evaluator;
+    import ai.djl.training.listener.EvaluatorTrainingListener;
+
+    public void train(NDArray trainFeatures, NDArray testFeatures, NDArray trainLabels, NDArray testLabels, int nDegree) {
+
+        Loss l2Loss = Loss.l2Loss();
+        NDManager manager = NDManager.newBaseManager();
+        LearningRateTracker lrt = LearningRateTrack

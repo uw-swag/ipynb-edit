@@ -1,0 +1,55 @@
+import random
+from random import choice
+
+import re
+from collections import Counter
+import nltk
+from nltk.util import ngrams
+def read_file(filename):
+    with open(filename, "r", encoding='UTF-8') as file:
+        contents = file.read().replace('\n\n',' ').replace('[edit]', '').replace('\ufeff', '').replace('\n', ' ').replace('\u3000', ' ')
+    return contents
+text = read_file('Data various/Monte_Cristo.txt')
+
+text_start = [m.start() for m in re.finditer('VOLUME ONE', text)]
+text_end = [m.start() for m in re.finditer('End of Project Gutenberg', text)]
+text = text[text_start[1]:text_end[0]]
+def generate_text(words, limit = 100):
+    capitalized_keys = [i for i in words.keys() if len(i[0]) > 0 and i[0][0].isupper()]
+    first_key = random.choice(capitalized_keys)
+
+    markov_text = ' '.join(first_key)
+    while len(markov_text.split(' ')) < limit:
+        next_word = random.choice(words[first_key])
+        first_key = tuple(first_key[1:]) + tuple([next_word])
+        markov_text += ' ' + next_word
+    
+    return markov_text
+def generate_text(words, limit = 100):
+    capitalized_keys = [i for i in words.keys() if len(i[0]) > 0 and i[0][0].isupper()]
+    first_key = random.choice(capitalized_keys)
+    markov_text = ' '.join(first_key)
+    while len(markov_text.split(' ')) < limit:
+        next_word = random.choice(words[first_key])
+
+        first_key = tuple(first_key[1:]) + tuple([next_word])
+        markov_text += ' ' + next_word
+    #Previous line attaches spaces to every token, so need to remove some spaces.
+    for i in ['.', '?', '!', ',']:
+        markov_text = markov_text.replace(' .', '.').replace(' ,', ',').replace(' !', '!').replace(' ?', '?').replace(' ;', ';')
+    return markov_text
+def collect_dict(corpus, n_grams):
+    text_dict = {}
+    words = nltk.word_tokenize(corpus)
+    #Main dictionary will have "n_grams" as keys - 1, 2 and so on up to N.
+    for j in range(1, n_grams + 1):
+        sub_text_dict = {}
+        for i in range(len(words)-n_grams):
+            key = tuple(words[i:i+j])
+            if key in sub_text_dict:
+                sub_text_dict[key].append(words[i+n_grams])
+            else:
+                sub_text_dict[key] = [words[i+n_grams]]
+        text_dict[j] = sub_text_dict
+    
+    return text_dict

@@ -1,0 +1,58 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add missing imports"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import load_iris
+from sklearn.metrics import accuracy_score
+
+import sys
+
+from surprise import KNNWithMeans
+from surprise import Dataset
+from surprise import accuracy
+from surprise.model_selection import cross_validate
+
+%matplotlib inline
+
+<\Cell_0>
+<Cell_1>
+iris = load_iris()
+<\Cell_1>
+<Cell_2>
+sns.pairplot(iris.data)
+<\Cell_2>
+<Cell_3>
+X_train, X_test, Y_train, Y_test = train_test_split(iris.data, iris.target, test_size=0.33)
+<\Cell_3>
+<Cell_4>
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, Y_train)
+predicts = knn.predict(X_test)
+print('Accuracy: ', accuracy_score(Y_test, predicts))
+<\Cell_4>
+<Cell_5>
+from surprise import KNNWithMeans
+from surprise import Dataset
+from surprise.model_selection import cross_validate
+
+surprise_data = Dataset.load_builtin('ml-100k')
+
+cross_validate(KNNWithMeans(), surprise_data, measures=['RMSE', 'MAE'], cv=5, verbose=True)
+<\Cell_5>
+<Cell_6>
+# Add missing imports
+<\Cell_6>
+    '''
+    ]
+
+    ### Response:
+    The code you've provided is already complete. It imports the necessary libraries for the tasks you've mentioned. Here

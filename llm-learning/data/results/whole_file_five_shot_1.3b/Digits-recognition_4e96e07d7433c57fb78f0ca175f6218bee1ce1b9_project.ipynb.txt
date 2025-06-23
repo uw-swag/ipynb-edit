@@ -1,0 +1,20 @@
+```python
+    # Adding files via upload
+    from azureml.core import Workspace, Dataset
+
+    # Load the workspace from the saved config file
+    ws = Workspace.from_config()
+
+    # Create a Dataset from the uploaded file
+    dataset = Dataset.upload(src_dir='path_to_your_local_directory',
+                              target_path='your_target_path_in_the_cloud',
+                              overwrite=True,
+                              show_progress=True)
+
+    # Register the dataset
+    registered_dataset = dataset.register(workspace=ws,
+                                           name='your_dataset_name',
+                                           description='your_dataset_description',
+                                           tags={'tag1': 'value1', 'tag2': 'value2'},
+                                           create_new_version=True)
+    ```

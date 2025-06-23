@@ -1,0 +1,9 @@
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs.widget_gallery_tab import WidgetGalleryTab
+
+import pandas as pd
+dashboard = Dashboard(tabs=[WidgetGalleryTab()])
+dashboard.calculate(pd.DataFrame([[1, 2],[1, 2],[1, 2]]), None, None)
+dashboard.save("widget_example.html")
+dashboard.save("example.html")
+dashboard.show(mode="inline")

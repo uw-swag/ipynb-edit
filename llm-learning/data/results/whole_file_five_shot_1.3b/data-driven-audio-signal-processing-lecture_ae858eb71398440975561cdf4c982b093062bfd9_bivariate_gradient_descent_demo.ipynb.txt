@@ -1,0 +1,41 @@
+```python
+    ## Bivariate Optimisation using Gradient Descent
+
+    ## Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    ## Gradient Descent Function
+    def gradient_descent(x_start, learning_rate, iterations):
+        x = x_start
+        history = [x]
+
+        for i in range(iterations):
+            gradient = compute_gradient(x)
+            x = x - learning_rate * gradient
+            history.append(x)
+
+        return history
+
+    ## Compute Gradient Function
+    def compute_gradient(x):
+        ## Placeholder for actual computation of gradient
+        ## This function should be replaced with actual computation of gradient
+        return np.array([2*x[0] + 3*x[1]**2 - 2, 2*x[1] + 4*x[0]**2 - 3])
+
+    ## Initial Parameters
+    x_start = np.array([1.5, 1.5])
+    learning_rate = 0.1
+    iterations = 1000
+
+    ## Run Gradient Descent
+    history = gradient_descent(x_start, learning_rate, iterations)
+
+    ## Plot History
+    plt.plot([x[0] for x in history], [x[1] for x in history])
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Gradient Descent History')
+    plt.show()
+    ```
+    This notebook demonstrates how to perform bivariate optimization using gradient descent. The `gradient_descent` function implements the gradient descent algorithm, and the `compute_gradient` function computes the gradient of the cost function. The cost function is a simple quadratic function, and the gradient of this function is a simple linear function. The `x_start` parameter is the initial guess for the parameters, and the `learning_rate` parameter determines the step size in the gradient descent. The `iterations` parameter determines the number of iterations to perform. The history of the parameters is plotted to visualize the progress of the gradient descent.

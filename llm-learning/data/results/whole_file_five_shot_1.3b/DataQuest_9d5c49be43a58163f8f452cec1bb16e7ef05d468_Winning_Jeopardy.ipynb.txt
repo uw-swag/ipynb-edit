@@ -1,0 +1,46 @@
+
+    '''
+    <Cell_0>
+    %matplotlib inline
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import numpy as np
+    # from scipy.stats import pearsonr
+    # from scipy.stats import linregress
+    <\Cell_0>
+    <Cell_1>
+    jeopardy = pd.read_csv('JEOPARDY_CSV.csv')
+    jeopardy.rename(columns=lambda col_header: col_header.strip(), inplace=True)
+    print('Column Header dtypes\n')
+    print(jeopardy.dtypes)
+    jeopardy.head(10)
+    <\Cell_1>
+    <Cell_2>
+    import string
+
+    def remove_punctuation(s):
+        translator = str.maketrans('', '', string.punctuation)
+        return  s.translate(translator)
+
+    def normalize_string_column(row, col_name):
+        # removes all punctuation from a string and converts to lower case
+        no_punctuation = remove_punctuation(row[col_name])
+        return no_punctuation.lower()
+
+    cols_to_normalize_columns = ['Question', 'Answer']
+    normalized_columns = ['clean_question', 'clean_answer']
+
+    for i in range(len(cols_to_normalize_columns)):
+        jeopardy[normalized_columns[i]] = jeopardy.apply(normalize_string_column, args=(cols_to_normalize_columns[i],), axis=1)
+    
+    jeopardy.tail(10)
+    <\Cell_2>
+    <Cell_3>
+    def normalize_dollar_values(row, col_name):
+        no_punctuation = remove_punctuation(row[col_name])
+        try:
+            return int(no_punctuation)
+        except ValueError:
+            return 0
+
+    jeopardy['clean_value'] = jeopardy.apply(normalize_dollar_values, args

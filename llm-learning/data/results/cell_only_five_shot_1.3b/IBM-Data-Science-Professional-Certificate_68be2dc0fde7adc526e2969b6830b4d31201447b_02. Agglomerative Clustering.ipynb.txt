@@ -1,0 +1,45 @@
+
+    The original code is using the Euclidean distance to calculate the distance between each pair of features in the dataset. However, the Euclidean distance is not the correct metric for clustering. 
+
+    Instead, we should use the Manhattan distance, which is the sum of the absolute differences in the coordinates of the two points. This is a more appropriate metric for clustering because it is less sensitive to the scale of the data.
+
+    Here is the updated code:
+
+    ```python
+    import numpy as np 
+import pandas as pd
+from scipy import ndimage 
+from scipy.cluster import hierarchy 
+from scipy.spatial import distance_matrix 
+from matplotlib import pyplot as plt 
+from sklearn import manifold, datasets 
+from sklearn.cluster import AgglomerativeClustering 
+from sklearn.datasets.samples_generator import make_blobs 
+%matplotlib inline
+
+# read the csv file
+filename = 'cars_clus.csv'
+pdf = pd.read_csv(filename)
+
+# print the shape of the dataset
+print("Shape of dataset: ", pdf.shape)
+
+# print the first 5 rows of the dataset
+pdf.head(5)
+
+# calculate the distance matrix
+leng = pdf.shape[0]
+D = np.zeros([leng,leng])
+for i in range(leng):
+    for j in range(leng):
+        D[i,j] = np.sum(np.abs(pdf.iloc[i] - pdf.iloc[j]))
+
+# perform agglomerative clustering
+cluster = AgglomerativeClustering(n_clusters=3, affinity='precomputed', linkage='average')
+cluster.fit_predict(D)
+
+# print the cluster assignments
+print(cluster.labels_)
+    ```
+
+    This code will perform agglomerative clustering on the dataset, using 3 clusters. The `affinity` parameter is set to 'precomputed', which means that the distance matrix is precomputed and stored in `D`. The `linkage` parameter is set to 'average', which means that the average of the distances between the members of

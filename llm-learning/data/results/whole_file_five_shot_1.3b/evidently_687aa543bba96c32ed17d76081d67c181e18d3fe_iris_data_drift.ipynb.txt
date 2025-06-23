@@ -1,0 +1,38 @@
+```python
+    # Refactoring the column_mapping
+    # The original code was using None as the column_mapping, which is not valid.
+    # We should provide a dictionary where the keys are the old column names and the values are the new column names.
+
+    # Refactoring the code
+    import pandas as pd
+
+    from sklearn import datasets
+
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DataDriftTab
+
+    from evidently.model_profile import Profile
+    from evidently.profile_sections import DataDriftProfileSection
+
+    # Load the iris dataset
+    iris = datasets.load_iris()
+
+    # Create a DataFrame from the iris dataset
+    iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+
+    # Create a Dashboard with DataDriftTab
+    iris_data_drift_dashboard = Dashboard(tabs=[DataDriftTab])
+
+    # Calculate the data drift and save the dashboard
+    iris_data_drift_dashboard.calculate(iris_frame, iris_frame, column_mapping={'sepal length (cm)': 'new_column_name', 'sepal width (cm)': 'new_column_name'})
+    iris_data_drift_dashboard.save('iris_data_drift.html')
+
+    # Create a Profile with DataDriftProfileSection
+    iris_data_drift_profile = Profile(sections=[DataDriftProfileSection])
+
+    # Calculate the data drift and save the profile
+    iris_data_drift_profile.calculate(iris_frame, iris_frame, column_mapping={'sepal length (cm)': 'new_column_name', 'sepal width (cm)': 'new_column_name'})
+    iris_data_drift_profile.json()
+    ```
+
+    The refactoring of the column_mapping parameter in the calculate method of the Dashboard and Profile classes has been done. The new column names are now being used in the calculation.

@@ -1,0 +1,49 @@
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "augmentation with albumenation"
+    Original Code Cells:
+    '''
+    import pandas as pd
+import numpy as np
+import glob
+import os
+from pathlib import Path
+from PIL import Image, ExifTags
+
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+from sklearn.utils import compute_class_weight
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import KFold
+from sklearn.preprocessing import StandardScaler
+
+from sklearn.metrics import mean_squared_error, accuracy_score
+import scipy
+
+import tensorflow as tf
+from tensorflow.keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping
+from tensorflow.keras.preprocessing.image import img_to_array, load_img, ImageDataGenerator
+from tensorflow.keras.layers import Activation, Dense, GlobalAveragePooling2D, GlobalMaxPooling2D
+from tensorflow.keras import layers
+from tensorflow.keras.models import Model
+from tensorflow.keras import optimizers
+import tensorflow.keras.backend as K
+from tensorflow.keras.callbacks import LambdaCallback
+
+#salmon-scales
+#from train_util import read_images, load_xy, get_checkpoint_tensorboard, create_model_grayscale, get_fresh_weights, base_output, dense1_linear_output, train_validate_test_split
+
+#!pip uninstall plotly -y
+#!pip install plotly --user
+#!pip uninstall torch -y
+#!pip install torch --user
+#!pip install loguru --user
+#!pip install timm --user #PyTorch Image Models
+#!pip install albumentations  --user #augmentation
+#!pip install colorama --user #color terminal
+# Source: https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/efficientnet.py
+# tf_efficientnet

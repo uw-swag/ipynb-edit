@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "fix random seed"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+<\Cell_0>
+<Cell_1>
+from sklearn.linear_model import LogisticRegression
+
+clf = LogisticRegression().fit(x, s)
+<\Cell_1>
+<Cell_2>
+from sklearn.linear_model import LogisticRegression
+
+from scar import load_scar
+x_new = []
+y_new = []
+sample_weight = []
+
+x_p, x_u = load_scar()
+x_new.extend(x_p[:])
+y_new.extend([1] * len(x_p))
+sample_weight.extend([1.0] * len(x_p))
+
+clf = LogisticRegression().fit(x_new, y_new, sample_weight=sample_weight)
+<\Cell_2>
+<Cell_3>
+visualize_pn_data(x, y)
+<\Cell_3>
+<Cell_4>
+visualize_pn_data(x, y_hat)
+<\Cell_4>
+<Cell_5>
+visualize_pn_data(x, y)
+<\Cell_5>
+<Cell_6>
+visualize_pn_data(x, y_hat)
+<\Cell_6>
+<Cell_7>
+visualize_pn_data(x, y)
+<\Cell_7>
+<Cell_8>
+visualize_pn_data(x, y_hat)
+<\Cell_8>
+<Cell_9>
+visualize_pn_data(x, y)
+<\Cell_9>
+<Cell_10>
+visualize_pn_data(x, y_hat)
+<\Cell_10>
+<Cell_11>
+visualize_pn_data(x, y)
+<\Cell_11>
+<Cell_12>
+visualize_pn_data(x, y_hat)
+<\Cell_12>
+<

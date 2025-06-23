@@ -1,0 +1,49 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Created a folder and shifted code into it, removed errors from sample code"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import confusion_matrix, accuracy_score
+    from sklearn.externals import joblib
+
+    # Loading the training dataset.
+    attributes = pd.read_csv('../downloads/feature-classifier/training/attributes.csv')
+
+    # Drop all duplicate attributes.
+    print('Shape before dropping duplicates: {}'.format(attributes.shape))
+    attributes = attributes.drop_duplicates(subset='changeset_id')
+    print('Shape after dropping duplicates: {}'.format(attributes.shape))
+
+    # Creating a smaller sample to speed up workflow.
+    # attributes = attributes[:1000]
+
+    # Estimate importance of all features.
+    non_training_attributes = ['changeset_id', 'changeset_harmful']
+    X = attributes.drop(non_training_attributes, axis=1)
+    y = attributes['changeset_harmful']
+
+    # Scale the features.
+    scaler = StandardScaler().fit(X)
+    Xscaled = scaler.transform(X)
+
+    # Split the dataset into training and test sets.
+    Xtrain, Xtest, ytrain, ytest = train_test_split(Xscaled, y, random_state=42, train_size=0.66)
+
+    # Train a Random Forest Classifier.
+    model = RandomForestClassifier()
+    model.fit(Xtrain, ytrain)
+
+    # Save the trained model.
+    model_path = '../gabbar/trained/model.pkl'
+    joblib.dump(model, model_path)
+
+    # Predict the test set.
+    ymodel = model.predict(Xtest)
+
+    # Evaluate the model

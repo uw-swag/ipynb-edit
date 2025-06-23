@@ -1,0 +1,38 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add descriptions to code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from scar import load_scar
+x, y, s = load_scar()
+<\Cell_1>
+<Cell_2>
+from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression().fit(x, y)
+y_hat = clf.predict(x)
+y_prob_hat = clf.predict_proba(x)[:, 1]
+<\Cell_2>
+<Cell_3>
+from utils import visualize_pn_data, visualize_pn_data_proba
+<\Cell_3>
+<Cell_4>
+visualize_pn_data(x, y)
+<\Cell_4>
+<Cell_5>
+visualize_pn_data(x, y_hat)
+<\Cell_5>
+<Cell_6>
+visualize_pn_data_proba(x, y_prob_hat)
+<\Cell_6>
+
+    '''
+    ]
+
+    ### Response:
+    The code cells are designed to perform various tasks such as data loading, model training, and visualization.

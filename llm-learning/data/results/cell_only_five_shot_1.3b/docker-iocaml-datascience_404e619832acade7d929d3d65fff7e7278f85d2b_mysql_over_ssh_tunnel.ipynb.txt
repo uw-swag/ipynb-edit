@@ -1,0 +1,39 @@
+```python
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+
+    # Example of MySQL over SSH Tunnel
+
+    import paramiko
+
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+    ssh.connect(hostname='your_hostname', username='your_username', password='your_password')
+
+    stdin, stdout, stderr = ssh.exec_command('mysql -u your_username -p')
+
+    password = getpass.getpass()
+
+    stdin.write(password + '\n')
+    stdin.flush()
+
+    print(stdout.read().decode().strip())
+
+    ssh.close()
+    ```
+    This script will open a SSH connection to your remote server, then execute a MySQL command to authenticate with the server.
+
+    Please replace 'your_hostname', 'your_username', and 'your_password' with your actual server details.
+
+    Also, make sure that your server's MySQL service is running and that the MySQL user you're using has the necessary permissions to connect.
+
+    This script uses the `paramiko` library for SSH and MySQL operations. If it's not already installed, you can install it using pip:
+
+    ```bash
+    pip install paramiko
+    ```
+
+    And for MySQL, you can install it using your package manager or download it from the official MySQL website.
+
+    Please note that this script should be run in a secure and controlled environment, as it may expose sensitive information.

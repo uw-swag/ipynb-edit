@@ -1,0 +1,37 @@
+```
+    name: Links-checks
+
+    on:
+      push:
+        branches: [ master ]
+
+    jobs:
+      - name: Links-checks
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+        - name: Install deepchecks
+          run: pip install deepchecks
+        - name: Run MixedNulls
+          run: |
+            from deepchecks.tabular.checks import MixedNulls
+            import pandas as pd
+            data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+            dataframe = pd.DataFrame(data=data)
+            MixedNulls().run(dataframe)
+    ```
+
+    This GitHub action will run the MixedNulls check on the provided dataframe. The check will identify any null values that are not marked as 'None' or 'nan' and are not marked as 'null'.
+
+    The action is triggered on every push to the master branch. The Python version is set to 3.8, and the deepchecks library is installed. The MixedNulls check is then run on the provided dataframe.
+
+    The dataframe is defined as a dictionary of lists, where each key-value pair represents a column name and a list of values. The MixedNulls check is then run on this dataframe.
+
+    The output of the MixedNulls check is displayed in the GitHub action log.
+
+    Please note that the MixedNulls check is not perfect and may not always identify all null values. It is designed to identify null values that are not marked as 'None' or 'nan' and are not marked as 'null'.

@@ -1,0 +1,20 @@
+```
+    from pyspark.sql import functions as F
+
+    # Assuming `assistant_logs` is a DataFrame and `column_mapping` is a dictionary
+    # where keys are column names and values are the corresponding column names in the LLM descriptor
+
+    # Adding columns in LLM descriptor
+    for col, new_col in column_mapping.items():
+        if col in assistant_logs.columns:
+            assistant_logs = assistant_logs.withColumn(new_col, F.col(col))
+
+    # Running the report
+    report = custom_judge.run(assistant_logs, column_mapping)
+
+    # Printing the report
+    print(report)
+    ```
+
+    This code will add the columns specified in `column_mapping` to the `assistant_logs` DataFrame, 
+    and then run the LLM descriptor on the modified DataFrame. The result is printed to the console.

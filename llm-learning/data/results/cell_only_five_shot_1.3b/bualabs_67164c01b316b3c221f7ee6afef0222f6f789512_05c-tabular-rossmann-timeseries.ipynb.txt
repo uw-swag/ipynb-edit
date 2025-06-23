@@ -1,0 +1,43 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added links to bualabs website related articles."
+    Original Code Cells:
+    '''
+    # Importing necessary libraries
+    import bs4 as bs
+    import urllib.request
+
+    # Specifying the url of the webpage
+    source = urllib.request.urlopen('https://www.bualabs.com/').read()
+    soup = bs.BeautifulSoup(source,'lxml')
+
+    # Finding all the links
+    for link in soup.find_all('a'):
+        print(link.get('href'))
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already complete. It uses BeautifulSoup to parse the HTML of the Bualabs website and print out all the links it finds.
+
+    However, if you want to add these links to a list, you can modify the code like this:
+
+    ```python
+    # Importing necessary libraries
+    import bs4 as bs
+    import urllib.request
+
+    # Specifying the url of the webpage
+    source = urllib.request.urlopen('https://www.bualabs.com/').read()
+    soup = bs.BeautifulSoup(source,'lxml')
+
+    # Finding all the links
+    links = []
+    for link in soup.find_all('a'):
+        links.append(link.get('href'))
+
+    print(links)
+    ```
+
+    This will print out a list of all the links found on the Bualabs website.

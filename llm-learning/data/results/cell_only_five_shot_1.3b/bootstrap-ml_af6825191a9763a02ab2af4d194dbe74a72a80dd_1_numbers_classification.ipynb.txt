@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import keras
+    from keras import layers
+
+    df = pd.read_csv("TMNIST_DATA.csv")
+    digits = df.drop(["names", "labels"], axis=1)
+    labels = df["labels"]
+
+    digits = digits.to_numpy().reshape(-1, 28, 28, 1) / 255
+    labels = labels.to_numpy()
+
+    print("digits shape:", digits.shape)
+    print("labels shape:", labels.shape)
+
+    def view(digits, labels, rows=1, cols=10, title=None):
+        fig, subs = plt.subplots(rows, cols, layout='constrained', figsize=(cols,rows + (0.25 if title else 0)), squeeze=False)
+        if title:
+            fig.suptitle(title)
+        subs = [s for sub in subs for s in sub] 
+        for digit, label, sub in zip(digits, labels, subs):
+            sub.set_title(label)
+            sub.imshow(digit, cmap='gray')
+
+    samples = np.random.choice(len(digits), 20)
+
+    view(digits[samples], labels[samples], rows=2)
+
+    augmentations = keras.Sequential([
+        layers.RandomRotation(0.025),
+        layers.RandomZoom((-0.2, 0.2), (-0.2, 0.2), fill_mode="constant", fill_value=0),
+        layers.RandomTranslation((-0.1, 0.1), (-0.1, 0.1), fill_mode="constant", fill_value=0),
+    ])
+
+    samples = np.random.choice(len(digits), 20)
+
+    augmented_digits = augmentations(digits[samples])
+
+    view(digits[samples

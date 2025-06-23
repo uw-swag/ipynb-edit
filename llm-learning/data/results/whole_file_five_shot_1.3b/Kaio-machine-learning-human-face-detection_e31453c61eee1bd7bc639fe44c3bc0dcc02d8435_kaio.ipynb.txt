@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "test: New analysis and data exploration inside server/kaio.ipynb"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Include the predict server path to access data and scripts
+import os,sys
+parentdir = os.path.dirname("../server/")
+sys.path.append(parentdir)
+
+# Imports to execute the analysis
+from data import get_full_data, get_training, get_predict
+from matplotlib import pyplot as plt
+from sklearn import linear_model
+from predicting import accuracy_score, performance_metric
+import pandas as pd
+import numpy as np
+
+# Allows the use of display() for DataFrames
+from IPython.display import display 
+
+# Import supplementary visualizations code visuals.py
+import visuals as vs
+
+# Get X (Features) and Y (Target)
+X, Y, df = get_full_data()
+
+# Print the first few entries
+display(X.head(100))
+<\Cell_0>
+<Cell_1>
+# Representation examples
+# Good references about data analysis
+#http://felipegalvao.com.br/blog/2016/03/08/visualizacao-de-dados-com-python-matplotlib/
+# Another links
+# http://www.dummies.com/programming/big-data/data-science/how-to-visualize-the-classifier-in-an-svm-supervised-learning-model/
+# http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html#sphx-glr-auto-examples-svm-plot-iris-py
+# http://scikit-learn.org/stable/auto_examples/plot_multilabel.html#sphx-glr-auto-examples-plot-multilabel-py
+#http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#sphx-glr-auto-examples-classification-plot-

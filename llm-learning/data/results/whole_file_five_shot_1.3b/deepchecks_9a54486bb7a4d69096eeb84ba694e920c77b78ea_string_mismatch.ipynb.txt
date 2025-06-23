@@ -1,0 +1,20 @@
+```python
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    r = StringMismatch().run(df)
+
+    # Split the functionality into two separate checks
+    c1 = StringMismatch().add_condition_no_variants()
+    c2 = StringMismatch().add_condition_no_variants()
+
+    # Decide on the decision for each check
+    decision1 = c1.conditions_decision(r)
+    decision2 = c2.conditions_decision(r)
+
+    # Print the decisions
+    print(f"Decision for first check: {decision1}")
+    print(f"Decision for second check: {decision2}")
+    ```

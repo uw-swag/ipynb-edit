@@ -1,0 +1,28 @@
+```python
+    # Cleaning data
+    # This is a placeholder for the actual data cleaning process
+
+    # For example, if we have a pandas DataFrame df, we can use the following code to clean it:
+
+    # Remove rows with missing values
+    df = df.dropna()
+
+    # Remove duplicates
+    df = df.drop_duplicates()
+
+    # Remove outliers
+    df = df[(np.abs(stats.zscore(df)) < 3).all(axis=1)]
+
+    # Convert data types if necessary
+    df['column_name'] = df['column_name'].astype('datatype')
+
+    # For example, if we have a column 'age' in the DataFrame df, we can convert it to a categorical variable:
+
+    df['age'] = df['age'].astype('category')
+
+    # For categorical variables, we can convert them to numerical variables:
+
+    df['age'] = df['age'].cat.codes
+
+    return df
+    ```

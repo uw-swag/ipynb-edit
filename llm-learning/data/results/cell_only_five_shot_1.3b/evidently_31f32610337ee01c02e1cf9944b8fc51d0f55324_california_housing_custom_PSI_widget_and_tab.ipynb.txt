@@ -1,0 +1,54 @@
+```python
+    class PSIWidget(Widget):
+    
+        def __init__(self, title: str, feature: str):
+            self.title = title
+            self.feature = feature
+
+        def calculate(self,
+                      reference_data: pd.DataFrame,
+                      current_data: pd.DataFrame,
+                      column_mapping,
+                      analyzers_results) -> Optional[BaseWidgetInfo]:
+        
+            buckets, ref, curr, val = calculate_PSI(reference_data[self.feature], current_data[self.feature], buckets=10)
+        
+            psi = go.Figure()
+        
+            psi.add_trace(go.Bar(x=[x+1 for x in range(buckets)], y=ref, marker_color='#191970', name='reference'))
+            psi.add_trace(go.Bar(x=[x+1 for x in range(buckets)], y=curr, marker_color='#b0c4de', name='production'))
+
+            psi.update_layout(        
+                xaxis_title="buckets",
+                yaxis_title="percents",
+                xaxis=dict(
+                    showticklabels=True
+                ),
+                yaxis=dict(
+                    showticklabels=True
+                ),
+                legend_title=f'PSI = {val}',
+                legend=dict(
+                    orientation="v",
+                    yanchor="top",
+                    y=1.02,
+                    xanchor="right",
+                    x=1
+                ),
+            )
+
+            psi_json = json.loads(psi.to_json())
+
+            return BaseWidgetInfo(
+                title=self.title,
+                type="big_graph",
+                size=1,
+                params={
+                    "data": psi_json['data'],
+                    "layout": psi_json['layout']
+                },
+            )
+    ```
+
+    ### Explanation:
+    The code snippet provided adds a new class `PSIWidget` to the `Widget` class in the `ev

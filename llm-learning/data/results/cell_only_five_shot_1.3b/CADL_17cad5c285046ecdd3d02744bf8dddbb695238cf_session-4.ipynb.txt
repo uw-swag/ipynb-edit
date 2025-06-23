@@ -1,0 +1,29 @@
+```
+    import tensorflow as tf
+
+    input = tf.placeholder(tf.float32, shape=[None, 28, 28, 1])
+    with tf.variable_scope('conv2d0'):
+        with tf.variable_scope('pre_relu'):
+            w = tf.get_variable("weights", shape=[3, 3, 1, 64],
+                                initializer=tf.contrib.layers.xavier_initializer())
+            b = tf.get_variable("biases", shape=[64],
+                                initializer=tf.contrib.layers.xavier_initializer())
+            h = tf.nn.conv2d(input, w, strides=[1, 1, 1, 1], padding='SAME')
+            h = tf.nn.bias_add(h, b)
+            h = tf.nn.relu(h)
+
+    with tf.variable_scope('conv2d1'):
+        with tf.variable_scope('pre_relu'):
+            w = tf.get_variable("weights", shape=[3, 3, 64, 64],
+                                initializer=tf.contrib.layers.xavier_initializer())
+            b = tf.get_variable("biases", shape=[64],
+                                initializer=tf.contrib.layers.xavier_initializer())
+            h = tf.nn.conv2d(h, w, strides=[1, 1, 1, 1], padding='SAME')
+            h = tf.nn.bias_add(h, b)
+            h = tf.nn.relu(h)
+
+    with tf.variable_scope('fc1'):
+        w = tf.get_variable("weights", shape=[2*2*64, 1024],
+                            initializer=tf.contrib.layers.xavier_initializer())
+        b = tf.get_variable("biases", shape=[1024],
+                            initializer=tf.contrib.layers.xavier_

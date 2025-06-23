@@ -1,0 +1,339 @@
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+from sklearn.metrics import auc, roc_curve
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn import preprocessing
+from sklearn import linear_model
+pd.set_option("display.max_columns", 200)
+pd.set_option("display.max_rows", 100)
+#from IPython.core.interactiveshell import InteractiveShell
+#InteractiveShell.ast_node_interactivity = "all"
+
+import functions
+
+%load_ext autoreload
+%autoreload 2
+%%time
+data = pd.read_excel('data set.xls', sheetname='данные')
+data.loc[data['EDUCATION'] == 'Среднее специальное', 'EDUCATION'] = 'Professional School'
+data.loc[data['EDUCATION'] == 'Среднее', 'EDUCATION'] = 'Some High School'
+data.loc[data['EDUCATION'] == 'Неполное среднее', 'EDUCATION'] = 'Some Primary School'
+data.loc[data['EDUCATION'] == 'Высшее', 'EDUCATION'] = 'Undergraduate Degree'
+data.loc[data['EDUCATION'] == 'Неоконченное высшее', 'EDUCATION'] = 'No Formal Education'
+data.loc[data['EDUCATION'] == 'Два и более высших образования', 'EDUCATION'] = 'Post-Graduate Work'
+data.loc[data['EDUCATION'] == 'Ученая степень', 'EDUCATION'] = 'Graduate Degree'
+data.loc[data['MARITAL_STATUS'] == 'Состою в браке', 'MARITAL_STATUS'] = 'Married'
+data.loc[data['MARITAL_STATUS'] == 'Гражданский брак', 'MARITAL_STATUS'] = 'Partner'
+data.loc[data['MARITAL_STATUS'] == 'Разведен(а)', 'MARITAL_STATUS'] = 'Separated'
+data.loc[data['MARITAL_STATUS'] == 'Не состоял в браке', 'MARITAL_STATUS'] = 'Single'
+data.loc[data['MARITAL_STATUS'] == 'Вдовец/Вдова', 'MARITAL_STATUS'] = 'Widowed'
+data.loc[data['GEN_INDUSTRY'] == 'Металлургия/Промышленность/Машиностроение', 'GEN_INDUSTRY'] = 'Iron & Steel'
+data.loc[data['GEN_INDUSTRY'] == 'Строительство', 'GEN_INDUSTRY'] = 'Construction - Raw Materials'
+data.loc[data['GEN_INDUSTRY'] == 'Нефтегазовая промышленность', 'GEN_INDUSTRY'] = 'Oil & Gas Operations'
+data.loc[data['GEN_INDUSTRY'] == 'Энергетика', 'GEN_INDUSTRY'] = 'Oil Well Services & Equipment'
+data.loc[data['GEN_INDUSTRY'] == 'Страхование', 'GEN_INDUSTRY'] = 'Insurance (Accident & Health)'
+data.loc[data['GEN_INDUSTRY'] == 'Банк/Финансы', 'GEN_INDUSTRY'] = 'Regional Banks'
+data.loc[data['GEN_INDUSTRY'] == 'Здравоохранение', 'GEN_INDUSTRY'] = 'Healthcare'
+data.loc[data['GEN_INDUSTRY'] == 'Управляющая компания', 'GEN_INDUSTRY'] = 'Business Services'
+data.loc[data['GEN_INDUSTRY'] == 'Туризм', 'GEN_INDUSTRY'] = 'Hotels & Motels'
+data.loc[data['GEN_INDUSTRY'] == 'Юридические услуги/нотариальные услуги', 'GEN_INDUSTRY'] = 'Personal Services'
+data.loc[data['GEN_INDUSTRY'] == 'Недвижимость', 'GEN_INDUSTRY'] = 'Real Estate Operations'
+data.loc[data['GEN_INDUSTRY'] == 'Развлечения/Искусство', 'GEN_INDUSTRY'] = 'Recreational Activities'
+data.loc[data['GEN_INDUSTRY'] == 'Ресторанный бизнес /общественное питание', 'GEN_INDUSTRY'] = 'Restaurants'
+data.loc[data['GEN_INDUSTRY'] == 'Образование', 'GEN_INDUSTRY'] = 'Schools'
+data.loc[data['GEN_INDUSTRY'] == 'Наука', 'GEN_INDUSTRY'] = 'Scientific & Technical Instr.'
+data.loc[data['GEN_INDUSTRY'] == 'Информационные технологии', 'GEN_INDUSTRY'] = 'Software & Programming'
+data.loc[data['GEN_INDUSTRY'] == 'Транспорт', 'GEN_INDUSTRY'] = 'Transportation'
+data.loc[data['GEN_INDUSTRY'] == 'Логистика', 'GEN_INDUSTRY'] = 'Trucking'
+data.loc[data['GEN_INDUSTRY'] == 'Ресторанный бизнес/Общественное питание', 'GEN_INDUSTRY'] = 'Restaurant & Catering'
+data.loc[data['GEN_INDUSTRY'] == 'Коммунальное хоз-во/Дорожные службы', 'GEN_INDUSTRY'] = 'Municipal economy/Road service'
+data.loc[data['GEN_INDUSTRY'] == 'Салоны красоты и здоровья', 'GEN_INDUSTRY'] = 'Beauty shop'
+data.loc[data['GEN_INDUSTRY'] == 'Сборочные производства', 'GEN_INDUSTRY'] = 'Assembly production'
+data.loc[data['GEN_INDUSTRY'] == 'Сельское хозяйство', 'GEN_INDUSTRY'] = 'Agriculture'
+data.loc[data['GEN_INDUSTRY'] == 'Химия/Парфюмерия/Фармацевтика', 'GEN_INDUSTRY'] = 'Chemistry/Perfumery/Pharmaceut'
+data.loc[data['GEN_INDUSTRY'] == 'ЧОП/Детективная д-ть', 'GEN_INDUSTRY'] = 'Detective'
+data.loc[data['GEN_INDUSTRY'] == 'Другие сферы', 'GEN_INDUSTRY'] = 'Others fields'
+data.loc[data['GEN_INDUSTRY'] == 'Государственная служба', 'GEN_INDUSTRY'] = 'Public  & municipal administ.'
+data.loc[data['GEN_INDUSTRY'] == 'Информационные услуги', 'GEN_INDUSTRY'] = 'Information service'
+data.loc[data['GEN_INDUSTRY'] == 'Торговля', 'GEN_INDUSTRY'] = 'Market, real estate'
+data.loc[data['GEN_INDUSTRY'] == 'Маркетинг', 'GEN_INDUSTRY'] = 'Marketing'
+data.loc[data['GEN_INDUSTRY'] == 'Подбор персонала', 'GEN_INDUSTRY'] = 'Staff recruitment'
+data.loc[data['GEN_INDUSTRY'] == 'СМИ/Реклама/PR-агенства', 'GEN_INDUSTRY'] = 'Mass media'
+data.loc[data['FAMILY_INCOME'] == 'от 10000 до 20000 руб.', 'FAMILY_INCOME'] = '10000-20000'
+data.loc[data['FAMILY_INCOME'] == 'от 20000 до 50000 руб.', 'FAMILY_INCOME'] = '20000-50000'
+data.loc[data['FAMILY_INCOME'] == 'от 5000 до 10000 руб.', 'FAMILY_INCOME'] = '5000-10000'
+data.loc[data['FAMILY_INCOME'] == 'свыше 50000 руб.', 'FAMILY_INCOME'] = '50000+'
+data.loc[data['FAMILY_INCOME'] == 'до 5000 руб.', 'FAMILY_INCOME'] = 'up to 5000'
+data.drop(['GEN_TITLE', 'ORG_TP_STATE', 'ORG_TP_FCAPITAL', 'JOB_DIR', 'REG_ADDRESS_PROVINCE',
+           'FACT_ADDRESS_PROVINCE', 'POSTAL_ADDRESS_PROVINCE', 'TP_PROVINCE', 'REGION_NM'], axis=1, inplace=True)
+data.head()
+data.info()
+for col in data.columns:
+    if data[col].value_counts(dropna=False, normalize=True).values[0] > 0.95:
+        if col == 'TARGET':
+            pass
+        else:
+            print(col)
+            data.drop([col], axis=1, inplace=True)
+data['Income_to_limit'] = data['PERSONAL_INCOME'] / data['CREDIT']
+df = pd.DataFrame(index = data['GENDER'].unique(),
+                      data={'% responders': data.groupby('GENDER')['TARGET'].sum() / np.sum(data['TARGET'])})
+df['% non-responders'] = (data.groupby('GENDER')['TARGET'].count() - data.groupby('GENDER')['TARGET'].sum()) \
+                        / (len(data['TARGET']) - np.sum(data['TARGET']))
+df['WOE'] = np.log(df['% responders'] / df['% non-responders'])
+df['DG-DB'] = df['% responders'] - df['% non-responders']
+df['IV'] = df['WOE'] * df['DG-DB']
+df
+print('IV is {:.2f}.'.format(np.sum(df['IV'])))
+data['PERSONAL_INCOME'].plot(kind='box')
+data = data[(data.PERSONAL_INCOME < np.percentile(data.PERSONAL_INCOME, 99))
+            & (data.PERSONAL_INCOME > np.percentile(data.PERSONAL_INCOME, 1))]
+data['WORK_TIME'].nlargest(20)
+data.drop([8984, 4296, 2532, 5375, 9852, 1092, 11720, 13928, 9983, 10677, 10171, 676, 7711, 3323], inplace=True)
+data['FST_PAYMENT'].nlargest()
+data.loc[data['FST_PAYMENT'] > data['CREDIT']][['CREDIT', 'FST_PAYMENT']][:10]
+len(data.loc[data['FST_PAYMENT'] > data['CREDIT']][['CREDIT', 'FST_PAYMENT']])
+data = data.loc[data['FST_PAYMENT'] < data['CREDIT']]
+#Living in the place, months.
+data['FACT_LIVING_TERM'].nlargest(20)
+data.drop([6186, 12261, 8562, 14739, 988, 12869, 7650, 12134, 5681, 11004, 14707], inplace=True)
+data.shape, np.sum(data['TARGET'])
+#This will be used lated.
+initial_data = data.copy()
+data['PERSONAL_INCOME'].plot(kind='box')
+data['PERSONAL_INCOME'] = functions.split_best_iv(data, 'PERSONAL_INCOME', 'TARGET')
+functions.feature_stat(data, 'PERSONAL_INCOME', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'PERSONAL_INCOME')[0]
+data['AGE'].plot(kind='box')
+data['AGE'] = functions.split_best_iv(data, 'AGE', 'TARGET')
+functions.feature_stat(data, 'AGE', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'AGE')[0]
+#I assume that missing values mean that the person didn't work at all.
+data['WORK_TIME'].fillna(0, inplace=True)
+data['WORK_TIME'].plot(kind='box')
+data['WORK_TIME'] = functions.split_best_iv(data, 'WORK_TIME', 'TARGET')
+data['WORK_TIME'].fillna(data['WORK_TIME'].cat.categories[0], inplace=True)
+functions.feature_stat(data, 'WORK_TIME', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'WORK_TIME')[0]
+data['CREDIT'].plot(kind='box')
+data['CREDIT'] = functions.split_best_iv(data, 'CREDIT', 'TARGET')
+functions.feature_stat(data, 'CREDIT', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'CREDIT')[0]
+data['TERM'].plot(kind='box')
+data['TERM'] = functions.split_best_iv(data, 'TERM', 'TARGET')
+functions.feature_stat(data, 'TERM', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'TERM')[0]
+data['FST_PAYMENT'].plot(kind='box')
+data['FST_PAYMENT'] = functions.split_best_iv(data, 'FST_PAYMENT', 'TARGET')
+data['FST_PAYMENT'].fillna(data['FST_PAYMENT'].cat.categories[0], inplace=True)
+functions.feature_stat(data, 'FST_PAYMENT', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'FST_PAYMENT')[0]
+data['FACT_LIVING_TERM'].plot(kind='box')
+data['FACT_LIVING_TERM'] = functions.split_best_iv(data, 'FACT_LIVING_TERM', 'TARGET')
+data['FACT_LIVING_TERM'].fillna(data['FACT_LIVING_TERM'].cat.categories[0], inplace=True)
+functions.feature_stat(data, 'FACT_LIVING_TERM', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'FACT_LIVING_TERM')[0]
+data['LOAN_NUM_PAYM'].plot(kind='box')
+data['LOAN_NUM_PAYM'] = functions.split_best_iv(data, 'LOAN_NUM_PAYM', 'TARGET')
+functions.feature_stat(data, 'LOAN_NUM_PAYM', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_NUM_PAYM')[0]
+data['LOAN_AVG_DLQ_AMT'].plot(kind='box')
+data['LOAN_AVG_DLQ_AMT'] = functions.split_best_iv(data, 'LOAN_AVG_DLQ_AMT', 'TARGET')
+data['LOAN_AVG_DLQ_AMT'].fillna(data['LOAN_AVG_DLQ_AMT'].cat.categories[0], inplace=True)
+functions.feature_stat(data, 'LOAN_AVG_DLQ_AMT', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_AVG_DLQ_AMT')[0]
+data['LOAN_MAX_DLQ_AMT'].plot(kind='box')
+data['LOAN_MAX_DLQ_AMT'] = functions.split_best_iv(data, 'LOAN_MAX_DLQ_AMT', 'TARGET')
+data['LOAN_MAX_DLQ_AMT'].fillna(data['LOAN_MAX_DLQ_AMT'].cat.categories[0], inplace=True)
+functions.feature_stat(data, 'LOAN_MAX_DLQ_AMT', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_MAX_DLQ_AMT')[0]
+data['Income_to_limit'].plot(kind='box')
+data['Income_to_limit'] = functions.split_best_iv(data, 'Income_to_limit', 'TARGET')
+functions.feature_stat(data, 'Income_to_limit', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'Income_to_limit')[0]
+for col in ['GENDER', 'CHILD_TOTAL', 'DEPENDANTS', 'EDUCATION', 'MARITAL_STATUS', 'GEN_INDUSTRY', 'OWN_AUTO',
+            'FAMILY_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED', 'LOAN_DLQ_NUM', 'LOAN_MAX_DLQ']:
+    data[col] = data[col].astype('category')
+    if (data[col].isnull() == True).any():
+        data[col].cat.add_categories(['Unknown'], inplace=True)
+        data[col].fillna('Unknown', inplace=True)
+data['OWN_AUTO'].value_counts(dropna=False, normalize=True)
+data.loc[data['OWN_AUTO'] == 2, 'OWN_AUTO'] = 1
+data['OWN_AUTO'] = data['OWN_AUTO'].cat.remove_unused_categories()
+functions.feature_stat(data, 'OWN_AUTO', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'OWN_AUTO')[0]
+functions.feature_stat(data, 'GENDER', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'GENDER')[0]
+data['CHILD_TOTAL'].value_counts(dropna=False, normalize=True)
+data['CHILD_TOTAL'].cat.add_categories(['3 or more'], inplace=True)
+data.loc[data['CHILD_TOTAL'].isin([1.0, 0.0, 2.0]) == False, 'CHILD_TOTAL'] = '3 or more'
+data['CHILD_TOTAL'] = data['CHILD_TOTAL'].cat.remove_unused_categories()
+functions.feature_stat(data, 'CHILD_TOTAL', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'CHILD_TOTAL')[0]
+data['DEPENDANTS'].value_counts(dropna=False, normalize=True)
+data['DEPENDANTS'].cat.add_categories(['2 or more'], inplace=True)
+data.loc[data['DEPENDANTS'].isin([1.0, 2.0]) == False, 'DEPENDANTS'] = '2 or more'
+data['DEPENDANTS'] = data['DEPENDANTS'].cat.remove_unused_categories()
+functions.feature_stat(data, 'DEPENDANTS', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'DEPENDANTS')[0]
+data['EDUCATION'].value_counts(dropna=False, normalize=True)
+data.loc[data['EDUCATION'].isin(['Undergraduate Degree', 'Post-Graduate Work', 'Graduate Degree']),
+         'EDUCATION'] = 'Undergraduate Degree'
+data.loc[data['EDUCATION'].isin(['Some High School', 'No Formal Education', 'Some Primary School']),
+         'EDUCATION'] = 'Some High School'
+data['EDUCATION'] = data['EDUCATION'].cat.remove_unused_categories()
+functions.feature_stat(data, 'EDUCATION', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'EDUCATION')[0]
+data['MARITAL_STATUS'].value_counts(dropna=False, normalize=True)
+data.loc[data['MARITAL_STATUS'].isin(['Married', 'Partner']), 'MARITAL_STATUS'] = 'Married'
+data.loc[data['MARITAL_STATUS'].isin(['Single', 'Separated', 'Widowed']), 'MARITAL_STATUS'] = 'Single'
+data['MARITAL_STATUS'] = data['MARITAL_STATUS'].cat.remove_unused_categories()
+functions.feature_stat(data, 'MARITAL_STATUS', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'MARITAL_STATUS')[0]
+data['GEN_INDUSTRY'].value_counts(dropna=False, normalize=True)
+data['GEN_INDUSTRY'].cat.add_categories(['others'], inplace=True)
+data.loc[data['GEN_INDUSTRY'].isin(['Market, real estate', 'Others fields', 'Iron & Steel', 'Unknown', 'Transportation',
+                                   'Public  & municipal administ.', 'Healthcare', 'Schools']) == False,
+         'GEN_INDUSTRY'] = 'others'
+data['GEN_INDUSTRY'] = data['GEN_INDUSTRY'].cat.remove_unused_categories()
+functions.feature_stat(data, 'GEN_INDUSTRY', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'GEN_INDUSTRY')[0]
+data['FAMILY_INCOME'].value_counts(dropna=False, normalize=True)
+data['FAMILY_INCOME'].cat.add_categories(['up to 10000', '20000+'], inplace=True)
+data.loc[data['FAMILY_INCOME'].isin(['up to 5000', '5000-10000']), 'FAMILY_INCOME'] = 'up to 10000'
+data.loc[data['FAMILY_INCOME'].isin(['20000-50000', '50000+']), 'FAMILY_INCOME'] = '20000+'
+data['FAMILY_INCOME'] = data['FAMILY_INCOME'].cat.remove_unused_categories()
+functions.feature_stat(data, 'FAMILY_INCOME', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'FAMILY_INCOME')[0]
+data['LOAN_NUM_TOTAL'].value_counts(dropna=False, normalize=True)
+data['LOAN_NUM_TOTAL'].cat.add_categories(['3 or more'], inplace=True)
+data.loc[data['LOAN_NUM_TOTAL'].isin([1, 2]) == False, 'LOAN_NUM_TOTAL'] = '3 or more'
+data['LOAN_NUM_TOTAL'] = data['LOAN_NUM_TOTAL'].cat.remove_unused_categories()
+functions.feature_stat(data, 'LOAN_NUM_TOTAL', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_NUM_TOTAL')[0]
+data['LOAN_NUM_CLOSED'].value_counts(dropna=False, normalize=True)
+data['LOAN_NUM_CLOSED'].cat.add_categories(['3 or more'], inplace=True)
+data.loc[data['LOAN_NUM_CLOSED'].isin([0, 1, 2]) == False, 'LOAN_NUM_CLOSED'] = '3 or more'
+data['LOAN_NUM_CLOSED'] = data['LOAN_NUM_CLOSED'].cat.remove_unused_categories()
+functions.feature_stat(data, 'LOAN_NUM_CLOSED', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_NUM_CLOSED')[0]
+data['LOAN_DLQ_NUM'].value_counts(dropna=False, normalize=True)
+data['LOAN_DLQ_NUM'].cat.add_categories(['1 or more'], inplace=True)
+data.loc[data['LOAN_DLQ_NUM'].isin([0]) == False, 'LOAN_DLQ_NUM'] = '1 or more'
+data['LOAN_DLQ_NUM'] = data['LOAN_DLQ_NUM'].cat.remove_unused_categories()
+functions.feature_stat(data, 'LOAN_DLQ_NUM', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_DLQ_NUM')[0]
+data['LOAN_MAX_DLQ'].value_counts(dropna=False, normalize=True)
+data['LOAN_MAX_DLQ'].cat.add_categories(['1 or more'], inplace=True)
+data.loc[data['LOAN_MAX_DLQ'].isin([0]) == False, 'LOAN_MAX_DLQ'] = '1 or more'
+data['LOAN_MAX_DLQ'] = data['LOAN_MAX_DLQ'].cat.remove_unused_categories()
+functions.feature_stat(data, 'LOAN_MAX_DLQ', 'TARGET')
+functions.calc_iv(data, 'TARGET', 'LOAN_MAX_DLQ')[0]
+data.head(10)
+columns_to_try = [col for col in list(data.columns) if col not in ('AGREEMENT_RK', 'CARD_ID_SB8', 'CARD_NUM', 'TARGET')]
+ivs = []
+for col in columns_to_try:
+    data[col] = data[col].astype('category')
+    if data[col].isnull().any():
+        print(col)
+        if 'Unknown' not in data[col].cat.categories:
+            data[col].cat.add_categories(['Unknown'], inplace=True)
+        data[col].fillna('Unknown', inplace=True)
+    data[col] = data[col].cat.remove_unused_categories()
+    _, iv = functions.calc_iv(data, 'TARGET', col)
+    ivs.append((col, np.round(iv, 4)))
+good_cols = [i[0] for i in sorted(ivs, key=lambda tup: tup[1], reverse=True) if i[1] > 0.02]
+for i in ['TARGET', 'AGREEMENT_RK']:
+    good_cols.append(i)
+good_cols
+data_viz = data[good_cols]
+fig, ax = plt.subplots(1, 2, figsize = (16, 6))
+sns.pointplot(x='SOCSTATUS_WORK_FL', y="TARGET", hue='SOCSTATUS_PENS_FL', data=data_viz, ax=ax[0])
+sns.pointplot(x='LOAN_MAX_DLQ', y="TARGET", hue='SOCSTATUS_PENS_FL', data=data_viz, ax=ax[1])
+data['work_pens'] = 0
+data.loc[data['SOCSTATUS_WORK_FL'] == 0, 'work_pens'] = 1
+data.loc[(data['SOCSTATUS_WORK_FL'] == 1) & (data['SOCSTATUS_PENS_FL'] == 1), 'work_pens'] = 2
+data.loc[(data['SOCSTATUS_WORK_FL'] == 1) & (data['SOCSTATUS_PENS_FL'] == 0), 'work_pens'] = 3
+data['pens_dlq'] = 0
+data.loc[(data['LOAN_MAX_DLQ'] == 0) & (data['SOCSTATUS_PENS_FL'] == 0), 'pens_dlq'] = 1
+data.loc[(data['LOAN_MAX_DLQ'] == '1 or more') & (data['SOCSTATUS_PENS_FL'] == 1), 'pens_dlq'] = 2
+data.loc[(data['LOAN_MAX_DLQ'] == 0) & (data['SOCSTATUS_PENS_FL'] == 0), 'pens_dlq'] = 3
+data.loc[(data['LOAN_MAX_DLQ'] == '1 or more') & (data['SOCSTATUS_PENS_FL'] == 1), 'pens_dlq'] = 4
+le = preprocessing.LabelEncoder()
+for col in ['GENDER', 'CHILD_TOTAL', 'DEPENDANTS', 'EDUCATION', 'MARITAL_STATUS', 'GEN_INDUSTRY', 'OWN_AUTO',
+            'FAMILY_INCOME', 'LOAN_NUM_TOTAL', 'LOAN_NUM_CLOSED', 'LOAN_DLQ_NUM', 'LOAN_MAX_DLQ']:
+    initial_data[col] = initial_data[col].astype('category')
+    if (initial_data[col].isnull() == True).any():
+        initial_data[col].cat.add_categories(['Unknown'], inplace=True)
+        initial_data[col].fillna('Unknown', inplace=True)
+    initial_data[col] = le.fit_transform(initial_data[col])  
+data_viz1 = initial_data[good_cols].drop(['AGREEMENT_RK'], axis=1)
+plt.figure(figsize=(32, 32))
+sns.pairplot(data_viz1[['LOAN_AVG_DLQ_AMT', 'LOAN_MAX_DLQ_AMT', 'AGE', 'TARGET', 'FAMILY_INCOME']], hue='TARGET')
+with sns.axes_style("white"):
+    sns.jointplot(x=data_viz1['LOAN_AVG_DLQ_AMT'], y=data_viz1['LOAN_MAX_DLQ_AMT'], kind="hex", color="k");
+data.drop(['LOAN_AVG_DLQ_AMT'], axis=1, inplace=True)
+columns_to_try = [col for col in list(data.columns) if col not in ('AGREEMENT_RK', 'CARD_ID_SB8', 'CARD_NUM', 'TARGET')]
+ivs = []
+for col in columns_to_try:
+    data[col] = data[col].astype('category')
+    if data[col].isnull().any():
+        print(col)
+        if 'Unknown' not in data[col].cat.categories:
+            data[col].cat.add_categories(['Unknown'], inplace=True)
+        data[col].fillna('Unknown', inplace=True)
+    data[col] = data[col].cat.remove_unused_categories()
+    _, iv = functions.calc_iv(data, 'TARGET', col)
+    ivs.append((col, np.round(iv, 4)))
+good_cols = [i[0] for i in sorted(ivs, key=lambda tup: tup[1], reverse=True) if i[1] > 0.02]
+for i in ['TARGET', 'AGREEMENT_RK']:
+    good_cols.append(i)
+good_cols
+columns_dummify = [col for col in good_cols if col not in ('TARGET', 'AGREEMENT_RK')]
+data = data[good_cols]
+for col in columns_dummify:
+    data[col] = data[col].astype('category')
+    dummies = pd.get_dummies(data[col])
+    dummies = dummies.add_prefix('{}_:_'.format(col))
+    data.drop([col], axis=1, inplace=True)
+    data = data.join(dummies)
+X = data.drop(['TARGET', 'AGREEMENT_RK'], axis=1)
+Y = data['TARGET']
+X.shape
+randomized_logistic = linear_model.RandomizedLogisticRegression(C=0.1, selection_threshold=0.5,
+                                                                n_resampling=50, normalize=False)
+X_train_log = randomized_logistic.fit_transform(X=X, y=Y)
+randomized_logistic.get_support()
+X_train_log.shape
+X_train, X_test, y_train, y_test = train_test_split(X_train_log, Y, test_size=0.2, stratify = Y)
+X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, stratify = y_train)
+logreg = linear_model.LogisticRegressionCV(class_weight='balanced', n_jobs=-1, fit_intercept=True)
+logreg.fit(X_train, y_train)
+
+y_pred_log_val = logreg.predict_proba(X_val)
+y_pred_log_val_1 = [i[1] for i in y_pred_log_val]
+fpr_val, tpr_val, thresholds_val = roc_curve(y_val, y_pred_log_val_1)
+plt.plot(fpr_val, tpr_val, label='Validation')
+scores_val = cross_val_score(logreg, X_val, y_val, cv=5, scoring='roc_auc')
+
+y_pred_log_test = logreg.predict_proba(X_test)
+y_pred_log_test_1 = [i[1] for i in y_pred_log_test]
+fpr_test, tpr_test, thresholds_test = roc_curve(y_test, y_pred_log_test_1)
+plt.plot(fpr_test, tpr_test, label='Test')
+scores_test = cross_val_score(logreg, X_test, y_test, cv=5, scoring='roc_auc')
+
+plt.title('ROCAUC curve')
+plt.legend(loc='lower right')
+print('Validation auc: ', np.round(auc(fpr_val, tpr_val), 4))
+print('Cross-validation: mean value is {0} with std {1}.'.format(np.round(np.mean(scores_val), 4),
+                                                                 np.round(np.std(scores_val), 4)))
+print('Test auc: ', np.round(auc(fpr_test, tpr_test), 4))
+print('Cross-validation: mean value is {0} with std {1}.'.format(np.round(np.mean(scores_test), 4),
+                                                                 np.round(np.std(scores_test), 4)))
+coefs = pd.DataFrame(list(zip(X[X.columns[randomized_logistic.get_support()]].columns, logreg.coef_[0])),
+             columns=['Feature', 'Coefficient'])
+coefs

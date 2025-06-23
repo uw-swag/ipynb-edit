@@ -1,0 +1,10 @@
+per_feature_stattest = {x: 'wasserstein' for x in ['age', 'education-num', 
+                                                   'capital-gain', 'capital-loss']}
+for column in ['sex', 'class']:
+    per_feature_stattest[column] = 'z'
+for column in ['workclass', 'education', 'marital-status']:
+    per_feature_stattest[column] = 'kl_div'
+for column in ['occupation', 'relationship', 'race',  'native-country']:
+    per_feature_stattest[column] = 'jensenshannon'
+for column in ['fnlwgt','hours-per-week']:
+    per_feature_stattest[column] = 'anderson'

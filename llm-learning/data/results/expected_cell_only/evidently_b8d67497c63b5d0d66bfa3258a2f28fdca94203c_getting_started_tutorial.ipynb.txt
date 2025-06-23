@@ -1,0 +1,14 @@
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithMissingValues(),
+    TestNumberOfRowsWithMissingValues(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedColumns(),
+])
+
+tests.run(reference_data=reference, current_data=current)
+
+# show HTML
+tests

@@ -1,0 +1,22 @@
+```python
+    from deepchecks.checks.integrity.new_label import NewLabelTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    test_data = {"col1": [0, 1, 2, 3] * 10, "col2": [1,2,2,3]*10}
+    val_data = {"col1": [4, 5, 6, 7, 8, 9] * 10, "col2": [1, 4, 5]*10}
+    test = Dataset(pd.DataFrame(data=test_data), label_name="col2")
+    val = Dataset(pd.DataFrame(data=val_data), label_name="col2")
+
+    NewLabelTrainTest().run(test, val)
+    ```
+
+    The code above is an example of how to use the `NewLabelTrainTest` check in Deepchecks. This check is used to validate the integrity of the labels in a dataset. The `NewLabelTrainTest` check will run on the test and validation datasets and will return a report of the results.
+
+    The test and validation datasets are created using pandas DataFrames. The `label_name` parameter is set to "col2" in both datasets, which is the name of the column that contains the labels.
+
+    The `NewLabelTrainTest().run(test, val)` call is the main function call that will run the check. This will return a report of the results.
+
+    The report will provide information about the number of unique labels in the test and validation datasets, the number of missing labels, and the number of duplicate labels.
+
+    Please note that the `NewLabelTrainTest` check is a part of the Deepchecks library and may not be available in all environments.

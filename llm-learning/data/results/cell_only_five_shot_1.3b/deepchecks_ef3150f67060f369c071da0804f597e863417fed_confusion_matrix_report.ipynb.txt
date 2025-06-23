@@ -1,0 +1,36 @@
+```python
+    # Importing necessary libraries
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName('example').getOrCreate()
+
+    # Load the data
+    df = spark.read.json("example.json")
+
+    # Show the data
+    df.show()
+
+    # Select a specific column
+    df.select("column_name").show()
+
+    # Filter the data
+    df.filter(col("column_name") > 10).show()
+
+    # Group the data
+    df.groupBy("column_name").count().show()
+
+    # Aggregate the data
+    df.agg({"column_name": "sum"}).show()
+
+    # Join the data
+    df1 = spark.read.json("example1.json")
+    df.join(df1, df["column_name"] == df1["column_name"]).show()
+
+    # Save the data
+    df.write.json("output.json")
+
+    # Stop the SparkSession
+    spark.stop()
+    ```

@@ -1,0 +1,26 @@
+```python
+    import deepchecks
+    from deepchecks.base import Dataset
+    from deepchecks.checks import IndexTrainTestLeakage
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, index_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, index_name=index_name)
+
+    train_ds = dataset_from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1')
+    test_ds = dataset_from_dict({'col1': [4, 3, 5, 6, 7]}, 'col1')
+
+    check_obj = IndexTrainTestLeakage()
+    check_obj.run(train_ds, test_ds)
+
+    # You can also specify the number of index to show in the report
+    check_obj = IndexTrainTestLeakage(n_index_to_show=1)
+    check_obj.run(train_ds, test_ds)
+
+    # If you want to check the leakage in the test set, you can do so by setting the test_ds to None
+    check_obj = IndexTrainTestLeakage()
+    check_obj.run(train_ds, test_ds=None)
+    ```
+
+    This code will run the IndexTrainTestLeakage check on the provided datasets. The check will show the indices that are present in the test set but not in the training set.

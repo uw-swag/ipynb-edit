@@ -1,0 +1,27 @@
+```python
+    #@title Install
+    !git clone https://github.com/ziatdinovmax/atomai.git
+    %cd atomai
+    !python3 -m pip -q install -r requirements.txt
+    download_link = 'https://drive.google.com/uc?id=1-0fXGXGY8jW11q2GdPZ2hmOhQ7-WNlnK'
+    !gdown -q $download_link -O 'training_data.npy'
+    dataset = np.load('training_data.npy')
+    images_all = dataset['X_train']
+    labels_all = dataset['y_train']
+    images_test_all = dataset['X_test']
+    labels_test_all = dataset['y_test']
+    trained_model = atomnet.trainer(
+        images_all, labels_all, 
+        images_test_all, labels_test_all,
+        training_cycles=1000).run()
+    # Load "validation" data
+    expdata = dataset['validation_img']
+    # Get raw NN output
+    input_img, pred = atomnet.predictor(
+        expdata, trained_model).run()
+    # Transform NN output into atomic coordinates
+    coordinates_im = atomnet.locator(pred).run()
+    plot_coord(expdata, coordinates_im[0], fsize=12)
+    ```
+
+    This code is for training a multi-class model using the AtomAI library. The model is trained on the training data provided in the 'training_data.npy' file. The model is then used to predict the labels for the test data. The predicted labels are then plotted with the atomic coordinates.

@@ -1,0 +1,38 @@
+```python
+    %reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+from fastai.callbacks.tensorboard import *
+path = untar_data(URLs.MNIST)
+path
+path.ls()
+(path/'training').ls()
+filenames = get_image_files(path/'training/5')
+len(filenames), filenames[:10]
+batchsize = 64
+np.random.seed(0)
+transform = get_transforms(do_flip=False)
+
+databunch = ImageDataBunch.from_folder(path, train='training', valid_pct=0.2, size=28, 
+                                       ds_tfms=transform, bs=batchsize, num_workers=8).normalize()
+databunch.show_batch(rows=3, figsize=(10, 10))
+databunch.classes
+learner = cnn_learner(databunch, models.resnet18, metrics=accuracy)
+proj_id = '07a-mnist-tensorboard'
+tboard_path = Path('data/tensorboard/' + proj_id)
+learner.callback_fns.append(partial(LearnerTensorboardWriter, base_dir=tboard_path, name='LearnerTensorboardWriter'))
+print(f'tensorboard --logdir={}', tboard_path)
+learner.fit_one_cycle(4)
+learner.unfreeze()
+learner.lr_find()
+learner.recorder.plot()
+learner.fit_one_cycle(3, max_lr=slice(1e-6, 3e-3))
+learner.show_results(rows=3)
+interpretation = ClassificationInterpretation.from_learner(learner)
+interpretation.plot_top_losses(9)
+path_test = Path()/'data'
+path_test.ls()
+test_image = open_image(

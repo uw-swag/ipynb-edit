@@ -1,0 +1,48 @@
+```python
+    from deepchecks.tabular.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.tabular.checks.performance import MultiModelPerformanceReport
+
+    # Load iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a dataset
+    train_dataset = Dataset(X_train, y_train, features=iris.feature_names)
+    test_dataset = Dataset(X_test, y_test, features=iris.feature_names)
+
+    # Create a model
+    model = AdaBoostClassifier()
+
+    # Train the model
+    model.fit(train_dataset)
+
+    # Evaluate the model
+    report = MultiModelPerformanceReport(test_dataset, model)
+    report.show()
+
+    # Split many files in core and base
+    from deepchecks.core.utils.split_files import split_files
+    split_files(["base.py", "core.py"], ["base", "core"])
+
+    # Split the files
+    split_files(["base.py", "core.py"], ["base", "core"])
+
+    # Split the files
+    split_files(["base.py", "core.py"], ["base", "core"])
+
+    # Split the files
+    split_files(["base.py", "core.py"], ["base", "core"])
+
+    # Split the files
+    split_files(["base.py", "core.py"], ["base", "core"])
+
+    # Split the files
+    split_files(["base.py", "core.py"], ["base",

@@ -1,0 +1,33 @@
+```python
+    # Model Monitoring
+    from sklearn.model_selection import learning_curve
+
+    # Compute learning curves
+    train_sizes, train_scores, test_scores = learning_curve(model_bias, X, y, cv=10, scoring='neg_mean_squared_error', n_jobs=-1, train_sizes=np.linspace(.1, 1.0, 5))
+
+    # Calculate mean and standard deviation
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+
+    # Plot learning curves
+    plt.plot(train_sizes, train_scores_mean, '--', color="#111111",  label="Training score")
+    plt.plot(train_sizes, test_scores_mean, color="#111111", label="Cross-validation score")
+
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std, train_scores_mean + train_scores_std, alpha=0.2, color="#111111")
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std, test_scores_mean + test_scores_std, alpha=0.2, color="#DDDDDD")
+
+    plt.legend(loc="best")
+    plt.grid()
+    plt.xlabel("Training set size")
+    plt.ylabel("RMSE")
+    plt.show()
+
+    # Documentation Changes
+    # ...
+
+    # Param Mapping
+    # ...
+    ```
+    Please replace the `...` with your actual changes.

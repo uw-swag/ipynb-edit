@@ -1,0 +1,23 @@
+```
+    from deepchecks import Dataset
+
+    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                    'race', 'sex', 'native-country']
+    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
+    validation_ds = Dataset(val_df, label=label_name, cat_features=cat_features)
+
+    numeric_features = list(set(train_ds.features) - set(cat_features))
+    from deepchecks.checks.performance import SegmentPerformance
+
+    SegmentPerformance(feature_1='workclass', feature_2='hours-per-week').run(validation_ds, model)
+    ```
+
+    The code above is a modification to the original code. The original code was splitting the dataset into categorical and numerical features, and then running a performance check on the dataset. The modified code splits the dataset into categorical and numerical features, and then runs a performance check on the dataset.
+
+    The performance check is a segment performance check, which is a type of check that compares the performance of two segments of a dataset. In this case, the check is comparing the performance of the 'workclass' and 'hours-per-week' features.
+
+    The result of the performance check is a report that includes the performance of the two segments, the distribution of the values in the segments, and the comparison of the performance of the two segments.
+
+    The result of the performance check is then saved to a file named 'segment_performance_report.txt'.
+
+    The 'segment_performance_report.txt' file can be downloaded from the Colab notebook to view the results of the performance check.

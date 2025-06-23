@@ -1,0 +1,12 @@
+
+The code you provided is used to create a DeepChecks dataset. The `label_name` parameter is used to specify the name of the label column in the dataset. If you want to remove the label from the dataset, you can do so by setting the `label_name` parameter to `None`. Here is the modified code:
+
+```python
+from deepchecks import Dataset
+
+# Assuming df_train and df_test are your dataframes and label_col is the name of the label column
+ds_train = Dataset(df_train, label_name=None, cat_features=[], set_index_from_dataframe_index=False)
+ds_test =  Dataset(df_test,  label_name=None, cat_features=[])
+```
+
+In this code, `label_name=None` means that the label column will not be included in the dataset.

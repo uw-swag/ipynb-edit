@@ -1,0 +1,35 @@
+```
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import precision_score, make_scorer
+
+    from deepchecks.checks import ClassPerformanceImbalance
+    from deepchecks.base import Dataset
+
+    # Load the iris dataset
+    iris = load_iris(as_frame=True)
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    # Create a dataset object for the training data
+    train_ds = Dataset(train, label_name="target")
+
+    # Create a dataset object for the testing data
+    test_ds = Dataset(test, label_name="target")
+
+    # Fit the AdaBoost classifier on the training data
+    clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+
+    # Run the ClassPerformanceImbalance check on the testing data
+    check = ClassPerformanceImbalance()
+    check.run(test_ds, clf)
+
+    # Use a custom scorer to calculate precision score
+    scorers = {
+        "precision": make_scorer(precision_score, average=None, zero_division=0),
+    }
+
+    # Run the ClassPerformanceImbalance check on the testing data with the custom scorer
+    check = ClassPerformanceImbalance(alternative_scorers=scorers)
+    check.run(test_ds, clf)
+    ```

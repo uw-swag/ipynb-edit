@@ -1,0 +1,32 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import nblinks as nb
+
+from deepchecks.checks.methodology.single_feature_contribution_train_validation import SingleFeatureContributionTrainTest
+from deepchecks.base import Dataset
+
+df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+df['x4'] = df['x1'] * 0.5 + df['x2']
+df['label'] = df['x2'] + 0.1 * df['x1']
+df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+ds = Dataset(df, label='label')
+df_test = df.copy()
+df_test['x2'] = df['x2'] + 0.5 * df['x1']
+df_test['x3'] = 0.3 * df['x3'] + df['label']
+ds_test = Dataset(df_test, label='label')
+
+# Create a new DataFrame with the same columns as the original DataFrame, but with a new 'nblinks' column
+df_test['nblinks'] = df_test['x2'] + 0.5 * df_test['x1']
+
+# Create a new DataFrame with the same columns as the original DataFrame, but with a new 'x5' column
+df_test['x5_new'] = df_test['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+
+# Create a new DataFrame with the same columns as the original DataFrame, but with a new 'x4' column
+df_test['x4_new'] = df_test['x1'] * 0.5 + df_test['x2']
+
+# Create a new DataFrame with the same columns as the original DataFrame, but with a new 'x3' column
+df_test['x3_new'] = 0.3 * df_test['x3'] + df_test['label']
+
+# Create a new

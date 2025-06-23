@@ -1,0 +1,53 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, confusion_matrix
+    from sklearn.preprocessing import StandardScaler
+
+    # Loading the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Data preprocessing
+    # Fill missing values
+    df.fillna(df.mean(), inplace=True)
+
+    # Encoding categorical variables
+    df = pd.get_dummies(df)
+
+    # Splitting the dataset
+    X = df.drop('target_column', axis=1)
+    y = df['target_column']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Model training
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Model evaluation
+    y_pred = model.predict(X_test)
+    print('Accuracy:', accuracy_score(y_test, y_pred))
+    print('Confusion Matrix:', confusion_matrix(y_test, y_pred))
+
+    # Saving the model
+    import joblib
+    joblib.dump(model, 'model.pkl')
+
+    # Loading the model
+    model_loaded = joblib.load('model.pkl')
+
+    # Predicting on new data
+    new_data = pd.read_csv('new_data.csv')
+    new_data = sc.transform(new_data)
+    prediction = model_loaded.predict(new_data)
+
+    # Visualizing the results

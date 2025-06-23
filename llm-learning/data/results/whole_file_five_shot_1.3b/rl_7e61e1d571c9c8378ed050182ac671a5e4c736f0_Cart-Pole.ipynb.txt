@@ -1,0 +1,61 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "added Lunar Lander, saved good model"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import os
+import random
+import time
+import resource
+import pickle
+import math
+
+import pdb
+
+import numpy as np
+import pandas as pd
+
+import tensorflow as tf
+# keras bundled with TensorFlow 2.0 ran slower, leaked memory. got latest
+# from tensorflow import keras
+# from tensorflow.keras.models import Model, Sequential, load_model
+# from tensorflow.keras.layers import Input, Dense, Dropout
+# from tensorflow.keras.optimizers import Adam
+# import tensorflow.keras.backend as K
+import keras
+from keras.models import Model, load_model
+from keras.layers import Input, Dense, Dropout
+from keras.optimizers import Adam
+from keras.initializers import glorot_uniform
+from keras.regularizers import l2
+import keras.backend as K
+
+import plotly
+import plotly.graph_objects as go
+
+# requires python 3.6
+# conda install -c akode gym
+import gym
+
+# set seeds for reproducibility
+# np.random.uniform(0,10000) 4465
+GLOBAL_SEED = 4465
+random.seed(GLOBAL_SEED)
+np.random.seed(GLOBAL_SEED)
+tf.random.set_seed(GLOBAL_SEED)
+
+print("TensorFlow %s" % tf.__version__)
+print("Keras %s" % keras.__version__)
+print("gym %s" % gym.__version__)
+print("plotly %s" % plotly.__version__)
+print("pandas %s" % pd.__version__)
+print("numpy %s" % np.__version__)
+
+<\Cell_0>
+<Cell_1>
+MAX_TIMESTEPS = 500
+N_EPISODES = 2000
+WIN_REWARD = 10
+DIS

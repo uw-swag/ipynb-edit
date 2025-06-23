@@ -1,0 +1,20 @@
+```{toggle}
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    import numpy as np
+    import pandas as pd
+
+    # Load the data
+    data = pd.read_csv('./train.csv')
+
+    # Calculate the age distribution
+    age_dist = data['Age'].value_counts().sort_index()
+
+    # Plot the age distribution
+    plt.figure(figsize=(10,6))
+    sns.barplot(age_dist.index, age_dist.values)
+    plt.title('Age Distribution')
+    plt.xlabel('Age')
+    plt.ylabel('Number of Homes')
+    plt.show()
+    ```

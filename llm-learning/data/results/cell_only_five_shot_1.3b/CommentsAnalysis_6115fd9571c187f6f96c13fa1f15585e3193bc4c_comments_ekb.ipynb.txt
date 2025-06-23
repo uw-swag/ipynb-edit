@@ -1,0 +1,42 @@
+```python
+    import numpy as np
+    import pandas as pd
+    from sklearn.preprocessing import MinMaxScaler
+    from keras.models import Sequential
+    from keras.layers import Dense, LSTM, Dropout
+    from sklearn.model_selection import train_test_split
+
+    # Load the data
+    data = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    data = data.dropna()
+
+    # Split the data into input and output variables
+    X = data.iloc[:, :-1].values
+    y = data.iloc[:, -1].values
+
+    # Normalize the data
+    scaler = MinMaxScaler(feature_range=(0, 1))
+    X = scaler.fit_transform(X)
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Reshape the data for LSTM
+    X_train = np.reshape(X_train, (X_train.shape[0], X_train.shape[1], 1))
+    X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
+
+    # Define the LSTM model
+    model = Sequential()
+    model.add(LSTM(units=50, return_sequences=True, input_shape=(X_train.shape[1], 1)))
+    model.add(Dropout(0.2))
+    model.add(LSTM(units=50, return_sequences=False))
+    model.add(Dropout(0.2))
+    model.add(Dense(units=1))
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mean_squared_error')
+
+    # Train the model
+    model.fit(X_train, y_train, epochs=100, batch_size=

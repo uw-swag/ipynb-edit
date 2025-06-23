@@ -1,0 +1,38 @@
+```
+    # Gradient Descent
+
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Defining the gradient descent function
+    def gradient_descent(x_start, learning_rate, num_iterations):
+        x = x_start
+        history = [x]
+
+        for i in range(num_iterations):
+            gradient = compute_gradient(x)  # Compute the gradient of the function at x
+            x = x - learning_rate * gradient  # Update x
+            history.append(x)
+
+        return history
+
+    # Defining the function to compute the gradient
+    def compute_gradient(x):
+        # This is a placeholder. Replace it with the actual function you want to compute the gradient of.
+        return 2 * x
+
+    # Testing the function
+    x_start = 5
+    learning_rate = 0.01
+    num_iterations = 1000
+    history = gradient_descent(x_start, learning_rate, num_iterations)
+
+    # Plotting the history
+    plt.plot(history)
+    plt.xlabel('Iteration')
+    plt.ylabel('x')
+    plt.title('Gradient Descent')
+    plt.show()
+    ```
+    This code defines a simple gradient descent function, which iteratively updates the value of a variable (in this case, x) based on a gradient computed at each iteration. The gradient is a function of the current value of x, and the learning rate determines how much to update x at each iteration. The history of the values of x at each iteration is plotted to visualize the progress of the gradient descent.

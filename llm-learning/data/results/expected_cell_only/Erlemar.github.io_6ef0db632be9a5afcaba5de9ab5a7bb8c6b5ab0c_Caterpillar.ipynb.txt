@@ -1,0 +1,146 @@
+import numpy as np
+import pandas as pd
+import xgboost as xgb
+from sklearn import preprocessing
+from sklearn.preprocessing import LabelEncoder
+from scipy.stats import skew
+import glob
+glob.glob('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/*.csv')
+#Read each file in a separate data frame.
+bill_of_materials = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/bill_of_materials.csv')
+components = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/components.csv')
+comp_adaptor = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_adaptor.csv')
+comp_boss = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_boss.csv')
+comp_elbow = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_elbow.csv')
+comp_float = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_float.csv')
+comp_hfl = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_hfl.csv')
+comp_nut = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_nut.csv')
+comp_other = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_other.csv')
+comp_sleeve = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_sleeve.csv')
+comp_straight = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_straight.csv')
+comp_tee = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_tee.csv')
+comp_threaded = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/comp_threaded.csv')
+specs = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/specs.csv')
+tube = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/tube.csv')
+tube_end_form = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/tube_end_form.csv')
+type_component = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/type_component.csv')
+type_connection = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/type_connection.csv')
+type_end_form = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/type_end_form.csv')
+train = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/train_set.csv', parse_dates=[2,])
+test = pd.read_csv('Kaggle/Data_Kaggle/Caterpillar Tube Pricing/test_set.csv', parse_dates=[3,])
+#The file contains information about components of tube assemblies. All information is necessary.
+#Missing values could be filled only with 0, but it isn't necessary.
+bill_of_materials.info()
+#There are columns with too few non-null values. But it is necessary to see more.
+comp_adaptor.info()
+comp_adaptor.drop(['adaptor_angle', 'component_type_id', 'end_form_id_1', 'connection_type_id_1', 'length_1', 'length_2',
+                   'unique_feature', 'orientation', 'end_form_id_2', 'connection_type_id_2'], axis=1, inplace=True)
+
+#Could input a formula, but it single value.
+comp_adaptor.loc[comp_adaptor['overall_length'].isnull(), 'overall_length'] = 93.5
+comp_adaptor.drop(comp_adaptor.index[[8, 21]], inplace=True)
+comp_adaptor
+#Descriptive and categorical features will be dropped.
+comp_boss.info()
+#Use only important information.
+comp_boss = comp_boss[['component_id', 'height_over_tube', 'weight']]
+comp_boss.info()
+for i in comp_boss.columns:
+    if comp_boss[i].dtype != object:
+        if comp_boss[i][comp_boss[i] > 4 * comp_boss[i].mean()].any() == True:
+            print(i)
+            print(comp_boss.loc[comp_boss[i] == comp_boss[i].max()])
+#Most of the columns aren't necessary.
+comp_elbow.drop(['component_type_id', 'mj_class_code', 'mj_plug_class_code', 'plug_diameter', 'groove', 'unique_feature',
+                 'orientation',], axis=1, inplace=True)
+#Combine two length columns.
+all_comp['overall_length'] = all_comp['overall_length'].fillna(0)
+all_comp['length'] = all_comp['length'].fillna(0)
+all_comp['length'] = all_comp['length'] + all_comp['overall_length']
+all_comp = all_comp.drop(['overall_length'], axis=1)
+
+all_comp['weight'] = all_comp['weight'].fillna(0)
+all_comp['thickness'] = all_comp['thickness'].fillna(0)
+#Merging to get information about components
+for i in range(1, 9, 2):
+    suffix1 = '_' + str(i)
+    suffix2 = '_' + str(i + 1)
+    component_1 = 'component_id' + suffix1
+    component_2 = 'component_id' + suffix2
+    
+    train = pd.merge(train, all_comp, left_on = component_1, right_on = 'component_id', how='left')
+    train = pd.merge(train, all_comp, left_on = component_2, right_on = 'component_id', suffixes=(suffix1, suffix2), how='left')
+    
+    test = pd.merge(test, all_comp, left_on = component_1, right_on = 'component_id', how='left')
+    test = pd.merge(test, all_comp, left_on = component_2, right_on = 'component_id', suffixes=(suffix1, suffix2), how='left')
+#Add descriptive information about specs.
+train = pd.merge(train, specs, on='tube_assembly_id', how='left')
+test = pd.merge(test, specs, on='tube_assembly_id', how='left')
+[col for col in list(train.columns) if 'thickness' in col]
+#Calculate various additional features on physical parameters. They turned out to be useful.
+length_columns = [col for col in list(train.columns) if 'length' in col]
+weight_columns = [col for col in list(train.columns) if 'weight' in col]
+thickness_columns = [col for col in list(train.columns) if 'thickness' in col]
+train['avg_w'] = train[weight_columns].mean(axis=1)
+train['avg_l'] = train[length_columns].mean(axis=1)
+train['avg_th'] = train[thickness_columns].mean(axis=1)
+train['min_w'] = train[weight_columns].min(axis=1)
+train['min_l'] = train[length_columns].min(axis=1)
+train['min_th'] = train[thickness_columns].min(axis=1)
+train['max_w'] = train[weight_columns].max(axis=1)
+train['max_l'] = train[length_columns].max(axis=1)
+train['max_th'] = train[thickness_columns].max(axis=1)
+test['avg_w'] = test[weight_columns].mean(axis=1)
+test['avg_l'] = test[length_columns].mean(axis=1)
+test['avg_th'] = test[thickness_columns].mean(axis=1)
+test['min_w'] = test[weight_columns].min(axis=1)
+test['min_l'] = test[length_columns].min(axis=1)
+test['min_th'] = test[thickness_columns].min(axis=1)
+test['max_w'] = test[weight_columns].max(axis=1)
+test['max_l'] = test[length_columns].max(axis=1)
+test['max_th'] = test[thickness_columns].max(axis=1)
+train['tot_w'] = train[weight_columns].sum(axis=1)
+train['tot_l'] = train[length_columns].sum(axis=1)
+test['tot_w'] = test[weight_columns].sum(axis=1)
+test['tot_l'] = test[length_columns].sum(axis=1)
+#Take log of skewered columns to smooth them and fill NA.
+for col in train.columns:
+    if train[col].dtype != 'object':
+        if skew(train[col]) > 0.75:
+            train[col] = np.log1p(train[col])
+            train[col] = train[col].apply(lambda x: 0 if x == -np.inf else x)
+
+        train[col] = train[col].fillna(0)
+        
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+            test[col] = test[col].apply(lambda x: 0 if x == -np.inf else x)
+
+        test[col] = test[col].fillna(0)
+for col in train.columns:
+    if train[col].dtype == 'object':
+        train[col].replace(np.nan,' ', regex=True, inplace= True)
+for col in test.columns:
+    if test[col].dtype == 'object':
+        test[col].replace(np.nan,' ', regex=True, inplace= True)
+X_train = train.drop('cost',axis=1)
+Y_train = train['cost']
+X_test  = test.drop('id', axis=1)
+#XGB need float.
+X_train = X_train.astype(float)
+X_test = X_test.astype(float)
+params = {}
+params['objective'] = 'reg:linear'
+params['eta'] = 0.1
+params['min_child_weight'] = 5
+params['subsample'] = 1.0
+params['scale_pos_weight'] = 1.0
+params['silent'] = 1
+params['max_depth'] = 7
+
+param = list(params.items())
+preds_df = pd.DataFrame({'id': test['id'], 'cost': preds})
+preds_df.to_csv('Caterpillar.csv', index=False)
+#0.229153 from ~0.19

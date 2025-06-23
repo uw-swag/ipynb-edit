@@ -1,0 +1,12 @@
+```python
+    from mlchecks.checks import string_mismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    string_mismatch(df)
+    ```
+
+    The function `string_mismatch` checks for string mismatches in the dataframe. It returns a dataframe with the mismatches. If there are no mismatches, it returns an empty dataframe.
+
+    In your code, you are comparing strings in the 'col1' column. The '$deeP$' and 'foo?' are not the same as 'deep' and 'foo', respectively. The function will return a dataframe with the mismatches.

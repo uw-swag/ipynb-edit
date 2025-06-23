@@ -1,0 +1,388 @@
+<Cell_0>
+%load_ext autoreload
+
+%autoreload 2
+import pandas as pd
+import datetime
+import numpy as np
+from datetime import datetime
+from scipy.stats import pearsonr
+import sys
+sys.path.append("../src")
+from score_funcs import cdep
+from copy import deepcopy
+from tqdm import tqdm_notebook
+import numpy as np
+from torch import nn
+import seaborn as sns; sns.set()
+import matplotlib.pyplot as plt
+from model import  Net
+import torch.nn.functional as F
+import torch.optim as optim
+import random
+import torch
+import torch
+from model import Net
+from torch.utils.data import TensorDataset, ConcatDataset
+
+torch.backends.cudnn.deterministic = True #this makes results reproducible. 
+%matplotlib inline
+
+from matplotlib import pyplot as plt
+<\Cell_0>
+<Cell_1>
+raw_data = pd.read_csv('../../compas-analysis/compas-scores-two-years.csv')
+print('Num rows: %d' %len(raw_data))
+<\Cell_1>
+<Cell_2>
+df = raw_data[((raw_data['days_b_screening_arrest'] <=30) & 
+      (raw_data['days_b_screening_arrest'] >= -30) &
+      (raw_data['is_recid'] != -1) &
+      (raw_data['c_charge_degree'] != 'O') & 
+      (raw_data['score_text'] != 'N/A')
+     )].copy()
+
+print('Num rows filtered: %d' % len(df))
+<\Cell_2>
+<Cell_3>
+crimes = df.c_charge_desc.value_counts().to_frame()
+crimes['description'] = crimes.index
+crimes['classified']= False
+words = ['Battery', 'Assault','Violence', 'no charge', 'Possession', 'Poss', 'Pos', 'Theft', 'Driving', 'DUI', 'Burglary', 'Drivers','Cocaine', 'License','Abuse']
+for word in words:
+    crimes['classified'] = crimes['description'].str.contains(word) | crimes['classified']
+<\Cell_3>
+<Cell_4>
+with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+    print(crimes[crimes.c_charge_desc >20])
+
+<\Cell_4>
+<Cell_5>
+df['c_charge_desc'] = df['c_charge_desc'].astype(str)
+<\Cell_5>
+<Cell_6>
+black_book = {'possession' : ['Possession'  'Poss', 'Cocaine','Cannabis'],
+'violence' : ['Battery','Assault', 'Violence', 'Abuse'],
+'theft' : ['Theft', 'Burglary', ],
+'driving' : ['Drivers', 'Driving', 'License', 'Drivers', 'DUI','Veh'],
+'nocharge' : ['no charge'],}
+df['classified'] = 0
+
+for key in black_book.keys():
+    df[key] = 0
+    for word in black_book[key]:
+        df[key]= df[key] +   df['c_charge_desc'].str.contains(word).astype(bool).astype(int)
+        df['classified'] =df['classified'] |  df['c_charge_desc'].str.contains(word).astype(bool).astype(int)
+
+<\Cell_6>
+<Cell_7>
+df_crime = pd.get_dummies(df['c_charge_degree'],prefix='crimefactor',drop_first=True)
+df_age = pd.get_dummies(df['age_cat'],prefix='age')
+df_race = pd.get_dummies(df['race'],prefix='race')
+df_gender = pd.get_dummies(df['sex'],prefix='sex',drop_first=True)
+df_score = pd.get_dummies(df['score_text'] != 'Low',prefix='score_factor',drop_first=True)
+
+<\Cell_7>
+<Cell_8>
+df_lr = pd.concat([df_race, df_crime, df_age,df_gender,
+                   df['priors_count'],
+                   df['theft'],
+                   df['driving'],
+                   df['possession'],
+                   df['violence'],
+                   df['nocharge']
+                  ],axis=1)
+<\Cell_8>
+<Cell_9>
+x =  torch.tensor(df_lr.values).float()
+y= torch.tensor(df['two_year_recid'].values)
+<\Cell_9>
+<Cell_10>
+dataset = TensorDataset(x,y)
+num_total = len(dataset)
+num_train = int(0.8 * num_total)
+num_val = int(0.1 * num_total)
+num_test = num_total - num_train - num_val
+torch.manual_seed(0);
+train_dataset, test_dataset ,val_dataset= torch.utils.data.random_split(dataset, [num_train, num_test, num_val])
+<\Cell_10>
+<Cell_11>
+datasets = {'train' : train_dataset, 'test':test_dataset, 'val': val_dataset}
+dataset_sizes = {'train' : len(train_dataset), 'test':len(test_dataset), 'val': len(val_dataset)}
+dataloaders = {x: torch.utils.data.DataLoader(datasets[x], batch_size=256, 
+                                             shuffle=True, num_workers=2)
+              for x in ['train', 'test','val']}
+
+<\Cell_11>
+<Cell_12>
+df1 = pd.DataFrame({'seed':[], 'regularizer_rate':[],
+                    "test_acc":[], 
+                    "test_loss":[],
+                   'black_wc': [],
+                   'black_wf':[],
+                   'white_wc':[],
+                   'white_wf':[],
+                   
+                   'insensitivity':[]}) 
+<\Cell_12>
+<Cell_13>
+device = torch.device("cuda")
+patience = 10
+num_epochs =1000
+
+weights = np.asarray([len(datasets['train'])/(datasets['train'].dataset[datasets['train'].indices][1]==0).sum().item(), len(train_dataset)/datasets['train'].dataset[datasets['train'].indices][1].sum().item()])
+weights /= weights.sum()
+weights = torch.tensor(weights).to(device)
+criterion = nn.CrossEntropyLoss(weight = weights.double().float())
+<\Cell_13>
+<Cell_14>
+blob_race = np.zeros((17))
+blob_race[:] =1
+blob_norace = np.zeros((17))
+blob_norace[6:] = 1
+def train( model, device, train_loader, optimizer, epoch, regularizer_rate):
+    model.train()
+    for batch_idx, (data, target) in enumerate(train_loader):
+
+        data, target = data.to(device), target.to(device)
+
+         
+        optimizer.zero_grad()
+        output = model(data)
+        loss =criterion(output, target)
+        add_loss = torch.zeros(1,).cuda()
+        if regularizer_rate != 0:
+            add_loss += cdep(model, data, blob_norace) 
+        (loss+regularizer_rate*add_loss).backward()
+
+        optimizer.step()
+
+        
+        if batch_idx % 100 == 0:
+            pred = output.argmax(dim=1, keepdim=True)
+            acc = 100.*pred.eq(target.view_as(pred)).sum().item()/len(target)
+
+def test(model, device, test_loader, epoch, verbose = False):
+    model.eval()
+    test_loss = 0
+    correct = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            data[:,:6] =0
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
+            pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+            correct += pred.eq(target.view_as(pred)).sum().item()
+
+    test_loss /= len(test_loader.dataset)
+    if verbose:
+        print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+            test_loss, correct, len(test_loader.dataset),
+            100. * correct / len(test_loader.dataset)))
+    test_acc = 100. * correct / len(test_loader.dataset)
+#     s.losses_test.append(test_loss)
+#     s.accs_test.append(100. * correct / len(test_loader.dataset))
+    return test_loss,test_acc
+
+<\Cell_14>
+<Cell_15>
+df1 = pd.DataFrame({'seed':[], 'regularizer_rate':[],
+                    "test_acc":[], 
+                    "test_loss":[],
+                   'black_wc': [],
+                   'black_wf':[],
+                   'white_wc':[],
+                   'white_wf':[],
+                    'weights' :[],
+                   
+                   'insensitivity':[]}) 
+<\Cell_15>
+<Cell_16>
+regularizer_rates = [0,1]
+val_x, val_y = val_dataset.dataset[val_dataset.indices] #needed for calculating race specific accs
+for seed in range(5):
+    for regularizer_rate  in regularizer_rates:
+        torch.manual_seed(seed) #weight init is varied
+        torch.cuda.manual_seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
+        best_model_weights = None
+        best_test_loss = 100000
+
+        cur_patience = 0
+        net = Net().cuda()
+        optimizer = optim.SGD(net.parameters(), lr = 0.01, momentum =0.9)
+        for epoch in tqdm_notebook(range(num_epochs)):
+
+            train( net, device, dataloaders['train'], optimizer, epoch, regularizer_rate)
+            test_loss = test(net, device, dataloaders['test'], epoch)
+            if test_loss[0] < best_test_loss:
+
+                cur_patience = 0
+                best_test_loss = test_loss[0]
+                best_model_weights = deepcopy(net.state_dict())
+            else:
+                cur_patience +=1
+                if cur_patience > patience:
+                    break
+        net.load_state_dict(best_model_weights)
+        test_loss, test_acc = test(net, device, dataloaders['val'], epoch+1, verbose = True)
+
+
+        val_out = net(val_x.cuda())
+        def calc_fairness(race_int):
+            black_mask = (val_x[:, race_int] ==1).bool() #
+            val_out_black = val_out.argmax(dim=1).cpu().masked_select(black_mask)
+            val_y_black = val_y.cpu().masked_select(black_mask)
+            fp = ((val_out_black ==1)*(val_y_black ==0)).sum().item()
+            tp = ((val_out_black ==1)*(val_y_black ==1)).sum().item()
+            fn = ((val_out_black ==0)*(val_y_black ==1)).sum().item()
+            tn = ((val_out_black ==0)*(val_y_black ==0)).sum().item()
+            wrongly_incarcerated = fp/(tn+fp)
+            wrongly_let_go = fn/(tp+fn)
+            return (wrongly_incarcerated, wrongly_let_go)
+
+        black_wc, black_wf = calc_fairness(0)
+        white_wc, white_wf = calc_fairness(2)
+#         diff_black, diff_white = test_change(net)
+        df1 = df1.append(pd.DataFrame({'seed': [seed], 'regularizer_rate':[regularizer_rate],
+                        "test_acc":[test_acc], 
+                        "test_loss":[test_loss],
+                       'black_wc': [black_wc],
+                       'black_wf':[black_wf],
+                       'white_wc':[white_wc],
+                       'white_wf':[white_wf],
+                                       
+                       'weights':[best_model_weights],
+                        'insensitivity' :0 }))
+df1['equalized_odds_wc'] = df1['black_wc'] / df1['white_wc'] 
+df1['equalized_odds_wf'] = df1['black_wf'] / df1['white_wf'] 
+<\Cell_16>
+<Cell_17>
+df1.groupby(['regularizer_rate']).mean()[['test_acc', 'black_wc', 'white_wc', 'equalized_odds_wc','equalized_odds_wf', 'black_wf', 'white_wf']].round(2)
+<\Cell_17>
+<Cell_18>
+blob_race = np.zeros((17))
+blob_race[:] =1
+blob_norace = np.zeros((17))
+blob_norace[6:] = 1
+def train( model, device, train_loader, optimizer, epoch, regularizer_rate):
+    model.train()
+    for batch_idx, (data, target) in enumerate(train_loader):
+
+        data, target = data.to(device), target.to(device)
+        data[:,:6] = 0
+
+         
+        optimizer.zero_grad()
+        output = model(data)
+        loss =criterion(output, target)
+        add_loss = torch.zeros(1,).cuda()
+
+        (loss).backward()
+
+        optimizer.step()
+
+        
+        if batch_idx % 100 == 0:
+            pred = output.argmax(dim=1, keepdim=True)
+            acc = 100.*pred.eq(target.view_as(pred)).sum().item()/len(target)
+
+def test(model, device, test_loader, epoch, verbose = False,):
+    model.eval()
+    test_loss = 0
+    correct = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            data[:,:6] =0
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += F.nll_loss(output, target, reduction='sum').item() # sum up batch loss
+            pred = output.argmax(dim=1, keepdim=True) # get the index of the max log-probability
+            correct += pred.eq(target.view_as(pred)).sum().item()
+
+    test_loss /= len(test_loader.dataset)
+    if verbose:
+        print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+            test_loss, correct, len(test_loader.dataset),
+            100. * correct / len(test_loader.dataset)))
+    test_acc = 100. * correct / len(test_loader.dataset)
+#     s.losses_test.append(test_loss)
+#     s.accs_test.append(100. * correct / len(test_loader.dataset))
+    return test_loss,test_acc
+
+<\Cell_18>
+<Cell_19>
+regularizer_rates = [-1]
+val_x, val_y = val_dataset.dataset[val_dataset.indices] #needed for calculating race specific accs
+for seed in range(5):
+    for regularizer_rate  in regularizer_rates:
+        torch.manual_seed(seed) #weight init is varied
+        torch.cuda.manual_seed(seed)
+        np.random.seed(seed)
+        random.seed(seed)
+        best_model_weights = None
+        best_test_loss = 100000
+
+        cur_patience = 0
+        net = Net().cuda()
+        optimizer = optim.SGD(net.parameters(), lr = 0.01, momentum =0.9)
+        for epoch in tqdm_notebook(range(num_epochs)):
+
+            train( net, device, dataloaders['train'], optimizer, epoch, regularizer_rate)
+            test_loss = test(net, device, dataloaders['test'], epoch)
+            if test_loss[0] < best_test_loss:
+
+                cur_patience = 0
+                best_test_loss = test_loss[0]
+                best_model_weights = deepcopy(net.state_dict())
+            else:
+                cur_patience +=1
+                if cur_patience > patience:
+                    break
+        net.load_state_dict(best_model_weights)
+        test_loss, test_acc = test(net, device, dataloaders['val'], epoch+1, verbose = True)
+
+
+        
+        def calc_fairness(race_int):
+            black_mask = (val_x[:, race_int] ==1).bool() #
+            val_x_copy = val_x.clone().detach().cuda()
+            val_x_copy[:,:6] =0
+            val_out = net(val_x_copy.cuda())
+            val_out_black = val_out.argmax(dim=1).cpu().masked_select(black_mask)
+            val_y_black = val_y.cpu().masked_select(black_mask)
+            fp = ((val_out_black ==1)*(val_y_black ==0)).sum().item()
+            tp = ((val_out_black ==1)*(val_y_black ==1)).sum().item()
+            fn = ((val_out_black ==0)*(val_y_black ==1)).sum().item()
+            tn = ((val_out_black ==0)*(val_y_black ==0)).sum().item()
+            wrongly_incarcerated = fp/(tn+fp)
+            wrongly_let_go = fn/(tp+fn)
+            return (wrongly_incarcerated, wrongly_let_go)
+
+        black_wc, black_wf = calc_fairness(0)
+        white_wc, white_wf = calc_fairness(2)
+#         diff_black, diff_white = test_change(net)
+        df1 = df1.append(pd.DataFrame({'seed': [seed], 'regularizer_rate':[regularizer_rate],
+                        "test_acc":[test_acc], 
+                        "test_loss":[test_loss],
+                       'black_wc': [black_wc],
+                       'black_wf':[black_wf],
+                       'white_wc':[white_wc],
+                       'white_wf':[white_wf],
+                                       
+                       'weights':[best_model_weights],
+                        'insensitivity' :0 }))
+df1['equalized_odds_wc'] = df1['black_wc'] / df1['white_wc'] 
+df1['equalized_odds_wf'] = df1['black_wf'] / df1['white_wf'] 
+<\Cell_19>
+<Cell_20>
+df1.groupby(['regularizer_rate']).mean()[['test_acc', 'black_wc', 'white_wc', 'equalized_odds_wc','equalized_odds_wf', 'black_wf', 'white_wf']].round(2)
+<\Cell_20>
+<Cell_21>
+df1.groupby(['regularizer_rate']).std()[['test_acc', 'black_wc', 'white_wc', 'equalized_odds_wc','equalized_odds_wf', 'black_wf', 'white_wf']].round(2)
+<\Cell_21>
+<Cell_22>
+
+<\Cell_22>

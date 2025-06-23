@@ -1,0 +1,41 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.utils import to_categorical
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Drafted 24c convnet hook class
+    class ConvNetHook(tf.keras.callbacks.Callback):
+        def on_epoch_end(self, epoch, logs=None):
+            if epoch % 24 == 0:
+                self.model.save(f'24c_convnet_epoch_{epoch}.h5')
+
+    # Drafted histogram notebook
+    def plot_histogram(model):
+        layers_outputs = [layer.output for layer in model.layers]
+        layer_names = [layer.name for layer in model.layers]
+
+        # Create a dictionary to hold each layer's activations
+        activations = dict()
+        for layer_name, output in zip(layer_names, layers_outputs):
+            activations[layer_name] = model.get_layer(layer_name).output
+
+        # Create a dictionary to hold each layer's histograms
+        histograms = dict()
+        for layer_name, activation in activations.items():
+            # Flatten the tensor output
+            histograms[layer_name] = tf.reduce_mean(activation, axis=[0, 1, 2])
+
+        # Plot the histograms
+        for layer_name, histogram in histograms.items():
+            plt.figure(figsize=(10, 5))
+            plt.title(f'Histogram of {layer_name}')
+            plt.hist(histogram.numpy().flatten(), bins=256)
+            plt.show()
+
+    # Create a 24c convnet
+    model = Sequential()
+    model.add(Conv2D(3

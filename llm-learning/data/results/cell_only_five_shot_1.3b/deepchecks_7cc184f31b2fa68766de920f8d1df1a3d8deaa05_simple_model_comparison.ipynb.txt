@@ -1,0 +1,33 @@
+
+The code you provided is a PyTorch DeepChecks example. The commit message "Split VisionData and remove Formatters" suggests that the code is splitting the VisionData into training and testing sets, and then removing the formatters from the VisionData. 
+
+However, the code you provided is not complete and does not provide a complete solution. It's missing the part where the VisionData is split and the formatters are removed. 
+
+Here's a complete example of how you might split the VisionData and remove the formatters:
+
+```python
+from deepchecks.vision.data import VisionData
+from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+from torch import nn
+
+# Assuming `vision_data` is your VisionData object
+train_ds, test_ds = vision_data.split(0.8)
+
+# Remove formatters
+pred_formatter = ClassificationPredictionFormatter(None)
+
+# Now you can use the pred_formatter to format your predictions
+# For example, if your model is a simple neural network
+model = nn.Sequential(nn.Linear(784, 128), nn.ReLU(), nn.Linear(128, 10))
+
+# And if your prediction_formatter is a function that takes a model and a batch of data,
+# it can be used to format your predictions
+def prediction_formatter(model, batch):
+    # Your code here
+    pass
+
+# Use the pred_formatter to format your predictions
+result = pred_formatter(model, test_ds)
+```
+
+Please replace the `prediction_formatter` function with your own code.

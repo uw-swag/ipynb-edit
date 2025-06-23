@@ -1,0 +1,20 @@
+
+    from deepchecks import Dataset
+
+    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                    'race', 'sex', 'native-country']
+    train_ds = Dataset(train_df, label_name='target', cat_features=cat_features)
+    test_ds = Dataset(test_df, label_name='target', cat_features=cat_features)
+
+    numeric_features = list(set(train_ds.features) - set(cat_features))
+    iris = load_iris(as_frame=True)
+    clf = LogisticRegression(max_iter=20)
+    frame = iris.frame
+    X = iris.data
+    y = iris.target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=55)
+    clf.fit(X_train, y_train)
+    ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+                features=iris.feature_names,
+                label_name='target')
+

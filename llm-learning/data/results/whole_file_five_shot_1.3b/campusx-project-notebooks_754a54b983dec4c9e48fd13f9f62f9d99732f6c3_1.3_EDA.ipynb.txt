@@ -1,0 +1,58 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "♻️ Using `pandas` and `numpy` for data manipulation"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+from helpers.data import summary
+from helpers.plots import univariate
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv("data/processed/gurgaon_10k.csv")
+print(df.shape)
+df.head()
+<\Cell_1>
+<Cell_2>
+df["PROPERTY_TYPE"].value_counts()
+<\Cell_2>
+<Cell_3>
+df.drop(
+    index=df.query("PROPERTY_TYPE==['farm house', 'serviced apartments']").index,
+    inplace=True,
+)
+df.shape
+<\Cell_3>
+<Cell_4>
+df.info()
+<\Cell_4>
+<Cell_5>
+df.isnull().sum()
+<\Cell_5>
+<Cell_6>
+df.columns
+<\Cell_6>
+<Cell_7>
+df["CITY"].value_counts()
+<\Cell_7>
+<Cell_8>
+summary.custom_describe(df["PRICE"])
+<\Cell_8>
+<Cell_9>
+univariate.univariate_eda(df["PRICE"], compare=True, ecdf=True, qqplot_kw={"dist": "log"})
+<\Cell_9>
+<Cell_10>
+low_price_df = df.query("PRICE<20_000")
+print(low_price_df.shape)
+low_price_df.sample(5)
+<\Cell_10>
+<Cell_11>
+low_price_df["PROPERTY_TYPE"].value_

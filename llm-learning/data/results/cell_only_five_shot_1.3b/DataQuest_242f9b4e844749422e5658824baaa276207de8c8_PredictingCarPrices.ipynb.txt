@@ -1,0 +1,37 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Chapter 02: Data Cleaning and Preprocessing"
+    Original Code Cells:
+    '''
+    # Because the column we're trying to predict is 'price', any row were price is NaN will be removed.
+    # After doing check the DataFrame again
+    numeric_cars.dropna(subset=['price'], inplace=True)
+    numeric_cars.info()
+    # All remaining NaN's will be filled with the mean of its respective column
+    # Then, yet again check the DataFrame.
+    numeric_cars = numeric_cars.fillna(numeric_cars.mean())
+    numeric_cars.info()
+    # Create training feature list and k value list
+    test_features = numeric_cars.columns.tolist()
+    predictive_feature = 'price'
+    test_features.remove(predictive_feature)
+    # k_values = [x for x in range(22) if x/2 != round(x/2)]
+    k_values = [x for x in range(1,22)]
+
+    # Normalize columns
+    numeric_cars_normalized = numeric_cars[test_features].copy()
+    numeric_cars_normalized = (numeric_cars_normalized - numeric_cars_normalized.min()) / (numeric_cars_normalized.max() - numeric_cars_normalized.min())
+    numeric_cars_normalized[predictive_feature] = numeric_cars[predictive_feature].copy()
+
+    numeric_cars_normalized.head(5)
+    # Do a final check on the data and verify that it has been cleaned properly and there are no NaN's or inf
+
+    index = []
+    NaN_counter = []
+    inf_counter = []
+
+    for col in numeric_cars_normalized.columns:
+        index.append(col)
+        inf_counter.append(np.any(np.isfinite(numeric_cars_normalized[col])))

@@ -1,0 +1,59 @@
+
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D
+
+    # Create a new sequential model
+    model = Sequential()
+
+    # Add a convolutional layer
+    model.add(Conv2D(64, (3, 3), input_shape=(150, 150, 3)))
+
+    # Add a activation layer
+    model.add(Activation('relu'))
+
+    # Add a max pooling layer
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+
+    # Add a dropout layer
+    model.add(Dropout(0.5))
+
+    # Add a flatten layer
+    model.add(Flatten())
+
+    # Add a fully connected layer
+    model.add(Dense(64))
+
+    # Add an activation layer
+    model.add(Activation('relu'))
+
+    # Add a dropout layer
+    model.add(Dropout(0.5))
+
+    # Add the output layer
+    model.add(Dense(1))
+
+    model.compile(loss='binary_crossentropy',
+                  optimizer='adam',
+                  metrics=['accuracy'])
+
+    model.fit(x_train, y_train, batch_size=32, epochs=10, validation_data=(x_val, y_val))
+
+    model.save('my_model.h5')
+
+    # Evaluate the model
+    scores = model.evaluate(x_test, y_test)
+
+    print('Test loss:', scores[0])
+    print('Test accuracy:', scores[1])
+
+    # Predict the class of an image
+    prediction = model.predict(new_image)
+
+    # Print the prediction
+    print('Prediction:', prediction)
+
+    # Close the TensorFlow session
+    tf.keras.backend.clear_session()
+

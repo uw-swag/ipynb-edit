@@ -1,0 +1,42 @@
+<Cell_0>
+import pandas as pd
+
+from evidently.v2.metrics import DataIntegrityMetrics
+from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests import TestNumberOfColumns
+<\Cell_0>
+<Cell_1>
+from evidently import ColumnMapping
+from evidently.v2.suite.base_suite import Suite
+
+suite = Suite()
+suite.add_metrics(DataIntegrityMetrics())
+suite.add_tests(TestNumberOfColumns(NumberRange(exact=3)))
+
+suite.run_calculate(InputData(reference_data=None, current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping()))
+suite.run_checks()
+<\Cell_1>
+<Cell_2>
+from evidently import ColumnMapping
+
+suite = TestSuite(tests=[TestNumberOfColumns(NumberRange(left_side_threshold=1))])
+
+suite.run(reference_data=None, current_data=pd.DataFrame([{'a': 1, 'b': 2}]), column_mapping=ColumnMapping())
+<\Cell_2>
+<Cell_3>
+suite
+<\Cell_3>
+<Cell_4>
+suite.show(mode="inline")
+<\Cell_4>
+<Cell_5>
+suite.save_html("example.html")
+<\Cell_5>
+<Cell_6>
+suite.json()
+<\Cell_6>
+<Cell_7>
+suite.save_json("example.json")
+<\Cell_7>

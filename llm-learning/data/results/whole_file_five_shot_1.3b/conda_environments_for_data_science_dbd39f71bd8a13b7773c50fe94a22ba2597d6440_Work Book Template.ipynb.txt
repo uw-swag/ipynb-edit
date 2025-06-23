@@ -1,0 +1,50 @@
+```python
+    # This function checks if a file exists at the given location path.
+    def testFileExists(locationPath):
+        print(locationPath)
+        assert os.path.exists(locationPath)
+
+    # This function creates a directory at the given location path.
+    def createLocationPath(locationPath):
+        print(locationPath)
+        path = Path(locationPath)
+        path.mkdir(parents=True, exist_ok=True)
+        assert os.path.exists(locationPath)
+
+    # This function detects the operating system.
+    def detectOS():
+        if (os.name == "nt"):
+            # Windows
+            print("This is Windows")
+        elif (os.name == "posix"):
+            # Linux
+            print("This is Linux")
+        else:
+            print("Unknown OS")
+
+    # This is a class that has methods for saving and printing input.
+    class exampleClass(object):
+        
+        def __init__(self, inputString):
+            self.savedString = inputString
+        
+        # This method prints the input string.
+        def printInput(self, inputString):
+            print(inputString)
+        
+        # This method prints the saved input string.
+        def printSavedInput(self):
+            print(self.savedString)
+
+    # This creates an instance of the exampleClass.
+    theObject = exampleClass("Hello World")
+
+    # This calls the detectOS function.
+    detectOS()
+
+    # This calls the printSavedInput method of theObject.
+    theObject.printSavedInput()
+
+    # This calls the printInput method of theObject with "Hello Universe".
+    theObject.printInput("Hello Universe")
+    ```

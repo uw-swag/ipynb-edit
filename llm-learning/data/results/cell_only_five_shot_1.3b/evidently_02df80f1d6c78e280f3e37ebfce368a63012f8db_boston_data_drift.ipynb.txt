@@ -1,0 +1,50 @@
+```
+    ## README
+
+    ## Overview
+    This repository contains the code for the paper "A Deep Recommender System for News Recommendation" by your name.
+
+    ## Installation
+    To install the code, you can use pip:
+    ```
+    pip install reco-utils
+    ```
+
+    ## Examples
+    Here are some examples of how to use the code:
+
+    ```python
+    from reco_utils.models.newsrec.newsrec_utils import prepare_hparams
+    from reco_utils.models.newsrec.models.lstur import LSTURModel
+    from reco_utils.models.newsrec.io.mind_iterator import MINDIterator
+    from reco_utils.models.newsrec.newsrec_utils import get_mind_data_set
+
+    # Prepare hyperparameters
+    hparams = prepare_hparams(dataset='ml-100k', model='lstur', batch_size=32, learning_rate=0.001,
+                             num_epochs=10, num_negatives=5, num_users=100, num_items=100,
+                             embedding_dim=10, hidden_dim=10, num_layers=1, dropout=0.5)
+
+    # Initialize the model
+    model = LSTURModel(hparams)
+
+    # Initialize the iterator
+    mind_iterator = MINDIterator(hparams)
+
+    # Get the data set
+    train_data, test_data = get_mind_data_set(hparams.dataset, hparams.num_users, hparams.num_items)
+
+    # Train the model
+    model.fit(train_data, mind_iterator, hparams.num_epochs)
+
+    # Evaluate the model
+    model.evaluate(test_data)
+    ```
+
+    ## License
+    The code is licensed under the MIT License.
+    ```
+    ## Contributing
+    Contributions to this project are welcome. Please see the contributing guide for more information.
+
+    ## Citation
+    If you use this code in your research, please c

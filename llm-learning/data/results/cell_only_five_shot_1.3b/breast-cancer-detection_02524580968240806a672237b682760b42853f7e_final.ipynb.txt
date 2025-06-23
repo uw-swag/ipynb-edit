@@ -1,0 +1,27 @@
+```python
+    import os
+    import glob
+    import shutil
+
+    # Get the list of all files in the current directory
+    files = glob.glob('./*')
+
+    # Loop through each file
+    for f in files:
+        # Get the file size
+        size = os.path.getsize(f)
+
+        # Print the file name and its size
+        print(f'{f} : {size} bytes')
+
+    # Update the file size in the final notebook
+    with open('final.ipynb', 'r+') as f:
+        lines = f.readlines()
+        f.seek(0)
+        f.write('\n'.join(lines[1:]))
+        f.truncate()
+
+    # Print the updated file size
+    with open('final.ipynb', 'r') as f:
+        print(f.read())
+    ```

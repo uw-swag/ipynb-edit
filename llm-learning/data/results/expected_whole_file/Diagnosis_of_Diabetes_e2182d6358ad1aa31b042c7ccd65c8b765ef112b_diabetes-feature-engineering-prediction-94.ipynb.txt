@@ -1,0 +1,582 @@
+<Cell_0>
+# Basic Libraries 🐳
+# --------------------------------------
+import pandas as pd
+import numpy as np
+from numpy import nan
+import seaborn as sns
+from pylab import rcParams
+import matplotlib.pyplot as plt
+
+# Plotly Express - Plotly - cufflinks 🦅
+# --------------------------------------
+'''
+Cufflink is also a python library that connects plotly
+with pandas so that we can create charts directly on data frames.
+{It basically acts as a plugin.}
+'''
+import cufflinks as cf
+import plotly.express as px
+import plotly.offline as py
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+from plotly.offline import init_notebook_mode, iplot
+init_notebook_mode(connected = True)
+
+# Metrics ETC.. 🧠🧠🧠🧠🧠🧠
+# --------------------------------------
+from sklearn.preprocessing import  RobustScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score,accuracy_score,roc_auc_score
+
+# Machine Learning Models 🧠🧠🧠🧠🧠🧠
+# --------------------------------------
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
+from catboost import CatBoostClassifier
+from lightgbm import LGBMClassifier
+from xgboost import XGBClassifier
+
+# Customize to Remove Warnings and Better Observation  🏗🏗🏗
+# ------------------------------------------------------------
+import warnings
+warnings.filterwarnings("ignore")
+warnings.warn("this will not show")
+pd.set_option('display.float_format', lambda x: '%.5f' % x)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', 600)
+from termcolor import colored
+constraints = ['#581845', '#C70039']
+metric_constraints = ['#2ECC71','#34495E','#D0D3D4']
+cat_feat_constraints = ['#7FB3D5','#76D7C4','#F7DC6F','#85929E','#283747']
+<\Cell_0>
+<Cell_1>
+df_ = pd.read_csv("../input/diadata/diabetes.csv")
+<\Cell_1>
+<Cell_2>
+df = df_.copy()
+df.head()
+<\Cell_2>
+<Cell_3>
+def missing_values_analysis(df):
+    na_columns_ = [col for col in df.columns if df[col].isnull().sum() > 0]
+    n_miss = df[na_columns_].isnull().sum().sort_values(ascending=False)
+    ratio_ = (df[na_columns_].isnull().sum() / df.shape[0] * 100).sort_values(ascending=False)
+    missing_df = pd.concat([n_miss, np.round(ratio_, 2)], axis=1, keys=['Total Missing Values', 'Ratio'])
+    missing_df = pd.DataFrame(missing_df).sort_values(by="Ratio", ascending=False)
+    return missing_df
+
+
+def check_df(df, head=5, tail=5):
+    print(" SHAPE ".center(60, '~'))
+    print('Observations -------> {}'.format(df.shape[0]))
+    print('Features     -------> {}'.format(df.shape[1]))
+    print(f"Shape of dataset: {colored(df.shape, 'red')}")
+    print(" Types of Features ".center(60, '~'))
+    print(df.dtypes,"\n")
+    print(" Dataframe - Head ".center(60, '~'))
+    print("\n",df.head(head),"\n")
+    print(' Dataframe - TAIL '.center(60, '~'))
+    print("\n",df.tail(tail),"\n")
+    print(" Missing Values Analysis ".center(60, '~'))
+    print("\n",missing_values_analysis(df),"\n")
+    print(' Duplicate Values Analysis '.center(60, '~'))
+    print("\n",df.duplicated().sum(),"\n")
+    print(" QUANTILES ".center(60, '~'))
+    print("\n",df.quantile([0, 0.05, 0.50, 0.95, 0.99, 1]).T,"\n")
+
+
+check_df(df)
+<\Cell_3>
+<Cell_4>
+def grab_col_names(df, cat_th=10, car_th=20):
+     
+    """
+    It gives the names of categorical, numerical and categorical but cardinal variables in the data set.
+    Note: Categorical variables with numerical appearance are also included in categorical variables.
+
+    Parameters
+    ------
+            df: Dataframe
+                The dataframe from which variable names are to be retrieved
+        cat_th: int, optional
+                threshold value for numeric but categorical variables
+        car_th: int, optinal
+                threshold value for categorical but cardinal variables
+
+    Returns
+    ------
+        cat_cols: list
+                Categorical variable list
+        num_cols: list
+                Numeric variable list
+        cat_but_car: list
+                Categorical but cardinal variable list
+
+    Examples
+    ------
+        You just need to call the function and send the dataframe.)
+        
+        --> grab_col_names(df)
+
+    Notes
+    ------
+        cat_cols + num_cols + cat_but_car = total number of variables
+        num_but_cat is inside cat_cols.
+        The sum of the 3 returned lists equals the total number of variables: 
+        cat_cols + num_cols + cat_but_car = number of variables
+
+    """
+    
+    # cat_cols, cat_but_car
+    cat_cols = [col for col in df.columns if df[col].dtypes == "O"]
+    num_but_cat = [col for col in df.columns if df[col].nunique() < cat_th and
+                   df[col].dtypes != "O"]
+    cat_but_car = [col for col in df.columns if df[col].nunique() > car_th and
+                   df[col].dtypes == "O"]
+    cat_cols = cat_cols + num_but_cat
+    cat_cols = [col for col in cat_cols if col not in cat_but_car]
+
+    # num_cols
+    num_cols = [col for col in df.columns if df[col].dtypes != "O"]
+    num_cols = [col for col in num_cols if col not in num_but_cat]
+
+    print(" RESULT ".center(60, '~'),"\n")
+    print(f'cat_cols: {len(cat_cols)}')
+    print(f'num_cols: {len(num_cols)}')
+    print(f'cat_but_car: {len(cat_but_car)}')
+    print(f'num_but_cat: {len(num_but_cat)}',"\n")
+    print("".center(60, '~'))
+
+    return cat_cols, num_cols, cat_but_car
+
+cat_cols, num_cols, cat_but_car = grab_col_names(df)
+<\Cell_4>
+<Cell_5>
+# Categorical Columns
+cat_cols
+<\Cell_5>
+<Cell_6>
+# Numerical Columns
+num_cols
+<\Cell_6>
+<Cell_7>
+def check_classes(df):  
+    dict = {}
+    for i in list(df.columns):
+        dict[i] = df[i].value_counts().shape[0]
+
+    unq = pd.DataFrame(dict,index=["Unique Count"]).transpose().sort_values(by="Unique Count", ascending=False)
+    return unq
+
+check_classes(df)
+<\Cell_7>
+<Cell_8>
+def descriptive_statistics(df):
+    describe_ = df.describe().T
+    describe_df = pd.DataFrame(index=df.columns,
+                               columns=describe_.columns,
+                               data=describe_)
+
+    f, ax = plt.subplots(figsize=(22,7))
+    sns.heatmap(describe_df,
+                annot=True,
+                cmap= constraints,
+                fmt='.3f',
+                ax=ax,
+                linecolor='#C6D3E5',
+                linewidths=3,
+                cbar=False,
+                annot_kws={"size": 15})
+    plt.xticks(size=20)
+    plt.yticks(size=20,
+               rotation=0)
+    plt.title("\nDescriptive Statistics\n", size=25)
+    plt.show()
+
+
+num_desc = df[num_cols]
+descriptive_statistics(num_desc)
+<\Cell_8>
+<Cell_9>
+def corr_map(df,width=23, height=7):
+    mtx = np.triu(df.corr())
+    f,ax=plt.subplots(figsize = (width,height))
+    sns.heatmap(df.corr(),
+                annot= True,
+                fmt = ".2f",
+                ax=ax,
+                vmin = -1,
+                vmax = 1,
+                cmap = constraints,
+                mask = mtx,
+                linewidth = 0.4,
+                linecolor = "black",
+                annot_kws={"size": 15})
+    plt.yticks(rotation=0,size=15)
+    plt.xticks(rotation=75,size=15)
+    plt.title('\nCorrelation Map\n', size = 40)
+    plt.show()
+    
+corr_map(df)
+<\Cell_9>
+<Cell_10>
+sns.set(font_scale=1.2, 
+        style="whitegrid", 
+        palette= constraints,
+        font="sans-serif")
+sns.pairplot(df,
+             hue='Outcome',
+             corner = True, 
+             kind = 'reg');
+<\Cell_10>
+<Cell_11>
+fig = px.imshow(df.corr(),
+                text_auto=True,
+                color_continuous_scale='Viridis',
+                zmin=-1, 
+                zmax=1,
+                width = 1300, 
+                height = 1000,
+               )
+fig.show()
+<\Cell_11>
+<Cell_12>
+def num_features_hist(df, column_name,i,hue):
+    rcParams['figure.figsize'] = 30,50
+    sns.set(font_scale = 1.5)
+    sns.set_style("whitegrid")
+    sns.set_palette("bright")
+    plt.subplots_adjust(hspace=0.5)
+    plt.subplot(5,2,i)
+    sns.histplot(data=df, x=column_name, hue=hue,kde=True,palette=constraints)
+    
+def num_summary(df, column_name):
+    fig = make_subplots(rows=1, cols=2,
+                        subplot_titles=('Quantiles', 'Distribution'))
+
+    fig.add_trace(go.Box(y= df[column_name],
+                         name=str(column_name),
+                         showlegend=False,
+                         marker_color=constraints[1]),
+                  row=1, col=1)
+
+    fig.add_trace(go.Histogram(x= df[column_name],
+                               xbins=dict(start= df[column_name].min(),
+                                          end= df[column_name].max()),
+                               showlegend=False,
+                               name=str(column_name),
+                               marker=dict(color=constraints[0],
+                                           line=dict(color='#DBE6EC',
+                                                     width=1))),
+                  row=1, col=2)
+
+    fig.update_layout(title={'text': column_name,
+                             'y': 0.9,
+                             'x': 0.5,
+                             'xanchor': 'center',
+                             'yanchor': 'top'},
+                      template='plotly_white')
+
+    iplot(fig)
+
+
+i = 0
+for column_name in num_cols:
+    i= i + 1
+    num_summary(df, column_name)
+    num_features_hist(df,column_name,i,hue='Outcome')
+    
+    
+plt.figure(figsize=(23,7))
+sns.set(font_scale = 1.3)
+sns.set_style("whitegrid")
+plt.subplots_adjust(wspace=0.5)
+sns.countplot(x=df['Age'],hue=df['Outcome'],palette = constraints);
+<\Cell_12>
+<Cell_13>
+def categorical_variable_summary(df, column_name):
+    fig = make_subplots(rows=1, cols=2,
+                        subplot_titles=('Countplot', 'Percentages'),
+                        specs=[[{"type": "xy"}, {'type': 'domain'}]])
+
+    fig.add_trace(go.Bar(y=df[column_name].value_counts().values.tolist(),
+                         x=[str(i) for i in df[column_name].value_counts().index],
+                         text=df[column_name].value_counts().values.tolist(),
+                         textfont=dict(size=15),
+                         name=column_name,
+                         textposition='auto',
+                         showlegend=False,
+                         marker=dict(color=cat_feat_constraints,
+                                     line=dict(color='#DBE6EC',
+                                               width=1))),
+                  row=1, col=1)
+
+    fig.add_trace(go.Pie(labels=df[column_name].value_counts().keys(),
+                         values=df[column_name].value_counts().values,
+                         textfont=dict(size=20),
+                         textposition='auto',
+                         showlegend=False,
+                         name=column_name,
+                         marker=dict(colors=cat_feat_constraints)),
+                  row=1, col=2)
+
+    fig.update_layout(title={'text': column_name,
+                             'y': 0.9,
+                             'x': 0.5,
+                             'xanchor': 'center',
+                             'yanchor': 'top'},
+                      template='plotly_white')
+
+    iplot(fig)
+
+categorical_variable_summary(df,'Outcome')
+<\Cell_13>
+<Cell_14>
+df["Glucose"] = np.where(df.Glucose == 0, nan, df["Glucose"])
+df.drop(['BloodPressure','SkinThickness'], axis=1, inplace=True)
+df["Insulin"] = np.where(df.Insulin == 0, nan, df["Insulin"])
+df["BMI"] = np.where(df.BMI == 0, nan, df["BMI"])
+<\Cell_14>
+<Cell_15>
+missing_values_analysis(df)
+<\Cell_15>
+<Cell_16>
+# Creating New Variables -> Age Category 
+
+df["Age_Cat"] = pd.cut(df.Age, 5, labels = [1, 2, 3, 4, 5]) # Category { 1 - 2 - 3 - 4 - 5}
+
+# Fill Missing Insulin
+
+df['Insulin'] = df['Insulin'].fillna(df.groupby(["Age_Cat", "Outcome"])['Insulin'].transform('median'))
+df['Insulin'] = df['Insulin'].fillna(df.groupby('Outcome')['Insulin'].transform('median'))  
+
+# Fill Missing BMI
+
+df['BMI'] = df['BMI'].fillna(df.groupby(["Age_Cat", "Outcome"])['BMI'].transform('median'))
+
+# Creating New Variable --> Is the person obese or not? 1 = True, 0 = False
+df["OBESE"] = np.where(df.BMI  >= 30, 1, 0)
+<\Cell_16>
+<Cell_17>
+# BMI Category --> Total 6 category  => {Underweight, Normal Weight, Overweight,  Obese Class I ,Obese Class II ,Obese Class III}
+
+df["BMI_Cat"] = np.where(df.BMI < 18.5, "Underweight", "Normal Weight")
+df["BMI_Cat"] = np.where((df.BMI >= 18.5) & (df.BMI < 25), "Normal Weight", df["BMI_Cat"])
+df["BMI_Cat"] = np.where((df.BMI >= 25) & (df.BMI < 30), "Overweight", df["BMI_Cat"])
+df["BMI_Cat"] = np.where((df.BMI >= 30) & (df.BMI < 35), "Obese Class I", df["BMI_Cat"])
+df["BMI_Cat"] = np.where((df.BMI >= 35) & (df.BMI < 40), "Obese Class II", df["BMI_Cat"])
+df["BMI_Cat"] = np.where(df.BMI  >= 40, "Obese Class III", df["BMI_Cat"])  
+<\Cell_17>
+<Cell_18>
+# Creating New Variables -> Pregnancy Category 
+df["Pregnancy_Cat"] = np.where(df.Pregnancies == 0, "Childless", "One-Three")
+df["Pregnancy_Cat"] = np.where((df.Pregnancies > 3) & (df.Pregnancies < 10), "Four-Nine", df["Pregnancy_Cat"])
+df["Pregnancy_Cat"] = np.where((df.Pregnancies > 10), "Over-Ten", df["Pregnancy_Cat"])
+
+# Creating New Variables -> Pregnancies - ıs have child ? --> 1 => True  --- 0 => False
+df["Is_Have_Child"] = np.where(df.Pregnancies > 0, 1, 0)
+<\Cell_18>
+<Cell_19>
+# Fill Missing Glucose
+df["Glucose"] = df.Glucose.fillna(df.Glucose.median())
+
+# Creating New Variable -> 'hypo' for glucose variable 
+'''
+A low blood sugar level, also called hypoglycaemia or a "hypo", 
+is where the level of sugar (glucose) in your blood drops too low. It mainly affects people with diabetes, 
+especially if they take insulin. A low blood sugar level can be dangerous if it's not treated quickly, 
+but you can usually treat it easily yourself.
+
+Very often, hypoglycemia symptoms occur when blood glucose levels fall below 70 mg/dL.
+As unpleasant as they may be, the symptoms of low blood glucose are useful. 
+These symptoms tell you that you your blood glucose is low and you need to take action to bring it back into a safe range.
+
+We will assume <90 and below as HYPO while generating variables.
+'''
+
+df["Hypo"] = np.where(df.Glucose < 90, 1,0)
+
+# Creating New Variable -> --> 1 => At Risk  --- 0 => No Risk
+
+df["Glucose_Cat"] = np.where(df.Glucose < 140, 0, 1) # 0 => No Risk
+df["Glucose_Cat"] = np.where(df.Glucose >= 140, 1, df["Glucose_Cat"]) # 1 => 1 At Risk
+<\Cell_19>
+<Cell_20>
+df.isnull().sum()
+<\Cell_20>
+<Cell_21>
+cat_cols, num_cols, cat_but_car = grab_col_names(df)
+<\Cell_21>
+<Cell_22>
+descriptive_statistics(df[num_cols])
+<\Cell_22>
+<Cell_23>
+def outlier_thresholds(dataframe, col_name, q1=0.10, q3=0.90):
+    quartile1 = dataframe[col_name].quantile(q1)
+    quartile3 = dataframe[col_name].quantile(q3)
+    interquantile_range = quartile3 - quartile1
+    up_limit = quartile3 + 1.5 * interquantile_range
+    low_limit = quartile1 - 1.5 * interquantile_range
+    return low_limit, up_limit
+
+def replace_with_thresholds(dataframe, variable):
+    low_limit, up_limit = outlier_thresholds(dataframe, variable)
+    dataframe.loc[(dataframe[variable] < low_limit), variable] = low_limit
+    dataframe.loc[(dataframe[variable] > up_limit), variable] = up_limit
+    
+for col in num_cols:
+    replace_with_thresholds(df, col)
+    
+descriptive_statistics(df[num_cols])
+<\Cell_23>
+<Cell_24>
+def summary_cat_features(dataframe,column_name,label):
+    data = go.Bar(x = dataframe.groupby(column_name).agg({label:'mean'}).reset_index()[column_name],
+                  y = dataframe.groupby(column_name).agg({label:'mean'}).reset_index()[label],
+                  text = round(dataframe.groupby(column_name).agg({label:'mean'}).reset_index()[label],3),
+                  textposition= 'auto',
+                  marker = dict(color = cat_feat_constraints,line_color = 'white',line_width=1.5))
+
+    layt = go.Layout(title={'text': f'Average {label} by {column_name} Categories','y':0.9,'x':0.2,
+                              'xanchor': 'center','yanchor': 'top'},
+                       xaxis = dict(title=column_name),
+                       yaxis =dict(title=label),
+                       template = 'plotly_white')
+                      
+
+    fig=go.Figure(data = data, layout = layt)
+    iplot(fig)
+
+new_cat_fea = ['Age_Cat','BMI_Cat','Pregnancy_Cat','Is_Have_Child','Hypo','Glucose_Cat','OBESE']
+for i in new_cat_fea:
+    categorical_variable_summary(df,i)        
+    summary_cat_features(df,i,'Outcome')
+<\Cell_24>
+<Cell_25>
+pd.crosstab(df.Outcome,df.OBESE,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_25>
+<Cell_26>
+pd.crosstab(df.Outcome,df.Age_Cat,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_26>
+<Cell_27>
+pd.crosstab(df.Outcome,df.BMI_Cat,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_27>
+<Cell_28>
+pd.crosstab(df.Outcome,df.Glucose_Cat,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_28>
+<Cell_29>
+pd.crosstab(df.Outcome,df.Hypo,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_29>
+<Cell_30>
+pd.crosstab(df.Outcome,df.Is_Have_Child,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_30>
+<Cell_31>
+pd.crosstab(df.Outcome,df.Pregnancy_Cat,margins=True).style.background_gradient(cmap='summer_r')
+<\Cell_31>
+<Cell_32>
+corr_map(df)
+<\Cell_32>
+<Cell_33>
+df.info()
+<\Cell_33>
+<Cell_34>
+# Transform  cat variable to object
+df["Age_Cat"] = df["Age_Cat"].astype(object)
+<\Cell_34>
+<Cell_35>
+df.info()
+<\Cell_35>
+<Cell_36>
+def one_hot_encoder(df, categorical_cols, drop_first=True):
+    df = pd.get_dummies(df, columns=categorical_cols, drop_first=drop_first)
+    return df
+<\Cell_36>
+<Cell_37>
+check_classes(df)
+<\Cell_37>
+<Cell_38>
+ohe_cols = [col for col in df.columns if 10 >= df[col].nunique() > 2]
+ohe_cols
+<\Cell_38>
+<Cell_39>
+df = one_hot_encoder(df, ohe_cols)
+<\Cell_39>
+<Cell_40>
+df.head()
+<\Cell_40>
+<Cell_41>
+df[num_cols]
+<\Cell_41>
+<Cell_42>
+rs = RobustScaler()
+df[num_cols] = rs.fit_transform(df[num_cols])
+descriptive_statistics(df[num_cols])
+<\Cell_42>
+<Cell_43>
+df.head()
+<\Cell_43>
+<Cell_44>
+y = df['Outcome']
+X = df.drop(['Outcome'], axis=1)
+random_state = 135
+
+X_train, X_test, y_train, y_test = train_test_split(X,
+                                                    y,
+                                                    random_state = random_state,
+                                                    stratify = y,
+                                                    test_size = 0.2, 
+                                                    shuffle = True)
+
+print(f"The shape of X_train is      {colored(X_train.shape,'red')}")
+print(f"The shape of X_test is       {colored(X_test.shape,'red')}")
+print(f"The shape of y_train is      {colored(y_train.shape,'red')}")
+print(f"The shape of y_test is       {colored(y_test.shape,'red')}")
+<\Cell_44>
+<Cell_45>
+def clc_ml(model):
+    
+    y_pred = model.fit(X_train, y_train).predict(X_test)
+    Accuracy = accuracy_score(y_test, y_pred)
+    roc_auc = roc_auc_score(y_test, model.predict_proba(X_test)[:,1])
+    f1 = f1_score(y_test, y_pred)
+    mt_dataframe = pd.DataFrame({'Scores': [Accuracy, roc_auc, f1],
+                            'Metrics': ['Accuracy',
+                                        'ROC-AUC',
+                                        'F1-Score']})
+    
+    fig = make_subplots(rows = 1, cols = 1)
+    fig.add_trace(go.Bar(x = [round(i,5) for i in mt_dataframe['Scores']],
+                         y = mt_dataframe['Metrics'],
+                         text = [round(i,5) for i in mt_dataframe['Scores']],
+                         orientation='h',
+                         textposition = 'inside',
+                         name = 'Scores',
+                         marker = dict(color = metric_constraints,
+                                       line_color = 'white',
+                                       line_width=1.5)),
+                  row = 1, col = 1)
+    fig.update_layout(title={'text': model.__class__.__name__ ,
+                             'y':0.9,
+                             'x':0.5,
+                             'xanchor': 'center',
+                             'yanchor': 'top'},
+                      template='plotly_white')
+    fig.update_xaxes(range=[0,1], row = 1, col = 1)
+
+    iplot(fig)
+
+ml_models = [  
+               LogisticRegression(random_state = random_state),
+               RandomForestClassifier(random_state = random_state),
+               GradientBoostingClassifier(random_state = random_state),
+               LGBMClassifier(random_state = random_state),
+               XGBClassifier(random_state = random_state),
+               CatBoostClassifier(random_state = random_state),
+               DecisionTreeClassifier(random_state = random_state)
+            ]
+
+for model in ml_models:
+    clc_ml(model)
+<\Cell_45>

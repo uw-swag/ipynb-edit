@@ -1,0 +1,89 @@
+# Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For Map vizualization
+import folium
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For random selection 
+import random
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Communicating with operating and file system
+import os
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+# store in a new dataframe the info latitude/longitude/transit for month February
+data = df[['latitude', 'longitude', 'transit']].loc[df['month'] == 'February']
+data.dropna(inplace=True)
+tooltip = 'Click me!'
+
+for row in data.itertuples():
+    mapit = folium.Map(location=[row.latitude, row.longitude], zoom_start=12)
+
+for row in data[:100].itertuples():
+    folium.Marker(location=[row.latitude, row.longitude], popup=row.transit, icon=folium.Icon(icon='info-sign')).add_to(mapit)
+# Display map generated from Folium
+mapit
+df['neighbourhood'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540).generate(' '.join(df['neighbourhood'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+room_types = df['room_type'].value_counts().keys()
+print("Average number of people each room type accommodates: \n")
+for room_type in room_types:
+    print("{}: {}".format(room_type, round(df.loc[df['room_type'] == room_type]['accommodates'].mean())))
+df = df[['id', 'name', 'description']]
+df.info()
+df.head()
+# drop any NaN value
+df.dropna(inplace=True)
+df.info()
+def preprocess_text(text):
+    # remove all punctuation
+    text = re.sub(r'[^\w\d\s]', ' ', text)
+    # collapse all white spaces
+    text = re.sub(r'\s+', ' ', text)
+    # convert to lower case
+    text = re.sub(r'^\s+|\s+?$', '', text.lower())
+    # remove stop words and perform stemming
+    stop_words = nltk.corpus.stopwords.words('english')
+    lemmatizer = WordNetLemmatizer() 
+    return ' '.join(
+        lemmatizer.lemmatize(term) 
+        for term in text.split()
+        if term not in set(stop_words)
+    )
+# Concatenate name and description in one column and perform preprocessing
+df['info'] = df['name'] + df['description']
+df['processed info'] = df['info'].apply(lambda row : preprocess_text(row))
+df.head()
+

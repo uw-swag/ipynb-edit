@@ -1,0 +1,35 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.callbacks import LearningRateScheduler, Callback
+
+    class AnnealingLearningRate(Callback):
+        def __init__(self, initial_lr, warmup_steps=1000, final_lr=1e-4, final_anneal_steps=2000):
+            super(AnnealingLearningRate, self).__init__()
+            self.initial_lr = initial_lr
+            self.warmup_steps = warmup_steps
+            self.final_lr = final_lr
+            self.final_anneal_steps = final_anneal_steps
+
+        def on_train_begin(self, logs=None):
+            self.lr_schedule = LearningRateScheduler(self.lr_schedule)
+            self.lr_schedule(0)
+
+        def lr_schedule(self, epoch):
+            if epoch < self.warmup_steps:
+                return self.initial_lr * (epoch / self.warmup_steps)
+            else:
+                return self.final_lr * (1 - (epoch - self.warmup_steps) / self.final_anneal_steps)
+
+    # Create a model
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Dense(16, activation='relu'),
+        tf.keras.layers.Dense(16, activation='relu'),
+        tf.keras.layers.Dense(1)
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam', loss='mean_squared_error')
+
+    # Train the model with Learning Rate Annealing
+    model.fit(x_train, y_train, epochs=100, callbacks=[AnnealingLearningRate(1e-3)])
+    ```

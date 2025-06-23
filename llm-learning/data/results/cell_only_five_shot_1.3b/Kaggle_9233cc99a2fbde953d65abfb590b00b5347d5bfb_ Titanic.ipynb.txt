@@ -1,0 +1,61 @@
+```python
+    import matplotlib.pyplot as plt
+
+    # Assuming df is your DataFrame and 'Age' is a column in it
+    plt.figure(figsize=(10,6))
+    plt.hist(df['Age'], bins=30, color='c', edgecolor='black')
+    plt.title('Age Distribution')
+    plt.xlabel('Age')
+    plt.ylabel('Frequency')
+    plt.grid(True)
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Plotted 'Sex' Metrics"
+    Original Code Cells:
+    '''
+    
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import matplotlib.pyplot as plt
+
+    # Assuming df is your DataFrame and 'Sex' is a column in it
+    df['Sex'] = df['Sex'].astype('category')
+    plt.figure(figsize=(6,6))
+    df['Sex'].value_counts('normalize').plot(kind='pie', autopct='%1.1f%%')
+    plt.title('Sex Distribution')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Plotted 'Survived' Metrics"
+    Original Code Cells:
+    '''
+    
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import matplotlib.pyplot as plt
+
+    # Assuming df is your DataFrame and 'Survived' is a column in it
+    plt.figure(figsize=(6,6))
+    df['Survived'].value_counts(normalize=True).plot(kind='bar', color=['blue', 'red'])
+    plt.title('Survived Distribution')
+    plt.xlabel('Survived')
+    plt.ylabel('Frequency')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "

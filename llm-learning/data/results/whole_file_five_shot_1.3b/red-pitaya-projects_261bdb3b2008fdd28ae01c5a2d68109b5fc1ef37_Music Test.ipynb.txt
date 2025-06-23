@@ -1,0 +1,33 @@
+```
+    The code you provided is a Jupyter notebook that uses the IPython and ipywidgets libraries to create a simple synthesizer. The notebook starts by importing necessary libraries and defining a function to generate a sine wave. Then, it creates a list of notes and their corresponding frequencies. It then creates a button for each note, and when a button is clicked, it plays the corresponding sound. The buttons are arranged in a horizontal layout.
+
+    However, the code you provided is not complete. It seems like you want to remove the notebooks from the root directory. This is not possible as Jupyter notebooks are saved as .ipynb files and not as Python scripts. They are meant to be run in a Jupyter environment, not as standalone scripts.
+
+    If you want to remove the notebooks from the root directory, you can do so by deleting the .ipynb files in the root directory. However, this will not affect the notebooks that are run in the Jupyter environment.
+
+    If you want to run the notebooks in a Jupyter environment, you can do so by saving the notebooks as Python scripts (.py files) and then running them in a Jupyter environment.
+
+    Here's an example of how you can do this:
+
+    ```python
+    # This is a Python script, not a Jupyter notebook
+    # You can run this script in a Jupyter environment
+
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from IPython.display import (
+        Audio, display, clear_output)
+    from ipywidgets import widgets
+    from functools import partial
+
+    rate = 16000.
+    duration = .25
+    t = np.linspace(
+        0., duration, int(rate * duration))
+
+    def synth(f):
+        x = np.sin(f * 2. * np.pi * t)
+        display(Audio(x, rate=rate, autoplay=True))
+
+    notes = 'C,C#,D,D#,E,F,F#,G,G#,A,A#,B,C'.split(',')
+    freqs = 

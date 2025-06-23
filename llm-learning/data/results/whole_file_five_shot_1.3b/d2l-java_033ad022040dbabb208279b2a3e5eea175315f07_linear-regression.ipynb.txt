@@ -1,0 +1,33 @@
+
+    The website build script and fix all notebooks are as follows:
+
+    1. The Maven dependencies for AI/ML libraries are incorrect. The correct versions are:
+
+        ai.djl:api:0.6.0
+        org.slf4j:slf4j-api:1.7.26
+        org.slf4j:slf4j-simple:1.7.26
+
+        ai.djl.mxnet:mxnet-engine:0.6.0
+        ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+
+    2. The `%maven` directive is not used in Jupyter notebooks. It's used in Maven POM files.
+
+    3. The `%%loadFromPOM` directive is not used in Jupyter notebooks. It's used to load Maven dependencies.
+
+    4. The `%load` directive is not used in Jupyter notebooks. It's used to load notebooks from the file system.
+
+    5. The `StopWatch` class is not defined. It should be `tech.tablesaw.util.StopWatch`.
+
+    6. The `normal` method is not defined. It should be `tech.tablesaw.api.stats.normal.Normal.standard`.
+
+    7. The `combine3` method is not defined. It should be `tech.tablesaw.api.functions.combine.combine3`.
+
+    8. The `normalDistributions` table is not defined. It should be `tech.tablesaw.api.Table.create("normal")`.
+
+    9. The `LinePlot.create` method is not defined. It should be `tech.tablesaw.plotly.api.LinePlot.create`.
+
+    10. The `Arrays.fill` method is not defined. It should be `org.apache.commons.lang3.ArrayUtils.fill`.
+
+    11. The `Table` class is not defined. It should be `tech.tablesaw.api.Table`.
+
+    12. The `LinePlot` class is not defined. It

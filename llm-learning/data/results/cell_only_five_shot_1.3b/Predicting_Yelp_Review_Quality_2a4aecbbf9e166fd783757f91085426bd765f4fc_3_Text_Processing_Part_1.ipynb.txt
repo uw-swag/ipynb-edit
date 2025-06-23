@@ -1,0 +1,50 @@
+```python
+    import os
+    import re
+
+    # Split the notebook into cells
+    notebook_cells = [cell for cell in nb['cells'] if cell['cell_type'] == 'code']
+
+    # Split the notebook into separate notebooks for each cell
+    notebooks = {}
+    for cell in notebook_cells:
+        # Extract the code from the cell
+        code = cell['source']
+
+        # Find the first cell in the notebook that is not a code cell
+        for i, cell in enumerate(nb['cells']):
+            if cell['cell_type'] != 'code':
+                break
+
+        # Create a new notebook for the code
+        notebooks[i] = {
+            'source': code,
+            'metadata': {
+                'tags': [],
+                'cell_type': 'code',
+                'execution_count': None,
+                'id': None,
+                'outputs': []
+            }
+        }
+
+    # Create a new notebook for the metadata
+    notebooks[i + 1] = {
+        'source': '',
+        'metadata': {
+            'tags': [],
+            'cell_type': 'code',
+            'execution_count': None,
+            'id': None,
+            'outputs': []
+        }
+    }
+
+    # Replace the original notebook with the new notebooks
+    nb['cells'] = [notebooks[i] for i in range(len(notebooks))]
+
+    # Save the notebook
+    with open('notebook.ipynb', 'w') as f:
+        json.dump(nb, f)
+    ```
+    This script splits a Jupyter notebook into separate notebooks for each cell, preserving the structure of the notebook. The new notebooks are created by copying the source of the original notebook and replacing the original notebook with the new notebooks.

@@ -1,0 +1,73 @@
+```python
+    import torch
+    from torch.optim import Adam
+    from torch.optim.lr_scheduler import StepLR
+
+    # Define the model
+    model = ...
+
+    # Define the loss function
+    criterion = ...
+
+    # Define the optimizer
+    optimizer = Adam(model.parameters(), lr=0.001)
+
+    # Define the learning rate scheduler
+    scheduler = StepLR(optimizer, step_size=7, gamma=0.1)
+
+    # Training loop
+    for epoch in range(100):
+        for batch_idx, (data, target) in enumerate(train_loader):
+            # Forward pass
+            output = model(data)
+            loss = criterion(output, target)
+
+            # Backward pass and optimization
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            # Learning rate scheduler
+            scheduler.step()
+
+    # Save the model
+    torch.save(model.state_dict(), 'model.pth')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add 16e nn parameter optimizer notebook"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import torch
+    from torch.optim import Adam
+    from torch.optim.lr_scheduler import StepLR
+
+    # Define the model
+    model = ...
+
+    # Define the loss function
+    criterion = ...
+
+    # Define the optimizer
+    optimizer = Adam(model.parameters(), lr=0.001)
+
+    # Define the learning rate scheduler
+    scheduler = StepLR(optimizer, step_size=7, gamma=0.1)
+
+    # Training loop
+    for epoch in range(100):
+        for batch_idx, (data, target) in enumerate(train_loader):
+            # Forward pass
+            output = model(data)
+            loss = criterion(output, target)
+
+            # Backward pass and optimization
+            optimizer.zero_grad()
+            loss

@@ -1,0 +1,39 @@
+```python
+    # Example usage with customised model
+    from keras.applications import Xception
+    from keras.preprocessing.image import ImageDataGenerator
+
+    # Load the customised model
+    model = Xception(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+    # Create a data generator for the customised model
+    datagen = ImageDataGenerator(rescale=1./255)
+
+    # Load the test dataset
+    test_df = pd.read_csv('/content/pharmaceutical-drugs-and-vitamins-dataset/Capsure Dataset/test_data.csv')
+
+    # Process images in batches and make predictions
+    image_paths = test_df['Image_Path'].tolist()
+    prediction = process_images_in_batches(image_paths, model, (224, 224), batch_size)
+
+    # Map predictions to class labels
+    prediction_labels = [class_indices_inverse[label] for label in prediction]
+
+    # Create a DataFrame with predictions
+    predicted_df = pd.DataFrame({
+        'Image_Path': test_df['Image_Path'],
+        'True_Label': test_df['True_Label'],
+        'Predicted_Label': prediction_labels,
+    })
+
+    # Calculate accuracy
+    accuracy = np.mean(predicted_df['True_Label'] == predicted_df['Predicted_Label'])
+
+    # Save predictions to CSV
+    csv_path = f'/content/saved_models/predicted_customised.csv'
+    predicted_df.to_csv(csv_path, header=True, index=False)
+
+    print(f"Predictions saved to {csv_path}")
+    print(f"Test Accuracy: {accuracy:.2%}")
+    ```
+    This example demonstrates how to load a customised model and use it to make predictions. The customised model is Xception, and the data generator is set to rescale images to the input shape of the model. The test dataset is loaded, the images are processed in bat

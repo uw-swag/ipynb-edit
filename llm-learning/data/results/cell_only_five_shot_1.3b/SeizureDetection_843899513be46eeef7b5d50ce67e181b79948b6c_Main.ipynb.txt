@@ -1,0 +1,21 @@
+```
+    import configparser
+    from ipynb.fs.full.EdfManipulation import read_and_store_data
+    from ipynb.fs.full.ImportExportData import importCsvToDataframe, exportDataframeToCSV
+    from ipynb.fs.full.LeftRightHemispheresExperiment import LeftRightHemispheresExperiment
+    from ipynb.fs.full.AverageChannelExperiment import AverageChannelExperiment
+    from ipynb.fs.full.AllChannelsExperiment import AllChannelsExperiment
+    
+    if readEdf:
+        df = read_and_store_data(dataset, sample_rate, channels)
+        exportDataframeToCSV(df, csvExportFile)
+    else:
+        df = importCsvToDataframe(csvImportFile)
+    
+    Exp1 = LeftRightHemispheresExperiment(df, channels, readEdf, csvImportFile, csvExportFile, dataset, sample_rate, time_window, test_ratio, pca_tolerance, smote_neighbors, k_fold, knn_neighbors, rf_estimators, max_iter, dropout, loss_function, epochs, lstm_units, dense1_units, dense2_units, batch, step)
+    exportDataframeToCSV(Exp1, 'LeftRight.csv')
+    
+    Exp2 = AverageChannelExperiment(df, channels, readEdf, csvImportFile, csvExportFile, dataset, sample_rate, time_window, test_ratio, pca_tolerance, smote_neighbors, k_fold, knn_neighbors, rf_estimators, max_iter, dropout, loss_function, epochs, lstm_units, dense1_units, dense2_units, batch, step)
+    exportDataframeToCSV(Exp2, 'AvgChannel.csv')
+    
+    Exp3 = AllChannelsExperiment(df, channels, readEdf, csvImportFile, csvExportFile, dataset, sample_rate, time_window, test_ratio, pca_tolerance,

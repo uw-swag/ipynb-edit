@@ -1,0 +1,10 @@
+```python
+    # Adding files via upload
+    from google.colab import drive
+    drive.mount('/content/gdrive')
+    import os
+    os.chdir('/content/gdrive/My Drive/Colab Notebooks/')
+    uploaded = drive.list()
+    for file_ in uploaded:
+        print('title: %s | id: %s' % (file_[0], file_[1]))
+    ```

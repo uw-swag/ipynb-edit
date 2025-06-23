@@ -1,0 +1,31 @@
+
+    The code you provided is used to download and update a bike dataset from the UCI Machine Learning Repository. The dataset is a time-series dataset of hourly bike sharing data for the year of 2011 in the city of Washington, D.C. The dataset includes the following variables:
+
+    - 'dteday' - the date
+    - 'yr' - the year
+    - 'mnth' - the month
+    - 'hr' - the hour
+    - 'holiday' - a flag indicating a holiday
+    - 'weekday' - the day of the week
+    - 'workingday' - a flag indicating whether the day is a working day
+    - 'weathersit' - the weather situation (1 = Clear, 2 = Cloudy, 3 = Overcast, 4 = Rainy)
+    - 'temp' - the temperature in Celsius
+    - 'atemp' - the feeling temperature in Celsius
+    - 'hum' - the humidity
+    - 'windspeed' - the wind speed
+    - 'casual' - the number of casual riders
+    - 'registered' - the number of registered riders
+    - 'cnt' - the total count of rental bikes including both casual and registered
+
+    The updated code is used to read the updated dataset from the downloaded zip file.
+
+    Please note that the link to the dataset has been updated. The original link is: https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip
+
+    The updated link is: https://s3-eu-west-1.amazonaws.com/downloads-dev/machine-learning-databases/00275/Bike-Sharing-Dataset.zip
+
+    The updated code is:
+
+    ```python
+    content = requests.get("https://s3-eu-west-1.amazonaws.com/downloads-dev/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+    with zipfile.ZipFile(io.BytesIO(content)) as arc:
+        raw_data = pd.read_csv(arc.open("hour.

@@ -1,0 +1,17 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import RegressionPerformanceProfileSection
+dashboard = Dashboard(tabs=[RegressionPerformanceTab])
+dashboard .calculate(ref_data, prod_data, column_mapping=column_mapping)
+#dashboard.save('bike_sharing_demand_model_perfomance.html')
+bike_regression_performance_profile = Profile(sections=[RegressionPerformanceProfileSection])
+bike_regression_performance_profile.calculate(ref_data, prod_data, column_mapping=column_mapping)
+regression_profile = bike_regression_performance_profile.json() 
+regression_profile

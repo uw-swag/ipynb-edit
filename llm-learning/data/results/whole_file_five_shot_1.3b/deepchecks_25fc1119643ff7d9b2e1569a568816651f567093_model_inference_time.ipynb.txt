@@ -1,0 +1,53 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "Adding nblinks instead of copy (#292)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.datasets import load_iris
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.model_selection import train_test_split
+
+from deepchecks import Dataset
+from deepchecks.checks.methodology import ModelInferenceTimeCheck
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, features=iris.feature_names, label_name='target')
+test_ds = Dataset(test, features=iris.feature_names, label_name='target')
+
+clf = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+<\Cell_1>
+<Cell_2>
+# NBVAL_SKIP
+check = ModelInferenceTimeCheck()
+check.run(test_ds, clf)
+<\Cell_2>
+<Cell_3>
+# NBVAL_SKIP
+check = ModelInferenceTimeCheck().add_condition_inference_time_is_not_greater_than(0.00001)
+check.run(test_ds, clf)
+<\Cell_3>
+<Cell_4>
+plt.scatter(tv_df.columns, out_df.T.ix[tv_df.index])
+<\Cell_4>
+<Cell_5>
+wash_df.T.plot()
+<\Cell_5>
+<Cell_6>
+out_df.T[[5]]
+<\Cell_6>
+<Cell_7>
+clf.predict(out_df.T[[6]])
+<\Cell_7>
+<Cell_8>
+m = elec.mains()
+<\Cell_8

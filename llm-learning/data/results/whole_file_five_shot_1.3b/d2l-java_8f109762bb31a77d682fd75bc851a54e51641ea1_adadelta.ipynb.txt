@@ -1,0 +1,39 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.python.layers import core as layers_core
+
+    # Defining the optimizer
+    optimizer = tf.train.AdadeltaOptimizer(0.01)
+
+    # Defining the variables
+    var1 = tf.Variable(tf.zeros([784, 128]))
+    var2 = tf.Variable(tf.zeros([128, 10]))
+
+    # Defining the model
+    def model(data, labels):
+        # Defining the forward pass
+        layer1 = tf.nn.relu(tf.matmul(data, var1) + var2)
+        return tf.matmul(layer1, var2)
+
+    # Defining the loss function
+    def loss(data, labels):
+        # Defining the prediction
+        prediction = model(data)
+        # Defining the loss
+        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=labels, logits=prediction))
+        return loss
+
+    # Defining the training step
+    def train_step(data, labels):
+        # Defining the gradients
+        gradients = tf.gradients(loss, [var1, var2])
+        # Applying the gradients
+        optimizer.apply_gradients(zip(gradients, [var1, var2]))
+
+    # Training the model
+    for i in range(1000):
+        # Fetching the data
+        # Fetching the labels
+        # Training the model
+    ```

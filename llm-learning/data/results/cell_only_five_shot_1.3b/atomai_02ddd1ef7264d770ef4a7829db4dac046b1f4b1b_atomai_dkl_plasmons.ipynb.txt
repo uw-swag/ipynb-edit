@@ -1,0 +1,21 @@
+```
+    # Update DKL example
+    dklgp2 = aoi.models.dklGPR(data_dim, embedim=2, precision="single")
+    dklgp2.fit(X_train, y_train, training_cycles=200)
+    # Thompson sampling
+    obj, next_point_idx = dklgp2.thompson(X_test)
+    # Select next point to "measure"
+    next_point = indices_test[next_point_idx]
+    # Do "measurement"
+    measured_point = y_test[next_point_idx]
+    # Plot current result
+    plot_result(indices_test, obj)
+    # Append to the arrays of measured points
+    X_train = np.append(X_train, X_test[next_point_idx], 0)
+    X_test = np.delete(X_test, next_point_idx, 0)
+    y_train = np.append(y_train, measured_point)
+    y_test = np.delete(y_test, next_point_idx)
+    indices_train = np.append(indices_train, next_point, 0)
+    indices_test = np.delete(indices_test, next_point_idx, 0)
+
+    ```

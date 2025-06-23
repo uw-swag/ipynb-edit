@@ -1,0 +1,17 @@
+```python
+    import pandas as pd
+    from outlier_detection import StringLengthOutOfBounds
+
+    col = ["a","a","a","a","a","a","a","a","a","a","a","a","a","ab","ab","ab","ab","ab","ab", "ab"]*1000
+    col.append("basdbadsbaaaaaaaaaa")
+    col.append("basdbadsbaaaaaaaaaaa")
+    df = pd.DataFrame({"col1":col})
+
+    # Calculate the minimum outlier difference
+    outlier_diff = StringLengthOutOfBounds().run(df)
+    print(f"The minimum outlier difference is {outlier_diff}")
+    ```
+
+    This code will calculate the minimum outlier difference between the length of the string and the number of occurrences of the string. The `StringLengthOutOfBounds` function is a custom function that calculates the difference between the length of the string and the number of occurrences of the string. The `run` method is used to apply the function to the DataFrame.
+
+    Please note that the `StringLengthOutOfBounds` function is not defined in the provided code, so it's assumed that it's a custom function. If it's not, you'll need to define it.

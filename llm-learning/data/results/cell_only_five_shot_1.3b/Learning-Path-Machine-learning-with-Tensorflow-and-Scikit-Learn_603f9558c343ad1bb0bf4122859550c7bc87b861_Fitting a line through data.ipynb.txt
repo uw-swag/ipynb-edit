@@ -1,0 +1,47 @@
+```python
+    # Module 03: Code files added
+    # This module contains code files related to Module 03.
+
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.cluster import KMeans
+
+    # Function to perform PCA
+    def perform_pca(data, n_components):
+        # Standardizing the features
+        scaler = StandardScaler()
+        data_scaled = scaler.fit_transform(data)
+
+        # Performing PCA
+        pca = PCA(n_components=n_components)
+        data_pca = pca.fit_transform(data_scaled)
+
+        return pca, data_pca
+
+    # Function to perform K-Means clustering
+    def perform_kmeans(data, n_clusters):
+        # Performing K-Means clustering
+        kmeans = KMeans(n_clusters=n_clusters)
+        kmeans.fit(data)
+
+        return kmeans
+
+    # Function to visualize the results
+    def visualize_results(pca, data_pca, kmeans, n_clusters):
+        # Creating a DataFrame for the PCA results
+        pca_df = pd.DataFrame(data_pca, columns=['PC1', 'PC2'])
+        pca_df['Cluster'] = kmeans.labels_
+
+        # Plotting the PCA results
+        plt.figure(figsize=(10, 6))
+        sns.scatterplot(data=pca_df, x='PC1', y='PC2', hue='Cluster', palette='viridis')
+        plt.title('PCA of the data')
+        plt.show()
+
+        # Creating a DataFrame for the K-Means results
+        kmeans_df = pd.DataFrame(data, columns=['PC1', 'PC2

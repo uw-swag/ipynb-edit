@@ -1,0 +1,21 @@
+```python
+    from deepchecks.checks.methodology import DateTrainTestLeakageDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, date_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        if date_name:
+            dataframe[date_name] = pd.to_datetime(dataframe[date_name])
+        return Dataset(dataframe)
+
+    # Add a check to the suite
+    suite = Suite(checks=[DateTrainTestLeakageDuplicates()])
+
+    # Use the function to create a dataset
+    dataset = dataset_from_dict({'a': [1, 2, 3, 4, 5], 'b': [1, 2, 3, 4, 5]}, 'a')
+
+    # Run the suite
+    suite.run(dataset)
+    ```

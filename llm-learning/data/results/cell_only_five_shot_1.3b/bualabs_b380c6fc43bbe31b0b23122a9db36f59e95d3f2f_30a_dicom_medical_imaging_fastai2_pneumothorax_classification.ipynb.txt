@@ -1,0 +1,36 @@
+```python
+    from fastai2.basics import *
+    from fastai2.callback.all import *
+    from fastai2.vision.all import *
+    from fastai2.medical.imaging import *
+
+    import pydicom
+    import kornia
+
+    import pandas as pd
+    def getDataLoaders(bs, size):
+        pneumothorax = DataBlock(blocks=(ImageBlock(cls=PILDicom), CategoryBlock), 
+                                 get_items=get_dicom_files, 
+                                 get_y=label_func, 
+                                 batch_tfms=[*aug_transforms(do_flip=False, size=size)]
+                                 )
+        # pneumothorax.summary(path/'dicom-images-train')
+        dls = pneumothorax.dataloaders(path/'dicom-images-train', bs=bs)
+        return dls    
+
+    learn = cnn_learner(dls, resnet34, metrics=accuracy, 
+                        loss_func=loss_func, opt_func=ranger, 
+                        cbs=[ShowGraphCallback])
+    learn.fine_tune(10, freeze_epochs=6)
+    learn.save("224")
+    learn = cnn_learner(dls, resnet34, metrics=accuracy, 
+                        loss_func=loss_func, opt_func=ranger, 
+                        cbs=[ShowGraphCallback])
+    learn.load("224")
+    learn.fit_one_cycle(4, lr_max=slice(1e-3))
+    learn.save("384-1")
+    learn.load("384-1");
+    learn.fit_one_cycle(12, lr_max=slice(1e-6, 1e-4))
+    learn.save("384-2")
+    learn.load("384-2");
+    ```

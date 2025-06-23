@@ -1,0 +1,12 @@
+```python
+    from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter
+
+    train_ds = VisionData(mnist_dataloader_train, label_transformer=ClassificationLabelFormatter())
+    test_ds = VisionData(mnist_dataloader_test, label_transformer=ClassificationLabelFormatter())
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter
+
+    train_ds = VisionData(train_dataloader, label_transformer=DetectionLabelFormatter(yolo_label_formatter))
+    test_ds = VisionData(test_dataloader, label_transformer=DetectionLabelFormatter(yolo_label_formatter))
+    ```
+
+    The code above is a refactor of the vision suite. The original code was using the `VisionData` class to load and preprocess the data, and the `ClassificationLabelFormatter` and `DetectionLabelFormatter` were used to format the labels. The refactor has moved these operations into the `VisionData` class, which is a more general-purpose data loading and preprocessing class.

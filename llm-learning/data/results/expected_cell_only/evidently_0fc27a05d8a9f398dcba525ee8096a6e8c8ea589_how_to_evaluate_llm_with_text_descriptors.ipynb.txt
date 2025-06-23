@@ -1,0 +1,82 @@
+from evidently.ui.workspace.cloud import CloudWorkspace
+
+from evidently import ColumnMapping
+from evidently.report import Report
+
+from evidently.metrics import ColumnSummaryMetric, ColumnDistributionMetric, ColumnDriftMetric, DataDriftTable, TextDescriptorsDistribution
+
+from evidently.metric_preset import DataDriftPreset, DataQualityPreset, TextOverviewPreset, TextEvals
+
+from evidently.descriptors import HuggingFaceModel, OpenAIPrompting 
+from evidently.descriptors import RegExp, BeginsWith, EndsWith, Contains, DoesNotContain, IncludesWords, ExcludesWords
+from evidently.descriptors import TextLength, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment
+#Built-in descriptors without parameters
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        Sentiment(display_name="Question sentiment"),
+        TextLength(display_name= "Question length"),
+        OOV(display_name= "Question out of vocabulary words")
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        Sentiment(display_name="Response sentiment"),
+        NonLetterCharacterPercentage(display_name="Non letter characters in response"),
+        SentenceCount(display_name="Sentence count in response"),
+        WordCount(display_name="Word count in response")
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)], 
+           column_mapping=column_mapping)
+report    
+#Built-in descriptors with parameters
+report = Report(metrics=[
+    TextEvals(column_name="question", descriptors=[
+        BeginsWith(display_name="'How' question", prefix="How"),
+        RegExp(reg_exp=r"^I", display_name= "Question begins with 'I'"),
+        IncludesWords(words_list=['invoice', 'salary'], display_name="Questions about invoices and salary")
+    ]),
+    TextEvals(column_name="response", descriptors=[
+        EndsWith(display_name="Assisrance might be needed", suffix="for assistance."),
+        ExcludesWords(words_list=['wrong', 'mistake'], display_name="Responses without mention of mistakes"),
+        Contains(items=['medical leave'], display_name="contains 'medical leave'"),
+        DoesNotContain(items=['employee portal'], display_name="does not contain 'employee portal'")
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)], 
+           column_mapping=column_mapping)
+report    
+#Descriptors with external models
+#to run OpenAIPrompting descriptor make sure you set environement variable with openai token 
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        HuggingFaceModel("toxicity", "DaNLP/da-electra-hatespeech-detection", {"module_type": "measurement"}, {"toxic_label": "offensive"}, "toxicity", display_name="Hugging Face Toxicity for response"),
+        OpenAIPrompting(prompt=pii_prompt, prompt_replace_string="REPLACE", model="gpt-3.5-turbo-instruct", feature_type="num", display_name="PII for response (by gpt3.5)"),
+        OpenAIPrompting(prompt=negativity_prompt, prompt_replace_string="REPLACE", model="gpt-3.5-turbo-instruct", feature_type="cat", display_name="Negativity for response (by gpt3.5)")       
+    ])
+])
+
+report.run(reference_data=assistant_logs[datetime(2024, 4, 8) : datetime(2024, 4, 9)], 
+           current_data=assistant_logs[datetime(2024, 4, 9) : datetime(2024, 4, 10)], 
+           column_mapping=column_mapping)
+
+report    
+#Descriptors with external models
+#to run OpenAIPrompting descriptor make sure you set environement variable with openai token 
+
+report = Report(metrics=[
+    TextEvals(column_name="response", descriptors=[
+        OpenAIPrompting(prompt=pii_prompt, prompt_replace_string="REPLACE", 
+                        model="gpt-4o", feature_type="num", context_column="question",
+                        display_name="PII for response with question in context (by gpt4o)"),
+    ])
+])
+
+report.run(reference_data=assistant_logs[:10],
+           current_data=assistant_logs[10:20],
+           column_mapping=column_mapping)
+
+report    
+

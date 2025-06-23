@@ -1,0 +1,24 @@
+
+The code you provided is already split into multiple cells. The cells are already well-structured and follow the standard Python syntax. The code is loading a dataset, training a model, and then running a robustness report on the dataset.
+
+The code is splitting the VisionData and removing the formatters, which is a common practice in data preprocessing. The formatters are used to transform the data into a format that can be used by the model. In this case, the formatters are not needed as the data is already in the correct format.
+
+Here's the code again for reference:
+
+```python
+from deepchecks.vision.datasets.classification.mnist import load_dataset, load_model, mnist_prediction_formatter
+
+mnist_dataloader_test = load_dataset(train=False, batch_size=1000, object_type='VisionData')
+model = load_model()
+from deepchecks.vision.checks.performance.robustness_report import RobustnessReport
+from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+
+prediction_formatter = ClassificationPredictionFormatter(mnist_prediction_formatter)
+result = RobustnessReport().run(mnist_dataloader_test, model, prediction_formatter=prediction_formatter)
+result
+check = RobustnessReport().add_condition_degradation_not_greater_than(0.05)
+result = check.run(mnist_dataloader_test, model, prediction_formatter=prediction_formatter)
+result.show(show_additional_outputs=False)
+```
+
+This code will load the MNIST dataset, train a model, and then run a robustness report on the dataset. The robustness report will check if the model's predictions are significantly degraded when the threshold is 0.05.

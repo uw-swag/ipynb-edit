@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add TestAccuracyScore for classification performance. Add sample TestSuite to test_suite_example.ipynb"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    try:
+        import evidently
+    except:
+        !pip install git+https://github.com/evidentlyai/evidently.git@test_suite_alpha
+        !npm install -g yarn
+    
+    import pandas as pd
+    import numpy as np
+
+    from evidently.v2.metrics import DataIntegrityMetrics
+    from evidently.v2.metrics.base_metric import NumberRange, InputData
+
+    from evidently.v2.test_suite import TestSuite
+    from evidently.v2.tests import TestNumberOfColumns
+    from evidently.v2.tests import TestNumberOfDriftedFeatures
+    from evidently.v2.tests import TestValueMAE, TestValueMeanError
+
+    from evidently import ColumnMapping
+    from datetime import datetime
+    from sklearn.datasets import fetch_openml
+
+    suite = TestSuite(tests=[
+        TestNumberOfColumns(gt=1),
+        # TestNumberOfDriftedFeatures(),
+        TestValueMAE(),
+        TestValueMeanError(),
+    ])
+
+    data = fetch_openml(name='adult', version=2, as_frame='auto')
+    df = data.frame
+
+    ref = df[:20000]
+    curr = df[20000:]
+
+    curr['target'] = curr['education-num']
+    curr['preds'] = curr['education-num'].values + np.random.normal(0, 6, curr.shape[0])
+    ref['target'] = ref['education-num']
+    ref['preds'] = ref['education-num'].values + np.random.normal(0, 6, ref.shape[0])
+
+    suite.run(reference_data=None,
+              current_data=curr, column_mapping=ColumnMapping(target='target', prediction='pred

@@ -1,0 +1,36 @@
+```python
+    # Import necessary libraries
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize
+    from nltk.stem import PorterStemmer
+    from nltk.stem import WordNetLemmatizer
+
+    # Download the NLTK stop words
+    nltk.download('stopwords')
+
+    # Define a text
+    text = "This is a sample text for NLP stop words."
+
+    # Tokenize the text
+    tokenized_text = word_tokenize(text)
+
+    # Get the NLTK stop words
+    stop_words = set(stopwords.words('english'))
+
+    # Remove stop words
+    filtered_text = [word for word in tokenized_text if word not in stop_words]
+
+    # Print the filtered text
+    print(filtered_text)
+
+    # Stemming
+    ps = PorterStemmer()
+    stemmed_text = [ps.stem(word) for word in filtered_text]
+    print(stemmed_text)
+
+    # Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    lemmatized_text = [lemmatizer.lemmatize(word) for word in filtered_text]
+    print(lemmatized_text)
+    ```

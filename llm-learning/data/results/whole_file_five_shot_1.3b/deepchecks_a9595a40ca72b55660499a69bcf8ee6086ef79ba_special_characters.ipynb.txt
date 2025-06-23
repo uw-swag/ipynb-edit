@@ -1,0 +1,23 @@
+```
+    The commit message "fixing docs (#898)" is a fix for a specific issue related to documentation. The issue is related to the SpecialCharacters check in Deepchecks, which is used to detect and remove special characters from text data.
+
+    The Deepchecks library is a Python library for data quality checks, which is used to ensure the quality of data. The 'SpecialCharacters' check is used to detect and remove special characters from text data.
+
+    The commit message is updated to reflect the issue being fixed.
+
+    The updated code is as follows:
+
+    ```python
+    from deepchecks.tabular.checks import SpecialCharacters
+    import pandas as pd
+
+    data = {'col1': [' ', '!', '"', '#', '$', '%', '&', '\'','(', ')',
+                     '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', 
+                     '>', '?', '@', '[', ']', '\\', '^', '_', '`', '{',
+                     '}', '|', '~', '\n'],
+            'col2':['v', 'v', 'v', 'v4', 'v5', 'v6', 'v7', 'v8','v9','v10', 
+                     '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', 
+                     '>', '?', '@', '[', ']', '\\', '^', '_', '`', '{',
+                     '}', '|', '~', '\n'],
+            'col3': [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,'???#',1,1,1,1,1,1,1,1,1,1,1],
+            'col4': [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,11,1,1,1,1,1,

@@ -1,0 +1,71 @@
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import RegressionPerformanceTab
+dataset = fetch_california_housing(as_frame=True)
+df = dataset.frame
+target = 'MedHouseVal'
+prediction = 'prediction'
+
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+ref_data = df[:15000]
+prod_data = df[15000:]
+model = RandomForestRegressor(random_state=0)
+model.fit(ref_data[features], ref_data[target])
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+import plotly.figure_factory as ff
+
+hist_data = [ref_data[target], prod_data[target]]
+
+group_labels = ['reference', 'production']
+
+colors = ['#333F44', '#37AA9C'] 
+
+fig = ff.create_distplot(hist_data, group_labels, colors=colors, show_hist=False, show_rug=False)
+
+fig.update_layout(   
+    xaxis_title="Value", 
+    yaxis_title="Share",
+    xaxis=dict(
+        showticklabels=True
+    ),
+    yaxis=dict(
+        showticklabels=True
+    ),
+    legend=dict(
+        orientation="v",
+        yanchor="top",
+        y=1.02,
+        xanchor="right",
+        x=1
+    ),
+)
+from my_widgets.target_distribution_widget import TargetDistributionWidget
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(include_widgets=[
+    'Current: Predicted vs Actual',
+    TargetDistributionWidget('Target distribution')
+])])
+dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                    prod_data.sample(1000, random_state=0), 
+                    column_mapping=column_mapping)
+dashboard.show()
+from my_tabs.my_simple_tab import MySimpleTab
+dashboard = Dashboard(tabs=[MySimpleTab()])
+dashboard.calculate(ref_data.sample(1000, random_state=0), 
+                    prod_data.sample(1000, random_state=0), 
+                    column_mapping=column_mapping)
+dashboard.show()
+

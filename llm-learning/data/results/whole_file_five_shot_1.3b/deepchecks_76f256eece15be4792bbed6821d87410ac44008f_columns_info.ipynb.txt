@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from deepchecks.checks.overview import ColumnsInfo
+    from deepchecks.base import Dataset
+
+    try:
+        num_fe = np.random.rand(500)
+        cat_fe = np.random.randint(3, size=500)
+        num_col = np.random.rand(500)
+        date = range(1635693229, 1635693729)
+        index = range(500)
+        data = {'index': index, 'date': date, 'a': cat_fe, 'b': num_fe, 'c': num_col, 'label': cat_fe}
+        df = pd.DataFrame.from_dict(data)
+
+        dataset = Dataset(df, label_name='label', datetime_name='date', index_name='index', features=['a', 'b'])
+
+        check = ColumnsInfo()
+        check.run(dataset=dataset)
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    ```
+    This code will catch any error that might occur during the execution of the ColumnsInfo check. If an error occurs, it will print the error message.

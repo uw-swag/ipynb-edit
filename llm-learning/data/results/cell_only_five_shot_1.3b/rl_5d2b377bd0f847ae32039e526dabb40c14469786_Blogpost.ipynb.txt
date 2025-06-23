@@ -1,0 +1,44 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the data
+    df = pd.read_csv('stock_data.csv')
+
+    # Data preprocessing
+    df = df.dropna()
+
+    # Split the data into training and testing sets
+    train, test = train_test_split(df, test_size=0.2)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Fit the model to the training data
+    model.fit(train[['Open', 'High', 'Low', 'Volume']], train['Close'])
+
+    # Make predictions on the testing data
+    predictions = model.predict(test[['Open', 'High', 'Low', 'Volume']])
+
+    # Calculate the mean squared error of the predictions
+    mse = metrics.mean_squared_error(test['Close'], predictions)
+
+    # Print the mean squared error
+    print('Mean Squared Error:', mse)
+
+    # Plot the actual vs predicted values
+    plt.figure(figsize=(10, 6))
+    plt.plot(test['Close'], label='Actual')
+    plt.plot(predictions, label='Predicted')
+    plt.legend()
+    plt.show()
+
+    # Plot the volume
+    plt.figure(figsize=(10, 6))
+    sns.lineplot(data=df, x='Date', y='Volume')
+    plt.show()
+    ```

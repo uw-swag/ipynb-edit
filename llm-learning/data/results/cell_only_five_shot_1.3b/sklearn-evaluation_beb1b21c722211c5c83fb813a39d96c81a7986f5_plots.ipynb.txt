@@ -1,0 +1,14 @@
+```python
+    import nbformat as nbf
+
+    # Load the notebook
+    with open('notebook.ipynb', 'r') as f:
+        nb = nbf.read(f, as_version=4)
+
+    # Print the cells of the notebook
+    for cell in nb.cells:
+        if cell.cell_type == 'code':
+            print(cell.source)
+    ```
+
+    This code will print the code cells of the notebook. You can modify it to show other types of cells, such as markdown or text.

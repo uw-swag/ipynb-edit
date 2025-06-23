@@ -1,0 +1,50 @@
+
+<Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv("/home/arnav/WorkSpace/GitHub/Bangladesh-Rainfall/historical-rainfall-data-in-bangladesh/customized_daily_rainfall_data.csv")
+df.head()
+<\Cell_1>
+<Cell_2>
+df.size
+<\Cell_2>
+<Cell_3>
+df.plot(x='Year',y='Rainfall',style='.', figsize=(15,5))
+<\Cell_3>
+<Cell_4>
+train = df.loc[df['Year'] <= 1975]
+test = df.loc[df['Year'] == 1976]
+train=train[train['Station']=='Dhaka']
+test=test[test['Station']=='Dhaka']
+<\Cell_4>
+<Cell_5>
+train.size
+<\Cell_5>
+<Cell_6>
+X_train=train.drop(['Station','StationIndex'],axis=1)
+Y_train=train['Rainfall']
+<\Cell_6>
+<Cell_7>
+X_test=test.drop(['Station','StationIndex'],axis=1)
+Y_test=test['Rainfall']
+<\Cell_7>
+<Cell_8>
+from sklearn import svm
+from sklearn.svm import SVC
+model = svm.SVC(gamma='auto',kernel='linear')
+model.fit(X_train, Y_train)
+<\Cell_8>
+<Cell_9>
+Y_pred = model.predict(X_test)
+<\Cell_9>
+<Cell_10>
+df1 = pd.DataFrame({'Actual': Y_test, 'Predicted': Y_pred})  
+df1.head()
+<\Cell_10>
+<Cell_11>
+test.head()
+<\Cell_

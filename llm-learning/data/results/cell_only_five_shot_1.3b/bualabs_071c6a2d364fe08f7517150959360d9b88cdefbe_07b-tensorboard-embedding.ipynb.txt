@@ -1,0 +1,20 @@
+```python
+    # Import necessary libraries
+    import tensorflow as tf
+    import os
+
+    # Create a TensorBoard callback that writes metadata to an HTML file.
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir='./logs',
+                                                         histogram_freq=1,
+                                                         profile_batch='auto',
+                                                         embed_data=True)
+
+    # Train your model with the callback
+    model.fit(X_train, y_train, epochs=10, callbacks=[tensorboard_callback])
+    ```
+
+    This code will create a new directory called `./logs` in your current working directory. Inside this directory, you will find a file named `index.html`. This file contains a visualization of the training process, including the loss and accuracy curves, the embedding of the training data, and the distribution of the training data.
+
+    You can open this file in a web browser to view the visualization.
+
+    Note: TensorBoard may not work in some environments (e.g., Jupyter notebooks).

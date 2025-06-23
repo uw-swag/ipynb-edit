@@ -1,0 +1,54 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.optimize import curve_fit
+
+    # Load the data
+    data = np.loadtxt('B4-min.txt')
+
+    # Define the function to fit
+    def func(x, a, b, c):
+        return a * np.exp(-b * x) + c
+
+    # Fit the data
+    popt, pcov = curve_fit(func, data[:, 0], data[:, 1])
+
+    # Print the results
+    print('Fitted parameters:', popt)
+
+    # Plot the data and the fitted curve
+    plt.figure()
+    plt.plot(data[:, 0], data[:, 1], 'ko', label='Data')
+    plt.plot(data[:, 0], func(data[:, 0], *popt), 'r-', label='Fitted curve')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.legend()
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "results from B4-min with resolution 380"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.optimize import curve_fit
+
+    # Load the data
+    data = np.loadtxt('B4-min.txt')
+
+    # Define the function to fit
+    def func(x, a, b, c):
+        return a * np.exp(-b * x) + c
+
+    # Fit the data
+    popt, pcov = curve_fit(func, data[:, 0], data[:, 1])
+
+    # Print the results
+    print('Fitted parameters:', popt)
+
+    # Plot the data and the fitted curve
+    plt.figure()
+    plt.plot(data[:, 0], data[:, 1], 'ko', label='Data')
+    plt.plot(data[:, 0], func(data

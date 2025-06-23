@@ -1,0 +1,47 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import Pipeline
+    from sklearn.metrics import accuracy_score, confusion_matrix
+    import seaborn as sns
+    from matplotlib import pyplot as plt
+
+    # Load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your data and what you want to achieve
+
+    # Split the data into training and validation sets
+    texts, y = df['Text'], df['Label']
+    train_texts, valid_texts, y_train, y_valid = \
+        train_test_split(texts, y, random_state=17,
+                         stratify=y, shuffle=True)
+
+    # Create a pipeline for text vectorization and model training
+    tf_idf = TfidfVectorizer()
+    logit = LogisticRegression(C=1e2, n_jobs=4, solver='lbfgs', 
+                               random_state=17, multi_class='multinomial',
+                               verbose=1)
+    pipeline = Pipeline([('tf_idf', tf_idf), ('logit', logit)])
+
+    # Fit the pipeline on the training data
+    pipeline.fit(train_texts, y_train)
+
+    # Validate the model on the validation data
+    valid_pred = pipeline.predict(valid_texts)
+    accuracy = accuracy_score(y_valid, valid_pred)
+    print('Accuracy:', accuracy)
+
+    # Save the model
+    import joblib
+    joblib.dump(pipeline, 'model.pkl')
+
+    # Load the model
+    loaded_model = joblib.load('model.pkl')
+
+    # Use the model to predict new data
+    new_texts = ['This is a new

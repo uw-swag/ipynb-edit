@@ -1,0 +1,23 @@
+```python
+    import pandas as pd
+
+    def load_housing_data(housing_path=HOUSING_PATH):
+        csv_path = os.path.join(housing_path, "housing.csv")
+        if not os.path.exists(csv_path):
+            # download the data
+            fetch_housing_data()
+
+        # load the data
+        df = pd.read_csv(csv_path)
+
+        # convert 'ocean_proximity' column to categorical
+        df['ocean_proximity'] = df['ocean_proximity'].astype('category')
+
+        return df
+
+    df = load_housing_data()
+    ```
+
+    The above code will load the housing data from the csv file and convert the 'ocean_proximity' column to categorical.
+
+    Please note that the 'ocean_proximity' column is not included in the original code. You may need to add it to the code if you want to use this data.

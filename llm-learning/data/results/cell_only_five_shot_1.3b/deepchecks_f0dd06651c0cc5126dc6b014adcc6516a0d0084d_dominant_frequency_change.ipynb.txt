@@ -1,0 +1,44 @@
+```python
+    import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.tabular.checks.integrity import DominantFrequencyChange
+from deepchecks.tabular.base import Dataset
+
+# Load the iris dataset
+iris = load_iris()
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['target'] = iris.target
+
+# Split the dataset into train and test
+X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+# Create a Dataset object
+dataset = Dataset(X_train, y_train, features=iris.feature_names, label='target')
+
+# Create a check
+check = DominantFrequencyChange(min_frequency=0.5)
+
+# Run the check
+check.run(dataset)
+
+# Split the dataset into train and test
+X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+# Create a Dataset object
+dataset = Dataset(X_train, y_train, features=iris.feature_names, label='target')
+
+# Create a check
+check = DominantFrequencyChange(min_frequency=0.5)
+
+# Run the check
+check.run(dataset)
+
+# Split the dataset into train and test
+X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+# Create a Dataset object
+dataset = Dataset(X_train, y_train, features=iris.feature_names, label='target')
+
+# Create a check
+check = DominantFrequencyChange(min_frequency=0.5)

@@ -1,0 +1,37 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics.pairwise import cosine_similarity
+    from sklearn.feature_extraction.text import CountVectorizer
+
+    # Loading the data
+    data = pd.read_csv('movie_data.csv')
+
+    # Preprocessing the data
+    data['genres'] = data['genres'].apply(lambda x: [i.strip() for i in x.split(',')])
+    data['tags'] = data['tags'].apply(lambda x: [i.strip() for i in x.split(',')])
+    data['keywords'] = data['keywords'].apply(lambda x: [i.strip() for i in x.split(',')])
+
+    # Combining all the features into one
+    data['combined_features'] = data['title'] + ' ' + data['genres'] + ' ' + data['tags'] + ' ' + data['keywords']
+
+    # Converting the combined features into a matrix of token counts
+    vectorizer = CountVectorizer()
+    count_matrix = vectorizer.fit_transform(data['combined_features'])
+
+    # Computing the cosine similarity matrix
+    cosine_sim = cosine_similarity(count_matrix, count_matrix)
+
+    # Function to get recommendations
+    def recommendations(title, cosine_sim=cosine_sim):
+        idx = data[data['title'] == title].index[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:TOP_K+1]
+        movie_indices = [i[0] for i in sim_scores]
+        return data['title'].iloc[movie_indices]
+
+    # Testing the function
+    print(recommendations('The Dark Knight'))
+    ```

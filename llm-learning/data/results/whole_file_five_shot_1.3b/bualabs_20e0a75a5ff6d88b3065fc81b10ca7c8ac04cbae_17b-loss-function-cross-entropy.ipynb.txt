@@ -1,0 +1,10 @@
+```python
+    # Define the loss function
+    def cross_entropy_loss(y_true, y_pred):
+        return tf.nn.sigmoid_cross_entropy_with_logits(labels=y_true, logits=y_pred)
+
+    # Compute the loss
+    loss = cross_entropy_loss(y_true=y_train, y_pred=logits_out)
+    loss_val = sess.run(loss, feed_dict=train_dict)
+    print("Cross Entropy Loss: {:.2}".format(loss_val))
+    ```

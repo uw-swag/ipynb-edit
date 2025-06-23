@@ -1,0 +1,38 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#496)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from deepchecks.base import Dataset
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.datasets import load_diabetes
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import RegressionSystematicError
+<\Cell_0>
+<Cell_1>
+diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+train_df['target'] = train_df['target'] + 150
+
+train = Dataset(train_df, label='target', cat_features=['sex'])
+test = Dataset(test_df, label='target', cat_features=['sex'])
+
+clf = GradientBoostingRegressor(random_state=0)
+_ = clf.fit(train.features_columns, train.label_col)
+<\Cell_1>
+<Cell_2>
+check = RegressionSystematicError()
+<\Cell_2>
+<Cell_3>
+check.run(test, clf)
+<\Cell_3>
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is already up-to-date. It includes the necessary imports, loads the diabetes dataset, splits it into a training set and a test set, trains a Gradient Boosting Regressor model on the training set, and then runs a check on the test set to evaluate the model's performance.
+
+    However, if you have any specific changes or additions you'd like to make, please provide more details.

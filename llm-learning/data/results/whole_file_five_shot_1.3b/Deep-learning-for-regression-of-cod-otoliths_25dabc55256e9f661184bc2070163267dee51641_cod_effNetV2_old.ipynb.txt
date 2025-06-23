@@ -1,0 +1,32 @@
+```python
+    import ipywidgets as widgets
+    import matplotlib.pyplot as plt
+    from IPython.display import display, Image
+
+    # Create a new figure
+    fig = plt.figure(figsize=(10, 10))
+
+    # Create a list of images
+    images = ['image1.jpg', 'image2.jpg', 'image3.jpg', 'image4.jpg', 'image5.jpg']
+
+    # Create a slider for the images
+    slider_widget = widgets.IntSlider(min=0, max=len(images)-1, step=1, value=0)
+
+    # Create a label for the image
+    image_label = widgets.Label()
+
+    # Create a function to update the image
+    def update_image(i):
+        image_label.value = 'Image: ' + images[i]
+
+    # Update the image when the slider value changes
+    slider_widget.observe(update_image, 'value')
+
+    # Display the slider and the image
+    display(slider_widget)
+    display(image_label)
+
+    # Display the first image
+    display(Image(filename=images[0]))
+    ```
+    This code creates a slider that changes the image displayed on the notebook. The slider's value corresponds to the index of the image in the list. The image is then updated to the corresponding image in the list.

@@ -1,0 +1,59 @@
+```python
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    from fastai import *
+    from fastai.tabular import *
+    <\Cell_1>
+    <Cell_2>
+    path = untar_data(URLs.ADULT_SAMPLE)
+    # df = DataFrame, pd = Pandas
+    df = pd.read_csv(path/'adult.csv')
+    <\Cell_2>
+    <Cell_3>
+    df.head(10)
+    <\Cell_3>
+    <Cell_4>
+    df.info()
+    <\Cell_4>
+    <Cell_5>
+    df.fillna(df.mean(), inplace=True)
+    <\Cell_5>
+    <Cell_6>
+    df.isnull().sum()
+    <\Cell_6>
+    ```
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Add missing imports for the new feature"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import classification_report
+    <\Cell_0>
+    <Cell_1>
+    df = pd.DataFrame()
+    <\Cell_1>
+    <Cell_2>
+    X = df.drop('target', axis=1)
+    y = df['target']
+    <\Cell_2>
+    <Cell_3>
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    <\Cell_3>
+    <Cell_4>
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+    <\Cell_4>
+    <

@@ -1,0 +1,46 @@
+```
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.options import DataDriftOptions, ColorOptions
+from evidently.report import Report
+
+from evidently.metrics import ColumnDriftMetric, DataDriftTable, DatasetDriftMetric
+
+from evidently.metrics import (ColumnDistributionMetric, ColumnQuantileMetric, ColumnCorrelationsMetric,
+    ColumnValueListMetric, ColumnValueRangeMetric, DatasetCorrelationsMetric)
+
+from evidently.metrics import (ColumnRegExpMetric, ColumnSummaryMetric, ColumnMissingValuesMetric,
+    DatasetSummaryMetric, DatasetMissingValuesMetric)
+
+from evidently.metrics import (ClassificationQuality, ClassificationClassBalance, ClassificationConfusionMatrix,
+    ClassificationQualityByClass, ClassificationClassSeparationPlot, ProbabilityDistribution, ClassificationRocCurve,
+    ClassificationPRCurve, ClassificationPRTable, ClassificationQualityByFeatureTable)
+
+from evidently.metrics import (RegressionQualityMetric, RegressionPredictedVsActualScatter, 
+    RegressionPredictedVsActualPlot, RegressionErrorPlot, RegressionAbsPercentageErrorPlot, 
+    RegressionErrorDistribution, RegressionErrorNormality, RegressionTopErrorMetric, RegressionErrorBiasTable)
+
+classification_report = Report(metrics=[
+    ClassificationQuality(),
+    ClassificationClassBalance(),
+    ClassificationConfusionMatrix(),
+    ClassificationQualityByClass(),
+    ClassificationClassSeparationPlot(),
+    ProbabilityDistribution(),
+    ClassificationRocCurve(),
+    ClassificationPRCurve(),
+    ClassificationPRTable(),
+    ClassificationQualityByFeatureTable(columns=['mean area', 'fractal dimension error'])
+    
+])
+
+classification_report.run(reference_data=bcancer_ref, current_data=bcancer_cur, column_mapping=bcancer_column_mapping)
+classification_report
+    ```
+
+    ### Explanation:
+    The code is a classification report for a dataset. The classification metrics are calculated

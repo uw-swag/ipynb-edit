@@ -1,0 +1,13 @@
+```python
+    # Data Load
+    path = 'D:/Denoising/Autoencoder/LSTM_SAE/Samsung.txt'
+    def Data_Load(path):
+        global df
+        df = pd.read_csv(path, sep = ',')
+        scaler = MinMaxScaler()
+        scaled = scaler.fit_transform(df[['CLOSE']])
+        df["Close"] = scaled
+        return df
+
+    df = Data_Load(path)
+    ```

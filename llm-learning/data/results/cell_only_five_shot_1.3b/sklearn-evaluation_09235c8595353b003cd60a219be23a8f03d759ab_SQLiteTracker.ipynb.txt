@@ -1,0 +1,38 @@
+```python
+    # import necessary libraries
+    import sqlite3
+    from sqlite_tracker import SQLiteTracker
+
+    # create a connection to the SQLite database
+    conn = sqlite3.connect('my_database.db')
+
+    # create a cursor object
+    cursor = conn.cursor()
+
+    # create a table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS tracker(
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            description TEXT,
+            status TEXT
+        )
+    ''')
+
+    # create an instance of SQLiteTracker
+    tracker = SQLiteTracker(conn, 'tracker')
+
+    # add a new entry
+    tracker.add('Task1', 'This is task 1', 'Not Started')
+
+    # get all entries
+    entries = tracker.get_all()
+
+    # print all entries
+    for entry in entries:
+        print(entry)
+
+    # close the connection
+    conn.close()
+    ```
+    This code creates a SQLite database, a table, and adds a new entry to the table. It then retrieves all entries from the table and prints them.

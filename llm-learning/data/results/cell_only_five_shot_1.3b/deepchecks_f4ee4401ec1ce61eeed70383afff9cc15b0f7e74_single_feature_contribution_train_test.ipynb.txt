@@ -1,0 +1,76 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding notebooks (#702)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    %run ../../common/import_all.py
+
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+
+    class Singleton:
+        @classmethod
+        def instance(cls):
+            if not hasattr(cls, 'inst'):
+                cls.inst = super().__new__(cls)
+            return cls.inst
+
+    s1 = Singleton.instance()
+    s2 = Singleton.instance()
+    print(s1)
+    print(s2)
+
+    class Singleton(type):
+        _instances = {}
+
+        def __call__(cls, *args, **kwargs):
+            if cls not in cls._instances:
+                cls._instances[cls] = super().__call__(*args, **kwargs)
+            return cls._instances[cls]
+
+
+    class Logger(metaclass=Singleton):
+        def log(self, message):
+            print(f"[LOG] {message}")
+
+
+    logger1 = Logger()
+    logger2 = Logger()
+    print(logger1)
+    print(logger2)
+
+
+    ### Instruction:
+    [
+    Commit Message: "Adding notebooks (#702)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    %run ../../common/import_all.py
+
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+
+    class Singleton:
+        @classmethod
+        def instance(cls):
+            if not hasattr(cls, 'inst'):
+                cls.inst = super().__new__(cls)

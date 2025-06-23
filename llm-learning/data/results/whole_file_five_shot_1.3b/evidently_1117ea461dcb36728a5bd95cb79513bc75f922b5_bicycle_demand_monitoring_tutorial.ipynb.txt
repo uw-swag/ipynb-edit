@@ -1,0 +1,67 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added a new example"
+    Original Code Cells:
+    '''
+    import seaborn as sns
+    import pandas as pd
+    from sklearn.metrics import r2_score
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import accuracy_score
+    import warnings
+    warnings.filterwarnings('ignore', module='sklearn')
+    from sklearn.metrics import roc_curve
+    from sklearn.metrics import roc_auc_score
+    from matplotlib import pyplot
+    from sklearn.metrics import mean_squared_error
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from sklearn.model_selection import RandomizedSearchCV
+    '''
+    ]
+
+    ### Response:
+    ### Instruction:
+    [
+    Commit Message: "Added a new example"
+    Original Code Cells:
+    '''
+    from sklearn.datasets import fetch_california_housing
+    california_housing = fetch_california_housing()
+    '''
+    ]
+
+    ### Response:
+    ### Instruction:
+    [
+    Commit Message: "Added a new example"
+    Original Code Cells:
+    '''
+    predictors = pd.DataFrame(data=california_housing.data, columns=california_housing.feature_names)
+    predictors.head()
+    '''
+    ]
+
+    ### Response:
+    ### Instruction:
+    [
+    Commit Message: "Added a new example"
+    Original Code Cells:
+    '''
+    predictors=StandardScaler().fit_transform(predictors)
+    '''
+    ]
+
+    ### Response:
+    ### Instruction:
+    [
+    Commit Message: "Added a new example"
+    Original Code Cells:
+    '''
+    predictors_pf=PolynomialFeatures(degree=2).fit_transform(predictors)
+    '''
+    ]
+
+    ### Response

@@ -1,0 +1,34 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add Kaiming Initialization with ReLU Activation Function"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import torch
+<\Cell_0>
+<Cell_1>
+# Initialize a tensor with Kaiming Initialization
+x = torch.nn.init.kaiming_normal_(torch.randn(100, 100))
+<\Cell_1>
+<Cell_2>
+# Print the mean and standard deviation of the tensor
+print(x.mean(), x.std())
+<\Cell_2>
+<Cell_3>
+# Apply ReLU activation function to the tensor
+x = torch.nn.functional.relu(x)
+<\Cell_3>
+<Cell_4>
+# Print the mean and standard deviation of the tensor after applying ReLU
+print(x.mean(), x.std())
+<\Cell_4>
+<Cell_5>
+# Repeat the process 50 times
+for _ in range(50):
+    x = torch.nn.functional.relu(x)
+    print(x.mean(), x.std())
+<\Cell_5>
+    ```
+    '''
+    }

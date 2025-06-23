@@ -1,0 +1,44 @@
+```python
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import Perceptron
+    from sklearn.datasets import make_blobs
+
+    # Generate a random dataset
+    X, y = make_blobs(n_samples=100, centers=2, n_features=2, random_state=42)
+
+    # Create a Perceptron model
+    perceptron = Perceptron(tol=1e-3, random_state=42)
+
+    # Fit the model
+    perceptron.fit(X, y)
+
+    # Plot the decision boundary
+    h = .02
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    Z = perceptron.predict(np.c_[xx.ravel(), yy.ravel()])
+
+    # Put the result into a color plot
+    Z = Z.reshape(xx.shape)
+    plt.figure(figsize=(8, 6))
+    plt.contourf(xx, yy, Z, alpha=0.8)
+    plt.scatter(X[:, 0], X[:, 1], c=y, s=20, edgecolor='k')
+    plt.title('Perceptron Decision Boundary')
+    plt.show()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add LISA evaluation, update LISA img"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import Perceptron
+    from sklearn.datasets import make_blobs

@@ -1,0 +1,68 @@
+<Cell_0>
+!git clone https://github.com/mmaithani/DeOldify.git DeOldify 
+<\Cell_0>
+<Cell_1>
+cd DeOldify
+<\Cell_1>
+<Cell_2>
+#NOTE:  This must be the first call in order to work properly!
+from deoldify import device
+from deoldify.device_id import DeviceId
+#choices:  CPU, GPU0...GPU7
+device.set(device=DeviceId.GPU0)
+
+import torch
+
+if not torch.cuda.is_available():
+    print('GPU not available.')
+<\Cell_2>
+<Cell_3>
+!pip install -r colab_requirements.txt
+<\Cell_3>
+<Cell_4>
+import fastai
+from deoldify.visualize import *
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, message=".*?Your .*? set is empty.*?")
+<\Cell_4>
+<Cell_5>
+!mkdir 'models'
+!wget https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth -O ./models/ColorizeArtistic_gen.pth
+<\Cell_5>
+<Cell_6>
+!wget https://media.githubusercontent.com/media/jantic/DeOldify/master/resource_images/watermark.png -O ./resource_images/watermark.png
+<\Cell_6>
+<Cell_7>
+colorizer = get_image_colorizer(artistic=True)
+<\Cell_7>
+<Cell_8>
+source_url = 'https://images.pexels.com/photos/3031397/pexels-photo-3031397.jpeg' #@param {type:"string"}
+render_factor = 35  #@param {type: "slider", min: 7, max: 40}
+watermarked = True #@param {type:"boolean"}
+
+if source_url is not None and source_url !='':
+    image_path = colorizer.plot_transformed_image_from_url(url=source_url, render_factor=render_factor, compare=True, watermarked=watermarked)
+    show_image_in_notebook(image_path)
+else:
+    print('Provide an image url :) ')
+<\Cell_8>
+<Cell_9>
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/vic-P8Fxe0J8Flo-unsplash.jpg', render_factor=i, display_render_factor=True, figsize=(8,8))
+<\Cell_9>
+<Cell_10>
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/mvf78f3j7z961.png', render_factor=i, display_render_factor=True, figsize=(8,8))
+<\Cell_10>
+<Cell_11>
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/black-and-white-landscapes.jpg', render_factor=i, display_render_factor=True, figsize=(8,8))
+<\Cell_11>
+<Cell_12>
+url="image url" #@param {type:"string"}
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/68747470733a2f2f692e696d6775722e636f6d2f427430766e6b652e6a7067 (2).jpg', render_factor=i, display_render_factor=True, figsize=(8,8))
+<\Cell_12>
+<Cell_13>
+
+<\Cell_13>

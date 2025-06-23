@@ -1,0 +1,17 @@
+```
+    from deepchecks.datasets.classification.phishing import load_data, load_fitted_model
+
+    train_dataset, test_dataset = load_data()
+    model = load_fitted_model()
+    from deepchecks.checks.performance import SimpleModelComparison
+
+    # Using tree model as a simple model, and changing the tree depth from the default 3 to 5
+    check = SimpleModelComparison(simple_model_type='tree', max_depth=5)
+    check.run(train_dataset, test_dataset, model)
+    ```
+
+    The code above is a part of a Jupyter notebook. The commit message "[issue-650] functionality split (#751)" suggests that the functionality of the code has been split into two parts. The first part loads the data and the fitted model, and the second part runs a check on the model's performance.
+
+    The check is a simple model comparison check, which compares a tree model with a simple model. The maximum depth of the tree is set to 5.
+
+    The code is written in Python and uses the Deepchecks library, which is a library for building and validating machine learning models.

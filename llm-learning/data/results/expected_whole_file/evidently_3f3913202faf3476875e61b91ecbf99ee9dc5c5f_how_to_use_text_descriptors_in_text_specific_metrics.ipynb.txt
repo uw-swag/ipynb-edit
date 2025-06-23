@@ -1,0 +1,104 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+<\Cell_0>
+<Cell_1>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextOverviewPreset
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+
+from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage
+<\Cell_1>
+<Cell_2>
+import nltk
+nltk.download('words')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+<\Cell_2>
+<Cell_3>
+#Dataset for Data Quality and Integrity
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame='auto')
+reviews = reviews_data.frame
+<\Cell_3>
+<Cell_4>
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) #.dropna()
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) #.dropna()
+<\Cell_4>
+<Cell_5>
+reviews.head()
+<\Cell_5>
+<Cell_6>
+column_mapping = ColumnMapping(
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title']
+)
+<\Cell_6>
+<Cell_7>
+#NO descriptors
+
+text_specific_metrics_report = Report(metrics=[
+    TextDescriptorsDriftMetric(column_name="Review_Text"),
+    TextDescriptorsDistribution(column_name="Review_Text"),
+    TextDescriptorsCorrelationMetric(column_name="Review_Text"),
+])
+
+text_specific_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_specific_metrics_report
+<\Cell_7>
+<Cell_8>
+#WITH descriptors
+
+report = Report(metrics=[
+    TextDescriptorsDriftMetric("Review_Text", descriptors={
+        "Review Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt'])
+    }),
+    TextDescriptorsCorrelationMetric(column_name="Title", descriptors={
+        "Title OOV" : OOV(),
+        "Title Non Letter %" : NonLetterCharacterPercentage(),
+        "Title Length" : TextLength()
+    })
+])
+
+report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+report
+
+<\Cell_8>
+<Cell_9>
+#NO descriptors
+
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text")
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+<\Cell_9>
+<Cell_10>
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextOverviewPreset(column_name="Review_Text", descriptors={
+        "Review Text OOV" : OOV(),
+        "Review Text Non Letter %" : NonLetterCharacterPercentage(),
+        "Review Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt'])
+    })
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+<\Cell_10>
+<Cell_11>
+
+<\Cell_11>

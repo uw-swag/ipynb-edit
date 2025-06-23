@@ -1,0 +1,12 @@
+
+    The code you provided is missing a parameter for the `Experiment` class. The `Experiment` class is expected to take several parameters, including the dataframe, the list of channels, the sample rate, the time window, the test ratio, the PCA tolerance, the undersampling method, the undersampling rate, the undersampling neighbors, the oversampling method, the oversampling neighbors, the number of folds in the k-fold cross-validation, the number of epochs in the training, the dropout percentage, the loss function, and the metric.
+
+    Here's the corrected code:
+
+    ```python
+    for experiment in experiments:
+        res = Experiment (df, channels, sample_rate, time_window, test_ratio, pca_tolerance, undersampling_method, undersampling_rate, undersampling_neighbors, oversampling_method, oversampling_neighbors, k_fold, epochs, batch, dropout_percentage, loss_function, metric, step, perfInd, experiment)
+        res.to_csv(experiment + '.csv')
+    ```
+
+    This code will create a new CSV file for each experiment in the `experiments` list, with the experiment name as the filename. Each file will contain the results of the experiment, including the dataframe, the channels, the sample rate, the time window, the test ratio, the PCA tolerance, the undersampling method, the undersampling rate, the undersampling neighbors, the oversampling method, the oversampling neighbors, the number of folds in the k-fold cross-validation, the number of epochs in the training, the dropout percentage, the loss function, and the metric.

@@ -1,0 +1,193 @@
+<Cell_0>
+import pandas as pd
+%matplotlib inline 
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv('./data/training_data.csv')
+df.head(5)
+<\Cell_1>
+<Cell_2>
+print(df['title'][1])
+print('-----')
+print(df['description'][1])
+print('Published at:', df['publishedAt'][1])
+<\Cell_2>
+<Cell_3>
+# Number of clickbait and non-clickbait articles
+df['label'].value_counts()
+<\Cell_3>
+<Cell_4>
+# Plotting the number of author fields that are Null
+df['author'].isnull().value_counts().plot('barh')
+<\Cell_4>
+<Cell_5>
+# The number of characters in the description field
+df['description'].apply(len).mean()
+<\Cell_5>
+<Cell_6>
+# Comparing the number of description characters in clickbait to news
+df['description'].apply(len).groupby(df['label']).mean()
+<\Cell_6>
+<Cell_7>
+# TEST YOUR KNOWLEDGE
+# Can you write a one-liner to compute the number of clickbait articles
+# written by each author? Hint: you might find the .sum() function helpful!
+<\Cell_7>
+<Cell_8>
+df['full_content'] = df.description + ' ' + df.title
+df.head(1)
+<\Cell_8>
+<Cell_9>
+from sklearn.feature_extraction.text import CountVectorizer
+vectorizer = CountVectorizer()
+<\Cell_9>
+<Cell_10>
+sentence = ["Literally just 8 really really cute dogs"]
+vectorizer.fit(sentence)
+print(vectorizer.vocabulary_) # dictionary of words and ids
+<\Cell_10>
+<Cell_11>
+vectorizer.transform(sentence).toarray()
+<\Cell_11>
+<Cell_12>
+sentence = ["OMG 5 truly hilarious dogs 😂"]
+vectorizer.transform(sentence).toarray()
+<\Cell_12>
+<Cell_13>
+from sklearn.svm import LinearSVC
+svc = LinearSVC()
+<\Cell_13>
+<Cell_14>
+bag_of_words = [
+    [1, 5], [1, 4], [2, 6], [4, 2], [3, 4], [2, 1]
+]
+labels = [1, 1, 1, 0, 0, 0]
+<\Cell_14>
+<Cell_15>
+from utils.plotting import plot_2d_samples
+plot_2d_samples(bag_of_words, labels)
+<\Cell_15>
+<Cell_16>
+svc = svc.fit(bag_of_words, labels)
+<\Cell_16>
+<Cell_17>
+from utils.plotting import plot_2d_trained_svc
+plot_2d_trained_svc(bag_of_words, labels, svc)
+<\Cell_17>
+<Cell_18>
+svc.predict([[3, 1], [2,4]])
+<\Cell_18>
+<Cell_19>
+steps = (
+    ('vectorizer', CountVectorizer()),
+    ('classifier', LinearSVC())
+)
+<\Cell_19>
+<Cell_20>
+from sklearn.pipeline import Pipeline
+pipeline = Pipeline(steps)
+<\Cell_20>
+<Cell_21>
+from sklearn.model_selection import train_test_split
+training, testing = train_test_split(
+    df,                # The dataset we want to split
+    train_size=0.7,    # The proportional size of our training set
+    stratify=df.label, # The labels are used for stratification
+    random_state=400   # Use the same random state for reproducibility
+)
+<\Cell_21>
+<Cell_22>
+training.head(5)
+<\Cell_22>
+<Cell_23>
+print(len(training))
+print(len(testing))
+<\Cell_23>
+<Cell_24>
+pipeline = pipeline.fit(training.title, training.label)
+<\Cell_24>
+<Cell_25>
+pipeline.predict(["10 things you need to do..."])
+<\Cell_25>
+<Cell_26>
+pipeline.predict(["French election polls show an early lead for Macron."])
+<\Cell_26>
+<Cell_27>
+from sklearn.model_selection import cross_val_predict
+predicted_labels = cross_val_predict(pipeline, training.title, training.label)
+<\Cell_27>
+<Cell_28>
+from utils.plotting import pipeline_performance
+pipeline_performance(training.label, predicted_labels)
+<\Cell_28>
+<Cell_29>
+training[training.label != predicted_labels]
+<\Cell_29>
+<Cell_30>
+predicted_labels = cross_val_predict(pipeline, training.full_content, training.label)
+pipeline_performance(training.label, predicted_labels)
+<\Cell_30>
+<Cell_31>
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+steps = (
+    ('vectorizer', TfidfVectorizer()),
+    ('classifier', LinearSVC())
+)
+pipeline = Pipeline(steps)
+
+predicted_labels = cross_val_predict(pipeline, training.full_content, training.label)
+pipeline_performance(training.label, predicted_labels)
+<\Cell_31>
+<Cell_32>
+import re
+def mask_integers(s):
+    return re.sub(r'\d+', 'INTMASK', s)
+
+steps = (
+    ('vectorizer', TfidfVectorizer(preprocessor=mask_integers)),
+    ('classifier', LinearSVC())
+)
+pipeline = Pipeline(steps)
+
+predicted_labels = cross_val_predict(pipeline, training.full_content, training.label)
+pipeline_performance(training.label, predicted_labels)
+<\Cell_32>
+<Cell_33>
+steps = (
+    ('vectorizer', TfidfVectorizer()),
+    ('classifier', LinearSVC())
+)
+
+pipeline = Pipeline(steps)
+<\Cell_33>
+<Cell_34>
+gs_params = {
+    'vectorizer__stop_words': ['english', None],
+    'vectorizer__ngram_range': [(1, 1), (1, 2), (2, 2)],
+    'vectorizer__preprocessor': [mask_integers, None],
+    'classifier__C': [0.001, 0.01, 0.1, 1, 10, 100]
+}
+<\Cell_34>
+<Cell_35>
+from sklearn.model_selection import GridSearchCV
+gs = GridSearchCV(pipeline, gs_params, n_jobs=-1)
+gs.fit(training.full_content, training.label)
+<\Cell_35>
+<Cell_36>
+print(gs.best_params_)
+print(gs.best_score_)
+<\Cell_36>
+<Cell_37>
+pipeline = gs.best_estimator_
+predicted_labels = pipeline.predict(testing.full_content)
+pipeline_performance(testing.label, predicted_labels)
+<\Cell_37>
+<Cell_38>
+filename = 'classifiers/clickbait_svc_v1'
+<\Cell_38>
+<Cell_39>
+import pickle
+with open(filename, 'wb') as f:
+    pickle.dump(pipeline, f)
+<\Cell_39>

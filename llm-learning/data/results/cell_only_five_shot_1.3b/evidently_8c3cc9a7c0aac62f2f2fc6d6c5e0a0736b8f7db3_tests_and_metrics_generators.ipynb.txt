@@ -1,0 +1,14 @@
+```python
+    from evidently.tests import TestValueQuantile
+    from evidently.test_suite import TestSuite
+
+    suite = TestSuite(tests=[
+        TestValueQuantile(column_name="education-num", quantile=quantile) for quantile in [0.5, 0.9, 0.99]
+    ])
+
+    suite.run(current_data=current_data, reference_data=reference_data)
+    suite
+    ```
+
+    ### Explanation:
+    The commit message "Rename some tests (#457)" is a rename of the test suite. The number "#457" is a reference to a specific issue or a specific test in the codebase. The test suite is a collection of tests that are run to check the quality of the data. The tests in the suite are used to evaluate the quality of different columns in the data. The tests are renamed to make the code more understandable and to avoid any potential naming conflicts.

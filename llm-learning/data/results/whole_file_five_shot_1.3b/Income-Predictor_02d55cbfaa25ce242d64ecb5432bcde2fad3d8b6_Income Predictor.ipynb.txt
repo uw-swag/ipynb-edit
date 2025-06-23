@@ -1,0 +1,59 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Data Cleaning
+import pandas as pd
+import numpy as np
+from sklearn.impute import SimpleImputer
+
+# Load the dataset
+dataset = pd.read_csv('income-dataset.csv')
+
+# Fill missing values
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+imputer = imputer.fit(dataset)
+dataset = imputer.transform(dataset)
+
+# Convert the dataframe to a pandas DataFrame
+dataset = pd.DataFrame(dataset, columns=columns)
+<\Cell_0>
+<Cell_1>
+# Check for missing values
+dataset.isnull().sum()
+<\Cell_1>
+<Cell_2>
+# Check for duplicate rows
+duplicate_rows = dataset.duplicated()
+print('Number of duplicate rows:', duplicate_rows.sum())
+<\Cell_2>
+<Cell_3>
+# Drop duplicates
+dataset = dataset.drop_duplicates()
+<\Cell_3>
+<Cell_4>
+# Check for outliers
+for column in dataset.columns:
+    plt.figure()
+    dataset.boxplot([column])
+<\Cell_4>
+<Cell_5>
+# Remove outliers
+Q1 = dataset.quantile(0.25)
+Q3 = dataset.quantile(0.75)
+IQR = Q3 - Q1
+dataset = dataset[~((dataset < (Q1 - 1.5 * IQR)) |(dataset > (Q3 + 1.5 * IQR))).any(axis=1)]
+<\Cell_5>
+<Cell_6>
+# Save the cleaned data
+dataset.to_csv('cleaned_income_dataset.csv', index=False)
+<\Cell_6>
+<Cell_7>
+# Check for outliers in the cleaned data
+for column in dataset.columns:
+    plt.figure()
+    dataset.boxplot([column])
+<\

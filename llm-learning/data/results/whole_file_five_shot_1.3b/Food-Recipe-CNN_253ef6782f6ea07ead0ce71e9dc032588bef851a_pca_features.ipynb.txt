@@ -1,0 +1,26 @@
+```python
+    from nannyml.components import ComponentAnalysis
+
+    # Define the components
+    components = [
+        nml.components.Classifier(),
+        nml.components.Regressor(),
+        nml.components.Clustering(),
+        nml.components.DimensionalityReduction(),
+        nml.components.AssociationRule(),
+        nml.components.AnomalyDetection(),
+        nml.components.TimeSeriesForecasting(),
+    ]
+
+    # Create a component analysis
+    component_analysis = ComponentAnalysis(components)
+
+    # Fit the component analysis
+    component_analysis.fit(analysis_df)
+
+    # Get the results
+    results = component_analysis.get_results()
+
+    # Display the results
+    display(results.to_df())
+    ```

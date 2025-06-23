@@ -1,0 +1,9 @@
+```
+    # remove notebooks from root folder
+    import os
+    for dirname, _, filenames in os.walk('.'):
+        for filename in filenames:
+            if filename.endswith('.ipynb'):
+                file_path = os.path.join(dirname, filename)
+                os.remove(file_path)
+    ```

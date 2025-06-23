@@ -1,0 +1,40 @@
+```python
+    from getml.engine import Snapshot
+    from getml.engine import SnapshotConfig
+
+    # Create a snapshot configuration
+    snapshot_config = SnapshotConfig(
+        name="my_snapshot",
+        description="This is a snapshot",
+        tags=["tag1", "tag2"],
+        version=1,
+        criticality="high",
+    )
+
+    # Create a snapshot
+    snapshot = Snapshot(snapshot_config)
+
+    # Add data to the snapshot
+    snapshot.add_data(data)
+
+    # Get the snapshot
+    snapshot_data = snapshot.get_data()
+
+    # Test the snapshot
+    assert snapshot_data.equals(data)
+
+    # Customize the snapshot
+    snapshot_config.description = "This is a customized snapshot"
+    snapshot_config.tags.append("tag3")
+    snapshot_config.version = 2
+    snapshot_config.criticality = "medium"
+
+    # Update the snapshot
+    snapshot.update_config(snapshot_config)
+
+    # Get the updated snapshot
+    updated_snapshot_data = snapshot.get_data()
+
+    # Test the updated snapshot
+    assert updated_snapshot_data.equals(data)
+    ```

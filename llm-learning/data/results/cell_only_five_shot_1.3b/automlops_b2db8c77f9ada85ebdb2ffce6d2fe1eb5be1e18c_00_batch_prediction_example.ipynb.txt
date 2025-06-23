@@ -1,0 +1,37 @@
+```python
+    from flask import Flask, request, jsonify
+    from flask_caching import Cache
+
+    app = Flask(__name__)
+
+    # Setup cache
+    cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+
+    @app.route('/api/data', methods=['GET'])
+    def get_data():
+        data = cache.get('data')
+        if data is None:
+            # Fetch data from the source
+            data = fetch_data_from_source()
+            # Set the data in cache for 10 minutes
+            cache.set('data', data, timeout=600)
+        return jsonify(data)
+
+    def fetch_data_from_source():
+        # Fetch data from the source
+        # This is a placeholder function, replace it with your actual data fetching logic
+        return {'key': 'value'}
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+
+    The above code is a simple Flask application with a single route ('/api/data') that fetches data from a source. The data is cached for 10 minutes using a simple caching strategy. If the data is not in the cache, it is fetched from the source and then cached for 10 minutes.
+
+    The `fetch_data_from_source` function is a placeholder for your actual data fetching logic. Replace it with your actual data fetching logic.
+
+    The `cache.set` function is used to set the data in the cache. The `cache.get` function is used to get the data from the cache. The `timeout` parameter is used to set the cache expiration time.
+
+    The `CACHE_TYPE` configuration option is set to 'simple' to use a simple caching strategy. You can also use other caching strategies like 'filesystem', 'memcached', 'redis', etc.
+
+    Please note that the caching strategy you choose should be based on your specific requirements and the nature of your data.

@@ -1,0 +1,28 @@
+
+    The code you've provided is a set of cells that define a number of functions and classes in Python. The functions and classes are used to perform various tasks such as data normalization, model training, and more.
+
+    The refactoring of the code to move the model to a module level is a good practice as it makes the code more organized and easier to maintain. This is done by creating a new class `Model` that encapsulates all the operations related to the model.
+
+    Here's a brief explanation of the changes:
+
+    - The `Model` class is created. This class encapsulates all the operations related to the model, such as forward propagation, backward propagation, and loss calculation.
+
+    - The `Module` class is created. This class is a base class for all modules in the model. It provides a common interface for all modules and includes methods for forward and backward propagation.
+
+    - The `Relu` and `Lin` classes are created. These are subclasses of `Module`, which are used to define the layers in the model.
+
+    - The `Mse` class is created. This is a subclass of `Module`, which is used to define the loss function.
+
+    - The `forward_and_backward` function is defined. This function performs both forward propagation and backward propagation of the model.
+
+    - The `forward` and `backward` methods of the `Model` class are defined. These methods call the `forward_and_backward` function to perform the forward and backward propagation of the model.
+
+    - The `w1.g, b1.g, w2.g, b2.g` variables are defined. These are used to store the gradients of the weights and biases during the backward propagation.
+
+    - The `Model` class is instantiated and the loss is calculated. The `backward` method is then called to perform the backward propagation of the model.
+
+    - The `test_near` function is used to check if the gradients are close to zero.
+
+    - The `forward_and_backward` function is called to perform both forward and backward propagation of the model.
+
+    - The `w1.g.mean(), w1.g.std()` and `w2.g.mean(), w2.g.std

@@ -1,0 +1,24 @@
+```python
+    ### Cell_0: Import necessary libraries
+    import fastbook
+    from fastai.vision.all import *
+    from fastai.vision.widgets import *
+
+    ### Cell_1: Load the data
+    path = untar_data(URLs.PETS)
+    dogs = ImageClassifier.from_pretrained_resnet(path)
+
+    ### Cell_2: Create a widget for image upload
+    img = widgets.ImageUpload()
+
+    ### Cell_3: Predict the class of the image
+    def on_click(change):
+        img = widgets.ImageUpload()
+        pred,pred_idx,prob = dogs.predict(img.data)
+        return widgets.HTML(f"<p>Prediction: {pred}</p>"
+                            f"<p>Probability: {prob[pred_idx]:.2f}</p>")
+
+    ### Cell_4: Display the widget
+    widgets.interact(on_click, image=img)
+    ```
+    This code creates a new notebook that uses the fastai library to perform image classification using the ResNet34 model. It also includes a widget for image upload and a prediction display.

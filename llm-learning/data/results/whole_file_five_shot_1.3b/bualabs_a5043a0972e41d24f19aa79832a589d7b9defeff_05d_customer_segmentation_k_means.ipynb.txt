@@ -1,0 +1,60 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added links to several articles on bualabs.com website."
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    # ! pip install kaggle --upgrade
+    # ! pip install plotly --upgrade
+    <\Cell_1>
+    <Cell_2>
+    import numpy as np 
+    import pandas as pd 
+    from pandas import plotting
+
+    import matplotlib.pyplot as plt 
+    import seaborn as sns 
+    plt.style.use('fivethirtyeight')
+
+    import plotly as py
+    import plotly.graph_objs as go
+    py.offline.init_notebook_mode(connected = True)
+
+    from sklearn.cluster import KMeans
+    import fastai
+
+    import warnings
+    import os
+    from pathlib import Path
+    warnings.filterwarnings("ignore")
+    <\Cell_2>
+    <Cell_3>
+    dataset = 'vjchoudhary7/customer-segmentation-tutorial-in-python'
+
+    # Google Colab
+    config_path = Path('/content/drive')
+    data_path_base = Path('/content/datasets/')
+
+    data_path = data_path_base/dataset
+
+    from google.colab import drive
+    drive.mount(str(config_path))
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+    <\Cell_3>
+    <Cell_4>
+    !kaggle datasets download {dataset} -p "{data_path}" --unzip
+    <\Cell_4>
+    <Cell_5>
+    !ls {data_path}
+    <\Cell_5>
+    <Cell_6>
+    df =  pd.read_csv(data_path/'Mall_Customers.csv')
+    df.shape
+    <\Cell_6>
+    <

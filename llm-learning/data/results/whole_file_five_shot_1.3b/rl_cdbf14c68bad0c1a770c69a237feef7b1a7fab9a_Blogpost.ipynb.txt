@@ -1,0 +1,42 @@
+```python
+    <Cell_0>
+    import numpy as np
+    import tensorflow as tf
+    import matplotlib.pyplot as plt
+    from stable_baselines import REINFORCE
+    from stable_baselines.common.vec_env import DummyVecEnv
+    from stable_baselines.common.policies import MlpLstmPolicy
+    from stable_baselines.common.vec_env import VecNormalize
+
+    # Define the environment
+    n_envs = 1
+    env_name = 'CartPole-v0'
+    env = gym.make(env_name)
+
+    # Define the policy
+    policy_kwargs = dict(
+        features_extractor=dict(
+            dtype=tf.float32,
+            features_dim=6,
+        ),
+        n_atoms=256,
+        layer_norm_fn=tf.keras.layers.LayerNormalization,
+    )
+    policy_name = 'MlpLstmPolicy'
+    policy = MlpLstmPolicy
+
+    # Define the model
+    model = REINFORCE(policy, env, verbose=1)
+
+    # Train the model
+    model.learn(total_timesteps=10000)
+
+    # Save the model
+    model.save("cartpole")
+
+    # Plot the results
+    rewards = np.array(model.get_episode_rewards())
+    plt.plot(rewards)
+    plt.show()
+    <\Cell_0>
+    ```

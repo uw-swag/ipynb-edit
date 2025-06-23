@@ -1,0 +1,11 @@
+performance_report = Report(metrics=[
+    DataDriftTable(),
+    generate_column_metrics(ColumnSummaryMetric),
+    generate_column_metrics(ColumnCorrelationsMetric),
+    ClassificationQualityMetric(),
+    ClassificationQualityByClass(),
+])
+
+performance_report.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+
+performance_report.show()

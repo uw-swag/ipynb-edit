@@ -1,0 +1,392 @@
+<Cell_0>
+#Libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from scipy.stats import skew
+<\Cell_0>
+<Cell_1>
+Input the path to the files instead of "../input".
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+<\Cell_1>
+<Cell_2>
+#Fill Nan values with means.
+train = train.fillna(train.mean())
+test = test.fillna(test.mean())
+<\Cell_2>
+<Cell_3>
+#LoanID is just an index, so it isn't useful. LoanID in test data is necessary to create a submission file.
+train.drop(['Loan_ID'], axis=1, inplace=True)
+test_id = test.Loan_ID
+test.drop(['Loan_ID'], axis=1, inplace=True)
+<\Cell_3>
+<Cell_4>
+#Take log of skewered data and dummify categorical variables.
+for col in train.columns.drop('Loan_Status'):
+    if train[col].dtype != 'object':
+        if skew(train[col]) > 0.75:
+            train[col] = np.log1p(train[col])
+        pass
+    else:
+        dummies = pd.get_dummies(train[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        train.drop(col, axis=1, inplace=True)
+        train = train.join(dummies)
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+        pass
+    else:
+        dummies = pd.get_dummies(test[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        test.drop(col, axis=1, inplace=True)
+        test = test.join(dummies)
+<\Cell_4>
+<Cell_5>
+#Make data ready for modelling
+from sklearn.preprocessing import LabelEncoder
+X_train = train.drop('Loan_Status', axis=1)
+le = LabelEncoder()
+Y_train = le.fit_transform(train.Loan_Status.values)
+X_test = test
+<\Cell_5>
+<Cell_6>
+#Estimating feature importance.
+clf = RandomForestClassifier(n_estimators=200)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+print('Feature ranking:')
+
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]],
+                                      clf.feature_importances_[indices[f]]))
+<\Cell_6>
+<Cell_7>
+#I'll use top-5 most important features.
+best_features=X_train.columns[indices[0:5]]
+X = X_train[best_features]
+Xt = X_test[best_features]
+<\Cell_7>
+<Cell_8>
+#Split data for validation.
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, Y_train, test_size=0.20, random_state=36)
+<\Cell_8>
+<Cell_9>
+clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, criterion = 'gini')
+#CalibratedClassifierCV - probability calibration with cross-validation.
+calibrated_clf = CalibratedClassifierCV(clf, method='isotonic', cv=5)
+calibrated_clf.fit(Xtrain, ytrain)
+y_val = calibrated_clf.predict_proba(Xtest)
+y_f = [1 if y_val[i][0] < 0.5 else 0 for i in range(len(ytest))]
+print("Validation accuracy: ", sum(y_f == ytest) / len(ytest))
+<\Cell_9>
+<Cell_10>
+clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, criterion = 'gini')
+calibrated_clf = CalibratedClassifierCV(clf, method='isotonic', cv=5)
+calibrated_clf.fit(X, Y_train)
+y_submit = calibrated_clf.predict_proba(Xt)
+submission = pd.DataFrame({'Loan_ID':test_id, 'Loan_Status':le.inverse_transform([1 if y_submit[i][0] < 0.5 else 0 for i in range(len(Xt))])})
+submission.to_csv('Loan.csv', index=False)
+<\Cell_10>
+<Cell_11>
+Input the path to the files instead of "../input".
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+<\Cell_11>
+<Cell_12>
+train.info()
+<\Cell_12>
+<Cell_13>
+test.info()
+<\Cell_13>
+<Cell_14>
+train.describe(include='all')
+<\Cell_14>
+<Cell_15>
+train.head()
+<\Cell_15>
+<Cell_16>
+#LoanID isn't necessary
+train.drop(['Loan_ID'], axis=1, inplace=True)
+test_id = test.Loan_ID
+test.drop(['Loan_ID'], axis=1, inplace=True)
+<\Cell_16>
+<Cell_17>
+train.Gender.value_counts()
+<\Cell_17>
+<Cell_18>
+sns.stripplot(x="Gender", y="ApplicantIncome", data=train, hue='Loan_Status', jitter=True)
+<\Cell_18>
+<Cell_19>
+sns.boxplot(x='Gender', y='ApplicantIncome',  data=train.loc[train.ApplicantIncome < 25000])
+<\Cell_19>
+<Cell_20>
+train.groupby(['Gender'])['Loan_Status'].value_counts(normalize=True)
+<\Cell_20>
+<Cell_21>
+sns.factorplot(x="Credit_History", hue="Loan_Status", col="Gender", data=train, kind="count")
+<\Cell_21>
+<Cell_22>
+train['Gender'].fillna('Male', inplace=True)
+test['Gender'].fillna('Male', inplace=True)
+<\Cell_22>
+<Cell_23>
+train.Married.value_counts()
+<\Cell_23>
+<Cell_24>
+pd.crosstab(train.Married, train.Loan_Status)
+<\Cell_24>
+<Cell_25>
+train.groupby(['Gender'])['Married'].value_counts(normalize=True)
+<\Cell_25>
+<Cell_26>
+sns.factorplot(x="Married", hue="Loan_Status", col="Gender", data=train, kind="count")
+<\Cell_26>
+<Cell_27>
+train.loc[train.Married.isnull() == True]
+<\Cell_27>
+<Cell_28>
+train.loc[(train.Gender == 'Male') & (train.Married.isnull() == True), 'Married'] = 'Yes'
+train.loc[(train.Gender == 'Female') & (train.Married.isnull() == True), 'Married'] = 'No'
+<\Cell_28>
+<Cell_29>
+train.Dependents.value_counts()
+<\Cell_29>
+<Cell_30>
+train.groupby(['Dependents'])['Loan_Status'].value_counts(normalize=True)
+<\Cell_30>
+<Cell_31>
+sns.factorplot("Loan_Status", col="Dependents", col_wrap=4, data=train, kind="count", size=2.4, aspect=.8)
+<\Cell_31>
+<Cell_32>
+train.groupby(['Gender', 'Married', 'Property_Area'])['Dependents'].value_counts(normalize=True)
+<\Cell_32>
+<Cell_33>
+train['Dependents'] = train['Dependents'].fillna(train['Dependents'].mode().iloc[0])
+test['Dependents'] = test['Dependents'].fillna(test['Dependents'].mode().iloc[0])
+<\Cell_33>
+<Cell_34>
+sns.factorplot(x="Education", hue="Loan_Status", data=train, kind="count")
+<\Cell_34>
+<Cell_35>
+train.groupby(['Self_Employed'])['Loan_Status'].value_counts(normalize=True)
+<\Cell_35>
+<Cell_36>
+sns.factorplot("Loan_Status", col="Self_Employed", col_wrap=4, data=train, kind="count", size=2.4, aspect=.8)
+<\Cell_36>
+<Cell_37>
+train.groupby(['Education', 'Married', 'Dependents', 'Gender', 'Property_Area'])['Self_Employed'].apply(lambda x: x.mode())
+<\Cell_37>
+<Cell_38>
+train.loc[(train.Education == 'Graduate') & (train.Married == 'Yes')
+          & (train.Dependents == '2') & (train.Gender == 'Male') & (train.Property_Area == 'Urban')
+          & (train.Self_Employed.isnull() == True), 'Self_Employed'] = 'Yes'
+test.loc[(test.Education == 'Graduate') & (test.Married == 'Yes')
+         & (test.Dependents == '2') & (test.Gender == 'Male') & (test.Property_Area == 'Urban')
+         & (test.Self_Employed.isnull() == True), 'Self_Employed'] = 'Yes'
+train['Self_Employed'].fillna('No', inplace=True)
+test['Self_Employed'].fillna('No', inplace=True)
+<\Cell_38>
+<Cell_39>
+sns.distplot(train['ApplicantIncome'], kde=False, color='c', hist_kws={'alpha': 0.9})
+<\Cell_39>
+<Cell_40>
+sns.distplot(np.log1p(train['ApplicantIncome']), kde=False, color='c', hist_kws={'alpha': 0.9})
+<\Cell_40>
+<Cell_41>
+train['Income_group'] = pd.qcut(train.ApplicantIncome, 10, labels=[0,1,2,3,4,5,6,7,8,9])
+test['Income_group'] = pd.qcut(test.ApplicantIncome, 10, labels=[0,1,2,3,4,5,6,7,8,9])
+<\Cell_41>
+<Cell_42>
+train['Income_group'] = train['Income_group'].astype(str)
+test['Income_group'] = test['Income_group'].astype(str)
+<\Cell_42>
+<Cell_43>
+train.groupby(['Income_group'])['Loan_Status'].value_counts(normalize=True)
+<\Cell_43>
+<Cell_44>
+sns.distplot(train['CoapplicantIncome'], kde=False, color='c', hist_kws={'alpha': 0.9})
+<\Cell_44>
+<Cell_45>
+sns.distplot(np.log1p(train['CoapplicantIncome']), kde=False, color='c', hist_kws={'alpha': 0.9})
+<\Cell_45>
+<Cell_46>
+train['Coap_group'] =  pd.qcut(train.CoapplicantIncome, 2, labels=[0,1])
+test['Coap_group'] =  pd.qcut(test.CoapplicantIncome, 2, labels=[0,1])
+<\Cell_46>
+<Cell_47>
+train['Coap_group'] = train['Coap_group'].astype(str)
+test['Coap_group'] = test['Coap_group'].astype(str)
+<\Cell_47>
+<Cell_48>
+train.groupby(['Coap_group'])['Loan_Status'].value_counts(normalize=True)
+<\Cell_48>
+<Cell_49>
+plt.scatter(train['ApplicantIncome'], train['LoanAmount'])
+<\Cell_49>
+<Cell_50>
+train.groupby(['Education', 'Gender', 'Income_group', 'Self_Employed'])['LoanAmount'].median()
+<\Cell_50>
+<Cell_51>
+train.groupby(['Education', 'Gender', 'Self_Employed'])['LoanAmount'].median()
+<\Cell_51>
+<Cell_52>
+train['LoanAmount'] = train.groupby(['Education', 'Gender', 'Income_group', 'Self_Employed'])['LoanAmount'].apply(lambda x: x.fillna(x.mean()))
+test['LoanAmount'] = test.groupby(['Education', 'Gender', 'Income_group', 'Self_Employed'])['LoanAmount'].apply(lambda x: x.fillna(x.mean()))
+train['LoanAmount'] = train.groupby(['Education', 'Gender', 'Self_Employed'])['LoanAmount'].apply(lambda x: x.fillna(x.mean()))
+test['LoanAmount'] = test.groupby(['Education', 'Gender', 'Self_Employed'])['LoanAmount'].apply(lambda x: x.fillna(x.mean()))
+<\Cell_52>
+<Cell_53>
+sns.distplot(train['LoanAmount'], kde=False, color='c', hist_kws={'alpha': 0.9})
+<\Cell_53>
+<Cell_54>
+train['Loan_group'] =  pd.qcut(train.LoanAmount, 10, labels=[0,1,2,3,4,5,6,7,8,9])
+test['Loan_group'] =  pd.qcut(test.LoanAmount, 10, labels=[0,1,2,3,4,5,6,7,8,9])
+train['Loan_group'] = train['Loan_group'].astype(str)
+test['Loan_group'] = test['Loan_group'].astype(str)
+<\Cell_54>
+<Cell_55>
+train.Loan_Amount_Term.value_counts()
+<\Cell_55>
+<Cell_56>
+sns.factorplot("Loan_Status", col="Loan_Amount_Term", col_wrap=3,
+               data=train.loc[train.Loan_Amount_Term !=360.], kind="count", size=3.4, aspect=.8)
+<\Cell_56>
+<Cell_57>
+train.groupby(['Education', 'Income_group', 'Loan_group'])['Loan_Amount_Term'].apply(lambda x: x.mode())
+<\Cell_57>
+<Cell_58>
+train['Loan_Amount_Term'].fillna(360.0, inplace=True)
+test['Loan_Amount_Term'].fillna(360.0, inplace=True)
+train['Loan_Amount_Term'] = train['Loan_Amount_Term'].astype(str)
+test['Loan_Amount_Term'] = test['Loan_Amount_Term'].astype(str)
+<\Cell_58>
+<Cell_59>
+train.Credit_History.value_counts()
+<\Cell_59>
+<Cell_60>
+train.groupby(['Education', 'Self_Employed', 'Property_Area', 'Income_group'])['Credit_History'].apply(lambda x: x.mode())
+<\Cell_60>
+<Cell_61>
+train.loc[(train.Education == 'Graduate') & (train.Self_Employed == 'Yes')
+          & (train.Property_Area == 'Urban') & (train.Income_group == '9') & (train.Credit_History.isnull() == True),
+          'Self_Employed'] = 0.0
+train.loc[(train.Education == 'Not Graduate') & (train.Self_Employed == 'No')
+          & (train.Property_Area == 'Rural') & (train.Income_group == '7') & (train.Credit_History.isnull() == True),
+          'Self_Employed'] = 0.0
+train.loc[(train.Education == 'Not Graduate') & (train.Self_Employed == 'No')
+          & (train.Property_Area == 'Urban') & (train.Income_group == '2') & (train.Credit_History.isnull() == True),
+          'Self_Employed'] = 0.0
+test.loc[(test.Education == 'Graduate') & (test.Self_Employed == 'Yes')
+          & (test.Property_Area == 'Urban') & (test.Income_group == '9') & (test.Credit_History.isnull() == True),
+          'Self_Employed'] = 0.0
+test.loc[(test.Education == 'Not Graduate') & (test.Self_Employed == 'No')
+          & (test.Property_Area == 'Rural') & (test.Income_group == '7') & (test.Credit_History.isnull() == True),
+          'Self_Employed'] = 0.0
+test.loc[(test.Education == 'Not Graduate') & (test.Self_Employed == 'No')
+          & (test.Property_Area == 'Urban') & (test.Income_group == '2') & (test.Credit_History.isnull() == True),
+          'Self_Employed'] = 0.0
+train['Credit_History'].fillna(1.0, inplace=True)
+test['Credit_History'].fillna(1.0, inplace=True)
+train['Credit_History'] = train['Credit_History'].astype(str)
+test['Credit_History'] = test['Credit_History'].astype(str)
+<\Cell_61>
+<Cell_62>
+sns.factorplot('Loan_Status', col='Property_Area', col_wrap=3, data=train, kind='count', size=2.5, aspect=.8)
+<\Cell_62>
+<Cell_63>
+train.dtypes
+<\Cell_63>
+<Cell_64>
+for col in train.columns.drop('Loan_Status'):
+    if train[col].dtype != 'object':
+        if skew(train[col]) > 0.75:
+            train[col] = np.log1p(train[col])
+        pass
+    else:
+        dummies = pd.get_dummies(train[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        if col == 'Credit_History' or col == 'Loan_Amount_Term':
+            pass
+        else:
+            train.drop(col, axis=1, inplace=True)
+        train = train.join(dummies)
+for col in test.columns:
+    if test[col].dtype != 'object':
+        if skew(test[col]) > 0.75:
+            test[col] = np.log1p(test[col])
+        pass
+    else:
+        dummies = pd.get_dummies(test[col], drop_first=False)
+        dummies = dummies.add_prefix("{}_".format(col))
+        if col == 'Credit_History' or col == 'Loan_Amount_Term':
+            pass
+        else:
+            test.drop(col, axis=1, inplace=True)
+        test = test.join(dummies)
+<\Cell_64>
+<Cell_65>
+#I leave these two variables as they seem to be important by themselves.
+train['Credit_History'] = train['Credit_History'].astype(float)
+train['Loan_Amount_Term'] = train['Loan_Amount_Term'].astype(float)
+test['Credit_History'] = test['Credit_History'].astype(float)
+test['Loan_Amount_Term'] = test['Loan_Amount_Term'].astype(float)
+<\Cell_65>
+<Cell_66>
+X_train = train.drop('Loan_Status', axis=1)
+le = LabelEncoder()
+Y_train = le.fit_transform(train.Loan_Status.values)
+X_test = test
+<\Cell_66>
+<Cell_67>
+clf = RandomForestClassifier(n_estimators=200)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+# Print the feature ranking
+print('Feature ranking:')
+
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]],
+                                      clf.feature_importances_[indices[f]]))
+<\Cell_67>
+<Cell_68>
+#I'll use 6 most important features.
+best_features=X_train.columns[indices[0:6]]
+X = X_train[best_features]
+Xt = X_test[best_features]
+<\Cell_68>
+<Cell_69>
+#Splitting data for validation
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, Y_train, test_size=0.20, random_state=36)
+<\Cell_69>
+<Cell_70>
+clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, criterion = 'gini')
+#CalibratedClassifierCV - probability calibration with cross-validation.
+calibrated_clf = CalibratedClassifierCV(clf, method='isotonic', cv=5)
+calibrated_clf.fit(Xtrain, ytrain)
+y_val = calibrated_clf.predict_proba(Xtest)
+y_f = [1 if y_val[i][0] < 0.5 else 0 for i in range(len(ytest))]
+sum(y_f == ytest) / len(ytest)
+<\Cell_70>
+<Cell_71>
+clf = RandomForestClassifier(n_estimators=300, n_jobs=-1, criterion = 'gini')
+calibrated_clf = CalibratedClassifierCV(clf, method='isotonic', cv=5)
+calibrated_clf.fit(X, Y_train)
+y_submit = calibrated_clf.predict_proba(Xt)
+<\Cell_71>
+<Cell_72>
+y_pred = le.inverse_transform([1 if y_submit[i][0] < 0.5 else 0 for i in range(len(Xt))])
+submission = pd.DataFrame({'Loan_ID':test_id, 'Loan_Status':y_pred})
+submission.to_csv('Loan.csv', index=False)
+<\Cell_72>

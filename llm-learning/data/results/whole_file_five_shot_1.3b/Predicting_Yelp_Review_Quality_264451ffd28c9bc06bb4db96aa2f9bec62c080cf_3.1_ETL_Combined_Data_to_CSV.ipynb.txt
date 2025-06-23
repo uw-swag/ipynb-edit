@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+    from nltk.corpus import stopwords
+    from nltk.stem import WordNetLemmatizer
+    from nltk.tokenize import word_tokenize
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Load the data
+    data = pd.read_csv('data.csv')
+
+    # Lowercase
+    data['text'] = data['text'].apply(lambda x: x.lower())
+
+    # Remove punctuation
+    data['text'] = data['text'].str.replace('[^\w\s]', '')
+
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    data['text'] = data['text'].apply(lambda x: ' '.join(x for x in x.split() if x not in stop_words))
+
+    # Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    data['text'] = data['text'].apply(lambda x: ' '.join(lemmatizer.lemmatize(word) for word in word_tokenize(x)))
+
+    # TF-IDF
+    vectorizer = TfidfVectorizer(max_features=2000)
+    X = vectorizer.fit_transform(data['text']).toarray()
+
+    # Save the vectorized data
+    with open('vectorized_data.pkl', 'wb') as f:
+        pickle.dump(vectorizer, f)
+
+    with open('tfidf_matrix.pkl', 'wb') as f:
+        pickle.dump(X, f)
+    ```

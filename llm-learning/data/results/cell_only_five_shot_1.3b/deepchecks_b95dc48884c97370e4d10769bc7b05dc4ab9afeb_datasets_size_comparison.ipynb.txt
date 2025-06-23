@@ -1,0 +1,39 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from torch.utils.data import Dataset
+    from torchvision.datasets import DatasetsSizeComparison
+
+    df = pd.DataFrame(np.random.randn(1000, 3), columns=['x1', 'x2', 'x3'])
+    df['label'] = df['x2'] + 0.1 * df['x1']
+
+    train, test = train_test_split(df, test_size=0.4)
+
+    class MyDataset(Dataset):
+        def __init__(self, dataframe, features, label_name):
+            self.dataframe = dataframe
+            self.features = features
+            self.label_name = label_name
+
+        def __len__(self):
+            return len(self.dataframe)
+
+        def __getitem__(self, idx):
+            return {
+                'x1': self.dataframe.iloc[idx]['x1'],
+                'x2': self.dataframe.iloc[idx]['x2'],
+                'x3': self.dataframe.iloc[idx]['x3'],
+                'label': self.dataframe.iloc[idx][self.label_name]
+            }
+
+    train = MyDataset(train, features=['x1', 'x2', 'x3'], label_name='label')
+    test = MyDataset(test, features=['x1', 'x2', 'x3'], label_name='label')
+
+    check_instance = (
+        DatasetsSizeComparison()
+        .add_condition_train_dataset_not_smaller_than_test()
+        .add_condition_test_size_not_smaller_than(100)
+        .add_condition_test_train_size_ratio_not_smaller_than(0.2)
+    )
+    ```

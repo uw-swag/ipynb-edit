@@ -1,0 +1,19 @@
+```python
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.checks.distribution import ImagePropertyDrift
+
+    # Load the dataset
+    dataset = coco.load_data()
+
+    # Create a batch
+    batch = dataset.create_tuple_batch(batch_size=4)
+
+    # Create a distribution check
+    distribution_check = ImagePropertyDrift(property_name="image")
+
+    # Run the check
+    result = distribution_check.run(batch)
+
+    # Print the result
+    print(result)
+    ```

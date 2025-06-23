@@ -1,0 +1,47 @@
+```python
+    # Import necessary libraries
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    # Assuming you have a pandas DataFrame named 'df'
+
+    # Split the dataset into features and target variable
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature Scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the Random Forest Classifier
+    classifier = RandomForestClassifier(n_estimators=20, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # Changes in feature classification parameters
+    # 1. Changed the number of estimators from 20 to 100
+    classifier = RandomForestClassifier(n_estimators=100, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    ```
+
+    The above code is a simple example of how to classify a dataset using the Random Forest Class

@@ -1,0 +1,37 @@
+
+The issue with the dropout in the VGG network is that the dropout operation is applied to the output of the previous layer, not to the input of the next layer. This means that the dropout operation is not being applied to the input of the next layer, but to the output of the previous layer.
+
+To fix this, you need to apply the dropout operation to the input of the next layer. This can be done by setting the 'keep_prob' parameter in the dropout operation to 1.0 in the feed_dict.
+
+Here is the corrected code:
+
+```python
+# Grab the tensor defining the input to the network
+x = ...
+
+# And grab the tensor defining the softmax layer of the network
+softmax = ...
+
+for img in [content_img, style_img]:
+    with tf.Session(graph=g) as sess, g.device('/cpu:0'):
+        # Remember from the lecture that we have to set the dropout
+        # "keep probability" to 1.0.
+        res = softmax.eval(feed_dict={x: img,
+                    'net/dropout_1/random_uniform:0': [[1.0]],
+                    'net/dropout/random_uniform:0': [[1.0]]})[0]
+        print([(res[idx], net['labels'][idx])
+               for idx in res.argsort()[-5:][::-1]])
+
+# Experiment w/ different layers here.  You'll need to change this if you 
+# use another network!
+content_layer = 'net/conv3_2/conv3_2:0'
+
+with tf.Session(graph=g) as sess, g.device('/cpu:0'):
+    content_features = g.get_tensor_by_name(content_layer).eval(
+            session=sess,
+            feed_dict={x: content_img,
+                'net/dropout_1/random_uniform:0': [[1.0]],
+                'net/dropout/random_uniform:0': [[1.0]]})
+
+# Experiment with different layers and layer subsets.  You'll need to change these
+# if you use a

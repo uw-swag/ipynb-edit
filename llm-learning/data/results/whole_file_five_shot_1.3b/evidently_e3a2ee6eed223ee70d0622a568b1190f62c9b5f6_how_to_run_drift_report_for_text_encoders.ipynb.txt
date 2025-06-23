@@ -1,0 +1,49 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Add pre python files"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+<\Cell_0>
+<Cell_1>
+try:
+    import evidently
+except:
+    !npm install -g yarn
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_1>
+<Cell_2>
+from evidently.options.data_drift import DataDriftOptions
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import DataDriftTab
+<\Cell_2>
+<Cell_3>
+# IMDB reviews
+
+imdb_5k_data = pd.read_csv("https://raw.githubusercontent.com/SangamSwadiK/test_dataset/main/cleaned_imdb_data_5000_rows.csv")
+imdb_5k_data.head()
+<\Cell_3>
+<Cell_4>
+# amazon product review data of Gen3EcoDot 
+
+eco_dot_data = pd.read_csv("https://raw.githubusercontent.com/SangamSwadiK/test_dataset/main/eco_data.csv", squeeze=True)
+eco_dot_data.head()
+<\Cell_4>
+<Cell_5>
+## Run this to experiment with the dataset with various ways of embedding (average over records / sum of records etc ...)
+# !wget http://nlp.stanford.edu/data/glove.6B.zip -P /content/test/
+# !unzip  /content/test/glove.6B.zip -d /content/test/
+<\Cell_5>
+<Cell_6>
+# Load glove vector from vector file
+def load_glove_model(File):
+  """ Loads

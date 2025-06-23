@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added data download link to matplotlib-to-plotly notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import json
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
+import seaborn as sns
+from IPython.display import display, Markdown
+<\Cell_0>
+<Cell_1>
+plt.rcParams["axes.labelsize"] = 16.
+plt.rcParams["xtick.labelsize"] = 14.
+plt.rcParams["ytick.labelsize"] = 14.
+plt.rcParams["legend.fontsize"] = 12.
+plt.rcParams["figure.figsize"] = [15., 6.]
+plt.rcParams["axes.titlesize"] = 18.
+<\Cell_1>
+<Cell_2>
+battles = pd.read_csv("./data/battles.csv")
+<\Cell_2>
+<Cell_3>
+data = battles.groupby('year').sum()[["major_death", "major_capture"]]
+ax = data.plot.bar(rot=0, title="Major death/capture events by year")
+_ = ax.set(xlabel="Year", ylabel="No. of Death/Capture Events", ylim=[0, 9])
+_ = ax.legend(["Major Deaths", "Major Captures"])
+<\Cell_3>
+<Cell_4>
+display(ax.properties())
+<\Cell_4>
+<Cell_5>
+display(ax.get_children()[0].properties())
+<\Cell_5>
+<Cell_6>
+display(ax.get_children()[0].properties())
+<\Cell_6>
+<Cell_7>
+print(f.to_json(pretty=True))
+<\Cell_7>
+<Cell_8>
+f["

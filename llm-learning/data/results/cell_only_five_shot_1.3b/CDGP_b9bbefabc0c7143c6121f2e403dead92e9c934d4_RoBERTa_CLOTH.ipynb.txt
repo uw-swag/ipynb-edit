@@ -1,0 +1,59 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add fine-tune code"
+    Original Code Cells:
+    '''
+    from google.colab import drive
+drive.mount('/content/drive')
+cd /content/drive/My Drive/ML
+ls -l
+from tqdm.notebook import tqdm
+import json
+import re
+import os
+import nltk
+nltk.download('punkt')
+# 三個錯誤 + SEP + 正確選項
+en2num = {"A": 0, "B": 1, "C": 2, "D": 3}
+
+input_list = list()
+label_list = list()
+
+for tv in ["train", "valid"]:
+  tv_path = os.path.join(r"./datasets/CLOTH", tv)
+  for grade in ["high", "middle"]:
+    grade_path = os.path.join(tv_path, grade)
+    # print(grade_path)
+
+    files = os.listdir(grade_path)
+    # print(files)
+
+    for file in tqdm(files):     
+      full_path = os.path.join(grade_path, file)
+      # print(full_path)
+
+      if not file.endswith(".json"):
+        continue
+      
+      with open(full_path, "r") as f:
+        dataset = json.load(f)
+
+      sents = nltk.sent_tokenize(dataset["article"])
+      options = dataset["options"]
+      answers = dataset["answers"]
+
+      i = 0
+      for sent in sents:
+        # print(sent)
+        blank_num = sent.count("_")
+        blank_texts = sent.split("_")
+        for j in range(blank_num):
+          input_text = ""
+          label_text1 = ""
+          label_text2 = ""
+          label_text3 = ""
+          k = 0
+          for blank_text in blank_texts:
+            if k == blank_num:
+              answer_index = answer

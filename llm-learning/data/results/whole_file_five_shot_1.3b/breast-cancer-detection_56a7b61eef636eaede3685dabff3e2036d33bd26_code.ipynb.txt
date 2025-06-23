@@ -1,0 +1,51 @@
+```
+    ## Implementing Naive Bayes Classifier
+
+    # Importing necessary libraries for data manipulation and visualization
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Importing dataset for the project
+    from sklearn.datasets import load_breast_cancer
+
+    # Importing tools for splitting data and preprocessing
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+
+    # Importing metrics for evaluating model performance
+    from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+    # Importing machine learning models for classification
+    from sklearn.svm import SVC
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neighbors import KNeighborsClassifier
+
+    # Loading the breast cancer dataset
+    cancer_dataset = load_breast_cancer()
+
+    # Creating a DataFrame from the dataset
+    cancer_df = pd.DataFrame(
+        np.c_[cancer_dataset["data"], cancer_dataset["target"]],
+        columns=np.append(cancer_dataset["feature_names"], ["target"]),
+    )
+
+    # Implementing Naive Bayes Classifier
+    from sklearn.naive_bayes import GaussianNB
+
+    gnb = GaussianNB()
+    gnb.fit(X_train, y_train)
+    y_pred = gnb.predict(X_test)
+
+    # Evaluating the model performance
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+    print(accuracy_score(y_test, y_pred))
+
+    # Plotting the confusion matrix
+    plt.figure(figsize=(10, 5))
+    sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, cmap='Blues')
+    plt.show()
+
+    # Plotting the

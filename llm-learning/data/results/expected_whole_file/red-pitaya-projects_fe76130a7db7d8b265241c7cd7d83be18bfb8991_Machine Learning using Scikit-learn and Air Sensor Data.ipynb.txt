@@ -1,0 +1,129 @@
+<Cell_0>
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import svm
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.model_selection import train_test_split
+from datetime import datetime, date
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+filename = str(date.today()) + " data.csv"
+
+<\Cell_1>
+<Cell_2>
+headers = ["PM 0.3","PM 0.5","PM 1.0","PM 2.5","PM 5.0","PM 10.0","Temp","Pressure","Humidity","CO2",
+           "BME680 VOC","QM9 VOC","MiCS5524 VOC","CCS811 VOC","Date"]
+try:
+    dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+    df = pd.read_csv(filename, parse_dates=['Date'], date_parser=dateparse,index_col=0)
+    df
+except:
+    print("Reading Data Failed.")
+<\Cell_2>
+<Cell_3>
+df.head()
+<\Cell_3>
+<Cell_4>
+df.info()
+<\Cell_4>
+<Cell_5>
+#Preprocess data
+bins = (2, 6.5, 8)
+group_names = ['air','alcohol']
+df['smell'] = pd.cut(wine['smell'],bins = bins, labels = group_names)
+df['smell'].unique()
+<\Cell_5>
+<Cell_6>
+label_object = LabelEncoder()
+<\Cell_6>
+<Cell_7>
+wine['smell'] = label_quality.fit_transform(wine['quality'])
+<\Cell_7>
+<Cell_8>
+wine.head(10)
+<\Cell_8>
+<Cell_9>
+wine['quality'].value_counts()
+<\Cell_9>
+<Cell_10>
+sns.countplot(wine['quality'])
+<\Cell_10>
+<Cell_11>
+#Seperate the dataset as response variable and feature variables
+X = wine.drop('quality', axis = 1)
+y = wine['quality']
+<\Cell_11>
+<Cell_12>
+#Train and test the splitting of data
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+<\Cell_12>
+<Cell_13>
+#Applying standard scalling to get an optimum result
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+<\Cell_13>
+<Cell_14>
+X_train[:10]
+<\Cell_14>
+<Cell_15>
+rfc = RandomForestClassifier(n_estimators=200)
+rfc.fit(X_train,y_train)
+pred_rfc=rfc.predict(X_test)
+<\Cell_15>
+<Cell_16>
+#Testing the model
+print(classification_report(y_test,pred_rfc))
+print(confusion_matrix(y_test,pred_rfc))
+<\Cell_16>
+<Cell_17>
+clf=svm.SVC()
+clf.fit(X_train,y_train)
+pred_clf=clf.predict(X_test)
+<\Cell_17>
+<Cell_18>
+#Testing the model
+print(classification_report(y_test,pred_clf))
+print(confusion_matrix(y_test,pred_clf))
+<\Cell_18>
+<Cell_19>
+mlpc=MLPClassifier(hidden_layer_sizes=(11,11,11),max_iter=500)
+mlpc.fit(X_train,y_train)
+pred_mlpc=mlpc.predict(X_test)
+<\Cell_19>
+<Cell_20>
+#Testing the model
+print(classification_report(y_test,pred_mlpc))
+print(confusion_matrix(y_test,pred_mlpc))
+<\Cell_20>
+<Cell_21>
+cm = accuracy_score(y_test, pred_rfc)
+cm
+<\Cell_21>
+<Cell_22>
+wine.head(10)
+<\Cell_22>
+<Cell_23>
+#Test the Random Forest Classifier (the best) on a new wine
+Xnew = [[7.3,0.58,0.00,2.0,0.065,15.0,21.0,0.9946,3.36,0.47,10.0]]
+Xnew = sc.transform(Xnew)
+ynew = rfc.predict(Xnew)
+ynew
+<\Cell_23>
+<Cell_24>
+r_probs = [0 for _ in range(len(y_test))]
+rfc_probs = ynew = rfc.predict_proba(X_test)
+mlpc_probs = pred_mlpc=mlpc.predict_proba(X_test)
+<\Cell_24>
+<Cell_25>
+from sklearn.metrics import roc_curve, roc_auc_score
+r_auc = roc_auc_score(y_test, r_probs)
+rfc_auc = roc_auc_score(y_test, rfc_probs)
+mlpc_auc = roc_auc_score(y_test, mlpc_probs)
+<\Cell_25>

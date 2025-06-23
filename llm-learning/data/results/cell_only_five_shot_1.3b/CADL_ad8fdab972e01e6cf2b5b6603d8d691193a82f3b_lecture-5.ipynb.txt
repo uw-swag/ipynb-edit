@@ -1,0 +1,36 @@
+
+    Here is the updated code with the addition of book information:
+
+    ```python
+    import tensorflow as tf
+    from six.moves import urllib
+    import re
+
+    f, _ = urllib.request.urlretrieve('https://www.gutenberg.org/cache/epub/11/pg11.txt', 'alice.txt')
+    with open(f, 'r') as fp:
+        txt = fp.read()
+
+    # Preprocess the text data
+    txt = txt.lower()
+    txt = re.sub(r'[^a-z0-9\s]', '', txt)
+    txt = re.sub(r'\s+', ' ', txt)
+    txt = re.sub(r'^a', 'a', txt)
+    txt = re.sub(r'\n$', '', txt)
+
+    # Tokenize the text
+    chars = tf.strings.unicode_transcode(txt, "UTF-8")
+    chars = chars[1:-1]
+    vocab_size = len(chars.unique())
+    start_token, end_token, vocab_size = chars[0], chars[-1], vocab_size
+
+    # Create sequences and masks
+    sequences = tf.data.Dataset.from_tensor_slices(chars)
+    sequences = sequences.window(window_size+1, shift=1, drop_remainder=True)
+    sequences = sequences.flat_map(lambda w: w.batch(window_size+1))
+    sequences = sequences.map(lambda w: (w[:-1], w[-1:]))
+
+    # Create vocabulary
+    vocab = tf.data.Dataset.from_tensor_slices(chars)
+    vocab = vocab.map(lambda x: tf.expand_dims(x, 0))
+    vocab = vocab.map(lambda x: tf.strings.unicode_transcode(x, "UTF-8"))
+    vocab = vocab.map(lambda x: tf.strings.to_number(x, out_type=tf

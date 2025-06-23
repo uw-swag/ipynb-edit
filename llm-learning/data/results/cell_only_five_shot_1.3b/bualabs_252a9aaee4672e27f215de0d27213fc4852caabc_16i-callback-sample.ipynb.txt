@@ -1,0 +1,27 @@
+```python
+    class Recorder(Callback):
+        def begin_fit(self):
+            self.lrs, self.losses = [], []
+
+        def after_batch(self):
+            if not self.in_train:
+                return
+            self.lrs.append(self.opt.param_groups[-1]['lr'])
+            self.losses.append(self.loss.detach().cpu())
+
+        def plot_lr(self):
+            plt.plot(self.lrs)
+
+        def plot_loss(self):
+            plt.plot(self.losses)
+
+    model, loss_func = get_model()
+    opt = torch.optim.SGD(model.parameters(), lr=lr)
+    learn = Learner(model, opt, loss_func, data)
+
+    run = Runner(cb_funcs=[acc_cbf, Recorder])
+    run.fit(2, learn)
+    Recorder.plot_loss()
+    ```
+
+    This code will plot the loss as a function of the learning rate. The learning rate is determined by the SGD optimizer, and the loss is the loss function applied to the model's predictions. The `Recorder` class is used to record the learning rate and loss at each batch, and then these can be plotted.

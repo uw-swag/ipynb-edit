@@ -1,0 +1,14 @@
+import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, CatTargetDriftTab
+bcancer_frame['target'] = bcancer.target
+column_mapping['target'] = 'target'
+bcancer_data_and_target_drift = Dashboard(bcancer_frame[:280], bcancer_frame[280:], column_mapping = column_mapping,
+                               tabs=[DriftTab, CatTargetDriftTab])
+bcancer_data_and_target_drift.show()
+bcancer_data_and_target_drift.save('reports/bcancer_data_and_target_drift.html')

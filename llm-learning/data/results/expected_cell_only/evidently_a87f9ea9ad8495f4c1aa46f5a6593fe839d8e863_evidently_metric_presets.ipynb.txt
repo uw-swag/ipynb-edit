@@ -1,0 +1,45 @@
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import DataQualityPreset
+from evidently.metric_preset import RegressionPreset
+from evidently.metric_preset import ClassificationPreset
+from evidently.metric_preset import TargetDriftPreset
+classification_performance_report = Report(metrics=[
+    ClassificationPreset(),
+])
+
+classification_performance_report.run(
+    reference_data=bcancer_ref,
+    current_data=bcancer_cur,
+    column_mapping=ColumnMapping(prediction='pos')
+)
+classification_performance_report
+num_target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+num_target_drift_report.run(reference_data=housing_ref, current_data=housing_cur)
+num_target_drift_report
+cat_target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+cat_target_drift_report.run(reference_data=iris_ref, current_data=iris_cur)
+cat_target_drift_report
+classification_target_drift_report = Report(metrics=[
+    TargetDriftPreset(),
+])
+
+classification_target_drift_report.run(
+    reference_data=bcancer_ref,
+    current_data=bcancer_cur,
+    column_mapping=ColumnMapping(prediction='pos', task='classification')
+)
+classification_target_drift_report
+

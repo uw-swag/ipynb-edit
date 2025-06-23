@@ -1,0 +1,42 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from scipy.optimize import minimize
+    from sklearn.linear_model import LinearRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error
+    from statsmodels.tsa.arima_model import ARIMA
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from fbprophet import Prophet
+
+    # Load the data
+    data = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    data['Date'] = pd.to_datetime(data['Date'])
+    data.set_index('Date', inplace=True)
+
+    # Create a new column for the OU process
+    data['OU_Process'] = data['Price'].rolling(window=3).mean()
+
+    # Create a new column for the profitable trading
+    data['Profitable_Trading'] = np.where(data['Price'] > data['OU_Process'], 1, 0)
+
+    # Split the data into training and testing sets
+    train, test = train_test_split(data, test_size=0.2, random_state=42)
+
+    # Fit an ARIMA model to the training data
+    model_arima = ARIMA(train['Price'], order=(5,1,0))
+    model_arima_fit = model_arima.fit(disp=0)
+
+    # Fit a SARIMAX model to the training data
+    model_sarima = SARIMAX(train['Price'], order=(1,1,1), seasonal_order=(0,1,0,12))
+    model_sarima_fit = model_sarima.fit(disp=0)
+
+    # Fit a Prophet model to the training data
+    model_prophet = Prophet()
+    model_prophet.fit(train)
+
+    # Make predictions on the testing set
+    predictions_arima = model_arima_fit.predict(start=pd.

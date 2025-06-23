@@ -1,0 +1,49 @@
+```python
+    class LogisticAgent(Agent):
+        """REINFORCE agent (policy gradient) using logistic regression"""
+        def __init__(self, theta, learning_rate, discount_rate, filename='logistic'):
+            """Initialize parameter vector theta, learning rate and discount_rate"""
+            self.theta = theta
+            self.learning_rate = learning_rate
+            self.discount_rate = discount_rate
+            self.save_interval = 10
+            self.results = []
+            self.timestep = 0
+            self.state_size = 4
+            self.filename = filename
+
+        def reset(self):
+            """reset agent for start of episode"""
+            self.state_history = []
+            self.action_history = []
+            self.reward_history = []
+            self.probs = []
+            self.timestep = 0
+            self.total_reward = 0
+
+        def logistic(self, y):
+            """logistic function, squash -infinity to +infinity to prob between 0 and 1"""
+            return 1/(1 + math.exp(-y))
+
+        def remember(self):
+            self.state_history.append(self.state)
+            self.reward_history.append(self.reward)
+            self.action_history.append(self.action)
+
+        def act(self, X):
+            """predict probas using theta, sample an action from probabilities"""
+            # use same calling convention as Keras predict, which expects array X of n states
+            x = X[0]
+            y = x @ self.theta
+            prob0 = self.logistic(y)
+            probs = np.array([prob0, 1-prob0])
+            # sample action from predicted probabilities
+            action = np.random.choice([0, 1], p=probs)
+            # save prob history
+            self.probs.append(probs[action])
+            return action
+
+        def grad_log_p(self, x):
+            """calculate gradient vector of log-probas"""
+            y = x @ self.theta
+            grad_log_p0 = x -

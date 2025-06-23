@@ -1,0 +1,45 @@
+```python
+    import os
+    import sys
+    import numpy as np
+    import pandas as pd
+    from matplotlib import pyplot as plt
+    import tensorflow as tf
+
+    %matplotlib notebook
+
+    class CovNet:
+        def __init__(self, input_dim, hidden_dim, output_dim):
+            self.input_dim = input_dim
+            self.hidden_dim = hidden_dim
+            self.output_dim = output_dim
+
+            self.W1 = tf.Variable(np.random.randn(input_dim, hidden_dim))
+            self.W2 = tf.Variable(np.random.randn(hidden_dim, output_dim))
+            self.b1 = tf.Variable(np.zeros(hidden_dim))
+            self.b2 = tf.Variable(np.zeros(output_dim))
+
+            self.params = [self.W1, self.W2, self.b1, self.b2]
+
+        def forward(self, X):
+            Z1 = np.dot(X, self.W1) + self.b1
+            A1 = tf.nn.relu(Z1)
+            Z2 = np.dot(A1, self.W2) + self.b2
+            A2 = tf.nn.relu(Z2)
+            return A2
+
+    # Create a new instance of the model
+    cov_net = CovNet(input_dim=10, hidden_dim=5, output_dim=1)
+
+    # Define the loss function
+    def compute_loss(model, X, y):
+        y_hat = model.forward(X)
+        return tf.reduce_mean(tf.square(y - y_hat))
+
+    # Define the optimizer
+    optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01)
+
+    # Define the training step
+    def train(model, X, y, optimizer):
+        loss = compute_loss(model, X, y)
+        optimizer.minimize(loss, var_list=model.

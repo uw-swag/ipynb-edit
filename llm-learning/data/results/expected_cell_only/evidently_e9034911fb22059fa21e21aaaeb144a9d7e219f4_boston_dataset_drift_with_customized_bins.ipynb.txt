@@ -1,0 +1,14 @@
+import pandas as pd
+
+from sklearn import datasets
+
+from plotly.graph_objects import histogram
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.tabs import DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection
+from evidently.analyzers.data_drift_analyzer import DataDriftOptions
+boston = datasets.load_boston()

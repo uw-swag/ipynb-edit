@@ -1,0 +1,28 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.decomposition import LatentDirichletAllocation
+
+    # Load the dataset
+    df = pd.read_csv('rare_format.csv')
+
+    # Preprocessing
+    le = LabelEncoder()
+    df['column_name'] = le.fit_transform(df['column_name'])
+
+    # Vectorization
+    vectorizer = TfidfVectorizer(max_df=0.95, min_df=2, max_features=1000, stop_words='english')
+    dtm = vectorizer.fit_transform(df['column_name'])
+
+    # LDA Model
+    lda = LatentDirichletAllocation(n_components=5, max_iter=5, learning_method='online', learning_offset=50, random_state=0)
+    lda.fit(dtm)
+
+    # Printing the topics
+    for index, topic in enumerate(lda.components_):
+        print(f"Top 10 words for Topic #{index}")
+        print([vectorizer.get_feature_names()[i] for i in topic.argsort()[-10:]])
+    ```

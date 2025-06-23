@@ -1,0 +1,41 @@
+```python
+    # import standard libs
+    import os
+
+    # if on collab pull required subdirectories
+    if os.getenv("COLAB_RELEASE_TAG"): 
+        # install github clone - allows for easy cloning of subdirectories
+        !pip install github-clone
+        from pathlib import Path 
+
+        # clone datasets
+        if not Path('chapter_1_library').is_dir():
+            !ghclone https://github.com/mlr2dev/machine_learning_refined_q1_2023_dev/tree/j_branch/notes/1_Introduction_to_Machine_Learning/chapter_1_library
+        else:
+            print('chapter_1_library already cloned!')
+
+        # clone library subdirectory
+        if not Path('chapter_1_datasets').is_dir():
+            !ghclone https://github.com/mlr2dev/machine_learning_refined_q1_2023_dev/tree/j_branch/notes/1_Introduction_to_Machine_Learning/chapter_1_datasets
+        else:
+            print('chapter_1_datasets already cloned!')
+
+        # clone datasets
+        if not Path('chapter_1_images').is_dir():
+            !ghclone https://github.com/mlr2dev/machine_learning_refined_q1_2023_dev/tree/j_branch/notes/1_Introduction_to_Machine_Learning/chapter_1_images
+        else:
+            print('chapter_1_images already cloned!')
+        
+
+    # append path for local library, data, and image import
+    import sys
+    sys.path.append('./chapter_1_library') 
+    sys.path.append('./chapter_1_images') 
+    sys.path.append('./chapter_1_datasets') 
+
+    # import section helper
+    import section_1_1_helpers
+
+    # dataset paths
+    dataset_path_1 = 'chapter_1_datasets/dataset1.csv'
+    dataset_path

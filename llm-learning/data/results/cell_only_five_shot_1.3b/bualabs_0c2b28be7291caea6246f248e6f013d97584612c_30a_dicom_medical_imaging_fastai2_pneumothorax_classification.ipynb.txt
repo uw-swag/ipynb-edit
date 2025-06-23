@@ -1,0 +1,20 @@
+
+    The code you provided is a function that is used to create a PyTorch DataLoader for a medical image dataset. The function `getDataLoaders` takes two parameters: `bs`, the batch size, and `size`, the size of the image.
+
+    The function uses the `DataBlock` class from PyTorch's `DataLoaders` to create a DataLoader. The `DataBlock` class is a wrapper around a list of transforms and a list of item loaders. The `item_tfms` parameter is used to apply a list of transforms to the items in the dataset. The `batch_tfms` parameter is used to apply a list of transforms to the batches in the dataset.
+
+    The `RandomResizedCrop` transform is used to randomly resize the image and crop it to the specified size. The `min_scale` parameter is used to control the minimum scale at which the image is resized.
+
+    The `EchoingTransform` is used to add a random echo to the image.
+
+    The `CrossEntropyLossFlat` is used to calculate the loss function. The `weight` parameter is used to give more weight to the classes that are more common in the dataset.
+
+    The function then returns the DataLoader.
+
+    The line `weights = torch.tensor([[0.8]*1 + [1.2]]).cuda()` is used to set the weights for the loss function. The weights are given to the classes 0 and 1, with class 0 having a higher weight.
+
+    The line `loss_func = CrossEntropyLossFlat(weight=weights)` is used to set the loss function.
+
+    The function `getDataLoaders` is then used to create a DataLoader for the medical image dataset.
+
+    The DataLoader is returned by the function.

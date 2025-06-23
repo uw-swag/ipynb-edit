@@ -1,0 +1,41 @@
+
+The code you provided seems to be correct, but there is a small issue with the URL you're using to download the files. The URL you're using is for the MD5SUMS file, not the actual files. The MD5SUMS file contains the MD5 hash of each file, not the actual file itself. 
+
+To download the files, you should use the actual file URLs. Here's the corrected code:
+
+```python
+# url that contains CHB-MIT Scalp EEG Database
+base_url = 'https://archive.physionet.org/pn6/chbmit/'
+
+# for every folder contained in the dataset
+for l in list_of_folders:
+    
+    # check if the folder already exists, otherwise create it
+    if not os.path.exists(l):
+        os.mkdir(l)
+        print("Creation of the directory %s succeeded" % l)
+    else:
+        print ("Directory %s already exists" % l)
+    
+    # change the working directory to the current list's file
+    os.chdir(l)
+    
+    # for the current folder, download the 'MD5SUMS' file that enumerates all the files contained in the folder.
+    # save the names of the files in a list
+    folder_url = base_url + l 
+    url = folder_url + '/' + 'MD5SUMS'
+    print ('Downloading ', url, ' to ', os.getcwd())
+    if not os.path.isfile('MD5SUMS'):
+        wget.download(url)
+    else:
+        print('File MD5SUMS already exists to ', os.getcwd())
+    f = open('MD5SUMS','r')
+    lines = f.readlines()
+    f.close()
+    # for each folder download all the files that contains
+    for line in lines:
+        fname = line[line.find('chb'):line.find('\n')].strip()
+        url = folder_url + '/' + fname
+        print ('Downloading ', url, ' to ', os.getcwd())
+        # check if we have already downloaded the file
+        if not os.path.

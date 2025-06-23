@@ -1,0 +1,21 @@
+```python
+    # Adding a dropdown menu to the plot
+    import ipywidgets as widgets
+    from IPython.display import display
+
+    # Create a dropdown menu
+    dropdown = widgets.Dropdown(
+        options=['zero', 'number_of_cusines'],
+        description: 'Select a value:',
+        disabled: False
+    )
+
+    # Display the dropdown menu
+    display(dropdown)
+
+    # Add the dropdown menu to the plot
+    g.map(sns.kdeplot, dropdown)
+
+    # Add a legend to the plot
+    g.add_legend()
+    ```

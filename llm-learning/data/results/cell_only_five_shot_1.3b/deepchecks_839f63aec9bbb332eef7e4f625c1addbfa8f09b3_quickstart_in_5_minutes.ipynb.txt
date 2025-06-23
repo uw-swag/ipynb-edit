@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics import mean_squared_error
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score
+
+    # Load the data
+    df = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    df['label'] = df['label'].fillna(df['label'].mean())
+    df['pred'] = df['pred'].fillna(df['pred'].mean())
+    df['label'] = df['label'].astype('category')
+    df['label'] = df['label'].cat.codes
+    df['pred'] = df['pred'].astype('category')
+    df['pred'] = df['pred'].cat.codes
+
+    # Split the data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(df[['label', 'pred']], df['target'], test_size=0.2, random_state=42)
+
+    # Train the model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Calculate the drift
+    drift = np.mean((y_test - y_pred)**2)
+
+    # Print the drift
+    print(f'The drift is {drift}')
+
+    # Calculate the accuracy
+    accuracy = accuracy_score(y_test, y_pred)
+
+    # Print the accuracy
+    print(f'The accuracy is {accuracy}')
+    ```

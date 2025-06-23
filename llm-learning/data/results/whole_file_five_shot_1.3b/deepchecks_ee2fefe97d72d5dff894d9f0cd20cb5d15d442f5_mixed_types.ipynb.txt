@@ -1,0 +1,10 @@
+```
+    from mlchecks.checks import MixedTypes
+    import pandas as pd
+
+    data = {'col1': ['str', '1.0', 1, 2 , 2.61 , 'timtam'], 'col2':['', '', '1.0', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+    dataframe = pd.DataFrame(data=data)
+    MixedTypes().run(dataframe)
+    ```
+
+    The code above will prioritize columns according to the 'FI' in the multicolumn checks.

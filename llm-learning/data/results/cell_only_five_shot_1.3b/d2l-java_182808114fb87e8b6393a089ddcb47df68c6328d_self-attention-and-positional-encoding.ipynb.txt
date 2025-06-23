@@ -1,0 +1,37 @@
+```python
+    # Section 10.6: Self-Attention and Positional Encoding
+    # -----------------------------------------------------
+    # In this section, we will discuss the self-attention mechanism and positional encoding.
+    # 
+    # Self-attention is a mechanism that allows a model to focus on different parts of the input sequence.
+    # It's a key component of the Transformer model, which is used in many NLP tasks.
+    # 
+    # Positional Encoding is a technique used to add an extra dimension to the input sequence,
+    # which can help the model understand the relative position of the words in the sequence.
+    # 
+    # Here is a simple implementation of self-attention:
+
+    class SelfAttention(nn.Module):
+        def __init__(self, embed_dim, num_heads):
+            super(SelfAttention, self).__init__()
+            self.embed_dim = embed_dim
+            self.num_heads = num_heads
+            self.head_dim = embed_dim // num_heads
+            self.linear_q = nn.Linear(embed_dim, embed_dim)
+            self.linear_k = nn.Linear(embed_dim, embed_dim)
+            self.linear_v = nn.Linear(embed_dim, embed_dim)
+            self.linear_out = nn.Linear(embed_dim, embed_dim)
+
+        def forward(self, query, key, value):
+            N = query.shape[0]
+            Q = self.linear_q(query)
+            K = self.linear_k(key)
+            V = self.linear_v(value)
+
+            # Split the query, key, value into num_heads parts
+            Q = torch.stack(Q.split(self.head_dim, dim=1), dim=0)
+            K = torch.stack(K.split(self.head_dim, dim=1), dim=0)
+            V = torch.stack(V.split(self.head_dim, dim=1), dim=0)
+
+            # Compute the attention scores
+            scores = torch.matmul(Q, K.transpose(-

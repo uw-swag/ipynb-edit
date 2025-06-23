@@ -1,0 +1,19 @@
+```python
+    import cv2
+    import numpy as np
+    from google.colab.patches import cv2_imshow
+
+    # Load the image
+    img = cv2.imread('image.jpg', 0)
+
+    # Display the image
+    cv2_imshow(img)
+
+    # Perform erosion
+    kernel = np.ones((5, 5), np.uint8)
+    eroded_img = cv2.erode(img, kernel, iterations=1)
+
+    # Display the eroded image
+    cv2_imshow(eroded_img)
+    ```
+    This code will load an image, display it, perform erosion on the image, and then display the eroded image.

@@ -1,0 +1,56 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding more data cleaning and preprocessing steps"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+
+# Load the data
+cs_df = pd.read_excel(io=r'Online Retail.xlsx')
+<\Cell_0>
+<Cell_1>
+# Remove unnecessary columns
+cs_df = cs_df.drop(['InvoiceNo', 'CustomerID'], axis=1)
+<\Cell_1>
+<Cell_2>
+# Fill missing values
+cs_df = cs_df.fillna(0)
+<\Cell_2>
+<Cell_3>
+# Convert object type to category
+for col in cs_df.columns:
+    if cs_df[col].dtype == 'object':
+        le = LabelEncoder()
+        cs_df[col] = le.fit_transform(cs_df[col])
+<\Cell_3>
+<Cell_4>
+# Save the cleaned data
+cs_df.to_excel('Online_Retail_Cleaned.xlsx', index=False)
+<\Cell_4>
+<Cell_5>
+# Check for duplicates
+duplicates = cs_df.duplicated()
+print("Number of duplicates: ", duplicates.sum())
+<\Cell_5>
+<Cell_6>
+# Remove duplicates
+cs_df = cs_df.drop_duplicates()
+<\Cell_6>
+<Cell_7>
+# Check for null values
+null_values = cs_df.isnull().sum()
+print("Number of null values: ", null_values)
+<\Cell_7>
+<Cell_8>
+# Fill null values
+cs_df = cs_df.fillna(0)
+<\Cell_8>
+<Cell_9>
+# Save the cleaned data
+cs_df.to_excel('Online_Retail_Cleaned.xlsx', index=False)
+<\Cell_9>

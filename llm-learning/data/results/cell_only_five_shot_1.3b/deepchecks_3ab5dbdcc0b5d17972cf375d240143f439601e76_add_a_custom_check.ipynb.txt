@@ -1,0 +1,43 @@
+```python
+    import wandb
+
+    # Initialize a new run
+    wandb.init(project="your_project_name", entity="your_entity_name")
+
+    # Log a parameter (key-value pair)
+    wandb.log({"param1": 0.1, "param2": 0.2})
+
+    # Log a metric; metrics can be updated throughout the run
+    wandb.log({"loss": 0.15})
+
+    # Log a figure
+    import matplotlib.pyplot as plt
+    fig, ax = plt.subplots()
+    ax.plot([1, 2, 3])
+    wandb.log({"my_graph": ax})
+
+    # Finish the run
+    wandb.finish()
+    ```
+
+    This code will log parameters, metrics, and figures to your W&B project. You can view these logs in the W&B interface.
+
+    Please replace "your_project_name" and "your_entity_name" with your actual project and entity name.
+
+    Also, make sure you have the W&B CLI installed and properly configured in your environment.
+
+    W&B CLI is a command-line interface for W&B, which allows you to run, manage, and visualize experiments.
+
+    You can install it using pip:
+    ```
+    pip install wandb
+    ```
+
+    And then you can run the code:
+    ```
+    python your_script.py
+    ```
+
+    This will start a new run in W&B, and your code will be logged to it.
+
+    Please note that you need to run this code in a W&B compatible environment (like Jupyter notebook, Google Colab, or a local machine).

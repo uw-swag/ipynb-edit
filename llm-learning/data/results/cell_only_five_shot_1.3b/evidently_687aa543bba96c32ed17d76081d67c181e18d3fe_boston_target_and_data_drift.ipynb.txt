@@ -1,0 +1,17 @@
+```python
+    # Define the column mapping
+    column_mapping = {
+        "column1": "new_column1",
+        "column2": "new_column2",
+        "column3": "new_column3",
+        # add more columns as needed
+    }
+
+    # Refactor the code to use the column mapping
+    boston_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab, NumTargetDriftTab])
+    boston_data_and_target_drift_dashboard.calculate(boston_frame[:200], boston_frame[200:], 
+                                                       column_mapping=column_mapping)
+    boston_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection, NumTargetDriftProfileSection])
+    ```
+
+    In the refactored code, the column mapping is defined as a dictionary where the keys are the original column names and the values are the new column names. The `calculate` method of the `boston_data_and_target_drift_dashboard` object is then called with the `column_mapping` parameter, which is a dictionary. This allows for the easy modification of the column names in the data and target variables.

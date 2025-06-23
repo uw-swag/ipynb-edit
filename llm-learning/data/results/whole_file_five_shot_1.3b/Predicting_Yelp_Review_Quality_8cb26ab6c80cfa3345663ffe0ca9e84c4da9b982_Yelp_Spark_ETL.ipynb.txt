@@ -1,0 +1,15 @@
+```python
+    # Import necessary libraries
+    import pyspark
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName('etl_sparkbook').getOrCreate()
+
+    # Read data from CSV
+    df = spark.read.format('csv').option('header', 'true').load('s3a://mybucket/myfile.csv')
+
+    # Write data to CSV
+    df.write.format('csv').option('header', 'true').save('s3a://mybucket/myfile_out.csv')
+    ```

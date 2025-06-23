@@ -1,0 +1,14 @@
+```python
+    from deepml.train import Learner
+    from deepml.callbacks import LearnerTensorBoardWriter
+
+    # Create a Learner instance
+    learner = Learner(model, optimizer, work_dir, use_gpu=True)
+
+    # Create a callback to write logs to TensorBoard
+    tensorboard_callback = LearnerTensorBoardWriter(learner, log_dir='tensorboard_logs')
+
+    # Add the callback to the fit function
+    learner.fit(criterion, train_loader, val_loader, epochs=2, callbacks=[tensorboard_callback])
+    ```
+    This code will create a new callback that writes logs to TensorBoard. The logs will be written to the directory specified in the `log_dir` parameter of the `LearnerTensorBoardWriter` callback.

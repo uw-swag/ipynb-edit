@@ -1,0 +1,51 @@
+```python
+    # import necessary libraries
+    import pandas as pd
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # load the dataset
+    df = pd.read_csv('your_data.csv')
+
+    # perform column-wise exploratory data analysis
+    for column in df.columns:
+        print(f"Column: {column}")
+        print(f"Data type: {df[column].dtype}")
+        print(f"Number of unique values: {df[column].nunique()}")
+        print(f"Null values: {df[column].isnull().sum()}")
+        print(f"Mean: {df[column].mean()}")
+        print(f"Median: {df[column].median()}")
+        print(f"Mode: {df[column].mode()}")
+        print(f"Standard Deviation: {df[column].std()}")
+        print(f"Variance: {df[column].var()}")
+        print(f"Min: {df[column].min()}")
+        print(f"Max: {df[column].max()}")
+        print("-"*50)
+
+    # save the analysis results to a new csv file
+    df.to_csv('column_analysis.csv', index=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning"
+    Original Code Cells:
+    '''
+    df = pd.read_csv('your_data.csv')
+    '''
+    ]
+
+    ### Response:
+    # Data Cleaning
+    # This step involves handling missing values, outliers, and inconsistencies in the data.
+    # Here is a simple example of how to handle missing values:
+
+    ```python
+    # fill missing values with the mean of the column
+    df.fillna(df.mean(), inplace=True)
+
+    # drop rows with missing values
+    df.dropna(inplace=True)
+
+    # fill missing values with the most frequent value in the column
+    df.fillna(df.mode().iloc[0

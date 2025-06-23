@@ -1,0 +1,47 @@
+```python
+    import io
+import pandas as pd
+import requests
+import zipfile
+
+from datetime import datetime
+from datetime import time
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
+from sklearn import ensemble
+from sklearn.metrics import explained_variance_score, r2_score
+
+from evidently import ColumnMapping
+
+from evidently.base_metric import InputData
+from evidently.metrics import RegressionQualityMetric
+from evidently.metrics.custom_metric import CustomValueMetric
+from evidently.report import Report
+from evidently.renderers.html_widgets import WidgetSize
+
+# Assuming you have a custom value of 100
+custom_value = 100
+
+# Create a custom metric
+custom_metric = CustomValueMetric(target_column='target_column', custom_value=custom_value)
+
+# Create a custom metric input data
+input_data = InputData(
+    df=df,
+    column_mapping=ColumnMapping(
+        target='target_column'
+    )
+)
+
+# Calculate the custom metric
+custom_metric.calculate(input_data)
+
+# Print the custom metric
+print(custom_metric.value)
+
+# Create a report
+report = Report(metrics=[custom_metric])
+
+# Show the report
+report.show()
+    ```

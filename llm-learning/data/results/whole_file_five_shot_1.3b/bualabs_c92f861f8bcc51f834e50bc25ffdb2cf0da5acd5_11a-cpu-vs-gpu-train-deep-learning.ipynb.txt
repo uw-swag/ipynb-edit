@@ -1,0 +1,55 @@
+```
+    [Link to GPU article](https://www.tensorflow.org/guide/gpu)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added link to TensorFlow guide."
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+import fastai
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.PETS)
+path_images = path/'images'
+filenames = get_image_files(path_images)
+<\Cell_2>
+<Cell_3>
+batchsize = 32
+epoch = 6
+np.random.seed(55)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+
+def get_databunch():
+    return ImageDataBunch.from_name_re(path_images, 
+                                filenames, 
+                                regex_pattern, 
+                                ds_tfms=get_transforms(), 
+                                size=224, bs=batchsize).normalize(imagenet_stats)
+<\Cell_3>
+<Cell_4>
+def get_learner(databunch):
+    return cnn_learner(databunch, models.resnet34, 
+                      pretrained=True, 
+                      metrics=accuracy, callback_fns=ShowGraph)
+<\Cell_4>
+<Cell_5>
+fastai.torch_core.defaults.device = 'cpu'
+learner = get_learner(get_databunch())
+learner.fit_one_cycle(epoch)
+<\Cell_5>
+<Cell_6>
+fastai.torch_core.defaults.device = 'cuda'
+learner = get_learner(get_databunch())
+learner.fit_one_cycle(epoch)
+<\Cell_6>
+<

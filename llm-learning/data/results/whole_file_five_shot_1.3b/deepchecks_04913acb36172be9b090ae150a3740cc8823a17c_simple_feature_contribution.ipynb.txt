@@ -1,0 +1,38 @@
+```
+    # Add map of class to list of dataset index
+    class_to_index = {v: i for i, v in enumerate(train_ds.classes)}
+    ```
+    ### End of Response
+    '''
+    }
+<\Cell_11>
+<Cell_12>
+check = SimpleFeatureContribution()
+check.run(train_ds, test_ds)
+<\Cell_12>
+<Cell_13>
+# Increase the pixel values of all bounding boxes with specific labels:
+def coco_batch_to_images_with_bias(batch):
+    import numpy as np
+    ret = [np.array(x) for x in batch[0]]
+    for i, labels in enumerate(train_ds.batch_to_labels(batch)):
+        for label in labels:
+            if label[0] > 40:
+                x, y, w, h = np.array(label[1:]).astype(int)
+                ret[i][y:y+h, x:x+w] = ret[i][y:y+h, x:x+w].clip(min=200)
+    return ret
+
+train_ds.batch_to_images = coco_batch_to_images_with_bias
+<\Cell_13>
+<Cell_14>
+check = SimpleFeatureContribution()
+check.run(train_ds, test_ds)
+<\Cell_14>
+<Cell_15>
+check = SimpleFeatureContribution().add_condition_feature_pps_difference_not_greater_than().add_condition_feature_pps_in_train_not_greater_than()
+result = check.run(train_dataset=train_ds, test_dataset=test_ds)
+result.show(show_additional_outputs=False)
+<\Cell_15>
+
+    '''
+    }

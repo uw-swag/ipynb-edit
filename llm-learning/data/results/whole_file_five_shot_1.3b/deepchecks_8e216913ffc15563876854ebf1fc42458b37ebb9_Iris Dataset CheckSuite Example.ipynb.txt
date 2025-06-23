@@ -1,0 +1,49 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # imports from custom library
+    import sys
+    sys.path.append('../../')
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import matplotlib.gridspec as gridspec
+    from sklearn.cluster import KMeans
+
+    # custom libs
+    from mlrefined_libraries import unsupervised_library as unsuplib
+    from mlrefined_libraries import basics_library as baslib
+    datapath = '../../mlrefined_datasets/unsuperlearn_datasets/'
+
+    # This is needed to compensate for matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib notebook
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+
+    import pandas as pd
+    import numpy as np
+    np.random.seed(42)
+
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Update wanrnings to not print source line
+    import warnings
+
+    def custom_formatwarning(msg, *args, **kwargs):
+        # ignore everything except the message
+        return str(msg) + '\n'
+
+    warnings.formatwarning = custom_formatwarning
+
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    label_col = 'target'
+    df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+    rf_clf = RandomForestClassifier()
+    rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col])
+
+    from deep

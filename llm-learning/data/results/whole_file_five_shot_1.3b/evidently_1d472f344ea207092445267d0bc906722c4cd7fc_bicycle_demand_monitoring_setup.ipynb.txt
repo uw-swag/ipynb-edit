@@ -1,0 +1,59 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Added the tutorial for cs329S workshop"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn import svm
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # Code you have previously used to load data
+    iowa_file_path = '../input/home-data-for-ml-course/train.csv'
+    home_data = pd.read_csv(iowa_file_path)
+
+    # Set up code checking
+    from learntools.core import binder
+    binder.bind(globals())
+    from learntools.machine_learning.ex3 import *
+
+    print("Setup Complete")
+
+    # Code to check if tabulate is installed
+    try:
+        import tabulate
+        print("Tabulate is installed")
+    except ImportError:
+        print("Tabulate is not installed. Please install it using pip.")
+
+    # Code to check if requirements.txt is satisfied
+    try:
+        with open('requirements.txt', 'r') as file:
+            lines = file.readlines()
+            for line in lines:
+                if 'tabulate' not in line:
+                    print(f"Missing requirement: {line.strip()}")
+    except FileNotFoundError:
+        print("requirements.txt not found")
+
+    # Code to check if utils.py is imported correctly
+    try:
+        from utils import *
+        print("utils.py imported correctly")
+    except ImportError:
+        print("utils.py not imported correctly")
+
+    # Code to check if tabulate is installed before importing tabulate
+    try:
+        from tabulate import *
+        print("tabulate is installed before importing tabulate")
+    except ImportError:
+        print("tabulate is not installed before importing tabulate")
+
+    # Code to check if tabulate is installed after importing tabulate
+    try:
+        import tabulate
+        print("tabulate is installed after importing tabulate

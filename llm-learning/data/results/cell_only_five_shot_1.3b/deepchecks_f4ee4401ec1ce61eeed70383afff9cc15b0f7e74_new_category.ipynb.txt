@@ -1,0 +1,50 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # import necessary libraries
+    import sys
+    import os
+    import numpy as np
+    import lightgbm as lgb
+    import papermill as pm
+    import scrapbook as sb
+    import pandas as pd
+    import category_encoders as ce
+    from tempfile import TemporaryDirectory
+    from sklearn.metrics import roc_auc_score, log_loss
+
+    import reco_utils.recommender.lightgbm.lightgbm_utils as lgb_utils
+    import reco_utils.dataset.criteo as criteo
+
+    print("System version: {}".format(sys.version))
+    print("LightGBM version: {}".format(lgb.__version__))
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # load in dataset
+    data = np.loadtxt('chapter_7_datasets/5class_data.csv',delimiter = ',')
+
+    # create an instance of the ova demo
+    demo = section_7_4_helpers.MulticlassVisualizer(data)
+
+    # run demo
+    demo.compare_to_counting(num_runs = 3,max_its = 500,alpha = 10**(-2),lam = 10**(-5))
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # load in model
+    pipeline = PipelineModel.load('my-model')
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # make predictions
+    predictions = pipeline.transform(data)
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # evaluate model
+    evaluator = (
+        ComputeModelStatistics()
+        .setScoredLabelsCol("prediction")
+        .setLabelCol("label")
+        .setEvaluationMetric("AUC")
+    )
+
+    result = evaluator.transform(predictions)
+    auc = result.select("AUC").collect()[0][0]
+    result.

@@ -1,0 +1,27 @@
+```
+    # Moving utils scripts to a new directory
+    import os
+    import shutil
+
+    # Create the new directory
+    os.makedirs('utils', exist_ok=True)
+
+    # Move the files
+    for script in ['plot_2d_samples.py', 'plot_2d_trained_svc.py', 'plot_confusion_matrix.py']:
+        shutil.move(os.path.join('workshop', script), 'utils')
+
+    # Now, the utils directory should contain the moved scripts
+    # You can import them in your main script like this:
+
+    from utils import plot_2d_samples
+    from utils import plot_2d_trained_svc
+    from utils import plot_confusion_matrix
+
+    # And you can use them as you would use the original scripts
+    plot_2d_samples(bag_of_words, labels)
+    plot_2d_trained_svc(bag_of_words, labels, svc)
+    cm = confusion_matrix(testing.label, predicted_label)
+    plot_confusion_matrix(cm, pipeline.classes_)
+    ```
+
+    This code will move the utils scripts to a new directory named 'utils'. You can then import them in your main script as you would import the original scripts.

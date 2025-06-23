@@ -1,0 +1,49 @@
+```python
+    import os
+    import sys, getopt
+    import signal
+    import numpy as np
+    from edge_impulse_linux.runner import ImpulseRunner
+    from scipy.io import wavfile
+
+    # Initialize variables
+    runner = None
+    model_file_name = 'modelfile.eim'
+    audio_file_name = 'float_wave_test_raw.wav'
+
+    # Define the path to the model file and the audio file
+    dir_path = os.path.dirname(os.path.realpath(model_file_name))
+    modelfile = os.path.join(dir_path, model_file_name)
+    audio_file = os.path.join(dir_path, audio_file_name)
+
+    # Read the audio file
+    samplerate, generator = wavfile.read(audio_file)
+
+    # Initialize the features array
+    features = np.array([], dtype=np.int16)
+
+    # Initialize the runner
+    runner = ImpulseRunner(modelfile)
+
+    # Initialize the model info
+    model_info = runner.init()
+
+    # Get the labels, deploy version, and window size
+    labels = model_info['model_parameters']['labels']
+    deploy_version = model_info['project']['deploy_version']
+    window_size = model_info['model_parameters']['input_features_count']
+
+    # Print the model info
+    print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
+    print('labels: ', labels)
+    print('deploy_version: ', deploy_version)
+
+    # Read the audio file again to get the features
+    features = np.concatenate((features, generator), axis=0)
+
+    # Classify the features
+    res = runner.classify(features[:window_size].tolist())
+
+    # Get the best label and confidence
+    best_label = max(res['result']['classification'], key=lambda key: res['result']['classification'][key])
+    confidence = res['result']['

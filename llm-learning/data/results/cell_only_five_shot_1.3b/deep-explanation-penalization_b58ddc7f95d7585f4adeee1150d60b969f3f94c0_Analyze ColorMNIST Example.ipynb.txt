@@ -1,0 +1,22 @@
+
+    The code you've provided is used to load the results of a machine learning model trained on the ISIC dataset. The results are then saved in a pandas DataFrame, which is then converted to LaTeX for easier readability.
+
+    Here's a brief explanation of the code:
+
+    1. The code first imports the necessary libraries.
+    2. It then loads the trained models from the specified folder.
+    3. The model names are sorted to ensure that the block models are not included.
+    4. The results of each model are loaded into a list, and then concatenated into a single DataFrame.
+    5. The 'final_acc' and 'final_acc_train' columns are created by taking the maximum of the 'accs_test' and 'accs_train' columns, respectively.
+    6. The 'final_test_loss' and 'final_train_loss' columns are created by taking the minimum of the 'losses_test' and 'losses_train' columns, respectively.
+    7. The 'acc_color' column is created by setting all values to 0.
+    8. The NaN values are dropped from the DataFrame.
+    9. The DataFrame is reset to its original index.
+    10. The DataFrame is sorted by the 'regularizer_rate' column.
+    11. The DataFrame is filtered to only include models with a train accuracy greater than 15.
+    12. The DataFrame is grouped by the 'regularizer_rate' column and the mean of the columns 'Test accuracy', 'Train accuracy', 'Test loss', 'Color accuracy', and 'CD' is calculated.
+    13. The DataFrame is saved to a LaTeX file.
+
+    The LaTeX file 'colormnist.tex' is used to display the results in a LaTeX document.
+
+    Please note that the code assumes that the 'accs_test' and 'accs_train' columns contain lists of accuracy values, and the 'losses_test' and 'losses_train' columns contain lists of loss values.

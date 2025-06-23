@@ -1,0 +1,43 @@
+```
+    import edgeimpulse as ei
+
+    # Create a new project
+    project = ei.Project.create(project_name='My Project')
+
+    # Add a new dataset
+    dataset = project.add_dataset(
+        name='Fresh Air',
+        description='Data from fresh air',
+        file_path='CSV-Data/Fresh Air ' + str(datetime.now()) + '.csv',
+        file_format=ei.FileFormat.CSV,
+        time_column='timestamp'
+    )
+
+    # Add a new model
+    model = project.add_model(
+        name='Fresh Air Model',
+        description='Model for predicting fresh air',
+        dataset=dataset,
+        model_type=ei.ModelType.REGRESSION,
+        loss=ei.Loss.MEAN_SQUARED_ERROR,
+        metrics=[ei.Metric.MEAN_ABSOLUTE_ERROR]
+    )
+
+    # Train the model
+    model.train(epochs=10)
+
+    # Deploy the model
+    model.deploy(instance_type=ei.InstanceType.CPU_SMALL, instance_count=1)
+
+    # Get the model prediction
+    prediction = model.predict(data='CSV-Data/Fresh Air ' + str(datetime.now()) + '.csv')
+
+    # Get the model performance
+    performance = model.performance()
+
+    # Get the model metrics
+    metrics = model.metrics()
+
+    # Get the model logs
+    logs = model.logs()
+    ```

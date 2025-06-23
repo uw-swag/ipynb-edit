@@ -1,0 +1,50 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding credit to kaggle"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+# ! {sys.executable} -m pip install kaggle --upgrade
+<\Cell_2>
+<Cell_3>
+# ! mkdir -p ~/.kaggle/
+# ! mv kaggle.json ~/.kaggle/
+
+<\Cell_3>
+<Cell_4>
+# ! kaggle competitions download -c planet-understanding-the-amazon-from-space -f train-jpg.tar.7z -p {path}  
+# ! kaggle competitions download -c planet-understanding-the-amazon-from-space -f train_v2.csv -p {path}  
+# ! unzip -q -n {path}/train_v2.csv.zip -d {path}
+<\Cell_4>
+<Cell_5>
+# ! conda install --yes --prefix {sys.prefix} -c haasad eidl7zip
+<\Cell_5>
+<Cell_6>
+# ! 7za -bd -y -so x {path}/train-jpg.tar.7z | tar xf - -C {path.as_posix()}
+<\Cell_6>
+<Cell_7>
+path = Config.data_path()/'planet'
+path.mkdir(parents=True, exist_ok=True)
+path
+<\Cell_7>
+<Cell_8>
+path.ls()
+<\Cell_8>
+<Cell_9>
+df = pd.read_csv(path/'train_v2.csv')
+df.head()
+<\Cell_9>
+<Cell_10>
+path_images = path/'train-jpg'
+filenames = get_image_

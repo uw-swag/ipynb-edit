@@ -1,0 +1,108 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from scipy.stats import anderson_ksamp
+from sklearn.datasets import fetch_openml
+
+from evidently import ColumnMapping
+from evidently.calculations.stattests import StatTest
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import DataDriftTab, CatTargetDriftTab
+from evidently.options import DataDriftOptions
+<\Cell_0>
+<Cell_1>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_1>
+<Cell_2>
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+df.head()
+<\Cell_2>
+<Cell_3>
+df['num_feature_with_3_values'] = np.random.choice(3, df.shape[0])
+df['num_feature_with_2_values'] = np.random.choice(2, df.shape[0])
+<\Cell_3>
+<Cell_4>
+df.head()
+<\Cell_4>
+<Cell_5>
+numerical_features = ['age', 'fnlwgt', 'education-num', 'capital-gain', 'capital-loss', 
+                      'hours-per-week', 'num_feature_with_3_values', 'num_feature_with_2_values']
+
+categorical_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                        'race', 'sex', 'native-country']
+
+column_mapping = ColumnMapping(numerical_features=numerical_features, 
+                               categorical_features=categorical_features,
+                               task='classification', target='class')
+<\Cell_5>
+<Cell_6>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+data_drift_dashboard.calculate(df.sample(50, random_state=0), 
+                               df.sample(50, random_state=10), column_mapping=column_mapping)
+data_drift_dashboard.show()
+<\Cell_6>
+<Cell_7>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+data_drift_dashboard.calculate(df[df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=0), 
+                               df[~df.relationship.isin(['Husband', 'Wife'])].sample(1000, random_state=10), column_mapping=column_mapping)
+data_drift_dashboard.show()
+<\Cell_7>
+<Cell_8>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+data_drift_dashboard.calculate(df.sample(30000, random_state=0), 
+                               df.sample(30000, random_state=10), column_mapping=column_mapping)
+data_drift_dashboard.show()
+<\Cell_8>
+<Cell_9>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+data_drift_dashboard.calculate(df[df.relationship.isin(['Husband', 'Wife'])].sample(30000, random_state=0, replace=True), 
+                               df[~df.relationship.isin(['Husband', 'Wife'])].sample(30000, random_state=10, replace=True), 
+                               column_mapping=column_mapping)
+data_drift_dashboard.show()
+<\Cell_9>
+<Cell_10>
+stat_test_option = DataDriftOptions(all_features_stattest='psi')
+<\Cell_10>
+<Cell_11>
+stat_test_option = DataDriftOptions(per_feature_stattest={'class':'psi', 'age':'ks'})
+<\Cell_11>
+<Cell_12>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[stat_test_option])
+data_drift_dashboard.calculate(df.sample(50, random_state=0), 
+                               df.sample(50, random_state=10), column_mapping=column_mapping)
+data_drift_dashboard.show()
+<\Cell_12>
+<Cell_13>
+def _anderson_stat_test(reference_data: pd.Series, current_data: pd.Series, _feature_type: str, threshold: float):
+    p_value = anderson_ksamp(np.array([reference_data, current_data]))[2]
+    return p_value, p_value < threshold
+
+anderson_stat_test = StatTest(
+    name="anderson",
+    display_name="Anderson test (p_value)",
+    func=_anderson_stat_test,
+    allowed_feature_types=["num"]
+)
+<\Cell_13>
+<Cell_14>
+stat_test_option = DataDriftOptions(num_features_stattest=anderson_stat_test)
+<\Cell_14>
+<Cell_15>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[stat_test_option])
+data_drift_dashboard.calculate(df.sample(50, random_state=0), 
+                               df.sample(50, random_state=10), column_mapping=column_mapping)
+data_drift_dashboard.show()
+<\Cell_15>
+<Cell_16>
+target_drift_dashboard = Dashboard(tabs=[CatTargetDriftTab()])
+target_drift_dashboard.calculate(df.sample(50, random_state=0), 
+                               df.sample(50, random_state=10), column_mapping=column_mapping)
+target_drift_dashboard.show()
+<\Cell_16>
+<Cell_17>
+
+<\Cell_17>

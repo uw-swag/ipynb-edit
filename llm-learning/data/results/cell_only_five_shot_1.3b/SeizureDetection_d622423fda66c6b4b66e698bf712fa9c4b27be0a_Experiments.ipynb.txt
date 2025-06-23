@@ -1,0 +1,28 @@
+```
+    def featureExtraction (df, sample_rate, step, pca_tolerance, undersampling_method, undersampling_rate, undersampling_neighbors, oversampling_method, oversampling_neighbors, exp):
+        if exp.upper() == 'FULL':
+            ft = pd.DataFrame(featureExtractionFull (df, sample_rate, step))
+        elif exp.upper() == 'AVERAGE':
+            ft = pd.DataFrame(featureExtractionAverage (averageChannels(df), sample_rate, step))
+        else:
+            ft = pd.DataFrame(featureExtractionLeftRight (leftRightHemisphericChannels(df), sample_rate, step))
+        removeNonNumericValues(ft)
+        ft = featureNormalization(ft)
+        print('Normalized features')
+        removeNonNumericValues(ft)
+        size = ft.shape
+        print('Reducing features dimension')
+        ft = dimentionalityReduction(ft, pca_tolerance)
+        removeNonNumericValues(ft)
+        print('Dimensions reduced from', size, 'to', ft.shape)
+        size = ft.seizure.value_counts()
+        print('Undersampling the majority class using', undersampling_method)
+        ft = majorityUndersampling(ft.loc[:, ft.columns != 'seizure'], ft['seizure'], undersampling_rate, undersampling_neighbors, undersampling_method)
+        removeNonNumericValues(ft)
+        print('Majority class downsampled from (', size[0], ', ', ft.shape[1], ') to ', ft.shape, sep = '')
+        size = ft.shape
+        print('Oversampling the minority class using', oversampling_method)
+        ft = minorityOversampling(ft.loc[:, ft.columns != 'seizure'], ft['seizure'], oversampling_neighbors, oversampling_method)
+        ft = shuffle(ft)
+        ft.reset_index(drop = True, inplace = True)
+        removeNon

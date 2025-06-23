@@ -1,0 +1,33 @@
+```python
+    <Cell_0>
+    %load_ext autoreload
+    %autoreload 2
+
+    import os
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    from joblib import dump, load
+    from xgboost import XGBClassifier
+    from sortedcontainers import SortedSet
+    from scipy.stats import randint, uniform
+    from sklearn.metrics import roc_auc_score
+    from sklearn.model_selection import train_test_split, RandomizedSearchCV
+    from mlutils.transformers import Preprocessor
+    from utils import clean, build_xgb, write_output
+
+    %watermark -a 'Ethen' -d -t -v -p numpy,scipy,pandas,joblib,xgboost,sklearn,matplotlib,sortedcontainers
+    <\Cell_0>
+    <Cell_1>
+    # original raw data
+    data_dir = os.path.join('..', 'data')
+    path_train = os.path.join(data_dir, 'flats.csv')
+    data = pd.read_csv(path_train)
+    data.head()
+    <\Cell_1>
+    <Cell_2>
+    # note that the drop_cols variable indicating which columns are dropped is not
+    # actually used, this is used in the notebook for sanity checking purpose, i.e.
+    # ensuring the column number adds up to the original column
+    drop_cols = [
+        'id', 'date', 'price', 'bedrooms', 'bathrooms', 'sqft_living15', 'sqft_lot15', 'floors', 'waterfront', 'view', 'condition', 'grade', 'sqft_above', 'sqft_basement', 'yr_built', 'yr_renovated', 'zipcode', 'lat', 'long', 'sqft_living', 'sqft_lot', 'sqft_above', 'sqft_basement', 'yr_built', 'yr_renovated', 'zipcode', 'lat', 'long', 'sqft_living15',

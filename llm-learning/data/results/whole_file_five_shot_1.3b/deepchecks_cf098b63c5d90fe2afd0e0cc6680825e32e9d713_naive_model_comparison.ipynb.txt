@@ -1,0 +1,29 @@
+```python
+    <Cell_0>
+    from sklearn.metrics import roc_curve, auc
+    from sklearn.model_selection import train_test_split
+    from sklearn.model_selection import KFold
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from sklearn import svm
+    import joblib
+    <\Cell_0>
+    <Cell_1>
+    biodata = pd.read_csv(r"biodata.csv")
+    biodatawS = pd.read_csv(r"biodatawS.csv")
+    subs = pd.read_csv(r"subs.csv")
+    W2v= pd.read_csv(r"W2v.csv")
+    W2vwS = pd.read_csv(r"W2vwS.csv")
+    biodatawSdrop = pd.read_csv(r"biodatawSdrop.csv")
+    <\Cell_1>
+    <Cell_2>
+    df = pd.DataFrame({"true_y": biodata["true_y"].tolist(), "biodata_y":biodata["pred_y"].tolist(), "biodatawS_y": biodatawS["pred_y"].tolist(), "subs_y": subs["pred_y"].tolist(), "W2v_y": W2v["pred_y"].tolist(), "W2vwS_y": W2vwS["pred_y"].tolist(), "biodatawSdrop_y":biodatawSdrop["pred_y"].tolist() })
+    print(df.head(5))
+    <\Cell_2>
+    <Cell_3>
+    X = df.loc[:, ["biodatawSdrop_y", "subs_y", "W2v_y"]] #, "subs_y", "W2v_y"
+    print(X.head(5))
+    y = df.true_y
+    <\Cell_3>
+    <Cell_4>
+    X = X.to_

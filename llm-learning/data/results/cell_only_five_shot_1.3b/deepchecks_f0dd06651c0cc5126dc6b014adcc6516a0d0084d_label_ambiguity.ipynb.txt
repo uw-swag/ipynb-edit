@@ -1,0 +1,65 @@
+```python
+    from deepchecks.tabular.checks.integrity import LabelAmbiguity
+    from deepchecks.tabular.base import Dataset
+    import pandas as pd
+
+    # Assuming you have a DataFrame df
+    df = pd.DataFrame({
+        'A': ['a', 'b', 'c', 'd'],
+        'B': ['a', 'b', 'c', 'd'],
+        'C': ['a', 'b', 'c', 'd'],
+        'D': ['a', 'b', 'c', 'd']
+    })
+
+    # Create a Dataset
+    dataset = Dataset(df)
+
+    # Create a LabelAmbiguity check
+    label_ambiguity_check = LabelAmbiguity(label_column='A')
+
+    # Run the check
+    result = label_ambiguity_check.run(dataset)
+
+    # Print the results
+    print(result)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the mean of a column (#988)"
+    Original Code Cells:
+    '''
+    def calculate_mean(df, column):
+        return df[column].mean()
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_mean(df, column):
+        return df[column].mean()
+
+    # Usage
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4],
+        'B': [5, 6, 7, 8]
+    })
+
+    print(calculate_mean(df, 'A'))  # Output: 2.5
+    print(calculate_mean(df, 'B'))  # Output: 6.5
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the median of a column (#989)"
+    Original Code Cells:
+    '''
+    def calculate_median(df, column):
+        return df[column].median()
+
+    '''
+    ]
+
+    ### Response:
+    ```python

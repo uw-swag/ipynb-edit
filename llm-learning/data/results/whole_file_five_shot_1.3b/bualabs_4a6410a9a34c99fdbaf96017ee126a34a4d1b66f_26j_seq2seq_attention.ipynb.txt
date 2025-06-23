@@ -1,0 +1,36 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.layers import Input, Dense, LSTM, Attention
+    from tensorflow.keras.models import Model
+
+    # Define the input sequence and its length
+    encoder_inputs = Input(shape=(None, num_encoder_tokens))
+    encoder_lstm = LSTM(latent_dim, return_state=True)
+    encoder_outputs, state_h, state_c = encoder_lstm(encoder_inputs)
+
+    # We discard the output at the last state step
+    encoder_states = [state_h, state_c]
+
+    # Set up the decoder, using `encoder_states` as initial state.
+    decoder_inputs = Input(shape=(None, num_decoder_tokens))
+    # We set up our decoder, using `encoder_states` as initial state.
+    decoder_lstm = LSTM(latent_dim, return_sequences=True, return_state=True)
+    decoder_outputs, _, _ = decoder_lstm(decoder_inputs, initial_state=encoder_states)
+    decoder_dense = Dense(num_decoder_tokens, activation='softmax')
+    decoder_outputs = decoder_dense(decoder_outputs)
+
+    # Define the model that will turn
+    # `encoder_input_data` & `decoder_input_data` into `decoder_target_data`
+    model = Model([encoder_inputs, decoder_inputs], decoder_outputs)
+
+    # Compile the model
+    model.compile(optimizer='rmsprop', loss='categorical_crossentropy')
+
+    # Define attention layer
+    class AttentionLayer(Layer):
+        def __init__(self, **kwargs):
+            super(AttentionLayer, self).__init__(**kwargs)
+
+        def build(self, input_shape):
+            # Create a trainable weight variable for this layer.
+            self.W = self.add_weight(name='attention_weight', 

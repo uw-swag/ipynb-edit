@@ -1,0 +1,44 @@
+```python
+    from evidently import ColumnMapping
+    from evidently.test_preset import NoTargetPerformance, DataQuality, DataStability, DataDrift
+    from evidently.test_suite import TestSuite
+    from evidently.test_preset.data_drift import TestShareOfDriftedFeatures, TestNumberOfDriftedFeatures, TestFeatureValueDrift
+
+    suite = TestSuite(tests=[
+        TestShareOfDriftedFeatures(),
+        TestNumberOfDriftedFeatures(),
+        TestFeatureValueDrift(column_name='education-num'),
+        TestFeatureValueDrift(column_name='education')
+    ])
+
+    suite.run(reference_data=ref,
+              current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+
+    suite = TestSuite(tests=[
+        NoTargetPerformance(most_important_features=["education-num"]),
+    ])
+
+    suite.run(reference_data=ref,
+              current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+
+    suite = TestSuite(tests=[
+        DataDrift(),
+    ])
+
+    suite.run(reference_data=ref,
+              current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+
+    suite = TestSuite(tests=[
+        DataStability(),
+    ])
+
+    suite.run(reference_data=ref,
+              current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+
+    suite = TestSuite(tests=[
+        DataQuality(),
+    ])
+
+    suite.run(reference_data=ref,
+              current_data=curr, column_mapping=ColumnMapping(target='target', prediction='preds'))
+    ```

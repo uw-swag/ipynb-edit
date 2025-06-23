@@ -1,0 +1,21 @@
+```python
+    # Timeseries dataset
+    url = "https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip"
+    with zipfile.ZipFile(io.BytesIO(requests.get(url).content)) as arc:
+        raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+    raw_data.index = raw_data.index + pd.to_timedelta(raw_data['hr'], unit='h')
+    raw_data['mnth'] = raw_data.index.to_period('M').astype('datetime64[M]')
+    raw_data['hr'] = raw_data.index.floor('h')
+    raw_data['weekday'] = raw_data.index.floor('d')
+    raw_data['date'] = raw_data.index
+
+    bike_reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+    bike_current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+
+    # Skip SSL verify for bike dataset in examples.
+    bike_reference.replace(r'^https://', 'http://', regex=True, inplace=True)
+    bike_current.replace(r'^https://', 'http://', regex=True, inplace=True)
+    ```
+
+    This code snippet skips the SSL verification for the bike dataset in the examples. It uses the `replace` function to replace the 'https://' with 'http://' in the URLs.

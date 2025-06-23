@@ -1,0 +1,38 @@
+```python
+    def create_dataset(self, data, split_ratio, random_state=None):
+        """
+        Create a dataset from the given data.
+
+        Parameters:
+        data (pandas.DataFrame): The data to create the dataset from.
+        split_ratio (float): The ratio of the data to split for the training and testing sets.
+        random_state (int): The random state to use for the random number generator.
+
+        Returns:
+        tuple: A tuple containing the training and testing datasets.
+        """
+        if random_state is not None:
+            np.random.seed(random_state)
+
+        # Split the data
+        train_data, test_data = python_random_split(data, split_ratio)
+
+        # Create the datasets
+        train_dataset = Dataset(train_data)
+        test_dataset = Dataset(test_data)
+
+        return train_dataset, test_dataset
+    ```
+
+    ### Explanation:
+    The function `create_dataset` is used to create a dataset from the given data. The data is split into a training set and a testing set using the `python_random_split` function. The training and testing datasets are then created using the `Dataset` class.
+
+    The function is decorated with the `@staticmethod` decorator, which means it can be called on the class itself, not on an instance of the class. This is useful for methods that don't need access to instance-specific data.
+
+    The function also takes an optional `random_state` parameter, which is used to seed the random number generator. This is useful for reproducibility.
+
+    The function returns a tuple containing the training and testing datasets.
+
+    The `split_ratio` parameter is used to specify the ratio of the data to split for the training and testing sets. The `random_state` parameter is used to seed the random number generator.
+
+    The `Dataset` class is a custom class that is used to create a dataset from a pandas DataFrame. The `Dataset` class has a `__init__` method that takes a pandas DataFrame and stores it, and a `__getitem__` method that allows the dataset to be indexed like a regular DataFrame.

@@ -1,0 +1,50 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added TensorFlow to code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+## Colab
+! curl -s https://course.fast.ai/setup/colab | bash
+<\Cell_1>
+<Cell_2>
+! nvidia-smi
+<\Cell_2>
+<Cell_3>
+from fastai import *
+from fastai.text import *
+from fastai.callbacks import *
+from fastai.callbacks.mem import *
+<\Cell_3>
+<Cell_4>
+class Model0(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.i_h = nn.Embedding(nv, nh)
+        self.h_h = nn.Linear(nh, nh)
+        self.h_o = nn.Linear(nh, nv)
+        self.bn = nn.BatchNorm1d(nh)
+        self.h = torch.zeros(bs, nh)
+
+    def forward(self, x):
+        h = self.bn(F.relu(self.i_h(x)))
+        if x.shape[1] > 1:
+            h = h + self.i_h(x[:, 1])
+            h = self.bn(F.relu(self.h_h(h)))
+        if x.shape[1] > 2:
+            h = h + self.i_h(x[:, 2])
+            h = self.bn(F.relu(self.h_h(h)))
+        return self.h_o(h)
+<\Cell_4>
+<Cell_5>
+learn = Learner(data, Model0(), loss_func=loss4, metrics=[acc4], callback_fns=[ShowGraph])
+<\Cell_5>
+<Cell_6>
+# learn.lr_find()
+# learn.recorder.plot

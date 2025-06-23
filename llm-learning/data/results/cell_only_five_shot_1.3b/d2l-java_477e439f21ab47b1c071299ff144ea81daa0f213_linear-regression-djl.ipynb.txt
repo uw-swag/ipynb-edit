@@ -1,0 +1,42 @@
+```python
+    import deeplearning as dl
+    from deeplearning.training import Trainer, DefaultTrainingConfig
+    from deeplearning.optimization.optimizers import SGD
+    from deeplearning.utilities.device import Device
+
+    # Create a new trainer
+    trainer = Trainer(model)
+
+    # Define the training configuration
+    config = DefaultTrainingConfig(l2loss) \
+        .optOptimizer(SGD()) \
+        .optDevices(Device.getDevices(1)) \
+        .addTrainingListeners(TrainingListener.Defaults.logging())
+
+    # Train the model
+    trainer.fit(dataset, config)
+
+    # Evaluate the model
+    trainer.evaluate(val_dataset)
+
+    # Predict the labels for the test set
+    predictions = trainer.predict(test_dataset)
+    ```
+
+    The code above is a Python example using the DL library, Deeplearning. It creates a new trainer, defines a training configuration, trains a model, evaluates the model, and makes predictions on a test set.
+
+    The `deeplearning` library is a high-level, user-friendly interface for training and deploying machine learning models. It provides a wide range of features, including support for a variety of machine learning algorithms, data preprocessing, and model evaluation metrics.
+
+    The `deeplearning.training.Trainer` class is the main interface for training models. It provides methods for fitting the model to the training data, evaluating the model on a validation set, and making predictions on new data.
+
+    The `deeplearning.utilities.device` module provides utilities for managing the devices on which the model is trained.
+
+    The `deeplearning.optimization.optimizers` module provides optimizers for different types of optimization algorithms.
+
+    The `deeplearning.utilities.training_listeners` module provides listeners for various events during the training process.
+
+    The `deeplearning.utilities.loss_functions` module provides loss functions for different types of loss functions.
+
+    The `deeplearning.utilities.metrics` module provides metrics for evaluating the performance of a model.
+
+    The `deeplearning.utilities.activation_functions` module provides activation functions for different types

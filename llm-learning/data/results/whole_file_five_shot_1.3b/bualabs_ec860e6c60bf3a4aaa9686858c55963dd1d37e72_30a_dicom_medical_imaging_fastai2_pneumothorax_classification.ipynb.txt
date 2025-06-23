@@ -1,0 +1,60 @@
+```
+    ## Colab
+    # ! pip install fastai2 pydicom kornia -q
+
+    ## Colab
+
+    # !pip install torch-geometric \
+    #   torch-sparse==latest+cu101 \
+    #   torch-scatter==latest+cu101 \
+    #   torch-cluster==latest+cu101 \
+    #   -f https://pytorch-geometric.com/whl/torch-1.4.0.html
+
+    from fastai2.basics import *
+    from fastai2.callback.all import *
+    from fastai2.metrics import *
+    from fastai2.vision.all import *
+    from fastai2.medical.imaging import *
+
+    import pydicom
+    import kornia
+
+    import pandas as pd
+
+    set_seed(42)
+
+    dataset = 'jesperdramsch/siim-acr-pneumothorax-segmentation-data'
+
+    # Google Colab
+    config_path = Path('/content/drive')
+    learner_path = config_path/"My Drive"
+    data_path_base = Path('/content/datasets/')
+
+    path = data_path_base/dataset
+
+    from google.colab import drive
+
+    drive.mount(str(config_path))
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+    # !kaggle datasets download {dataset} -p "{path}" --unzip
+
+    path.ls()
+
+    (path/'dicom-images-train').ls()
+
+    items = get_dicom_files(path/'dicom-images-train')
+
+    patient = 42
+
+    items[patient]
+
+    xray_sample = dcmread(items[patient])
+
+    xray_sample.show(figsize=(12, 12))
+
+    xray_sample.as_dict()
+
+    xray_sample.pixels.shape
+
+    xray_

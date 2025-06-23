@@ -1,0 +1,53 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add iframe markdown only."
+    Original Code Cells:
+    '''
+    <Cell_0>
+# ! pip install geopandas
+# ! pip install git+https://github.com/python-visualization/folium
+# ! pip install kaggle --upgrade
+<\Cell_0>
+<Cell_1>
+dataset = 'alexisbcook/geospatial-learn-course-data'
+
+# google colab
+# config_path = '/content/drive'
+# data_path = '/content/datasets/' + dataset
+
+# gcp
+import os
+from pathlib import Path
+config_path = Path(os.getenv("HOME"))
+data_path = config_path/"datasets"/dataset
+data_path.mkdir(parents=True, exist_ok=True)
+<\Cell_1>
+<Cell_2>
+## Google Colab
+# from google.colab import drive
+# drive.mount(config_path)
+<\Cell_2>
+<Cell_3>
+import os
+# google colab
+# os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+# gcp
+os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/.kaggle"
+<\Cell_3>
+<Cell_4>
+!kaggle datasets download {dataset} -p "{data_path}" --unzip
+<\Cell_4>
+<Cell_5>
+import pandas as pd
+import geopandas as gpd
+
+import folium
+from folium import *
+from folium.plugins import *
+<\Cell_5>
+<Cell_6>
+plate_boundaries = gpd.read_file(data_path/"Plate_Boundaries/Plate_Boundaries/Plate_Boundaries.shp")
+plate_boundaries['coordinates'] = plate_boundaries.apply(lambda x: [(b,a) for (a,b) in list(x.geometry.coords)], axis='columns')
+pl

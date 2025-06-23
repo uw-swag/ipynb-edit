@@ -1,0 +1,50 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.preprocessing import StandardScaler
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Data preprocessing
+    df = df.dropna()
+    df = pd.get_dummies(df)
+
+    # Split the dataset into features and target variable
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Standardize the features
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train the model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluate the model
+    print(classification_report(y_test, y_pred))
+
+    # Visualize the confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+    sns.heatmap(cm, annot=True)
+    plt.show()
+
+    # Predict the target variable for new data
+    new_data = sc.transform(new_data)
+    new_data_prediction = model.predict(new_data)
+
+    return new_data_prediction
+    ```

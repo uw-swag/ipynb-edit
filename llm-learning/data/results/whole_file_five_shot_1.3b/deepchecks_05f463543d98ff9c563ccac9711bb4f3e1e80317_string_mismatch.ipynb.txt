@@ -1,0 +1,55 @@
+```python
+    <Cell_0>
+from deepchecks.checks import StringMismatch
+import pandas as pd
+
+data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+df = pd.DataFrame(data=data)
+r = StringMismatch().run(df)
+<\Cell_0>
+<Cell_1>
+c  = StringMismatch().add_condition_no_variants()
+c.conditions_decision(r)
+<\Cell_1>
+
+    ## New Code Cell
+    <Cell_2>
+r.show_summary()
+<\Cell_2>
+
+    ## New Code Cell
+    <Cell_3>
+r.show_details()
+<\Cell_3>
+
+    ## New Code Cell
+    <Cell_4>
+r.show_chart()
+<\Cell_4>
+
+    ## New Code Cell
+    <Cell_5>
+r.show_table()
+<\Cell_5>
+
+    ## New Code Cell
+    <Cell_6>
+r.show_dataframe()
+<\Cell_6>
+
+    ## New Code Cell
+    <Cell_7>
+r.show_metrics()
+<\Cell_7>
+
+    ## New Code Cell
+    <Cell_8>
+r.show_logs()
+<\Cell_8>
+
+    ## New Code Cell
+    <Cell_9>
+r.show_all()
+<\Cell_9>
+
+    ```

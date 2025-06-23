@@ -1,0 +1,18 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+from sklearn.model_selection import train_test_split
+%matplotlib inline
+#load the dataset
+wine = pd.read_csv('winequality-red.csv',sep=';')
+wine.head()
+#Preprocess data
+bins = (2, 6.5, 8)
+group_names = ['bad','good']
+wine['quality'] = pd.cut(wine['quality'],bins = bins, labels = group_names)
+import seaborn as sns

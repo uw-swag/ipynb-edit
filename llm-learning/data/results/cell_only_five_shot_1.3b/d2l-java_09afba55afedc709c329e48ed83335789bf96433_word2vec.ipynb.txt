@@ -1,0 +1,49 @@
+```python
+    import boto3
+
+    # Create a session using your AWS credentials
+    session = boto3.Session(
+        aws_access_key_id='YOUR_ACCESS_KEY',
+        aws_secret_access_key='YOUR_SECRET_KEY',
+        region_name='us-west-2'
+    )
+
+    # Use the session to create a resource object
+    s3 = session.resource('s3')
+
+    # Get the bucket object
+    bucket = s3.Bucket('bucket_name')
+
+    # Get all the objects in the bucket
+    for obj in bucket.objects.all():
+        print(obj.key)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature (#140)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    Here is a simple example of how you might add a new feature to a Python class.
+
+    ```python
+    class MyClass:
+        def __init__(self):
+            self.my_attribute = "Initial value"
+
+        def new_feature(self):
+            # This is a new feature
+            self.my_attribute = "New value"
+
+        def get_attribute(self):
+            return self.my_attribute
+    ```
+
+    You can use the `new_feature` method to change the value of `my_attribute`, and then use the `get_attribute` method to retrieve the new value.
+
+    Please note that this is a very basic example and real-world applications would likely require more complex code.

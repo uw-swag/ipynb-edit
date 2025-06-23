@@ -1,0 +1,39 @@
+```
+    [
+    Commit Message: "Bump to v0.5.0"
+    Original Code Cells:
+    '''
+    <Cell_0>
+!pip install git+https://github.com/ziatdinovmax/atomai --upgrade
+<\Cell_0>
+<Cell_1>
+from atomai.utils import create_lattice_mask, extract_patches_
+from atomai.transforms import datatransform
+import numpy as np
+import matplotlib.pyplot as plt
+<\Cell_1>
+<Cell_2>
+download_link = 'https://drive.google.com/uc?id=1_uo7BXjDU-laUAs4Uj1aFqwqfnxi9tpz'
+!gdown $download_link -O 'img_w_coord.npy'
+img_w_coord = np.load('img_w_coord.npy')
+lattice_im = img_w_coord['lattice_img']
+xy_atoms_a = img_w_coord['lattice_coord_a']
+xy_atoms_b = img_w_coord['lattice_coord_b']
+print(lattice_im.shape, xy_atoms_a.shape, xy_atoms_b.shape)
+<\Cell_2>
+<Cell_3>
+lattice_mask_a = create_lattice_mask(lattice_im, xy_atoms_a.T)
+lattice_mask_b = create_lattice_mask(lattice_im, xy_atoms_b.T)
+<\Cell_3>
+<Cell_4>
+multiclass = True
+
+if multiclass:
+    lattice_mask_backgr = 1 - (lattice_mask_a + lattice_mask_b)
+    lattice_mask = np.concatenate(
+        (lattice_mask_a[..., None], 
+         lattice_mask_b[..., None],
+         lattice_mask_backgr[..., None]), # we need to add a background class
+        axis=-1)
+else:
+   

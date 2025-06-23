@@ -1,0 +1,42 @@
+
+    '''
+    import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.integrity import DominantFrequencyChange
+from deepchecks.base import Dataset
+iris = load_iris(return_X_y=False, as_frame=True)
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=iris.feature_names,
+            label='target')
+check = DominantFrequencyChange()
+check.run(dataset=train_dataset, baseline_dataset=train_dataset)
+
+    '''
+    '''
+    import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.integrity import DominantFrequencyChange
+from deepchecks.base import Dataset
+iris = load_iris(return_X_y=False, as_frame=True)
+X = iris.data
+y = iris.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+            features=iris.feature_names,
+            label='target')
+check = DominantFrequencyChange()
+check.run(dataset=train_dataset, baseline_dataset=train_dataset)
+
+    '''
+    '''
+    import pandas as pd
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.integrity import DominantFrequencyChange
+from deepchecks.base import Dataset
+iris = load_iris(

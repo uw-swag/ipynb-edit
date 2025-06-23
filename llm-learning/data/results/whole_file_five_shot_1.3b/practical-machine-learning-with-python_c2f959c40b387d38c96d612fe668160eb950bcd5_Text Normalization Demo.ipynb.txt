@@ -1,0 +1,13 @@
+```
+    # Removing .gitignore file
+    git rm --cached .gitignore
+
+    # Removing LFS files
+    git filter-branch --subdirectory-filter=.nobackup LFS  HEAD
+
+    # Removing LFS tracking info
+    git config --global --unset filter.lfs.text
+    ```
+    This script will remove the .gitignore file and the LFS tracking information from your Git repository. However, it will not remove the LFS files themselves. You will need to manually remove the LFS files from your local system.
+
+    Also, please note that this is a destructive operation and should be performed with caution. The LFS files are large and can take up a lot of disk space.

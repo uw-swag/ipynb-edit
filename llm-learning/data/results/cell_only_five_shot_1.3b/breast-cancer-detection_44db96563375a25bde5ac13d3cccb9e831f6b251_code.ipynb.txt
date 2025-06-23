@@ -1,0 +1,55 @@
+```python
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the breast cancer dataset
+    data = load_breast_cancer()
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train a Random Forest Classifier
+    classifier = RandomForestClassifier(n_estimators=10, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Make predictions on the testing set
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(accuracy_score(y_test, y_pred))
+
+    # Save the model
+    import joblib
+    joblib.dump(classifier, 'breast_cancer_classifier.pkl')
+    ```
+    '''
+
+    Commit Message: "feat: Implement code changes for improved model performance"
+    Original Code Cells:
+    '''
+    import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the breast cancer dataset
+    data = load_breast_cancer()
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.2, random_state=42)
+
+    # Standardize the features
+    sc = StandardScaler

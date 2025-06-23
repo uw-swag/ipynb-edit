@@ -1,0 +1,49 @@
+```
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Preprocess your data
+    df = preprocess(df)
+
+    # Split your data into train and test sets
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target'], test_size=0.2, random_state=42)
+
+    # Set up the TPOTClassifier
+    tpot = TPOTClassifier(generations=5, population_size=50, verbosity=2, random_state=42)
+
+    # Fit the TPOTClassifier
+    tpot.fit(X_train, y_train)
+
+    # Print the best found generations
+    print(tpot.found_generation())
+
+    # Evaluate the TPOTClassifier
+    print(tpot.score(X_test, y_test))
+
+    # Plot the TPOTClassifier
+    tpot.plot()
+    ```
+
+    This script will load your data, preprocess it, split it into a training and testing set, set up a TPOTClassifier, fit the TPOTClassifier to the training data, print the best found generations, evaluate the TPOTClassifier, and finally, plot the TPOTClassifier.
+
+    Please replace 'your_data.csv' and 'target' with your actual data file and target column.
+
+    Also, you need to install the necessary libraries. You can install them using pip:
+
+    ```
+    pip install numpy pandas matplotlib seaborn tpot
+    ```
+
+    And you also need to install the TPOT library. You can install it using pip:
+
+    ```
+    pip install tpot
+    ```
+
+    And you also need to install the EC2 instance. You can install it using pip:
+
+    ```
+    pip install awscli
+    ```
+
+    After installing the necessary libraries, you can run the script on your EC2 instance.

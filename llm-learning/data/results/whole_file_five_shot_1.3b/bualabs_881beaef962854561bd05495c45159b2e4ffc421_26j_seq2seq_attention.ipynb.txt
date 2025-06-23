@@ -1,0 +1,39 @@
+```
+    ## Colab
+    ! curl -s https://course.fast.ai/setup/colab | bash
+
+    ## VM
+    # import os
+    # os.environ["HOME"] = "/mnt/c/Users/Your_Name"
+
+    # import fastai.utils.collect_env
+    # fastai.utils.collect_env.show_install()
+
+    ## Google Colab
+    from google.colab import drive
+    drive.mount(str(config_path))
+
+    ## Data path
+    path = data_path_base/dataset
+
+    ## Model path
+    model_path = config_path/'My Drive/models'
+
+    ## Embeddings
+    emb_enc = torch.load(model_path/'fr_emb.pth')
+    emb_dec = torch.load(model_path/'en_emb.pth')
+
+    ## Loss and accuracy functions
+    class NGram():
+        def __init__(self, ngram, max_n=50000): self.ngram, self.max_n = ngram, max_n
+        def __eq__(self, other): 
+            if len(self.ngram) != len(other.ngram): return False
+            return np.all(np.array(self.ngram) == np.array(other.ngram))
+        def __hash__(self): return int(sum([o * self.max_n**i for i, o in enumerate(self.ngram)]))
+
+    def get_grams(x, n, max_n=5000):
+        return x if n==1 else [NGram(x[i:i+n], max_n=max_n) for i in range(len(x)-n+1)]
+
+    def get_correct_ngrams(pred, targ, n, max_n=5000): 
+        pred_grams, targ_grams = get_grams(pred, n, max_n=max_n), get_grams(targ, n, max_n=max_n)
+        pred_cnt, targ

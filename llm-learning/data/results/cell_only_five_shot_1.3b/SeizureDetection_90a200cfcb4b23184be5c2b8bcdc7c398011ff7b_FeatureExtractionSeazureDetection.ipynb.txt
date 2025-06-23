@@ -1,0 +1,15 @@
+```python
+    import numpy as np
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    def metrics(x_true_np_array, x_pred_np_array):
+        accuracy = accuracy_score(x_true_np_array, x_pred_np_array)
+        confusion_matrix = confusion_matrix(x_true_np_array, x_pred_np_array)
+        tp = confusion_matrix[0, 0]
+        tn = confusion_matrix[1, 1]
+        fp = confusion_matrix[0, 1]
+        fn = confusion_matrix[1, 0]
+        sensitivity = tp / (tp + fn)
+        specificity = tn / (tn + fp)
+        return accuracy, sensitivity, specificity
+    ```

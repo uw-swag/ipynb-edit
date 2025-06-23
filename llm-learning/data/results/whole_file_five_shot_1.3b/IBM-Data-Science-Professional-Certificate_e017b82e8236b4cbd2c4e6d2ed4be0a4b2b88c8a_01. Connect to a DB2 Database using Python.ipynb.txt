@@ -1,0 +1,33 @@
+```python
+    import ibm_db
+    import pandas as pd
+
+    # Connect to the database
+    try:
+        connection_params = {
+            "host": "<hostname>",
+            "port": "<port>",
+            "database": "<database>",
+            "username": "<username>",
+            "password": "<password>"
+        }
+        connection = ibm_db.connect(connection_params)
+        print("Connected to the database")
+    except Exception as e:
+        print("Connection failed", e)
+
+    # Query the database
+    try:
+        sql_query = "SELECT * FROM <table_name>"
+        df = pd.read_sql(sql_query, con=connection)
+        print(df)
+    except Exception as e:
+        print("Query failed", e)
+
+    # Close the connection
+    try:
+        ibm_db.close(connection)
+        print("Connection closed")
+    except Exception as e:
+        print("Closing connection failed", e)
+    ```

@@ -1,0 +1,35 @@
+```python
+    import os
+    import shutil
+
+    # Path to the directory where the notebooks are located
+    notebooks_path = "/path/to/your/notebooks"
+
+    # Path to the directory where you want to move the notebooks
+    destination_path = "/path/to/your/destination"
+
+    # Get a list of all notebook files
+    notebook_files = os.listdir(notebooks_path)
+
+    # Iterate over each notebook file
+    for notebook_file in notebook_files:
+        # Check if the file is a notebook
+        if notebook_file.endswith(".ipynb"):
+            # Get the full path to the notebook file
+            notebook_full_path = os.path.join(notebooks_path, notebook_file)
+
+            # Get the name of the notebook without the extension
+            notebook_name = notebook_file.split(".ipynb")[0]
+
+            # Get the full path to the destination folder
+            destination_folder_path = os.path.join(destination_path, notebook_name)
+
+            # Check if the destination folder exists
+            if not os.path.exists(destination_folder_path):
+                # Create the destination folder
+                os.makedirs(destination_folder_path)
+
+            # Move the notebook to the destination folder
+            shutil.move(notebook_full_path, destination_folder_path)
+    ```
+    This script will move all notebooks from the specified source directory to the destination directory, with the name of the notebook being used as the name of the folder. If a folder with the same name already exists, the notebook will be moved to the next available folder.

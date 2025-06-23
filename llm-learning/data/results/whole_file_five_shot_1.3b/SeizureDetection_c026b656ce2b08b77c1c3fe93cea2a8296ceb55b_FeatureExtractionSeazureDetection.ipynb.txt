@@ -1,0 +1,40 @@
+
+    '''
+    def readEdfFile(pathToFile):
+        f = pyedflib.EdfReader(pathToFile)
+        n = f.signals_in_file
+        signal_labels = f.getSignalLabels()
+        sigbufs = np.zeros((f.getNSamples()[0],n))
+        for i in np.arange(n):
+            sigbufs[:,i] = f.readSignal(i)
+        f._close()
+        del i,f,n,signal_labels
+        return sigbufs
+    
+    def get_seizure_period(file_location):
+        bytes_array = []
+        for b in pathlib.Path(file_location).read_bytes(): bytes_array.append(b)
+        return int(str(bin(bytes_array[38]))[2:]+str(bin(bytes_array[41]))[2:],2), bytes_array[49]
+    
+    def read_and_store_data (dataset_folder) :
+        path = os.path.join(os.getcwd(), dataset_folder)
+        os.chdir(dataset_folder)
+    
+        patients = [d for d in os.listdir() if os.path.isdir(d)]
+        patients.sort()
+    
+        for p in patients:
+            os.chdir(p)
+            print('Reading data of patient ', p)
+            l=[]
+        
+            edf = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('edf')]
+            edf.sort()
+            seizures = [f for f in os.listdir() if os.path.isfile(f) and f.endswith('seizures')]
+            seizures.sort()
+    
+            arr = np.zeros((1,24))
+            for e in edf:
+                print('Reading data file ', e)
+                sigbufs = readEdfFile(e)
+                sigbufs = np.append(sigbufs, np.zeros((sigbufs.shape[0],1)), axis=

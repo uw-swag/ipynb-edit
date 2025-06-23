@@ -1,0 +1,33 @@
+```java
+    import org.nd4j.linalg.api.ndarray.NDArray;
+    import org.nd4j.linalg.api.ndarray.NDManager;
+    import org.nd4j.linalg.api.ops.impl.transforms.Transforms;
+    import org.nd4j.linalg.factory.Nd4j;
+    import org.nd4j.linalg.ops.transforms.TransformsMulti;
+
+    NDManager manager = NDManager.newBaseManager();
+
+    public NDArray corr2D(NDArray X, NDArray K) {
+        long h = K.getShape().get(0);
+        long w = K.getShape().get(1);
+
+        NDArray Y = manager.zeros(new int[] {X.getShape().get(0) - h + 1, X.getShape().get(1) - w + 1});
+
+        for (int i = 0; i < Y.getShape().get(0); i++) {
+            for (int j = 0; j < Y.getShape().get(1); j++) {
+                NDArray temp = X.get(i + ":" + (i + h) + "," + j + ":" + (j + w)).mul(K);
+                Y.set(new int[] {i + "," + j}, temp.sum());
+            }
+        }
+        return Y;
+    }
+
+    public NDArray corr2dMultiIn(NDArray X, NDArray K) {
+        long h = K.getShape().get(0);
+        long w = K.getShape().get(1);
+
+        NDArray res = manager.zeros(new int[] {X.getShape().get(0) - h + 1, X.getShape().get(1) - w + 1});
+        for (int i = 0; i < X.getShape().get(0); i++) {
+            for (int j = 0; j < K.getShape().get(0); j++) {
+                if (i == j)
+                    res = res.add(corr2D(

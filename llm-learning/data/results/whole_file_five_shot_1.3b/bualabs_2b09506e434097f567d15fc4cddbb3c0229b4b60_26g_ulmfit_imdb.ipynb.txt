@@ -1,0 +1,29 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from imdb import IMDb
+
+    # create an instance of the IMDb class
+    ia = IMDb()
+
+    # get a list of movies
+    movies = ia.get_movies_by_title('ulmfit')
+
+    # create a dataframe to store the data
+    df = pd.DataFrame(columns=['Title', 'Year', 'Rating', 'Votes', 'Genres'])
+
+    # iterate over the movies and add the data to the dataframe
+    for movie in movies:
+        ia.update(movie)
+        data = {
+            'Title': movie['title'],
+            'Year': movie['year'],
+            'Rating': movie['rating'],
+            'Votes': movie['votes'],
+            'Genres': ', '.join(movie['genres'])
+        }
+        df = df.append(data, ignore_index=True)
+
+    # print the dataframe
+    print(df)
+    ```

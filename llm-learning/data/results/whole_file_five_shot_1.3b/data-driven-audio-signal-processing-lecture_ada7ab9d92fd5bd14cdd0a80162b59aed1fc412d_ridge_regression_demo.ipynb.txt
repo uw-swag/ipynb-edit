@@ -1,0 +1,41 @@
+
+    '''
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    <\Cell_0>
+    <Cell_1>
+    N = 1000  # total number of examples
+    F = 6  # dimensionality of lifted feature space
+    alpha = 1.2  # true intercept
+    theta = [0.1, 0.25]  # true slopes
+
+    np.random.seed(123)
+    X = np.random.uniform(low=-5, high=10, size=(N, 2))
+    Y = alpha + np.dot(X, theta) + .5 * np.random.normal(size=(N))
+
+    # lifting of feature space by linear mapping
+    A = np.random.uniform(low=-2, high=2, size=(2, F))
+    A = A * np.random.choice([0, 1], size=(2, F), p=[2./10, 8./10])
+    XF = np.dot(X, A)
+    <\Cell_1>
+    <Cell_2>
+    kappa_x = np.linalg.cond(X.T @ X)
+    kappa_xf = np.linalg.cond(XF.T @ XF)
+
+    print('Condition number of covariance matrix of \n \t uncorrelated features: {}'.format(kappa_x))
+    print('\t correlated features: {}'.format(kappa_xf))
+    <\Cell_2>
+    <Cell_3>
+    def ridge_regression(Xt, Y, mu=0):
+        return np.linalg.inv(Xt.T @ Xt + mu*np.eye(F+1)) @ Xt.T @ Y
+
+
+    def predict(Xt, theta_hat):
+        return np.dot(Xt, theta_hat)
+
+
+    def evaluate(Y, Y_hat):

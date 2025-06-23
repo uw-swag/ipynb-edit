@@ -1,0 +1,44 @@
+```python
+    class SGD:
+        def __init__(self, learning_rate=0.01, momentum=0.9):
+            self.learning_rate = learning_rate
+            self.momentum = momentum
+            self.v = None
+
+        def init_velocity(self, layer):
+            self.v = np.zeros((layer.weights.shape))
+
+        def update_velocity(self, layer):
+            if self.v is not None:
+                self.v = self.momentum * self.v + self.learning_rate * layer.d_weights
+            else:
+                self.init_velocity(layer)
+
+        def update_weights(self, layer):
+            if layer.weights is not None:
+                layer.weights -= self.v
+
+        def train_step(self, layer, X, y):
+            output = self.forward(layer, X)
+            layer.error = y - output
+            self.update_velocity(layer)
+            self.update_weights(layer)
+            return output
+
+        def forward(self, layer, X):
+            z = np.dot(X, layer.weights) + layer.bias
+            return self.sigmoid(z)
+
+        def sigmoid(self, z):
+            return 1 / (1 + np.exp(-z))
+
+        def cost(self, layer, X, y):
+            return np.mean(np.square(y - self.forward(layer, X)))
+
+        def fit(self, layer, X, y, epochs=100):
+            self.init_velocity(layer)
+            for _ in range(epochs):
+                for i in range(X.shape[0]):
+                    self.train_step(layer, X[i], y[i])
+    ```
+    This is a simple implementation of Stochastic Gradient Descent (SGD) optimizer from scratch. It's a basic version and may not be suitable for complex tasks. For more advanced usage, you may need to implement more advanced features such as learning rate decay, momentum, and other advanced optimizers.

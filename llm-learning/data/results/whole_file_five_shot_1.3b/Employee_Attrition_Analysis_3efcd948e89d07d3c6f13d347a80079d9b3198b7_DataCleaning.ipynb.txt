@@ -1,0 +1,51 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "update Flask and website"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# dependencies
+import pandas as pd
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+<\Cell_0>
+<Cell_1>
+# read in csv
+file_path = "../resources/IBM_employee_data.csv"
+attrition_df = pd.read_csv(file_path)
+attrition_df.head()
+<\Cell_1>
+<Cell_2>
+# determine if any missing values and data types for columns
+attrition_df.info()
+<\Cell_2>
+<Cell_3>
+# column names
+attrition_df.columns
+<\Cell_3>
+<Cell_4>
+# ambiguous/unnecessary columns - only going to keep MonthlyIncome
+attrition_df[["DailyRate", "HourlyRate", "MonthlyIncome", "MonthlyRate", "StandardHours", "Over18"]]
+<\Cell_4>
+<Cell_5>
+# these columns are either unique identifiers, ambiguous or constant thru each column
+columns_to_drop = ["DailyRate", "HourlyRate", "MonthlyRate", "StandardHours", "EmployeeCount", 
+                   "EmployeeNumber", "Over18"]
+<\Cell_5>
+<Cell_6>
+attrition_df.drop(columns=columns_to_drop, inplace=True)
+attrition_df.head()
+<\Cell_6>
+<Cell_7>
+# making a list of columns with object data types
+attrition_cat = attrition_df.dtypes[attrition_df.dtypes == "object"].index.tolist()
+attrition_cat
+<\Cell_7>
+<Cell_8>
+# number of unique items in each column
+attrition_df[attrition_cat].nunique()
+<\Cell_8>
+<Cell_9>
+# remove attrition from this list as it is our target variable
+attrition_cat.remove("Attrition")
+attrition

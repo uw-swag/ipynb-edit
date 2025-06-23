@@ -1,0 +1,23 @@
+```python
+    import torch
+
+    class TestDatasetSize(torch.utils.data.Dataset):
+        def __init__(self, dataset, size):
+            self.dataset = dataset
+            self.size = size
+
+        def __len__(self):
+            return self.size
+
+        def __getitem__(self, index):
+            if index < len(self.dataset):
+                return self.dataset[index]
+            else:
+                raise IndexError("Index out of range")
+
+    # Testing
+    test_dataset = TestDatasetSize(torch.utils.data.Subset(train_dataset, indices=range(10)), 10)
+    print(f"Test dataset size: {len(test_dataset)}")
+    ```
+
+    This code creates a custom dataset that only returns a certain number of elements from the original dataset. The `__len__` method returns the size of the dataset, and the `__getitem__` method returns a specific element at a given index. The test dataset is created with a size of 10, and the size of the test dataset is printed out.

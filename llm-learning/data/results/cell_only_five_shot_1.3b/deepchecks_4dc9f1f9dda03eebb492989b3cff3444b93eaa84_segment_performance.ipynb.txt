@@ -1,0 +1,11 @@
+```python
+    import plotly.graph_objects as go
+
+    # Assuming df is your DataFrame and it has columns 'x', 'y', 'z'
+    fig = go.Figure(data=[go.Scatter3d(x=df['x'], y=df['y'], z=df['z'])])
+    fig.update_layout(scene = dict(zaxis=dict(title="Z axis"), 
+                                   xaxis=dict(title="X axis"), 
+                                   yaxis=dict(title="Y axis")))
+    fig.show()
+    ```
+    This code will create a 3D scatter plot using Plotly. The 'x', 'y', and 'z' columns of the DataFrame 'df' are used to create the plot. The layout of the plot is also updated to include titles for the Z, X, and Y axes.

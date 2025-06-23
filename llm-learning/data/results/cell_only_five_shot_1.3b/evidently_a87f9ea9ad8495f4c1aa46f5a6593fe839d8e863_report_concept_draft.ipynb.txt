@@ -1,0 +1,60 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import DataQuality
+from evidently.metric_preset import CatTargetDrift
+from evidently.metric_preset import NumTargetDrift
+from evidently.metric_preset import RegressionPerformance
+from evidently.metric_preset import ClassificationPerformance
+
+# Define the column mapping
+column_mapping = ColumnMapping()
+column_mapping.add_dataset_column("numerical_column_1", "target")
+column_mapping.add_dataset_column("numerical_column_2", "target")
+
+# Create a data drift report
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+], column_mapping=column_mapping)
+
+# Run the data drift report
+data_drift_report.run(reference_data=housing_ref, current_data=housing_cur)
+
+# Print the data drift report
+data_drift_report
+
+# Create a data quality report
+data_quality_report = Report(metrics=[
+    DataQuality(),
+], column_mapping=column_mapping)
+
+# Run the data quality report
+data_quality_report.run(reference_data=housing_ref, current_data=housing_cur)
+
+# Print the data quality report
+data_quality_report
+
+# Create a cat target drift report
+cat_target_drift_report = Report(metrics=[
+    CatTargetDrift(),
+], column_mapping=column_mapping)
+
+# Run the cat target drift report
+cat_target_drift_report.run(reference_data=iris_ref, current_data=iris_cur)
+
+# Print the cat target drift report
+cat_target_drift_report
+
+# Create a num target drift report
+num_target_drift_report = Report(metrics=[
+    NumTargetDrift(),
+], column_mapping=column_mapping)
+
+# Run the num target drift report
+num_target_drift

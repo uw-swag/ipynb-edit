@@ -1,0 +1,29 @@
+```python
+    # Crop long outputs to make it easier to visualize the notebooks on github.com
+    import os
+    import matplotlib.pyplot as plt
+
+    # Get all files in the current directory
+    files = os.listdir()
+
+    # Loop through each file
+    for file in files:
+        # If the file is a python file
+        if file.endswith(".py"):
+            # Open the file
+            with open(file, "r") as f:
+                lines = f.readlines()
+
+            # If the file is too long
+            if len(lines) > 100:
+                # Crop the lines to 100
+                lines = lines[:100]
+
+                # Write the new lines back to the file
+                with open(file, "w") as f:
+                    f.write("".join(lines))
+
+    # Show a message
+    print("Cropped long outputs to 100 lines.")
+    ```
+    This script will crop the first 100 lines of each python file in the current directory. This is a simple way to keep the notebooks on github.com clean and easy to read.

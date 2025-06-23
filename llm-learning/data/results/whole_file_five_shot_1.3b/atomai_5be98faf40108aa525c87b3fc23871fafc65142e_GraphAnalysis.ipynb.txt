@@ -1,0 +1,43 @@
+```
+    # Update installation instructions
+    Please ensure you have the following installed:
+
+    1. Python: Python 3.6 or above.
+    2. pip: pip 19.3.1 or above.
+    3. AtomAI: Please refer to the AtomAI documentation for installation instructions.
+    4. Numpy: Numpy 1.18.1 or above.
+    5. Matplotlib: Matplotlib 3.1.1 or above.
+    6. Google Drive: To download the data and model files.
+
+    You can install these packages using pip:
+
+    ```
+    pip install -q numpy matplotlib
+    ```
+
+    After installation, you can download the data and model files using the provided links.
+
+    After downloading, you can use the following code to load the data and model:
+
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from atomai import AtomAI
+
+    imgdata = np.load("Gr_SiCr.npy")
+    model = AtomAI.load_model("G_MD.tar")
+    ```
+
+    The model is an instance of the AtomAI class, and you can use it to predict the coordinates of the atoms in the image.
+
+    The `find_cycle_clusters` function is a method of the `graphx` module, which is used to find the clusters of cycles in the image.
+
+    The `clusters` variable is a list of numpy arrays, where each array represents a cluster of atoms. The coordinates of the atoms in each cluster are the mean of their coordinates.
+
+    The `fig, ax` lines are used to display the image and the clusters.
+
+    The `clusters = graphx.find_cycle_clusters(coord, cycles=[5, 7, 8], map_dict=map_dict, px2ang=px2ang)` line is used to find the clusters of cycles with the specified cycles.
+
+    The `clusters` variable is a list of numpy arrays, where each array represents a cluster of atoms. The coordinates of the atoms in each cluster are the mean of their coordinates.
+
+    The `fig, ax`

@@ -1,0 +1,27 @@
+# TestSuites support include in dict/json as well
+
+test_suite = TestSuite(tests=[
+    DataDriftTestPreset(),
+])
+
+test_suite.run(reference_data=reference, current_data=current)
+test_suite.as_dict()
+# use include_metrics=True/False to include/exclude metrics data from Test Suite results 
+
+test_suite.as_dict(include_metrics=True)
+# if you have included metrics in Test Suite output, you can customize what exactly to include
+# use include_render=True/False to include/exclude render-related data from metrics 
+
+test_suite.as_dict(include_metrics=True, include_render=False) 
+# if you have included metrics in Test Suite output, you can customize what exactly to include
+# specify what metric fields to include in the output using include/exclude parameters, that you used before for Reports
+
+test_suite.as_dict(include_metrics=True, include={
+    "DataDriftTable": {
+        "drift_by_columns":AllDict({
+                "column_name", "column_type", "drift_score"
+            })},
+    "ColumnDriftMetric": {
+        "column_name", "column_type", "drift_score"
+    }
+}) 

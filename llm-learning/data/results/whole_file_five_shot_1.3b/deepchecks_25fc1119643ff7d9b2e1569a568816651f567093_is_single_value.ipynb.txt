@@ -1,0 +1,29 @@
+```python
+    <Cell_0>
+    from sklearn.datasets import load_iris
+    import pandas as pd
+    from deepchecks.checks.integrity.is_single_value import IsSingleValue
+    <\Cell_0>
+    <Cell_1>
+    iris = load_iris()
+    X = iris.data
+    df = pd.DataFrame({'a':[3,4,1], 'b':[2,2,2], 'c':[None, None, None], 'd':['a', 4, 6]})
+    df
+    <\Cell_1>
+    <Cell_2>
+    IsSingleValue().run(pd.DataFrame(X))
+    <\Cell_2>
+    <Cell_3>
+    IsSingleValue().run(pd.DataFrame({'a':[3,4], 'b':[2,2], 'c':[None, None], 'd':['a', 4]}))
+    <\Cell_3>
+    <Cell_4>
+    sv = IsSingleValue()
+    sv.run(df)
+    <\Cell_4>
+    <Cell_5>
+    sv_ignore = IsSingleValue(ignore_columns=['b','c'])
+    sv_ignore.run(df)
+    <\Cell_5>
+    ```
+
+    The `IsSingleValue` check in deepchecks is used to verify that all values in a DataFrame or a Series are either all the same or all different. The `ignore_columns` parameter can be used to specify which columns to ignore in the check.

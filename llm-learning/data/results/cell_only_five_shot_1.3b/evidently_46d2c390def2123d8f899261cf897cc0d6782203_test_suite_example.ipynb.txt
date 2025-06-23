@@ -1,0 +1,29 @@
+```python
+    from evidently import ColumnMapping
+    from evidently.test_suite import TestSuite
+    from evidently.test_suite.data_integrity import DataIntegrityMetrics
+    from evidently.test_suite.data_integrity.test_number_of_columns import NumberRange, TestNumberOfColumns
+    from evidently.test_suite.data_integrity.test_number_of_drifted_features import TestNumberOfDriftedFeatures
+    import pandas as pd
+
+    suite = TestSuite(tests=[
+        TestNumberOfColumns(
+            NumberRange(left_side_threshold=1),
+            data_integrity_metric=DataIntegrityMetrics(),
+        ),
+        TestNumberOfDriftedFeatures(),
+    ])
+
+    suite.run(
+        reference_data=pd.DataFrame([{'a': 1, 'b': 2}]),
+        current_data=pd.DataFrame([{'a': 1, 'b': 2}]),
+        column_mapping=ColumnMapping(),
+    )
+    ```
+
+    ### Explanation:
+    The provided code is a test suite for a machine learning model. The `TestSuite` class is used to run a list of tests. The `TestNumberOfColumns` class is a test that checks the number of columns in the input data. The `NumberRange` class is a test that checks if the number of columns is within a certain range. The `DataIntegrityMetrics` class is a metric that measures the data integrity of the input data. The `TestNumberOfDriftedFeatures` class is a test that checks if the number of drifted features is within a certain range.
+
+    The `run` method of the `TestSuite` class is used to execute the tests. The `reference_data` and `current_data` parameters are the reference and current data respectively. The `column_mapping` parameter is a `ColumnMapping` object that maps the columns of the input data to the columns of the output data.
+
+    The code is written in Python and uses the `evidently` library, which is a Python library for creating and running tests for machine learning models.

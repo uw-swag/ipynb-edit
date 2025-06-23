@@ -1,0 +1,32 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.linear_model import LinearRegression
+
+    # Generate some random data
+    np.random.seed(0)
+    x = np.random.rand(100, 1)
+    y = 2 + 3 * x + np.random.rand(100, 1)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Fit the model to the data
+    model.fit(x, y)
+
+    # Predict the output for the new data
+    x_new = np.array([[0.5]]).T
+    y_pred = model.predict(x_new)
+
+    # Plot the original data
+    plt.scatter(x, y)
+    plt.plot(x, y, 'r')
+    plt.title('Linear Regression')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.show()
+
+    # Print the coefficients
+    print('Coefficients:', model.coef_)
+    print('Intercept:', model.intercept_)
+    ```

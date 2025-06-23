@@ -1,0 +1,47 @@
+
+
+    ### Instruction:
+    [
+    Commit Message: "Adding 24e init lsuv."
+    Original Code Cells:
+    '''
+<Cell_0>
+
+<\Cell_0>
+<Cell_1>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+import torch.nn.init as init
+
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module="torch.nn.functional")
+<\Cell_2>
+<Cell_3>
+def mnist_resize(x): return x.view(-1, 1, 28, 28)
+<\Cell_3>
+<Cell_4>
+def flatten(x): return x.view(x.shape[0], -1)
+<\Cell_4>
+<Cell_5>
+def get_cnn_model(data, **kwargs):
+    return nn.Sequential(
+        nn.Conv2d(  3,  8, 5, padding=2, stride=2), GeneralRelu(**kwargs), #14
+        nn.Conv2d(  8, 16, 3, padding=1, stride=2), GeneralRelu(**kwargs), # 7
+        nn.Conv2d( 16, 32, 3, padding=1, stride=2), GeneralRelu(**kwargs), # 4
+        nn.AdaptiveAvgPool2d(1), 
+        Lambda(flatten), 
+        nn.Linear(32, data.c)
+    )
+<\Cell_5>
+<Cell_6>
+model = get_cnn_model(databunch, leak=0.1, sub=0.4, maxv=6.)
+init_cnn(model)
+<\Cell_6>
+<Cell_7>
+model.fit_one_cycle(1, max_lr=max_lr,

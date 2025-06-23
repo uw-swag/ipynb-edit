@@ -1,0 +1,26 @@
+```
+    import tensorflow as tf
+    import tensorflow_datasets as tfds
+
+    # Load the FashionMNIST dataset
+    (training_set, validation_set), dataset_info = tfds.load('fashion_mnist', split=['train', 'test'], shuffle_files=True, with_info=True, as_supervised=True)
+
+    # Convert the dataset to TensorFlow tensors
+    def convert_to_tensor(image, label):
+        image = tf.cast(image, tf.float32)
+        image /= 255.0
+        return image, label
+
+    training_set = training_set.map(convert_to_tensor)
+    validation_set = validation_set.map(convert_to_tensor)
+
+    # Batch and shuffle the datasets
+    training_set = training_set.padded_batch(batchSize, training_set.padded_shuffle_batch(10000))
+    validation_set = validation_set.padded_batch(batchSize)
+
+    # Use the model
+    model = create_model()
+    model.fit(training_set, epochs=5, validation_data=validation_set)
+    ```
+
+    This code uses the TensorFlow Datasets library to load the FashionMNIST dataset, converts the dataset to TensorFlow tensors, and then uses a model to train the dataset.

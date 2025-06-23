@@ -1,0 +1,22 @@
+```python
+    import os
+    import pandas as pd
+    from pathlib import Path
+
+    dataset = '26i-giga-fren'
+
+    # Google Colab
+    config_path = Path('/content/drive')
+    data_path_base = Path('/content/drive/My Drive/datasets/')
+
+    data_path = data_path_base/dataset
+
+    from google.colab import drive
+    drive.mount(str(config_path))
+
+    # Load your data
+    # Assuming your data is in a CSV file
+    df = pd.read_csv(data_path/'your_data.csv')
+
+    # Now you can use the data in your script
+    ```

@@ -1,0 +1,46 @@
+```python
+    # Implementing Sphinx Gallery
+
+    # If you don't have deepchecks installed yet:
+    import sys
+    !{sys.executable} -m pip install "deepchecks[vision]" -U --quiet #--user
+
+    from deepchecks.vision.datasets.detection import coco
+
+    import torch
+    device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
+
+    yolo = coco.load_model(pretrained=True, device=device)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    from deepchecks.vision.detection_data import DetectionData
+    from typing import Union, List
+    import numpy as np 
+    import warnings
+
+    class COCOData(DetectionData):
+
+        # ...
+
+        def infer_on_batch(self, batch, model, device) -> Union[List[torch.Tensor], torch.Tensor]:
+            # ...
+
+    train_ds = COCOData(coco_train_loader, label_map=coco.LABEL_MAP)
+    test_ds = COCOData(coco_test_loader, label_map=coco.LABEL_MAP)
+
+    from deepchecks.vision.suites import full_suite
+
+    suite = full_suite()
+
+    suite.run(train_dataset=train_ds, test_dataset=test_ds, model=yolo, device=device)
+
+    result.save_as_html('full_suite_result.html')
+
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    check = TrainTestLabelDrift()
+    result = check.run(train_ds, test_ds, device=device)
+    result
+    ```

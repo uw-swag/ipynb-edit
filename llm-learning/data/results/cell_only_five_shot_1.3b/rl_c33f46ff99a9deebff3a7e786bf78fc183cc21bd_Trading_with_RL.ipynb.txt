@@ -1,0 +1,44 @@
+```python
+    # Import necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Model
+    from tensorflow.keras.layers import Input, Dense, Dropout
+    from tensorflow.keras.optimizers import Adam
+    from tensorflow.keras.regularizers import l2
+
+    # Set seeds for reproducibility
+    import numpy as np
+    import random
+    np.random.seed(42)
+    random.seed(42)
+
+    # Load the model
+    model = load_model('model_output/trading/model.h5')
+
+    # Use the model to make predictions
+    prediction = model.predict(np.array([[1, 2, 3, 4, 5]]))
+    print(prediction)
+
+    # Save the model
+    model.save('model_output/trading/model.h5')
+
+    # Load the model again
+    loaded_model = load_model('model_output/trading/model.h5')
+    print(loaded_model.summary())
+
+    # Save the weights of the model
+    model.save_weights('model_output/trading/model_weights.h5')
+
+    # Load the model with the same architecture but different weights
+    new_model = Model(inputs=model.inputs, outputs=model.outputs)
+    new_model.load_weights('model_output/trading/model_weights.h5')
+    print(new_model.summary())
+
+    # Save the model architecture
+    model.save('model_output/trading/model_architecture.json')
+
+    # Load the model with the same architecture but different weights
+    with open('model_output/trading/model_architecture.json', 'r') as json_file:
+        loaded_model = keras.models.model_from_json(json_file)
+        print(loaded_model.summary())
+    ```

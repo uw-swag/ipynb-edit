@@ -1,0 +1,29 @@
+```python
+    from deepchecks.vision.datasets.detection import coco
+    from deepchecks.vision.checks.distribution import ImagePropertyDrift
+
+    train_dataset = coco.load_dataset(train=True, object_type='VisionData')
+    test_dataset = coco.load_dataset(train=False, object_type='VisionData')
+
+    check_result = ImagePropertyDrift().run(train_dataset, test_dataset)
+    check_result
+
+    # Check the value of the result
+    check_result.value
+
+    # Add a condition to the check
+    check_result = (
+        ImagePropertyDrift()
+        .add_condition_drift_score_not_greater_than(0.001)
+        .run(train_dataset, test_dataset)
+    )
+    check_result.show(show_additional_outputs=False)
+
+    # Specify the image properties to check
+    check_result = ImagePropertyDrift(
+        image_properties=['area', 'aspect_ratio'], 
+        max_num_categories=20
+    ).run(train_dataset, test_dataset)
+
+    check_result
+    ```

@@ -1,0 +1,42 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import seaborn as sns
+    from matplotlib import pyplot as plt
+    import matplotlib
+    %matplotlib inline
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    # Example of data
+    data = {
+        'Name': ['Tom', 'Nick', 'John', 'Tom', 'John'],
+        'Age': [20, 21, 19, 18, 17],
+        'Score': [85, 80, 90, 88, 92]
+    }
+    df = pd.DataFrame(data)
+
+    # Example of machine learning monitoring
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+
+    X = df['Age'].values.reshape(-1,1)
+    y = df['Score'].values.reshape(-1,1)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    regressor = LinearRegression()  
+    regressor.fit(X_train, y_train)
+
+    y_pred = regressor.predict(X_test)
+
+    plt.scatter(X_test, y_test, color='red')
+    plt.plot(X_test, y_pred, color='blue')
+    plt.title('Age vs Score')
+    plt.xlabel('Age')
+    plt.ylabel('Score')
+    plt.show()
+
+    ```
+
+    This code creates a simple linear regression model using the sklearn library. The model is trained on a subset of the data and then used to predict the scores of the people in the test set. The results are then plotted.

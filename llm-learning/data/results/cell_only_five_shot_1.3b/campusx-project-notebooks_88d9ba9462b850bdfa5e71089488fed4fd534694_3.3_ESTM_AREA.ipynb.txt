@@ -1,0 +1,54 @@
+```python
+    # Adding a new notebook
+    # This is a new notebook for the 3.3_ESTM_AREA category
+
+    ## 3.3 Estimation of the Area
+
+    ### 1. Introduction
+
+    Estimation of the area is a crucial part of the field of geography. It is a statistical process that involves the use of statistical methods to estimate the area of a given set of points.
+
+    ### 2. Methodology
+
+    The methodology for estimating the area involves the following steps:
+
+    1. **Centroid calculation**: The centroid of a polygon is calculated as the average of its vertices.
+
+    2. **Distance calculation**: The distance between two points is calculated using the Haversine formula.
+
+    3. **Area calculation**: The area of a polygon is calculated as the sum of the products of the distances from each point to the centroid and the negative of the cosine of the angle formed by the points.
+
+    ### 3. Python Code
+
+    Here is a simple Python code snippet that calculates the area of a polygon using the centroid and distance methods:
+
+    ```python
+    import math
+
+    def calculate_area(points):
+        # Calculate the centroid
+        centroid = calculate_centroid(points)
+
+        # Initialize the area to 0
+        area = 0
+
+        # Loop through each point
+        for i in range(len(points)):
+            # Calculate the distance to the centroid
+            distance = calculate_distance(points[i], centroid)
+
+            # Calculate the area of the triangle formed by the current point and the next point
+            area += (distance * distance) / 2
+
+        # Return the area
+        return area
+
+    def calculate_centroid(points):
+        # Calculate the average of the x-coordinates and the y-coordinates
+        centroid_x = sum(point[0] for point in points) / len(points)
+        centroid_y = sum(point[1] for point in points) / len(points)
+
+        # Return the centroid
+        return (centroid_x, centroid_y)
+
+    def calculate_distance(point1

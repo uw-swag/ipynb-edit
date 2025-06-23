@@ -1,0 +1,38 @@
+```python
+    # Section 13.3 - Bounding boxes
+    ## 13.3.1 Bounding box format
+    # A bounding box is represented as a 4-element vector: (x1, y1, x2, y2).
+    # x1 and y1 are the coordinates of the top-left corner of the bounding box,
+    # and x2 and y2 are the coordinates of the bottom-right corner.
+
+    ## 13.3.2 Bounding box operations
+    # Bounding box operations include:
+
+    ## 13.3.2.1 Intersection
+    # The intersection of two bounding boxes is the set of points that lie between the two bounding boxes.
+    # The intersection is calculated as follows:
+
+    def intersection(self, bbox1, bbox2):
+        # Calculate the coordinates of the intersection rectangle
+        x1 = max(bbox1[0], bbox2[0])
+        y1 = max(bbox1[1], bbox2[1])
+        x2 = min(bbox1[2], bbox2[2])
+        y2 = min(bbox1[3], bbox2[3])
+
+        # Calculate the area of intersection rectangle
+        if x2 < x1 or y2 < y1:
+            return 0
+
+        area_intersection = (x2 - x1) * (y2 - y1)
+
+        # Calculate the area of both bounding boxes
+        area_bbox1 = (bbox1[2] - bbox1[0]) * (bbox1[3] - bbox1[1])
+        area_bbox2 = (bbox2[2] - bbox2[0]) * (bbox2[3] - bbox2[1])
+
+        # Calculate the ratio of the intersection to the union of the bounding boxes
+        iou = area_intersection / (area_bbox1 + area_bbox2 - area_intersection)
+
+        return iou
+
+    ## 13.3.2.2 Union
+    # The union of two bounding boxes is the set of points that lie either inside the two bounding

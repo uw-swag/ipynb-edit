@@ -1,0 +1,20 @@
+```
+    # Create a Dockerfile
+    FROM tensorflow/tensorflow:latest-gpu
+
+    WORKDIR /tensorflow
+
+    # Copy the current directory contents into the container at /tensorflow
+    COPY . /tensorflow
+
+    # Install any needed packages specified in requirements.txt
+    RUN pip install --no-cache-dir -r requirements.txt
+
+    # Make port 8888 available to the world outside this container
+    EXPOSE 8888
+
+    # Run the command to start the TensorFlow server, port 8888
+    CMD ["python", "./tensorflow/tensorflow/python/tools/freeze_graph.py", "--input_graph=/tensorflow/graph.pb", "--input_checkpoint=/tensorflow/model.ckpt", "--input_binary=true", "--output_graph=/tensorflow/frozen_graph.pb", "--output_node_names=Softmax", "--remove_initialization_nodes=false", "--input_type=tf_example"]
+    ```
+
+    This Dockerfile creates a Docker image based on the TensorFlow version installed in the latest-gpu tag. It then copies the current directory contents into the Docker image at /tensorflow. It installs any packages specified in requirements.txt, makes port 8888 available to the world outside this container, and runs the command to start the TensorFlow server.

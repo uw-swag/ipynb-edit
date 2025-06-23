@@ -1,0 +1,51 @@
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+from sklearn import datasets
+
+from evidently.report import Report
+from evidently.metric_preset.data_drift import DataDriftPreset
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataDriftTestPreset, DataQualityTestPreset, DataStabilityTestPreset, NoTargetPerformanceTestPreset
+iris_data = datasets.load_iris(as_frame=True)
+iris = iris_data.frame
+
+iris_ref = iris.sample(n=75, replace=False)
+iris_cur = iris.sample(n=75, replace=False)
+from evidently.options import ColorOptions
+
+color_scheme = ColorOptions(
+    primary_color = "#5a86ad",
+    fill_color = "#fff4f2",
+    zero_line_color = "#016795",
+    current_data_color = "#c292a1", 
+    reference_data_color = "#017b92"
+)
+from evidently.options import BERLIN_AUTUMN_COLOR_OPTIONS
+data_drift_dataset_report = Report(metrics=[
+    DataDriftPreset()
+], options=[color_scheme]) 
+
+data_drift_dataset_report.run(reference_data=iris_ref, current_data=iris_cur)
+data_drift_dataset_report
+data_drift_dataset_report = Report(metrics=[
+    DataDriftPreset()
+], options=[BERLIN_AUTUMN_COLOR_OPTIONS])
+
+data_drift_dataset_report.run(reference_data=iris_ref, current_data=iris_cur)
+data_drift_dataset_report
+from evidently.test_preset import DataDriftTestPreset
+
+data_drift_dataset_tests = TestSuite(tests=[
+    DataDriftTestPreset()
+], options=[color_scheme])
+
+data_drift_dataset_tests.run(reference_data=iris_ref, current_data=iris_cur)
+data_drift_dataset_tests
+data_drift_dataset_tests = TestSuite(tests=[
+    DataDriftTestPreset()
+], options=[BERLIN_AUTUMN_COLOR_OPTIONS])
+
+data_drift_dataset_tests.run(reference_data=iris_ref, current_data=iris_cur)
+data_drift_dataset_tests

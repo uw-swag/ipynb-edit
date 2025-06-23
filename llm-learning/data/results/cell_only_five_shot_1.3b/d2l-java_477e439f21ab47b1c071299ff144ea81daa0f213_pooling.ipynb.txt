@@ -1,0 +1,34 @@
+```python
+    # Upgrade to djl 0.13.0 (#176)
+    # Please note that this is a code change and not a commit message.
+    # The commit message is for the purpose of tracking changes and is not necessary for the upgrade.
+
+    # Please make sure to install the new version of djl before running the following code.
+    # You can install it using pip:
+    # pip install djl==0.13.0
+
+    import djl
+    from djl.nn import Hyperparameter
+    from djl.training import Trainer, TrainingConfig
+    from djl.training.loss import Loss
+    from djl.training.optimizer import Optimizer
+
+    # Create a new instance of the model
+    model = djl.Model.new(uri="<your-model-uri>")
+
+    # Define the hyperparameters
+    hyperparameters = Hyperparameter(name="hyperparameter_name", type="type", range="range")
+
+    # Define the training configuration
+    training_config = TrainingConfig(optimizer=Optimizer(name="optimizer_name", type="optimizer_type", options="options"),
+                                     loss=Loss(name="loss_name", type="loss_type", options="options"),
+                                     metrics=["metric_name"],
+                                     batch_size=batch_size,
+                                     epochs=epochs)
+
+    # Define the trainer
+    trainer = Trainer(model=model, training_config=training_config)
+
+    # Train the model
+    trainer.train(dataset=dataset)
+    ```

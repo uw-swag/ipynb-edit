@@ -1,0 +1,45 @@
+```python
+    import tkinter as tk
+    def button_click(row, col):
+        current_label = board[row][col].get()
+        if current_label == '':
+            board[row][col].set('X')
+        elif current_label == 'X':
+            board[row][col].set('O')
+        elif current_label == 'O':
+            board[row][col].set('X')
+
+    def check_win():
+        for i in range(3):
+            if board[i][0].get() == board[i][1].get() == board[i][2].get() != '':
+                return True
+        for i in range(3):
+            if board[0][i].get() == board[1][i].get() == board[2][i].get() != '':
+                return True
+        if board[0][0].get() == board[1][1].get() == board[2][2].get() != '':
+            return True
+        if board[0][2].get() == board[1][1].get() == board[2][0].get() != '':
+            return True
+        return False
+
+    def game_status():
+        if check_win():
+            if check_win() == 'X':
+                status.set('X wins')
+            else:
+                status.set('O wins')
+        elif ' ' not in board[0][0].get() + board[0][1].get() + board[0][2].get() + \
+             board[1][0].get() + board[1][1].get() + board[1][2].get() + \
+             board[2][0].get() + board[2][1].get() + board[2][2].get():
+            status.set('Tie')
+        else:
+            status.set('Game not over')
+
+    def reset_board():
+        for i in range(3):
+            for j in range(3):
+                board[i][j].set('')
+        status.set('Tic Tac Toe')
+
+    root = tk.Tk()
+    board = [[tk.String

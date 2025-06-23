@@ -1,0 +1,19 @@
+
+    # calculate null accuracy
+y_test_binary = np.where(y_test==5, 1, 0)
+y_test_binary.mean()
+# define a function that accepts a vectorizer and returns the accuracy
+def tokenize_test(vect):
+    X_train_dtm = vect.fit_transform(X_train)
+    print('Features: ', X_train_dtm.shape[1])
+    X_test_dtm = vect.transform(X_test)
+    nb = MultinomialNB()
+    nb.fit(X_train_dtm, y_train)
+    y_pred_class = nb.predict(X_test_dtm)
+    print('Accuracy: ', metrics.accuracy_score(y_test, y_pred_class))
+# use split_into_lemmas as the feature extraction function
+vect = CountVectorizer(analyzer=split_into_lemmas)
+tokenize_test(vect)
+# boxplot of sentiment grouped by stars
+yelp.boxplot(column='sentiment', by='stars')
+

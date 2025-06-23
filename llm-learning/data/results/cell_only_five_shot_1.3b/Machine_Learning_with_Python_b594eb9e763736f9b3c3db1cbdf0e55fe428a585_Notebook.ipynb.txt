@@ -1,0 +1,25 @@
+```python
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.metrics import accuracy_score
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=1)
+
+    # Create a DecisionTreeClassifier object
+    clf = DecisionTreeClassifier(random_state=1)
+
+    # Train the model using the training sets
+    clf.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = clf.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    ```
+    This code will train a decision tree classifier on the iris dataset, and then it will print the accuracy of the classifier on the test set.

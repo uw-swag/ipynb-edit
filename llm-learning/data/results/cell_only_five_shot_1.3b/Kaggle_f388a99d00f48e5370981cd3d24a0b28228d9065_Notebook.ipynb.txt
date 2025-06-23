@@ -1,0 +1,46 @@
+
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.ensemble import RandomForestClassifier
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Loading the dataset
+    glass_df = pd.read_csv('glass.csv')
+
+    # Checking for missing values
+    glass_df.isnull().sum()
+
+    # Checking the distribution of the target variable
+    glass_df['Type'].value_counts().plot(kind='bar')
+
+    # Splitting the dataset into features and target variable
+    X = glass_df.drop('Type', axis=1)
+    y = glass_df['Type']
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Creating a Random Forest Classifier
+    rfc = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Training the model
+    rfc.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = rfc.predict(X_test)
+
+    # Evaluating the model
+    print(classification_report(y_test, y_pred))
+
+    # Creating a confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    # Visualizing the confusion matrix
+    sns.heatmap(cm, annot=True, fmt='d')
+
+    # Predicting the class of a new glass
+    new_glass = [[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1

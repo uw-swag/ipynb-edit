@@ -1,0 +1,24 @@
+```python
+    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+    def naive_model_comparison(y_true, y_pred):
+        accuracy = accuracy_score(y_true, y_pred)
+        precision = precision_score(y_true, y_pred)
+        recall = recall_score(y_true, y_pred)
+        f1 = f1_score(y_true, y_pred)
+
+        return {'accuracy': accuracy, 'precision': precision, 'recall': recall, 'f1': f1}
+
+    # Example usage:
+    y_true = [0, 1, 1, 0, 1, 1]
+    y_pred = [0, 0, 1, 0, 1, 1]
+
+    results = naive_model_comparison(y_true, y_pred)
+
+    for metric, score in results.items():
+        print(f'{metric}: {score}')
+    ```
+
+    This code defines a function `naive_model_comparison` that takes in the true labels and predicted labels, and returns a dictionary with the accuracy, precision, recall, and F1 score. The function is then used to compare two models.
+
+    Please note that this is a simple example and might not be suitable for all use cases. Depending on the specifics of your problem, you might need to adjust the function or the way you compare models.

@@ -1,0 +1,51 @@
+
+    '''
+    Commit Message: "Updating the URLs notebook example (#596)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from IPython.display import Image; from IPython.core.display import HTML;Image(url= "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/What_is_a_URL/mdn-url-all.png")
+<\Cell_0>
+<Cell_1>
+import sys
+!{sys.executable} -m pip install deepchecks --quiet
+<\Cell_1>
+<Cell_2>
+import numpy as np; import pandas as pd; import sklearn; import deepchecks; 
+pd.set_option('display.max_columns', 45); np.random.seed(42);
+<\Cell_2>
+<Cell_3>
+from deepchecks.datasets.classification.phishing import load_data
+<\Cell_3>
+<Cell_4>
+df = load_data(data_format='dataframe', as_train_test=False)
+<\Cell_4>
+<Cell_5>
+df.head(5)
+<\Cell_5>
+<Cell_6>
+df.columns
+<\Cell_6>
+<Cell_7>
+from deepchecks.suites import single_dataset_integrity
+integ_suite = single_dataset_integrity()
+<\Cell_7>
+<Cell_8>
+integ_suite.run(test_dataset=df)
+<\Cell_8>
+<Cell_9>
+raw_train_df = df[df.month <= 9]
+len(raw_train_df)
+<\Cell_9>
+<Cell_10>
+raw_test_df = df[df.month > 9]
+len(raw_test_df)
+<\Cell_10>
+<Cell_11>
+from typing import List
+import pandas as pd
+import sklearn
+
+class UrlDatasetProcessor:
+    
+    def _cols_to_scale(self, df: pd.DataFrame)

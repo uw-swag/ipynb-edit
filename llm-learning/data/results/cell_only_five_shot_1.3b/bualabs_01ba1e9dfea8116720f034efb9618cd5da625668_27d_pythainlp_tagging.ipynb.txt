@@ -1,0 +1,20 @@
+```python
+    from pythainlp import Tokenizer
+    from pythainlp.tokenize import dict_trie
+    from pythainlp.corpus.common import thai_words
+
+    words = ["ไทยบางแก้ว", "บางแก้ว"]
+    custom_words_list = set(thai_words())
+    # add multiple words
+    custom_words_list.update(words)
+    trie = dict_trie(dict_source=custom_words_list)
+
+    custom_tokenizer = Tokenizer(custom_dict=trie, engine='newmm')
+
+    sents = [custom_tokenizer.word_tokenize(text) for text in texts]
+    sents
+    from pythainlp.tag.named_entity import ThaiNameTagger
+
+    ner = ThaiNameTagger()
+    # ner.get_ner??
+    ```

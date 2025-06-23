@@ -1,0 +1,47 @@
+```python
+    import mlflow
+    import mlflow.sklearn
+
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+    # Set up the experiment
+    mlflow.start_run()
+
+    # Set up the model
+    model = RandomForestClassifier()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Log the model
+    mlflow.sklearn.log_model(model, "model")
+
+    # Log the parameters
+    mlflow.log_param("max_depth", model.get_params()['max_depth'])
+    mlflow.log_param("n_estimators", model.get_params()['n_estimators'])
+
+    # Log the metrics
+    mlflow.log_metric("accuracy", model.score(X_test, y_test))
+    mlflow.log_metric("loss", 1 - model.score(X_test, y_test))
+
+    # End the run
+    mlflow.end_run()
+    ```
+
+    This script uses the MLflow library to log the results of a machine learning experiment. It trains a Random Forest model on the iris dataset, logs the model, the parameters of the model, and the metrics of the model.
+
+    The script also uses the `mlflow.sklearn.log_model` function to log the model to MLflow, which is a centralized platform for tracking MLflow models.
+
+    The `mlflow.log_param` function is used to log parameters of the model, and the `mlflow.log_metric` function is used to log metrics of the model.
+
+    The `mlflow.end_run` function is used to end the

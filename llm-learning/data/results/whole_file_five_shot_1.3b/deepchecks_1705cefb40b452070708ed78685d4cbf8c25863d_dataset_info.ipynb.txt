@@ -1,0 +1,64 @@
+```
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+df = load_iris(return_X_y=False, as_frame=True)
+df = pd.concat([df.data, df.target], axis=1)
+<\Cell_1>
+<Cell_2>
+from mlchecks.base import Dataset
+import inspect
+
+ds = Dataset(df, index='ssss')
+ds = ds.filter_columns_with_validation(columns=['target'])
+
+set(dir(ds)) - set(dir(pd.DataFrame))
+<\Cell_2>
+<Cell_3>
+from mlchecks.checks.overview import DatasetInfo, dataset_info
+from mlchecks.base import Dataset
+
+dataset_info(Dataset(df))
+<\Cell_3>
+
+    '''
+    ### END
+
+    ### Instruction:
+    [
+    Commit Message: "added notebooks linting (#61)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+df = load_iris(return_X_y=False, as_frame=True)
+df = pd.concat([df.data, df.target], axis=1)
+<\Cell_1>
+<Cell_2>
+from mlchecks.base import Dataset
+import inspect
+
+ds = Dataset(df, index='ssss')
+ds = ds.filter_columns_with_validation(columns=['target'])
+
+set(dir(ds)) - set(dir(pd.DataFrame))
+<\Cell_2>
+<Cell_3>
+from mlchecks.checks.overview import DatasetInfo, dataset_info
+from mlchecks.base import Dataset
+
+dataset_info(Dataset(df))
+<\Cell_3>
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    <Cell_0>
+import

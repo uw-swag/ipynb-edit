@@ -1,0 +1,41 @@
+```python
+    import os
+    import sys
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.pipeline import Pipeline
+    from sklearn.impute import SimpleImputer
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
+    from deepchecks import Dataset
+    from deepchecks.base import BaseDataset
+    from deepchecks.checks import UnusedFeatures
+
+    class MyDataset(BaseDataset):
+        def __init__(self, df, label_name, cat_features):
+            super().__init__(df)
+            self.label_name = label_name
+            self.cat_features = cat_features
+            self.features = [f for f in df.columns if f not in [label_name]]
+
+        def prepare(self):
+            self.df[self.label_name] = self.df[self.label_name].astype(str)
+            for f in self.cat_features:
+                if f in self.df[f].unique():
+                    self.df[f] = self.df[f].astype('category')
+                else:
+                    print(f"Error: The feature '{f}' does not exist in the system path.")
+                    sys.exit(1)
+
+            self.label = self.df[self.label_name]
+            self.features = self.df.drop(self.label_name, axis=1)
+
+    name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+    lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+    features = [l.split(':')[0] for l in lines]
+    label_name = 'income'
+
+    cat_features = [l.split(':')[0] for l in

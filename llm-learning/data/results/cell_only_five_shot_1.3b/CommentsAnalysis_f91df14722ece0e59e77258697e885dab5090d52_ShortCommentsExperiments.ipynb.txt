@@ -1,0 +1,40 @@
+
+    '''
+    def replace_id(df):
+    comments_list = []
+    for comment in df.text.values:
+        c = comment.split()
+        if c[0].startswith('[id'):
+            c[0] = 'имя'
+        c_ = []
+        for w in c:
+            if w.startswith('id'):
+                c_.append('имя')
+            else:
+                c_.append(w)
+        comments_list.append(' '.join(c))
+    comments_list = np.array(comments_list)
+    df.text = comments_list
+
+    def fit_predict_to_n_user(comments, models, n=10, use_cache=True, debug=True, debug_score=True,
+                              with_additional=True, predict_proba=False, return_prediction=False):
+        unique_ids = None
+        if use_cache:
+            with open('unique_ids_{}.pkl'.format(n), 'rb') as f:
+                unique_ids = pickle.load(f)
+        else:
+            unique_ids = comments.from_id.value_counts()[comments.from_id.value_counts() >= n].index.values
+            additional_ids = comments.from_id.value_counts()[comments.from_id.value_counts() < n].index.values
+
+        train_idxs = unique_ids[:int(len(unique_ids) * 0.8)]
+        test_idxs = unique_ids[int(len(unique_ids) * 0.8):]
+
+        train_comments = comments[[i in train_idxs for i in comments.from_id]]
+        additional_comments = comments[[i in additional_ids for i in comments.from_id]]
+        train_comments = pd.concat((train_comments.reset_index(drop=True), additional_comments.reset_index(drop=True)))
+
+        test_comments = comments[[i in test_idxs for i in comments.from_id]]
+
+        if debug:
+            print('Before sampling:')
+            print(train_comments.is

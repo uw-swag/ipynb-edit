@@ -1,0 +1,52 @@
+
+Here's a new example and new installation documentation.
+
+## New Example
+
+This is a new example of how to use the `golearn` library in Go. The example loads a dataset from a CSV file, initializes a new KNN classifier, performs a training-test split, trains the classifier, and then makes predictions on the test data. It also calculates precision/recall metrics, and summarizes the results.
+
+## New Installation Documentation
+
+The `golearn` library is a Go package that provides various machine learning algorithms. To install it, you can use the following command:
+
+```bash
+go get github.com/sjwhitworth/golearn
+```
+
+After installing the library, you can import it in your Go code as follows:
+
+```go
+import (
+    "fmt"
+    "github.com/sjwhitworth/golearn/base"
+    "github.com/sjwhitworth/golearn/evaluation"
+    "github.com/sjwhitworth/golearn/knn"
+)
+```
+
+## Usage
+
+Here's a brief example of how to use the `golearn` library:
+
+```go
+import (
+    "fmt"
+    "github.com/sjwhitworth/golearn/base"
+    "github.com/sjwhitworth/golearn/evaluation"
+    "github.com/sjwhitworth/golearn/knn"
+)
+
+// Load in a dataset, with headers. Header attributes will be stored.
+// Think of instances as a Data Frame structure in R or Pandas.
+// You can also create instances from scratch.
+rawData, err := base.ParseCSVToInstances("iris.csv", false)
+
+//Initialises a new KNN classifier
+cls := knn.NewKnnClassifier("euclidean", 2)
+
+//Do a training-test split
+trainData, testData := base.InstancesTrainTestSplit(rawData, 0.50)
+cls.Fit(trainData)
+
+//Calculates the Euclidean distance and returns the most popular label
+predictions :=

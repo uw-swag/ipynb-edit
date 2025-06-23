@@ -1,0 +1,23 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.io import wavfile
+    from scipy.signal import stft
+
+    # Load the audio file
+    rate, data = wavfile.read('audio.wav')
+
+    # Compute the STFT
+    f, t, Zxx = stft(data, fs=rate, nperseg=1024, noverlap=512)
+
+    # Compute the magnitude spectrogram
+    magnitude_db = 20 * np.log10(np.abs(Zxx)**2)
+
+    # Plot the spectrogram
+    plt.pcolormesh(t, f, magnitude_db, shading='gouraud')
+    plt.title('Spectrogram')
+    plt.ylabel('Frequency [Hz]')
+    plt.xlabel('Time [s]')
+    plt.show()
+    ```
+    This code will load an audio file, compute the Short-Time Fourier Transform (STFT) of the audio, and then plot the magnitude spectrogram of the audio. The spectrogram is a visualization of the frequency content of the audio signal.

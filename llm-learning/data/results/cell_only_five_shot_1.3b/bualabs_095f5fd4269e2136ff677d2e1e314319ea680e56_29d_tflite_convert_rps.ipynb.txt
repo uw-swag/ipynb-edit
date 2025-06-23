@@ -1,0 +1,36 @@
+```python
+    #@title (Optional) Unfreeze some layers
+    NUM_LAYERS = 10 #@param {type:"slider", min:1, max:50, step:1}
+      
+    if do_fine_tuning:
+        feature_extractor.trainable = True
+    
+        for layer in model.layers[-NUM_LAYERS:]:
+            layer.trainable = True
+
+    else:
+        feature_extractor.trainable = False
+
+    # Intialize the TFLite converter to load the SavedModel
+    converter = tf.lite.TFLiteConverter.from_saved_model(RPS_SAVED_MODEL)
+    converter.experimental_new_converter = True
+
+    # Set the optimization strategy for 'size' in the converter 
+    converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+
+    # Convert the model
+    tflite_model = converter.convert()
+
+    # Save the model.
+    with open(MODEL_NAME, 'wb') as f:
+        f.write(tflite_model)
+
+    print('The TFLite model has been saved.')
+
+    #@title Visualize the outputs { run: "auto" }
+    index = 6 #@param {type:"slider", min:0, max:9, step:1}
+    plt.figure(figsize=(6,3))
+    plt.subplot(1,2,1)
+    plot_image(index, predictions, test_labels, test_imgs)
+    plt.show()
+    ```

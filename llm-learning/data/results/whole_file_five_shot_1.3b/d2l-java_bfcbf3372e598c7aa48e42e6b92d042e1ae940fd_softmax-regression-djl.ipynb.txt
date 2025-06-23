@@ -1,0 +1,28 @@
+```python
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    class SoftmaxRegression(nn.Module):
+        def __init__(self, input_dim, output_dim):
+            super(SoftmaxRegression, self).__init__()
+            self.linear = nn.Linear(input_dim, output_dim)
+
+        def forward(self, x):
+            return F.softmax(self.linear(x), dim=1)
+
+        def train(self, data, target, learning_rate, num_epochs):
+            for epoch in range(num_epochs):
+                for i, (data, target) in enumerate(data):
+                    output = self(data)
+                    loss = F.cross_entropy(output, target)
+
+                    optimizer = torch.optim.SGD(self.parameters(), lr=learning_rate)
+                    optimizer.zero_grad()
+                    loss.backward()
+                    optimizer.step()
+
+        def predict(self, data):
+            return self(data)
+    ```
+    This code defines a simple Softmax Regression model in PyTorch. The model takes an input of dimension `input_dim` and outputs a probability distribution over the classes. The model's `train` method implements the training loop, using stochastic gradient descent to minimize the cross-entropy loss function. The `predict` method simply applies the model to the input data.

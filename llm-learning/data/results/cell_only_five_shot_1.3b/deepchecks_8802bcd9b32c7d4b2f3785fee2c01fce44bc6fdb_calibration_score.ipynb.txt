@@ -1,0 +1,38 @@
+
+    The code you provided is a Python script that uses the deepchecks library to perform a calibration score check on a dataset. It also uses a logistic regression model to classify the data. However, the code is not complete and there are some issues with the syntax and the imports. Here is a corrected version of the code:
+
+```python
+from deepchecks.tabular.checks import CalibrationScore
+from deepchecks.tabular import Dataset
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+import pandas as pd
+import warnings
+
+def custom_formatwarning(msg, *args, **kwargs):
+    # ignore everything except the message
+    return str(msg) + '\n'
+
+warnings.formatwarning = custom_formatwarning
+from urllib.request import urlopen
+from sklearn.preprocessing import LabelEncoder
+
+name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+features = [l.split(':')[0] for l in lines]
+label_name = 'income'
+
+cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
+
+train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
+                       names=features + [label_name])
+test_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
+                      names=features + [label_name], skiprows=1)
+
+test_df[label_name] = test_df [label_name].str[:-1]
+
+encoder = LabelEncoder()
+encoder.fit(train_df[label_name])
+train

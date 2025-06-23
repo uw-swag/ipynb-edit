@@ -1,0 +1,34 @@
+```
+    import numpy as np
+    import scipy.stats as stats
+
+    # Create a dummmy dataset of 10 year old children's weight
+    data = np.random.randint(20, 40, 10)
+    print(data)
+
+    # Define the null hypothesis
+    H0 = "The average weight of 10 year old children is 32kg."
+
+    # Define the alternative hypothesis
+    H1 = "The average weight of 10 year old children is more than 32kg."
+
+    # Calculate the test statistics
+    t_stat, p_value = stats.ttest_1samp(data, 32)
+
+    # Print the results
+    print(f"Test statistics : {t_stat}")
+    print(f"p-value : {p_value}")
+
+    if p_value < 0.05:
+      print("Reject the null hypothesis.")
+    else:
+      print("Fail to reject the null hypothesis.")
+    ```
+
+    This code is used to perform a one-sample t-test to determine if the average weight of 10 year old children is significantly different from 32kg. The null hypothesis is that the average weight of the children is 32kg, and the alternative hypothesis is that it is more than 32kg.
+
+    The t-statistic is the test statistic, and the p-value is the probability that the results of the test are due to randomness. If the p-value is less than 0.05, we reject the null hypothesis and conclude that the average weight of the children is significantly different from 32kg.
+
+    The code also calculates the mean, standard deviation, and p-value for two datasets (week1 and week2). It then performs a paired t-test to compare the means of the two datasets. If the p-value is less than 0.05, we reject the null hypothesis and conclude that the means of the two datasets are significantly different.
+
+    The code also calculates a z-test to determine if the average weight of the children is significantly different from the average weight of the children in week1. If the p-value is less than 0.05, we reject the null

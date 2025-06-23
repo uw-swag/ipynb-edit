@@ -1,0 +1,36 @@
+
+The code you provided is already in a good structure. It's a good practice to follow a consistent structure for your code, which includes organizing your code into functions, classes, and modules. This makes it easier to read, maintain, and debug.
+
+Here's a suggested refactoring of your code:
+
+1. Create a separate function for each step of the pipeline, such as `load_data`, `preprocess_data`, `train_model`, and `evaluate_model`.
+2. Use a class to encapsulate the pipeline, and override the `fit` and `predict` methods to make the code more reusable and maintainable.
+
+Here's a refactored version of your code:
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OrdinalEncoder
+from sklearn.ensemble import RandomForestClassifier
+from deepchecks import Dataset
+from deepchecks.checks import UnusedFeatures
+
+def load_data():
+    name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+    lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+    features = [l.split(':')[0] for l in lines]
+    label_name = 'income'
+
+    cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
+
+    train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
+                           names=features + [label_name])

@@ -1,0 +1,55 @@
+```python
+    # Import necessary libraries
+    from evidently.profile import DataDriftProfileSection
+    from evidently.profile.sections.data_drift import DataDriftProfileSection
+    import json
+
+    # Define the function to evaluate data drift
+    def eval_drift(reference, production, column_mapping):
+        # Initialize the data_drift_profile
+        data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+
+        # Calculate the data_drift_profile
+        data_drift_profile.calculate(reference, production, column_mapping=column_mapping)
+
+        # Convert the profile to JSON
+        report = data_drift_profile.json()
+
+        # Load the JSON report
+        json_report = json.loads(report)
+
+        # Initialize the list to store the drifts
+        drifts = []
+
+        # Iterate over the numerical and categorical features
+        for feature in column_mapping.numerical_features + column_mapping.categorical_features:
+            # Append the p-value of the feature to the drifts list
+            drifts.append((feature, json_report['data_drift']['data']['metrics'][feature]['p_value']))
+
+        # Return the drifts
+        return drifts
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "fix mlflow examples (#208)"
+    Original Code Cells:
+    '''
+    # Import necessary libraries
+    import mlflow
+    from mlflow.tracking import MlflowClient
+
+    # Define the function to log metrics
+    def log_metrics(run_id, metrics):
+        mlflow.log_metrics(metrics)
+
+    # Define the function to log parameters
+    def log_parameters(run_id, parameters):
+        mlflow.log_params(parameters)
+
+    # Define the function to log artifacts
+    def log_artifacts(run_id, local_path, artifact_path):
+        mlflow.log_artifact(local_path, artifact_path)
+
+    # Define the function to start a run
+    def start_run(run_name):

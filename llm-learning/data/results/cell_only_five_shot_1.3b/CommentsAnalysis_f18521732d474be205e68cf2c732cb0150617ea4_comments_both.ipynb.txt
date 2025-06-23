@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added model prediction is_gum not for comment but for user"
+    Original Code Cells:
+    '''
+    (em_proportion_rep > 0.25).sum()
+comments_list[em_proportion_rep > 0.25][:20]
+(em_proportion_no_rep > 0.1).sum()
+comments_list[em_proportion_rep > 0.1][:20]
+sum(abc_proportion < 0.4)
+comments_list[abc_proportion < 0.4][:20]
+comments_for_char = []
+for l, c in zip(comments_lenghts, comments_list):
+    if l > 50:
+        comments_for_char.append(c)
+plt.plot(range(len(counter.values()))[:100], [x[1] for x in counter.most_common()[:100]]);
+max_len = 40
+step = 8
+sentences = []
+next_chars = []
+model = Sequential()
+model.add(LSTM(256, input_shape=(max_len, len(char_set) + 1)))
+model.add(Dense(len(char_set) + 1))
+model.add(Activation('softmax'))
+
+optimizer = Adam(lr=0.001)
+model.compile(optimizer, 'categorical_crossentropy')
+def sample(preds, temperature=1.0):
+    # helper function to sample an index from a probability array
+    preds = np.asarray(preds).astype('float64')
+    preds = np.log(preds) / temperature
+    exp_preds = np.exp(preds)
+    preds = exp_preds / np.sum(exp_preds)
+    probas = np.random.multinomial(1, preds, 1)
+    return np.argmax(probas)
+np.random.multinomial(1, [0.7, 0.2, 0.05, 0.01,

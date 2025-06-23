@@ -1,0 +1,59 @@
+```python
+    # Example/tracing tutorial (#1242)
+
+    # Tracing in Python is a powerful feature that allows you to monitor the execution of your code,
+    # especially in production environments.
+
+    # Let's start with a simple example.
+
+    import logging
+
+    # Set up a logger
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+
+    # Create a handler that writes messages to the console
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    logger.addHandler(console_handler)
+
+    # Now, let's say we have a function that takes a long time to execute.
+    # We want to be able to see what's happening during this time.
+
+    def slow_function():
+        import time
+        time.sleep(2)  # This function will take 2 seconds to complete
+
+    # Before we call the function, we want to know what's happening.
+    # We can do this by setting up a tracer.
+
+    from contextvars import ContextVar
+    tracer = ContextVar('tracer')
+
+    def set_tracer(t):
+        tracer.get_and_set(t)
+
+    from opentracing import Tracer
+    tracer = Tracer()
+    set_tracer(tracer)
+
+    # Now, we can start a span
+    span = tracer.start_span('slow_function_span')
+
+    # We'll use the span to record events
+    span.log_kv({'event': 'started', 'message': 'Slow function started'})
+
+    # Call the function
+    slow_function()
+
+    # And we'll end the span
+    span.log_kv({'event': 'finished', 'message': 'Slow function finished'})
+    span.finish()
+
+    # Now, if we look at the logs, we'll see what's happening
+    logger.info('Slow function finished')
+
+    # And if we look at the tracing UI, we'll see the same thing
+    ```
+
+    This is a simple example of tracing in Python

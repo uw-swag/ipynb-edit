@@ -1,0 +1,54 @@
+
+    '''
+    Commit Message: "KNN for Classification"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# primary data structure libraries
+import pandas as pd
+import numpy as np
+
+# primary plotting library
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from matplotlib.ticker import NullFormatter
+import matplotlib.ticker as ticker
+
+# primary machine learning library
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import metrics
+
+# optional: for ggplot-like style of plots
+mpl.style.use(['ggplot']) 
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv('teleCust1000t.csv')
+df.head()
+<\Cell_1>
+<Cell_2>
+df['custcat'].value_counts()
+<\Cell_2>
+<Cell_3>
+df.hist(column='income', bins=50)
+<\Cell_3>
+<Cell_4>
+df.columns
+<\Cell_4>
+<Cell_5>
+X = df[['region', 'tenure','age', 'marital', 'address', 'income', 'ed', 'employ','retire', 'gender', 'reside']] .values  #.astype(float)
+X[0:5]
+<\Cell_5>
+<Cell_6>
+y = df['custcat'].values
+y[0:5]
+<\Cell_6>
+<Cell_7>
+X = preprocessing.StandardScaler().fit(X).transform(X.astype(float))
+X[0:5]
+<\Cell_7>
+<Cell_8>
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=4)
+print ('Train set:', X_train.shape,  y_train.shape)

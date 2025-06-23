@@ -1,0 +1,42 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.ml.evaluation import BinaryClassificationEvaluator
+    from pyspark.ml.classification import LogisticRegression
+    from pyspark.ml.feature import VectorAssembler
+    from pyspark.ml.feature import IndexToString
+    from pyspark.ml.feature import StringIndexer
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Training Loop").getOrCreate()
+
+    # Load training data
+    df = spark.read.format("libsvm").load("data/mllib/sample_libsvm_binary.txt")
+
+    # Index labels
+    labelIndexer = StringIndexer(inputCol="label", outputCol="indexedLabel").fit(df)
+
+    # Assemble features
+    assembler = VectorAssembler(
+        inputCols=["indexedLabel", "features"],
+        outputCol="vector")
+
+    # Train Logistic Regression Model
+    lr = LogisticRegression(maxIter=10)
+
+    # Fit model
+    lrModel = lr.fit(df)
+
+    # Make predictions
+    predictions = lrModel.transform(df)
+
+    # Select (prediction, true label) and compute test error
+    evaluator = BinaryClassificationEvaluator(rawPredictionCol="rawPrediction")
+    testError = evaluator.evaluate(predictions)
+    print("Test Error = %g" % (1 - testError))
+
+    # Save model
+    lrModel.save("models/lr")
+
+    # Stop the session
+    spark.stop()
+    ```

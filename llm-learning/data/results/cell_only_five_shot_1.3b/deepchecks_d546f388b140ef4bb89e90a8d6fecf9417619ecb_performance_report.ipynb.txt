@@ -1,0 +1,18 @@
+```python
+    from deepchecks.vision.datasets.classification.mnist import (
+    load_model, 
+    load_dataset, 
+    MNistNet, 
+)
+    train_ds = load_dataset(train=True, object_type='Dataset')
+    test_ds = load_dataset(train=False, object_type='Dataset')
+    from deepchecks.vision.datasets.detection import coco
+    import numpy as np
+    yolo = coco.get_trained_yolov5_object_detection()
+    coco_dataloader = coco.get_coco_dataloader()
+    from deepchecks.vision.dataset import VisionData
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+    train_ds = VisionData(coco_dataloader, label_transformer=DetectionLabelFormatter(lambda x: x), num_classes=80)
+    ```
+
+    The code above is updated to split the Coco dataset into training and testing sets. The `load_dataset` function is used to load the training and testing datasets. The `VisionData` class is used to wrap the dataloader and label transformer, which is necessary for the DeepChecks vision module. The `coco.get_trained_yolov5_object_detection` and `coco.get_coco_dataloader` functions are used to get the YOLOv5 object detection model and the Coco dataloader, respectively. The `VisionData` class is used to wrap the dataloader and label transformer, which is necessary for the DeepChecks vision module. The `coco.get_trained_yolov5_object_detection` and `coco.get_coco_dataloader` functions are used to get the YOLOv5 object detection model and the Coco dataloader, respectively.

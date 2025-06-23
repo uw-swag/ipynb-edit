@@ -1,0 +1,36 @@
+```python
+    import ai.djl.*;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.index.NDIndex;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.engine.*;
+import ai.djl.training.GradientCollector;
+import ai.djl.nn.Block;
+import ai.djl.nn.convolutional.Conv2d;
+import ai.djl.training.loss.Loss;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.Trainer;
+import ai.djl.training.TrainingConfig;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.nn.ParameterList;
+import ai.djl.training.optimizer.Optimizer;
+import ai.djl.training.optimizer.learningrate.LearningRateTracker;
+
+    # Rename LearningRateTracker to Tracker
+    class LearningRateTracker:
+        def __init__(self, initial_lr, final_lr, steps):
+            self.initial_lr = initial_lr
+            self.final_lr = final_lr
+            self.steps = steps
+            self.current_step = 0
+
+        def get_current_lr(self):
+            if self.current_step < self.steps:
+                fraction_done = self.current_step / self.steps
+                current_lr = self.initial_lr + fraction_done * (self.final_lr - self.initial_lr)
+                self.current_step += 1
+            else:
+                current_lr = self.final_lr
+            return current_lr
+    ```

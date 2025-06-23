@@ -1,0 +1,31 @@
+```python
+    import numpy as np
+    from sklearn.metrics import accuracy_score
+
+    # Original code cells
+    mat = np.asarray(all_cnns)
+    y_true1 = np.mean(mat, axis=0)
+    y_true2 = y_true1.round().astype(int)
+    score = accuracy_score(y_true2, y_true.age)
+    print(score)
+
+    # Four-year-olds to be read by experts
+    mat1 = mat.round().astype('int')
+    filter = np.tile(y_true2, (17,1))
+    print(filter.shape)
+    print(mat1.shape)
+    print(filter[0:17,0])
+    print(mat1[0:17, 0])
+
+    PA = (mat1==filter).astype('int')
+    print(PA)
+    print(np.mean(PA, axis=1))
+
+    # Four-year-olds to be read by experts
+    print("#b4_min, b5_min, b6_min, m_min, l_min, \n",
+          "#b4_middle, b5_middle, b6_middle, m_middle, l_middle, b4_max, b5_max, b6_max, m_max, l_max, m_all, l_all\n",
+          "#| 89.5 | 89.3 | 88.2 | 89.7 | 89.9 |\n",
+          "#| 88.2 | 89.5 | 90.9 | 91.1 | 87.8 |\n",
+          "#| 87.6 | 90.5 | 88.0 | 89.5 | 90.3 |\n",
+          "#| -   | -    | -    | 91.3 | 91.1 |")
+    ```

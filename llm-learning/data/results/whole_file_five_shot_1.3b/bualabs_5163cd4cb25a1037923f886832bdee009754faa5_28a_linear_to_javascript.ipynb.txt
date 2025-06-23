@@ -1,0 +1,39 @@
+```javascript
+    // Linear Regression in JavaScript
+    class LinearRegression {
+        constructor(x, y) {
+            this.slope = this.calculateSlope(x, y);
+            this.intercept = this.calculateIntercept(x, y);
+        }
+
+        calculateSlope(x, y) {
+            let mean_x = this.mean(x), mean_y = this.mean(y);
+            let ss_x = this.squareSum(x) - (mean_x * (x.length));
+            let ss_y = this.squareSum(y) - (mean_y * (y.length));
+            let slope = ss_y * ss_x / (ss_x * ss_x);
+            return slope;
+        }
+
+        calculateIntercept(x, y) {
+            let mean_x = this.mean(x);
+            let mean_y = this.mean(y);
+            return mean_y - (this.slope * mean_x);
+        }
+
+        mean(data) {
+            let sum = data.reduce((previous, current) => current += previous, 0);
+            return sum / data.length;
+        }
+
+        squareSum(data) {
+            return data.reduce((previous, current) => current += previous, 0) * data.length;
+        }
+    }
+
+    // Usage
+    let x = [1, 2, 3, 4, 5];
+    let y = [2, 4, 5, 4, 5];
+    let model = new LinearRegression(x, y);
+    console.log(model.slope);
+    console.log(model.intercept);
+    ```

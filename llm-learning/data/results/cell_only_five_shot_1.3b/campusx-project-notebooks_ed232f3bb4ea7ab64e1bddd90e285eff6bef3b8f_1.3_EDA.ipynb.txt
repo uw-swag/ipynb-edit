@@ -1,0 +1,24 @@
+```python
+    # Rename the directory
+    import os
+    import shutil
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Define the old and new directory names
+    old_dir_name = "old_dir"
+    new_dir_name = "new_dir"
+
+    # Define the path to the directory
+    dir_path = os.path.join(cwd, old_dir_name)
+
+    # Check if the old directory exists
+    if os.path.exists(dir_path):
+        # Rename the old directory to the new one
+        new_dir_path = os.path.join(cwd, new_dir_name)
+        os.rename(dir_path, new_dir_path)
+        print(f"Directory '{old_dir_name}' renamed to '{new_dir_name}'")
+    else:
+        print(f"Directory '{old_dir_name}' not found")
+    ```

@@ -1,0 +1,30 @@
+```python
+    import mlchecks.checks as checks
+
+    def mixed_nulls(df):
+        """
+        This function checks if the dataframe has mixed nulls.
+
+        Parameters:
+        -----------
+            df : (pandas.DataFrame)
+
+        Returns:
+        --------
+            mixed_nulls : (bool)
+        """
+        return checks.mixed_nulls(df)
+
+    # Testing the function
+    data = {'col1': ['sog', '1', 'cat', None, None], 'col2':['', '', 'None', 'a', 'b'], 'col3': [1,2,3,4,5]}
+    dataframe = pd.DataFrame(data=data)
+    print(mixed_nulls(dataframe))
+
+    data = {'col1': ['nan', None, 'null', 'Nan', '1', 'cat'], 'col2':['', '', 'None', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+    dataframe = pd.DataFrame(data=data)
+    print(mixed_nulls(dataframe))
+    ```
+
+    The function `mixed_nulls` checks if the dataframe has mixed nulls. It returns `True` if the dataframe has mixed nulls, and `False` otherwise.
+
+    The function is tested with two dataframes: one with some non-null values and one with mixed nulls.

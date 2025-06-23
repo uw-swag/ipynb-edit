@@ -1,0 +1,23 @@
+```python
+    import numpy as np
+
+    from deepchecks.vision.base import VisionData
+    from deepchecks.vision.checks.performance import MeanAveragePrecisionReport
+    from deepchecks.vision.datasets.detection import coco
+
+    # Split the dataset into train and test
+    train_data, test_data = train_data.split(0.8)
+
+    # Create a DeepChecks VisionData object for the train data
+    train_data_obj = VisionData.from_dataset(train_data)
+
+    # Create a DeepChecks VisionData object for the test data
+    test_data_obj = VisionData.from_dataset(test_data)
+
+    # Create a MeanAveragePrecisionReport object
+    mAP_report = MeanAveragePrecisionReport(test_data_obj)
+
+    # Run the report
+    mAP_report.run()
+    ```
+    This code splits the original dataset into a training set and a test set, then creates a DeepChecks VisionData object for each dataset. The MeanAveragePrecisionReport object is then created and the report is run, which will provide a report of the Mean Average Precision (mAP) for the test set.

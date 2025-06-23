@@ -1,0 +1,32 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn import datasets
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Loading the iris dataset
+    iris = datasets.load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Creating a Perceptron classifier
+    perceptron = MLPClassifier(hidden_layer_sizes=(10,), max_iter=1000)
+
+    # Training the Perceptron classifier
+    perceptron.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = perceptron.predict(X_test)
+
+    # Evaluating the classifier
+    print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
+
+    # Displaying the image
+    plt.imshow(X[0].reshape((20, 20)), cmap='gray')
+    plt.show()
+    ```

@@ -1,0 +1,18 @@
+```
+    x_train = np.array([1.0,2.0 ],dtype=np.int64) #features
+    y_train = np.array([300.0, 500.0],dtype=np.int64) #target values
+
+    x_train = x_train.reshape(-1,1)
+    y_train = y_train.reshape(-1,1)
+
+    from sklearn.linear_model import LinearRegression
+    model = LinearRegression()
+    model.fit(x_train, y_train)
+
+    x_test = np.array([4.0,5.0],dtype=np.int64)
+    x_test = x_test.reshape(-1,1)
+
+    y_pred = model.predict(x_test)
+
+    print(y_pred)
+    ```

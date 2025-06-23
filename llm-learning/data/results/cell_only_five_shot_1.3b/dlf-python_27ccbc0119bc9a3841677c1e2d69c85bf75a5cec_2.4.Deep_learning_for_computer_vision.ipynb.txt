@@ -1,0 +1,44 @@
+```python
+    from flask import Flask, request
+    from werkzeug.utils import secure_filename
+    import os
+    import shutil
+
+    app = Flask(__name__)
+
+    @app.route('/upload', methods=['POST'])
+    def upload_file():
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return 'File uploaded successfully'
+        else:
+            return 'Invalid file type'
+
+    def allowed_file(filename):
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+    if __name__ == '__main__':
+        app.run(debug=True)
+    ```
+    This code creates a Flask application that allows users to upload files. The `upload_file` function is a route that handles POST requests. If the request contains a file, the function checks if it's an allowed file type, saves it to the upload folder, and returns a success message. If the file is not an allowed type, the function returns an error message.
+
+    The `allowed_file` function checks if a filename has an extension and if it's in the list of allowed extensions.
+
+    The `ALLOWED_EXTENSIONS` configuration variable is a list of allowed file extensions.
+
+    The `UPLOAD_FOLDER` configuration variable is the directory where uploaded files will be saved.
+
+    The `secure_filename` function is used to ensure that the filename is safe to use in a URL and does not contain any disallowed characters.
+
+    The `os` and `shutil` modules are used to save the file to the upload folder and to delete it after it's been uploaded.
+
+    The `werkzeug.utils` module is used to secure the filename.
+
+    The `flask` module is used to create the Flask application.
+
+    The `@app.route` decor

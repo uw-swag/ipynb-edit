@@ -1,0 +1,21 @@
+```python
+    from torch.optim.lr_scheduler import StepLR
+
+    # Define the learning rate scheduler
+    scheduler = StepLR(optimizer, step_size=7, gamma=0.1)
+
+    # Training loop
+    for epoch in range(epochs):
+        for batch in dataloader:
+            # Forward pass
+            outputs = model(batch)
+            loss = criterion(outputs, labels)
+
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            # Update the learning rate
+            scheduler.step()
+    ```

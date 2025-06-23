@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Mlc 97 (#81)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from mlchecks.checks.integrity.data_duplicates import data_duplicates
+from mlchecks.base import Dataset, CheckSuite
+from datetime import datetime
+import pandas as pd
+
+<\Cell_0>
+<Cell_1>
+ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],"col2":[1,2,1,2,1,2,1,2,1,2]})
+<\Cell_1>
+<Cell_2>
+data_duplicates(ds)
+<\Cell_2>
+<Cell_3>
+data_duplicates(ds, n_to_show=2)
+<\Cell_3>
+<Cell_4>
+data_duplicates(ds, columns=["col1"])
+<\Cell_4>
+<Cell_5>
+data_duplicates(ds, ignore_columns=["col3"])
+<\Cell_5>
+<Cell_6>
+ds_no_dups = ds = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2,1,2]})
+<\Cell_6>
+<Cell_7>
+data_duplicates(ds_no_dups)
+<\Cell_7>
+<Cell_8>
+data_duplicates(ds_no_dups, ignore_columns=["col3"])
+<\Cell_8>
+<Cell_9>
+<Cell_10>
+data_duplicates(ds_no_dups, ignore_columns=["col3"])
+<\Cell_10>
+<Cell_11>
+data_duplicates(ds_no_dups, columns=["col1"])
+<\Cell_11>
+<Cell_12>
+data_duplicates(ds_no_dups, ignore_columns=

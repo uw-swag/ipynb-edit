@@ -1,0 +1,42 @@
+
+    '''
+    import sys
+    sys.path.append("../../")
+    import os
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from PIL import Image
+    import scrapbook as sb
+    import torch
+    import torchvision
+    from torchvision import transforms
+
+    from utils_cv.classification.data import Urls as UrlsIC
+    from utils_cv.common.data import unzip_url
+    from utils_cv.common.gpu import which_processor, is_windows
+    from utils_cv.detection.data import Urls as UrlsOD
+    from utils_cv.detection.dataset import DetectionDataset, get_transform
+    from utils_cv.detection.model import DetectionLearner, get_pretrained_fasterrcnn
+    from utils_cv.detection.plot import plot_detection_vs_ground_truth, plot_grid 
+
+    # Change matplotlib backend so that plots are shown on windows machines
+    if is_windows():
+        plt.switch_backend('TkAgg')
+
+    print(f"TorchVision: {torchvision.__version__}")
+    which_processor()
+    # Path to training images, and to the negative images 
+    DATA_PATH = unzip_url(UrlsOD.fridge_objects_path, exist_ok=True)
+    NEG_DATA_PATH = unzip_url(UrlsIC.fridge_objects_negatives_path, exist_ok=True)
+
+    # Number of negative images to add to the training set after each negative mining iteration. 
+    # Here set to 10, but this value should be around 10-20% of the total number of images in the training set.
+    NEGATIVE_NUM = 10
+
+    # Model parameters corresponding to the "fast_inference" parameters in the 03_training_accuracy_vs_speed notebook.
+    EPOCHS = 10
+    LEARNING_RATE = 0.005
+    IM_SIZE = 500
+    BATCH_SIZE = 2 
+
+    # Use GPU

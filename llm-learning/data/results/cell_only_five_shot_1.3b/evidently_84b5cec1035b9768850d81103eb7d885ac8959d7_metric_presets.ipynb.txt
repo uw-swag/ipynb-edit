@@ -1,0 +1,37 @@
+```python
+    # New data drift metrics
+
+    from evidently import ColumnMapping
+    from evidently.report import Report
+    from evidently.metrics.data_integrity_metrics import DataIntegrityMetrics
+    from evidently.metrics.data_integrity_metrics import DataIntegrityValueByRegexpMetrics
+    from evidently.metrics.data_integrity_metrics import DataIntegrityNullValuesMetrics
+    from evidently.metrics.data_drift_metrics import DataDriftMetrics
+    from evidently.metrics.regression_performance_metrics import RegressionPerformanceMetrics
+    from evidently.metrics.data_quality_metrics import DataQualityMetrics
+    from evidently.metrics.data_quality_metrics import DataQualityStabilityMetrics
+    from evidently.metrics.data_quality_metrics import DataQualityValueListMetrics
+    from evidently.metrics.data_quality_metrics import DataQualityValueRangeMetrics
+    from evidently.metrics.data_quality_metrics import DataQualityValueQuantileMetrics
+    from evidently.metrics.data_quality_metrics import DataQualityCorrelationMetrics
+
+    # make one feature drifted
+    curr['education-num'] = 0
+    data_mapping = ColumnMapping(target='target', prediction='preds')
+    curr.head()
+
+    # Create a report
+    report = Report(metrics=[DataIntegrityMetrics(), DataDriftMetrics(), RegressionPerformanceMetrics()])
+
+    # Generate report
+    report.generate(curr, data_mapping=data_mapping)
+
+    # Get metrics
+    metrics = report.get_metrics()
+
+    # Print metrics
+    for metric in metrics:
+        print(metric)
+    ```
+
+    This code will generate a report with the new data drift metrics. The report will show the data integrity, data drift, and regression performance metrics for the current data.

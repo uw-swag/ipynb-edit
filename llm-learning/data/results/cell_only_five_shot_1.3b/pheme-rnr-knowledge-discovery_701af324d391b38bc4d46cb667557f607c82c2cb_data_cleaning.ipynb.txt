@@ -1,0 +1,19 @@
+```python
+    # Importing necessary libraries
+    import matplotlib.pyplot as plt
+    from sklearn.manifold import TSNE
+    from sklearn.decomposition import PCA
+
+    # Performing PCA
+    pca = PCA(n_components=2)
+    principalComponents = pca.fit_transform(thrd_data)
+
+    # Performing t-SNE
+    tsne = TSNE(n_components=2, random_state=0)
+    tsne_data = tsne.fit_transform(principalComponents)
+
+    # Plotting t-SNE
+    plt.figure(figsize=(10, 8))
+    plt.scatter(tsne_data[:, 0], tsne_data[:, 1])
+    plt.show()
+    ```

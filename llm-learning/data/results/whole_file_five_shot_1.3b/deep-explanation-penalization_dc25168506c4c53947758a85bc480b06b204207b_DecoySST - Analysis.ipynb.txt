@@ -1,0 +1,22 @@
+
+The code you've provided is a part of a larger process that involves loading a set of trained models, analyzing their performance, and then creating some visualizations. Here's a brief explanation of what each part of the code does:
+
+1. `import os` and `import sys`: These lines import the necessary modules.
+
+2. `trained_model_folder = '../models/trained_models'`: This line sets the folder where the trained models are stored.
+
+3. `fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'annot' in fname])`: This line gets the names of all the files in the trained_models folder that end with 'annot'.
+
+4. `results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)]`: This line loads the hyperparameters and weights of each trained model.
+
+5. `results = pd.concat(results_list, axis=1).T.infer_objects()`: This line concatenates the results of all the models into a single DataFrame.
+
+6. `results = results[results.which_adversarial == "annotated"]`: This line filters the results to only include the models that were adversarially trained.
+
+7. `results["Test Accuracy"] = [int(max(x)) for x in results["accs_test"]]`: This line adds a new column to the results DataFrame that contains the maximum test accuracy achieved by each model.
+
+8. `results.columns`: This line prints the current columns in the results DataFrame.
+
+9. `my_results = results[results.num_iters ==4]`: This line filters the results to only include the models that reached the 4th iteration.
+
+10. `my_results[[ 'Test Accuracy', 'final_train_loss', 'final_test_loss', 'signal_strength' ]].groupby(by = ['signal_strength']).mean()`: This line calculates the mean of the 'Test Accuracy', 'final_train_loss', 'final_test_loss

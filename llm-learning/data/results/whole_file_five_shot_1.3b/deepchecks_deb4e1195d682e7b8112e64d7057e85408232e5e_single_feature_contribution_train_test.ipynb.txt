@@ -1,0 +1,44 @@
+
+    '''
+<Cell_3>
+# Check core SDK version number
+print(f"Azure ML SDK Version: {azureml.core.VERSION}")
+<\Cell_3>
+<Cell_4>
+# Let's define these variables here - These pieces of information can be found on the portal
+subscription_id = os.getenv("SUBSCRIPTION_ID", default="<our_subscription_id>")
+resource_group =  os.getenv("RESOURCE_GROUP", default="<our_resource_group>")
+workspace_name = os.getenv("WORKSPACE_NAME", default="<our_workspace_name>")  # (e.g. "myworkspace")
+
+try:
+    # Let's load the workspace from a configuration file
+    ws = Workspace.from_config()
+    print("Workspace was loaded successfully from the configuration file")
+except:
+    # or directly from Azure, if it already exists (exist_ok=True).
+    # If it does not exist, let's create a workspace from scratch
+    ws = Workspace.create(name=workspace_name,
+                          subscription_id=subscription_id,
+                          resource_group=resource_group,
+                          location=workspace_region,
+                          create_resource_group=True,
+                          exist_ok=True
+                         )
+<\Cell_4>
+<Cell_5>
+# Create a new/Retrieve an existing experiment
+experiment_name = 'image-classif-websvc'
+experiment = Experiment(workspace=ws, name=experiment_name)
+print(f"New/Existing experiment:\n \
+      --> Name: {experiment.name}\n \
+      --> Workspace name: {experiment.workspace.name}")
+<\Cell_5>
+<Cell_6>
+# Create the Docker image
+docker_image = ContainerImage.create(
+    name = "image-classif-websvc",
+    models = [model], # the model is passed as part of a list
+    image_config = image_config,
+    workspace = ws
+)
+<\Cell_6

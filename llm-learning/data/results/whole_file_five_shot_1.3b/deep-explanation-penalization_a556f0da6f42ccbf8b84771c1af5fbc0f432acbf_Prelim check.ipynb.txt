@@ -1,0 +1,57 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "added results and code for only eval on iid"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%load_ext autoreload
+%autoreload 2
+<\Cell_0>
+<Cell_1>
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import numpy as np
+import torch.utils.data as utils
+import torch
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+import pickle as pkl
+
+from os.path import join as oj
+import matplotlib.pyplot as plt
+%matplotlib inline
+import os
+import seaborn as sns
+sns.set()
+<\Cell_1>
+<Cell_2>
+import torch
+import torchvision
+import torchvision.datasets as datasets
+import sys
+import matplotlib.pyplot as plt
+import numpy as np
+import torch.utils.data as utils
+from sklearn.metrics import auc,average_precision_score, roc_curve,roc_auc_score
+<\Cell_2>
+save_path = "../results_for_export"
+<\Cell_2>
+<Cell_3>
+device = torch.device("cuda")
+<\Cell_3>
+<Cell_4>
+data_root  = "../../../datasets/ISIC"
+data_transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                             std=[0.229, 0.224, 0.225])
+    ])
+img_dataset = datasets.ImageFolder(data_root,transform=data_transform)
+num_total = len(img_dataset)
+num_train = int(0.8 * num_total)
+num_val = int(0.1 * num_total)
+num_test = num_total - num_train -

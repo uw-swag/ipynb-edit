@@ -1,0 +1,49 @@
+
+    # Import the libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    %matplotlib inline
+
+    # Import the dataset
+    dataset = pd.read_csv('Data.csv')
+
+    X = dataset.iloc[:, :-1].values
+    Y = dataset.iloc[:, 1].values
+
+    from sklearn.model_selection import train_test_split
+
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=1/3, random_state=0)
+
+    from sklearn.linear_model import LinearRegression
+
+    regressor = LinearRegression()
+    regressor.fit(X_train, Y_train)
+
+    y_pred = regressor.predict(X_test)
+
+    plt.scatter(X_test, Y_test, color='red')
+    plt.plot(X_train, regressor.predict(X_train), color='blue')
+    plt.title('Salary vs experience(test set)')
+    plt.xlabel('years of experience')
+    plt.ylabel('salary')
+    plt.show()
+
+    ### Instruction:
+    [
+    Commit Message: "Adding nblinks instead of copy (#292)"
+    Original Code Cells:
+    '''
+    # importing all existing checks for demonstration simplicity
+    from deepchecks.checks import *
+    from deepchecks import Suite
+    from sklearn.metrics import precision_score, recall_score
+
+    # The Suite's first argument is its name, and then all of the check objects.
+    # Some checks can receive arguments when initialized (all check arguments have default values)
+    # Each check can have an optional condition(/s)
+    # Multiple conditions can be applied subsequentially
+    new_custom_suite = Suite('Simple Suite For Model Performance',
+        ModelInfo(),
+        PerformanceReport(alternative_metrics={'Recall': recall_score, 'Precision': precision_score}),
+        TrainTestDifferenceOverfit(

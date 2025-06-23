@@ -1,0 +1,29 @@
+```python
+    class ClassPerformanceImbalanceCheck:
+        def __init__(self, model, X, y, class_weight='balanced'):
+            self.model = model
+            self.X = X
+            self.y = y
+            self.class_weight = class_weight
+
+        def check(self):
+            from sklearn.utils import class_weight
+            from sklearn.metrics import classification_report
+
+            # Calculate class weights
+            class_weights = class_weight(self.y, class_weight=self.class_weight)
+
+            # Train the model with class weights
+            self.model.fit(self.X, self.y, class_weight=class_weights)
+
+            # Predict the labels
+            y_pred = self.model.predict(self.X)
+
+            # Print the classification report
+            print(classification_report(self.y, y_pred))
+
+            # Return the model
+            return self.model
+    ```
+
+    This class is used to check the performance of a model when the classes in the dataset are imbalanced. It calculates the class weights based on the 'balanced' strategy, which assigns higher weight to under-represented classes and lower weight to over-represented classes. The model is then trained with these class weights and the performance of the model is printed.

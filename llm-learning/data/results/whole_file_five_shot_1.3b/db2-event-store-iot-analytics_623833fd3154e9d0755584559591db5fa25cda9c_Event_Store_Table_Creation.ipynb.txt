@@ -1,0 +1,54 @@
+```
+    [
+    Commit Message: "More notebook work"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# Set your host IP address
+HOST = "XXX.XXX.XXX.XXX"
+
+# Port will be 1100 for version 1.1.2 or later (5555 for version 1.1.1)
+PORT = "1100"
+
+# Database name
+DB_NAME = "TESTDB"
+
+# Table name
+TABLE_NAME = "IOT_TEMPERATURE"
+<\Cell_0>
+<Cell_1>
+from eventstore.common import ConfigurationReader
+from eventstore.oltp import EventContext
+from eventstore.sql import EventSession
+from pyspark.sql import SparkSession
+<\Cell_1>
+<Cell_2>
+endpoint = HOST + ":" + PORT
+print("Event Store connection endpoint:", endpoint)
+ConfigurationReader.setConnectionEndpoints(endpoint)
+<\Cell_2>
+<Cell_3>
+sparkSession = SparkSession.builder.appName("EventStore SQL in Python").getOrCreate()
+eventSession = EventSession(sparkSession.sparkContext, DB_NAME)
+<\Cell_3>
+<Cell_4>
+# Run this cell if you need to (DROP and/or) CREATE the database.
+
+# EventContext.drop_database(DB_NAME)   # Uncomment this if you want to drop an existing database
+EventContext.create_database(DB_NAME)   # Comment this out (or skip this cell) to re-use an existing database
+<\Cell_4>
+<Cell_5>
+eventSession.open_database()
+<\Cell_5>
+<Cell_6>
+with EventContext.get_event_context(DB_NAME) as ctx:
+   print("Event context successfully retrieved.")
+
+print("Table names:")
+table_names = ctx.get_names_of_tables()
+for name in table_names:
+   print(name)
+<\Cell_6>
+<Cell_7>
+from eventstore.catalog import TableSchema
+from pyspark.sql.types import *

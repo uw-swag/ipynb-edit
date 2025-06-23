@@ -1,0 +1,39 @@
+```python
+    import torch
+
+    # Define a simple neural network
+    class Net(torch.nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.conv1 = torch.nn.Conv2d(1, 32, 3, 1)
+            self.conv2 = torch.nn.Conv2d(32, 64, 3, 1)
+            self.dropout1 = torch.nn.Dropout2d(0.25)
+            self.dropout2 = torch.nn.Dropout2d(0.5)
+            self.fc1 = torch.nn.Linear(9216, 128)
+            self.fc2 = torch.nn.Linear(128, 10)
+
+        def forward(self, x):
+            x = self.conv1(x)
+            x = torch.nn.functional.relu(x)
+            x = self.conv2(x)
+            x = torch.nn.functional.relu(x)
+            x = torch.nn.functional.max_pool2d(x, 2)
+            x = self.dropout1(x)
+            x = torch.nn.functional.relu(x)
+            x = torch.nn.functional.max_pool2d(x, 2)
+            x = self.dropout2(x)
+            x = x.view(x.size(0), -1)
+            x = self.fc1(x)
+            x = torch.nn.functional.relu(x)
+            x = self.fc2(x)
+            return x
+
+    # Define a simple loss function
+    criterion = torch.nn.CrossEntropyLoss()
+
+    # Define a simple optimizer
+    optimizer = torch.optim.SGD(Net().parameters(), lr=0.01)
+
+    # Load the training data
+    # (assuming you have a function load_training_data() that returns a tuple (inputs, labels))
+    inputs, labels = load_training

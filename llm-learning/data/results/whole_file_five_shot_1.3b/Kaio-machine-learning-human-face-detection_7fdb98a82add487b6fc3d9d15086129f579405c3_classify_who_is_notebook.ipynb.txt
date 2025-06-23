@@ -1,0 +1,54 @@
+```python
+    # Import necessary libraries
+    import matplotlib.pyplot as plt
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+    # Load dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Split dataset into features and target variable
+    X = df.drop("target_column", axis=1)
+    y = df["target_column"]
+
+    # Standardize the features
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+
+    # Split dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    # Create a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100)
+
+    # Train the model using the training sets
+    clf.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = clf.predict(X_test)
+
+    # Model Accuracy
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+
+    # Confusion Matrix
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_pred))
+
+    # Classification Report
+    print("Classification Report:")
+    print(classification_report(y_test, y_pred))
+
+    # Visualization
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Create a confusion matrix
+    cm = confusion_matrix(y_test, y_pred)
+
+    # Visualize the confusion matrix using seaborn library
+    plt.figure(figsize=(10,7))
+    sns.heatmap(cm, annot=True)
+    plt

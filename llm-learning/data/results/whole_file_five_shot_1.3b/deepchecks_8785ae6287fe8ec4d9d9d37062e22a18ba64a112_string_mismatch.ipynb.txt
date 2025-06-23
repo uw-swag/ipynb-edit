@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    r = StringMismatch().run(df)
+
+    # Adding condition
+    c = StringMismatch().add_condition_no_variants()
+    c.conditions_decision(r)
+    ```
+
+    The code above is an example of how to use the `StringMismatch` check in Deepchecks, a library for data quality checks. The `StringMismatch` check is used to find strings that are not in a standard English alphabet. The `add_condition_no_variants` method is used to add a condition that will exclude strings that are not in a standard English alphabet. The `conditions_decision` method is used to decide which conditions are true or false.

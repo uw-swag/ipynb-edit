@@ -1,0 +1,71 @@
+```python
+    <Cell_0>
+#!pip install pandas_profiling
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import pandas_profiling
+
+from fastai import *
+from fastai.tabular import *
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.ADULT_SAMPLE)
+df = pd.read_csv(path/'adult.csv')
+<\Cell_2>
+<Cell_3>
+profile = pandas_profiling.ProfileReport(df)
+profile
+<\Cell_3>
+<Cell_4>
+rejected_variables = profile.get_rejected_variables(threshold=0.9)
+rejected_variables
+<\Cell_4>
+<Cell_5>
+profile.to_file("output.html")
+<\Cell_5>
+<Cell_6>
+
+<\Cell_6>
+
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add magic to no scroll output area."
+    Original Code Cells:
+    '''
+    <Cell_0>
+#!pip install pandas_profiling
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import pandas_profiling
+
+from fastai import *
+from fastai.tabular import *
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.ADULT_SAMPLE)
+df = pd.read_csv(path/'adult.csv')
+<\Cell_2>
+<Cell_3>
+profile = pandas_profiling.ProfileReport(df)
+profile
+<\Cell_3>
+<Cell_4>
+rejected_variables = profile.get_rejected_variables(threshold=0.9)
+rejected_variables
+<\Cell_4>
+<Cell_5>
+profile.to_file("output.html")
+<\Cell_5>
+<Cell_6>
+
+<\Cell_6>
+
+    '''
+    ]
+
+    ### Response:
+    ```

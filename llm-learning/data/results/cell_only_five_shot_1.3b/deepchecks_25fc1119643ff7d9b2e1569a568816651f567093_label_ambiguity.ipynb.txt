@@ -1,0 +1,23 @@
+```python
+    from deepchecks.checks.integrity import NBlinks
+    from deepchecks.base import Dataset
+    import pandas as pd
+    dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                    "col2":[1,2,1,2,5,2,5,2,3,2],
+                                    "my_label":[2,3,4,4,4,3,4,5,6,4]}),
+                     label="my_label")
+
+    NBlinks().run(dataset)
+    NBlinks(n_to_show=1).run(dataset)
+    NBlinks(columns=['col1', 'my_label']).run(dataset)
+    clean_dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                          "col2":[1,2,1,2,5,2,5,2,3,2],
+                                          "my_label":[2,3,2,3,4,3,4,3,6,3]}),
+                     label="my_label")
+
+    NBlinks().run(clean_dataset)
+    NBlinks(n_to_show=1).run(clean_dataset)
+    NBlinks(columns=['col1', 'my_label']).run(clean_dataset)
+    ```
+
+    The `NBlinks` check is used to find instances where the same label is present in the same row, but with different values in the specified columns. This is useful to identify instances where a label is ambiguous or unclear.

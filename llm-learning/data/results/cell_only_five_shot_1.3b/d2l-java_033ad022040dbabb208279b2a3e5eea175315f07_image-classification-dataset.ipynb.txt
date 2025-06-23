@@ -1,0 +1,73 @@
+```
+    #!/bin/bash
+
+    # Update the list of packages
+    mvn -N io.takari:maven-wrapper-maven-plugin:wrap -Dmaven.wrapper.java.version=1.8.0 -Dmaven.wrapper.maven.version=3.6.1
+
+    # Build the project
+    mvn clean install
+
+    # If there are test failures, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Build failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean deploy
+
+    # If there are any issues, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Deploy failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean install
+
+    # If there are any issues, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Build failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean deploy
+
+    # If there are any issues, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Deploy failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean install
+
+    # If there are any issues, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Build failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean deploy
+
+    # If there are any issues, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Deploy failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean install
+
+    # If there are any issues, fail the build
+    if [ $? -ne 0 ]; then
+        echo "Build failed"
+        exit 1
+    fi
+
+    # Copy the built artifacts to the target directory
+    mvn clean deploy
+
+    # If there

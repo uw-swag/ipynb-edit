@@ -1,0 +1,40 @@
+```python
+    import pandas as pd
+
+    # Assuming you have a DataFrame df with columns 'rank', 'name', 'year'
+    df = pd.DataFrame({
+        'rank': [1, 2, 3, 4, 5],
+        'name': ['Movie1', 'Movie2', 'Movie3', 'Movie4', 'Movie5'],
+        'year': [2001, 2002, 2003, 2004, 2005]
+    })
+
+    # Output as HTML
+    display(HTML(df.to_html(index=False)))
+
+    # Output as CSV
+    df.to_csv('movies.csv', index=False)
+
+    # Output as JSON
+    df.to_json('movies.json', orient='records')
+
+    # Output as Markdown
+    df.to_markdown('movies.md')
+
+    # Output as Latex
+    df.to_latex('movies.tex')
+
+    # Output as Excel
+    df.to_excel('movies.xlsx')
+
+    # Output as SQL insert
+    df.to_sql('movies', con=engine, if_exists='append', index=False)
+
+    # Output as XML
+    df.to_xml('movies.xml', root_name='movies', index=False)
+
+    # Output as YAML
+    df.to_yaml('movies.yaml')
+
+    # Output as Pandas Protocol
+    df.to_pickle('movies.pkl')
+    ```

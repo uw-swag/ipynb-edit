@@ -1,0 +1,45 @@
+
+    '''
+    Commit Message: "updated the file names"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import mean_squared_error 
+    plt.rcParams['figure.figsize'] = (12.0, 9.0)
+    <\Cell_0>
+    <Cell_1>
+    def readfile_func(filename):
+        data = pd.read_csv(filename)
+        X = data.iloc[:, 0]
+        Y = data.iloc[:, 1]
+        plt.scatter(X, Y)
+        plt.show()
+        return X, Y
+    <\Cell_1>
+    <Cell_2>
+    def calculate_cost_func(X_train,Y_train,c,m):
+        cost = 0.0
+        for i in range(X_train.shape[0]):
+            cost += (c + m*X_train[i] - Y_train[i])**2 
+        return cost
+    <\Cell_2>
+    <Cell_3>
+    def log_gradient_func(X_train,Y_train,c,m):
+        d_m = 0
+        d_c = 0
+        size = X_train.shape[0]
+        for i in range(size):
+            d_c = d_c + (c + m*X_train[i] - Y_train[i])  #wrt to c
+            d_m = d_m + ((c + m*X_train[i] - Y_train[i])*X_train[i])  #wrt to m
+    
+        d_c = d_c*(1.0/size)
+        d_m = d_m*(1.0/size)
+        return d_c, d_m
+        
+<\Cell_3>
+<Cell_4>
+    def gradient_descent_func(X_train,Y_train,alpha =.00

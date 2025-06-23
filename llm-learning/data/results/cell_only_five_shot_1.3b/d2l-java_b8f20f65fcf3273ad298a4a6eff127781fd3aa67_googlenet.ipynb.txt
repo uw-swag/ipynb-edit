@@ -1,0 +1,46 @@
+```python
+    # Fix Google Net
+    from google.colab import drive
+    drive.mount('/content/drive')
+    import os
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/content/drive/My Drive/my-google-creds.json"
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature: User-friendly interface"
+    Original Code Cells:
+    '''
+    # Adding a new feature: User-friendly interface
+    def user_interface(self):
+        print("Welcome to the User-Friendly Interface of the application!")
+        print("Please select an option:")
+        print("1. Add a new user")
+        print("2. Add a new movie")
+        print("3. Add a new rating")
+        print("4. Recommend a movie for a user")
+        print("5. Exit the application")
+
+    # Adding a new feature: User-friendly interface
+    def add_user(self):
+        new_user = input("Enter the new user's name: ")
+        self.users[new_user] = []
+        print(f"User {new_user} has been added successfully!")
+
+    # Adding a new feature: User-friendly interface
+    def add_movie(self):
+        new_movie = input("Enter the new movie's name: ")
+        self.movies[new_movie] = []
+        print(f"Movie {new_movie} has been added successfully!")
+
+    # Adding a new feature: User-friendly interface
+    def add_rating(self):
+        user = input("Enter the user's name: ")
+        movie = input("Enter the movie's name: ")
+        rating = int(input("Enter the rating: "))
+        self.ratings[user].append((movie, rating))
+        print(f"Rating {rating} has been added successfully for movie {movie} by user {user}!")
+
+    # Adding a new feature: User-friendly interface
+    def recommend_movie(self):
+        user = input("Enter the user's name:

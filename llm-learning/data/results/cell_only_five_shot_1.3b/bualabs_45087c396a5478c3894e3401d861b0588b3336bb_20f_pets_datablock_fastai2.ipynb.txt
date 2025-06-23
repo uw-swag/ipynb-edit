@@ -1,0 +1,38 @@
+```python
+    class PetTfm(ItemTransform):
+        def __init__(self, vocab, o2i, lblr):
+            self.vocab, self.o2i, self.lblr = vocab, o2i, lblr
+
+        def encodes(self, o):
+            return (resized_image(o), self.o2i(self.lblr(o)))
+
+        def decodes(self, x):
+            return TitledImage(x[0], self.vocab[x[1]])
+
+    def setup(self, items):
+        self.items = items
+        self.transformed_items = []
+        for item in self.items:
+            self.transformed_items.append(self.encodes(item))
+
+    def order(self):
+        return self.transformed_items
+
+    def setups(self, items):
+        self.setup(items)
+        return self.order()
+
+    def decode(self, item):
+        return self.decodes(item)
+
+    def show(self, item):
+        dec = self.decode(item)
+        dec.show()
+
+    def run(self, items):
+        self.setups(items)
+        for item in self.order():
+            self.show(item)
+    ```
+
+    In this code, the `setup` method is used to encode the items, the `order` method is used to get the transformed items in the correct order, and the `setups` method is used to call both `setup` and `order` methods. The `decode` method is used to decode the transformed items, and the `show` method is used to display the decoded items. The `run` method is used to execute the entire process.

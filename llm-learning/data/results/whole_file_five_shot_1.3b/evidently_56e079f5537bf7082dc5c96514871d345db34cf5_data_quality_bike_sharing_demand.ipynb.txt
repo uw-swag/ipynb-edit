@@ -1,0 +1,40 @@
+```python
+    import nannyml as nml
+    import pandas as pd
+
+    # Load the data
+    data = pd.read_csv('data.csv')
+
+    # Create a DataQuality Dashboard
+    dq_dashboard = nml.DataQualityDashboard(data)
+
+    # Add a quality check
+    dq_dashboard.add_quality_check(
+        check_name='check_missing_values',
+        check_function=lambda df: df.isnull().sum().sum() > 0,
+        check_description='Check for missing values',
+        check_severity='warning'
+    )
+
+    # Add a quality check
+    dq_dashboard.add_quality_check(
+        check_name='check_duplicates',
+        check_function=lambda df: df.duplicated().sum() > 0,
+        check_description='Check for duplicates',
+        check_severity='warning'
+    )
+
+    # Add a quality check
+    dq_dashboard.add_quality_check(
+        check_name='check_outliers',
+        check_function=lambda df: (df - df.mean()).abs() > 3 * df.std(),
+        check_description='Check for outliers',
+        check_severity='warning'
+    )
+
+    # Generate the dashboard
+    dq_dashboard.generate_dashboard()
+
+    # Update the package version
+    __version__ = '0.1.0'
+    ```

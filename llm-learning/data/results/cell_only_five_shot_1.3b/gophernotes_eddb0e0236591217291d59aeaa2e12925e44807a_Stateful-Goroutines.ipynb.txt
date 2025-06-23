@@ -1,0 +1,29 @@
+```go
+    package main
+
+    import (
+        "fmt"
+        "time"
+    )
+
+    func main() {
+        for i := 0; i < 10; i++ {
+            go say("Hello, World!", i)
+        }
+
+        time.Sleep(time.Second)
+    }
+
+    func say(message string, i int) {
+        for j := 0; j < 10; j++ {
+            fmt.Println(message, j)
+            time.Sleep(time.Second)
+        }
+    }
+    ```
+
+    In this example, we have a main function that creates 10 goroutines. Each goroutine is a separate function that runs in a separate goroutine. The `say` function is a stateful function that runs in a separate goroutine. The `main` function waits for all goroutines to finish before it exits.
+
+    The `say` function prints a message and a count for 10 times. It uses a loop variable `j` to count the number of times it has printed a message. The `main` function uses a loop variable `i` to count the number of times it has created a goroutine.
+
+    The `time.Sleep(time.Second)` call in the `main` function ensures that the `say` function finishes before the `main` function finishes. Without this call, the `main` function would finish before the `say` function could start, which would result in a deadlock.

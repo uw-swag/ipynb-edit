@@ -1,0 +1,25 @@
+```python
+    import tensorflow as tf
+
+    # Define a simple 1-layer DNN with 10 neurons
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Dense(10, activation='relu', input_shape=(28*28,)),
+        tf.keras.layers.Dense(10, activation='softmax')
+    ])
+
+    # Compile the model
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+    # Generate dummy data
+    X = tf.random.normal((1000, 28*28))
+    y = tf.random.normal((1000, 10))
+
+    # Train the model
+    model.fit(X, y, epochs=5)
+
+    # Evaluate the model
+    model.evaluate(X, y)
+    ```
+    This code creates a simple 1-layer DNN with 10 neurons. The model is compiled with the Adam optimizer and the sparse categorical cross-entropy loss function. The model is trained for 5 epochs and then evaluated on the same data.

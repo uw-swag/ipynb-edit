@@ -1,0 +1,38 @@
+```python
+    # added neural network
+    from keras.models import Sequential
+    from keras.layers import Dense
+
+    # define the keras model
+    model = Sequential()
+    model.add(Dense(12, input_dim=8, activation='relu'))
+    model.add(Dense(8, activation='relu'))
+    model.add(Dense(1, activation='sigmoid'))
+
+    # compile the keras model
+    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+    # fit the keras model on the dataset
+    model.fit(X_train_scaledo, y_over, epochs=150, batch_size=10)
+
+    # evaluate the keras model
+    _, accuracy = model.evaluate(X_test_scaledo, y_testo)
+    print('Accuracy: %.2f' % (accuracy*100))
+
+    # make a prediction
+    y_pred = model.predict(X_test_scaledo)
+    y_pred = (y_pred > 0.5)
+
+    # print the confusion matrix
+    print(confusion_matrix(y_testo, y_pred))
+
+    # print the accuracy
+    print(accuracy_score(y_testo, y_pred))
+
+    # print the classification report
+    print(classification_report(y_testo, y_pred))
+
+    # print the yes and no counts
+    print(Counter(y_testo))
+    print(Counter(y_pred))
+    ```

@@ -1,0 +1,21 @@
+```python
+    from mlchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    iris = load_iris(as_frame=True)
+    from mlchecks.checks import train_validation_difference_overfit, TrainValidationDifferenceOverfit
+    import pandas as pd
+    %matplotlib inline
+    %load_ext autoreload
+    %autoreload 2
+
+    # Modify the check without function
+    train_validation_difference_overfit(train_ds, val_ds, clf)
+
+    # Adding an alternative metric
+    train_validation_difference_overfit(train_ds, val_ds, clf, alternative_metrics={'Accuracy': 'accuracy', 'Always 0.5': lambda x,y,z: 0.5})
+
+    # Checking the same model on the same data
+    train_validation_difference_overfit(train_ds, train_ds, clf)
+    ```

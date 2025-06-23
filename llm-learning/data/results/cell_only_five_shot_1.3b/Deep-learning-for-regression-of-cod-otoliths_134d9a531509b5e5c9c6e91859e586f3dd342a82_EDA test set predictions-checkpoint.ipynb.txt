@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "updated manuscript with fold results, and added results for B6 medium, and EDA"
+    Original Code Cells:
+    '''
+    import numpy as np 
+    import pandas as pd
+    import seaborn as sns
+    SEED = 42
+    train_data = pd.read_csv("data/train.csv")
+    train_data.head()
+    test_data = pd.read_csv("data/test.csv")
+    test_data.head()
+    test_data['Age'].fillna(round((test_data['Age'].mean())), inplace = True)
+    train_data['Age'].fillna(round((train_data['Age'].mean())), inplace = True)
+    test_data['Fare'] = test_data['Fare'].fillna(test_data['Fare'].mean())
+    train_data = train_data.drop(columns=['Name'], axis=1)
+    test_data = test_data.drop(columns=['Name'], axis=1)
+    train_data = train_data.drop(columns=['Ticket'], axis=1)
+    test_data = test_data.drop(columns=['Ticket'], axis=1)
+    train_data = train_data.drop(columns=['Cabin'], axis=1)
+    test_data = test_data.drop(columns=['Cabin'], axis=1)
+    def embarked(x):
+        if x == 'Q':
+            return 0
+        elif x == 'C':
+            return 1
+        else:
+            return 2
+    train_data['Embarked'] = train_data['Embarked'].apply(embarked)
+    test_data['Embarked'] = test_data['Embarked'].apply(embarked)
+    X = train_data.drop("Survived", axis=1)
+    y = train_data['Survived'].values
+    X.head()
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import GradientBo

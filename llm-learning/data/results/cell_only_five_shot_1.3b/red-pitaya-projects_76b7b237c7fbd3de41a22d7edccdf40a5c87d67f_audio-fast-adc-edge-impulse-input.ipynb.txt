@@ -1,0 +1,46 @@
+```python
+    def record_audio():
+        # synchronization and trigger sources are the default,
+        # which is the module itself
+        in2.reset()
+        in2.start()
+        in2.trigger()
+        print ('Recording started')
+        # wait for data
+        while (in2.status_run()): pass
+        print ('Recording complete')
+        data = in2.data(N)
+        return data
+
+    audio_data_returned = record_audio()
+    # Install requests via: `pip3 install requests`
+    import requests
+    import os
+    from app_keys import * #Import personal keys for the Edge Impulse project
+
+    def upload_audio2edge_impulse(files, label = 'red-pitaya'): # Replace the label with your own.
+        
+        # Upload the file to Edge Impulse using the API, and print the response.
+        res = requests.post(url='https://ingestion.edgeimpulse.com/api/training/files',
+                            headers={
+                                'x-label': label,
+                                'x-api-key': api_key,
+                            },
+                            # Creating the data payload for the request.
+                            files=(('data', (os.path.basename(i), open(
+                                i, 'rb'), 'audio/wav')) for i in files)
+                            )
+        
+        if (res.status_code == 200):
+            print('Uploaded file(s) to Edge Impulse\n', res.status_code, res.content)
+        else:
+            print('Failed to upload file(s) to Edge Impulse\n',
+                  res.status_code, res.content)
+
+    files = ['float_wave_test_raw.wav']
+    file = files[0] #save the first one
+    save_audio(audio_data_returned, file, sr = 3000)
+    upload_audio2edge_impulse(files)
+    python_display_audio = display_audio(audio_data_returned, sr = 3000)
+    plot_audio(audio_data_returned)
+    save_audio(audio_data_

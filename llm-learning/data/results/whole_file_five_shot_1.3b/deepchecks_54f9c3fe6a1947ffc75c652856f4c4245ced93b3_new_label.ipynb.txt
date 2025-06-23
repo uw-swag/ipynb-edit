@@ -1,0 +1,27 @@
+```python
+    from deepchecks.checks.integrity.new_label import NewLabelTrainTest
+    from deepchecks.base import Dataset
+    import pandas as pd
+
+    test_data = {"col1": [0, 1, 2, 3] * 10}
+    val_data = {"col1": [4, 5, 6, 7, 8, 9] * 10}
+    test = Dataset(pd.DataFrame(data=test_data), label="col1", label_type="classification_label")
+    val = Dataset(pd.DataFrame(data=val_data), label="col1", label_type="classification_label")
+
+    NewLabelTrainTest().run(test, val)
+
+    test_data = {"col1": ["a", "b", "a", "c"] * 10, "col2": [1,2,2,3]*10}
+    val_data = {"col1": ["a","b","d"] * 10, "col2": [1, 4, 5]*10}
+    test = Dataset(pd.DataFrame(data=test_data), label="col2", label_type="classification_label")
+    val = Dataset(pd.DataFrame(data=val_data), label="col2", label_type="classification_label")
+
+    NewLabelTrainTest().run(test, val)
+    ```
+
+    The code above is a demonstration of how to use the `NewLabelTrainTest` check in Deepchecks, a library for data quality checks. The `NewLabelTrainTest` check is used to check for new labels in the training and validation datasets.
+
+    The `NewLabelTrainTest` check will return a report with the number of new labels found in the training and validation datasets. If no new labels are found, the report will be empty.
+
+    The `run` method of the `NewLabelTrainTest` class is used to execute the check. The `run` method takes two parameters: the training dataset and the validation dataset.
+
+    The `NewLabelTrainTest` check is

@@ -1,0 +1,20 @@
+```python
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+
+    # Assuming you have a pandas DataFrame df with the data
+    df['Date'] = pd.to_datetime(df['Date'])
+    df.set_index('Date', inplace=True)
+
+    # Plotting the data
+    plt.figure(figsize=(10, 6))
+    plt.plot(df['PM 0.3'], label='PM 0.3')
+    plt.plot(df['PM 0.5'], label='PM 0.5')
+    plt.plot(df['PM 1.0'], label='PM 1.0')
+    plt.plot(df['PM 2.5'], label='PM 2.5')
+    plt.plot(df['PM 5.0'], label='PM 5.0')
+    plt.plot(df['PM 10.0'], label='PM 10.0')
+    plt.legend()
+    plt.show()
+    ```

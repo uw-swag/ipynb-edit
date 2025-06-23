@@ -1,0 +1,69 @@
+```python
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+from IPython.display import HTML, display
+
+def set_css():
+  display(HTML('''
+  <style>
+    pre {
+        white-space: pre-wrap;
+    }
+  </style>
+  '''))
+get_ipython().events.register('pre_run_cell', set_css)
+<\Cell_2>
+<Cell_3>
+# ! pip install openai
+<\Cell_3>
+<Cell_4>
+import openai
+<\Cell_4>
+<Cell_5>
+import os
+from getpass import getpass
+
+token = getpass('Enter OPENAI_API_KEY here: ')
+# print ('token is', token)
+
+openai.api_key = token
+<\Cell_5>
+<Cell_6>
+def get_completion(prompt, model="gpt-3.5-turbo"):
+    messages = [{"role": "user", "content": prompt}]
+    response = openai.ChatCompletion.create(
+        model=model,
+        messages=messages,
+        temperature=0, # this is the degree of randomness of the model's output
+    )
+    return response.choices[0].message["content"]
+<\Cell_6>
+<Cell_7>
+resp = get_completion("what are the 5 most populated provinces in thailand?")
+<\Cell_7>
+<Cell_8>
+print(resp)
+<\Cell_8>
+<Cell_9>
+
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>
+<Cell_11>
+
+<\Cell_11>
+<Cell_12>
+
+<\Cell_12>
+<Cell_13>
+
+<\Cell_13>
+```

@@ -1,0 +1,25 @@
+```python
+    # Spacy Features: pos, ent, dep
+    import spacy
+    nlp = spacy.load('en_core_web_sm')
+
+    # POS tagging
+    text = "Hello, I'm a data scientist."
+    doc = nlp(text)
+    pos_tagged = [(token.text, token.pos_) for token in doc]
+    print(pos_tagged)
+
+    # Entity Recognition
+    text = "Apple is looking at buying U.K. startup for $1 billion"
+    doc = nlp(text)
+    entities = [(ent.text, ent.label_) for ent in doc.ents]
+    print(entities)
+
+    # Dependency Parsing
+    text = "Hello, I'm a data scientist."
+    doc = nlp(text)
+    deps = [(token, token.dep_, token.head.text, token.head.pos_) for token in doc]
+    print(deps)
+    ```
+
+    Please note that these features are not included in the original code cells. They are added to the code as a part of the commit message.

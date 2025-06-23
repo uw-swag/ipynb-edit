@@ -1,0 +1,51 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding titles and descriptions to notebooks"
+    Original Code Cells:
+    '''
+    public static Model train(SequentialBlock net, ArrayDataset dataset, int batchSize, int numEpochs, float learningRate) 
+    throws IOException, TranslateException {
+    // Square Loss
+    Loss loss = Loss.l2Loss();
+    Tracker lrt = Tracker.fixed(learningRate);
+    Optimizer sgd = Optimizer.adam().optLearningRateTracker(lrt).build();
+    
+    DefaultTrainingConfig config = new DefaultTrainingConfig(loss)
+        .optOptimizer(sgd) // Optimizer (loss function)
+        .optInitializer(new XavierInitializer(), "")
+        .addTrainingListeners(TrainingListener.Defaults.logging()); // Logging
+    
+    Model model = Model.newInstance("sequence");
+    model.setBlock(net);
+    trainer = model.newTrainer(config);
+    
+    for (int epoch = 1; epoch <= numEpochs; epoch++) {
+        // Iterate over dataset
+        for (Batch batch : trainer.iterateDataset(dataset)) {
+            // Update loss and evaluator
+            EasyTrain.trainBatch(trainer, batch);
+
+            // Update parameters
+            trainer.step();
+
+            batch.close();
+        }
+        
+        // reset training and validation evaluators at end of epoch
+        trainer.notifyListeners(listener -> listener.onEpoch(trainer));
+        System.out.printf("Epoch %d\n", epoch);
+        System.out.printf("Loss %f\n", trainer.getTrainingResult().getTrainLoss());
+        
+        
+    }
+    return model;
+}
+SequentialBlock net = getNet();
+Model model = train(net, trainIter, batchSize, 5, 0.01f);
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a function that trains a model using the Adam optimizer. The function takes in a SequentialBlock

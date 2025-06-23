@@ -1,0 +1,38 @@
+```python
+    import os
+    import re
+
+    def fix_colab_notebook_links(text):
+        # Replace colab notebook links with a temporary link
+        colab_notebook_link_pattern = r'https://colab.research.google.com/github/[^/]+/[^/]+/blob/[^/]+/[^/]+'
+        temp_link = 'https://colab.research.google.com/github/[USERNAME]/[NOTEBOOK_NAME]/blob/[BRANCH]/[NOTEBOOK_NAME]'
+        temp_link = temp_link.replace('[USERNAME]', os.getenv('USER'))
+        temp_link = temp_link.replace('[NOTEBOOK_NAME]', os.getenv('NOTEBOOK_NAME'))
+        temp_link = temp_link.replace('[BRANCH]', os.getenv('BRANCH'))
+
+        return re.sub(colab_notebook_link_pattern, temp_link, text)
+
+    # Test the function
+    text = '''
+    Here is a link to a Colab notebook: https://colab.research.google.com/github/[USERNAME]/[NOTEBOOK_NAME]/blob/[BRANCH]/[NOTEBOOK_NAME]
+    '''
+    fixed_text = fix_colab_notebook_links(text)
+    print(fixed_text)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding missing imports (#310)"
+    Original Code Cells:
+    '''
+    import sys
+    import torch
+    import pandas as pd
+    from recommenders.datasets import movielens
+    from recommenders.datasets.python_splitters import python_random_split
+    from recommenders.models.cornac.cornac_utils import predict_ranking
+    from recommenders.utils.timer import Timer
+    from recommenders.utils.constants import SEED
+    from recommenders.evaluation.python_evaluation import (
+        map_at_k,
+        ndcg_at_

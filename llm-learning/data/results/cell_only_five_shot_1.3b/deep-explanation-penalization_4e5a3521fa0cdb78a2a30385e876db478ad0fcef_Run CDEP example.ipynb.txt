@@ -1,0 +1,39 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+    from keras.utils import to_categorical
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Flatten
+    from keras.optimizers import Adam
+    from keras.callbacks import EarlyStopping
+    from keras.applications.vgg16 import VGG16
+    from keras.preprocessing.image import ImageDataGenerator
+
+    # Load ISIC dataset
+    df = pd.read_csv('ISIC_2019_Task3_Data.csv')
+
+    # Preprocess the data
+    # This is a basic preprocessing step. Depending on the specifics of the dataset, you may need to perform additional steps.
+    # For example, you may need to normalize the pixel values, handle missing values, etc.
+    df['target'] = LabelEncoder().fit_transform(df['target'])
+    y = df['target']
+    X = df.drop('target', axis=1)
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Convert the labels to categorical
+    y_train = to_categorical(y_train)
+    y_test = to_categorical(y_test)
+
+    # Define the model
+    model = Sequential()
+    model.add(VGG16(include_top=False, weights='imagenet', input_shape=(224, 224, 3)))
+    model.add(Flatten())
+    model.add(Dense(1024, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(512, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(y_train.shape

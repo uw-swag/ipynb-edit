@@ -1,0 +1,22 @@
+```python
+    import fastbook
+    from fastbook import *
+    from fastai.vision import *
+    from fastai.callback.tensorboard import *
+
+    # Define the data
+    path = untar_data(URLs.PETS)
+    df = pd.read_csv(path/'labels.csv')
+    dls = ImageDataLoaders.from_df(df, path, valid_pct=0.2, seed=42)
+
+    # Define the model
+    model = cnn_learner(dls, resnet34, metrics=error_rate)
+
+    # Define the callback
+    callback = TensorBoardCallback(data, learn)
+
+    # Train the model
+    model.fit_learn(1, callback)
+    ```
+
+    This code will create a TensorBoard callback and use it to train a model using the fastai library. The TensorBoard callback logs the loss and accuracy for each epoch, which can be useful for visualizing the learning process.

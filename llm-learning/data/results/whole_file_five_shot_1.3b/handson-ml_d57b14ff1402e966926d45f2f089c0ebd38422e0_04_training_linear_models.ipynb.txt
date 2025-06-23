@@ -1,0 +1,27 @@
+```
+    The code you provided is a mix of Python code and Jupyter notebook cells. It includes import statements, variable definitions, and cell outputs. However, it seems like the code is not formatted properly, and there are some missing cell outputs.
+
+    Here is the corrected version of your code:
+
+    ```python
+    #@title Authorization Form
+    ACCOUNT_ID = "ACCOUNT_ID" #@param {type:"string"}
+    AUTH_TOKEN = "AUTH_TOKEN" #@param {type:"string"}
+    MATERIALS_PROJECT_API_KEY = "MATERIALS_PROJECT_API_KEY" #@param {type:"string"}
+    ORGANIZATION_ID  = "ORGANIZATION_ID" #@param {type:"string"}
+
+    import os
+    if "COLAB_JUPYTER_IP" in os.environ:
+        os.environ.update(
+            dict(
+                ACCOUNT_ID=ACCOUNT_ID,
+                AUTH_TOKEN=AUTH_TOKEN,
+                MATERIALS_PROJECT_API_KEY=MATERIALS_PROJECT_API_KEY,
+                ORGANIZATION_ID=ORGANIZATION_ID,
+            )
+        )
+
+        !GIT_BRANCH="bugfix/SOF-5578-WIP"; export GIT_BRANCH; curl -s "https://raw.githubusercontent.com/Exabyte-io/api-examples/${GIT_BRANCH}/scripts/env.sh" | bash
+    ```
+
+    This code is a Jupyter notebook cell, and it should be formatted correctly.

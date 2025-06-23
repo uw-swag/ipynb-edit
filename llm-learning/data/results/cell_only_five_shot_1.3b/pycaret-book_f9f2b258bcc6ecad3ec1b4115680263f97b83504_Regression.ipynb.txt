@@ -1,0 +1,41 @@
+```python
+    # Importing necessary libraries
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.metrics import mean_squared_error
+    from sklearn.model_selection import cross_val_score
+    import pandas as pd
+    import numpy as np
+
+    # Splitting the data
+    X_train, X_test, y_train, y_test = train_test_split(data.drop('charges', axis=1), data['charges'], test_size=0.2, random_state=42)
+
+    # Creating a Gradient Boosting Regressor model
+    gbr = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=1, random_state=42)
+
+    # Training the model
+    gbr.fit(X_train, y_train)
+
+    # Predicting on the test set
+    y_pred = gbr.predict(X_test)
+
+    # Calculating the mean squared error
+    mse = mean_squared_error(y_test, y_pred)
+    print(f'Mean Squared Error: {mse}')
+
+    # Cross-validation
+    scores = cross_val_score(gbr, X_train, y_train, cv=10, scoring='neg_mean_squared_error')
+    print(f'Cross-validation scores: {scores}')
+
+    # Plotting the feature importance
+    importances = gbr.feature_importances_
+    for i, feature in enumerate(numeric):
+        print(f'Feature {feature} has importance {importances[i]}')
+
+    # Plotting the error
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(10, 6))
+    plt.plot(y_test, label='True')
+    plt.plot(y_pred, label='Predicted')
+    plt.legend()
+    plt.show()

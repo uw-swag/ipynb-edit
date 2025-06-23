@@ -1,0 +1,48 @@
+
+    The code you provided is already correct. The `account_slug` is replaced with `account_id` in the examples. Here's the updated code:
+
+    ```python
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#581)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from deepchecks import TrainTestBaseCheck, CheckResult, Dataset
+
+
+    class DatasetSizeComparison(TrainTestBaseCheck):
+        """Check which compares the sizes of train and test datasets."""
+
+        def run(self, train_dataset: Dataset, test_dataset: Dataset, model=None) -> CheckResult:
+            ## Check logic
+            train_size = train_dataset.n_samples
+            test_size = test_dataset.n_samples
+
+            ## Return value as check result
+            return_value = {'train_size': train_size, 'test_size': test_size}
+            return CheckResult(return_value)
+    <\Cell_0>
+    <Cell_1>
+    import pandas as pd
+
+    # We'll use dummy data for the purpose of this demonstration
+    train_dataset = Dataset(pd.DataFrame(data={'account_id': [1,2,3,4,5,6,7,8,9]}), label=None)
+    test_dataset = Dataset(pd.DataFrame(data={'account_id': [1,2,3]}), label=None)
+
+    result = DatasetSizeComparison().run(train_dataset, test_dataset)
+    result
+    <\Cell_1>
+    <Cell_2>
+    result.value
+    <\Cell_2>
+    <Cell_3>
+    from deepchecks import TrainTestBaseCheck, CheckResult, Dataset
+    import matplotlib.pyplot as plt
+
+    class DatasetSizeComparison(TrainTestBaseCheck):
+        """Check which compares the sizes of train and test datasets."""
+
+        def run(self, train_dataset: Dataset, test_dataset: Dataset, model=None) -> CheckResult:
+            ## Check logic
+            train_size =

@@ -1,0 +1,11 @@
+```python
+    # !pip install git+https://github.com/Pendar2/fastai-tensorboard-callback.git
+    proj_id = '07b-tensorboard-embedding'
+    tboard_path = Path('data/tensorboard/' + proj_id)
+    learner.callback_fns.append(partial(LearnerTensorboardWriter, 
+                                        base_dir=tboard_path, 
+                                        name=f'Run{time.time()}'))
+    print(f"tensorboard --logdir={tboard_path}")
+    learner.save("07b-tensorboard-embedding")
+    learner.load("07b-tensorboard-embedding");
+    ```

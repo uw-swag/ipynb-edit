@@ -1,0 +1,18 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Initialize Spark Session
+    spark = SparkSession.builder.appName("Momentum").getOrCreate()
+
+    # Load Data
+    df = spark.read.format("csv").option("header", "true").load("path_to_your_data.csv")
+
+    # Add Momentum Column
+    df = df.withColumn("Momentum", col("Close") - col("Open"))
+
+    # Save Data
+    df.write.format("csv").option("header", "true").save("path_to_save_data.csv")
+    ```

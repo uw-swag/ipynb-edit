@@ -1,0 +1,59 @@
+
+    '''
+    [
+    Commit Message: "Add new comments"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+folder = 'acne'
+file = 'urls_acne.txt'
+<\Cell_2>
+<Cell_3>
+folder = 'freckle'
+file = 'urls_freckle.txt'
+<\Cell_3>
+<Cell_4>
+folder = 'melasma'
+file = 'urls_melasma.txt'
+<\Cell_4>
+<Cell_5>
+path = Path('data/skin')
+download_path = path/'downloads'
+dest = download_path/folder
+dest.mkdir(parents=True, exist_ok=True)
+<\Cell_5>
+<Cell_6>
+download_images(path/file, dest, max_pics=500, max_workers=8)
+<\Cell_6>
+<Cell_7>
+databunch.classes
+<\Cell_7>
+<Cell_8>
+databunch.show_batch(rows=3, figsize=(12, 12))
+<\Cell_8>
+<Cell_9>
+learner.save('01d-resnet34-1')
+<\Cell_9>
+<Cell_10>
+# learner.load('01d-resnet34-1')
+<\Cell_10>
+<Cell_11>
+learner.lr_find()
+learner.recorder.plot()
+<\Cell_11>
+<Cell_12>
+learner.unfreeze()
+learner.fit_one_cycle(6, max_lr=slice(3e-6,3e-3))
+<\Cell_12>
+<Cell_13>
+learner

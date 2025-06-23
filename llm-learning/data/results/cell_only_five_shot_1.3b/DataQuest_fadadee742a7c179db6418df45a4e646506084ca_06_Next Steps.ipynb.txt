@@ -1,0 +1,34 @@
+
+The code you've provided is a Python script that uses pandas, matplotlib, and numpy to analyze data from a CSV file and create visualizations. 
+
+The first part of the code reads a CSV file, groups the data by 'Major_category', and calculates the total number of men and women in each major category. It then creates a bar plot to compare the number of men and women in each major category.
+
+The second part of the code creates a box plot to compare the distributions of median salaries and unemployment rates.
+
+The code is well-structured and should work as expected. However, it seems like there's a slight issue with the data. The 'Unemployment_rate' column in the 'recent-grads.csv' file seems to be a percentage, not a proportion. If you want to convert it to a proportion, you can divide it by 100.
+
+Here's the corrected code:
+
+```python
+# Use a grouped bar plot to compare the number
+# of men with the number of women in each category of majors.
+recent_grads = pd.read_csv('recent-grads.csv')
+
+recent_grads.groupby('Major_category')
+
+# Create series with the total Men/Women in
+# each major catigories
+men_mjr_ctgry = recent_grads.groupby(['Major_category'])['Men'].sum()
+women_mjr_ctgry = recent_grads.groupby(['Major_category'])['Women'].sum()
+
+# Determine the number of major categories
+N = len(men_mjr_ctgry.values)
+
+fig, ax = plt.subplots(figsize=(10,10))
+
+ind = np.arange(N)  # the x locations for the groups
+width = 0.35       # the width of the bars
+
+#
+rects1 = ax.bar(ind, men_mjr_ctgry.values, width, color='#a4c2f2')
+rects2 = ax.bar(ind + width, women_mjr_ctgry.values, width, color='#f

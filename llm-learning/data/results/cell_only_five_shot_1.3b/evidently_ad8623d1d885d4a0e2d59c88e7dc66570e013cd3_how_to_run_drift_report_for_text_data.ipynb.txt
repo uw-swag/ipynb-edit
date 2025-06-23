@@ -1,0 +1,10 @@
+```python
+    # import MiniLM v2 from sentence transformer
+
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformer('all-MiniLM-L6-v2')
+    # Encode only a fraction
+    ref_embeddings = model.encode(imdb_5k_data["review"][:100].tolist())
+    # Similarly encode only a fraction
+    cur_embeddings = model.encode(eco_dot_data.tolist()[:100])
+    ```

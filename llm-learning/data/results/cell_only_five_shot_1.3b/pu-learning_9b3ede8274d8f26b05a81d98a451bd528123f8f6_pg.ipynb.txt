@@ -1,0 +1,40 @@
+
+    Here's how you can merge the data processing and existing notebooks:
+
+    The existing notebook is already set up to load the data, process it, and label it. The data processing code is already in the provided cells.
+
+    If you want to merge the data processing and existing notebooks, you can follow these steps:
+
+    1. Open the existing notebook.
+    2. Replace the existing data loading and processing code with the new data loading and processing code.
+    3. Save and run the notebook.
+
+    The existing notebook will now load the new data, process it, and label it.
+
+    Please note that the existing notebook should be saved in a location where it can be accessed by the new notebook.
+
+    Also, the existing notebook should be saved in a format that can be read by the new notebook. This could be a .ipynb file, a .py file, or any other format that can be read by the new notebook.
+
+    If the existing notebook is a Jupyter notebook, you can use the `%%writefile` magic command to save the notebook as a .py file. For example:
+
+    ```
+    %%writefile
+    # This is the new notebook
+    import numpy as np
+    import pandas as pd
+    from scar import load_scar
+    train, valid, test = load_scar()
+    x, y, s = train
+    from labeling import LabelingMechanism, label_frequency
+
+    def get_sample(data, lm, is_train=False):
+        x, y, _ = data
+        if is_train:
+            lm.fit(x)
+        score = lm.propensity_score(x)
+        s = (y * (np.random.uniform(size=x.shape[0]) < score)).astype(int)
+        return x, y, s
+    lm = LabelingMechanism([0,1],[1,1], min_prob=0, max_prob=1)
+    train = get_sample(train, lm, is_train=True)
+    valid = get_sample(valid, lm)
+    test = get_sample(test, lm)

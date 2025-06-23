@@ -1,0 +1,17 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Define the M-P model
+    def M_P_model(x, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z):
+        return a * x**m * (1 - x**m)**(n-m) * b * (1 - x)**(o-n) * c * x**(p-n) * (1 - x**p)**(q-p) * d * (1 - x)**(r-q) * e * x**(s-q) * (1 - x**s)**(t-s) * f * (1 - x)**(u-t) * g * x**(v-u) * (1 - x**v)**(w-v) * h * (1 - x)**(x-w) * i * x**(y-x) * (1 - x**y)**(z-y)
+
+    # Generate values for x
+    x_values = np.linspace(0, 1, 200)  # Adjust the range as needed
+
+    # Calculate corresponding function values
+    M_P_values = M_P_model(x_values, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z)
+
+    # Plot the M-P model with LaTeX representation
+    plt.figure(figsize=(10, 8))
+    plt.plot(x_values, M_P_values, label=r'$M_P(x) = a * x^m * (1 - x^m)^{n-m} * b * (1 - x)^{o-n} * c * x^{p-n} * (1 - x^p)^{q-p} * d * (1 - x)

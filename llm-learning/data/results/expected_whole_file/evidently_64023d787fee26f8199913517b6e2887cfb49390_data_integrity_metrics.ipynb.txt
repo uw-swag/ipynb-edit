@@ -1,0 +1,36 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_openml
+<\Cell_0>
+<Cell_1>
+# load "adult" dataset
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+# prepare target and prediction
+df['target'] = df['education-num']
+df['prediction'] = df['education-num'].values + np.random.normal(0, 6, df.shape[0])
+
+# make reference and current datasets
+reference_data = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data.head()
+<\Cell_1>
+<Cell_2>
+from evidently.report import Report
+from evidently.metrics import ColumnRegExpMetric
+
+report = Report(metrics=[ColumnRegExpMetric(column_name="education", reg_exp=r".*-.*", top=5)])
+report.run(current_data=current_data, reference_data=reference_data)
+report
+<\Cell_2>
+<Cell_3>
+report = Report(metrics=[ColumnRegExpMetric(column_name="relationship", reg_exp=r".*child.*")])
+report.run(current_data=current_data, reference_data=None)
+report
+<\Cell_3>
+<Cell_4>
+
+<\Cell_4>

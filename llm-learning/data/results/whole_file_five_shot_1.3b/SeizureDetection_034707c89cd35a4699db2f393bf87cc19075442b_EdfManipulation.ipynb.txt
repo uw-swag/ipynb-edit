@@ -1,0 +1,32 @@
+```python
+    # train.py
+    import pandas as pd
+    from bs4 import BeautifulSoup
+    import re
+    import nltk
+    from keras.preprocessing.text import Tokenizer
+    from keras.preprocessing.sequence import pad_sequences
+    from sklearn.model_selection import train_test_split
+    from keras.models import Sequential
+    from keras.layers import Dense, Flatten, Embedding, Bidirectional, LSTM, Dropout
+    from keras.callbacks import ModelCheckpoint
+
+    def clean_review(sentence):
+        sentence = BeautifulSoup(sentence, 'lxml').get_text() 
+        sentence = re.sub("[^a-zA-Z]"," ", sentence).lower().strip()
+        while "  " in sentence:  
+            sentence = sentence.replace("  ", " ")
+        sentence_split = sentence.split()
+        stop_words = nltk.corpus.stopwords.words('english')
+        review_cleaned = filter(lambda w: True if w not in stop_words else False, sentence_split)    
+        return " ".join(list(review_cleaned))
+
+    def cleaning_each_review(sentence):
+        sentence = BeautifulSoup(sentence, 'lxml').get_text() 
+        sentence = re.sub("[^a-zA-Z]"," ", sentence).lower().strip()
+        while "  " in cleaned_review: # 공백을 없애줍니다. 
+            cleaned_review = cleaned_review.replace("  ", " ")
+        words_in_cleaned_review = cleaned_review.split(" ")# 단어를 잘라줍니다. 
+        stop_words = nltk.corpus.stopwords.words('english')
+        words_in_cleaned_review = filter(lambda w: True if w not in stop_words else False, words_in_cleaned_review)    
+        return " ".join(list

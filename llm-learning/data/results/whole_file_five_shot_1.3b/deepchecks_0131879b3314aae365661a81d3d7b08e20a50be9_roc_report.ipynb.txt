@@ -1,0 +1,19 @@
+```python
+    # Add youden's index marker point to roc report
+    import numpy as np
+    from sklearn.metrics import roc_curve, roc_auc_score
+
+    # Compute ROC curve and ROC area for each class
+    fpr, tpr, _ = roc_curve(y_test, clf.predict_proba(X_test)[:, 1])
+    roc_auc = roc_auc_score(y_test, clf.predict_proba(X_test)[:, 1])
+
+    # Youden's index
+    youden_index = tpr - fpr
+
+    # Add youden's index to the roc report
+    check.roc_auc = roc_auc
+    check.roc_auc_curve = (fpr, tpr, youden_index)
+
+    # Run the check
+    check.run(ds, clf)
+    ```

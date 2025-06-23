@@ -1,0 +1,45 @@
+```python
+    ## Chapter 1: Introduction to Neural Networks
+
+    ### 1.1 Introduction
+
+    Neural networks are a class of artificial neural networks, which are inspired by the human brain's biological neural networks. They are used in a wide range of applications, from image and speech recognition to machine learning and data mining.
+
+    ### 1.2 Importing Libraries
+
+    The first step in using neural networks is to import the necessary libraries. In Python, we can use libraries like `numpy` for numerical computations, `matplotlib` for data visualization, and `sklearn` for machine learning tasks.
+
+    ### 1.3 Creating a Simple Neural Network
+
+    Let's create a simple neural network with one input layer, one hidden layer, and one output layer. The input layer has 2 inputs, the hidden layer has 3 neurons, and the output layer has 1 neuron.
+
+    ```python
+    import numpy as np
+
+    # weights
+    weights_input_hidden = np.random.normal(size=(2, 3))
+    weights_hidden_output = np.random.normal(size=(3, 1))
+
+    # bias
+    bias_hidden = np.random.normal(size=(1, 3))
+    bias_output = np.random.normal(size=(1, 1))
+
+    # input and output
+    inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    expected_output = np.array([[0], [1], [1], [0]])
+    ```
+
+    ### 1.4 Forward Propagation
+
+    In forward propagation, we calculate the output of the network.
+
+    ```python
+    def sigmoid(x):
+        return 1 / (1 + np.exp(-x))
+
+    def sigmoid_derivative(x):
+        return x * (1 - x)
+
+    input_layer = inputs
+    hidden_layer = sigmoid(np.dot(input_layer, weights_input_hidden) + bias_hidden)
+    output_layer = sigmoid(

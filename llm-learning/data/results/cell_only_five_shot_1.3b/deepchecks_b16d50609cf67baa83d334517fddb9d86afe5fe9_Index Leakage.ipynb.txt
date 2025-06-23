@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score
+
+    # Assuming you have a DataFrame df with features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Train a Random Forest model
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+    clf.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = clf.predict(X_test)
+
+    # Calculate the accuracy of the model
+    accuracy = accuracy_score(y_test, y_pred)
+
+    # Print the accuracy
+    print(f"Accuracy: {accuracy}")
+
+    # Now, let's try to leak an index from the test set to the training set
+    X_train_leak = X_train.iloc[0:1, :]  # Select the first row of the training set
+    y_train_leak = y_train.iloc[0]  # Select the target of the first row of the training set
+
+    # Add the leaky index to the training set
+    X_train = pd.concat([X_train, X_train_leak], axis=0)
+    y_train = pd.concat([y_train, y_train_leak], axis=0)
+
+    # Train the model again with the updated training set
+    clf.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred_leak = clf.predict(X_test)
+
+    # Calculate the accuracy of the model after the index leakage
+    accuracy_leak = accuracy_score(y

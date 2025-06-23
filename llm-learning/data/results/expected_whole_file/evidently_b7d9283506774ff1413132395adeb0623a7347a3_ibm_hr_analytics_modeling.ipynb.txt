@@ -1,0 +1,893 @@
+<Cell_0>
+#Import of the particular libraries 
+import math
+import numpy as np
+import os 
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from sklearn.ensemble import RandomForestClassifier
+from sklearn import metrics
+from catboost import CatBoostClassifier
+<\Cell_1>
+<Cell_2>
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, ClassificationPerformanceTab, ProbClassificationPerformanceTab, CatTargetDriftTab
+<\Cell_2>
+<Cell_3>
+#Import of the visualization libraries 
+import matplotlib
+import matplotlib.pyplot as plt
+
+red = "#ed0400"
+grey = "#4d4d4d"
+evidently_cmap = matplotlib.colors.ListedColormap([red, grey])
+
+%matplotlib inline
+<\Cell_3>
+<Cell_4>
+DATA_DIR = "datasets/ibm-hr-analytics//" #full path to directory with the input data 
+              
+dataset_path = os.path.join(DATA_DIR, "WA_Fn-UseC_-HR-Employee-Attrition.csv")
+<\Cell_4>
+<Cell_5>
+dataset = pd.read_csv(dataset_path, sep = ',', header = 0)
+<\Cell_5>
+<Cell_6>
+dataset.head()
+<\Cell_6>
+<Cell_7>
+dataset.shape
+<\Cell_7>
+<Cell_8>
+dataset.describe()
+<\Cell_8>
+<Cell_9>
+dataset.info()
+<\Cell_9>
+<Cell_10>
+#check if EmployeeNumber is a correct index
+dataset.EmployeeNumber.nunique() == dataset.shape[0]
+<\Cell_10>
+<Cell_11>
+#constant features
+print(dataset.EmployeeCount.nunique())
+print(dataset.StandardHours.nunique())
+print(dataset.Over18.nunique())
+<\Cell_11>
+<Cell_12>
+target_name = 'Attrition'
+<\Cell_12>
+<Cell_13>
+numerique_features = ['Age', 'DailyRate', 'DistanceFromHome', 'Education', 'EnvironmentSatisfaction',
+                      'HourlyRate', 'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+                      'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike', 'PerformanceRating',
+                      'RelationshipSatisfaction','StockOptionLevel', 'TotalWorkingYears',
+                      'TrainingTimesLastYear', 'WorkLifeBalance', 'YearsAtCompany', 'YearsInCurrentRole',
+                      'YearsSinceLastPromotion', 'YearsWithCurrManager'
+                     ]
+<\Cell_13>
+<Cell_14>
+categorical_features = ['BusinessTravel', 'Department', 'EducationField', 'Gender',
+                        'JobRole', 'MaritalStatus', 'OverTime'
+                       ]
+<\Cell_14>
+<Cell_15>
+processed_dataset = dataset.copy(deep = True)
+<\Cell_15>
+<Cell_16>
+processed_dataset.drop(columns = ['EmployeeCount', 'StandardHours', 'Over18'], inplace = True)
+<\Cell_16>
+<Cell_17>
+processed_dataset.BusinessTravel.value_counts()
+<\Cell_17>
+<Cell_18>
+business_travel_dummies = pd.get_dummies(processed_dataset.BusinessTravel, prefix = 'b_travel')
+processed_dataset = pd.concat([processed_dataset, business_travel_dummies], axis=1)
+<\Cell_18>
+<Cell_19>
+dataset.Department.value_counts()
+<\Cell_19>
+<Cell_20>
+department_dummies = pd.get_dummies(processed_dataset.Department, prefix = 'department')
+processed_dataset = pd.concat([processed_dataset, department_dummies], axis=1)
+<\Cell_20>
+<Cell_21>
+dataset.EducationField.value_counts()
+<\Cell_21>
+<Cell_22>
+edu_field_dummies = pd.get_dummies(processed_dataset.Department, prefix = 'edu_field')
+processed_dataset = pd.concat([processed_dataset, edu_field_dummies], axis=1)
+<\Cell_22>
+<Cell_23>
+dataset.Gender.value_counts()
+<\Cell_23>
+<Cell_24>
+processed_dataset['gender_bin'] = processed_dataset.Gender.apply(
+    lambda x : 0 if x == 'Male' else 1 if x == 'Female' else -1)
+<\Cell_24>
+<Cell_25>
+dataset.JobRole.value_counts()
+<\Cell_25>
+<Cell_26>
+job_role_dummies = pd.get_dummies(processed_dataset.JobRole, prefix = 'job_role')
+processed_dataset = pd.concat([processed_dataset, job_role_dummies], axis=1)
+<\Cell_26>
+<Cell_27>
+dataset.MaritalStatus.value_counts()
+<\Cell_27>
+<Cell_28>
+marital_dummies = pd.get_dummies(processed_dataset.MaritalStatus, prefix = 'marital')
+processed_dataset = pd.concat([processed_dataset, marital_dummies], axis=1)
+<\Cell_28>
+<Cell_29>
+dataset.OverTime.value_counts()
+<\Cell_29>
+<Cell_30>
+overtime_dummies = pd.get_dummies(processed_dataset.OverTime, prefix = 'overtime')
+processed_dataset = pd.concat([processed_dataset, overtime_dummies], axis=1)
+<\Cell_30>
+<Cell_31>
+#drop initial categorical features
+processed_dataset.drop(columns = categorical_features, inplace = True)
+<\Cell_31>
+<Cell_32>
+processed_dataset['target'] = processed_dataset.Attrition.apply(
+    lambda x : 0 if x == 'No' else 1 if x == 'Yes' else -1)
+<\Cell_32>
+<Cell_33>
+processed_dataset.columns
+<\Cell_33>
+<Cell_34>
+features = ['Age','DailyRate', 'DistanceFromHome', 'Education',
+       'EmployeeNumber', 'EnvironmentSatisfaction', 'HourlyRate',
+       'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+       'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike',
+       'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel',
+       'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
+       'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
+       'YearsWithCurrManager', 'b_travel_Non-Travel',
+       'b_travel_Travel_Frequently', 'b_travel_Travel_Rarely',
+       'department_Human Resources', 'department_Research & Development',
+       'department_Sales', 'edu_field_Human Resources',
+       'edu_field_Research & Development', 'edu_field_Sales', 'gender_bin',
+       'job_role_Healthcare Representative', 'job_role_Human Resources',
+       'job_role_Laboratory Technician', 'job_role_Manager',
+       'job_role_Manufacturing Director', 'job_role_Research Director',
+       'job_role_Research Scientist', 'job_role_Sales Executive',
+       'job_role_Sales Representative', 'marital_Divorced', 'marital_Married',
+       'marital_Single', 'overtime_No', 'overtime_Yes',]
+<\Cell_34>
+<Cell_35>
+processed_dataset.info()
+<\Cell_35>
+<Cell_36>
+from sklearn.model_selection import train_test_split
+<\Cell_36>
+<Cell_37>
+RANDOM_STATE = 1603
+
+train_data, test_data, train_y, test_y = train_test_split(processed_dataset[features], processed_dataset.target,
+                                                   random_state = RANDOM_STATE, test_size = 0.25,
+                                                   stratify = processed_dataset.target)
+<\Cell_37>
+<Cell_38>
+train_y.value_counts()
+<\Cell_38>
+<Cell_39>
+test_y.value_counts()
+<\Cell_39>
+<Cell_40>
+def get_precison_recall_table(target, probs, step_size = 0.05):
+    
+    binded = list(zip(target, probs))
+    binded.sort(key = lambda item: item[1], reverse = True)
+    
+    data_size = len(binded)
+    target_class_size = sum(list(map(lambda x: x[0], binded)))
+
+    result = pd.DataFrame(columns = ['Top(%)', 'Count', 'TP', 'FP', 'precision', 'recall'])
+
+    offset = int(data_size*step_size)
+    for step in np.arange(offset, data_size + offset, offset):
+        count = min(step, data_size)
+        top = round(100.0*min(step, data_size)/data_size, 1)
+        tp = sum(list(map(lambda x: x[0], binded[:min(step, data_size)])))
+        fp = count - tp
+        precision = round(100.0*tp/count, 1)
+        recall = round(100.0*tp/target_class_size, 1)
+        #print(top, count, tp, fp, precision, recall)
+
+        result = result.append({'Top(%)' : top, 
+                       'Count' : count, 
+                       'TP' : tp, 
+                       'FP' : fp, 
+                       'precision' : precision, 
+                       'recall' : recall}, ignore_index = True)
+
+    return result
+<\Cell_40>
+<Cell_41>
+rf = RandomForestClassifier(n_estimators=500, n_jobs = -1, random_state = 11)
+<\Cell_41>
+<Cell_42>
+rf.fit(train_data[features], train_y)
+<\Cell_42>
+<Cell_43>
+metrics.roc_auc_score(test_y, list(map(lambda x : x[1], rf.predict_proba(test_data[features]))))
+<\Cell_43>
+<Cell_44>
+print(metrics.classification_report(test_y, rf.predict(test_data[features]), digits=3))
+<\Cell_44>
+<Cell_45>
+get_precison_recall_table(test_y, list(map(lambda x : x[1], rf.predict_proba(test_data[features]))),
+                          step_size= 0.05)
+<\Cell_45>
+<Cell_46>
+train_probas = pd.DataFrame(rf.predict_proba(train_data[features]))
+train_probas.columns = ['no', 'yes']
+test_probas = pd.DataFrame(rf.predict_proba(test_data[features]))
+test_probas.columns = ['no', 'yes']
+<\Cell_46>
+<Cell_47>
+train_data.reset_index(inplace=True, drop=True)
+train_data['Attrition'] = ['no' if x == 0 else 'yes' for x in train_y]
+rf_merged_train = pd.concat([train_data, train_probas], axis = 1)
+
+test_data.reset_index(inplace=True, drop=True)
+test_data['Attrition'] = ['no' if x == 0 else 'yes' for x in test_y]
+rf_merged_test = pd.concat([test_data, test_probas], axis = 1)
+<\Cell_47>
+<Cell_48>
+column_mapping = {}
+
+column_mapping['target'] = 'Attrition'
+column_mapping['prediction'] = ['yes', 'no']
+
+column_mapping['numerical_features'] = ['Age','DailyRate', 'DistanceFromHome', 'Education',
+       'EmployeeNumber', 'EnvironmentSatisfaction', 'HourlyRate',
+       'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+       'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike',
+       'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel',
+       'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
+       'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
+       'YearsWithCurrManager']
+column_mapping['categorical_features'] = ['b_travel_Non-Travel',
+       'b_travel_Travel_Frequently', 'b_travel_Travel_Rarely',
+       'department_Human Resources', 'department_Research & Development',
+       'department_Sales', 'edu_field_Human Resources',
+       'edu_field_Research & Development', 'edu_field_Sales', 'gender_bin',
+       'job_role_Healthcare Representative', 'job_role_Human Resources',
+       'job_role_Laboratory Technician', 'job_role_Manager',
+       'job_role_Manufacturing Director', 'job_role_Research Director',
+       'job_role_Research Scientist', 'job_role_Sales Executive',
+       'job_role_Sales Representative', 'marital_Divorced', 'marital_Married',
+       'marital_Single', 'overtime_No', 'overtime_Yes']
+<\Cell_48>
+<Cell_49>
+report = Dashboard(rf_merged_train, rf_merged_test, column_mapping = column_mapping, 
+                       tabs=[ProbClassificationPerformanceTab])
+report.show()
+<\Cell_49>
+<Cell_50>
+report.save('reports/ibm_hr_attrition_baseline_performance.html')
+<\Cell_50>
+<Cell_51>
+cat = CatBoostClassifier(random_state= 11, iterations=1600, learning_rate=0.008, class_weights = {0:1, 1:6})
+<\Cell_51>
+<Cell_52>
+cat.fit(train_data[features], train_y)
+<\Cell_52>
+<Cell_53>
+metrics.accuracy_score(test_y, cat.predict(test_data[features]))
+<\Cell_53>
+<Cell_54>
+metrics.roc_auc_score(test_y, [ x[1] for x in cat.predict_proba(test_data[features])])
+<\Cell_54>
+<Cell_55>
+print(metrics.classification_report(test_y, cat.predict(test_data[features]), digits=3))
+<\Cell_55>
+<Cell_56>
+get_precison_recall_table(test_y, list(map(lambda x : x[1], cat.predict_proba(test_data[features]))),
+                          step_size= 0.05)
+<\Cell_56>
+<Cell_57>
+train_probas = pd.DataFrame(cat.predict_proba(train_data[features]))
+train_probas.columns = ['no', 'yes']
+test_probas = pd.DataFrame(cat.predict_proba(test_data[features]))
+test_probas.columns = ['no', 'yes']
+<\Cell_57>
+<Cell_58>
+train_data.reset_index(inplace=True, drop=True)
+train_data['target'] = ['no' if x == 0 else 'yes' for x in train_y]
+cat_merged_train = pd.concat([train_data, train_probas], axis = 1)
+
+test_data.reset_index(inplace=True, drop=True)
+test_data['target'] = ['no' if x == 0 else 'yes' for x in test_y]
+cat_merged_test = pd.concat([test_data, test_probas], axis = 1)
+<\Cell_58>
+<Cell_59>
+column_mapping = {}
+
+column_mapping['target'] = 'Attrition'
+column_mapping['prediction'] = ['yes', 'no']
+
+column_mapping['numerical_features'] = ['Age','DailyRate', 'DistanceFromHome', 'Education',
+       'EmployeeNumber', 'EnvironmentSatisfaction', 'HourlyRate',
+       'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+       'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike',
+       'PerformanceRating', 'RelationshipSatisfaction', 'StockOptionLevel',
+       'TotalWorkingYears', 'TrainingTimesLastYear', 'WorkLifeBalance',
+       'YearsAtCompany', 'YearsInCurrentRole', 'YearsSinceLastPromotion',
+       'YearsWithCurrManager']
+column_mapping['categorical_features'] = ['b_travel_Non-Travel',
+       'b_travel_Travel_Frequently', 'b_travel_Travel_Rarely',
+       'department_Human Resources', 'department_Research & Development',
+       'department_Sales', 'edu_field_Human Resources',
+       'edu_field_Research & Development', 'edu_field_Sales', 'gender_bin',
+       'job_role_Healthcare Representative', 'job_role_Human Resources',
+       'job_role_Laboratory Technician', 'job_role_Manager',
+       'job_role_Manufacturing Director', 'job_role_Research Director',
+       'job_role_Research Scientist', 'job_role_Sales Executive',
+       'job_role_Sales Representative', 'marital_Divorced', 'marital_Married',
+       'marital_Single', 'overtime_No', 'overtime_Yes']
+<\Cell_59>
+<Cell_60>
+model_report = Dashboard(cat_merged_train, cat_merged_test, column_mapping = column_mapping, 
+                       tabs=[ProbClassificationPerformanceTab])
+model_report.show()
+<\Cell_60>
+<Cell_61>
+model_report.save('reports/ibm_hr_attrition_better_model_performance.html')
+<\Cell_61>
+<Cell_62>
+comparison_report = Dashboard(rf_merged_test, cat_merged_test, column_mapping = column_mapping, 
+                       tabs=[ProbClassificationPerformanceTab])
+comparison_report.show()
+<\Cell_62>
+<Cell_63>
+comparison_report.save('reports/ibm_hr_attrition_model_comparison.html')
+<\Cell_63>
+<Cell_64>
+'HourlyRate',
+       'JobInvolvement', 'JobLevel', 'JobSatisfaction', 'MonthlyIncome',
+       'MonthlyRate', 'NumCompaniesWorked', 'PercentSalaryHike',
+       'PerformanceRating', 
+    'department_Human Resources', 'department_Research & Development',
+       'department_Sales', 
+        'Education'
+<\Cell_64>
+<Cell_65>
+cat_merged_test.MonthlyIncome.plot()
+<\Cell_65>
+<Cell_66>
+cat_merged_test.JobLevel.value_counts()
+<\Cell_66>
+<Cell_67>
+segments_report = Dashboard(cat_merged_test[cat_merged_test['JobLevel'] <= 2], 
+                              cat_merged_test[cat_merged_test['JobLevel'] > 2], 
+                              column_mapping = column_mapping, 
+                              tabs=[ProbClassificationPerformanceTab])
+segments_report.show()
+<\Cell_67>
+<Cell_68>
+np.random.seed(1)
+
+cat_probs = list(map(lambda x : x[1], cat.predict_proba(test_data[features])))
+
+fig = go.Figure()
+
+#RANDOM CHOICE
+fig.add_trace(go.Scatter(
+    x = list(map(lambda x: -2.5 + x,  np.random.random(len(test_y)))),
+    y = np.random.random(len(test_y)),
+    mode = 'markers',
+    name = 'Random choice',
+    marker=dict(
+        size=6,
+        color=test_y, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+#TRAINED MODEL
+fig.add_trace(go.Scatter(
+    x = np.random.random(len(test_y)),
+    y = cat_probs,
+    mode = 'markers',
+    name = 'Trained model',
+    marker=dict(
+        size=6,
+        color=test_y, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+#IDEAL SEPARATION
+fig.add_trace(go.Scatter(
+    x = list(map(lambda x: 3.5 + x,  np.random.random(len(test_y)))),
+    y = test_y,
+    mode = 'markers',
+    #marker_color = answers['y'],
+    name = 'Ideal separation', 
+    marker=dict(
+        size=6,
+        color=test_y, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+
+fig.update_layout(
+    yaxis_title="Probability of Attrition",
+    width=700,
+    height=500,
+    xaxis = dict(
+        range=(-5, 6),
+        showticklabels=False
+        #constrain='domain'
+    )
+)
+
+fig.show()
+<\Cell_68>
+<Cell_69>
+np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = test_data.MonthlyIncome ,
+    y = cat_probs,
+    mode = 'markers',
+    marker=dict(
+        size=6,
+        color=test_y, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales   
+    )
+))
+
+
+fig.update_layout(
+    xaxis_title="Monthly Income",
+    yaxis_title="Probability of Attrition",
+    xaxis = dict(
+        showticklabels=True
+    ),
+     yaxis = dict(
+        range=(0, 1),
+        showticklabels=True
+    ),
+    
+    shapes=[
+        # 1st highlight during Feb 4 - Feb 6
+        dict(
+            type="rect",
+            # x-reference is assigned to the x-values
+            xref="x",
+            # y-reference is assigned to the plot paper [0,1]
+            yref="paper",
+            x0=0,
+            y0=0,
+            x1=3700,
+            y1=1,
+            fillcolor="LightGreen",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        ),
+        # 2st highlight during Feb 4 - Feb 6
+        dict(
+            type="rect",
+            # x-reference is assigned to the x-values
+            xref="x",
+            # y-reference is assigned to the plot paper [0,1]
+            yref="paper",
+            x0=3700,
+            y0=0,
+            x1=8200,
+            y1=1,
+            fillcolor="LightSalmon",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        ),
+        # 3nd highlight during Feb 20 - Feb 23
+        dict(
+            type="rect",
+            xref="x",
+            yref="paper",
+            x0=8200,
+            y0=0,
+            x1=21000,
+            y1=1,
+            fillcolor="LightGreen",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        )
+    ]
+    
+)
+
+fig.show()
+<\Cell_69>
+<Cell_70>
+test_analytics = test_data.copy(deep = True)
+test_analytics['target'] = test_y
+test_analytics['probs'] = cat_probs
+test_analytics['is_correct'] = test_analytics.apply(lambda row: 1 if (row['probs'] >= 0.5 and row['target'] == 1) or
+                                                                     (row['probs'] < 0.5 and row['target'] == 0)
+                                                                else 0
+                                                                      , axis=1)
+<\Cell_70>
+<Cell_71>
+### np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = test_analytics[test_analytics.target == 1].DistanceFromHome,
+    y = test_analytics[test_analytics.target == 1].MonthlyIncome,
+    mode = 'markers',
+    marker=dict(
+        size=list(map(lambda x : x*30, test_analytics[test_analytics.target == 1].probs)), 
+        color=test_analytics[test_analytics.target == 1].is_correct, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        showscale=False
+    )
+
+))
+
+fig.update_layout(
+    xaxis_title="Distance From Home",
+    yaxis_title="Montly Income",
+    width=700,
+    height=500,
+    #xaxis = dict(
+    #    range=(-5, 6),
+    #    showticklabels=False
+    #)
+)
+
+fig.show()
+<\Cell_71>
+<Cell_72>
+list(map(lambda x : x*10, [1,2,3]))
+<\Cell_72>
+<Cell_73>
+test_analytics = test_data.copy(deep = True)
+<\Cell_73>
+<Cell_74>
+test_analytics['target'] = test_y
+test_analytics['probs'] = test_y_probs
+<\Cell_74>
+<Cell_75>
+test_probs = rf.predict_proba(test_data[features])
+test_y_probs = list(map(lambda x : x[1], rf.predict_proba(test_data[features])))
+test_other_probs = list(map(lambda x : x[0], rf.predict_proba(test_data[features])))
+<\Cell_75>
+<Cell_76>
+answers = pd.DataFrame()
+answers['target_prob'] = test_y_probs
+answers['other_prob'] = test_other_probs
+answers['y'] = test_y.values
+answers['idx'] = test_y.index
+<\Cell_76>
+<Cell_77>
+answers
+<\Cell_77>
+<Cell_78>
+test_y_probs
+<\Cell_78>
+<Cell_79>
+?go.Scatter
+<\Cell_79>
+<Cell_80>
+?np.random.random
+<\Cell_80>
+<Cell_81>
+shifts =  list(map(lambda x : x, np.random.random(59)))
+<\Cell_81>
+<Cell_82>
+answers.shape
+<\Cell_82>
+<Cell_83>
+?go.Scatter
+<\Cell_83>
+<Cell_84>
+np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = np.random.random(answers.shape[0]),
+    y = answers['target_prob'],
+    mode = 'markers',
+    #marker_color = answers['y'],
+    marker=dict(
+        size=6,
+        color=answers['y'], #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+fig.update_layout(
+    yaxis_title="Probability of Attrition",
+    width=500,
+    height=500,
+    xaxis = dict(
+        range=(-2, 3),
+        showticklabels=False
+        #constrain='domain'
+    )
+)
+
+fig.show()
+<\Cell_84>
+<Cell_85>
+np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = np.random.random(answers.shape[0]),
+    y = answers['y'],
+    mode = 'markers',
+    #marker_color = answers['y'],
+    marker=dict(
+        size=6,
+        color=answers['y'], #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+fig.update_layout(
+    width=500,
+    height=500,
+    xaxis = dict(
+        range=(-2, 3),
+        showticklabels=False
+        #constrain='domain'
+    )
+)
+
+fig.show()
+<\Cell_85>
+<Cell_86>
+np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = np.random.random(answers.shape[0]),
+    y = np.random.random(answers.shape[0]),
+    mode = 'markers',
+    #marker_color = answers['y'],
+    marker=dict(
+        size=6,
+        color=answers['y'], #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+fig.update_layout(
+    width=500,
+    height=500,
+    xaxis = dict(
+        range=(-2, 3),
+        showticklabels=False
+        #constrain='domain'
+    )
+)
+
+fig.show()
+<\Cell_86>
+<Cell_87>
+train_data.columns
+<\Cell_87>
+<Cell_88>
+rf.feature_importances_
+<\Cell_88>
+<Cell_89>
+np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = test_analytics.MonthlyIncome,
+    y = test_analytics.probs,
+    mode = 'markers',
+    #marker_color = answers['y'],
+    marker=dict(
+        size=6,
+        color=test_analytics.target, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+#fig.add_shape(
+        # Line Vertical
+#        dict(
+#            type="line",
+#            x0=3173,
+#            y0=0,
+#            x1=3173,
+#            y1=1,
+#            line=dict(
+#                color="RoyalBlue",
+#                width=3
+#            )
+#))
+
+fig.update_layout(
+    xaxis_title="Monthly Income",
+    yaxis_title="Probability of Attrition",
+    width=800,
+    height=600,
+    xaxis = dict(
+        #range=(-2, 3),
+        showticklabels=True
+        #constrain='domain'
+    ),
+     yaxis = dict(
+        range=(0, 1),
+        showticklabels=True
+        #constrain='domain'
+    ),
+    
+    shapes=[
+        # 1st highlight during Feb 4 - Feb 6
+        dict(
+            type="rect",
+            # x-reference is assigned to the x-values
+            xref="x",
+            # y-reference is assigned to the plot paper [0,1]
+            yref="paper",
+            x0=0,
+            y0=0,
+            x1=3173,
+            y1=1,
+            fillcolor="LightGreen",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        ),
+        # 2st highlight during Feb 4 - Feb 6
+        dict(
+            type="rect",
+            # x-reference is assigned to the x-values
+            xref="x",
+            # y-reference is assigned to the plot paper [0,1]
+            yref="paper",
+            x0=3173,
+            y0=0,
+            x1=10500,
+            y1=1,
+            fillcolor="LightSalmon",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        ),
+        # 3nd highlight during Feb 20 - Feb 23
+        dict(
+            type="rect",
+            xref="x",
+            yref="paper",
+            x0=10500,
+            y0=0,
+            x1=21000,
+            y1=1,
+            fillcolor="LightGreen",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        )
+    ]
+    
+)
+
+fig.show()
+<\Cell_89>
+<Cell_90>
+np.random.seed(1)
+
+fig = go.Figure()
+
+fig.add_trace(go.Scatter(
+    x = test_analytics.Age,
+    y = test_analytics.probs,
+    mode = 'markers',
+    marker=dict(
+        size=6,
+        color=test_analytics.target, #set color equal to a variable
+        colorscale=[grey, red], # one of plotly colorscales
+        #showscale=True
+    )
+
+))
+
+
+fig.update_layout(
+    xaxis_title="Age",
+    yaxis_title="Probability of Attrition",
+    width=800,
+    height=600,
+    xaxis = dict(
+        #range=(-2, 3),
+        showticklabels=True
+        #constrain='domain'
+    ),
+     yaxis = dict(
+        range=(0, 1),
+        showticklabels=True
+        #constrain='domain'
+    ),
+    
+    shapes=[
+        # 1st highlight during Feb 4 - Feb 6
+        dict(
+            type="rect",
+            # x-reference is assigned to the x-values
+            xref="x",
+            # y-reference is assigned to the plot paper [0,1]
+            yref="paper",
+            x0=0,
+            y0=0,
+            x1=26,
+            y1=1,
+            fillcolor="LightGreen",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        ),
+        # 2st highlight during Feb 4 - Feb 6
+        dict(
+            type="rect",
+            # x-reference is assigned to the x-values
+            xref="x",
+            # y-reference is assigned to the plot paper [0,1]
+            yref="paper",
+            x0=26,
+            y0=0,
+            x1=56,
+            y1=1,
+            fillcolor="LightSalmon",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        ),
+        # 3nd highlight during Feb 20 - Feb 23
+        dict(
+            type="rect",
+            xref="x",
+            yref="paper",
+            x0=56,
+            y0=0,
+            x1=99,
+            y1=1,
+            fillcolor="LightGreen",
+            opacity=0.5,
+            layer="below",
+            line_width=0,
+        )
+    ]
+    
+)
+
+fig.show()
+<\Cell_90>

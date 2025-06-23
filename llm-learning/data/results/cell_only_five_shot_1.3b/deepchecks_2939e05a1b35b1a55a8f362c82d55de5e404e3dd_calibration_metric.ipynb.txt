@@ -1,0 +1,52 @@
+```python
+    from nannyml.calibration import Calibration
+
+    # Assuming that 'calibration' is a Calibration object
+    if not isinstance(calibration, Calibration):
+        raise ValueError("'calibration' must be an instance of nannyml.calibration.Calibration")
+
+    # Check if the calibration metric is available
+    if 'calibration_metric' not in calibration.metrics:
+        raise ValueError("The calibration metric 'calibration_metric' is not available in the calibration object")
+
+    # Continue with the rest of your code
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added calibration metric check (#92)"
+    Original Code Cells:
+    '''
+    import nannyml as nml
+    from IPython.display import display
+
+    reference, analysis, analysis_targets = nml.load_titanic_dataset()
+    display(reference.head())
+    from docs.utils import print_multi_index_markdown
+    print_multi_index_markdown(reference.head())
+    selected_columns = [
+        'Sex', 'Ticket', 'Cabin', 'Embarked',
+    ]
+    calc = nml.UnseenValuesCalculator(
+        column_names=selected_columns,
+    )
+    calc.fit(reference)
+    results = calc.calculate(analysis)
+    display(results.filter(period='all').to_df())
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from nannyml.calibration import Calibration
+
+    # Assuming that 'calibration' is a Calibration object
+    if not isinstance(calibration, Calibration):
+        raise ValueError("'calibration' must be an instance of nannyml.calibration.Calibration")
+
+    # Check if the calibration metric is available
+    if 'calibration_metric' not in calibration.metrics:
+        raise ValueError("The calibration metric 'calibration_metric' is not available in the calibration object")
+
+    # Continue with the rest of

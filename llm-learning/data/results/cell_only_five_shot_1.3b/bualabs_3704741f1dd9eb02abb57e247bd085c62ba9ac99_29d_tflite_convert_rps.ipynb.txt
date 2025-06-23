@@ -1,0 +1,19 @@
+```python
+    # Intialize the TFLite converter to load the SavedModel
+converter = tf.lite.TFLiteConverter.from_saved_model(RPS_SAVED_MODEL)
+
+# Set the optimization strategy for 'size' in the converter 
+converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_SIZE]
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+converter.inference_input_type = tf.uint8
+converter.inference_output_type = tf.uint8
+
+converter.experimental_new_converter = True
+tflite_model_file = 'converted_model.tflite'
+
+with open(tflite_model_file, "wb") as f:
+    f.write(tflite_model)
+
+    ```
+
+    The code above is used to convert a TensorFlow SavedModel to a TFLite model. The TFLite model is then written to a file. The optimization strategy is set to 'size', which means that the TFLite model will be as small as possible. The inference input and output types are set to uint8, which means that the model will be able to process 8-bit integers.

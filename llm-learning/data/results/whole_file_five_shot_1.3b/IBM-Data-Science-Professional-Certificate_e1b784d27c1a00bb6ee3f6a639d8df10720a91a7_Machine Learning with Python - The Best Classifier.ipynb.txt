@@ -1,0 +1,45 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing the Decision Tree Algorithm"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from sklearn.tree import DecisionTreeClassifier
+
+    # Create Decision Tree classifer object
+    clf = DecisionTreeClassifier()
+
+    # Train Decision Tree Classifer
+    clf = clf.fit(X_train,y_train)
+    <\Cell_0>
+    ### Response:
+    # Now, we can use this trained model to make predictions on the test set.
+    y_pred = clf.predict(X_test)
+    y_pred
+    <\Cell_0>
+    ### Response:
+    # We can also evaluate the performance of the model by checking the accuracy, precision, recall, and F1-score.
+    from sklearn.metrics import classification_report, confusion_matrix
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+    <\Cell_0>
+    ### Response:
+    # Finally, we can visualize the decision tree to understand the model's decision process.
+    from sklearn.tree import plot_tree
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(15,10))
+    plot_tree(clf, filled=True)
+    plt.show()
+    <\Cell_0>
+    ### Response:
+    # The decision tree visualization will help us to understand the decision process of the model.
+    # We can also use the feature importance to understand the importance of each feature in the decision process.
+    feature_importances = pd.DataFrame(clf.feature_importances_,
+                                   index = X_train.columns,
+                                   columns=['importance']).sort_values('importance', ascending=False)
+    print(feature_importances)
+    ### Response:
+    # The feature importance will help us to understand the importance of each feature in the decision process.
+    # We can also use the decision tree to understand the decision process of the model.
+    # Finally, we can evaluate the performance

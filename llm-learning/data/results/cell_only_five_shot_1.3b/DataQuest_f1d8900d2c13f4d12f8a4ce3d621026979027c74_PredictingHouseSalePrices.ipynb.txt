@@ -1,0 +1,51 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('housing_prices.csv')
+
+    # Checking for any missing values
+    df.isnull().sum()
+
+    # Dropping the missing values
+    df = df.dropna()
+
+    # Defining the features and the target variable
+    X = df.drop('SalePrice', axis=1)
+    y = df['SalePrice']
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Creating a linear regression model
+    lm = LinearRegression()
+
+    # Training the model
+    lm.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = lm.predict(X_test)
+
+    # Evaluating the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+
+    # Saving the model
+    import joblib
+    joblib.dump(lm, 'housing_price_model.pkl')
+
+    # Loading the model
+    loaded_model = joblib.load('housing_price_model.pkl')
+
+    # Making predictions with the loaded model
+    loaded_y_pred = loaded_model.predict(X_test)
+
+    # Comparing the predictions
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, loaded_y_pred))
+   

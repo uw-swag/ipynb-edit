@@ -1,0 +1,67 @@
+
+    The typo in the class name "callable" to "callable class" was corrected in the code. The corrected code is as follows:
+
+```python
+<Cell_0>
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+import torch
+import matplotlib.pyplot as plt
+import ipywidgets as widgets
+from time import sleep
+# from IPython.display import display
+<\Cell_1>
+<Cell_2>
+def save_file(p=0): print("Saved to disk!")
+<\Cell_2>
+<Cell_3>
+w = widgets.Button(description="Save")
+<\Cell_3>
+<Cell_4>
+# display(w)
+w 
+<\Cell_4>
+<Cell_5>
+w.on_click(save_file)
+<\Cell_5>
+<Cell_6>
+def calculation_program():    
+    result = 0
+    for i in range(5):
+        result += i * 2
+        sleep(1)
+    return result
+<\Cell_6>
+<Cell_7>
+%time calculation_program()
+<\Cell_7>
+<Cell_8>
+def calculation_program2(callback):    
+    result = 0
+    for i in range(5):
+        result += i * 2
+        sleep(1)
+        if callback: callback()
+    return result
+<\Cell_8>
+<Cell_9>
+calculation_program2(save_file)
+<\Cell_9>
+<Cell_10>
+def slow_calculation3(callback):    
+    result = 0
+    for i in range(5):
+        result += i * 2
+        sleep(1)
+        if callback: callback(i)
+    return result
+<\Cell_10>
+<Cell_11>
+def save_file2(disk_no):
+    print(f'Saved file to disk {disk_no}!')
+<\Cell_11>
+<Cell_12>
+slow_calculation3(save_file2)

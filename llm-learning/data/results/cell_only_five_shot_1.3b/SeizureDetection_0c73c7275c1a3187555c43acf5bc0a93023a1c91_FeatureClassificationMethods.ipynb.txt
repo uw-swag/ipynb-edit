@@ -1,0 +1,29 @@
+```
+    def LDA(X_train, y_train, X_test, y_test, experiment, results):
+        print('Implementing LDA...')
+        start = time.time()
+        shr = 0
+        if experiment.upper() == 'LEFTRIGHT': shr = 'auto'
+        clf = LinearDiscriminantAnalysis(solver = 'lsqr', shrinkage = shr, tol = 1e-4)
+        lda_ind = clf.fit(X_train, y_train).predict(X_test)
+        end = time.time()
+        t = round(end - start,2)
+        acc, snv, spc, ppv, f1, mcc, kappa, tt = classificationPerformanceIndexes (y_test, lda_ind, t)
+        results.loc['LDA', :] = acc, snv, spc, ppv, f1, mcc, kappa, t
+        printClassificationPerformanceIndexes('LDA', acc, snv, spc, ppv, f1, mcc, kappa)
+        print('LDA finished in', t,'sec\n')
+
+    def LDA_Kfold(X, kf, experiment,cols, results):
+        f = pd.DataFrame(columns = cols)
+        print('Implementing LDA k-fold...')
+        start = time.time()
+        shr = 0
+        if experiment.upper() == 'LEFTRIGHT': shr = 'auto'
+        clf = LinearDiscriminantAnalysis(solver = 'lsqr', shrinkage = shr, tol = 1e-4)
+        for train, test in kf.split(X):
+            X_train = X.iloc[train,:X.shape[1]-1]
+            y_train = X.loc[train,'seizure']
+            X_test = X.iloc[test,:X.shape[1]-1]
+            y_test = X.loc[test,'seizure']
+            lda_ind = clf.fit(X_train, y_train).predict(X_test)
+            f.loc[

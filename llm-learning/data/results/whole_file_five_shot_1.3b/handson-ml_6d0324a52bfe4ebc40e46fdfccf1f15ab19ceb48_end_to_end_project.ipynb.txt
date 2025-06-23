@@ -1,0 +1,63 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding notebook for data visualization"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from __future__ import division, print_function, unicode_literals
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+<\Cell_1>
+<Cell_2>
+# Load the data
+df = pd.read_csv('data.csv')
+df.head()
+<\Cell_2>
+<Cell_3>
+# Check the data
+df.info()
+<\Cell_3>
+<Cell_4>
+# Visualize the data
+df.hist(bins=50, figsize=(20,15))
+plt.show()
+<\Cell_4>
+<Cell_5>
+# Correlation matrix
+corr_matrix = df.corr()
+sns.heatmap(corr_matrix, annot=True)
+plt.show()
+<\Cell_5>
+<Cell_6>
+# Pairplot
+sns.pairplot(df)
+plt.show()
+<\Cell_6>
+<Cell_7>
+# Scatter plot
+sns.scatterplot(x="feature1", y="feature2", hue="target", data=df)
+plt.show()
+<\Cell_7>
+<Cell_8>
+# Boxplot
+sns.boxplot(x="target", data=df)
+plt.show()
+<\Cell_8>
+<Cell_9>
+# Violin plot
+sns.violinplot(x="target", data=df)
+plt.show()
+<\Cell_9>
+<Cell_10>
+# Histplot
+sns.histplot(df["feature1"], bins=20)
+plt.show()
+<\Cell_10>
+<Cell_11>
+# Lmplot
+sns.lmplot(x="feature1", y="feature2", data=df

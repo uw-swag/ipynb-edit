@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "README: Adding an example of how to generate test generators"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.model_selection import cross_val_score
+
+    from sklearn.utils.class_weight import compute_class_weight
+
+    from sklearn.datasets import load_iris
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardizing the features
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Creating a Random Forest Classifier
+    classifier = RandomForestClassifier(n_estimators=20, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predicting the Test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluating the model
+    print('Accuracy:', accuracy_score(y_test, y_pred))
+
+    # Cross-validation
+    cv_scores = cross_val_score(estimator = classifier, X = X_train, y = y_train, cv = 10)
+    print('Cross-Validation Scores:', cv_scores)
+
+    # Class weights
+    class_weights = compute_class_weight('balanced', np.unique(y_train), y_train)
+    classifier.set_params(class_weight='balanced')
+    classifier.fit(X_train, y_train)
+
+    #

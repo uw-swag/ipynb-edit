@@ -1,0 +1,14 @@
+```
+    <Cell_0>
+    import pandas as pd
+    from sklearn import preprocessing
+    <\Cell_0>
+    <Cell_1>
+    def featureNormalization(ft):
+        seizures = ft['seizure'].copy()
+        norm_ft = pd.DataFrame(preprocessing.scale(ft), columns=ft.columns)
+        norm_ft['seizure'] = seizures
+        del seizures
+        return norm_ft
+    <\Cell_1>
+    ```

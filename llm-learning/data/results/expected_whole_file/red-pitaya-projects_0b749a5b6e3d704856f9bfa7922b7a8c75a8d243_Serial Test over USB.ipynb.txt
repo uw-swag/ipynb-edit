@@ -1,0 +1,141 @@
+<Cell_0>
+%ls /dev/ttyACM*
+<\Cell_0>
+<Cell_1>
+import serial
+import time
+import csv
+import re
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+import pandas as pd
+import numpy as np
+from datetime import datetime
+ 
+portPath = "/dev/ttyACM4"       # Must match value shown on Arduino IDE
+baud = 115200                   # Must match Arduino baud rate
+timeout = 5                     # Seconds
+filename = "data.csv"
+max_num_readings = 8
+num_signals = 1
+ 
+ 
+ 
+def create_serial_obj(portPath, baud_rate, tout):
+    """
+    Given the port path, baud rate, and timeout value, creates and returns a pyserial object.
+    """
+    return serial.Serial(portPath, baud_rate, timeout = tout)
+<\Cell_1>
+<Cell_2>
+def read_serial_data(serial):
+    """
+    Given a pyserial object (serial). Outputs a list of lines read in from the serial port
+    """
+    #serial.flushInput()
+    serial.reset_input_buffer()
+    
+    serial_data = []
+    readings_left = True
+    timeout_reached = False
+    
+    #Send data to start the transfer
+    serial.write(1)
+    #Wait for the data to be ready
+    time.sleep(2)
+    
+    while readings_left and not timeout_reached:
+        serial_line = serial.readline()
+        if serial_line == b'':
+            timeout_reached = True
+        else:
+            serial_data.append(serial_line)
+            if len(serial_data) == max_num_readings:
+                readings_left = False
+        
+    return serial_data
+<\Cell_2>
+<Cell_3>
+headers = ["Co2","Date & Time"]
+df = pd.read_csv(filename,names=headers,skiprows = 1)
+df
+<\Cell_3>
+<Cell_4>
+print ("Creating serial object...")
+serial_obj = create_serial_obj(portPath, baud, timeout)
+ 
+print ("Reading serial data...")
+serial_data = read_serial_data(serial_obj)
+#print serial_data.len()
+<\Cell_4>
+<Cell_5>
+def is_number(string):
+    """
+    Given a string returns True if the string represents a number.
+    Returns False otherwise.
+    """
+    try:
+        float(string)
+        return True
+    except ValueError:
+        return False
+        
+def clean_serial_data(data):
+    """
+    Given a list of serial lines (data). Removes all characters.
+    Returns the cleaned list of lists of digits.
+    Given something like: ['0.5000,33\r\n', '1.0000,283\r\n']
+    Returns: [[0.5,33.0], [1.0,283.0]]
+    """
+    clean_data = []
+    
+    for line in data:
+        line_data = float(line.strip())
+        #line_data = re.findall("\d*\.\d*|\d*",line) # Find all digits
+        #line_data = [float(element) for element in line_data if is_number(element)] # Convert strings to float
+        if line_data >= 0.0:
+            clean_data.append(line_data)
+        
+        clean_data.append(datetime.now())
+    return clean_data
+<\Cell_5>
+<Cell_6>
+print("Cleaning data...")
+clean_data =  clean_serial_data(serial_data)
+clean_data
+<\Cell_6>
+<Cell_7>
+clean_data_table = [clean_data]
+<\Cell_7>
+<Cell_8>
+pd_data_new_row = pd.DataFrame(clean_data_table,columns=["Co2","Date & Time"])
+pd_data_new_row
+<\Cell_8>
+<Cell_9>
+df = df.append(pd_data_new_row)
+df
+<\Cell_9>
+<Cell_10>
+df.to_csv(filename,names=headers)
+<\Cell_10>
+<Cell_11>
+headers = ["Co2","Date & Time"]
+df = pd.read_csv(filename,names=headers,skiprows = 1)
+df
+<\Cell_11>
+<Cell_12>
+dateparse = lambda x: pd.datetime.strptime(x, '%Y-%m-%d %H:%M:%S.%f')
+df = pd.read_csv(filename, parse_dates=['Date & Time'], date_parser=dateparse,index_col=0)
+df
+<\Cell_12>
+<Cell_13>
+x = df['Date & Time']
+y = df['Co2']
+
+# plot
+plt.plot(x,y)
+# beautify the x-labels
+plt.gcf().autofmt_xdate()
+
+plt.show()
+<\Cell_13>

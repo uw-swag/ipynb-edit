@@ -1,0 +1,38 @@
+```python
+    # Load the data set
+    url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+    names = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'class']
+    iris = pd.read_csv(url, names=names)
+    # feature names
+    iris.head()
+    # dimensions of the dataset
+    iris.shape
+    # statistical description of the dataset
+    iris.describe()
+    # dataset information
+    iris.info()
+    # class distribution
+    iris.groupby('class').size()
+    iris.hist(edgecolor='black', linewidth=1.2)
+    sns.pairplot(data=iris, hue="class", size=2)
+    sns.pairplot(iris, hue="class", size=2, diag_kind="kde")
+    iris.isna().sum()
+    iris.isnull().sum()
+
+    # Sync chapter 13 notebook with code samples in that chapter
+    dataset = np.array([china, flower], dtype=np.float32)
+    batch_size, height, width, channels = dataset.shape
+
+    filters = np.zeros(shape=(7, 7, channels, 2), dtype=np.float32)
+    filters[:, 3, :, 0] = 1  # vertical line
+    filters[3, :, :, 1] = 1  # horizontal line
+
+    X = tf.placeholder(tf.float32, shape=(None, height, width, channels))
+    convolution = tf.nn.conv2d(X, filters, strides=[1,2,2,1], padding="SAME")
+
+    with tf.Session() as sess:
+        output = sess.run(convolution, feed_dict={X: dataset})
+
+    for image_index in (0, 1):
+        for feature_map_index in (0, 1):
+            plot_image(output[

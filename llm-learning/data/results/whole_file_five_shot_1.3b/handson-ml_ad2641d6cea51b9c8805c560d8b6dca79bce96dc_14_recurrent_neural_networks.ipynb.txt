@@ -1,0 +1,38 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new cell to the notebook"
+    Original Code Cells:
+    '''
+    import tensorflow as tf
+
+    reset_graph()
+
+    n_steps = 50
+    n_neurons = 30
+    n_outputs = 1
+
+    learning_rate = 0.02
+    momentum = 0.95
+
+    X = tf.placeholder(tf.float32, [None, None, n_inputs], name="X")
+    seq_length = tf.placeholder(tf.int32, [None], name="seq_length")
+    y = tf.placeholder(tf.float32, [None, 1], name="y")
+
+    gru_cell = tf.contrib.rnn.GRUCell(num_units=n_neurons)
+    outputs, states = tf.nn.dynamic_rnn(gru_cell, X, dtype=tf.float32,
+                                        sequence_length=seq_length)
+
+    logits = tf.layers.dense(states, n_outputs, name="logits")
+    y_pred = tf.cast(tf.greater(logits, 0.), tf.float32, name="y_pred")
+    y_proba = tf.nn.sigmoid(logits, name="y_proba")
+
+    xentropy = tf.nn.sigmoid_cross_entropy_with_logits(labels=y, logits=logits)
+    loss = tf.reduce_mean(xentropy, name="loss")
+    optimizer = tf.train.MomentumOptimizer(learning_rate=learning_rate,
+                                         momentum=momentum,
+                                         use_nesterov=True)
+    training_op = optimizer.minimize(loss)
+
+    correct = tf.equal(y_pred, y, name="correct")
+    accuracy = tf.reduce_mean(tf.cast(correct, tf.float32), name="accuracy

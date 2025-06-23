@@ -1,0 +1,46 @@
+```
+    # import dependencies
+    from getpass import getpass
+    import sqlalchemy
+    from sqlalchemy import Column, Integer, String, ForeignKey, create_engine, text
+    import psycopg2
+
+    import pandas as pd
+
+    from sklearn.model_selection import train_test_split
+    from imblearn.over_sampling import RandomOverSampler
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import confusion_matrix
+    from sklearn.metrics import balanced_accuracy_score
+    from imblearn.metrics import classification_report_imbalanced
+
+    # SQL Alchemy connection from RDS
+    secret = getpass('Enter the secret value: ')
+
+    args ={
+        'host':"ogdataset.c11hekhsylui.us-west-1.rds.amazonaws.com",
+        'port':'5432',
+        'database':"og_dataset",
+        'user':"attritionProject",
+        'password':secret
+    }
+    engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".format(**args))
+    connection = engine.connect()
+
+    # read in table from database
+    attrition_df = pd.read_sql('SELECT * FROM encoded_data', connection)
+    attrition_df
+
+    # determine how many yes/no (1/0) values we have
+    attrition_df["Attrition"].value_counts()
+
+    # Split our preprocessed data into our features and target arrays
+    X = attrition_df.drop("Attrition",1).values
+    y = attrition_df["Attrition"].values
+
+    # Split the preprocessed data into a training and testing dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=78, stratify=y)
+
+    # Using random oversampling increase the number of minority class (Yes values)
+    ros = RandomOverSampler(random_state=1)
+    X_resampled

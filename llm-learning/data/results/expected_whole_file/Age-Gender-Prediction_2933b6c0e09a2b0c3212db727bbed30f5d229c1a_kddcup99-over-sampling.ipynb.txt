@@ -1,0 +1,263 @@
+<Cell_0>
+## Import library and read csv
+import pandas as pd
+import numpy as np 
+df = pd.read_csv('../input/d/lngcthun/kdd99-test/KDD99_KMEAN5K.csv')
+df
+<\Cell_0>
+<Cell_1>
+# # drop cac colunms khong can thiet
+# df = df.drop(columns = ['Unnamed: 0', 'rerror_rate', 'lnum_outbound_cmds', 'is_host_login'])
+
+df = df.drop(columns = ['Unnamed: 0'])
+<\Cell_1>
+<Cell_2>
+X = df.drop(['label'], axis = 1)
+Y = df['label']
+X.shape, Y.shape
+<\Cell_2>
+<Cell_3>
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42, stratify = Y)
+X_train.shape, X_test.shape
+<\Cell_3>
+<Cell_4>
+pip install feature-engine
+<\Cell_4>
+<Cell_5>
+#Loai bo trung lap
+from feature_engine.selection import DropDuplicateFeatures
+
+sel =DropDuplicateFeatures()
+
+sel.fit(X_train)
+
+X_train_drop = sel.fit_transform(X_train)
+X_test_drop = sel.transform(X_test)
+X_train_drop.shape, X_test_drop.shape, X_train_drop.columns
+<\Cell_5>
+<Cell_6>
+# Random Oversampling
+from imblearn.over_sampling import RandomOverSampler, SMOTE
+smote = SMOTE()
+
+X_smote, Y_smote = smote.fit_resample(X_train_drop,Y_train)
+X_smote_test, Y_smote_test = smote.fit_resample(X_test_drop,Y_test)
+X_smote.shape, X_smote_test.shape
+<\Cell_6>
+<Cell_7>
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+# scaler.fit(X_smote)
+
+X_train_scale = scaler.fit_transform(X_smote)
+X_test_scale = scaler.fit_transform(X_smote_test)
+X_train_scale
+<\Cell_7>
+<Cell_8>
+pip install sklearn-genetic
+<\Cell_8>
+<Cell_9>
+from __future__ import print_function
+import numpy as num
+from sklearn import datasets, linear_model
+
+from genetic_selection import GeneticSelectionCV
+
+def main():
+    
+
+   
+
+    estimators = linear_model.LogisticRegression(solver="liblinear", multi_class="ovr")
+
+    selectors = GeneticSelectionCV(estimators,
+                                  cv=None,
+                                  verbose=True,
+                                  scoring="accuracy",
+                                  max_features=20,
+                                  n_population=30,
+                                  crossover_proba=0.6,
+                                  mutation_proba=0.1,
+                                  n_generations=15,
+                                  crossover_independent_proba=0.7,
+                                  mutation_independent_proba=0.1,
+                                  tournament_size=5,
+                                  n_gen_no_change=2,
+                                  caching=True,
+                                  n_jobs=-4)
+    selectors = selectors.fit(X_train_scale, Y_smote)
+
+    print(selectors.support_)
+
+
+
+<\Cell_9>
+<Cell_10>
+main() # Đang chạy ....
+<\Cell_10>
+<Cell_11>
+# fea = [True,  True,  True, False, False, False, False, False, False,  True,  True,  True,
+#  False,  True, False, False, False, False,  True,  True,  True,  True, False,  True,
+#  False, False,  True, False,  True,  True,  True,  True,  True,  True, False, False,
+#   True, False]
+# Xtrain = pd.DataFrame(X_train_scale)
+# Xtrain = Xtrain.iloc[:,fea].values
+# Ytrain = Y_smote
+
+# Xtest = pd.DataFrame(X_test_scale)
+# Xtest = Xtest.iloc[:,fea].values
+# Ytest = Y_smote_test
+
+# from datetime import datetime
+# from keras.regularizers import l2
+# # Import thư viện
+# import numpy as np
+# import pandas as pd
+# import tensorflow as tf
+# from matplotlib import pyplot
+# from tensorflow.keras import Model
+# from tensorflow.keras import Sequential
+# from tensorflow.keras.models import Sequential, Model
+# from tensorflow.keras.layers import Conv2D, Input, Dropout, Activation, Dense, MaxPooling2D, Flatten, GlobalAveragePooling2D
+# from tensorflow.keras.optimizers import Adadelta
+# from tensorflow.keras.callbacks import ModelCheckpoint
+# from tensorflow.keras.layers import Dense
+# from tensorflow.keras.layers import LSTM
+# import sklearn
+# from tensorflow.keras.layers import BatchNormalization
+# from sklearn.preprocessing import MinMaxScaler
+# from tensorflow.keras.optimizers import Adam 
+# from keras.models import Model 
+# from keras.callbacks import ReduceLROnPlateau, EarlyStopping, ModelCheckpoint 
+
+# # , kernel_regularizer=l2(0.01)
+# md1 = Sequential()
+
+# md1.add(Dense(128,activation='relu'))
+# # md1.add(BatchNormalization())
+# md1.add(Dropout(0.15))
+
+# md1.add(Dense(64,activation='relu'))
+# # md1.add(BatchNormalization())
+# md1.add(Dropout(0.15))
+
+# md1.add(Dense(32,activation='relu'))
+# # md1.add(BatchNormalization())
+# md1.add(Dropout(0.15))
+
+# md1.add(Dense(5, activation='softmax'))
+# md1.compile(loss='sparse_categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# import time
+# start = time.time()
+# print('program start...')
+
+# # Algorithms 
+# # Stop training when the validation loss metric has stopped decreasing for 5 epochs.
+# #Callback1
+# early_stopping = EarlyStopping(monitor = 'val_loss', patience = 5, mode = 'min', restore_best_weights = True) 
+# # Save the model with the minimum validation loss 
+# #Callback2
+# #Save best model
+# checkpoint = ModelCheckpoint('best_model.hdf5', monitor = 'val_loss', verbose = 1, save_best_only = True) 
+# # Reduce learning rate 
+# #Giảm tỉ lệ học tập khi không cải thiện loss
+# reduce_lr = ReduceLROnPlateau(monitor = 'val_loss', factor = 0.2, patience = 3, min_lr = 0.00001, mode = 'min', verbose = 1)
+
+# callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
+# history = md1.fit(Xtrain, Ytrain, epochs = 50, batch_size = 64, validation_data=(Xtest, Ytest),verbose=1, callbacks = [reduce_lr, checkpoint, early_stopping])
+
+# end = time.time()
+# print('program end...')
+# print()
+# print('time cost: ')
+# print(end - start, 'seconds')
+
+# from matplotlib import pyplot as plt
+# #  "Accuracy"
+# plt.plot(history.history['accuracy'])
+# plt.plot(history.history['val_accuracy'])
+# plt.title('model accuracy')
+# plt.ylabel('accuracy')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'val'], loc='upper left')
+# plt.show()
+# # "Loss"
+# plt.plot(history.history['loss'])
+# plt.plot(history.history['val_loss'])
+# plt.title('model loss')
+# plt.ylabel('loss')
+# plt.xlabel('epoch')
+# plt.legend(['train', 'val'], loc='upper left')
+# plt.show()
+<\Cell_11>
+<Cell_12>
+# df_ok = pd.read_csv('../input/kdd99-full/kdd_99_oke.csv')
+# # drop cac colunms khong can thiet
+# df_ok = df_ok.drop(columns = ['Unnamed: 0', 'rerror_rate', 'lnum_outbound_cmds', 'is_host_login'])
+# df_ok = df_ok.dropna()
+# print(df_ok.isnull().sum())
+# print(df_ok['label'].value_counts())
+# from sklearn import preprocessing
+  
+# # label_encoder object knows how to understand word labels.
+# label_encoder = preprocessing.LabelEncoder()
+# # Encode labels in column 'species'.
+# df_ok['label']= label_encoder.fit_transform(df_ok['label'])
+# print(df_ok['label'].unique())
+# df_ok
+<\Cell_12>
+<Cell_13>
+# # Tach feature và label 
+# X_ok = df_ok.drop(columns = ['label'])
+# Y_ok = df_ok['label']
+# X_ok
+<\Cell_13>
+<Cell_14>
+# fea = [False, False, False,  True,  True, False, False, False, False, False, False,  True,
+#  False, False, False, False, False,  True,  True,  True, False, False, False, False,
+#   True, False,  True,  True,  True,  True, False, False,  True, False,  True, False,
+#   True,  True]
+# X_ok2 = X_ok.iloc[:,fea].values
+
+# from sklearn.preprocessing import StandardScaler
+# sc = StandardScaler()
+# # Điều chỉnh tỷ lệ cho phù hợp với các tính năng và biến đổi
+# X_ok3 = sc.fit_transform(X_ok2)
+# X_ok3.shape, Y_ok.shape
+<\Cell_14>
+<Cell_15>
+# from sklearn.metrics import accuracy_score
+# from sklearn.metrics import precision_score
+# from sklearn.metrics import recall_score
+# from sklearn.metrics import f1_score
+# from sklearn.metrics import roc_auc_score
+# from sklearn.metrics import confusion_matrix
+# from sklearn.preprocessing import LabelBinarizer
+
+
+# # encoder = LabelBinarizer()
+# # Y_test1 = encoder.fit_transform(Y_ok)
+
+# y_hat = md1.predict(X_ok3)
+# y_pred = np.argmax(y_hat, axis=1)
+# y_test_label =  Y_ok
+
+
+# # Tính accuracy: (tp + tn) / (p + n)
+# accuracy = accuracy_score(y_test_label, y_pred)
+# print('Accuracy: %f' % accuracy)
+# # Tính precision tp / (tp + fp)
+# precision = precision_score(y_test_label, y_pred, average='macro')
+# print('Precision: %f' % precision)
+# # Tính recall: tp / (tp + fn)
+# recall = recall_score(y_test_label, y_pred, average='macro')
+# print('Recall: %f' % recall)
+# # Tính f1: 2 tp / (2 tp + fp + fn)
+# f1 = f1_score(y_test_label, y_pred, average='macro')
+# print('F1 score: %f' % f1)
+<\Cell_15>

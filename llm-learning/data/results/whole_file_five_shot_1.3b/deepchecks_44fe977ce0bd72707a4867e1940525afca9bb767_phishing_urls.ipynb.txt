@@ -1,0 +1,22 @@
+
+The code you provided is a Jupyter notebook that uses the DeepChecks library to perform various data analysis and visualization tasks. Here's a brief explanation of the changes:
+
+1. The cell with the code `df = df[~df['scrape_date'].str.contains('2020')]` is used to filter out the rows where the 'scrape_date' contains '2020'. This is a common practice in data cleaning to remove or filter out irrelevant or irrelevant data.
+
+2. The cell with the code `pipeline = get_url_preprocessor()` is used to get a preprocessing pipeline for the dataset. This pipeline is used to transform the data before it is used for training the model.
+
+3. The cell with the code `train_df = pipeline.fit_transform(raw_train_df)` and `test_df = pipeline.transform(raw_test_df)` is used to fit the preprocessing pipeline to the training and testing data, and then transform the data.
+
+4. The cell with the code `logreg.fit(train_X, train_y)` is used to fit the logistic regression model to the training data.
+
+5. The cell with the code `pred_y = logreg.predict(test_X)` is used to predict the labels for the testing data.
+
+6. The cell with the code `accuracy_score(test_y, pred_y)` is used to calculate the accuracy of the model.
+
+7. The cell with the code `msuite.run(model=logreg, train_dataset=ds_train, test_dataset=ds_test)` is used to run the model evaluation suite on the logistic regression model.
+
+8. The cell with the code `model = DecisionTreeClassifier(criterion='entropy', splitter='random', random_state=SEED)` is used to create a decision tree classifier model.
+
+9. The cell with the code `model.fit(train_X, train_y)` is used to fit the decision tree classifier model to the training data.
+
+10. The cell with the code `msuite.run(model=model, train_dataset=ds_train, test_

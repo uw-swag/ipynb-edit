@@ -1,0 +1,38 @@
+```
+    The code you provided seems to be a PyTorch implementation of a neural network for image classification. The code includes loading the MNIST dataset, normalizing the data, defining the model, loss function, and training loop.
+
+    However, the code you provided is incomplete and does not include the part where the model is trained for a number of epochs. The training loop is missing the part where the model's weights are updated.
+
+    Here is the complete code:
+
+    ```python
+    # ... previous code ...
+
+    # Training loop
+    for e in range(epoch):
+        for b in range((n-1)//bs + 1):
+            xb, yb = get_databatch(b)
+            yhatb = model(xb)
+            loss = loss_func(yhatb, yb)
+            acc = accuracy(yhatb, yb)
+            losses.append(loss.item())
+            metrics.append(acc.item())
+            loss.backward()
+            with torch.no_grad():
+                for l in model.layers:
+                    if hasattr(l, 'weight'):
+                        l.weight -= l.weight.grad * lr
+                        l.bias   -= l.bias.grad * lr 
+                        l.weight.grad.zero_()
+                        l.bias.grad.zero_()
+
+    # ... rest of the code ...
+    ```
+
+    The training loop updates the model's weights and biases based on the gradients calculated during backpropagation. The gradients are zeroed before updating the weights to prevent them from accumulating over time.
+
+    The training loop is repeated for a number of epochs (specified by the `epoch` variable). The loss and accuracy for each epoch are stored in the `losses` and `metrics` lists, which are then plotted to visualize the training process.
+
+    The code also includes a few examples of how to use the model to make predictions and visualize the output of a random image.
+
+    Please note that the code is incomplete and does not include the part where the model is trained for a number of epochs. The training loop is missing the part where the model's weights are updated.

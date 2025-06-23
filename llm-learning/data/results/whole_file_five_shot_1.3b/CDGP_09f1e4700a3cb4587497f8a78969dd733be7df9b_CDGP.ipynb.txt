@@ -1,0 +1,61 @@
+```
+    ## Code: test_directory.py
+
+    import unittest
+    from main import BERT_CLOTH_neg_model, fasttext_model, CSG_model
+
+    class TestModels(unittest.TestCase):
+
+        @classmethod
+        def setUpClass(cls):
+            cls.csg_model = CSG_model()
+            cls.fasttext_model = fasttext_model()
+            cls.bert_model = BERT_CLOTH_neg_model()
+
+        def test_csg_model(self):
+            pass
+
+        def test_fasttext_model(self):
+            pass
+
+        def test_bert_model(self):
+            pass
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+
+    '''
+    ]
+
+    ### Instruction:
+    [
+    Commit Message: "Implementing BERT model"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from transformers import BertTokenizer, BertConfig, BertForMaskedLM, pipeline
+
+    class BERT_CLOTH_neg_model:
+        def __init__(self):
+            self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+            self.config = BertConfig.from_pretrained('bert-base-uncased')
+            self.model = BertForMaskedLM.from_pretrained('bert-base-uncased')
+            self.model.eval()
+
+        def predict(self, sentence):
+            inputs = self.tokenizer(sentence, return_tensors='pt')
+            outputs = self.model(**inputs)
+            predictions = outputs[0]
+            return predictions
+
+        def get_word(self, prediction):
+            word_id = np.argmax(prediction)
+            word = self.tokenizer.convert_ids_to_tokens([word_id])[0]
+            return word
+
+        def get_words(self, predictions):
+            words = [self.get_word(pred) for pred in predictions]
+            return words
+
+       

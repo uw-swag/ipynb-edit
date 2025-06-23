@@ -1,0 +1,17 @@
+```python
+    import os
+    import shutil
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Get the list of all files in the current directory
+    files = os.listdir(cwd)
+
+    # Iterate over each file
+    for file in files:
+        # If the file is a notebook
+        if file.endswith(".ipynb"):
+            # Move the notebook to the 'examples' directory
+            shutil.move(os.path.join(cwd, file), os.path.join(cwd, "examples", file))
+    ```

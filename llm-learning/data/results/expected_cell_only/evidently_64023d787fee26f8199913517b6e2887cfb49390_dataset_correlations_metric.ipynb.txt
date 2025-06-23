@@ -1,0 +1,29 @@
+import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_openml
+
+# load "adult" dataset
+data = fetch_openml(name='adult', version=2, as_frame='auto')
+df = data.frame
+
+# prepare target and prediction
+df['target'] = df['education-num']
+df['prediction'] = df['education-num'].values + np.random.normal(0, 6, df.shape[0])
+
+# make reference and current datasets
+reference_data = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+current_data.head()
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics import DatasetCorrelationsMetric
+
+column_mapping = ColumnMapping(task="regression")
+report = Report(metrics=[DatasetCorrelationsMetric()])
+report.run(current_data=current_data, reference_data=reference_data, column_mapping=column_mapping)
+report
+report = Report(metrics=[DatasetCorrelationsMetric()])
+report.run(current_data=current_data, reference_data=None, column_mapping=column_mapping)
+report
+

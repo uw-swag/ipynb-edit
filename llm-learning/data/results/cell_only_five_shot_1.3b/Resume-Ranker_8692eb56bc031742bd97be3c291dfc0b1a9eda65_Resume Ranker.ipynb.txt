@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+
+    # Load resume data
+    resume_data = pd.read_csv('resume_data.csv')
+
+    # Preprocess resume data
+    resume_data['processed_text'] = resume_data['text'].apply(lambda x: x.lower()).apply(lambda x: ' '.join(x.split()))
+
+    # Vectorize resume data
+    vectorizer = TfidfVectorizer(stop_words='english')
+    X = vectorizer.fit_transform(resume_data['processed_text'])
+
+    # Train-test split
+    X_train, X_test, y_train, y_test = train_test_split(X, resume_data['rank'], test_size=0.2, random_state=42)
+
+    # Train model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+
+    # Predict ranks
+    predicted_ranks = model.predict(X_test)
+
+    # Calculate similarity
+    similarity = cosine_similarity(X_test)
+
+    # Rank resumes
+    ranked_resumes = [(i, similarity[i][j]) for i, j in enumerate(predicted_ranks)]
+    ranked_resumes.sort(key=lambda x: x[1], reverse=True)
+
+    # Print ranked resumes
+    for i, rank in ranked_resumes:
+        print(f'Rank {rank} for resume at index {i}')
+    ```

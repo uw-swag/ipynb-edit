@@ -1,0 +1,41 @@
+```python
+    from sklearn.datasets import load_iris
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.model_selection import train_test_split
+
+    from deepchecks import Dataset
+    from deepchecks.checks.methodology import ModelInferenceTime
+
+    # Load the iris dataset
+    iris = load_iris()
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+
+    # Create a dataset from the training data
+    train_ds = Dataset(X_train, y_train, description="Iris dataset")
+
+    # Create a dataset from the testing data
+    test_ds = Dataset(X_test, y_test, description="Iris dataset")
+
+    # Create an AdaBoost classifier
+    clf = AdaBoostClassifier()
+
+    # Train the classifier
+    clf.fit(train_ds)
+
+    # Make predictions on the testing data
+    predictions = clf.predict(test_ds)
+
+    # Create a dataset from the predictions
+    pred_ds = Dataset(predictions, y_test, description="Iris dataset")
+
+    # Create a check to measure the inference time
+    inference_time_check = ModelInferenceTime(clf)
+
+    # Run the check
+    result = inference_time_check.run(pred_ds)
+
+    # Print the result
+    print(result)
+    ```

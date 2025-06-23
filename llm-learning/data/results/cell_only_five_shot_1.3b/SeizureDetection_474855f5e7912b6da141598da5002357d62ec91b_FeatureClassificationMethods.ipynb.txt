@@ -1,0 +1,55 @@
+```
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import accuracy_score, confusion_matrix
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocess the data
+    # This step depends on the specifics of your dataset
+
+    # Split the data into features and target
+    X = df.drop('target', axis=1)
+    y = df['target']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Apply LDA
+    lda = LDA()
+    lda.fit(X_train, y_train)
+
+    # Apply Logistic Regression
+    logreg = LogisticRegression()
+    logreg.fit(X_train, y_train)
+
+    # Predict on the test set
+    lda_pred = lda.predict(X_test)
+    logreg_pred = logreg.predict(X_test)
+
+    # Evaluate the models
+    print("LDA Accuracy: ", accuracy_score(y_test, lda_pred))
+    print("Logistic Regression Accuracy: ", accuracy_score(y_test, logreg_pred))
+
+    # This is a simple example. In a real-world scenario, you would also want to evaluate the models
+    # on other metrics such as precision, recall, F1-score, ROC AUC, etc.
+
+    ```
+    '''
+    Commit Message: "Implementing LDA & Logistic Regression"
+    Original Code Cells:
+    '''
+    import numpy as np
+import pandas as pd
+from sklearn import ensemble, naive_bayes, neighbors, svm, tree
+
+
+
+    '''
+    ]
+
+    ### Response:
+    ```
+    from sklearn.discriminant

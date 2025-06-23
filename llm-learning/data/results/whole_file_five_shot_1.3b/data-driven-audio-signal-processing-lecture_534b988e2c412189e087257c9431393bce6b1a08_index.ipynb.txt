@@ -1,0 +1,43 @@
+```python
+    ## Segmentation of Signals
+
+    ## Overview
+    Segmentation of signals is a crucial process in signal processing. It involves dividing a signal into different segments based on certain criteria. This can be done using various methods such as thresholding, peak detection, or even machine learning algorithms.
+
+    ## Importing Libraries
+    ```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    ```
+
+    ## Signal Generation
+    ```python
+    # Generate a simple signal
+    t = np.linspace(0, 1, 1000, endpoint=False)
+    signal = 100*np.sin(2*np.pi*10*t) + 50*np.sin(2*np.pi*20*t)
+    ```
+
+    ## Thresholding
+    ```python
+    # Thresholding is a simple method of segmenting a signal. It involves setting a certain value as the threshold and dividing the signal into two segments above and below this threshold.
+    threshold = 30
+    signal_above_threshold = signal[signal >= threshold]
+    signal_below_threshold = signal[signal < threshold]
+
+    plt.figure(figsize=(12, 6))
+    plt.plot(t, signal, label='Original Signal')
+    plt.plot(t, signal_above_threshold, label='Signal Above Threshold')
+    plt.plot(t, signal_below_threshold, label='Signal Below Threshold')
+    plt.legend()
+    plt.show()
+    ```
+
+    ## Peak Detection
+    ```python
+    # Peak detection is a more complex method of segmenting a signal. It involves finding the peak in the signal and dividing the signal into two segments above and below this peak.
+    peaks, _ = find_peaks(signal, distance=10)
+    signal_above_peaks = signal[peaks]
+    signal_below_peaks = signal[~np.isnan(signal[~peaks])]
+
+    plt.figure(figsize=(12, 6))
+   

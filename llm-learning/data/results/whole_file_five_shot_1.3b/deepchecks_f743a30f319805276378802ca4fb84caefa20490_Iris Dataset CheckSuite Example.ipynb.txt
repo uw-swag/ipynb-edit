@@ -1,0 +1,26 @@
+
+The code you've provided is a part of a larger process, and it's unclear what the specific issue you're facing. However, based on the code you've provided, it seems like the issue is related to data sample leakage, which is a common problem in machine learning where the test set is used to evaluate the model, and the test set is also used to train the model. This can lead to a model that is overly optimistic about its performance on unseen data.
+
+To fix this issue, you should ensure that the test set is not used to train the model, and that the test set is used to evaluate the model's performance. This can be done by splitting the data into a training set and a test set, and then using the training set to train the model and the test set to evaluate its performance.
+
+Here's a simple example of how you can do this:
+
+```python
+from sklearn.model_selection import train_test_split
+
+# Split the data
+df_train, df_test = train_test_split(iris_df, test_size=0.2, random_state=42)
+
+# Train the model
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[label_col])
+
+# Evaluate the model
+from deepchecks import Dataset
+
+ds_train = Dataset(df_train, label = label_col)
+ds_test =  Dataset(df_test, label = label_col)
+
+OverallGenericCheckSuite.run(train_dataset=ds_train, test_dataset=ds_test, model=rf_clf, check_datasets_policy='both')
+```
+
+In this example, the test set is split into a training set and a test set, and then the training set is used to train the model and the test set is used to evaluate its performance.

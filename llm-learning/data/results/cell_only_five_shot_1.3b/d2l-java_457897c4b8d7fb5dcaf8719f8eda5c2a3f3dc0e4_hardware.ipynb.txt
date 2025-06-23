@@ -1,0 +1,30 @@
+
+    ### Code:
+    
+    import bs4 as bs
+    import urllib.request
+    from urllib.error import URLError, HTTPError
+
+    source = urllib.request.urlopen('http://www.example.com')
+    soup = bs.BeautifulSoup(source,'html.parser')
+
+    for link in soup.find_all('a'):
+        href = link.get('href')
+        try:
+            urllib.request.urlopen(href)
+        except HTTPError as e:
+            print(f'HTTPError: {href}')
+        except URLError as e:
+            print(f'URLError: {href}')
+
+    ### End Code
+
+    ### Explanation:
+
+    This code is used to check the broken links in a website. It uses BeautifulSoup to parse the HTML of the website and find all the 'a' tags (which are used to link to other pages). It then attempts to open each link in a try-except block. If an HTTPError or URLError is raised, it prints the link. This is a simple way to find broken links, but it may not be foolproof, as it just checks for the most common types of errors.
+
+    ### Solution:
+
+    If you want to fix the broken links, you would need to manually edit the HTML of the website to remove the broken links. This is usually done by changing the 'a' tags to 'a' tags with the href attribute set to the correct URL.
+
+    Please note that this code is a simple example and may not work for all websites. The BeautifulSoup library used here is a part of the BeautifulSoup4 library, which is a fork of the original BeautifulSoup library. The original BeautifulSoup library is not maintained anymore, and it's recommended to use the updated version of BeautifulSoup4.

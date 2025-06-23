@@ -1,0 +1,64 @@
+```python
+    import torch
+    import configparser
+
+    # Common functions for TensorFlow and PyTorch
+    class CommonFunctions:
+        @staticmethod
+        def read_config(file_path):
+            config = configparser.ConfigParser()
+            config.read(file_path)
+            return config
+
+        @staticmethod
+        def convert_to_tensor(data, dtype=torch.float32):
+            return torch.tensor(data, dtype=dtype)
+
+        @staticmethod
+        def convert_to_numpy(tensor):
+            return tensor.numpy()
+
+        @staticmethod
+        def convert_to_pandas(tensor):
+            return pd.DataFrame(tensor)
+
+        @staticmethod
+        def split_data(data, ratio):
+            return train_test_split(data, test_size=ratio)
+
+        @staticmethod
+        def train_model(model, train_data, epochs):
+            model.fit(train_data)
+            return model
+
+        @staticmethod
+        def evaluate_model(model, test_data):
+            predictions = model.predict(test_data)
+            return model.evaluate(test_data, predictions)
+
+        @staticmethod
+        def save_model(model, file_path):
+            torch.save(model.state_dict(), file_path)
+
+        @staticmethod
+        def load_model(model, file_path):
+            model.load_state_dict(torch.load(file_path))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "refactor to make use of config, and make util of common functions for tf and torch"
+    Original Code Cells:
+    '''
+    # Importing required libraries
+    import torch
+    import configparser
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+
+    # Common functions for TensorFlow and PyTorch
+    class CommonFunctions:
+        @staticmethod
+        def read_config(file_path):
+            config = configparser.ConfigParser()
+            config.read(file_path)

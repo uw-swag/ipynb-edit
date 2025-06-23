@@ -1,0 +1,51 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Perceptron function
+    def perceptron(x, w, b):
+        return np.dot(x, w) + b
+
+    # Generate some data
+    np.random.seed(0)
+    x = np.random.randn(2, 100)
+    y = x[0] * 0.5 + x[1] * 2.5 + 0.5 + np.random.randn(100)
+
+    # Initialize weights and bias
+    w = np.random.randn(2)
+    b = np.random.randn(1)
+
+    # Training perceptron
+    for i in range(1000):
+        y_hat = perceptron(x, w, b)
+        dw = (1 / 100) * np.dot(x.T, (y_hat - y))
+        db = (1 / 100) * np.sum(y_hat - y)
+        w -= dw
+        b -= db
+
+    # Plot the data
+    plt.scatter(x[0], x[1], c=y)
+    plt.title('Perceptron')
+    plt.xlabel('x1')
+    plt.ylabel('x2')
+    plt.show()
+    ```
+    ### Instruction:
+    [
+    Commit Message: "add perceptron image"
+    Original Code Cells:
+    '''
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    # Perceptron function
+    def perceptron(x, w, b):
+        return np.dot(x, w) + b
+
+    # Generate some data
+    np.random.seed(0)
+    x = np.random.randn(2, 100)
+    y = x[0] * 0.5 + x[1] * 2.5 + 0.5 + np.random.randn(100)
+
+    # Initialize weights and bias
+    w = np.random.

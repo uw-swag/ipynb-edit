@@ -1,0 +1,50 @@
+
+    '''
+    '''
+    ]
+
+    ### Response:
+    # code for renaming the folder
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir('../notebook_format')
+    os.rename('old_folder_name', 'new_folder_name')
+    os.chdir(path)
+
+    # code for loading the format for the notebook
+    import os
+
+    # path : store the current path to convert back to it later
+    path = os.getcwd()
+    os.chdir('../notebook_format')
+    from formats import load_style
+    load_style()
+    os.chdir(path)
+    %matplotlib inline
+    import numpy as np
+    import matplotlib.pyplot as plt
+    plt.rcParams['figure.figsize'] = 8, 6 # change default figure size
+
+    # magic so that the notebook will reload external python modules
+    %load_ext autoreload 
+    %autoreload 2
+    # Import MINST data
+    import tensorflow as tf
+    from tensorflow.examples.tutorials.mnist import input_data
+    mnist = input_data.read_data_sets( "/tmp/data/", one_hot = True )
+    X_train, y_train = mnist.train.images, mnist.train.labels
+    X_test, y_test = mnist.test.images, mnist.test.labels
+
+    # global parameters
+    learning_rate = 0.005
+    epochs = 20
+    batch_size = 2048
+
+    # network parameters (only one hidden layer)
+    n_hidden_1 = 256 # 1st hidden layer's size (number of nodes)
+    n_input = X_train.shape[1] # MNIST data input (image's shape: 28*28)
+    n_class = y_train.shape[1] # MNIST total classes (0-9 digits)
+
+    # place holder for the data and label

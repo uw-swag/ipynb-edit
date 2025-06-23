@@ -1,0 +1,26 @@
+report = Report(metrics=[
+    PrecisionTopKMetric(k=5),
+    RecallTopKMetric(k=5),
+    FBetaTopKMetric(k=5),
+    MAPKMetric(k=5),
+    NDCGKMetric(k=5),
+    DiversityMetric(k=5, item_features=item_features),
+    NoveltyMetric(k=5),
+    PersonalisationMetric(k=5),
+    SerendipityMetric(k=5, item_features=item_features),
+    PopularityBias(k=5),
+    ItemBiasMetric(k=5, column_name='moive_age'),
+    ItemBiasMetric(k=5, column_name='crime'),
+    UserBiasMetric(column_name='age'),
+    UserBiasMetric(column_name='gender')
+
+
+])
+column_mapping=ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
+report.run(
+    reference_data=most_popular_df.dropna(subset=['title', 'user_id']).fillna(0),
+    current_data=als_df.dropna(subset=['title', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+    additional_data={'current_train_data': train.dropna(subset=['title', 'user_id'])}
+  )
+report

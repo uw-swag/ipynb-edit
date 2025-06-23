@@ -1,0 +1,51 @@
+
+
+    ### Instruction:
+    [
+    Commit Message: "Improve readability of code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.feature_selection import SelectFromModel
+from sklearn.linear_model import LogisticRegression
+from sklearn import svm
+import xgboost as xgb
+from sklearn.ensemble import VotingClassifier
+from sklearn.naive_bayes import GaussianNB
+<\Cell_0>
+<Cell_1>
+#Reading data. Input the path to the files instead of "../input".
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+<\Cell_1>
+<Cell_2>
+train.info()
+<\Cell_2>
+<Cell_3>
+train.describe(include='all')
+<\Cell_3>
+<Cell_4>
+train.head()
+<\Cell_4>
+<Cell_5>
+plt.subplot(1,4,1)
+train.groupby('type').mean()['rotting_flesh'].plot(kind='bar',figsize=(7,4), color='r')
+<\Cell_5>
+<Cell_6>
+#Dummify 'color' column.
+col = 'color'
+dummies = pd.get_dummies(train[col], drop_first=False)
+dummies = dummies.add_prefix("{}_".format(col))
+train.drop(col, axis=1, inplace=True)
+train = train.join(dummies)
+<\Cell

@@ -1,0 +1,38 @@
+```
+    ## Installing TensorFlow
+    !pip install tensorflow
+
+    ## Importing TensorFlow
+    import tensorflow as tf
+
+    ## Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import os
+    import pandas as pd
+    import scipy.spatial
+    import scipy.optimize
+    import scipy.ndimage
+    import scipy.signal
+    import sklearn.metrics
+    import tensorflow as tf
+    from libs import utils, dft, vae
+    from reco_utils.common.notebook_utils import is_jupyter
+    from reco_utils.dataset.movielens import load_pandas_df
+    from reco_utils.dataset.python_splitters import python_stratified_split
+    from reco_utils.evaluation.python_evaluation import rmse, mae, exp_var, rsquared, get_top_k_items
+    from reco_utils.classification.data import Urls, unzip_url
+    from reco_utils.classification.parameter_sweeper import ParameterSweeper, clean_sweeper_df, plot_sweeper_df
+    from reco_utils.similarity.data import comparative_set_builder, positive_image_ranks
+    from reco_utils.similarity.model import compute_features_learner
+    from reco_utils.similarity.metrics import compute_distances
+
+    ## Checking Python version
+    if sys.version_info < (3, 4):
+        print('You are running an older version of Python!\n\n' \
+              'You should consider updating to Python 3.4.0 or higher as the libraries built for this course ' \
+              'have only been tested in Python 3.4 and higher.\n')
+        print('Try installing the Python 3.5 version of anaconda ' \
+              'and then restart jupyter notebook.\n\n' \
+              'https://www.continuum.io/downloads')
+    ```

@@ -1,0 +1,13 @@
+
+The commit message "remove label_name from dataset constructor (#456)" suggests that the label_name parameter is being removed from the Dataset constructor. This is a common practice in machine learning to ensure that the label is not included in the dataset, as it can lead to issues with model training and evaluation.
+
+However, the code you provided is not actually modifying the Dataset object. It's creating a new Dataset object with the label_name parameter, but it's not actually modifying the original train and test datasets.
+
+If you want to remove the label_name parameter from the Dataset constructor, you should be able to do so by removing the line from the code you provided. Here's how you can do it:
+
+```python
+train_ds = Dataset(train, label_name="target")
+test_ds = Dataset(test, label_name="target")
+```
+
+This will create a new Dataset object without the label_name parameter, which should remove the label_name from the dataset.

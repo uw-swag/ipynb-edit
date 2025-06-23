@@ -1,0 +1,14 @@
+```python
+    # Google Colab
+    # config_path = '/content/drive'
+    # data_path = '/content/datasets/' + dataset
+    # from google.colab import drive
+    # drive.mount(config_path)
+    # os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+
+    # VM
+    config_path = Path(os.getenv("HOME"))
+    data_path = config_path/"datasets"/dataset
+    data_path.mkdir(parents=True, exist_ok=True)
+    os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/.kaggle"
+    ```

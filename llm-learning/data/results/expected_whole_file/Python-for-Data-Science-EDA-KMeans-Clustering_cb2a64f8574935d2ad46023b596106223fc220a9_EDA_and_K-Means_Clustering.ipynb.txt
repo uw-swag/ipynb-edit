@@ -1,0 +1,317 @@
+<Cell_0>
+import numpy as np #linear algebra
+import pandas as pd #data manipulation and analysis
+
+import seaborn as sns #data visualization
+import matplotlib.pyplot as plt #data visualization
+
+import sklearn.preprocessing as skp #machine learning (preprocessing)
+import sklearn.cluster as skc #machine learning (clustering)
+
+import warnings # ignore warnings
+warnings.filterwarnings('ignore')
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv('Country-data.csv')
+df.head(10)
+<\Cell_1>
+<Cell_2>
+df.info()
+<\Cell_2>
+<Cell_3>
+df.describe()
+<\Cell_3>
+<Cell_4>
+# Count missing value / N/A
+
+df.isnull().sum()
+<\Cell_4>
+<Cell_5>
+df[df.duplicated(keep=False)]
+<\Cell_5>
+<Cell_6>
+# Visualize the distribution of each variable using histogram.
+
+plt.figure(figsize=(12,12))
+
+for i, j in enumerate(df.describe().columns):
+    plt.subplot(3,3, i+1)
+    sns.histplot(x=df[j], alpha=.5)
+    plt.xlabel(j)
+    plt.title('{} Distribution'.format(j))
+    plt.axvline(df[j].mean(), label='Mean', color='y')
+    plt.axvline(df[j].median(), label='Median', color='g')
+    # plt.subplots_adjust(wspace=.2, hspace=.5)
+    plt.legend()
+    plt.tight_layout()
+plt.savefig('hist.png')
+plt.show()
+
+<\Cell_6>
+<Cell_7>
+# Visualize the boxplot of each variable.
+
+plt.figure(figsize=(12,10))
+
+for i, j in enumerate(df.describe().columns):
+    plt.subplot(3,3, i+1)
+    sns.boxplot(x=df[j])
+    plt.title('{} Boxplot'.format(j))
+    plt.tight_layout()
+    
+plt.savefig('box.png')
+plt.show()
+<\Cell_7>
+<Cell_8>
+fig = plt.figure(figsize=(12,6))
+
+# m, b = np.polyfit(df.income, df.gdpp, 1)
+
+sns.scatterplot(x=df.income, y=df.gdpp)
+# plt.plot(df.income, m*df.income+b, color='red')
+plt.title('ggdp vs. income Scatterplot')
+
+plt.savefig('scatter.png', bbox_inches = 'tight')
+plt.show()
+<\Cell_8>
+<Cell_9>
+print('Correlation between ggdp and income is : {}'.format(round(df.corr()['income']['gdpp'],3)))
+<\Cell_9>
+<Cell_10>
+# Multivariate Analysis using Pairplot
+
+pairplot = sns.pairplot(df, corner=True)
+plt.show(pairplot)
+<\Cell_10>
+<Cell_11>
+# Multivariate Analysis using Heatmap
+
+correlation_metrics=df.corr()
+fig = plt.figure(figsize=(18,16))
+sns.heatmap(correlation_metrics,square=True, annot=True, vmax=1, vmin=-1, cmap='RdBu')
+plt.title('Correlation Between Variables', size=14)
+plt.savefig('heatmap.png')
+plt.show()
+<\Cell_11>
+<Cell_12>
+df_filter_income = df[df.income < df.income.median()]
+df_filter_income
+<\Cell_12>
+<Cell_13>
+fig = plt.figure(figsize=(12,10))
+
+plt.subplot(2,2,1)
+sns.boxplot(x=df_filter_income["income"])
+plt.title('"income" Boxplot After Handling Outliers')
+plt.tight_layout()
+
+plt.subplot(2,2,2)
+sns.boxplot(x=df_filter_income["gdpp"])
+plt.title('"gdpp" Boxplot After Handling Outliers')
+plt.tight_layout()
+
+plt.subplot(2,2,3)
+sns.histplot(x=df_filter_income["income"])
+plt.title('"income" Histogram After Handling Outliers')
+plt.tight_layout()
+
+plt.subplot(2,2,4)
+sns.histplot(x=df_filter_income["gdpp"])
+plt.title('"gdpp" Histogram After Handling Outliers')
+plt.tight_layout()
+
+plt.savefig('after_filter.png')
+plt.show()
+<\Cell_13>
+<Cell_14>
+fig = plt.figure(figsize=(14,6))
+
+plt.subplot(1,2,1)
+sns.scatterplot(x=df_filter_income["income"], y=df_filter_income["child_mort"])
+plt.title('"income" vs "child_mort" Scatterplot')
+plt.tight_layout()
+
+plt.subplot(1,2,2)
+hb = plt.hexbin(x=df_filter_income["income"], y=df_filter_income["child_mort"], gridsize = 20, cmap ='Blues') 
+cb = plt.colorbar(hb) 
+plt.title('"income" vs "child_mort" Hexbin')
+plt.xlabel('income')
+plt.ylabel('child_mort')
+plt.tight_layout()
+
+
+plt.savefig('bivariate_filter.png')
+plt.show()
+<\Cell_14>
+<Cell_15>
+# Create new data frame for Clustering
+
+df_cluster = df_filter_income[['country', 'income', 'child_mort']].reset_index()
+df_cluster.drop('index', inplace=True, axis=1)
+
+display(df_cluster)
+<\Cell_15>
+<Cell_16>
+# Scaling the new data frame for clustering
+sc = skp.StandardScaler()
+
+data_scale = np.array(df_cluster[['income', 'child_mort']])
+scaled = sc.fit_transform(data_scale.astype(float))
+scaled_df = pd.DataFrame(scaled, columns=['income', 'child_mort'])
+
+display(scaled_df)
+<\Cell_16>
+<Cell_17>
+fig = plt.figure(figsize=(14,6))
+
+plt.subplot(1,2,1)
+sns.scatterplot(x=scaled_df["income"], y=scaled_df["child_mort"])
+plt.title('"income" vs "child_mort" Scatterplot After Scaling')
+plt.tight_layout()
+
+plt.subplot(1,2,2)
+hb = plt.hexbin(x=scaled_df["income"], y=scaled_df["child_mort"], gridsize = 20, cmap ='Blues') 
+cb = plt.colorbar(hb) 
+plt.title('"income" vs "child_mort" Hexbin After Scaling')
+plt.xlabel('income')
+plt.ylabel('child_mort')
+plt.tight_layout()
+
+
+plt.savefig('bivariate_filter_scaled.png')
+plt.show()
+<\Cell_17>
+<Cell_18>
+###Decide n-cluster using Elbow Method
+
+wcss=[]
+
+k_range = range(1,11)
+
+for i in k_range:
+    kmeans = skc.KMeans(n_clusters=i, init='k-means++', random_state=42)
+    kmeans.fit(scaled_df)
+    wcss.append(kmeans.inertia_)
+
+fig, ax = plt.subplots(figsize=(12, 6), dpi=80)
+
+plt.plot(k_range, wcss, marker='o')
+
+
+# for i, value in enumerate(wcss):
+#     ax.text(i+1.05, value-0.005, round(value,1), fontsize=12, fontweight='bold')
+    
+plt.xticks(k_range)
+# plt.grid()
+plt.title('The Elbow Method')
+plt.xlabel('Number of clusters')
+plt.ylabel('WCSS')
+
+plt.savefig('num_clust.png')
+plt.show()
+<\Cell_18>
+<Cell_19>
+from kneed import KneeLocator
+
+kl = KneeLocator(range(1, 11), wcss, curve="convex", direction="decreasing")
+
+print('The elbow located is : {}'.format(kl.elbow))
+<\Cell_19>
+<Cell_20>
+# Clustering K Means, K=3
+
+kmeans_3 = skc.KMeans(n_clusters=3,random_state=42)
+kmeans_3.fit(scaled_df)
+kmeans_3.labels_
+<\Cell_20>
+<Cell_21>
+# Assign clustering result to each country in the data frame
+
+df_cluster['cluster_id'] = kmeans_3.labels_
+
+display(df_cluster)
+<\Cell_21>
+<Cell_22>
+## Number of countries in each cluster
+df_cluster.cluster_id.value_counts(ascending=True)
+<\Cell_22>
+<Cell_23>
+# Centroid Inverse Scaling
+
+centroids_ori_scale = sc.inverse_transform(kmeans_3.cluster_centers_) 
+
+# Plot Clustering Result
+
+fig, ax = plt.subplots(figsize=(12, 7), dpi=200)
+
+plt.scatter(df_cluster.income[df_cluster.cluster_id == 0], df_cluster['child_mort'][df_cluster.cluster_id == 0], color = 'green', s=100, edgecolor = 'green', label= '0')
+plt.scatter(df_cluster.income[df_cluster.cluster_id == 1], df_cluster['child_mort'][df_cluster.cluster_id == 1], color = 'red', s=100, edgecolor = 'green', label = '1')
+plt.scatter(df_cluster.income[df_cluster.cluster_id == 2], df_cluster['child_mort'][df_cluster.cluster_id == 2], color = 'blue', s=100, edgecolor = 'green', label = '2')
+
+ax.scatter(centroids_ori_scale[:, 0], centroids_ori_scale[:,1], c='black', s=400, marker='o', alpha=0.6, label = 'centroid')
+
+plt.legend(title= "Cluster ID", labelspacing=1.5, borderpad=1)
+plt.xlabel('income')
+plt.ylabel('child_mort')
+plt.title("Clustering Income & Child Mortality")
+
+plt.savefig('cluster_result.png')
+plt.show()
+<\Cell_23>
+<Cell_24>
+#Display 2nd Cluster
+
+df_cluster2 = df_cluster[df_cluster.cluster_id == 2]
+display(df_cluster2)
+<\Cell_24>
+<Cell_25>
+# Sort by lowest income
+
+df_clust2_low_income = df_cluster2.sort_values('income').head(10).reset_index().drop('index', axis=1, inplace=False)
+display(df_clust2_low_income)
+<\Cell_25>
+<Cell_26>
+# Visualize the sorted countries in a bar chart
+
+x = df_clust2_low_income.country.tolist()
+y= df_clust2_low_income.income.tolist()
+
+fig, ax = plt.subplots(figsize=(12, 6), dpi=120)
+sns.barplot(x=df_clust2_low_income.country, y=df_clust2_low_income.income)
+ax.set_xticklabels(df_clust2_low_income.country, rotation = 90)
+
+for i in range(len(x)):
+        plt.text(i, y[i]//2,y[i], ha = 'center',
+                 Bbox = dict(facecolor = 'white', alpha = .5))
+        
+plt.title('Cluster 2 10 Lowest Income Country')
+
+plt.savefig('cluster2_income_low.png', bbox_inches = 'tight')
+plt.show()
+<\Cell_26>
+<Cell_27>
+# Sort by highest child_mort
+
+df_clust2_high_child_mort = df_cluster2.sort_values('child_mort', ascending=False).head(10).reset_index().drop('index', axis=1, inplace=False)
+
+display(df_clust2_high_child_mort)
+<\Cell_27>
+<Cell_28>
+fig, ax = plt.subplots(figsize=(12, 6), dpi=120)
+
+x = df_clust2_high_child_mort.country.tolist()
+y = df_clust2_high_child_mort.child_mort.tolist()
+
+df_cluster2_sort_child_mort = df_cluster2.sort_values('child_mort', ascending=False).head(10)
+sns.barplot(x=df_clust2_high_child_mort.country, y=df_clust2_high_child_mort.child_mort)
+ax.set_xticklabels(df_clust2_high_child_mort.country, rotation = 90)
+
+for i in range(len(x)):
+        plt.text(i, y[i]//2,y[i], ha = 'center',
+                 Bbox = dict(facecolor = 'white', alpha = .5))
+        
+plt.title('Cluster 2 10 Highest Child Mortality Country')
+
+plt.savefig('cluster2_child_high.png', bbox_inches = 'tight')
+plt.show()
+<\Cell_28>

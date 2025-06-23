@@ -1,0 +1,11 @@
+```python
+    import pyreadr
+    import pandas as pd
+
+    # Load the data
+    data = pyreadr.read_r('mydata.RData')
+    df = pd.DataFrame(data.data, columns=data.var)
+
+    # Calculate the correlation
+    cov = df.iloc[:,0:4].corr()
+    ```

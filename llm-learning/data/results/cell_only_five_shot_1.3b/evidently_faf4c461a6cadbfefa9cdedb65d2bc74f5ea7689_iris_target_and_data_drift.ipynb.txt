@@ -1,0 +1,32 @@
+
+    The code you provided is a demonstration of how to use the evidently library to analyze and visualize data drift in a dataset. The first part of the code imports necessary libraries and loads the Iris dataset.
+
+    The second part of the code creates a Dashboard object and calculates the data and target drift. The Dashboard object is then displayed using the `show()` method.
+
+    The third part of the code creates a Profile object and calculates the data and target drift. The Profile object is then converted to a JSON format using the `json()` method.
+
+    The code is not complete and there are a few issues. The first issue is that the code is missing the part where the Dashboard and Profile objects are saved to a file. The second issue is that the code is not properly formatted. The third issue is that the code is not properly indented.
+
+    Here is a revised version of the code:
+
+    ```python
+    import pandas as pd
+
+    from sklearn import datasets
+
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import DataDriftTab, CatTargetDriftTab
+
+    from evidently.model_profile import Profile
+    from evidently.profile_sections import DataDriftProfileSection, CatTargetDriftProfileSection 
+    import warnings
+    warnings.filterwarnings('ignore')
+    warnings.simplefilter('ignore')
+    iris = datasets.load_iris()
+    iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+    iris_frame['target'] = iris.target
+    iris_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(), CatTargetDriftTab()])
+    iris_data_and_target_drift_dashboard.calculate(iris_frame[:75], iris_frame[75:], column_mapping = None)
+    iris_data_and_target_drift_dashboard.show()
+    iris_data_and_target_drift_dashboard.save('iris_data_and_target_drift.html')
+    iris_target_and_data_drift_profile = Profile(sections=[DataDriftProfile

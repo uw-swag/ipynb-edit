@@ -1,0 +1,34 @@
+```
+    '''
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    plt.rcParams['figure.figsize'] = (20.0, 10.0)
+
+    s = pd.DataFrame({"MSE": [0.35, 0.15, 0.30, 0.27, 0.14, 0.40, 0.35, 0.12, 0.36, 0.31, 0.15, 0.32],
+                  "cycle": np.arange(1, 13)})
+    alt.Chart(s).mark_line().encode(x="cycle", y="MSE").properties(title='Chart 1')
+
+    x = np.array([[1],[1]])
+    W_l = np.array([[2, 2],
+                [2, 2]])
+
+    h1 = np.tanh(W_l @ x)
+    h2 = np.tanh(W_l @ h1)
+    h3 = np.tanh(W_l @ h2)
+    h4 = np.tanh(W_l @ h3)
+    h5 = np.tanh(W_l @ h4)
+    y_hat = (W_l @ h5)
+    print(f'output for large initial weights: \n {y_hat}')
+
+    x = np.array([[1],[1]])
+    W_s = np.array([[0.02, 0.02],
+                [0.02, 0.02]])
+
+    h1 = np.tanh(W_s @ x)
+    h2 = np.tanh(W_s @ h1)
+    h3 = np.tanh(W_s @ h2)
+    h4 = np.tanh(W_s @ h3)
+    h5 = np.tanh(W_s @ h4)
+    y_hat = (W_s @ h5)
+    print(f'

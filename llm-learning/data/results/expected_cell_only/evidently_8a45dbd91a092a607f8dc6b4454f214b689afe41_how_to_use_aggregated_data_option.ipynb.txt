@@ -1,0 +1,50 @@
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.metrics import RegressionQualityMetric
+from evidently.metrics import RegressionPredictedVsActualScatter
+from evidently.metrics import RegressionPredictedVsActualPlot
+from evidently.metrics import RegressionErrorPlot
+housing_data = datasets.fetch_california_housing(as_frame='auto')
+housing = housing_data.frame
+
+housing.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+housing['prediction'] = housing_data['target'].values + np.random.normal(0, 3, housing.shape[0])
+
+housing_ref = housing.sample(n=5000, replace=False, random_state=0)
+housing_cur = housing.sample(n=5000, replace=False, random_state=0)
+report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionPredictedVsActualScatter(),
+    RegressionPredictedVsActualPlot()
+])
+report.run(reference_data=housing_ref, current_data=housing_cur)
+report
+report = Report(
+    metrics=[
+      RegressionQualityMetric(),
+      RegressionPredictedVsActualScatter(),
+      RegressionPredictedVsActualPlot()
+    ],
+    options={"render": {"raw_data": True}}
+  )
+report.run(reference_data=housing_ref, current_data=housing_cur)
+report
+report = Report(
+    metrics=[
+      RegressionQualityMetric(),
+      RegressionPredictedVsActualScatter(options={"render": {"raw_data": True}}),
+      RegressionPredictedVsActualPlot()
+    ],
+  )
+report.run(reference_data=housing_ref, current_data=housing_cur)
+report
+

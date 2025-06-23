@@ -1,0 +1,52 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding nblinks instead of copy (#292)"
+    Original Code Cells:
+    '''
+    from deepchecks.checks import DatasetsSizeComparison
+
+check = DatasetsSizeComparison().add_condition_test_size_not_smaller_than(1000)
+check
+from deepchecks import Dataset
+import pandas as pd
+# Dummy data
+train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+condition_results = check.conditions_decision(check.run(train_dataset, test_dataset))
+condition_results
+from deepchecks.suites import overfit_suite
+
+suite = overfit_suite()
+suite
+# Access check by id
+check = suite[1]
+# Remove condition by id
+check.remove_condition(0)
+
+suite
+# Re-add the condition with new parameter
+check.add_condition_test_score_percent_decline_not_greater_than(0.2)
+
+suite
+from deepchecks.checks import DatasetsSizeComparison
+from deepchecks import Dataset
+import pandas as pd
+
+# We'll use dummy data for the purpose of this demonstration
+train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+result = DatasetsSizeComparison().run(train_dataset, test_dataset)
+result.value
+from deepchecks import ConditionResult
+
+# Our parameters for the condition
+low_threshold = 0.4
+high_threshold = 0.6
+
+# Create the condition function
+def custom_condition(value: dict): 
+    ratio = value['Test'] / value['Train']
+    if low_threshold <= ratio <= high_

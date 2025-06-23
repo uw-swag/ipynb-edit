@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added Scraper module"
+    Original Code Cells:
+    '''
+    import scrapy
+    from scrapy.crawler import CrawlerProcess
+    from scrapy.spiders import BaseSpider
+
+    class MySpider(BaseSpider):
+        name = 'myspider'
+        start_urls = ['http://www.example.com']
+
+    process = CrawlerProcess()
+    process.crawl(MySpider)
+    process.start()
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a Scrapy spider that scrapes data from a website. Scrapy is a powerful library for web scraping in Python. 
+
+    Here's a brief explanation of the code:
+
+    - The `scrapy` library is imported.
+    - A class `MySpider` is defined, which inherits from `BaseSpider`. This class is the spider that will be used to crawl the website.
+    - The `name` attribute of the `MySpider` class is set to 'myspider'.
+    - The `start_urls` attribute of the `MySpider` class is a list of URLs to start the crawling process from. In this case, it's set to 'http://www.example.com'.
+    - The `process` variable is an instance of the CrawlerProcess class.
+    - The `process.crawl(MySpider)` line starts the crawling process.
+    - The `process.start()` line starts the crawling process.
+
+    This code will start the crawling process and scrape data from the website specified in the `start_urls` attribute. The scraped data can then be used for further processing or analysis.
+
+    Please note that you need to replace 'http://www.example.com' with the actual URL of the website you want to scrape.

@@ -1,0 +1,18 @@
+```python
+    # Adding a check context
+    import deepchecks.core.errors as dce
+    from deepchecks.base.check_mixin import Check
+
+    class CheckContext(Check):
+        def run(self):
+            try:
+                # Your code here
+                pass
+            except dce.DeepChecksValueError as e:
+                raise
+            except Exception as e:
+                raise dce.DeepChecksValueError(f"An error occurred: {str(e)}")
+
+    # Adding the check to the dataset
+    iris.add_check(CheckContext())
+    ```

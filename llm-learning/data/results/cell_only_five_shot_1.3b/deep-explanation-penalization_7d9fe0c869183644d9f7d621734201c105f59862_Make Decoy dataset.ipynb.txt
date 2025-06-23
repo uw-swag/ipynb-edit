@@ -1,0 +1,25 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import pandas as pd
+
+    # Assuming you have two dataframes df1 and df2 with columns 'version1', 'version2'
+    df = pd.DataFrame({
+        'version1': ['v1.0.0', 'v2.0.0', 'v3.0.0', 'v4.0.0', 'v5.0.0'],
+        'version2': ['v1.1.0', 'v2.1.0', 'v3.1.0', 'v4.1.0', 'v5.1.0']
+    })
+
+    # Compute the mean of each column
+    mean1 = df['version1'].mean()
+    mean2 = df['version2'].mean()
+
+    # Compute the standard deviation of each column
+    std1 = df['version1'].std()
+    std2 = df['version2'].std()
+
+    # Create a bar plot
+    plt.bar(['Version1', 'Version2'], [mean1, mean2], yerr=[std1, std2], alpha=0.5, color=['blue', 'orange'])
+    plt.ylabel('Mean Version')
+    plt.title('Comparison of Version Means')
+    plt.show()
+    ```

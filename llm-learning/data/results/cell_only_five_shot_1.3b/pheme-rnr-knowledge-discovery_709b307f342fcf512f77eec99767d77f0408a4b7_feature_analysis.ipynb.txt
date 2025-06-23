@@ -1,0 +1,81 @@
+```python
+    # Definition for singly-linked list.
+    # class ListNode(object):
+    #     def __init__(self, x):
+    #         self.val = x
+    #         self.next = None
+
+    class Solution(object):
+        def reverseList(self, head):
+            """
+            :type head: ListNode
+            :rtype: ListNode
+            """
+            prev = None
+            current = head
+
+            while current is not None:
+                next_node = current.next
+                current.next = prev
+                prev = current
+                current = next_node
+
+            head = prev
+            return head
+
+        def isPalindrome(self, head):
+            """
+            :type head: ListNode
+            :rtype: bool
+            """
+            slow = fast = head
+            prev_slow = None
+
+            while fast and fast.next:
+                fast = fast.next.next
+                next_node = slow.next
+                slow.next = prev_slow
+                prev_slow = slow
+                slow = next_node
+
+            if fast:
+                slow = slow.next
+
+            while slow:
+                if slow.val != head.val:
+                    return False
+                slow = slow.next
+                head = head.next
+
+            return True
+
+        def mergeTwoLists(self, l1, l2):
+            """
+            :type l1: ListNode
+            :type l2: ListNode
+            :rtype: ListNode
+            """
+            dummy = ListNode(0)
+            p = dummy
+            while l1 and l2:
+                if l1.val < l2.val:
+                    p.next = l1
+                    l1 = l1.next
+                else:
+                    p.next = l2
+                    l2 = l2.next
+                p = p.next
+
+            if l1:
+                p.next = l1
+            else:
+                p.next = l2
+
+            return dummy.next
+
+        def swapPairs(self, head):
+            """
+            :type head: ListNode
+            :rtype: ListNode
+            """
+            dummy = ListNode(

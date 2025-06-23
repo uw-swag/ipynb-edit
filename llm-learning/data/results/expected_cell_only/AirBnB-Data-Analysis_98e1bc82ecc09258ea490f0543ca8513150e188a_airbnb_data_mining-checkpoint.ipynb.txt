@@ -1,0 +1,37 @@
+DATASET = "./data/train.csv"
+df = pd.read_csv(DATASET)
+df.head()
+top_neighs = df['number_of_reviews'].value_counts().head(5)
+top_neighs.plot(kind = 'bar', color=['red', 'green', 'blue', 'yellow', 'black'], figsize = (8, 6))
+plt.xlabel('Neighbourhood')
+plt.ylabel('Reviews')
+plt.title('Distribution of reviews in the top neighbourhoods')
+print"Top 5 neighbourhoods are \n\n{}".format(df['neighbourhood'].value_counts().head(5))
+res = df['neighbourhood'].value_counts()
+neig = res.keys().tolist()[0]
+n_props = res.tolist()[0]
+print("The neighbourhood with the most listings is {} with {} properties".format(neig, n_props))
+df['month'].value_counts().plot(kind = 'bar', color=['red', 'green', 'blue'], figsize = (8, 6))
+plt.title('Entries per month', fontsize = 20)
+plt.xlabel('Month')
+plt.ylabel('Number of entries')
+plt.show()
+months = df['month'].value_counts().keys().tolist()
+values = df['month'].value_counts().tolist()
+
+print('Entries per month\n')
+for i,month in enumerate(months):
+    print('{1} in {0}'.format(month, values[i]))
+df['neighbourhood'].value_counts().plot(kind = 'bar', figsize = (8, 6))
+plt.title('Entries per neighbourhood', fontsize = 20)
+plt.xlabel('Neighbourhood')
+plt.ylabel('Number of entries')
+plt.show()
+neighbourhoods = df['neighbourhood'].value_counts().keys().tolist()
+values = df['neighbourhood'].value_counts().tolist()
+
+print('Entries per month\n')
+for i,neighbourhood in enumerate(neighbourhoods):
+    print('{1} in {0}'.format(neighbourhood, values[i]))
+df.hist(column='neighbourhood', by='id', figsize=(12,4))
+

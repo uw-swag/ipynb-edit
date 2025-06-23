@@ -1,0 +1,57 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "update pic link"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from argparse import Namespace
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+# Arguments
+args = Namespace(
+    seed=1234,
+    data_file="sample_data.csv",
+    num_samples=100,
+    train_size=0.75,
+    test_size=0.25,
+    num_epochs=100,
+)
+
+# Set seed for reproducability
+np.random.seed(args.seed)
+<\Cell_1>
+<Cell_2>
+# Generate synthetic data
+def generate_data(num_samples):
+    X = np.array(range(num_samples))
+    random_noise = np.random.uniform(-10,10,size=num_samples)
+    y = 3.65*X + 10 + random_noise # add some noise
+    return X, y
+<\Cell_2>
+<Cell_3>
+# Generate random (linear) data
+X, y = generate_data(args.num_samples)
+data = np.vstack([X, y]).T
+df = pd.DataFrame(data, columns=['X', 'y'])
+df.head()
+<\Cell_3>
+<Cell_4>
+# Scatter plot
+plt.title("Generated data")
+plt.scatter(x=df["X"], y=df["y"])
+plt.show()
+<\Cell_4>
+<Cell_5>
+# Import packages
+from sklearn.linear_model.stochastic_gradient import SGDRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+<\Cell_5>
+<Cell_6>
+# Create data splits
+X_train, X_test, y_train, y_test = train_test_split(
+    df

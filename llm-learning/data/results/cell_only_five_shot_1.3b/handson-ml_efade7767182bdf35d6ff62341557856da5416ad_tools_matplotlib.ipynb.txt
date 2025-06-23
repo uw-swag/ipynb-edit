@@ -1,0 +1,33 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Optimize code performance (disable spaCy components), and convert feature plotting into subplots"
+    Original Code Cells:
+    '''
+    import numpy
+x = numpy.linspace(-2, 2, 500)
+y = x**2
+
+plt.plot(x, y)
+plt.show()
+x = numpy.linspace(-1.4, 1.4, 30)
+plt.plot(x, x, 'g--', x, x**2, 'r:', x, x**3, 'b^')
+plt.show()
+x = numpy.linspace(-1.4, 1.4, 30)
+line1, line2, line3 = plt.plot(x, x, 'g--', x, x**2, 'r:', x, x**3, 'b^')
+line1.set_linewidth(3.0)
+line1.set_dash_capstyle("round")
+line3.set_alpha(0.2)
+plt.show()
+x = numpy.linspace(-1.4, 1.4, 30)
+plt.plot(x, x**2)
+plt.savefig("my_square_function.png", transparent=True)
+x = numpy.linspace(-1.4, 1.4, 30)
+plt.subplot(2, 2, 1)  # 2 rows, 2 columns, 1st subplot = top left
+plt.plot(x, x)
+plt.subplot(2, 2, 2)  # 2 rows, 2 columns, 2nd subplot = top right
+plt.plot(x, x**2)
+plt.subplot(2, 2, 3)  # 2 rows, 2 columns, 3rd subplot = bottow left
+plt.plot(x, x**3)
+plt.subplot(2, 2, 4)  # 2 rows, 2 columns, 4th subplot = bottom right
+plt.plot

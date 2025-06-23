@@ -1,0 +1,45 @@
+
+    '''
+    Commit Message: "Added frequency features, changed code structure"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import os
+    import pathlib
+    import pyedflib
+    import numpy as np
+    import pandas as pd
+    import scipy.stats as spst
+    from pyentrp import entropy as ent
+    import sklearn.metrics as metr
+    <\Cell_0>
+    <Cell_1>
+    # Should replan sample rate. No seizure happens.
+    sample_rate = 256
+    time_window = 5
+    step = time_window*sample_rate
+    <\Cell_1>
+    <Cell_2>
+    '''
+    https://stackoverflow.com/questions/48784257/convert-eye-tracking-edf-file-to-asc-csv-format
+    https://pyedflib.readthedocs.io/en/latest/
+    https://www.edfplus.info/specs/edf.html
+    '''
+    def readEdfFile(pathToFile):
+        f = pyedflib.EdfReader(pathToFile)
+        n = f.signals_in_file
+        signal_labels = f.getSignalLabels()
+        sigbufs = np.zeros((f.getNSamples()[0],n))
+        for i in np.arange(n):
+            sigbufs[:,i] = f.readSignal(i)
+        f._close()
+        del i,f,n,signal_labels
+        return sigbufs
+    <\Cell_2>
+    <Cell_3>
+    '''
+    https://www.mathworks.com/matlabcentral/answers/225716-how-i-can-read-chb01_03-edf-seizures-file-from-chb-mit-database-in-matlab-as-i-am-using-this-file-f
+    Returns start time and length of the seizure
+    '''
+    def get_seizure_period(file_location):
+        bytes_array = []

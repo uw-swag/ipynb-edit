@@ -1,0 +1,22 @@
+```
+    from deepchecks.vision import VisionData
+from deepchecks.vision.utils import DetectionLabelFormatter
+
+# The num_classes is explicitly declared to aid computation, but would be inferred automatically otherwise.
+train_ds = VisionData(coco_train_loader, label_transformer=DetectionLabelFormatter(lambda x: x), num_classes=80)
+test_ds = VisionData(coco_test_loader, label_transformer=DetectionLabelFormatter(lambda x: x), num_classes=80)
+from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+det_formatter = DetectionPredictionFormatter(coco.yolo_wrapper)
+
+# Robustness Report
+from deepchecks.vision.reporting import RobustnessReport
+
+report = RobustnessReport(train_ds, test_ds, det_formatter)
+report.show()
+
+# This will show a robustness report for the model. The report will show the distribution of the prediction errors, the mean prediction error, and the standard deviation of the prediction error.
+
+# Note: The robustness report is a visualization tool and it's not a deepchecks feature. It's a part of the deepchecks vision package.
+
+```

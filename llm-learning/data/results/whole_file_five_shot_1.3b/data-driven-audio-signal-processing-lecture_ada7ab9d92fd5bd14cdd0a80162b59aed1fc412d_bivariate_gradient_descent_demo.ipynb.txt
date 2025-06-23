@@ -1,0 +1,49 @@
+
+    '''
+    Commit Message: "fixed various bugs, migrated to AudioMNIST for digit recognition, re-run all notebooks"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import matplotlib.pyplot as plt
+    <\Cell_0>
+    <Cell_1>
+    # %matplotlib widget
+    <\Cell_1>
+    <Cell_2>
+    def function(theta):
+        return (theta[0, :]-2)**2 + 2 * theta[1, :]**2 + 1
+
+
+    def gradient(theta):
+        return np.array((2*theta[0]-4, 4*theta[1]))
+    <\Cell_2>
+    <Cell_3>
+    def plot_function():
+
+        theta1 = np.linspace(0, 4, 100)
+        theta2 = np.linspace(-2, 2, 100)
+        T1, T2 = np.meshgrid(theta1, theta2)
+        Z = function(np.array((T1, T2)))
+
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 1, 1, projection='3d')
+
+        ax.plot_surface(T1, T2, Z, antialiased=True,
+                        alpha=.5, zorder=-10, color='C0')
+        ax.plot_wireframe(T1, T2, Z, rstride=5, cstride=5,
+                          color='black', linewidth=.2)
+
+        ax.set_xlabel(r'$\theta_0$')
+        ax.set_ylabel(r'$\theta_1$')
+        ax.set_zlabel(r'$f(\mathbf{\theta})$')
+
+        ax.view_init(elev=51, azim=-57)
+
+        return ax, T1, T2
+
+
+    plot_function();
+    <\Cell_3>
+    <Cell_4>
+    def gradient_descent(gradient, theta_

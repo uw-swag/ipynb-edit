@@ -1,0 +1,36 @@
+```python
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        html.H1('Dashboard'),
+        dcc.Graph(
+            id='example-graph',
+            figure={
+                'data': [
+                    {'x': [1, 2, 3], 'y': [4, 1, 2], 'type': 'bar', 'name': 'SF'},
+                    {'x': [1, 2, 3], 'y': [2, 4, 5], 'type': 'bar', 'name': 'NY'},
+                ],
+                'layout': {
+                    'title': 'Dash Data Visualization'
+                }
+            }
+        )
+    ])
+
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    ```
+
+    This is a simple example of a Dashboard customization. The Dash application is created with the `dash.Dash(__name__)` method. The layout of the application is defined with the `app.layout` method. The layout is a combination of HTML components and Dash components.
+
+    The `html.H1` component is used to create a title, and the `dcc.Graph` component is used to create a graph. The `figure` attribute of the `dcc.Graph` component is a dictionary that contains the data and layout of the graph.
+
+    The `if __name__ == '__main__':` line ensures that the application runs only when the script is run directly, not when it is imported as a module.
+
+    The `app.run_server(debug=True)` line starts the development server. The `debug=True` argument enables debug mode, which automatically reloads the server when changes are made to the code.
+
+    This is a very basic example and real-world applications would likely require more complex layouts and more complex data visualizations.

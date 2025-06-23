@@ -1,0 +1,10 @@
+mlpc=MLPClassifier(hidden_layer_sizes=(11,11,11),max_iter=500)
+mlpc.fit(X_train,y_train)
+pred_mlpc=mlpc.predict(X_test)
+r_probs = [0 for _ in range(len(y_test))]
+rfc_probs = ynew = rfc.predict_proba(X_test)
+mlpc_probs = pred_mlpc=mlpc.predict_proba(X_test)
+from sklearn.metrics import roc_curve, roc_auc_score
+r_auc = roc_auc_score(y_test, r_probs)
+rfc_auc = roc_auc_score(y_test, rfc_probs)
+mlpc_auc = roc_auc_score(y_test, mlpc_probs)

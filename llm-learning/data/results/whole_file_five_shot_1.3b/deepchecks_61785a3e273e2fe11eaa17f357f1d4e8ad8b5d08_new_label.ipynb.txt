@@ -1,0 +1,30 @@
+
+The function `new_label_train_validation` is used to check the integrity of the data. It compares the values in two datasets and returns a list of any discrepancies.
+
+The function `new_label_train_validation` takes two arguments: `test` and `val`, which are instances of the `Dataset` class. The `Dataset` class is a data structure that holds a pandas DataFrame and a label.
+
+The function first checks if the label in the `test` dataset is the same as the label in the `val` dataset. If they are not the same, it returns a list of discrepancies.
+
+The function then checks if the values in the `test` dataset are the same as the values in the `val` dataset. If they are not the same, it returns a list of discrepancies.
+
+Here is the modified code:
+
+```python
+from mlchecks.checks.integrity.new_label import new_label_train_validation
+from mlchecks.base import Dataset
+import pandas as pd
+
+test_data = {"col1": [0, 1, 2, 3] * 10, "col2": [1,2,2,3]*10}
+val_data = {"col1": [4, 5, 6, 7, 8, 9] * 10, "col2": [1, 4, 5]*10}
+test = Dataset(pd.DataFrame(data=test_data), label="col1")
+val = Dataset(pd.DataFrame(data=val_data), label="col1")
+
+discrepancies = new_label_train_validation(test, val)
+
+if discrepancies:
+    print("Discrepancies found:", discrepancies)
+else:
+    print("No discrepancies found.")
+```
+
+In this code, the function `new_label_train_validation` is called with two datasets, `test` and `val`, and the discrepancies are stored in the `discrepancies` variable. If there are any discrepancies, they are printed, otherwise, a message saying that no discrepancies were found is printed.

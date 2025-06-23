@@ -1,0 +1,16 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from scipy import stats
+
+    # Load the dataset
+    data = pd.read_csv('data.csv')
+
+    # Perform ANOVA
+    aov_table = stats.f_oneway(data['column1'], data['column2'], data['column3'])
+
+    # Print the ANOVA table
+    print(aov_table)
+    ```
+    In the above code, replace 'column1', 'column2', and 'column3' with the names of the columns in your dataset that you want to compare. The `f_oneway` function from the `scipy.stats` module is used to perform the ANOVA. The result is a F-statistic and its corresponding p-value. The p-value is used to determine whether the null hypothesis (that all groups have the same mean) is rejected. If the p-value is less than the chosen significance level (usually 0.05), we reject the null hypothesis and conclude that the groups have different means.

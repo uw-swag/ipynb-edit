@@ -1,0 +1,40 @@
+```python
+    <Cell_0>
+    import numpy as np
+
+    from deepchecks.vision.base import VisionData
+    from deepchecks.vision.checks.performance import MeanAveragePrecisionReport
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+    from deepchecks.vision.datasets.detection import coco
+    <\Cell_0>
+    <Cell_1>
+    yolo = coco.load_model(pretrained=True)
+
+    coco_test_loader = coco.load_dataset(train=False)
+
+    test_ds = VisionData(coco_test_loader, label_transformer=DetectionLabelFormatter(coco.yolo_label_formatter), num_classes=80)
+    <\Cell_1>
+    <Cell_2>
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+    det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+    <\Cell_2>
+    <Cell_3>
+    check = MeanAveragePrecisionReport()
+    result = check.run(test_ds, yolo, prediction_formatter=det_formatter)
+    result
+    <\Cell_3>
+    <Cell_4>
+    result.value
+    <\Cell_4>
+    <Cell_5>
+    check = MeanAveragePrecisionReport().add_condition_test_average_precision_not_less_than(0.4)
+    result = check.run(test_ds, yolo, prediction_formatter=det_formatter)
+    result.show(show_additional_outputs=False)
+    <\Cell_5>
+    <Cell_6>
+
+    <\Cell_6>
+
+    '''
+    The code is used to validate the formatters in the deepchecks library. The formatters are used to transform the output of a model into a format that can be used by the deepchecks library. The formatters are used to transform the output of a model into a format that can be used by the deepchecks library

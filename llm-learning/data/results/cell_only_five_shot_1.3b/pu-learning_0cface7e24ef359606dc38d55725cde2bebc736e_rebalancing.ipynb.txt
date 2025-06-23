@@ -1,0 +1,14 @@
+```
+    from scar import C
+
+    train_x, _, train_s = train
+
+    x_ = train_x[:]
+    y_ = train_s[:]
+
+    tau = 0.5
+    class_weight = {
+        0: (1 - tau) / (1 - C * tau),
+        1: tau / (C * tau),
+    }
+    ```

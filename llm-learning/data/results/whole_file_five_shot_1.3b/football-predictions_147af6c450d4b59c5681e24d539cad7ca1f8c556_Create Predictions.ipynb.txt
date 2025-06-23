@@ -1,0 +1,47 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Added Readme and license"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import os
+    import pandas as pd
+    from scrapers import *
+    from keras.models import load_model
+    from sklearn.preprocessing import StandardScaler
+
+    DATA_PATH = 'data/'
+    <\Cell_0>
+    <Cell_1>
+    scraper = FixtureScraper()
+    fixtures = scraper.get_fixtures()
+    scraper.close_driver()
+
+    fixtures.replace({'Man Utd': 'Man United',
+                      'C Palace': 'Crystal Palace',
+                      'Sheff Utd': 'Sheffield United',
+                      'Sheffield Utd': 'Sheffield United'},
+                     inplace=True)
+    <\Cell_1>
+    <Cell_2>
+    df_ema = (pd.read_csv(os.path.join(DATA_PATH, 'all_seasons_joined.csv'))
+                    .assign(Date=lambda df: pd.to_datetime(df.Date))
+                    .pipe(lambda df: df.dropna(thresh=len(df) - 2, axis=1))  # Drop cols with NAs
+                    .dropna(axis=0)  # Drop rows with NAs
+                    .sort_values('season')
+                    .append(fixtures, sort=True)
+                    .reset_index(drop=True)
+                    .assign(gameId=lambda df: list(df.index + 1))
+                    )
+    <\Cell_2>
+    <Cell_3>
+    df_ema.tail()
+    <\Cell_3>
+    <Cell_4>
+    # Drop betting odds as we can use league stats function to get these
+    df_ema.drop(['B365H', 'B365D', 'B365A'], 1, inplace=True)
+    <\Cell_4>
+    <Cell_5>
+    headers = ['HTP', 'ATP', 'B365H', 'B365D', 'B365A

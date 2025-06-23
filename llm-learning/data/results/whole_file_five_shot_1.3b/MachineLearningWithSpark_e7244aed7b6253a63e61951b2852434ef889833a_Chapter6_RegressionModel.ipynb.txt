@@ -1,0 +1,40 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.ml.regression import LinearRegression
+    from pyspark.ml.feature import VectorAssembler
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName('linear_regression').getOrCreate()
+
+    # Load the dataset
+    df = spark.read.csv('data.csv', header=True, inferSchema=True)
+
+    # Assemble the features
+    assembler = VectorAssembler(
+        inputCols=["feature1", "feature2", "feature3"],
+        outputCol="features")
+    df = assembler.transform(df)
+
+    # Split the dataset into training and test sets
+    train, test = df.randomSplit([0.7, 0.3])
+
+    # Create a Linear Regression model
+    lr = LinearRegression(labelCol="label")
+
+    # Train the model
+    lrModel = lr.fit(train)
+
+    # Make predictions
+    predictions = lrModel.transform(test)
+
+    # Evaluate the model
+    evaluator = RegressionEvaluator(
+        labelCol="label", predictionCol="prediction", metricName="rmse")
+    rmse = evaluator.evaluate(predictions)
+    print("Root Mean Squared Error (RMSE) on test data = " + str(rmse))
+
+    # Shutdown the SparkSession
+    spark.stop()
+    ```
+
+    This script uses PySpark to perform a simple linear regression on a dataset. The dataset is read from a CSV file, the features are assembled, a Linear Regression model is created, the model is trained, and the predictions are made. The RMSE of the predictions is evaluated.

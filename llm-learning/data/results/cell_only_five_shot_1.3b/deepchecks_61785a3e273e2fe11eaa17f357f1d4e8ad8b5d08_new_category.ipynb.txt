@@ -1,0 +1,19 @@
+```python
+    from mlchecks.checks.integrity.new_category import new_category_train_validation
+    from mlchecks.base import Dataset
+    import pandas as pd
+
+    # Assuming val and test are your DataFrames
+    new_category_train_validation(val, test)
+
+    # You can also modify the check without a function
+    # Here, we're just checking if the new category exists in the training data
+    def check_new_category(val, test):
+        new_categories = set(val['new_category'].unique()) - set(test['new_category'].unique())
+        if new_categories:
+            print(f"The following new categories exist in the training data: {new_categories}")
+        else:
+            print("All new categories exist in the training data.")
+
+    check_new_category(val, test)
+    ```

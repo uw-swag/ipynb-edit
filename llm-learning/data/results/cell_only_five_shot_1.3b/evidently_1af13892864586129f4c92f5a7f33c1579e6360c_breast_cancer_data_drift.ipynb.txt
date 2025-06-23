@@ -1,0 +1,38 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DriftTab, CatTargetDriftTab
+
+# Load some data
+iris = datasets.load_iris()
+df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+
+# Create a DriftTab object
+drift_tab = DriftTab()
+
+# Add a target drift tab
+drift_tab.add(CatTargetDriftTab(target='target'))
+
+# Generate a report
+report = drift_tab.calculate(df)
+
+# Print the report
+print(report)
+
+# Create a Dashboard object
+dashboard = Dashboard(tabs=[drift_tab])
+
+# Generate a HTML report
+html_report = dashboard.generate_html_report()
+
+# Print the HTML report
+print(html_report)
+    ```
+
+    This code will generate a classification performance report for the Iris dataset using the DriftTab and CatTargetDriftTab classes from the evidently library. The report will include a detailed comparison of the target variable's distribution before and after the data drift.

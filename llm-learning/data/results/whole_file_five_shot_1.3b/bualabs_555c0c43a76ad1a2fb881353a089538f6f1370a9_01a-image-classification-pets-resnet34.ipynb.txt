@@ -1,0 +1,55 @@
+```python
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    from fastai import *
+    from fastai.vision import *
+    from fastai.metrics import accuracy
+    <\Cell_1>
+    <Cell_2>
+    URLs.PETS
+    <\Cell_2>
+    <Cell_3>
+    path = untar_data(URLs.PETS)
+    path.ls()
+    <\Cell_3>
+    <Cell_4>
+    path_annotations = path/'annotations'
+    path_images = path/'images'
+    <\Cell_4>
+    <Cell_5>
+    path_annotations.ls()
+    <\Cell_5>
+    <Cell_6>
+    filenames = get_image_files(path_images)
+    filenames[:10]
+    <\Cell_6>
+    <Cell_7>
+    batchsize = 32
+    np.random.seed(42)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+    <\Cell_7>
+    <Cell_8>
+    databunch = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=224, bs=batchsize).normalize(imagenet_stats)
+    <\Cell_8>
+    <Cell_9>
+    len(databunch.train_ds), len(databunch.valid_ds)
+    <\Cell_9>
+    <Cell_10>
+    databunch.show_batch(rows=3, figsize=(9, 9))
+    <\Cell_10>
+    <Cell_11>
+    print(databunch.classes)
+    <\Cell_11>
+    <Cell_12>
+    print(databunch.c)
+    <\Cell_12>
+    <Cell_13>
+    len(databunch.classes)
+    <\Cell_13>
+    <

@@ -1,0 +1,28 @@
+```python
+    import deepjavali.nn as djnn
+    import deepjavali.ops as djops
+    import deepjavali.utils as djutils
+    import deepjavali.vnn as dvvnn
+
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.conv1 = nn.Conv2d(1, 3, 3)
+            self.conv2 = nn.Conv2d(3, 3, 3)
+
+        def forward(self, x):
+            x = F.relu(self.conv1(x))
+            x = F.relu(self.conv2(x))
+            return x
+
+    net = Net()
+    x = torch.randn(1, 1, 28, 28)
+    y = net(x)
+    print(y)
+    ```
+
+    The code above is a simple example of how to use the djl library to create a neural network in PyTorch. The djl library is a high-performance deep learning library that provides a high-level interface for building and training models.

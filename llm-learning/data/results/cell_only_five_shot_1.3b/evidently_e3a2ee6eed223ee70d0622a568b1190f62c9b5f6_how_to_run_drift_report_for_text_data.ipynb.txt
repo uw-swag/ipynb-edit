@@ -1,0 +1,26 @@
+```python
+    import pandas as pd
+    from sklearn.preprocessing import LabelEncoder
+
+    # Create a sample DataFrame
+    df = pd.DataFrame({
+        'category': ['apple', 'banana', 'apple', 'banana', 'apple', 'banana']
+    })
+
+    # Initialize LabelEncoder
+    le = LabelEncoder()
+
+    # Fit and transform the 'category' column
+    df['category'] = le.fit_transform(df['category'])
+
+    print(df)
+    ```
+
+    ### Explanation:
+    This is an example of how to use the LabelEncoder from sklearn to encode categorical variables. The LabelEncoder is a type of preprocessing technique used to convert categorical variables into a format that can be used by machine learning algorithms.
+
+    The LabelEncoder works by assigning a unique integer to each unique category in the dataset. The first category is given the integer 0, the second category the integer 1, and so on.
+
+    In this example, the 'category' column is encoded using the LabelEncoder. The fit_transform method is used to fit the LabelEncoder to the 'category' column and then to transform the 'category' column. The result is a new DataFrame where the 'category' column has been replaced with its encoded values.
+
+    The original DataFrame is not modified, and the encoded values are stored in a new DataFrame.

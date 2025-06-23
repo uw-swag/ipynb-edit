@@ -1,0 +1,17 @@
+```python
+    from sklearn.preprocessing import StandardScaler
+    from sklearn import svm
+
+    # Feature scaling
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+
+    # Support Vector Classifier
+    svc = svm.SVC(kernel='linear') 
+    svc.fit(X_train_scaled, y_train)
+
+    # Model performance
+    y_pred = svc.predict(X_test_scaled)
+    print("Model performance: ", metrics.accuracy_score(y_test, y_pred))
+    ```

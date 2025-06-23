@@ -1,0 +1,35 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Atualizado o modelo de clusterização para KMeans"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+# Criar um conjunto de dados de exemplo
+X, y = make_blobs(n_samples=500, centers=3, n_features=2, cluster_std=1.0, random_state=42)
+
+# Normalizar os dados
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Criar um pipeline para o KMeans
+pipeline = Pipeline([
+    ('kmeans', KMeans(n_clusters=3, random_state=42)),
+])
+
+# Treinar o pipeline
+pipeline.fit(X)
+
+# Visualizar os clusters
+plt.scatter(X[:, 0], X[:, 1], c=pipeline.predict(X))
+plt.scatter(pipeline.cluster_centers_[:, 0], pipeline.cluster_centers_[:, 1], s=300, c='red')
+plt.show()
+<\Cell_0>

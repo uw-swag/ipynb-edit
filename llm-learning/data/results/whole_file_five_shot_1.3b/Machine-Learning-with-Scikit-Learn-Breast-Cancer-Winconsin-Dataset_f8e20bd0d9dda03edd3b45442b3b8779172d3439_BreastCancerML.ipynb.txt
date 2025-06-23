@@ -1,0 +1,46 @@
+```python
+    <Cell_0>
+from sklearn.datasets import load_breast_cancer
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+import matplotlib.pyplot as plt
+
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+cancer = load_breast_cancer()
+print(cancer.DESCR)
+<\Cell_1>
+<Cell_2>
+print(cancer.feature_names)
+print(cancer.target_names)
+<\Cell_2>
+<Cell_3>
+type(cancer.data)
+<\Cell_3>
+<Cell_4>
+cancer.data.shape
+<\Cell_4>
+<Cell_5>
+import pandas as pd
+raw_data = pd.read_csv('breast-cancer-wisconsin-data.csv', delimiter=',')
+raw_data.tail(10)
+<\Cell_5>
+<Cell_6>
+X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, test_size=0.3, random_state=101)
+<\Cell_6>
+<Cell_7>
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+<\Cell_7>
+<Cell_8>
+pred = knn.predict(X_test)
+<\Cell_8>
+<Cell_9>
+from sklearn.metrics import classification_report, confusion_matrix
+print(classification_report(y_test, pred))
+print(confusion_matrix(y_test, pred))
+<\Cell_9>
+    ```
+    '''

@@ -1,0 +1,40 @@
+```python
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=2)
+    X_reduced = pca.fit_transform(X)
+
+    from sklearn.manifold import LocallyLinearEmbedding
+    lle = LocallyLinearEmbedding(n_neighbors=10, n_components=2)
+    X_reduced_lle = lle.fit_transform(X)
+
+    from sklearn.manifold import MDS
+    mds = MDS(n_components=2)
+    X_reduced_mds = mds.fit_transform(X)
+
+    from sklearn.manifold import Isomap
+    isomap = Isomap(n_components=2)
+    X_reduced_isomap = isomap.fit_transform(X)
+
+    from sklearn.manifold import TSNE
+    tsne = TSNE(n_components=2)
+    X_reduced_tsne = tsne.fit_transform(X)
+
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+    lda = LinearDiscriminantAnalysis(n_components=2)
+    X_reduced_lda = lda.fit_transform(X)
+
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=2)
+    X_reduced_pca = pca.fit_transform(X)
+
+    from sklearn.decomposition import IncrementalPCA
+    inc_pca = IncrementalPCA(n_components=2)
+    X_reduced_inc_pca = inc_pca.fit_transform(X)
+
+    from sklearn.decomposition import KernelPCA
+    kpca = KernelPCA(n_components=2, kernel="rbf", gamma=0.0433)
+    X_reduced_kpca = kpca.fit_transform(X)
+
+    from sklearn.decomposition import NMF
+    nmf = NMF(n_components=2)
+    X_reduced_nmf = nmf.

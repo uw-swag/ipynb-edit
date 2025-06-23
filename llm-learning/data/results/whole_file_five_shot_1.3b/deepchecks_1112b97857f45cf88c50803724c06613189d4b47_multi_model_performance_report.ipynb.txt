@@ -1,0 +1,36 @@
+```python
+    # Fix string labels in performance report / simple model comparison
+    # The code above is a simple example of how to fix string labels in a performance report.
+    # In the context of DeepChecks, the labels are usually strings, but they can be any type.
+    # Here, we're just fixing the labels to be more human-readable.
+
+    # Import necessary libraries
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import MultiModelPerformanceReport
+
+    # Load iris dataset
+    iris = load_iris(as_frame=True)
+    train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+    # Create a Dataset object for the training and testing data
+    train_ds = Dataset(train, label="target")
+    test_ds = Dataset(test, label="target")
+
+    # Fit models
+    clf1 = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+    clf2 = RandomForestClassifier().fit(train_ds.features_columns, train_ds.label_col)
+    clf3 = DecisionTreeClassifier().fit(train_ds.features_columns, train_ds.label_col)
+
+    # Create a MultiModelPerformanceReport object and run it
+    MultiModelPerformanceReport().run(train_ds, test_ds, [clf1, clf2, clf3])
+
+    # Load diabetes dataset
+    diabetes = load_diabetes(as_frame=True)
+    train, test = train_test_split(diabetes.frame, test_size=0.33, random_state=42)
+
+    # Create a Dataset object for the training and testing data with categorical features
+    train_ds = Dataset(train

@@ -1,0 +1,51 @@
+<Cell_0>
+import os
+import sys, getopt
+import signal
+import numpy as np
+from edge_impulse_linux.runner import ImpulseRunner
+from scipy.io import wavfile
+<\Cell_0>
+<Cell_1>
+runner = None
+model_file_name = 'modelfile.eim'
+audio_file_name = 'float_wave_test_raw.wav'
+
+dir_path = os.path.dirname(os.path.realpath(model_file_name))
+modelfile = os.path.join(dir_path, model_file_name)
+audio_file = os.path.join(dir_path, audio_file_name)
+<\Cell_1>
+<Cell_2>
+samplerate, generator = wavfile.read(audio_file)
+
+features = np.array([], dtype=np.int16)
+runner = ImpulseRunner(modelfile)
+
+model_info = runner.init()
+labels = model_info['model_parameters']['labels']
+window_size = model_info['model_parameters']['input_features_count']
+sampling_rate = model_info['model_parameters']['frequency']
+print('Loaded runner for "' + model_info['project']['owner'] + ' / ' + model_info['project']['name'] + '"')
+print('labels: ', labels)
+print('window_size: ', window_size)
+print('sampling_rate: ', sampling_rate)
+<\Cell_2>
+<Cell_3>
+samplerate, generator = wavfile.read(audio_file)
+features = np.concatenate((features, generator), axis=0)
+res = runner.classify(features[:window_size].tolist())
+res
+<\Cell_3>
+<Cell_4>
+print('Result (%d ms.) ' % (res['timing']['dsp'] + res['timing']['classification']), end='')
+for label in labels:
+    score = res['result']['classification'][label]
+    print('%s: %.2f\t' % (label, score), end='')
+    print('', flush=True)
+<\Cell_4>
+<Cell_5>
+#Show the classification key that has the highest confidence index
+best_label = max(res['result']['classification'], key=lambda key: res['result']['classification'][key])
+confidence = res['result']['classification'][best_label]
+print(best_label,"{:.2%}".format(confidence))
+<\Cell_5>

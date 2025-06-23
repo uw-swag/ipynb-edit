@@ -1,0 +1,32 @@
+```python
+    import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import datetime as dt
+
+# Load data
+df = pd.read_csv('data.csv')
+
+# Convert date column to datetime
+df['date'] = pd.to_datetime(df['date'])
+
+# Set date as index
+df.set_index('date', inplace=True)
+
+# Fill missing values
+df.fillna(method='ffill', inplace=True)
+
+# Convert data to monthly frequency
+df_monthly = df.resample('M').mean()
+
+# Plotting
+plt.figure(figsize=(15, 10))
+sns.lineplot(data=df_monthly)
+plt.title('Monthly Data')
+plt.show()
+
+# Save data
+df_monthly.to_csv('monthly_data.csv')
+
+    ```

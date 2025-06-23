@@ -1,0 +1,30 @@
+
+    maxlen = 5000
+(train_data, train_labels), (test_data, test_labels) = imdb.load_data(
+num_words=maxlen)
+print(f'train-data shape: {train_data.shape}, train-labels shape: {train_labels.shape}')
+print(f'test-data shape: {test_data.shape}, test-labels shape: {test_labels.shape} \n')
+print(train_data[0],train_labels[0])
+word_index = imdb.get_word_index()
+reverse_word_index = dict([(value, key) for (key, value) in word_index.items()])
+decoded_review = ' '.join([reverse_word_index.get(i - 3, '?') for i in train_data[0]])
+decoded_review
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+accuracy = history.history['acc']
+val_acc = history.history['val_acc']
+
+df = pd.DataFrame({"accuracy":accuracy,
+                   "val_accuracy": val_acc,
+                   "loss":loss,
+                   "val_loss": val_loss,
+                   "time-step": np.arange(1, len(accuracy)+1)})
+
+accu = alt.Chart(df).mark_line(color="#0202d6").encode(x="time-step", y="accuracy")
+val_accu = alt.Chart(df).mark_line(color="#7272a1").encode(x="time-step", y="val_accuracy")
+
+loss = alt.Chart(df).mark_line(color="#d60202").encode(x="time-step", y="loss")
+val_loss = alt.Chart(df).mark_line(color="#cc6e6e").encode(x="time-step", y="val_loss")
+
+((accu  + val_accu)|(loss + val_loss)).properties(title='Chart 3') 

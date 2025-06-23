@@ -1,0 +1,41 @@
+```
+    with tf.Session() as sess:
+        init = tf.global_variables_initializer()
+        sess.run(init)
+
+        cursor = 0
+        it_i = 0
+        while it_i < 500:
+            Xs, Ys = [], []
+            for batch_i in range(batch_size):
+                if (cursor + sequence_length) >= len(txt) - sequence_length - 1:
+                    cursor = 0
+                Xs.append([encoder[ch]
+                           for ch in txt[cursor:cursor + sequence_length]])
+                Ys.append([encoder[ch]
+                           for ch in txt[cursor + 1: cursor + sequence_length + 1]])
+
+                cursor = (cursor + sequence_length)
+            Xs = np.array(Xs).astype(np.int32)
+            Ys = np.array(Ys).astype(np.int32)
+
+            loss_val, _ = sess.run([mean_loss, updates],
+                                   feed_dict={X: Xs, Y: Ys})
+            if it_i % 100 == 0:
+                print(it_i, loss_val)
+
+            if it_i % 500 == 0:
+                p = sess.run(probs, feed_dict={X: np.array(Xs[-1])[np.newaxis]})
+                ps = [np.random.choice(range(n_chars), p=p_i.ravel())
+                      for p_i in p]
+                p = [np.argmax(p_i) for p_i in p]
+                if isinstance(txt[0], str):
+                    print('original:', "".join(
+                        [decoder[ch] for ch in Xs[-1]]))
+                    print('synth(samp):', "".join(
+                        [decoder[ch] for ch in ps]))
+                    print('synth(amax):', "".join(
+                        [decoder[ch] for ch in p]))
+                else:
+                    print([decoder[ch] for ch in ps])
+

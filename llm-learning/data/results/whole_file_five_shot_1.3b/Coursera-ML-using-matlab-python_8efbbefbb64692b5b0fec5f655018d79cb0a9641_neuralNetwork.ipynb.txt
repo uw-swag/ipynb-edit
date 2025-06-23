@@ -1,0 +1,51 @@
+
+    '''
+    Commit Message: "Add files via upload"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    #load the datasets
+    from sklearn.datasets import load_digits
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    digits = load_digits()
+    print digits.keys()
+    data = digits.data
+    target = digits.target
+
+    print data.shape
+    print target.shape
+    print data[15]
+    print "the images 15 is",target[15]
+    plt.gray()
+    plt.matshow(digits.images[15])
+    plt.show()
+
+    <\Cell_0>
+    <Cell_1>
+    classes = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    num_classes = len(classes)
+    samples_per_class = 1
+    for y, cla in enumerate(classes):
+        idxs = np.flatnonzero(target == y)
+        idxs = np.random.choice(idxs, samples_per_class, replace=False)
+        for i, idx in enumerate(idxs):
+            plt.subplot(samples_per_class, num_classes, i * num_classes + y + 1)
+            plt.imshow(digits.images[idx].astype('uint8'))
+            plt.axis('off')
+            if i == 0:
+                plt.title(cla)
+    plt.show()
+    <\Cell_1>
+    <Cell_2>
+    #implement the neural network
+    def sigmoid(x):
+        return 1/(1+np.exp(-x))
+
+    def dsigmoid(x):
+        return x*(1-x)
+
+    class NeuralNetwork(object):
+        def __init__(self,input_size,hidden_size,output_size):
+            self.W1 = 0.01 * np.random.randn(input_size,hidden_size)#D*H

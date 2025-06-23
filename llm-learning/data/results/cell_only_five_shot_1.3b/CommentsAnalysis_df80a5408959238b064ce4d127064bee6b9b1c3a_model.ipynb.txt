@@ -1,0 +1,51 @@
+```python
+    %run ../../common/import_all.py
+
+    from common.setup_notebook import set_css_style, setup_matplotlib, config_ipython
+    config_ipython()
+    setup_matplotlib()
+    set_css_style()
+
+    import pandas as pd
+    import numpy as np
+    import tensorflow as tf
+    import tf2onnx
+
+    # Your code here
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Data preprocessing"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Select Movielens data size: 100k, 1m, 10m, or 20m
+    MOVIELENS_DATA_SIZE = '100k'
+    EXP_NAME = "movielens_" + MOVIELENS_DATA_SIZE + "_svd_model"
+    PRIMARY_METRIC = 'precision_at_k'
+    RATING_METRICS = ['rmse']
+    RANKING_METRICS = ['precision_at_k', 'ndcg_at_k']  
+    USERCOL = 'userID'
+    ITEMCOL = 'itemID'
+    RECOMMEND_SEEN = False
+    K = 10
+    RANDOM_STATE = 0
+    VERBOSE = True
+    NUM_EPOCHS = 30
+    BIASED = True
+
+    script_params = {
+        '--datastore': ds.as_mount(),
+        '--train-datapath': "data/" + TRAIN_FILE_NAME,
+        '--validation-datapath': "data/" + VAL_FILE_NAME,
+        '--output_dir': './outputs',
+        '--surprise-reader': 'ml-100k',
+        '--rating-metrics': RATING_METRICS,
+        '--ranking-metrics': RANKING_METRICS,
+        '--usercol': USERCOL,

@@ -1,0 +1,32 @@
+import pandas as pd
+import numpy as np
+
+from scipy.stats import mannwhitneyu
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.calculations.stattests import StatTest
+from evidently.options import DataDriftOptions
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+per_feature_stattest = {x: 'wasserstein' for x in ['age', 'fnlwgt', 'education-num', 
+                                                   'capital-gain', 'capital-loss', 'hours-per-week']}
+for column in ['sex', 'class']:
+    per_feature_stattest[column] = 'z'
+for column in ['workclass', 'education', 'marital-status']:
+    per_feature_stattest[column] = 'kl_div'
+for column in ['occupation', 'relationship', 'race',  'native-country']:
+    per_feature_stattest[column] = 'jensenshannon'
+for column in ['fnlwgt','hours-per-week']:
+    per_feature_stattest[column] = 'anderson'
+def _mann_whitney_u(reference_data: pd.Series, current_data: pd.Series, _feature_type: str, threshold: float):
+    p_value = mannwhitneyu(np.array([reference_data, current_data]))[2]
+    return p_value, p_value < threshold
+
+mann_whitney_stat_test = StatTest(
+    name="mann-whitney-u",
+    display_name="mann-whitney-u test",
+    func=_mann_whitney_u,
+    allowed_feature_types=["num"]
+)
+stat_test_option = DataDriftOptions(num_features_stattest=mann_whitney_stat_test)

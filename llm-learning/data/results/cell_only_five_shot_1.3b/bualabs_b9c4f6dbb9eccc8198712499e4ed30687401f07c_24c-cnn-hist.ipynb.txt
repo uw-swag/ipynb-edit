@@ -1,0 +1,9 @@
+
+# Added GeneralReLU
+cbfs = [Recorder, CudaCallback, partial(BatchTransformXCallback, mnist_view), partial(AvgStatsCallback, accuracy), GeneralReLU]
+fig, axes = plt.subplots(2, 2, figsize=(15, 6))
+for ax, h in zip(axes.flatten(), hooks[:4]):
+    ax.plot(get_min(h))
+    ax.set_ylim(0.4, 1.1)
+plt.tight_layout()
+

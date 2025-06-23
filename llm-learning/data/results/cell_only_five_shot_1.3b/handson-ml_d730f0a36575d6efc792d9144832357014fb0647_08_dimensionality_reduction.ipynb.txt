@@ -1,0 +1,39 @@
+```python
+    # Importing necessary libraries
+    import handson_ml2
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import fetch_openml
+    from sklearn.model_selection import train_test_split
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+    from sklearn.metrics import silhouette_score
+
+    # Loading the handson_ml2 dataset
+    X, y = handson_ml2.fetch_openml('mnist_784', version=1, return_X_y=True)
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Applying PCA to reduce the dimensionality of the dataset
+    pca = PCA(n_components=0.95)
+    X_train_reduced = pca.fit_transform(X_train)
+
+    # Applying KMeans clustering to find the optimal number of clusters
+    kmeans = KMeans(n_clusters=10)
+    y_pred = kmeans.fit_predict(X_train_reduced)
+
+    # Evaluating the model's performance
+    score = silhouette_score(X_train_reduced, kmeans.labels_)
+    print(f"Silhouette Score: {score}")
+
+    # Plotting the results
+    plt.figure(figsize=(8, 3))
+    plt.subplot(121)
+    plt.hist(y_pred)
+    plt.title("Histogram of predicted clusters")
+    plt.xlabel("Cluster ID")
+    plt.ylabel("Number of samples")
+    plt.subplot(122)
+    plt.scatter(X_train_reduced[:, 1], X_train_reduced[:, 2], c=y_pred)
+    plt.title("Visualization of clustered data")

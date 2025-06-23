@@ -1,0 +1,41 @@
+```python
+    import sys
+    import time
+    import numpy as np
+    import pandas as pd
+
+    from recommenders.datasets.python_splitters import python_random_split
+    from recommenders.datasets.python_splitters import python_stratified_split
+    from recommenders.datasets import movielens
+    from recommenders.models.rlrmc.RLRMCdataset import RLRMCdataset 
+    from recommenders.models.rlrmc.RLRMCalgorithm import RLRMCalgorithm 
+    from recommenders.evaluation.python_evaluation import rmse, mae
+    from recommenders.utils.notebook_utils import store_metadata
+
+    print(f"Pandas version: {pd.__version__}")
+    print(f"System version: {sys.version}")
+
+    %load_ext autoreload
+    %autoreload 2
+
+    reset_graph()
+
+    n_inputs = 28 * 28  # MNIST
+    n_outputs = 10
+
+    X = tf.placeholder(tf.float32, shape=(None, n_inputs), name="X")
+    y = tf.placeholder(tf.int32, shape=(None), name="y")
+
+    dnn_outputs = dnn(X, name="DNN_A")
+    frozen_outputs = tf.stop_gradient(dnn_outputs)
+
+    logits = tf.layers.dense(dnn_outputs, n_outputs, kernel_initializer=he_init)
+    Y_proba = tf.nn.softmax(logits)
+
+    xentropy = tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y, logits=logits)
+    loss = tf.reduce_mean(xentropy, name="loss")
+
+    optimizer = tf.train.MomentumOptimizer(learning_rate, momentum, use_nesterov=True)
+    training_op = optimizer.minimize(loss)
+
+    correct = tf.

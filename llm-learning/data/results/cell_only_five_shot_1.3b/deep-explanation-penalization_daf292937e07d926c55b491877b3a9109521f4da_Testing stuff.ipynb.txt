@@ -1,0 +1,22 @@
+
+    ## Delete trial notebook
+    ## This code will delete the trial notebook from your current directory.
+
+    import os
+    import shutil
+
+    # Get the current working directory
+    cwd = os.getcwd()
+
+    # Get the list of all files in the current directory
+    nb_list = os.listdir(cwd)
+
+    # Check if the trial notebook is in the list
+    if 'trial.ipynb' in nb_list:
+        # If it is, delete it
+        os.remove('trial.ipynb')
+    else:
+        print("Trial notebook not found in the current directory.")
+
+    ## End of delete trial notebook code
+

@@ -1,0 +1,44 @@
+```markdown
+    ## Links-checks Github Action Fix (#775)
+
+    This is a fix for the Github Action that checks for links in the code. The fix involves the use of the `check-urls` action from the `actions/check-urls` repository.
+
+    The `check-urls` action checks the URLs in the code and returns an error if any of them are not valid. This can be useful for catching typos or broken links.
+
+    Here is a simple example of how to use the `check-urls` action in a workflow:
+
+    ```yaml
+    name: Links-checks
+
+    on:
+      push:
+        branches: [ master ]
+
+    jobs:
+      build:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Set up Python
+          uses: actions/setup-python@v2
+          with:
+            python-version: 3.8
+
+        - name: Install dependencies
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+
+        - name: Check for links
+          uses: actions/check-urls@v1
+    ```
+
+    This workflow will run the `check-urls` action on every push to the `master` branch. It will check the URLs in the code and return an error if any of them are not valid.
+
+    Please note that this is a simple example and might not cover all cases. You may need to adjust the workflow to fit your specific needs.
+
+    ###
+    ```

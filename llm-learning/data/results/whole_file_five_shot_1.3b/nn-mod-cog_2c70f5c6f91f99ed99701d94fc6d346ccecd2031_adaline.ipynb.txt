@@ -1,0 +1,47 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # imports from custom library
+    import sys
+    sys.path.append('../../')
+    import matplotlib.pyplot as plt
+    from mlrefined_libraries import superlearn_library as superlearn
+    import autograd.numpy as np
+    import pandas as pd
+    %matplotlib notebook
+
+    # This is needed to compensate for matplotlib notebook's tendancy to blow up images when plotted inline
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+
+    # This code cell will not be shown in the HTML version of this notebook
+    # load in dataset
+    data = np.loadtxt('../../mlrefined_datasets/superlearn_datasets/svm_demo_data.csv',delimiter = ',')
+
+    # define the input and output of our dataset - assuming arbitrary N > 2 here
+    x = data[:,:-1]
+    y = data[:,-1]
+    y.shape = (len(y),1)
+
+    # create instance of svm comparision demo
+    demo5 = superlearn.svm_margin_demo.Visualizer(data)
+
+    # run all 
+    demo5.svm_comparison()         # compute linear decision boundaries
+    demo5.svm_comparison_fig()     # plot linear decision boundaries
+
+    # This code cell will not be shown in the HTML version of this notebook
+    import numpy as np
+
+    def random_weights(X, random_state: int):
+        '''create vector of random weights
+        Parameters
+        ----------
+        X: 2-dimensional array, shape = [n_samples, n_features]
+        Returns
+        -------
+        w: array, shape = [w_bias + n_features]'''
+        rand = np.random.RandomState(random_state)
+        w = rand.normal(loc=0.0, scale=0.01, size=1 +

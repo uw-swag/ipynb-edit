@@ -1,0 +1,21 @@
+```python
+    # Fix the trust score error
+    def fix_trust_score(df):
+        # Check if the 'trust_score' column exists
+        if 'trust_score' in df.columns:
+            # Check if the 'trust_score' column is numeric
+            if pd.api.types.is_numeric(df['trust_score']):
+                # Check if the 'trust_score' column is not null
+                if df['trust_score'].notnull().all():
+                    # Calculate the mean of the 'trust_score' column
+                    mean_trust_score = df['trust_score'].mean()
+                    # Replace the 'trust_score' column with the mean
+                    df['trust_score'] = df['trust_score'].apply(lambda x: mean_trust_score if pd.notnull(x) else x)
+                else:
+                    print("The 'trust_score' column is null. No fix needed.")
+            else:
+                print("The 'trust_score' column is not numeric. No fix needed.")
+        else:
+            print("The 'trust_score' column does not exist. No fix needed.")
+        return df
+    ```

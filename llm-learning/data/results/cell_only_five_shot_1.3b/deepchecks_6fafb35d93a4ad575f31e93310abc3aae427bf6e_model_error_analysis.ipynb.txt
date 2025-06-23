@@ -1,0 +1,39 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the error data
+    error_data = pd.read_csv('error_data.csv')
+
+    # Check for missing values
+    missing_data = error_data.isnull().sum()
+    print(f"Missing values in each column: {missing_data}")
+
+    # Check for duplicate values
+    duplicate_data = error_data.duplicated().sum()
+    print(f"Duplicate values in each column: {duplicate_data}")
+
+    # Check for outliers
+    for column in error_data.columns:
+        plt.figure(figsize=(10, 4))
+        sns.boxplot(x=error_data[column])
+        plt.title(f"Boxplot for {column}")
+        plt.show()
+
+    # Check for inconsistent data
+    inconsistent_data = error_data.apply(lambda x: x.value_counts() != x.value_counts().iloc[0]).sum()
+    print(f"Inconsistent data in each column: {inconsistent_data}")
+
+    # Check for inconsistent data
+    inconsistent_data = error_data.apply(lambda x: x.value_counts() != x.value_counts().iloc[0]).sum()
+    print(f"Inconsistent data in each column: {inconsistent_data}")
+
+    # Check for inconsistent data
+    inconsistent_data = error_data.apply(lambda x: x.value_counts() != x.value_counts().iloc[0]).sum()
+    print(f"Inconsistent data in each column: {inconsistent_data}")
+
+    # Check for inconsistent data
+    inconsistent_data = error_data.apply(lambda x: x.value_counts() != x.value_counts().iloc[0]).sum()
+    print(f"Inconsistent data in each column: {inconsistent_data}")

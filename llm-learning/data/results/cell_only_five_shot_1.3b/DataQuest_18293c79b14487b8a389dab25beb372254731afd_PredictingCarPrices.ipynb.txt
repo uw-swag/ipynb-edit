@@ -1,0 +1,34 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('housing_prices.csv')
+
+    # Select features
+    features = ['Avg. Area Income', 'Avg. Area House Age', 'Avg. Area Number of Rooms',
+               'Avg. Area Number of Bedrooms', 'Area Population', 'Price']
+    X = df[features]
+    y = df['Price']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a Linear Regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    predictions = model.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, predictions))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, predictions))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+    ```
+    This code is a simple example of a linear regression model for predicting house prices. It uses the sklearn library to train a linear regression model on a dataset, then makes predictions and evaluates the model using the mean absolute error, mean squared error, and root mean squared error metrics.

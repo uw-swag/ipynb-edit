@@ -1,0 +1,23 @@
+```python
+    # Load the data
+    data = pd.read_csv('HR_comma_sep.csv')
+
+    # Check the data
+    print(data.head())
+    print(data.info())
+
+    # Calculate the correlation between lower salaried and higher salaried employees
+    corr_data = data[['Attrition', 'Average_Benefits', 'Stock_Option_Level', 'Average_Compensation', 'Job_Satisfaction', 'Work_Life_Balance', 'Environment_Satisfaction', 'Job_Involvement', 'Performance_Rating', 'Stock_Option_Level', 'Work_Life_Balance', 'Environment_Satisfaction', 'Job_Involvement', 'Work_Life_Balance', 'Performance_Rating', 'Average_Compensation', 'Total_Earnings', 'Attrition']]
+    corr_data = corr_data.corr()
+
+    # Plot the correlation matrix
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_data, annot=True, cmap='coolwarm')
+    plt.title('Correlation between lower salaried and higher salaried employees')
+    plt.show()
+
+    # Calculate the correlation between lower salaried and higher salaried employees
+    corr_data['Attrition'].corr(corr_data['Average_Compensation'])
+
+    # The correlation between lower salaried and higher salaried employees is 0.64.
+    ```

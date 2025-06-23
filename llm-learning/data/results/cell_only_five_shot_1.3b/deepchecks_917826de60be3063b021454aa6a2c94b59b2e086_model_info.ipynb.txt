@@ -1,0 +1,52 @@
+
+    ## Simplify display
+
+    ### Code:
+    
+    ## Import necessary libraries
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from pandas.plotting import scatter_matrix
+    from sklearn.decomposition import PCA
+
+    ## Load the data
+    data = pd.read_csv('data.csv')
+
+    ## Simplify the display
+
+    ## Code:
+
+    ## Display the first few rows of the data
+    data.head()
+
+    ## Display the summary statistics of the data
+    data.describe()
+
+    ## Display the correlation matrix
+    data.corr()
+
+    ## Display the pairplot
+    sns.pairplot(data)
+
+    ## Display the scatter matrix
+    scatter_matrix(data)
+
+    ## Display the heatmap of the correlation matrix
+    sns.heatmap(data.corr(), annot=True)
+
+    ## Display the scatter plot of the first two features
+    sns.scatterplot(x=data['feature1'], y=data['feature2'])
+
+    ## Display the scatter plot of the first three features
+    sns.scatterplot(x=data['feature1'], y=data['feature2'], hue=data['feature3'])
+
+    ## Display the scatter plot of the first four features
+    sns.scatterplot(x=data['feature1'], y=data['feature2'], hue=data['feature3'], style=data['feature4'])
+
+    ## Display the scatter plot of the first five features
+    sns.scatterplot(x=data['feature1'], y=data['feature2'], hue=data['feature3'], style=data['feature4'], palette='deep')
+
+    ## Display the scatter plot of the first six features
+    sns.scatterplot(x=data['feature1'], y=data['feature2'], hue=data['feature3'], style=data['feature4'], palette='deep', hue_norm=(0, 10))
+
+    ## Display the scatter plot of the first

@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message: "cleaned data and made csv file for ML"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+<\Cell_16>
+<Cell_7>
+# count of missing values and data types for columns
+attrition_df.info()
+<\Cell_7>
+<Cell_8>
+# column names
+attrition_df.columns
+<\Cell_8>
+<Cell_9>
+# Merge one-hot encoded features and drop the originals
+attrition_df = attrition_df.drop(attrition_cat,1)
+attrition_df.head()
+<\Cell_9>
+<Cell_10>
+# Create our target
+y = attrition_df.dtypes[attrition_df.dtypes == "object"].index.tolist()
+y.value_counts()
+<\Cell_10>
+<Cell_11>
+# Split our preprocessed data into our features and target arrays
+X = scaler.fit(X_train)
+X_test = scaler.transform(X_test)
+<\Cell_11>
+<Cell_12>
+# Create a StandardScaler instances
+scaler = StandardScaler()
+
+# Fit the StandardScaler
+X_train_scaled = X_scaler.transform(X_train)
+X_test_scaled = X_scaler.transform(X_test)
+<\Cell_12>
+<Cell_13>
+# Create a OneHotEncoder instance
+enc = OneHotEncoder(sparse=False)
+
+# Fit the OneHotEncoder using the categorical variable list
+enc.fit(X_train)
+X_train_scaled = X_scaler.transform(X_train)
+X_test_scaled = X_scaler.transform(X_test)
+<\Cell_13>
+<Cell_14>
+# Create a StandardScaler instances
+scaler = StandardScaler()
+
+# Fit the StandardScaler
+X

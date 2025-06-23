@@ -1,0 +1,79 @@
+```python
+    import pandas as pd
+
+    # Create a simple dataframe
+    data = {
+        'Name': ['Tom', 'Nick', 'John', 'Tom'],
+        'Age': [20, 21, 19, 20],
+        'Country': ['Canada', 'USA', 'UK', 'Canada']
+    }
+
+    df = pd.DataFrame(data)
+
+    # Write the dataframe to a CSV file
+    df.to_csv('people.csv', index=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Database connection"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import sqlite3
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('my_database.db')
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Execute a SQL command
+    cursor.execute("CREATE TABLE people (name TEXT, age INTEGER, country TEXT)")
+
+    # Insert a row of data
+    cursor.execute("INSERT INTO people VALUES ('Tom', 20, 'Canada')")
+
+    # Commit the changes
+    conn.commit()
+
+    # Close the connection
+    conn.close()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Database query"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import sqlite3
+
+    # Connect to the SQLite database
+    conn = sqlite3.connect('my_database.db')
+
+    # Create a cursor object
+    cursor = conn.cursor()
+
+    # Execute a SQL command
+    cursor.execute("SELECT * FROM people")
+
+    # Fetch all the rows
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
+
+    # Close the connection
+    conn.close()
+    ```

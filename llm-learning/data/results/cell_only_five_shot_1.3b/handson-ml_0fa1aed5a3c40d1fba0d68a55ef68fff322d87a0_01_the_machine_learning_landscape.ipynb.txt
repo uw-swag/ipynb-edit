@@ -1,0 +1,14 @@
+```python
+    import os
+    import urllib.request
+
+    url = "https://raw.githubusercontent.com/username/repository/branch/file.txt"
+    file_name = "file.txt"
+
+    if not os.path.exists(file_name):
+        urllib.request.urlretrieve(url, file_name)
+    else:
+        print("File already exists.")
+    ```
+
+    This code will download a file from a given URL if it doesn't already exist in the current directory.

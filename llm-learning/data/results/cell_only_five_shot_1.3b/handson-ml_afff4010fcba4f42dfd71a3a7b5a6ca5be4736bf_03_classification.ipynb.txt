@@ -1,0 +1,29 @@
+```python
+    # Import necessary libraries
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.metrics import classification_report
+
+    # Assume we have a list of emails and their labels
+    emails = ['I love this place', 'I hate this place', 'This is an amazing place', 'I love the view', 'I feel very good about these prices', 'I am not going there']
+    labels = ['spam', 'ham', 'spam', 'spam', 'spam', 'ham']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(emails, labels, test_size=0.2, random_state=42)
+
+    # Convert the text data into numerical data
+    vectorizer = CountVectorizer()
+    X_train_vectorized = vectorizer.fit_transform(X_train)
+    X_test_vectorized = vectorizer.transform(X_test)
+
+    # Train a Naive Bayes classifier
+    clf = MultinomialNB()
+    clf.fit(X_train_vectorized, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test_vectorized)
+
+    # Print the classification report
+    print(classification_report(y_test, y_pred))
+    ```

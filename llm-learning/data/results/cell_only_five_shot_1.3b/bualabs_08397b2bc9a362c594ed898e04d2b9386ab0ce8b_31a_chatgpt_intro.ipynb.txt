@@ -1,0 +1,30 @@
+```python
+    import openai
+    import requests
+    from PIL import Image
+
+    # Set up the OpenAI API key
+    openai.api_key = "YOUR_OPENAI_API_KEY"
+
+    # Define the prompt for the image
+    prompt = "A cute cat"
+
+    # Use DALL-E to generate an image
+    response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size="1024x1024"
+    )
+
+    # Save the generated image
+    image_url = response['data'][0]['url']
+    image_data = requests.get(image_url).content
+    with open('generated_image.png', 'wb') as handler:
+        handler.write(image_data)
+
+    # Create an image from the saved file
+    img = Image.open('generated_image.png')
+    img.show()
+    ```
+
+    This code uses the DALL-E model from OpenAI to generate an image based on the provided prompt. The generated image is then saved as a PNG file and displayed using the PIL library.

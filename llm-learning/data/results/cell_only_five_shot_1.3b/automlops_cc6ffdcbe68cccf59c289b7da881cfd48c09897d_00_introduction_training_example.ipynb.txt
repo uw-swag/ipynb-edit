@@ -1,0 +1,58 @@
+```python
+    # imports from custom library
+    import sys
+    sys.path.append('../../')
+    from mlrefined_libraries import math_optimization_library as optlib
+    from mlrefined_libraries import nonlinear_superlearn_library as nonlib
+    from mlrefined_libraries import basics_library 
+
+    # demos for this notebook
+    regress_plotter = nonlib.nonlinear_regression_demos_multiple_panels
+    classif_plotter = nonlib.nonlinear_classification_visualizer_multiple_panels
+    static_plotter = optlib.static_plotter.Visualizer()
+    basic_runner = nonlib.basic_runner
+    classif_plotter_crossval = nonlib.crossval_classification_visualizer
+    datapath = '../../mlrefined_datasets/nonlinear_superlearn_datasets/'
+
+    # import autograd functionality to bulid function's properly for optimizers
+    import autograd.numpy as np
+
+    # import timer
+    from datetime import datetime 
+    import copy
+    import math
+
+    # this is needed to compensate for %matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib notebook
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+
+    # minor bug fixes and example updates
+    # ...
+    # ...
+    # ...
+
+    ### Instruction:
+    [
+    Commit Message: "update model training"
+    Original Code Cells:
+    '''
+    @AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ]
+)
+def train_model(
+    data_directory: str,
+    model_directory: str,
+    project_id: str,
+    region: str
+):
+    """Custom component that trains a decision tree on the training data.
+
+    Args:
+        data_directory: GS location of training data.
+        model_

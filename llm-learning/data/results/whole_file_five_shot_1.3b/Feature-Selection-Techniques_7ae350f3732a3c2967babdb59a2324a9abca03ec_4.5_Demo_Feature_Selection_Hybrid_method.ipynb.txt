@@ -1,0 +1,49 @@
+
+    '''
+    [
+    Commit Message: "adding the first notebook about filter methods"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    # import seaborn as sns
+    # import matplotlib.pyplot as plt
+    import os
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_selection import SelectFromModel
+    from sklearn.ensemble import RandomForestClassifier
+    # plt.style.use('seaborn-colorblind')
+    # %matplotlib inline
+    from sklearn.feature_selection import RFE
+    from feature_selection import hybrid
+
+    <\Cell_0>
+    <Cell_1>
+    from sklearn.datasets import load_breast_cancer
+    data = load_breast_cancer()
+    data = pd.DataFrame(np.c_[data['data'], data['target']],
+                  columns= np.append(data['feature_names'], ['target']))
+    <\Cell_1>
+    <Cell_2>
+    data.head(5)
+    <\Cell_2>
+    <Cell_3>
+    X_train, X_test, y_train, y_test = train_test_split(data.drop(labels=['target'], axis=1), 
+                                                        data.target, test_size=0.2,
+                                                        random_state=0)
+    X_train.shape, X_test.shape
+    <\Cell_3>
+    <Cell_4>
+    #  n_features_to_select decide the stopping criterion
+    # we stop till 10 features remaining
+
+    sel_ = RFE(RandomForestClassifier(n_estimators=20), n_features_to_select=10)
+    sel_.fit(X_train.fillna(0), y_train)
+    <\Cell_4>
+    <Cell_5>
+    selected_feat = X_train.columns[(sel_.get_support())]
+    print(selected_feat)
+    <\Cell_5>
+    <Cell_6>
+    #

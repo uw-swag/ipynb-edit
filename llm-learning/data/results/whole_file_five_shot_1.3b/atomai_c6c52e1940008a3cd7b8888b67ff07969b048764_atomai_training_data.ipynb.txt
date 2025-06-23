@@ -1,0 +1,40 @@
+```
+    ## Update Colab notebooks metadata
+    ## The following code updates the metadata of the Colab notebooks.
+
+    ## Import the necessary libraries
+    import os
+    import json
+
+    ## Define the metadata
+    metadata = {
+        "title": "Updated Colab Notebooks Metadata",
+        "description": "This notebook updates the metadata of the Colab notebooks.",
+        "author": "Your Name",
+        "language": "python",
+        "kernel_type": "python",
+        "kernel_version": "3.7.4",
+        "nbformat": 4,
+        "has_display_count": True,
+        "is_spark_compatible": True,
+        "argumets": [],
+        "language_info": {
+            "name": "python",
+            "version": "3.7.4"
+        }
+    }
+
+    ## Update the metadata of the notebooks
+    for file_name in os.listdir():
+        if file_name.endswith(".ipynb"):
+            with open(file_name, "r") as f:
+                notebook = json.load(f)
+            notebook["metadata"] = metadata
+            with open(file_name, "w") as f:
+                json.dump(notebook, f)
+    ```
+
+    ## Run the code
+    This code will update the metadata of all the notebooks in the current directory.
+
+    Please replace "Your Name" with your actual name in the code.

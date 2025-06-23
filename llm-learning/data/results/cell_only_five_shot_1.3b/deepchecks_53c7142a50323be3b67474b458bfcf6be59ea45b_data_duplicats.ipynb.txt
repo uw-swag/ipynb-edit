@@ -1,0 +1,52 @@
+```python
+    # Checking for duplicates
+    duplicates = train_df.duplicated()
+    print("Number of duplicates: ", duplicates.sum())
+
+    # Removing duplicates
+    train_df.drop_duplicates(inplace=True)
+    print("Number of rows after removing duplicates: ", train_df.shape[0])
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning and Preprocessing"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Checking for missing values
+    print("Missing values in each column:")
+    print(train_df.isnull().sum())
+
+    # Filling missing values
+    train_df.fillna(method='ffill', inplace=True)
+
+    # Checking for duplicates after filling
+    duplicates = train_df.duplicated()
+    print("Number of duplicates after filling: ", duplicates.sum())
+
+    # Removing duplicates
+    train_df.drop_duplicates(inplace=True)
+    print("Number of rows after removing duplicates: ", train_df.shape[0])
+
+    # Checking for outliers
+    for column in train_df.columns:
+        if train_df[column].dtype != 'O':
+            print(f"Outliers in column {column}:")
+            print(train_df[column].value_counts())
+
+    # Removing outliers
+    # This is a simple example, you may need to adjust this based on the specific outliers you have identified
+    for column in train_df.columns:
+        if train_df[column].dtype != 'O':
+            Q1 = train_df[column].quantile(0.25)
+            Q3 = train_df[column].quantile(0.75)
+            IQR = Q3 - Q1
+            lower_bound = Q1 - 1.5 * IQR
+            upper_bound = Q3 + 1.5 * IQR
+            train_df = train_df[train_df[column

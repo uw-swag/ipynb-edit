@@ -1,0 +1,28 @@
+```python
+    from sklearn.metrics import accuracy_score
+
+    def get_label(y, e):
+        if y == e:
+            return 1
+        else:
+            return 0
+
+    train_ss = [get_label(y, e) for y, e in zip(train_ys, train_es)]
+    valid_ss = [get_label(y, e) for y, e in zip(valid_ys, valid_es)]
+    test_ss = [get_label(y, e) for y, e in zip(test_ys, test_es)]
+
+    # Train the model
+    model.fit(train_ss, train_ys)
+
+    # Validate the model
+    valid_predictions = model.predict(valid_ss)
+    valid_accuracy = accuracy_score(valid_ys, valid_predictions)
+
+    # Test the model
+    test_predictions = model.predict(test_ss)
+    test_accuracy = accuracy_score(test_ys, test_predictions)
+
+    print(f"Train Accuracy: {train_accuracy}")
+    print(f"Valid Accuracy: {valid_accuracy}")
+    print(f"Test Accuracy: {test_accuracy}")
+    ```

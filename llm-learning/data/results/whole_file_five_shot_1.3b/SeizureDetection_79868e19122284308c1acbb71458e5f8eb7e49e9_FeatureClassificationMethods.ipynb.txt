@@ -1,0 +1,39 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Add missing parameter"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import time
+import numpy as np
+import pandas as pd
+from sklearn.svm import SVC
+from sklearn.naive_bayes import GaussianNB
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from tensorflow.keras.regularizers import l2
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.layers import Dense, Dropout, LSTM
+<\Cell_0>
+<Cell_1>
+from ipynb.fs.full.ClassificationPerformanceIndexes import classificationPerformanceIndexes, printClassificationPerformanceIndexes
+<\Cell_1>
+<Cell_2>
+def SVM(X_train, y_train, X_test, y_test, results):
+    print('Implementing SVM method...')
+    start = time.time()
+    clf = SVC(C = 1.0, kernel = 'rbf', gamma = 100)
+    svm_ind = clf.fit(X_train, y_train).predict(X_test)
+    end = time.time()
+    t = round(end - start,2)
+    acc, snv, spc, ppv, f1, mcc, kappa, tt = classificationPerformanceIndexes (y_test, svm_ind, t)
+    results.loc['SVM', :] = acc, snv, spc, ppv, f1, mcc, kappa, t
+    printClassificationPerformanceIndexes('KNN', acc, snv, spc, ppv, f1, mcc, kappa)
+    print('SVM finished

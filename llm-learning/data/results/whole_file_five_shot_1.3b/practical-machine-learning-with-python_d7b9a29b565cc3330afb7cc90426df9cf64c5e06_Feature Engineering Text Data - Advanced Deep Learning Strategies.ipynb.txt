@@ -1,0 +1,54 @@
+```python
+    <Cell_0>
+    # Ensure edits to libraries are loaded and plotting is shown in the notebook.
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+    <\Cell_0>
+    <Cell_1>
+    import sys
+    sys.path.append("../../")
+
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    import numpy as np
+    import pandas as pd
+    from pathlib import Path
+    import scrapbook as sb
+
+    # fastai
+    import fastai
+    from fastai.text import (
+        TextClasStaff, TextClasDataBunch, text_classifier_learner, AWD_LSTM,
+    )
+
+    # local modules
+    from utils_cv.classification.model import (
+        TrainMetricsRecorder, hamming_accuracy, zero_one_accuracy, get_optimal_threshold,
+    )
+    from utils_cv.classification.plot import plot_thresholds
+    from utils_cv.classification.data import Urls
+    from utils_cv.common.data import unzip_url
+    from utils_cv.common.gpu import db_num_workers, which_processor
+
+    print(f"Fast.ai version = {fastai.__version__}")
+    which_processor()
+    <\Cell_1>
+    <Cell_2>
+    DATA_PATH     = unzip_url(Urls.multilabel_fridge_objects_path, exist_ok=True)
+    EPOCHS        = 10
+    LEARNING_RATE = 1e-4
+    IM_SIZE       = 300
+    BATCH_SIZE    = 16
+    ARCHITECTURE  = AWD_LSTM
+    <\Cell_2>
+    <Cell_3>
+    path = Path(DATA_PATH)
+    path.ls()
+    <\Cell_3>
+    <Cell_4>
+    (path/'images').ls()[:5]
+    <\Cell_4>
+    <Cell_5>
+    df = pd.read_csv(path/'labels.csv

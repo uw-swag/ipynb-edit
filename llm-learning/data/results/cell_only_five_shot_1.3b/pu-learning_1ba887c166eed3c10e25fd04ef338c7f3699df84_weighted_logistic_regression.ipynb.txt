@@ -1,0 +1,27 @@
+
+    The code you provided is a Python script that uses the Scikit-Learn library to perform a weighted logistic regression on a dataset. The script first loads the dataset, then it calculates the weights for the two classes. These weights are then used to weight the classes in the logistic regression model. The model is then trained and predictions are made. Finally, the visualization of the data and predictions is shown.
+
+    However, there seems to be a typo in the code. The variable `C` is not defined in the code you provided. It should be `C` from the `sklearn.linear_model` module. The `ALPHA` variable is also not defined in the code. It should be `C` from the `sklearn.linear_model` module.
+
+    Here is the corrected code:
+
+    ```python
+    from scar import load_scar
+    x, y, s = load_scar()
+    from scar import C, ALPHA
+
+    w_p = (s == 0).sum() / len(s)
+    w_n = (s == 1).sum() / len(s)
+
+    class_weight = {0: w_n, 1: w_p}
+    from sklearn.linear_model import LogisticRegression
+    clf = LogisticRegression(class_weight=class_weight, C=C, random_state=0).fit(x, s)
+    y_hat = clf.predict(x)
+    y_hat_prob = clf.predict_proba(x)[:, 1]
+    from utils import visualize_pn_data, visualize_pn_data_proba
+    visualize_pn_data(x, y)
+    visualize_pn_data(x, y_hat)
+    visualize_pn_data_proba(x, y_hat_prob)
+    ```
+
+    Please replace `C` and `ALPHA` with the correct values from the `sklearn.linear_model` module.

@@ -1,0 +1,23 @@
+```
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'path_to_source_directory'
+    destination_dir = 'path_to_destination_directory'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Iterate over each file
+    for file in files:
+        # Construct the full source and destination file paths
+        source_file = os.path.join(source_dir, file)
+        destination_file = os.path.join(destination_dir, file)
+
+        # Check if the file is a notebook
+        if file.endswith('.ipynb'):
+            # Move the notebook to the destination directory
+            shutil.move(source_file, destination_file)
+    ```
+    This script will move all .ipynb files from the source directory to the destination directory. Please replace 'path_to_source_directory' and 'path_to_destination_directory' with the actual paths.

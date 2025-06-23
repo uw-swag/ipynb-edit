@@ -1,0 +1,27 @@
+```python
+    %load ../utils/djl-imports
+
+    NDManager manager = NDManager.newBaseManager();
+
+    public NDArray pool2d(NDArray X, Shape poolShape, String mode){
+        long poolHeight = poolShape.get(0);
+        long poolWidth = poolShape.get(1);
+
+        NDArray Y = manager.zeros(new Shape(X.getShape().get(0) - poolHeight + 1, 
+                                        X.getShape().get(1) - poolWidth + 1));
+        for(int i=0; i < Y.getShape().get(0); i++){
+            for(int j=0; j < Y.getShape().get(1); j++){
+                if("max".equals(mode)){
+                    Y.set(new NDIndex(i+","+j), 
+                                X.get(new NDIndex(i + ":" + (i + poolHeight) + ", " + j + ":" + (j + poolWidth))).max());
+                }
+                else if("avg".equals(mode)){
+                    Y.set(new NDIndex(i+","+j),
+                                X.get(new NDIndex(i + ":" + (i + poolHeight) + ", " + j + ":" + (j + poolWidth))).mean());
+                }
+            }
+        }
+
+        return Y;
+    }
+    ```

@@ -1,0 +1,31 @@
+```python
+    #thread ;;
+    #require "gsl" ;;
+    #require "jupyter.archimedes" ;;
+    #require "nn-roadmap" ;;
+    <\Cell_0>
+    <Cell_1>
+    let random_walk ~rng ~sigma n =
+      Array.init n (fun _ -> Gsl.Randist.gaussian ~sigma rng)
+      |> Array.fold_left (fun (ws, w) z -> let w' = w +. z in (w' :: ws, w')) ([], 0.0)
+      |> fst
+      |> List.rev
+    <\Cell_1>
+    <Cell_2>
+    let rng = Gsl.Rng.(make MT19937) ;; (* Mersenne Twister *)
+
+    let vp = A.init ~w:760. ~h:300. ["jupyter"] in
+    A.Axes.box vp ;
+    A.set_color vp A.Color.red ;
+    A.List.y ~style:`Lines vp (random_walk ~rng ~sigma:0.01 1000) ;
+    A.set_color vp A.Color.blue ;
+    A.List.y ~style:`Lines vp (random_walk ~rng ~sigma:0.01 1000) ;
+    A.set_color vp A.Color.green ;
+    A.List.y ~style:`Lines vp (random_walk ~rng ~sigma:0.01 1000) ;
+    A.set_color vp A.Color.magenta ;
+    A.List.y ~style:`Lines vp (random_walk ~rng ~sigma:0.01 1000) ;
+    A.set_color vp A.Color.cyan ;
+    A.List.y ~style:`Lines vp (random_walk ~rng ~sigma:0.01 1000) ;
+    A.close vp
+    <\Cell_2>
+    <Cell_3

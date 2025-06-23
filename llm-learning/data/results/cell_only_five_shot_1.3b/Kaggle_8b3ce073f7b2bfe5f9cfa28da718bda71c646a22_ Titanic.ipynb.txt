@@ -1,0 +1,16 @@
+```
+    #MACHINE LEARING & TESTING
+
+    X = train_DF.drop('Survived', axis = 1)
+    Y = train_DF['Survived']
+    X_test = test_DF.drop('PassengerId', axis = 1).copy()
+
+    #Using Logistic Regression 
+
+    logr = LogisticRegression()
+    logr.fit(X,Y)
+    Y_test = logr.predict(X_test)
+    logr.score(X,Y)
+
+    ```
+    This code is used to train a logistic regression model on the training data and then use this model to predict the survival of the passengers on the test data. The accuracy of the model is then printed.

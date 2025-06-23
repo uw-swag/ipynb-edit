@@ -1,0 +1,32 @@
+
+    ### Instruction:
+    [
+    Commit Message:" Adding examples for XGBoost"
+    Original Code:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+Sure, here are some examples of how to use XGBoost in Python:
+
+```python
+import xgboost as xgb
+
+# Create data
+data = xgb.DMatrix('./data.csv')
+
+# Specify parameter (learning rate, n_estimators etc.)
+param = {'max_depth':2, 'eta':1, 'objective':'binary:logistic'}
+
+# Define model
+model = xgb.train(param, data)
+
+# Predict
+pred = model.predict(data)
+```
+
+In this example, we first import the XGBoost library, then create a data matrix from a CSV file. We then specify some parameters for the model, and use these to train a model. Finally, we use the trained model to make predictions.
+
+Please replace `'./data.csv'` with your actual data file path.

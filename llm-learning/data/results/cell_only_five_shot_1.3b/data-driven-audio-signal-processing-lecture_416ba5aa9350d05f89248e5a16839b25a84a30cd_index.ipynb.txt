@@ -1,0 +1,39 @@
+```python
+    # Importing necessary libraries
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Dense, Dropout, Flatten
+    from tensorflow.keras.optimizers import Adam
+
+    # Loading the MNIST dataset
+    mnist = tf.keras.datasets.mnist
+    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+
+    # Normalizing the images
+    x_train, x_test = x_train / 255.0, x_test / 255.0
+
+    # Reshaping the images
+    x_train = x_train.reshape(-1, 28, 28, 1)
+    x_test = x_test.reshape(-1, 28, 28, 1)
+
+    # Creating a Sequential model
+    model = Sequential([
+        Flatten(input_shape=(28, 28, 1)),
+        Dense(128, activation='relu'),
+        Dropout(0.2),
+        Dense(10)
+    ])
+
+    # Compiling the model
+    model.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
+
+    # Training the model
+    model.fit(x_train, y_train, epochs=5)
+
+    # Evaluating the model
+    test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
+
+    print('\nTest accuracy:', test_acc)
+    ```

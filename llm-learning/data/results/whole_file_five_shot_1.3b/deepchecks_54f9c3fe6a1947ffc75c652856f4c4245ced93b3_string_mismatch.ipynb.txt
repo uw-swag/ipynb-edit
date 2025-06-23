@@ -1,0 +1,14 @@
+```python
+    from deepchecks.checks import StringMismatch
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', '$deeP$', 'earth', 'foo', 'bar', 'foo?']}
+    df = pd.DataFrame(data=data)
+    r = StringMismatch().run(df)
+
+    # Adding a condition
+    c = StringMismatch().add_condition_no_variants()
+    c.conditions_decision(r)
+    ```
+
+    The code above is an example of how to use the `StringMismatch` check in DeepChecks, a library for data quality checks. The `StringMismatch` check is used to detect strings that are not valid according to a specified pattern. The `add_condition_no_variants` method is used to add a condition that will be used to filter out the rows that do not meet the condition. The `conditions_decision` method is used to decide whether to keep or discard a row based on the condition.

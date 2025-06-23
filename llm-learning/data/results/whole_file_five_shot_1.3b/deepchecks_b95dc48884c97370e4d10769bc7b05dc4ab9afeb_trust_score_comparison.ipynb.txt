@@ -1,0 +1,25 @@
+```
+    # Removing label_name from dataset constructor
+    from deepchecks.datasets.base_dataset import BaseDataset
+
+    class CustomDataset(BaseDataset):
+        def __init__(self, df, label_name):
+            super().__init__(df)
+            self.label_name = label_name
+
+        def get_label(self):
+            return self.df[self.label_name]
+
+        def get_features(self):
+            return self.df.drop([self.label_name], axis=1)
+
+    train = CustomDataset(train_df, label)
+    test = CustomDataset(test_df, label)
+
+    clf = AdaBoostClassifier()
+    features = train.get_features()
+    target = train.get_label()
+    clf.fit(features, target)
+    ```
+
+    The `label_name` parameter is now passed to the `CustomDataset` class, which is used to set the label and features in the dataset.

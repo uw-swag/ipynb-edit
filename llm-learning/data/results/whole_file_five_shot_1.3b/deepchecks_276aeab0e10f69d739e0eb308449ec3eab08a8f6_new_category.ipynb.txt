@@ -1,0 +1,36 @@
+
+    The code you provided is a test for a function `new_category_train_validation` that checks the integrity of a dataset. The function is designed to compare the validation set with the training set and identify any new categories that have not been accounted for in the training set.
+
+    However, the code you provided is incomplete and does not provide any implementation for the function `new_category_train_validation`. 
+
+    If you want to implement this function, you would need to define the function based on the specific requirements of the dataset and the problem you are trying to solve.
+
+    Here is a basic implementation of the function:
+
+    ```python
+    def new_category_train_validation(val, test):
+        # Get all unique categories in the training set
+        train_categories = set(val.df['col1'])
+
+        # Get all unique categories in the validation set
+        val_categories = set(val.df['col1'])
+
+        # Get all unique categories in the test set
+        test_categories = set(test.df['col1'])
+
+        # Find new categories in the training set
+        new_categories = train_categories.difference(val_categories)
+
+        # Find new categories in the validation set
+        new_categories = new_categories.union(val_categories.difference(test_categories))
+
+        # If there are new categories, print them
+        if len(new_categories) > 0:
+            print("New categories in the training set:")
+            for category in new_categories:
+                print(category)
+    ```
+
+    This function assumes that the categories in the training set, validation set, and test set are all present in the same column named 'col1'. You would need to adjust the column names based on your actual dataset.
+
+    Please note that this is a basic implementation and may not cover all edge cases. For a more robust solution, you would need to consider more factors and possibly use more advanced techniques.

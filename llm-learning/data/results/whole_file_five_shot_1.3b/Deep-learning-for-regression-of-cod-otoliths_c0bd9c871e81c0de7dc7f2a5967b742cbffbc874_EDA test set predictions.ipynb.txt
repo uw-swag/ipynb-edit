@@ -1,0 +1,42 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error
+
+    # Adding results and EDA notebooks
+    ## Adding results
+    ## Saving the results of the analysis
+    ## For example, you can save the mean of the points column
+    mean_points = reviews['points'].mean()
+    print(f"The mean points is {mean_points}")
+
+    ## Adding EDA notebooks
+    ## Plotting the distribution of points
+    sns.distplot(reviews['points'])
+    plt.title('Distribution of points')
+    plt.show()
+
+    ## Plotting the correlation matrix
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(reviews.corr(), annot=True, cmap='coolwarm')
+    plt.title('Correlation matrix')
+    plt.show()
+
+    ## Splitting the data into train and test sets
+    X = reviews.drop('points', axis=1)
+    y = reviews['points']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    ## Applying a linear regression model
+    lr = LinearRegression()
+    lr.fit(X_train, y_train)
+
+    ## Making predictions
+    y_pred = lr.predict(X_test)
+
+    ## Evaluating the model
+    mse = mean_squared_error(y_test, y_pred)
+    print(f"Mean Squared Error: {mse}")
+    ```

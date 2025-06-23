@@ -1,0 +1,51 @@
+```python
+    # Python Practical 4: Advanced Python Practical
+    # Name: 
+    # Roll No: 
+    # Date: 
+
+    # Problem 1: Write a Python program to find the factorial of a number.
+    def factorial(n):
+        if n == 0:
+            return 1
+        else:
+            return n * factorial(n-1)
+
+    # Problem 2: Write a Python program to find the Fibonacci series up to n.
+    def fibonacci(n):
+        if n <= 0:
+            return []
+        elif n == 1:
+            return [0]
+        elif n == 2:
+            return [0, 1]
+        else:
+            fib_list = [0, 1]
+            while len(fib_list) < n:
+                fib_list.append(fib_list[-1] + fib_list[-2])
+            return fib_list
+
+    # Problem 3: Write a Python program to find the GCD of two numbers.
+    def gcd(a, b):
+        if b == 0:
+            return a
+        else:
+            return gcd(b, a % b)
+    ```
+    # Problem 4: Write a Python program to implement the Bubble Sort algorithm.
+    def bubble_sort(lst):
+        n = len(lst)
+        for i in range(n):
+            for j in range(0, n-i-1):
+                if lst[j] > lst[j+1]:
+                    lst[j], lst[j+1] = lst[j+1], lst[j]
+        return lst
+    ```
+    # Problem 5: Write a Python program to implement the Selection Sort algorithm.
+    def selection_sort(lst):
+        for i in range(len(lst)):
+            min_index = i
+            for j in range(i+1, len(lst)):
+                if lst[min_index] > lst[j]:
+                    min_index = j
+            lst[i], lst[min_index] = lst[min_index], lst[i

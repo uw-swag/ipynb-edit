@@ -1,0 +1,22 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("AddFilesViaUpload").getOrCreate()
+
+    # Read the data from the CSV file
+    df = spark.read.csv('path_to_your_file.csv', header=True, inferSchema=True)
+
+    # Show the data
+    df.show()
+
+    # Add a new column
+    df = df.withColumn('new_column', col('existing_column') + 1)
+
+    # Write the data back to the CSV file
+    df.write.csv('path_to_your_file.csv')
+
+    # Stop the SparkSession
+    spark.stop()
+    ```

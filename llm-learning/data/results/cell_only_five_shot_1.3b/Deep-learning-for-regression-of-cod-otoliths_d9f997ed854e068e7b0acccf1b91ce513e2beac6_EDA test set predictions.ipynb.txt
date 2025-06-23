@@ -1,0 +1,36 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding LaTeX to the code"
+    Original Code Cells:
+    '''
+    fold_preds = pd.read_csv("preds.csv")
+    y_true = pd.read_csv("test_set_files.csv")
+  
+    print("Accuracy score pr fold")    
+    for i in range(0,10):
+        if i == 5: print("")
+        print(f"${accuracy_score(fold_preds[str(i)].round().astype('int'), y_true.age)}$, ", end = ', ')
+    print("")
+
+    print("MSE pr fold")    
+    for i in range(0,10):
+        if i == 5: print("")
+        print(f"${mean_squared_error(fold_preds[str(i)], y_true.age)}$, ", end = ', ') 
+    print("")
+  
+    aggregate_pred = fold_preds['0']
+    for i in range(1,10):
+        aggregate_pred += fold_preds[str(i)]
+
+    aggregate_pred = aggregate_pred/10.0
+    print("aggregate accuracy, mse")
+    print(f"${ accuracy_score(aggregate_pred.round().astype('int')}$, " + 
+          f"${mean_squared_error(aggregate_pred, y_true.age)}$")
+    '''
+    ]
+
+    ### Response:
+    The LaTeX code has been added to the code cells. The LaTeX syntax is used to display mathematical expressions and formulas in a document. The `$` symbol is used to denote LaTeX commands. The `{` and `}` symbols are used to enclose the LaTeX code, and the `\` symbol is used to escape special LaTeX characters.
+
+    The original code was not changing the outliers table, but the LaTeX code was added to display the results in a more readable format.

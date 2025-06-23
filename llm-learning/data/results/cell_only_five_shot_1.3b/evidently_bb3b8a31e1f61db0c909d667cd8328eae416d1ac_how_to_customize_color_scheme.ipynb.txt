@@ -1,0 +1,27 @@
+
+    '''
+    [
+    Commit Message: "[docs] fix typos in docs (#828)"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+    import scipy.sparse as sp
+    import time
+    import random
+    SEED = 74
+    random.seed(SEED)
+    class T:
+       B = '\033[94m' # blue
+       G = '\033[92m' # green
+       Y = '\033[93m' # yellow
+       R = '\033[91m' # red
+       b = '\033[1m' # bold
+       E = '\033[0m' # end formatting
+    print(f"Mean feature engineering duration: {np.array([290.73,290.71,289.59,290.45,288.57,288.90,291.77,286.21,288.36,288.63,283.52]).mean():.2f} seconds")
+    print(f"Number of train data values: {uxm_train.nnz:,} ({uxm_train.nnz*100/NNZ:.2f}%)")
+    print(f"Number of validation data values: {uxm_val.nnz:,} ({uxm_val.nnz*100/NNZ:.2f}%)")
+    print(f"Number of test data values: {uxm_test.nnz:,} ({uxm_test.nnz*100/NNZ:.2f}%)")
+    errormessage = '''All datapoints should be in either the train, the test of the validation datasets. 
+    The reason might be a change in how .nnz of a DOK matrix (scipy.sparse.dok_matrix) is calculated. 
+    In version 1.4.1 SciPy setting the value to zero explicitly (X[i,j]=0) is not counted

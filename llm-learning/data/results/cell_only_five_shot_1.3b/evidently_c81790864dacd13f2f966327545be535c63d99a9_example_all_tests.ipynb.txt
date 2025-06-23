@@ -1,0 +1,26 @@
+```python
+    import unittest
+    from sklearn.feature_selection import SelectKBest, f_classif
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+
+    class TestSelectKBest(unittest.TestCase):
+
+        def setUp(self):
+            self.X, self.y = load_iris(return_X_y=True)
+            self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
+
+        def test_f_classif(self):
+            selector = SelectKBest(score_func=f_classif, k=2)
+            selector.fit(self.X_train, self.y_train)
+            X_new = selector.transform(self.X_test)
+            self.assertEqual(X_new.shape[1], 2)
+
+    if __name__ == '__main__':
+        unittest.main()
+    ```
+    This code adds a new test case for the `SelectKBest` class. The test case checks if the transformed feature matrix has the correct number of features after the selection process.
+
+    The code also updates the code style to PEP8, which is the official Python coding style guide.
+
+    Please note that the test case is a simple one and may not cover all possible edge cases.

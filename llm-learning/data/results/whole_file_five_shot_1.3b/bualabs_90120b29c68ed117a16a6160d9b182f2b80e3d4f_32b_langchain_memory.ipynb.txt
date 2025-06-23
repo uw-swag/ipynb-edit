@@ -1,0 +1,68 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add desc to ConversationBufferMemory"
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+
+
+<\Cell_1>
+<Cell_2>
+# ! pip install langchain
+
+<\Cell_2>
+<Cell_3>
+from langchain.chat_models import ChatOpenAI
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+<\Cell_3>
+<Cell_4>
+import os
+from getpass import getpass
+
+token = getpass('Enter OPENAI_API_KEY here: ')
+# print ('token is', token)
+
+os.environ["OPENAI_API_KEY"] = token
+<\Cell_4>
+<Cell_5>
+chatllm = ChatOpenAI(temperature=0.0)
+memory = ConversationBufferMemory()
+conversation = ConversationChain(
+    llm=chatllm, 
+    memory = memory,
+    verbose=True
+)
+<\Cell_5>
+<Cell_6>
+conversation.predict(input="Hi, my name is Ken")
+<\Cell_6>
+<Cell_7>
+conversation.predict(input="What is 1+1?")
+<\Cell_7>
+<Cell_8>
+conversation.predict(input="What is my name?")
+<\Cell_8>
+<Cell_9>
+print(memory.buffer)
+<\Cell_9>
+<Cell_10>
+memory.load_memory_variables({})
+<\Cell_10>
+<Cell_11>
+memory = ConversationBufferMemory()
+<\Cell_11>
+<Cell_12>
+memory.save_context({"input": "Hi"}, 
+                    {"output": "What's up"})
+<\Cell_12>
+<Cell_13>
+print(memory.buffer)
+<\Cell_13>
+<Cell_14>
+memory.load_memory_variables({})
+<\Cell_14>

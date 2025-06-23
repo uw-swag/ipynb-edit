@@ -1,0 +1,28 @@
+
+The code you provided is a part of a Jupyter notebook and it's using Deepchecks, a Python library for data quality checks. The code is splitting the VisionData and removing formatters, which is a common practice in data preprocessing.
+
+Here's a brief explanation of the code:
+
+1. The code imports necessary libraries and modules.
+2. It then creates a VisionData object `test_ds`, which is a dataset loaded from a specific source.
+3. It then creates a YOLO model `yolo`.
+4. The code then creates a `DetectionPredictionFormatter` object, which is a formatter for detection predictions.
+5. The code then runs a MeanAveragePrecisionReport check on the `test_ds` dataset and the `yolo` model, using the `DetectionPredictionFormatter`.
+6. The code then adds a condition to the check to only include results where the average precision is not less than 0.4.
+7. Finally, the code runs the check and displays the results.
+
+The `VisionData` class is a base class for all vision data, and the `MeanAveragePrecisionReport` class is a check that calculates the mean average precision (mAP) of a model's predictions.
+
+The `DetectionPredictionFormatter` class is a formatter for detection predictions, and the `coco` module contains functions for loading the COCO dataset.
+
+The `add_condition_test_average_precision_not_less_than` method is a method of the `MeanAveragePrecisionReport` class, which adds a condition to the check to only include results where the average precision is not less than a certain value.
+
+The `run` method of the `MeanAveragePrecisionReport` class is a method that runs the check and returns the results.
+
+The `show` method of the `Result` class is a method that displays the results of the check.
+
+The `Result` class is a class that represents the results of a data quality check.
+
+The `run` method of the `Check` class is a method that runs the check and returns the results.
+
+The `add_condition` method of the `Check` class is a method that adds a condition to the check

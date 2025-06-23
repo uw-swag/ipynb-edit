@@ -1,0 +1,49 @@
+import pandas as pd
+
+from datetime import datetime
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, CatTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection, CatTargetDriftProfileSection
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+bcancer = datasets.load_breast_cancer()
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+bcancer_frame.head()
+bcancer_frame['target'] = bcancer.target
+bcancer_target_drift_dashboard = Dashboard(tabs=[CatTargetDriftTab(verbose_level=1)])
+bcancer_target_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None)
+bcancer_target_drift_dashboard.show()
+# bcancer_target_drift_dashboard.save('bcancer_target_drift.html')
+bcancer_target_drift_dashboard = Dashboard(tabs=[CatTargetDriftTab(verbose_level=0)])
+bcancer_target_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None)
+bcancer_target_drift_dashboard.show()
+# bcancer_target_drift_dashboard.save('bcancer_target_drift.html')
+bcancer_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=1)])
+bcancer_data_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None)
+bcancer_data_drift_dashboard.show()
+# bcancer_data_drift_dashboard.save('bcancer_data_drift.html')
+bcancer_data_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=0)])
+bcancer_data_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None)
+bcancer_data_drift_dashboard.show()
+# bcancer_data_drift_dashboard.save('bcancer_data_drift.html')
+bcancer_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab(verbose_level=0), 
+                                                       CatTargetDriftTab(verbose_level=0)])
+bcancer_data_and_target_drift_dashboard.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None)
+bcancer_data_and_target_drift_dashboard.show()
+# bcancer_data_and_target_drift_dashboard.save('bcancer_data_and_target_drift.html')
+bcancer_target_drift_profile = Profile(sections=[CatTargetDriftProfileSection()])
+bcancer_target_drift_profile.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None) 
+bcancer_target_drift_profile.json()
+bcancer_data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+bcancer_data_drift_profile.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None) 
+bcancer_data_drift_profile.json()
+bcancer_target_and_data_drift_profile = Profile(sections=[DataDriftProfileSection(), CatTargetDriftProfileSection()])
+bcancer_target_and_data_drift_profile.calculate(bcancer_frame[:280], bcancer_frame[280:], column_mapping=None) 
+bcancer_target_and_data_drift_profile.json()
+

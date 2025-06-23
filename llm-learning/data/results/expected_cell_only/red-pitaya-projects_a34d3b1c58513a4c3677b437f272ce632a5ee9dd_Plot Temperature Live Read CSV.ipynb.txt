@@ -1,0 +1,39 @@
+%matplotlib notebook
+import matplotlib
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+from IPython.display import display, clear_output
+from datetime import datetime, date
+import time
+import pandas as pd
+from subprocess import run, PIPE
+
+filename = str(date.today()) + " temperature data.csv"
+def animate(i):
+    global df
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    
+    monitor_ams_output = run(["monitor","-ams"], stdout=PIPE).stdout
+    temp_value = float(monitor_ams_output.split(maxsplit=8)[7])
+    
+    clear_output(wait=True)
+    display('Collecting temperatures. '+ str(len(df.index)) +' value(s) recorded.')
+    clean_data_table['Temperature (oC)'] = [temp_value]
+    clean_data_table['Date'] = [datetime.now()]
+    df = df.append(clean_data_table)
+    
+    x = df['Date']
+    y1 = df['Temperature (oC)']
+    
+    plt.cla()
+    plt.plot(x,y1)
+    plt.xlabel('Time')
+    plt.ylabel('Temprature (C)')
+    plt.title("Temperature - Arcylic Case with Fan")
+    plt.gcf().autofmt_xdate()
+    plt.show()
+    
+ani = FuncAnimation(plt.gcf(), animate,interval=2000)
+plt.show()

@@ -1,0 +1,29 @@
+```python
+    from torchvision import models
+    import torchvision
+    import torch
+    from torch import nn
+    from torchvision.transforms import ToTensor
+    import copy
+
+    from deepchecks.vision.checks.performance import ConfusionMatrixReport
+    from deepchecks.vision.datasets.detection import coco
+    import numpy as np
+
+    yolo = coco.load_model(pretrained=True)
+
+    train_ds = coco.load_dataset(object_type='VisionData')
+
+    check = ConfusionMatrixReport(categories_to_display=20)
+    check.run(train_ds, yolo)
+    ```
+
+    The issue with the confusion matrix is that the axis of the confusion matrix is inverted. The confusion matrix is a 2x2 matrix, where the first row and the first column represent the true positives, the second row and the first column represent the false positives, and the second row and the second column represent the false negatives.
+
+    The issue is that the confusion matrix is being displayed in a different order compared to the actual data. The confusion matrix is a 2x2 matrix, where the first row and the first column represent the true positives, the second row and the first column represent the false positives, and the second row and the second column represent the false negatives.
+
+    The issue is that the confusion matrix is being displayed in a different order compared to the actual data. The confusion matrix is a 2x2 matrix, where the first row and the first column represent the true positives, the second row and the first column represent the false positives, and the second row and the second column represent the false negatives.
+
+    The issue is that the confusion matrix is being displayed in a different order compared to the actual data. The confusion matrix is a 2x2 matrix, where the first row and the first column represent the true positives, the second row and the first column represent the false positives, and the second row and the second column represent the false negatives.
+
+    The issue is that the confusion matrix is being displayed in a different order compared to the actual data. The confusion matrix is a 2x2 matrix, where the first row and the first column represent the true positives

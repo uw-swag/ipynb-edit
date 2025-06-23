@@ -1,0 +1,35 @@
+```python
+    from fastai.vision import *
+    import json
+    from PIL import Image, ImageDraw, ImageFont
+    import matplotlib.pyplot as plt
+
+    def show_img(im, figsize=None, ax=None):
+        if not ax: fig,ax = plt.subplots(figsize=figsize)
+        ax.imshow(im)
+        ax.get_xaxis().set_visible(False)
+        ax.get_yaxis().set_visible(False)
+        return ax
+
+    def draw_rect(ax, bbox):
+        rect = patches.Rectangle(bbox[:2], *bbox[-2:], linewidth=2, edgecolor='r', facecolor='none')
+        ax.add_patch(rect)
+        ax.set_title('Bounding box')
+        plt.show()
+
+    # Load the image
+    img = Image.open('image.jpg')
+
+    # Convert the image to RGB
+    img_rgb = img.convert('RGB')
+
+    # Get the bounding box coordinates
+    bbox = [100, 100, 200, 200]  # This is a dummy bbox, replace it with your actual bbox
+
+    # Draw the bounding box
+    fig, ax = plt.subplots()
+    show_img(img_rgb, ax=ax)
+    draw_rect(ax, bbox)
+    ```
+
+    This code will draw a bounding box on the image. The bbox parameter should be a list of four elements: the x and y coordinates of the top-left corner, and the width and height of the bounding box. The bounding box will be drawn in red color.

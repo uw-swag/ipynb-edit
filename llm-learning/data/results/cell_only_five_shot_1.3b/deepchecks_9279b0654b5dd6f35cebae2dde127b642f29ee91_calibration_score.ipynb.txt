@@ -1,0 +1,42 @@
+```python
+    # Example 1:
+    # Create a DataFrame
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': ['a', 'b', 'c', 'd', 'e']
+    })
+
+    # Example 2:
+    # Use the 'loc' function to select rows
+    df.loc[df['A'] > 2]
+
+    # Example 3:
+    # Use the 'apply' function to apply a function to each element in a DataFrame
+    df['A'] = df['A'].apply(lambda x: x**2)
+
+    # Example 4:
+    # Use the 'groupby' function to group a DataFrame by one or more columns
+    df.groupby('C')['A'].sum()
+
+    # Example 5:
+    # Use the 'merge' function to merge two DataFrames
+    df1 = pd.DataFrame({
+        'key': ['A', 'B', 'C', 'D'],
+        'value': [1, 2, 3, 4]
+    })
+
+    df2 = pd.DataFrame({
+        'key': ['B', 'C', 'D', 'E'],
+        'value': [10, 20, 30, 40]
+    })
+
+    df = pd.merge(df1, df2, on='key')
+
+    # Example 6:
+    # Use the 'pivot_table' function to pivot a DataFrame
+    df = pd.DataFrame({
+        'A': ['foo', 'bar', 'foo', 'bar', 'foo', 'bar', 'foo', 'foo'],
+        'B': ['one', 'one', 'two', 'three', 'two', 'two', 'one', 'three'],
+        'C': [1, 2, 3, 3, 2, 3, 2, 3],
+        'D': [2, 4, 5, 5, 6, 7, 8, 9

@@ -1,0 +1,30 @@
+```python
+    from fastai import *
+    from fastai.vision import *
+    from fastai.vision.all import *
+
+    path = '01'
+    filenames = get_files(path/'01')
+    len(filenames), filenames[:20]
+
+    fname = '09/frame_00667_rgb.jpg'
+
+    img = open_image(path/fname)
+    img.show()
+
+    batchsize = 64
+    np.random.seed(0)
+    transform = get_transforms()
+
+    databunch = (PointsItemList.from_folder(path)
+        .split_by_valid_func(lambda o: o.parent.name=='13')
+        .label_from_func(get_ctr)
+        .transform(transform, tfm_y=True, size=(120,160))
+        .databunch(bs=batchsize).normalize(imagenet_stats)
+       )
+    databunch.classes
+    learner.recorder.plot()
+
+    interpretation = ClassificationInterpretation.from_learner(learner)
+    interpretation.plot_top_losses(9)
+    ```

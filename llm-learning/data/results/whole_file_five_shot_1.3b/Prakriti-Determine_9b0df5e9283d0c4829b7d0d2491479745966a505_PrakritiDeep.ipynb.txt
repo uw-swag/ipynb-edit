@@ -1,0 +1,51 @@
+
+    '''
+    [
+    Commit Message: "Fix#2 : Improved the dataset columns title and rerun the jupyter notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import tensorflow as tf
+from tensorflow import keras
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+<\Cell_0>
+<Cell_1>
+dataset = pd.read_csv("../dataset/data.csv", names=["column1", "column2", "column3", ...])
+dataset
+<\Cell_1>
+<Cell_2>
+X=dataset.iloc[:,:-1].values
+Y=dataset.iloc[:,20].values
+print(X)
+<\Cell_2>
+<Cell_3>
+print(Y)
+<\Cell_3>
+<Cell_4>
+X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size = 0.2, random_state = 42)
+
+<\Cell_4>
+<Cell_5>
+X_train
+<\Cell_5>
+<Cell_6>
+dataset
+<\Cell_6>
+<Cell_7>
+X
+<\Cell_7>
+<Cell_8>
+Y
+<\Cell_8>
+<Cell_9>
+model = keras.Sequential([
+    keras.layers.Dense(19,input_shape=(20,),activation='relu'),
+    keras.layers.Dense(300,activation='relu'),
+    keras.layers.Dense(250,activation='relu'),
+    keras.layers.Dense(200,activation='relu'),
+    keras.layers.Dense(150,activation='relu'),
+    keras.layers.Dense(100,activation='relu'),
+    keras.layers.Dense(50,activation='relu'),
+    keras.layers.Dense(45,activation='

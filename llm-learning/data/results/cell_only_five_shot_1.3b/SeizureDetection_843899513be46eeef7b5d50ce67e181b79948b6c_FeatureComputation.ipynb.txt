@@ -1,0 +1,37 @@
+```python
+    def featureExtraction(ndf, sample_rate, step, method='full'):
+        print('Feature Extraction...')
+        ft = pd.DataFrame()
+        c = 0
+        for i in tqdm(range (0, ndf.shape[0], step)):
+            temp = ndf.iloc[i:i+step]
+            if method == 'left_right':
+                ft = featureExtractionLeftRight(temp, sample_rate, step)
+            elif method == 'average':
+                ft = featureExtractionAverage(temp, sample_rate, step)
+            elif method == 'full':
+                ft = featureExtractionFull(temp, sample_rate, step)
+            else:
+                print('Invalid method. Please choose from left_right, average, or full.')
+                return
+            c = c + 1
+        return ft
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "ADASYN, psd window, del code file, remove redundant arguments"
+    Original Code Cells:
+    '''
+    def featureExtractionLeftRight (ndf, sample_rate, step):
+    print('Feature Extraction...')
+    ft = pd.DataFrame()
+    c = 0
+    for i in tqdm(range (0, ndf.shape[0], step)):
+        temp = ndf.iloc[i:i+step]
+        left = np.array(temp['AvgLeftHemisphere'])
+        right = np.array(temp['AvgRightHemisphere'])
+
+        # Time Domain Features
+        ft.loc[c,'Lmean'], ft.loc[c,'Lvar'], ft.loc[c,'Lskew'],ft.loc[c,'Lkurt'], ft.loc[c,'Lstd'], ft.loc[c,'Lmedian'], ft.loc[c,'Lzcr'], ft.loc[c,'Lcv'], ft.loc[c,'Lrms'], ft.loc[c,'Lp2p'],ft.loc[c,'LsampEn'] = computeTimeDomainFeatures(left)
+        ft.loc[c,'Rmean'], ft.loc[

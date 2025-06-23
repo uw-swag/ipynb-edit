@@ -1,0 +1,14 @@
+from evidently.tests.base_test import generate_column_tests
+
+from evidently.tests import TestColumnShareOfMissingValues
+
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues)])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite.show()
+# set condition for all generated tests and specify that we want to generate tests for all columns explicitly
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="all", parameters={"lt": 0.5})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite
+suite = TestSuite(tests=[generate_column_tests(TestColumnShareOfMissingValues, columns="cat", parameters={"lt": 0.1})])
+suite.run(current_data=current_data, reference_data=reference_data)
+suite

@@ -1,0 +1,32 @@
+
+    # Random Forest with oversampling
+    # Oversampling is a technique that is used to increase the number of samples in the minority class.
+    # In this case, we will use SMOTE (Synthetic Minority Over-sampling Technique) to oversample the minority class.
+
+    # First, we need to import the necessary libraries.
+    from imblearn.over_sampling import SMOTE
+
+    # Initialize SMOTE
+    smote = SMOTE(random_state=42)
+
+    # Fit and transform the data
+    X_res, y_res = smote.fit_resample(X, y)
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X_res, y_res, test_size=0.2, random_state=42)
+
+    # Fit the model
+    Forest = RandomForestClassifier(random_state=42).fit(X_train, y_train)
+
+    # Print the training and testing scores
+    print(f'Training Score: {Forest.score(X_train, y_train)}')
+    print(f'Testing Score: {Forest.score(X_test, y_test)}')
+
+    # Plot the decision tree
+    fig = plt.figure(figsize=(15, 10))
+    plot_tree(Forest.estimators_[0], 
+              feature_names=attrition_df.feature_names,
+              class_names=attrition_df.target_names, 
+              filled=True, impurity=True, 
+              rounded=True)
+    plt.show()

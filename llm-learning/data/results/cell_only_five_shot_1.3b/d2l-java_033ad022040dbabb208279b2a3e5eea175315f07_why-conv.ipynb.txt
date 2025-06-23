@@ -1,0 +1,39 @@
+```python
+    # import necessary libraries
+    import os
+    import nbformat as nbf
+    from nbconvert.preprocessors import ExecutePreprocessor
+
+    # get all notebooks in the current directory
+    notebooks = [f for f in os.listdir('.') if f.endswith('.ipynb')]
+
+    # loop over all notebooks
+    for notebook in notebooks:
+        # load the notebook
+        with open(notebook, 'r') as f:
+            nb = nbf.read(f, as_version=4)
+
+        # initialize the notebook preprocessor
+        ep = ExecutePreprocessor(timeout=-1, kernel_name='python3')
+
+        # execute the notebook
+        try:
+            ep.preprocess(nb)
+        except Exception as e:
+            print(f"Failed to execute {notebook}")
+            print(str(e))
+
+        # write the notebook back to disk
+        with open(notebook, 'w') as f:
+            nbf.write(nb, f)
+    ```
+
+    This script will execute all notebooks in the current directory. If a notebook fails to execute, it will print the error message and continue with the next notebook.
+
+    Please note that this script assumes that you have the `nbconvert` and `nbformat` Python libraries installed. If you don't, you can install them using pip:
+
+    ```bash
+    pip install nbconvert nbformat
+    ```
+
+    Also, this script will overwrite the original notebooks with the executed notebooks. If you want to keep the original notebooks, you can create a copy of the notebook before executing it.

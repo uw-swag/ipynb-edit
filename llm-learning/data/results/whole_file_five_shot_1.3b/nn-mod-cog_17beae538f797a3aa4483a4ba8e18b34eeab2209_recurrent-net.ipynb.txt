@@ -1,0 +1,48 @@
+```
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Forward pass
+    x = np.array([[1],[1]])
+    W_l = np.array([[2, 2],[2, 2]])
+
+    h1 = np.tanh(W_l @ x)
+    h2 = np.tanh(W_l @ h1)
+    h3 = np.tanh(W_l @ h2)
+    h4 = np.tanh(W_l @ h3)
+    h5 = np.tanh(W_l @ h4)
+    y_hat = (W_l @ h5)
+
+    # Backward pass
+    x = np.array([[1],[1]])
+    W_s = np.array([[0.02, 0.02],[0.02, 0.02]])
+
+    h1 = np.tanh(W_s @ x)
+    h2 = np.tanh(W_s @ h1)
+    h3 = np.tanh(W_s @ h2)
+    h4 = np.tanh(W_s @ h3)
+    h5 = np.tanh(W_s @ h4)
+    y_hat = (W_s @ h5)
+
+    # Plotting
+    plt.plot(y_hat)
+    plt.show()
+    ```
+    '''
+    }
+
+    ### Response:
+    ```
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Forward pass
+    x = np.array([[1],[1]])
+    W_l = np.array([[2, 2],[2, 2]])
+
+    h1 = np.tanh(W_l @ x)
+    h2 = np.tanh(W_l @ h1)
+    h3 = np.tanh(W_l @ h2)
+    h4 = np.tanh(W_l @ h3

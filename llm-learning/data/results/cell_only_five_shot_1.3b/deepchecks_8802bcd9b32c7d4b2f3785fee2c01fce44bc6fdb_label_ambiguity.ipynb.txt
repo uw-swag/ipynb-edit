@@ -1,0 +1,16 @@
+```
+    from deepchecks.tabular.checks.integrity import LabelAmbiguity
+from deepchecks.tabular import Dataset
+import pandas as pd
+from deepchecks.tabular.datasets.classification.phishing import load_data
+
+phishing_dataframe = load_data(as_train_test=False, data_format='Dataframe')
+phishing_dataset = Dataset(phishing_dataframe, label='target', features=['urlLength', 'numDigits', 'numParams', 'num_%20', 'num_@', 'bodyLength', 'numTitles', 'numImages', 'numLinks', 'specialChars'])
+LabelAmbiguity().run(phishing_dataset)
+LabelAmbiguity(n_to_show=1).run(phishing_dataset)
+LabelAmbiguity(columns=['urlLength', 'numDigits']).run(phishing_dataset)
+check = LabelAmbiguity()
+check.add_condition_ambiguous_sample_ratio_not_greater_than(0)
+result = check.run(phishing_dataset)
+result.show(show_additional_outputs=False)
+```

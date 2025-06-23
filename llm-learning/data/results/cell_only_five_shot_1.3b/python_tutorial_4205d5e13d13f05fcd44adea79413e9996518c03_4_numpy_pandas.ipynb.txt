@@ -1,0 +1,36 @@
+
+    # check the shape of a matrix or vector
+    M.shape
+    # create a dataframe from the matrix M
+    pd.DataFrame(M)
+    # notice the additional column with 0-3 above; this is the index column
+    # for easier handeling of the data, we can explicitly set
+    # the subject_id column as our index
+    df = df.set_index('subject_id')
+    df
+    # on a group we can also compute different aggregations for different columns
+    # maximum for height, minimum for weight, mean for BMI
+    g.agg({'height': max, 'weight': min, 'BMI': np.mean}) 
+    # we can export our data as a .csv file (other formats are also supported)
+    df.to_csv('bmi_dataset.csv')
+    # with additional options, we can already correctly set our index column
+    # other options also allow to e.g. skip some lines at the beginning of a file, etc.
+    df_imported = pd.read_csv('bmi_dataset.csv', index_col='subject_id')
+    df_imported
+    # import with standard abbreviation
+    import matplotlib.pyplot as plt
+    # get some data that we want to plot
+    x = np.arange(10)  # numpy array with numbers 0 - 9
+    y = x**2           # squared numbers
+    # create a very basic plot of x vs. y
+    plt.figure()   # new canvas
+    plt.plot(x, y) # simple line plot
+    # more advanced plot with axis labels etc.
+    plt.figure()
+    plt.plot(x, y, label="x^2")  # label is later used in the legend
+    plt.plot(x, x**3, "r", label="x^3") # "r" creates a red line
+    # axis labels, legend based on the specified labels, and title
+    plt.xlabel("X axis")
+    plt.ylabel("Y axis")
+    plt.legend(loc=0)  # loc=0 automatically determines the best location for the legend
+    pl

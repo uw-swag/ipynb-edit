@@ -1,0 +1,19 @@
+```
+    # Update dataset properties
+    ds.update_dataset_properties(
+        new_features=iris.feature_names,
+        new_labels='target',
+        new_column_names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width', 'target']
+    )
+
+    # Update the dataset
+    ds.update_dataset(X_test, y_test)
+
+    # Predict on the updated dataset
+    y_pred = clf.predict(ds.X)
+
+    # Evaluate the model
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f'Accuracy: {accuracy}')
+    ```
+    This code updates the dataset properties, updates the dataset with the new data, and then uses the updated dataset to make predictions. It also evaluates the model's accuracy.

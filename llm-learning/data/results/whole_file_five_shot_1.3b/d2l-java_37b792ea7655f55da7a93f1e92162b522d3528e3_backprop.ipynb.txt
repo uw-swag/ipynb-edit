@@ -1,0 +1,51 @@
+```python
+    # Section 4.2 - 4.7 with all changes. (#109)
+
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+
+    # Load the dataset
+    df = pd.read_csv('data.csv')
+
+    # Data preprocessing
+    # Drop unnecessary columns
+    df = df.drop(['unnecessary_column1', 'unnecessary_column2'], axis=1)
+
+    # Fill missing values
+    df = df.fillna(df.mean())
+
+    # Encode categorical variables
+    df = pd.get_dummies(df)
+
+    # Split the dataset into features and target variable
+    X = df.drop('target_variable', axis=1)
+    y = df['target_variable']
+
+    # Split the dataset into training set and test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Train the model
+    classifier = RandomForestClassifier(n_estimators=20, random_state=42)
+    classifier.fit(X_train, y_train)
+
+    # Predict the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    print(f'Accuracy: {accuracy_score(y_test, y_pred)}')
+
+    # Save the model
+    import joblib
+    joblib.dump

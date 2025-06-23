@@ -1,0 +1,24 @@
+```R
+    # Add a new R Markdown notebook
+    # This will be the notebook for univariate linear regression
+
+    # Load necessary libraries
+    library(dplyr)
+    library(ggplot2)
+
+    # Load the dataset
+    data <- read.csv("data.csv")
+
+    # Perform linear regression
+    model <- lm(formula = y ~ x, data = data)
+
+    # Print the summary of the model
+    summary(model)
+
+    # Plot the data and the fitted line
+    ggplot() +
+      geom_point(aes(x = x, y = y), data = data) +
+      geom_line(aes(x = x, y = predict(model, newdata = data)), color = "red") +
+      labs(x = "x", y = "y", title = "Univariate Linear Regression")
+    ```
+    This R code performs a simple univariate linear regression on the data in the "data.csv" file. The `lm()` function is used to fit a linear model, and the `summary()` function is used to print the model summary. The `ggplot()` function is used to create a plot of the data and the fitted line.

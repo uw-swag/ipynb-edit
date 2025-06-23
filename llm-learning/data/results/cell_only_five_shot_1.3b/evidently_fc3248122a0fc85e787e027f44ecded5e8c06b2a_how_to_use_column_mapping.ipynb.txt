@@ -1,0 +1,27 @@
+
+The code you provided is updating the bike dataset link. The link is currently set to a .zip file which contains a .csv file with hourly data for a bike sharing system. The code is extracting the data from the .csv file and converting it into a pandas DataFrame. The data is then cleaned and prepared for analysis.
+
+The updated code is:
+
+```python
+import pandas as pd
+import requests
+import zipfile
+import io
+
+# Timeseries dataset
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip"
+with zipfile.ZipFile(io.BytesIO(requests.get(url).content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+
+raw_data.index = raw_data.index + pd.to_timedelta(raw_data['hr'], unit='h')
+raw_data['mnth'] = raw_data.index.to_period('M').astype('datetime64[M]')
+raw_data['hr'] = raw_data.index.floor('h')
+raw_data['weekday'] = raw_data.index.floor('d')
+raw_data['date'] = raw_data.index
+
+bike_reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+bike_current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+```
+
+This code will download the .zip file, extract the .csv file, and convert the data into a pandas DataFrame. The data is then cleaned and prepared for analysis.

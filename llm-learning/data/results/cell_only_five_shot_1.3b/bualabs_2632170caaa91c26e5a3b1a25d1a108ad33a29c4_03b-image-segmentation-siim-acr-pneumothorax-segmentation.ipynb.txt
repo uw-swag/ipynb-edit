@@ -1,0 +1,28 @@
+```python
+    import sys
+sys.path.insert(0, str(data_path))
+
+from mask_functions import rle2mask
+# Create databunch
+data = (SegmentationItemList.from_folder(path=path/'train')[:100]
+        .split_by_rand_pct(0.2)
+        .label_from_func(lambda x : str(x).replace('train', 'masks'), classes=[0, 1])
+        .add_test((path/'test').ls(), label=None)
+        .transform(get_transforms(), size=SZ, tfm_y=True)
+        .databunch(path=Path('.'), bs=32)
+        .normalize(imagenet_stats))
+
+# Train, Predict and submit to Kaggle.
+learn.lr_find()
+learn.recorder.plot()
+learn.fit_one_cycle(6, max_lr=1e-3, wd=1e-1)
+
+# Save the model
+learn.save('stage-1-resnet34')
+
+# Submit to Kaggle
+submission = pd.read_csv(path/'sample_submission.csv')
+submission['ImageId'] = [i.split('/')[-1].split('.')[0] for i in submission['ImageId']]
+submission['EncodedPixels'] = learn.predict(Path(), is_test=True)
+submission.to_csv(path/'submission.csv', index=False)
+    ```

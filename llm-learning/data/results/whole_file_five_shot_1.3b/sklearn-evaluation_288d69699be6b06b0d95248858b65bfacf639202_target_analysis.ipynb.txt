@@ -1,0 +1,49 @@
+```
+    ## Converting Notebooks to Myst Format
+    ###
+
+    #### 1. Importing Libraries
+
+    ```python
+    import matplotlib
+    import matplotlib.pyplot as plt
+    from sklearn.datasets import make_classification
+    from sklearn.model_selection import train_test_split
+
+    from sklearn_evaluation import plot
+    from sklearn import datasets
+    ```
+
+    #### 2. Setting up Matplotlib
+
+    ```python
+    matplotlib.rcParams["figure.figsize"] = (7, 7)
+    matplotlib.rcParams["font.size"] = 18
+    ```
+
+    #### 3. Generating Data
+
+    ```python
+    X, y = make_classification(
+        n_samples=1000, n_features=5, n_informative=3, n_classes=2, 
+        # Set label 0 for  97% and 1 for rest 3% of observations
+        weights=[0.85], 
+    )
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    ```
+
+    #### 4. Plotting Target Analysis
+
+    ```python
+    plot.target_analysis(y_train)
+    plot.target_analysis(y_train, y_test)
+    ```
+
+    ## Re-organizing Sections
+
+    The notebooks have been re-organized to follow the Myst format. The original notebooks were mostly about data analysis and visualization, but the re-organization has moved the data generation and model training sections to the top. The rest of the notebooks remain as they were.
+
+    ###
+
+    ```

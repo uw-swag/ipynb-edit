@@ -1,0 +1,41 @@
+```python
+    from deepchecks.checks import DatasetsSizeComparison
+
+    check = DatasetsSizeComparison().add_condition_test_size_not_smaller_than(1000)
+    check
+    ```
+
+    ### Response:
+    ```python
+    from deepchecks import Dataset
+    import pandas as pd
+
+    # Dummy data
+    train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}))
+    test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}))
+
+    result = check.run(train_dataset, test_dataset)
+    result.value
+    ```
+
+    ### Response:
+    ```python
+    from deepchecks import ConditionResult, ConditionCategory
+
+    # Our parameters for the condition
+    low_threshold = 0.3
+    high_threshold = 0.7
+
+    # Create the condition function for check `DatasetsSizeComparison`
+    def custom_condition(value: dict): 
+        ratio = value['Test'] / value['Train']
+        if low_threshold <= ratio <= high_threshold:
+            return ConditionResult(True)
+        elif ratio < low_threshold:
+            return ConditionResult(False, f'Test-Train ratio is {ratio:.2}', ConditionCategory.FAIL)
+        else:
+            return ConditionResult(False, f'Test-Train ratio is {ratio:.2}', ConditionCategory.WARN)
+
+    # Create check instance with the condition 
+    check = DatasetsSizeComparison().add_condition(condition_name, custom_condition)
+    ```

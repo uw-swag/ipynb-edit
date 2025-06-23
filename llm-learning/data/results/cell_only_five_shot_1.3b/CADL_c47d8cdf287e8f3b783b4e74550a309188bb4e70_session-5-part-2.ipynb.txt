@@ -1,0 +1,10 @@
+
+    The original code is using TensorFlow 2.0 API. To update it to TensorFlow 1.0 API, you need to change the `tf.split` call to `tf.split` with `axis=1`. Here is the updated code:
+
+    ```python
+    with tf.name_scope('reslice'):
+    Xs = [tf.squeeze(seq, [1])
+          for seq in tf.split(1, sequence_length, Xs, axis=1)]
+    ```
+
+    This code will split the input tensor `Xs` along the second dimension (axis=1) and squeeze the resulting sequences to remove any singleton dimensions.

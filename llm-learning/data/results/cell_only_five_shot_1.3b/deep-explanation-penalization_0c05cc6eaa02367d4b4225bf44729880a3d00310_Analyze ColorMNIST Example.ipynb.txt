@@ -1,0 +1,37 @@
+```python
+    #%%bash --out output --err error
+    save_path = "../results_for_export"
+    trained_model_folder = '../old_img_models/'
+    fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'block' not in fname]) 
+    # other models were trained badly
+
+    results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+    results = pd.concat(results_list, axis=1).T.infer_objects() 
+
+    acc_color_list = []
+    loss_color_list = []
+    for i in range(len(results)):
+        test_net.load_state_dict(results.model_weights[i])
+        loss_col, acc_col = test(test_net, 0, test_loader_color, 0)
+        acc_color_list.append(acc_col)
+        loss_color_list.append(loss_col)
+    results["acc_color"] =[x for x in acc_color_list]
+    results["loss_color"] =[x for x in loss_color_list]               
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "adding dilation to segmentation to actually penalize"
+    Original Code Cells:
+    '''
+    save_path = "../results_for_export"
+    trained_model_folder = '../old_img_models/'
+    fnames = sorted([oj(trained_model_folder, fname) for fname in os.listdir(trained_model_folder) if 'block' not in fname]) 
+    # other models were trained badly
+
+    results_list = [pd.Series(pkl.load(open(fname, "rb"))) for fname in (fnames)] 
+    results = pd.concat(results_list, axis=1).T.infer_objects() 
+
+    acc_color_list = []
+    loss_color_list = []
+    for

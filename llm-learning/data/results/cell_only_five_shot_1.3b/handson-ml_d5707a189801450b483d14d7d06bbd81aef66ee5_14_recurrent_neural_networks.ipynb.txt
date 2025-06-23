@@ -1,0 +1,25 @@
+```
+    # The DeviceWrapper class is a utility class that wraps a TensorFlow operation with a specific device.
+    # This is useful when you want to run your TensorFlow operations on multiple GPUs.
+    # The class takes a TensorFlow operation and a device string as input, and it returns a new operation that
+    # is run on the specified device. This is useful when you want to run your TensorFlow operations on multiple GPUs.
+    # The class is designed to be thread-safe, so it can be safely used from multiple threads.
+    # The class also provides a method to get the device string of the operation.
+    #
+    # Here is an example of how to use the DeviceWrapper class:
+    #
+    # devices = ["/gpu:0", "/gpu:1", "/gpu:2"]  
+    # cells = []
+    # for dev in devices:
+    #     cell = DeviceWrapper(rnn_cell.BasicRNNCell(num_units=n_neurons), dev)
+    #     cells.append(cell)
+    #
+    # self.multiple_lstm_cells = tf.contrib.rnn.MultiRNNCell(cells, state_is_tuple=True)
+    # outputs, states = tf.nn.dynamic_rnn(multi_layer_cell, X, dtype=tf.float32)
+    #
+    # In the above code, the DeviceWrapper class is used to run the TensorFlow operations on multiple GPUs.
+    # The operations are run on the devices specified in the 'devices' list.
+    # The 'devices' list contains the device strings for each GPU.
+    # The 'cells' list is used to create a MultiRNNCell that can be run on multiple GPUs.
+    # The 'outputs' and 'states' variables are the output and state of the operations after running on the GPUs.
+    ```

@@ -1,0 +1,31 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import LSTM, Dense, Dropout, Bidirectional
+
+    # Create the first LSTM model
+    model1 = Sequential()
+    model1.add(Bidirectional(LSTM(50, activation='relu'), input_shape=(X_train.shape[1], 1)))
+    model1.add(Dropout(0.2))
+    model1.add(Dense(1))
+
+    # Compile the model
+    model1.compile(optimizer='adam', loss='mean_squared_error')
+
+    # Fit the model
+    history1 = model1.fit(X_train, y_train, epochs=20, validation_data=(X_val, y_val))
+
+    # Create the second LSTM model
+    model2 = Sequential()
+    model2.add(Bidirectional(LSTM(50, activation='relu'), input_shape=(X_train.shape[1], 1)))
+    model2.add(Dropout(0.2))
+    model2.add(Dense(1))
+
+    # Compile the model
+    model2.compile(optimizer='adam', loss='mean_squared_error')
+
+    # Fit the model
+    history2 = model2.fit(X_train, y_train, epochs=20, validation_data=(X_val, y_val))
+    ```
+
+    This code creates two LSTM models, each with one LSTM layer and a dropout layer. The first model uses bidirectional LSTM, which is a type of LSTM that can process sequences in both directions, and the second model uses the same architecture. The models are compiled with the Adam optimizer and the mean squared error loss function, which is commonly used for regression problems. The models are then trained for 20 epochs, with the validation data set to `(X_val, y_val)`.

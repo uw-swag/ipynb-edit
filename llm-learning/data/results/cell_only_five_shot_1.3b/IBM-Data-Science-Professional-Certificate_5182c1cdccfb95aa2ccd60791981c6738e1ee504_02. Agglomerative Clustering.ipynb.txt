@@ -1,0 +1,40 @@
+
+    ## Agglomerative Clustering
+
+    ### Importing Libraries
+    from sklearn.cluster import AgglomerativeClustering
+    import matplotlib.pyplot as plt
+    import pandas as pd
+    import numpy as np
+
+    ### Loading the Dataset
+    communities_crime_df = pd.read_csv('communities-crime-clean.csv')
+
+    ### Preprocessing
+    ## Dropping irrelevant columns
+    communities_crime_df = communities_crime_df.drop(['ViolentCrimesPerPop', 'state', 'communityname', 'fold', 'highCrime'], axis=1)
+
+    ## Converting categorical data to numerical data
+    ## For simplicity, we are converting categorical data to numerical data using one-hot encoding
+    communities_crime_df = pd.get_dummies(communities_crime_df)
+
+    ### Model Building
+    ## Creating an instance of Agglomerative Clustering
+    agglomerative_clustering = AgglomerativeClustering(n_clusters=2, affinity='euclidean', linkage='average')
+
+    ## Fitting the model
+    agglomerative_clustering.fit(communities_crime_df)
+
+    ### Model Evaluation
+    ## We can evaluate the model by checking the silhouette score
+    from sklearn.metrics import silhouette_score
+    print("Silhouette Score: ", silhouette_score(communities_crime_df, agglomerative_clustering.labels_))
+
+    ### Visualizing the clusters
+    plt.figure(figsize=(10, 7))
+    plt.scatter(communities_crime_df.iloc[:, 0], communities_crime_df.iloc[:, 1], c=agglomerative_clustering.labels_)
+    plt.title('Agglomerative Clustering')
+    plt.show()
+
+    ### Model Optimization
+    ## We can optimize the model by tuning the parameters

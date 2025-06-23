@@ -1,0 +1,22 @@
+```python
+    from scipy import stats
+
+    # Calculate correlation
+    corr_blink_left = np.corrcoef(X['rate_blink_left'], Y)[0, 1]
+    corr_blink_right = np.corrcoef(X['rate_blink_right'], Y)[0, 1]
+    corr_smile_or_not = np.corrcoef(X['rate_smile_or_not'], Y)[0, 1]
+
+    # Print the results
+    print("Correlation between blink left and output: {}".format(corr_blink_left))
+    print("Correlation between blink right and output: {}".format(corr_blink_right))
+    print("Correlation between smile or not and output: {}".format(corr_smile_or_not))
+
+    # Calculate confidence interval
+    conf_int_blink_left = stats.t.interval(alpha=0.95, df=len(X['rate_blink_left']) - 1, loc=np.mean(X['rate_blink_left']), scale=stats.sem(X['rate_blink_left']))
+    conf_int_blink_right = stats.t.interval(alpha=0.95, df=len(X['rate_blink_right']) - 1, loc=np.mean(X['rate_blink_right']), scale=stats.sem(X['rate_blink_right']))
+    conf_int_smile_or_not = stats.t.interval(alpha=0.95, df=len(X['rate_smile_or_not']) - 1, loc=np.mean(X['rate_smile_or_not']), scale=stats.sem(X['rate_smile_or_not']))
+
+    # Print the results
+    print("Confidence interval for blink left: {}".format(conf_int_blink_left))
+    print("Confidence interval for blink right: {}".format(conf_int_blink_right))
+    print("Confidence interval for smile or not: {}".format(

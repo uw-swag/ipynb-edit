@@ -1,0 +1,43 @@
+```python
+    # EDA on complete results
+    ## Summary Statistics
+    print(df.describe())
+
+    ## Checking for Missing Values
+    print(df.isnull().sum())
+
+    ## Checking for Duplicates
+    print(df.duplicated().sum())
+
+    ## Checking for Outliers
+    for column in df.columns:
+        if df[column].dtype != 'O':
+            df.boxplot([column])
+            plt.show()
+
+    ## Checking for Class Imbalance
+    print(df.label.value_counts())
+
+    ## Checking for Categorical Variables
+    categorical_variables = df.select_dtypes(include=['object']).columns
+    for var in categorical_variables:
+        print(df[var].value_counts())
+
+    ## Checking for Numerical Variables
+    numerical_variables = df.select_dtypes(include=['int', 'float']).columns
+    for var in numerical_variables:
+        print(df[var].describe())
+
+    ## Checking for Correlation
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+    plt.show()
+
+    ## Checking for Out of Domain Sentences
+    out_of_domain_sentences = df[df['label']=='OOD']
+    print(out_of_domain_sentences)
+
+    ## Checking for In-Domain Sentences
+    in_domain_sentences = df[df['label']=='ID']
+    print(in_domain_sentences)
+    ```

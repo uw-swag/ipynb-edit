@@ -1,0 +1,32 @@
+```python
+    from pyspark.sql import functions as F
+
+    # Replace append with pd.concat
+    feature_level_tests = TestSuite(tests=[
+        TestMeanInNSigmas(column_name='hours-per-week'),
+        TestShareOfOutRangeValues(column_name='hours-per-week'),
+        TestNumberOfOutListValues(column_name='education'),
+        TestColumnNANShare(column_name='education'),
+        TestFeatureValueDrift(column_name='education')
+    ])
+
+    feature_level_tests.run(reference_data=ref, current_data=curr)
+    feature_level_tests
+
+    feature_level_tests = TestSuite(tests=[
+        TestMeanInNSigmas(column_name='hours-per-week', n_sigmas=3),
+        TestShareOfOutRangeValues(column_name='hours-per-week', lte=0),
+        TestNumberOfOutListValues(column_name='education', lt=0),
+        TestColumnNANShare(column_name='education', lt=0.2),
+    ])
+
+    feature_level_tests.run(reference_data=ref, current_data=curr)
+    feature_level_tests
+
+    data_staility = TestSuite(tests=[
+        DataStability(),
+    ])
+
+    data_staility.run(reference_data=ref, current_data=curr)
+    data_staility
+    ```

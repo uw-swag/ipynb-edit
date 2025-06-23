@@ -1,0 +1,43 @@
+```python
+    #@title Split many files in core and base
+    import os
+    import sys
+    import importlib.util
+    import urllib.request
+
+    # The below execution sets up runtime using code stored remotely in a url
+    spec = importlib.util.spec_from_file_location("module.name.path", "https://raw.githubusercontent.com/Exabyte-io/exabyte-api-examples/feature/SOF-4685/examples/utils/initialize_settings.py")
+    settings_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(settings_module)
+
+    from settings import ENDPOINT_ARGS, ACCOUNT_ID
+    from utils.generic import display_JSON
+
+    from exabyte_api_client.endpoints.workflows import WorkflowEndpoints
+
+    QUERY = {
+        "name": "Total Energy",
+        "owner._id": ACCOUNT_ID
+    }
+
+    OPTIONS = {
+        "limit": 2
+    }
+
+    endpoint = WorkflowEndpoints(*ENDPOINT_ARGS)
+
+    workflows = endpoint.list(QUERY, OPTIONS)
+
+    display_JSON(workflows)
+
+    import numpy as np
+    from deepchecks.vision.datasets.detection import coco
+
+    yolo = coco.load_model(pretrained=True)
+
+    train_ds = coco.load_dataset(train=True, object_type='VisionData')
+    test_ds = coco.load_dataset(train=False, object_type='VisionData')
+
+    check = ClassPerformance(show_only='best')
+    check.run(train_ds, test_ds, yolo)
+    ```

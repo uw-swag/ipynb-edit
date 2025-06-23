@@ -1,0 +1,24 @@
+```
+    import ai.djl.nn as nn
+    import ai.djl.training as dt
+    import ai.djl.nn.Block
+    import ai.djl.training.DefaultTrainingConfig
+    import ai.djl.training.EasyTrain
+    import ai.djl.training.Trainer
+    import ai.djl.training.metrics.Accuracy
+    import ai.djl.training.optimizer.sgd
+    import ai.djl.training.util.TrainingListener
+    import ai.djl.util.Device
+    import ai.djl.util.Shape
+    import ai.djl.util.Tracker
+    import ai.djl.util.Utils
+
+    import java.util.List;
+    import java.util.Map;
+
+    public class ActivationFunction {
+        public static List<Float> softmax(List<Float> arrays) {
+            return arrays.stream().map(e -> e / arrays.stream().mapToDouble(Double::doubleValue).sum()).map(Double::floatValue).collect(Collectors.toList());
+        }
+    }
+    ```

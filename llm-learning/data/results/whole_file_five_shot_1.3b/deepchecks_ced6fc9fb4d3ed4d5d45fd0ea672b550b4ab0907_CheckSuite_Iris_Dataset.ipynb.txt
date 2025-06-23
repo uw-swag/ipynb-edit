@@ -1,0 +1,24 @@
+```
+    The new dominant value condition (#183) is a condition that checks if the dominant value in a dataset is significantly different from the majority class. This condition is used to ensure that the model is not overfitting to the majority class.
+
+    The condition works by calculating the proportion of instances in the dataset that belong to the dominant class. If this proportion is less than a certain threshold (default is 0.9), the condition is considered to be violated.
+
+    The `TrainTestDifferenceOverfit` check is used to measure the difference between the training and test performance of the model. If the difference is significantly larger than the training performance, the condition is considered to be violated.
+
+    The `ConfusionMatrixReport` check is used to generate a confusion matrix for the test set. The diagonal elements of the matrix represent the number of points for which the predicted label is equal to the true label, while off-diagonal elements are those that are mislabeled by the classifier.
+
+    The `NaiveModelComparison` check is used to compare the performance of the model with a naive model. The `naive_model_type` parameter can be set to 'statistical' to compare the model with a naive model based on statistical tests, or 'rule-based' to compare the model with a naive model based on rule-based methods.
+
+    The `PerformanceReport` check is used to generate a report of the model's performance. This includes metrics such as precision, recall, F1-score, and ROC AUC.
+
+    The `ModelInfo` check is used to provide information about the model, such as the number of features, the number of classes, and the type of model.
+
+    The `run` method of the `CheckSuite` class is used to run all the checks in the suite.
+
+    The `remove_condition` method of the `CheckSuite` class is used to remove a condition from a check in the suite.
+
+    The `add_condition` method of the `CheckSuite` class is used to add a condition to a check in the suite.
+
+    The `Condition` class is used to define a condition for a check. A condition is a function that takes a dataset and returns a boolean value.
+
+    The `Violation` class is used to represent a violation

@@ -1,0 +1,38 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import LabelEncoder
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Load the dataset
+    df = pd.read_csv('your_dataset.csv')
+
+    # Perform label encoding for categorical variables
+    for col in df.columns:
+        if df[col].dtype == 'object':
+            le = LabelEncoder()
+            df[col] = le.fit_transform(df[col])
+
+    # Perform text feature engineering using TF-IDF
+    tfidf = TfidfVectorizer(stop_words='english')
+    tfidf_matrix = tfidf.fit_transform(df['text'])
+
+    # Create a new dataframe with TF-IDF scores
+    tfidf_df = pd.DataFrame(tfidf_matrix.toarray(), columns=tfidf.get_feature_names_out())
+    tfidf_df.index = df.index
+
+    # Concatenate the original dataframe with the TF-IDF dataframe
+    df = pd.concat([df, tfidf_df], axis=1)
+
+    # Drop the original 'text' column
+    df.drop('text', axis=1, inplace=True)
+
+    # Save the processed dataset
+    df.to_csv('processed_dataset.csv')
+    ```
+    This script performs label encoding for categorical variables, and text feature engineering using TF-IDF. The processed dataset is then saved to a new CSV file.
+
+    Please replace 'your_dataset.csv' with the path to your actual dataset, and 'text' with the name of the column containing the text data.
+
+    Note: This is a basic example and may need to be adjusted based on the specifics of your dataset and the features you want to include.

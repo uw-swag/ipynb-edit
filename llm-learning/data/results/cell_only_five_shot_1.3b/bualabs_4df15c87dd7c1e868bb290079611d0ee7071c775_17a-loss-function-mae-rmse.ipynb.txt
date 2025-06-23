@@ -1,0 +1,30 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Assuming y_true and y_pred are numpy arrays of the same length
+    y_true = np.array([1, 2, 3, 4, 5])
+    y_pred = np.array([1.1, 1.9, 3.2, 3.8, 4.9])
+
+    mae = np.mean(np.abs(y_true - y_pred))
+    mse = np.mean((y_true - y_pred)**2)
+
+    print(f'Mean Absolute Error (MAE): {mae}')
+    print(f'Mean Squared Error (MSE): {mse}')
+
+    plt.figure(figsize=(10, 6))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(y_true, label='True')
+    plt.plot(y_pred, label='Predicted')
+    plt.legend()
+    plt.title('True vs Predicted')
+
+    plt.subplot(1, 2, 2)
+    plt.plot((y_true - y_pred), label='Difference')
+    plt.legend()
+    plt.title('Difference between True and Predicted')
+
+    plt.tight_layout()
+    plt.show()
+    ```

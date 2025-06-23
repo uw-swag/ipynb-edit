@@ -1,0 +1,22 @@
+```
+    <Cell_0>
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    <\Cell_0>
+    <Cell_1>
+    df = load_iris(return_X_y=False, as_frame=True)
+    df = pd.concat([df.data, df.target], axis=1)
+    <\Cell_1>
+    <Cell_2>
+    from deepchecks.checks.overview import DatasetInfo
+    from deepchecks.base import Dataset
+
+    DatasetInfo().run(Dataset(df))
+    <\Cell_2>
+    ```
+    '''
+
+    ### End of Response:
+    '''
+
+    '''

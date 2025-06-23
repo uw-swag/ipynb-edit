@@ -1,0 +1,66 @@
+```python
+    import fastbook
+    fastbook.config.token = 'your_token'
+    from fastbook import *
+    from fastai.vision.all import *
+
+    # Load the data
+    path = untar_data(URLs.PNEUMONIA_LINK)
+    dls = ImageDataLoaders.from_folder(path)
+
+    # Create a model
+    learn = vision.create_cnn(dls, pretrained=True)
+
+    # Train the model
+    learn.fit_one_cycle(10)
+
+    # Predict
+    preds, y = learn.get_preds(with_loss=True)
+
+    # Create a confusion matrix
+    confusion_matrix(y, preds)
+
+    # Create a segmentation map
+    seg_map = get_segmentation_mask(learn.model, 1, postprocess=True)
+
+    # Display the original and the segmentation map
+    Image.create(seg_map, title="Segmentation Map")
+    Image.create(y, title="Ground Truth")
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Created 04b image classification mnist using fastai notebook."
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import fastbook
+    fastbook.config.token = 'your_token'
+    from fastbook import *
+    from fastai.vision.all import *
+
+    # Load the data
+    path = untar_data(URLs.MNIST_LINK)
+    dls = ImageDataLoaders.from_folder(path)
+
+    # Create a model
+    learn = vision.create_cnn(dls, pretrained=True)
+
+    # Train the model
+    learn.fit_one_cycle(10)
+
+    # Predict
+    preds, y = learn.get_preds(with_loss=True)
+
+    # Create a confusion matrix
+    confusion_matrix(y, preds)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Created 05b image

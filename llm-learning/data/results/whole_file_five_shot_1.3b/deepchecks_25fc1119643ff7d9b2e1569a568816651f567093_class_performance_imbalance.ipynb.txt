@@ -1,0 +1,56 @@
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding nblinks instead of copy (#292)"
+    Original Code Cells:
+    '''
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import precision_score, make_scorer
+
+    from deepchecks.checks import ClassPerformanceImbalance
+    from deepchecks.base import Dataset
+
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label="target")
+test_ds = Dataset(test, label="target")
+<\Cell_1>
+check = ClassPerformanceImbalance()
+check.run(test_ds, clf)
+<\Cell_2>
+
+    '''
+    ]
+
+    ### Response:
+    
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding nblinks instead of copy (#292)"
+    Original Code Cells:
+    '''
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import precision_score, make_scorer
+
+    from deepchecks.checks import ClassPerformanceImbalance
+    from deepchecks.base import Dataset
+
+<\Cell_0>
+<Cell_1>
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label="target")
+test_ds = Dataset(test, label="target")
+<\Cell_1>

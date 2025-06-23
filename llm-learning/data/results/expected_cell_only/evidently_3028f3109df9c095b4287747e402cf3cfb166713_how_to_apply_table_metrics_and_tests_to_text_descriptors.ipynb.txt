@@ -1,0 +1,84 @@
+table_column_metrics_report = Report(metrics=[
+    ColumnSummaryMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnDriftMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnCorrelationsMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnDistributionMetric(column_name = TextLength().for_column("Review_Text")),
+    ColumnValueRangeMetric(column_name = TextLength().for_column("Review_Text"), left=0, right=20)
+    
+])
+
+table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_metrics_report
+#Dataset-level metrics which use raw text data
+
+table_column_metrics_report = Report(metrics=[
+    DatasetDriftMetric(columns=["Age", "Review_Text"]),
+    DataDriftTable(columns=["Age", "Review_Text"]), 
+    
+])
+
+table_column_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+table_column_metrics_report
+#Dataset-level metric which uses descriptors
+
+regression_report = Report(metrics=[
+    RegressionErrorBiasTable(columns=["Age", "Review_Text"], descriptors = {
+        "Review_Text":{
+        "Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt'])
+    }
+    }),
+    
+])
+
+regression_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='regression'
+  )
+)
+
+regression_report
+#Dataset-level metric which uses descriptors
+
+classification_report = Report(metrics=[
+    ClassificationQualityByFeatureTable(columns=["Age", "Review_Text"], descriptors = {
+        "Review_Text":{
+        "Text Length" : TextLength(),
+        "Reviews about Dress" : TriggerWordsPresence(words_list=['dress', 'gown']),
+        "Review about Blouses" : TriggerWordsPresence(words_list=['blouse', 'shirt'])
+    }}),
+
+])
+classification_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='classification'
+  )
+)
+
+classification_report
+#Dataset-level tests which use raw text data
+
+table_dataset_test_suite = TestSuite(tests=[
+    TestNumberOfDriftedColumns(columns=["Age", "Review_Text"]),
+    TestShareOfDriftedColumns(columns=["Age", "Review_Text"]),
+    
+])
+
+table_dataset_test_suite.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=ColumnMapping(
+    target='Rating',
+    prediction='prediction',
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title'],
+    task='regression'
+  ))
+table_dataset_test_suite

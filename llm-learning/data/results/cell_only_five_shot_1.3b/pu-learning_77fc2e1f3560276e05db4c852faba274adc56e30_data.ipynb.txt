@@ -1,0 +1,38 @@
+
+To make the data distribution changeable by the user, we can modify the `LabelingMechanism` class to accept a parameter for the user-defined distribution. This parameter can be a function that takes the current data distribution and returns a new distribution.
+
+Here's how you can modify the `LabelingMechanism` class:
+
+```python
+class LabelingMechanism:
+    # ...
+    def __init__(
+        self,
+        propensity_attributes,
+        propensity_attributes_signs,
+        min_prob=0.2,
+        max_prob=0.8,
+        distribution_function=None,
+    ):
+        assert len(propensity_attributes) == len(propensity_attributes_signs), "size of attributes and signs must be same"
+        self.propensity_attributes = np.array(propensity_attributes)
+        self.propensity_attributes_signs = np.array(propensity_attributes_signs)
+        self.min_prob = min_prob
+        self.max_prob = max_prob
+        self.distribution_function = distribution_function
+
+        self.min_x = None
+        self.max_x = None
+
+    def fit(self, xs):
+        xs_ = xs[:, self.propensity_attributes] * self.propensity_attributes_signs
+        self.min_x = xs_.min(0)
+        self.max_x = xs_.max(0)
+
+    def propensity_score(self, xs):
+        assert self.min_x is not None and self.max_x is not None, "run fit() before calculating propensity score"
+        xs_ = xs[:, self.propensity_attributes] * self.propensity_attributes_signs
+        if self.distribution_function is not None:
+            xs_ = self.distribution_function(xs_)
+        scaled = (self.min_prob + (xs_ - self.min_x) / (self.max_x - self.min_x) * (self.max_prob - self.min_prob)) ** 4
+        es = (scaled ** (1 / len(self.propensity_attributes))).prod

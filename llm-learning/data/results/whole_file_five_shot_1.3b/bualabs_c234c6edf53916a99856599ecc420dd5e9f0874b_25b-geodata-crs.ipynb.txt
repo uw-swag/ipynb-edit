@@ -1,0 +1,45 @@
+
+    '''
+    Commit Message: "Describe .kaggle folder in vm HOME."
+    Original Code Cells:
+    '''
+    <Cell_0>
+# ! pip install geopandas
+# ! pip install kaggle --upgrade
+<\Cell_0>
+<Cell_1>
+config_path = '/content/drive'
+dataset = 'alexisbcook/geospatial-learn-course-data'
+data_path = '/content/datasets/' + dataset
+<\Cell_1>
+<Cell_2>
+from google.colab import drive
+drive.mount(config_path)
+<\Cell_2>
+<Cell_3>
+import os
+os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+<\Cell_3>
+<Cell_4>
+!kaggle datasets download {dataset} -p "{data_path}" --unzip
+<\Cell_4>
+<Cell_5>
+import pandas as pd
+import geopandas as gpd
+
+from shapely.geometry import LineString
+<\Cell_5>
+<Cell_6>
+birds_df = pd.read_csv(f"{data_path}/purple_martin.csv", parse_dates=['timestamp'])
+print("There are {} different birds in the dataset.".format(birds_df["tag-local-identifier"].nunique()))
+birds_df.head()
+<\Cell_6>
+<Cell_7>
+birds = gpd.GeoDataFrame(birds_df, geometry=gpd.points_from_xy(birds_df['location-long'], birds_df['location-lat']))
+
+birds.crs = {'init': 'epsg:4326'}
+<\Cell_7>
+<Cell_8>
+path_df = birds.groupby("tag-local-identifier")['geometry'].apply(list).apply(lambda x: LineString(x)).reset_index()
+path_gdf = gpd.GeoDataFrame(path_df, geometry=path_df.geometry)
+path_gdf.crs

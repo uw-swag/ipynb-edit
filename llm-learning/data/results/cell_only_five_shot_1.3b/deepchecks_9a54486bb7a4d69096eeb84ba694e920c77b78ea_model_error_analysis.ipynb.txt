@@ -1,0 +1,23 @@
+```python
+    from deepchecks import Dataset
+
+    cat_features = ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 
+                    'race', 'sex', 'native-country']
+    train_ds = Dataset(train_df, label=label_name, cat_features=cat_features)
+    test_ds = Dataset(test_df, label=label_name, cat_features=cat_features)
+
+    numeric_features = [feat_name for feat_name in train_ds.features if feat_name not in train_ds.cat_features]
+
+    from deepchecks.checks import ModelErrorAnalysis
+
+    # Create a ModelErrorAnalysis check
+    check = ModelErrorAnalysis(train_ds, test_ds, y_true=label_name, y_pred='y_pred')
+
+    # Run the check
+    report = check.run()
+
+    # Print the report
+    print(report)
+    ```
+
+    This code will run a ModelErrorAnalysis check on the training and test datasets, using the 'y_pred' column as the prediction column. The check will then print a report of the errors detected in the predictions.

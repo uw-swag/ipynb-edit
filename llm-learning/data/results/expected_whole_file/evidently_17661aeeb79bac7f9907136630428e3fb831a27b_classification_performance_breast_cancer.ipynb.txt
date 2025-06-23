@@ -1,0 +1,86 @@
+<Cell_0>
+import pandas as pd
+
+from datetime import datetime
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ClassificationPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+<\Cell_1>
+<Cell_2>
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+<\Cell_2>
+<Cell_3>
+bcancer_frame['target'] = bcancer.target
+<\Cell_3>
+<Cell_4>
+bcancer_frame.head()
+<\Cell_4>
+<Cell_5>
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = bcancer.feature_names
+categorical_features = []
+
+features = numerical_features.tolist() + categorical_features
+<\Cell_5>
+<Cell_6>
+train_data, test_data = model_selection.train_test_split(bcancer_frame, random_state=0)
+<\Cell_6>
+<Cell_7>
+model = ensemble.RandomForestClassifier(random_state=0)
+<\Cell_7>
+<Cell_8>
+model.fit(train_data[features], train_data.target)
+<\Cell_8>
+<Cell_9>
+train_predictions = model.predict(train_data[features])
+test_predictions = model.predict(test_data[features])
+<\Cell_9>
+<Cell_10>
+train_data['prediction'] = train_predictions
+test_data['prediction'] = test_predictions
+<\Cell_10>
+<Cell_11>
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = prediction
+bcancer_column_mapping.numerical_features = numerical_features
+<\Cell_11>
+<Cell_12>
+bcancer_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=1)])
+bcancer_model_performance_dashboard.calculate(train_data, test_data, column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_12>
+<Cell_13>
+# bcancer_model_performance_dashboard.save('bcancer_model_performance.html')
+<\Cell_13>
+<Cell_14>
+bcancer_model_performance_dashboard = Dashboard(tabs=[ClassificationPerformanceTab(verbose_level=0)])
+bcancer_model_performance_dashboard.calculate(train_data, test_data, column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_14>
+<Cell_15>
+# bcancer_model_performance_dashboard.save('bcancer_model_performance.html')
+<\Cell_15>
+<Cell_16>
+bcancer_classification_performance_profile = Profile(sections=[ClassificationPerformanceProfileSection()])
+<\Cell_16>
+<Cell_17>
+bcancer_classification_performance_profile.calculate(train_data, test_data, column_mapping = bcancer_column_mapping)
+<\Cell_17>
+<Cell_18>
+bcancer_classification_performance_profile.json() 
+<\Cell_18>
+<Cell_19>
+
+<\Cell_19>

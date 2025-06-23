@@ -1,0 +1,46 @@
+```python
+    # 0. defining c_old as k x n array of zeros
+    c_old = np.zeros((k,n))
+    c_new = deepcopy(c)
+
+    # 0.2 calculating initial error - squared error function
+    error = np.mean(np.mean(abs(c_new) - abs(c_old)))
+    print(error)
+
+    # 1. defining clusters as m x 2 matrix
+    # first column contains the cluster number (1, 2..k)
+    # the second column contains the distance between the point and the cluster center
+    cluster = np.zeros((m, 2))
+
+    # 2. defining distance matrix as m x k matrix
+    distance = np.zeros((m, k))
+
+    while(error != 0):
+        for i in range(m):
+            for j in range(k):
+                # 3.calcualting distance of all points from the centroids of all k clusters
+                distance[i,j] = findDist(x[i][:], c_new[j][:])
+            
+            # 4. find cluster to which point x[i] belongs
+            clust = np.argmin(distance[i][:]) #cluster start from 0
+            cluster[i][0] = clust
+            cluster[i][1] = distance[i][clust]
+
+
+        # 5. old cluster = new cluster
+        c_old = deepcopy(c_new)
+
+        # 6. calculating centroid of each cluster
+        clustSum = np.zeros((k,n))
+        clustNum = np.zeros((k,1))
+        for i in range(m):
+            clust = int(cluster[i][0])
+            clustSum[clust, :] += x[i, :]
+            clustNum[clust] += 1
+
+        for i in range(k):
+            c_new[i][:] = clustSum[i][:]/clustNum[i]
+
+        error = np.mean(np.mean(abs(c_new) - abs(c_old)))
+        print(error)
+        plot(x, c

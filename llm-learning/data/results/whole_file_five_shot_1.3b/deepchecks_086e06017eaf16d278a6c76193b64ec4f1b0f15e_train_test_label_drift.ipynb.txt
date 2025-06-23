@@ -1,0 +1,41 @@
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#535)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import numpy as np
+import pandas as pd
+
+from deepchecks import Dataset
+from deepchecks.checks import TrainTestLabelDrift
+import pprint
+<\Cell_0>
+<Cell_1>
+np.random.seed(42)
+
+train_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=[1,0], p=[0.5, 0.5], size=(1000, 1))], axis=1)
+#Create test_data with drift in label:
+test_data = np.concatenate([np.random.randn(1000,2), np.random.choice(a=[1,0], p=[0.35, 0.65], size=(1000, 1))], axis=1)
+<\Cell_1>
+<Cell_2>
+df_train = pd.DataFrame(train_data, columns=['col1', 'col2', 'target'])
+df_test = pd.DataFrame(test_data, columns=['col1', 'col2', 'target'])
+<\Cell_2>
+<Cell_3>
+check = TrainTestLabelDrift()
+result = check.run(train_dataset=train_dataset, test_dataset=test_dataset)
+result
+<\Cell_3>
+<Cell_4>
+check_cond = TrainTestLabelDrift().add_condition_drift_score_not_greater_than()
+check_cond.run(train_dataset=train_dataset, test_dataset=test_dataset)
+<\Cell_4>
+<Cell_5>
+check = TrainTestLabelDrift()
+result = check.run(train_dataset=train_dataset, test_dataset=test_dataset)
+result
+<\Cell_5>
+<Cell_6>
+check_cond = TrainTestLabelDrift().add_condition_drift_score_not_

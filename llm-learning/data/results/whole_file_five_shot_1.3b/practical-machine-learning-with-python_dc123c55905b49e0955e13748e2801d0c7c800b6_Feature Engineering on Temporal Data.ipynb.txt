@@ -1,0 +1,29 @@
+```
+    import datetime
+    import numpy as np
+    import pandas as pd
+    from dateutil.parser import parse
+    import pytz
+
+    time_stamps = ['2015-03-08 10:30:00.360000+00:00', '2017-07-13 15:45:05.755000-07:00',
+                   '2012-01-20 22:30:00.254000+05:30', '2016-12-25 00:30:00.000000+10:00']
+    df = pd.DataFrame(time_stamps, columns=['Time'])
+    df
+
+    ts_objs = np.array([pd.Timestamp(item) for item in np.array(df.Time)])
+    df['TS_obj'] = ts_objs
+    ts_objs
+
+    df['Year'] = df['TS_obj'].apply(lambda d: d.year)
+    df['Month'] = df['TS_obj'].apply(lambda d: d.month)
+    df['Day'] = df['TS_obj'].apply(lambda d: d.day)
+    df['DayOfWeek'] = df['TS_obj'].apply(lambda d: d.dayofweek)
+    df['DayName'] = df['TS_obj'].apply(lambda d: d.weekday_name)
+    df['DayOfYear'] = df['TS_obj'].apply(lambda d: d.dayofyear)
+    df['WeekOfYear'] = df['TS_obj'].apply(lambda d: d.weekofyear)
+    df['Quarter'] = df['TS_obj'].apply(lambda d: d.quarter)
+
+    df[['Time', 'Year', 'Month', 'Day', 'Quarter', 
+        'DayOfWeek', 'DayName', 'DayOfYear', 'WeekOfYear']]
+
+    df['Hour'] = df['TS_obj'].apply(lambda d: d

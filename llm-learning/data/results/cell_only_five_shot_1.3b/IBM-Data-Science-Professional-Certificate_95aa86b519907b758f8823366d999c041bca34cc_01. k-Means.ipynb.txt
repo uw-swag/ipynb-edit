@@ -1,0 +1,49 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.cluster import KMeans
+    from sklearn.preprocessing import StandardScaler
+    import matplotlib.pyplot as plt
+
+    # Load the dataset
+    df = pd.read_csv('Cust_Segmentation.csv')
+
+    # Standardize the features to have mean=0 and variance=1
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Create a DataFrame for the scaled data
+    df_scaled_df = pd.DataFrame(df_scaled, columns=df.columns)
+
+    # Create a list to store the inertia values
+    inertia = []
+
+    # Create a range of clusters to test
+    for k in range(1, 11):
+        kmeans = KMeans(n_clusters=k)
+        kmeans.fit(df_scaled_df)
+        inertia.append(kmeans.inertia_)
+
+    # Plot the inertia value against the number of clusters
+    plt.figure(figsize=(10, 4))
+    plt.plot(range(1, 11), inertia, marker='o')
+    plt.title('Elbow Method')
+    plt.xlabel('Number of clusters')
+    plt.ylabel('Inertia')
+    plt.show()
+
+    # Use the elbow method to find the optimal number of clusters
+    # The point where the inertia starts to decrease linearly is the optimal number of clusters
+    optimal_clusters = 4
+
+    # Fit the KMeans model with the optimal number of clusters
+    kmeans = KMeans(n_clusters=optimal_clusters)
+    kmeans.fit(df_scaled_df)
+
+    # Add a new column to the dataframe with the cluster assignments
+    df['Cluster'] = kmeans.labels_
+
+    # Plot the clusters
+    plt.figure(figsize=(10, 4))
+    plt.scatter(

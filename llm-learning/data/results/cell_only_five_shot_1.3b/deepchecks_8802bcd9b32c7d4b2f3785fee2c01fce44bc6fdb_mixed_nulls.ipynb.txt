@@ -1,0 +1,25 @@
+
+    The code you provided is a demonstration of the `MixedNulls` check in Deepchecks, a Python library for data quality checks. The `MixedNulls` check is used to detect mixed null values in a DataFrame.
+
+    Here's the code:
+
+    ```python
+    from deepchecks.tabular.checks import MixedNulls
+    import pandas as pd
+
+    data = {'col1': ['sog', '1', 'cat', None, None]}
+    dataframe = pd.DataFrame(data=data)
+    MixedNulls().run(dataframe)
+
+    data = {'col1': ['nan', None, 'null', 'Nan', '1', 'cat'], 'col2':['', '', 'None', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+    dataframe = pd.DataFrame(data=data)
+    MixedNulls().run(dataframe)
+    ```
+
+    The `MixedNulls` check is used to detect mixed null values in a DataFrame. It will return a DataFrame with the rows where the check found mixed null values.
+
+    The `MixedNulls` check is not a CI skip, it's a data quality check. The check is used to ensure that the data is not inconsistent or incorrect.
+
+    The first call to `MixedNulls().run(dataframe)` will return a DataFrame with the rows where the check found mixed null values. The second call will return the same DataFrame, but with additional information about the check.
+
+    Please note that the `MixedNulls` check is a part of Deepchecks' core library, and it's not a part of the public API.

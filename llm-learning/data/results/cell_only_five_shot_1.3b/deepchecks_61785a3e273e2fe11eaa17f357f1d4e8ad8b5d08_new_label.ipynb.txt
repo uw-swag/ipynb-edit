@@ -1,0 +1,29 @@
+```python
+    from mlchecks.checks.integrity.new_label import new_label_train_validation
+    from mlchecks.base import Dataset
+    import pandas as pd
+
+    # Assuming 'test' and 'val' are your DataFrames
+    new_label_train_validation(test, val)
+    new_label_train_validation(test, val)
+
+    # If you want to modify the check without a function, you can do it like this:
+    def check_integrity(self, test, val):
+        # Your code here
+        pass
+
+    # Then, you can set this function as the check in your dataset:
+    dataset = Dataset(data=test, label=label, check=check_integrity)
+    ```
+
+    Please replace the `new_label_train_validation` function with your actual function. The function should take two parameters: `test` and `val`, which are your DataFrames. The function should perform the check on the data.
+
+    Also, replace the `check_integrity` function with your actual check. The function should perform the check on the data.
+
+    Finally, you can set the check in your dataset like this:
+
+    ```python
+    dataset = Dataset(data=test, label=label, check=check_integrity)
+    ```
+
+    Please note that the `check_integrity` function is a placeholder. You should replace it with your actual check.

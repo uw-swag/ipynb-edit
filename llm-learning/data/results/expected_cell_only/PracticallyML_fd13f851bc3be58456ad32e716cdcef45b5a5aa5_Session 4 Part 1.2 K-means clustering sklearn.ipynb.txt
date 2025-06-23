@@ -1,0 +1,54 @@
+# K-Means Clustering
+
+# Importing the libraries
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+# Importing the cars.csv dataset
+dataset = pd.read_csv('data/cars.csv')
+
+#print first 10 rows of X
+dataset.head(10)
+
+#construct X
+X = dataset.iloc[:, :-1]
+
+X = X.convert_objects(convert_numeric=True)
+
+X.head()
+#describe X
+X.describe()
+
+X.isnull().any()
+# Eliminating null values
+
+for col in X.columns:
+    X[col] = X[col].fillna(X[col].mean())
+
+# X.columns
+# X[' cubicinches'] = X[' cubicinches'].fillna(X[' cubicinches'].mean())
+X.describe()
+# X[' cubicinches'].fillna
+# Using the elbow method to find  the optimal number of clusters
+
+#import kmeans 
+from sklearn.cluster import KMeans
+wcss = []
+
+for i in range(1,11):
+    #initialise k means instance
+    kmeans = KMeans(n_clusters=i)
+    #fit the data
+    kmeans.fit(X)
+    
+    wcss.append(kmeans.inertia_)
+    
+#plot cluster vs wcss
+plt.plot(range(1, 11), wcss)
+# Applying k-means to the cars dataset
+kmeans = KMeans(n_clusters=3,init='k-means++',max_iter=300,n_init=10,random_state=0) 
+y_kmeans = kmeans.fit_predict(X)
+
+X = X.as_matrix(columns=None)
+# type(X)
+X.head()

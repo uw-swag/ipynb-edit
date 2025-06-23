@@ -1,0 +1,13 @@
+
+    The code you provided is a PyTorch implementation of a Convolutional Neural Network (CNN) for text classification. The `weight` variable is used to assign weights to the loss function. In the code, the weights are set to be 0.2 for the first class and 0.8 for the second class.
+
+    If you want to remove the weighted loss function, you can do so by setting the `weight` parameter to `None` in the `CrossEntropyLossFlat` function. Here's how you can do it:
+
+    ```python
+    learn = cnn_learner(dls, resnet34, metrics=accuracy, 
+                        loss_func=CrossEntropyLossFlat(weight=None), 
+                        cbs=[ShowGraphCallback])
+    learn.fine_tune(6)
+    ```
+
+    In this case, the loss function will use the cross entropy loss without any weighting.

@@ -1,0 +1,55 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Adding new example"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+
+    def entropy(p):
+        """
+        A helper function that computes the entropy of the 
+        discrete distribution p (stored in a 1D numpy array).
+        The elements of p should add up to 1.
+        This function ensures lim p-->0 of p log(p) = 0
+        which is mathematically true, but numerically results in NaN
+        because log(0) returns -Inf.
+        """
+        plogp = 0*p # initialize full of zeros
+        plogp[p>0] = p[p>0]*np.log(p[p>0]) # only do the computation when p>0
+        return -np.sum(plogp)
+
+    class DecisionStump():
+
+        def fit(self, X, y, split_features=None):        
+            n, d = X.shape
+
+            # Address the trivial case where we do not split
+            count = np.bincount(y)
+
+            # Compute total entropy (needed for information gain)
+            p = count/np.sum(count); # Convert counts to probabilities
+            entropyTotal = entropy(p)
+
+            maxGain = 0
+            self.splitVariable = None
+            self.splitValue = None
+            self.splitSat = np.argmax(count)
+            self.splitNot = None
+
+            # Check if labels are not all equal
+            if np.unique(y).size <= 1:
+                return
+
+            if split_features is None:
+                split_features = range(d)
+
+            for j in split_features:
+                thresholds = np.unique(X[:,j])
+                for value in thresholds[:-1]:
+                    # Count number of class labels where the feature is greater than threshold
+                    y_vals = y[X[:,j] > value]
+                    countSat = np.bincount(y_vals, minlength=len(count))
+                    countNot = count-countSat
+                                

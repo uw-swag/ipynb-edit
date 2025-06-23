@@ -1,0 +1,198 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+<\Cell_0>
+<Cell_1>
+from evidently import ColumnMapping
+from evidently.report import Report
+from evidently.test_suite import TestSuite
+
+from evidently.metric_preset import TextEvals
+
+from evidently.metrics import TextDescriptorsDriftMetric
+from evidently.metrics import TextDescriptorsDistribution
+from evidently.metrics import TextDescriptorsCorrelationMetric
+from evidently.metrics import ColumnDriftMetric, ColumnSummaryMetric
+
+from evidently.descriptors import TextLength, IncludesWords, OOV, NonLetterCharacterPercentage, SentenceCount, WordCount, Sentiment, RegExp, SemanticSimilarity
+<\Cell_1>
+<Cell_2>
+import nltk
+nltk.download('words')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('vader_lexicon')
+<\Cell_2>
+<Cell_3>
+#Dataset for Data Quality and Integrity
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame='auto')
+reviews = reviews_data.frame
+<\Cell_3>
+<Cell_4>
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+<\Cell_4>
+<Cell_5>
+reviews.head()
+<\Cell_5>
+<Cell_6>
+column_mapping = ColumnMapping(
+    numerical_features=['Age', 'Positive_Feedback_Count'],
+    categorical_features=['Division_Name', 'Department_Name', 'Class_Name'],
+    text_features=['Review_Text', 'Title']
+)
+<\Cell_6>
+<Cell_7>
+#NO descriptors
+
+text_specific_metrics_report = Report(metrics=[
+    TextDescriptorsDriftMetric(column_name="Review_Text"),
+    TextDescriptorsDistribution(column_name="Review_Text"),
+    TextDescriptorsCorrelationMetric(column_name="Review_Text"),
+])
+
+text_specific_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_specific_metrics_report
+<\Cell_7>
+<Cell_8>
+#WITH descriptors
+
+report = Report(metrics=[
+    TextDescriptorsDriftMetric("Review_Text", descriptors={
+        "Review Text Length" : TextLength(),
+        "Reviews about Dress" : IncludesWords(words_list=['dress', 'gown']),
+        "Review about Blouses" : IncludesWords(words_list=['blouse', 'shirt']),
+        "Review Sentence Count" : SentenceCount(),
+        "Review Word Count" : WordCount(),
+        "Review Sentiment" : Sentiment(),
+        "Review questions": RegExp(reg_exp=r'.*\?.*'),
+    }),
+    TextDescriptorsCorrelationMetric(column_name="Title", descriptors={
+        "Title OOV" : OOV(),
+        "Title Non Letter %" : NonLetterCharacterPercentage(),
+        "Title Length" : TextLength(),
+        "Title Sentence Count" : SentenceCount(),
+        "Title Word Count" : WordCount(),
+        "Title Sentiment" : Sentiment(),
+        "Title questions": RegExp(reg_exp=r'.*\?.*'),
+    })
+])
+
+report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+report
+
+<\Cell_8>
+<Cell_9>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="Review_Text")
+    ]
+)
+
+text_evals_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_evals_report
+<\Cell_9>
+<Cell_10>
+text_evals_report = Report(metrics=[
+    TextEvals(column_name="Review_Text", descriptors=[
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        ]
+    )
+])
+
+text_evals_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_evals_report
+<\Cell_10>
+<Cell_11>
+#NO descriptors
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text")
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+<\Cell_11>
+<Cell_12>
+#NO descriptors, several columns
+
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text"),
+    TextEvals(column_name="Title"),
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+<\Cell_12>
+<Cell_13>
+#WITH descriptors
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+text_overview_report
+<\Cell_13>
+<Cell_14>
+text_overview_report = Report(metrics=[
+    TextEvals(column_name="Review_Text", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ]),
+    TextEvals(column_name="Title", descriptors=[
+        OOV(),
+        NonLetterCharacterPercentage(),
+        TextLength(),
+        IncludesWords(words_list=['dress', 'gown']),
+        IncludesWords(words_list=['blouse', 'shirt']),
+        SentenceCount(),
+        WordCount(),
+        Sentiment(),
+        RegExp(reg_exp=r'.*\?.*'),
+    ])
+])
+
+text_overview_report.run(reference_data=reviews_ref[:100], current_data=reviews_cur[:100], column_mapping=column_mapping)
+text_overview_report
+<\Cell_14>
+<Cell_15>
+drift_report = Report(metrics=[
+    ColumnDriftMetric(column_name=TextLength(display_name="TextLength").for_column("Review_Text")),
+    ColumnDriftMetric(column_name=IncludesWords(words_list=['blouse', 'shirt'], display_name="Review about Blouses").for_column("Review_Text")),
+
+])
+
+drift_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+drift_report
+<\Cell_15>
+<Cell_16>
+summary_report = Report(metrics=[
+    ColumnSummaryMetric(column_name=SemanticSimilarity(with_column="Title").on("Review_Text"))
+])
+
+summary_report.run(reference_data=reviews_ref[:10], current_data=reviews_cur[:10], column_mapping=column_mapping)
+summary_report
+<\Cell_16>
+<Cell_17>
+
+<\Cell_17>

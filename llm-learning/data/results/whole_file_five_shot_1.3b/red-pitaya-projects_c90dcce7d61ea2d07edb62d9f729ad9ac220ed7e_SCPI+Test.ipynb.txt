@@ -1,0 +1,10 @@
+```python
+    # Add dashboard notebooks
+    from azureml.core.notebooks import Notebook
+
+    notebook = Notebook(workspace=ws, name="<NOTEBOOK_NAME>")
+    dashboard = notebook.create_dashboard(name="<DASHBOARD_NAME>")
+
+    # Add a new run to the dashboard
+    dashboard.add_run(run)
+    ```

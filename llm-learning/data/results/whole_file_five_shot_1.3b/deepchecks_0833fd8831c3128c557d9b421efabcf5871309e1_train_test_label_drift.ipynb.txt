@@ -1,0 +1,18 @@
+```python
+    import torch
+    from deepchecks.vision.dataset import VisionData
+    from torchvision import models
+    import torchvision
+
+    from deepchecks.vision.checks import TrainTestLabelDrift
+    from deepchecks.vision.datasets.classification import mnist
+
+    mnist_dataloader_train = mnist.load_dataset(train=True, batch_size=64)
+    mnist_dataloader_test = mnist.load_dataset(train=False, batch_size=1000)
+
+    train_ds = VisionData(mnist_dataloader_train, label_transformer=ClassificationLabelFormatter(lambda x: x))
+    test_ds = VisionData(mnist_dataloader_test, label_transformer=ClassificationLabelFormatter(lambda x: x))
+
+    check = TrainTestLabelDrift()
+    check.run(train_ds, test_ds)
+    ```

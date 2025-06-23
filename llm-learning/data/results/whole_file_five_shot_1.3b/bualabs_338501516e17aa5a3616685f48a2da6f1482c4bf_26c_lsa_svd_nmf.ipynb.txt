@@ -1,0 +1,50 @@
+
+    '''
+    [
+    Commit Message: "Added more details on SVD."
+    Original Code Cells:
+    '''
+    <Cell_0>
+# ! pip install fbpca
+<\Cell_0>
+<Cell_1>
+import numpy as np
+from sklearn.datasets import fetch_20newsgroups
+from sklearn import decomposition
+from scipy import linalg
+import matplotlib.pyplot as plt
+import pandas as pd
+import plotly.express as px
+<\Cell_1>
+<Cell_2>
+%matplotlib inline
+np.set_printoptions(suppress=True)
+<\Cell_2>
+<Cell_3>
+categories = ['alt.atheism', 'talk.religion.misc', 'comp.graphics', 'sci.space']
+remove = ('headers', 'footers', 'quotes')
+newsgroups_train = fetch_20newsgroups(subset='train', categories=categories, remove=remove)
+newsgroups_test = fetch_20newsgroups(subset='test', categories=categories, remove=remove)
+<\Cell_3>
+<Cell_4>
+newsgroups_train.filenames.shape, newsgroups_train.target.shape
+<\Cell_4>
+<Cell_5>
+print("\n============================\n".join(newsgroups_train.data[1200:1203]))
+<\Cell_5>
+<Cell_6>
+for i, r in enumerate(reversed(sorted(zip(np.squeeze(np.asarray(vectors[1200, :])), vocab)))):
+    print(r)
+    if i > 20 : break
+<\Cell_6>
+<Cell_7>
+show_topics(Vh[:10])
+<\Cell_7>
+<Cell_8>
+plt.plot(clf.components_[0])
+<\Cell_8>
+<Cell_9>
+clf.reconstruction_err_
+<\Cell_9>
+<Cell_10>
+%time u,

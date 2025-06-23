@@ -1,0 +1,12 @@
+```python
+    import plotly.graph_objects as go
+
+    # Create a confusion matrix plot
+    fig = go.Figure(data=[go.Table(
+        header=dict(values=list(iris.target_names) + ['Predicted']),
+        cells=dict(values=[X_test.reshape(-1,1) , clf.predict(X_test)])
+    )])
+
+    fig.show()
+    ```
+    This code will create a table with the confusion matrix and a plot of the predicted classes.

@@ -1,0 +1,26 @@
+```python
+    import tensorflow as tf
+    import os
+
+    ckpt_name = './gan.ckpt'
+
+    sess = tf.Session()
+    saver = tf.train.Saver()
+    sess.run(tf.global_variables_initializer())
+    coord = tf.train.Coordinator()
+    tf.get_default_graph().finalize()
+    threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+
+    if os.path.exists(ckpt_name):
+        saver.restore(sess, ckpt_name)
+        print("VAE model restored.")
+
+    elif os.path.exists(ckpt_name + '.index'):
+        saver.restore(sess, ckpt_name)
+        print("VAE model restored.")
+
+    else:
+        print("No checkpoint found.")
+    ```
+
+    This code will check if the checkpoint file exists, if it does, it will restore the model. If it doesn't, it will print a message saying that no checkpoint was found.

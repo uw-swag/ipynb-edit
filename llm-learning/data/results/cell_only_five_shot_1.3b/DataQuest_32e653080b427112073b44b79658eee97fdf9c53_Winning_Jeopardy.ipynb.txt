@@ -1,0 +1,51 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the data
+    jeopardy = pd.read_csv('jeopardy.csv')
+
+    # Preprocess the data
+    jeopardy['clean_question'] = jeopardy['Question'].apply(lambda x: x.lower().strip())
+    jeopardy['clean_answer'] = jeopardy['Answer'].apply(lambda x: x.lower().strip())
+
+    # Create a function to filter out non-numeric values
+    def remove_non_numeric(x):
+        try:
+            float(x)
+            return True
+        except ValueError:
+            return False
+
+    # Filter out non-numeric values
+    jeopardy['Value'] = jeopardy['Value'].apply(lambda x: int(x.strip('$')) if remove_non_numeric(x) else np.nan)
+
+    # Split the data into training and testing sets
+    train, test = train_test_split(jeopardy, test_size=0.2, random_state=42)
+
+    # Create a CountVectorizer
+    vectorizer = CountVectorizer()
+
+    # Fit and transform the training data
+    train_matrix = vectorizer.fit_transform(train['clean_question'])
+
+    # Transform the testing data
+    test_matrix = vectorizer.transform(test['clean_question'])
+
+    # Train a Naive Bayes classifier
+    clf = MultinomialNB()
+    clf.fit(train_matrix, train['Value'])
+
+    # Make predictions
+    predictions = clf.predict(test_matrix)
+
+    # Print the classification report
+    print(classification_report(test['Value'], predictions))
+
+    # Print the confusion matrix
+    print(confusion_matrix(test['Value'], predictions))
+    ```

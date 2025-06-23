@@ -1,0 +1,41 @@
+<Cell_0>
+import matplotlib.pyplot as plt
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
+from sklearn import datasets
+from sklearn_evaluation import plot
+<\Cell_0>
+<Cell_1>
+data = datasets.make_classification(n_samples=200, n_features=10,
+                                    n_informative=4, class_sep=0.5)
+
+X = data[0]
+y = data[1]
+<\Cell_1>
+<Cell_2>
+hyperparameters = {
+    'n_estimators': [1, 10, 50, 100],
+    'criterion': ['gini', 'entropy'],
+    'max_features': ['sqrt', 'log2'],
+}
+<\Cell_2>
+<Cell_3>
+est = RandomForestClassifier(n_estimators=5)
+clf = GridSearchCV(est, hyperparameters, cv=3)
+clf.fit(X, y)
+
+grid_scores = clf.cv_results_
+<\Cell_3>
+<Cell_4>
+plot.grid_search(clf.cv_results_, change='n_estimators', kind='bar')
+<\Cell_4>
+<Cell_5>
+plot.grid_search(clf.cv_results_, change='n_estimators',
+                 subset={'n_estimators': [10, 50, 100],
+                         'criterion': 'gini'},
+                 kind='bar')
+<\Cell_5>
+<Cell_6>
+plot.grid_search(clf.cv_results_, change=('n_estimators', 'criterion'),
+                 subset={'max_features': 'sqrt'})
+<\Cell_6>

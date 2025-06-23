@@ -1,0 +1,22 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+
+    # Assuming you have a DataFrame df with a column 'text'
+    df = pd.DataFrame({'text': ['I love programming', 'Python is great', 'Data science is awesome']})
+
+    # Initialize the TfidfVectorizer
+    vectorizer = TfidfVectorizer()
+
+    # Fit and transform the data
+    X = vectorizer.fit_transform(df['text'])
+
+    # Get the feature names
+    feature_names = vectorizer.get_feature_names_out()
+
+    # Create a DataFrame with the features
+    df_features = pd.DataFrame(X.toarray(), columns=feature_names)
+
+    # Print the DataFrame
+    print(df_features)
+    ```

@@ -1,0 +1,10 @@
+
+    The caching strategy in the code you provided is not explicitly mentioned. However, it's important to note that caching can significantly improve the performance of your machine learning pipeline by reducing the number of times the same data is read from disk.
+
+    In the context of your code, the `create_dataset` function is using caching to load the Cassava dataset. The `tfds.load` function is used to load the dataset, and the `map` function is used to apply the `preprocess_data` function to each element in the dataset. The `cache` and `shuffle` functions are used to cache the dataset and shuffle it, respectively.
+
+    The `create_model` function is also using caching to compile the model. The `tf.keras.Model` class is used to create a model, and the `compile` method is used to compile the model.
+
+    The `model.fit` function is also using caching to train the model. The `tf.data.Dataset.batch` function is used to batch the dataset, and the `GLOBAL_BATCH_SIZE` variable is used to scale the global batch size by the number of workers.
+
+    Therefore, by using caching, you can significantly improve the performance of your machine learning pipeline.

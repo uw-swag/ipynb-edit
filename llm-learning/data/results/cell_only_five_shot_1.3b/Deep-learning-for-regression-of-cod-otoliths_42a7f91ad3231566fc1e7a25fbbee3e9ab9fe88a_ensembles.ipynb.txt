@@ -1,0 +1,20 @@
+```python
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.optimizers import Adam
+
+    # Define the model
+    model = Sequential()
+    model.add(Dense(64, input_dim=450, activation='relu'))
+    model.add(Dense(10, activation='softmax'))
+
+    # Compile the model
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(lr=0.001), metrics=['accuracy'])
+
+    # Fit the model
+    model.fit(X_train, y_train, epochs=450, batch_size=32, verbose=1)
+
+    # Evaluate the model
+    scores = model.evaluate(X_test, y_test, verbose=0)
+    print("Model Accuracy: %.2f%%" % (scores[1]*100))
+    ```

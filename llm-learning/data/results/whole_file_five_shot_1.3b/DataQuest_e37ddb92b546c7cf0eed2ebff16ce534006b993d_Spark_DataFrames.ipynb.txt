@@ -1,0 +1,22 @@
+```python
+    from pyspark.sql import SparkSession
+    from pyspark.sql.functions import col
+
+    # Create a SparkSession
+    spark = SparkSession.builder.appName("Spark DataFrames").getOrCreate()
+
+    # Load the data
+    df = spark.read.json("data.json")
+
+    # Show the data
+    df.show()
+
+    # Transform the data
+    df_transformed = df.select(col("field1").cast("int"), col("field2").cast("float"))
+
+    # Write the transformed data to a new JSON file
+    df_transformed.write.json("transformed_data.json")
+
+    # Stop the SparkSession
+    spark.stop()
+    ```

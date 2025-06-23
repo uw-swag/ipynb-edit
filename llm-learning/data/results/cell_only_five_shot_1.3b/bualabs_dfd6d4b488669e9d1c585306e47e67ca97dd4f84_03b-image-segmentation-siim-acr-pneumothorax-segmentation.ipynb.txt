@@ -1,0 +1,33 @@
+```python
+    import torch
+
+    def mix_precision(model, input_data):
+        # Convert the input data to the appropriate datatype
+        if isinstance(input_data, torch.Tensor):
+            input_data = input_data.to('cuda' if torch.cuda.is_available() else 'cpu')
+        elif isinstance(input_data, dict):
+            input_data = {k: v.to('cuda' if torch.cuda.is_available() else 'cpu') for k, v in input_data.items()}
+        else:
+            raise TypeError(f"Unsupported data type: {type(input_data)}")
+
+        # Forward pass
+        output_data = model(input_data)
+
+        # Convert the output data to the appropriate datatype
+        if isinstance(output_data, torch.Tensor):
+            output_data = output_data.to('cuda' if torch.cuda.is_available() else 'cpu')
+        elif isinstance(output_data, dict):
+            output_data = {k: v.to('cuda' if torch.cuda.is_available() else 'cpu') for k, v in output_data.items()}
+        else:
+            raise TypeError(f"Unsupported data type: {type(output_data)}")
+
+        return output_data
+    ```
+
+    This function `mix_precision` is used to perform mixed precision training on a model. It first converts the input data to the appropriate datatype (CPU or GPU) and then performs the forward pass. After the forward pass, the output data is converted to the appropriate datatype (CPU or GPU).
+
+    The function is then used in a loop to perform the training process. The loop iterates over the training data, passes the input data through the model, and then converts the output data back to the CPU. The model's parameters are then updated using the output data and the input data.
+
+    This function is useful when training a model with a large batch size, as it allows the model to use a smaller precision (e.g., 16-bit) to save memory and accelerate training.
+
+    The normalization

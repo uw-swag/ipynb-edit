@@ -1,0 +1,57 @@
+```python
+    import papermill as pm
+    import jupytext
+
+    from sklearn_evaluation import NotebookCollection
+
+    nb = jupytext.read('train.py')
+    jupytext.write(nb, 'train.ipynb')
+
+    params = [{
+        'model': 'sklearn.ensemble.RandomForestRegressor',
+        'params': {
+            'n_estimators': 50
+        }
+    }, {
+        'model': 'sklearn.ensemble.RandomForestRegressor',
+        'params': {
+            'n_estimators': 100
+        }
+    }, {
+        'model': 'sklearn.linear_model.LinearRegression',
+        'params': {
+            'normalize': True
+        }
+    }, {
+        'model': 'sklearn.svm.LinearSVR',
+        'params': {}
+    }]
+
+    ids = [
+        'random_forest_1', 'random_forest_2', 'linear_regression',
+        'support_vector_regression'
+    ]
+
+    files = [f'{i}.ipynb' for i in ids]
+
+    for f, p in zip(files, params):
+        pm.execute_notebook('train.ipynb', output_path=f, parameters=p)
+
+    nbs = NotebookCollection(paths=files, ids=ids, scores=['r2'])
+
+    nbs['model_params']
+    nbs['plot']
+    nbs['metrics']
+    nbs['river']
+    nbs['model_params']['random_forest_1']
+    nbs['plot']['random_forest_2']
+    nbs['metrics']
+    nbs['river']
+    nbs['model_params']
+    nbs['feature_names']
+    nbs['model_params']['random_forest_1']
+    nbs['plot']['random_forest_2']
+    nbs['metrics']
+    nbs['river']
+    nbs['model_params']
+    ```

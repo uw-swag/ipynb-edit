@@ -1,0 +1,216 @@
+<Cell_0>
+import pandas as pd
+
+from datetime import datetime
+from typing import Optional
+<\Cell_0>
+<Cell_1>
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, NumTargetDriftTab
+from evidently.options import DataDriftOptions
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection
+<\Cell_1>
+<Cell_2>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_2>
+<Cell_3>
+#! curl https://nyc-tlc.s3.amazonaws.com/trip+data/green_tripdata_2021-01.csv -o data/green_tripdata_2021-01.csv
+<\Cell_3>
+<Cell_4>
+source_data = pd.read_csv('data/green_tripdata_2021-01.csv', sep=',', low_memory=False, 
+                          parse_dates=['lpep_dropoff_datetime', 'lpep_pickup_datetime'])
+<\Cell_4>
+<Cell_5>
+source_data.shape
+<\Cell_5>
+<Cell_6>
+source_data.isna().sum()
+<\Cell_6>
+<Cell_7>
+source_data.describe()
+<\Cell_7>
+<Cell_8>
+#calculate target
+source_data['duration'] = (source_data['lpep_dropoff_datetime'] - source_data['lpep_pickup_datetime'])
+source_data['duration'] = source_data.duration.apply(lambda x: x.total_seconds()//60)
+<\Cell_8>
+<Cell_9>
+target = 'duration'
+
+categorical = ['VendorID', 'store_and_fwd_flag', 'RatecodeID', 
+               'payment_type', 'trip_type']
+
+numerical = ['passenger_count', 'trip_distance', 'fare_amount', 'extra', 'tip_amount', 'tolls_amount',
+             'total_amount']
+<\Cell_9>
+<Cell_10>
+first_week = source_data[(source_data.lpep_pickup_datetime >= datetime(2021,1,3)) & 
+                         (source_data.lpep_pickup_datetime < datetime(2021,1,10))]
+
+second_week = source_data[(source_data.lpep_pickup_datetime >= datetime(2021,1,10)) &
+                          (source_data.lpep_pickup_datetime < datetime(2021,1,17))]
+<\Cell_10>
+<Cell_11>
+mapping = ColumnMapping(target=target, numerical_features=numerical, categorical_features=categorical)
+<\Cell_11>
+<Cell_12>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+data_drift_dashboard.calculate(first_week, second_week, mapping)
+data_drift_dashboard.show()
+<\Cell_12>
+<Cell_13>
+from evidently.options import ColorOptions
+
+color_scheme = ColorOptions()
+color_scheme.primary_color = "#5a86ad"
+color_scheme.fill_color = "#fff4f2"
+color_scheme.zero_line_color = "#016795"
+color_scheme.current_data_color = "#c292a1" 
+color_scheme.reference_data_color = "#017b92"
+<\Cell_13>
+<Cell_14>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[color_scheme])
+data_drift_dashboard.calculate(first_week, second_week, mapping)
+<\Cell_14>
+<Cell_15>
+data_drift_dashboard.show()
+<\Cell_15>
+<Cell_16>
+from evidently.dashboard.widgets.widget import Widget
+from evidently.model.widget import BaseWidgetInfo
+
+class TextCommentWidget(Widget):
+    def __init__(self, title:str, text:str, size:int):
+        super().__init__(title)
+        self.text = text
+        self.size = size
+        
+    def calculate(self, reference_data: pd.DataFrame, current_data: Optional[pd.DataFrame],
+                  column_mapping: ColumnMapping, analyzers_results) -> Optional[BaseWidgetInfo]:
+        return BaseWidgetInfo(
+            title=self.title,
+            type="text",
+            size=self.size,
+            params={
+                "text": self.text
+            }
+        )
+
+    def analyzers(self):
+        return []
+<\Cell_16>
+<Cell_17>
+text_example = """
+# Header H1
+Important paragraph!
+
+## Header H2
+- point 1
+- point 2
+- point 3
+"""
+<\Cell_17>
+<Cell_18>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab(include_widgets=[
+    TextCommentWidget("", text=text_example, size=2),
+    'Data Drift',])])
+
+data_drift_dashboard.calculate(first_week, second_week, mapping)
+data_drift_dashboard.show()
+<\Cell_18>
+<Cell_19>
+dataset_description = """
+# NY Taxi Green Trip
+
+## Categorical Features Description
+- **VendorID**  A code indicating the LPEP provider that provided the record. 
+- **store_and_fwd_flag** This flag indicates whether the trip record was held in vehicle
+memory before sending to the vendor
+- **RatecodeID** The final rate code in effect at the end of the trip. 
+- **payment_type** A numeric code signifying how the passenger paid for the trip. 
+- **trip_type** A code indicating whether the trip was a street-hail or a dispatch
+that is automatically assigned based on the metered rate in use but can be altered by the driver. 
+
+## Numerical Features Description
+- **passenger_count** The number of passengers in the vehicle. This is a driver-entered value
+- **trip_distance** The elapsed trip distance in miles reported by the taximeter.
+- **fare_amount** The time-and-distance fare calculated by the meter
+- **extra** Miscellaneous extras and surcharges. Currently, this only includes
+the $0.50 and $1 rush hour and overnight charges.
+- **tip_amount** Tip amount – This field is automatically populated for credit card
+tips. Cash tips are not included.
+- **tolls_amount** Total amount of all tolls paid in trip. 
+- **total_amount** The total amount charged to passengers. Does not include cash tips.
+
+"""
+<\Cell_19>
+<Cell_20>
+drifted_features = """
+# Drifted features
+Note: All categorical!
+
+- VendorID
+- store_and_fwd_flag
+- RatecodeID
+- payment_type
+"""
+<\Cell_20>
+<Cell_21>
+drifted_features_categories = """
+# Meaning of Drifted Features Categories 
+
+**VendorID**
+
+1= Creative Mobile Technologies, LLC; 2= VeriFone Inc.
+
+**store_and_fwd_flag**
+
+Y= store and forward trip; N= not a store and forward trip
+
+**RatecodeID**
+
+1= Standard rate; 2=JFK; 3=Newark; 4=Nassau or Westchester; 5=Negotiated fare; 6=Group ride
+
+**payment_type**
+
+1= Credit card; 2= Cash; 3= No charge; 4= Dispute; 5= Unknown; 6= Voided trip
+"""
+<\Cell_21>
+<Cell_22>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab(include_widgets=[
+    TextCommentWidget("", text=dataset_description, size=2),
+    'Data Drift',
+    TextCommentWidget("", text=drifted_features, size=1),
+    TextCommentWidget("", text=drifted_features_categories, size=1),])],
+                                options = [color_scheme])
+
+data_drift_dashboard.calculate(first_week, second_week, mapping)
+data_drift_dashboard.show()
+<\Cell_22>
+<Cell_23>
+from evidently.options import DataDriftOptions
+<\Cell_23>
+<Cell_24>
+stat_test_option = DataDriftOptions(feature_stattest_func=
+                                    {
+                                        'tip_amount':'wasserstein',
+                                        'total_amount':'jensenshannon',
+                                        'fare_amount':'kl_div',
+                                    }
+                                   )
+<\Cell_24>
+<Cell_25>
+data_drift_dashboard = Dashboard(tabs=[DataDriftTab(include_widgets=[
+    TextCommentWidget("", text=dataset_description, size=2),
+    'Data Drift',
+    TextCommentWidget("", text=drifted_features, size=1),
+    TextCommentWidget("", text=drifted_features_categories, size=1),])],
+                                options = [color_scheme, stat_test_option ])
+
+data_drift_dashboard.calculate(first_week, second_week, mapping)
+data_drift_dashboard.show()
+<\Cell_25>

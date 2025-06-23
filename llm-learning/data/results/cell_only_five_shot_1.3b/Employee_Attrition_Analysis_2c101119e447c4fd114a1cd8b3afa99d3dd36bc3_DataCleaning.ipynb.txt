@@ -1,0 +1,46 @@
+
+    ## Updating Logistic Regression Model
+    ## Logistic Regression is a type of linear model used for binary classification.
+
+    ## Importing necessary libraries
+    import numpy as np
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+
+    ## Loading the dataset
+    df = pd.read_csv('logReg.csv')
+
+    ## Preprocessing the data
+    X = df.drop('Outcome', axis=1)
+    y = df['Outcome']
+
+    ## Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    ## Training the model
+    logReg = LogisticRegression()
+    logReg.fit(X_train, y_train)
+
+    ## Predicting the test set results
+    y_pred = logReg.predict(X_test)
+
+    ## Evaluating the model
+    print('Accuracy:', metrics.accuracy_score(y_test, y_pred))
+
+    ## Saving the model
+    joblib.dump(logReg, 'logReg_model.pkl')
+
+    ## Creating a new CSV file
+    new_data = pd.DataFrame(df.columns.values.tolist() + ['Outcome'], columns=['Feature', 'Outcome'])
+    new_data['Feature'] = new_data['Feature'].astype(str)
+    new_data.to_csv('new_logReg.csv', index=False)
+
+    ## Updating the 'logReg.csv' file
+    updated_df = pd.read_csv('logReg.csv')
+    updated_df.to_csv('updated_logReg.csv', index=False)
+
+    ## Updating the 'new_logReg.csv' file
+    updated_df = pd.read_csv('new_logReg.csv')
+   

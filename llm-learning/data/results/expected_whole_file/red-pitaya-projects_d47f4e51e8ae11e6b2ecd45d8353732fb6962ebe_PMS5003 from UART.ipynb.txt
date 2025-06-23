@@ -1,0 +1,22 @@
+<Cell_0>
+import serial
+import struct
+import time
+from pms5003 import PMS5003
+<\Cell_0>
+<Cell_1>
+print("""all.py - Continously print all data values.
+Press Ctrl+C to exit!
+""")
+
+# Configure the PMS5003
+pms5003 = PMS5003(device='/dev/ttyPS1',baudrate=9600)
+
+try:
+    while True:
+        data = pms5003.read()
+        print(data)
+
+except KeyboardInterrupt:
+    pass
+<\Cell_1>

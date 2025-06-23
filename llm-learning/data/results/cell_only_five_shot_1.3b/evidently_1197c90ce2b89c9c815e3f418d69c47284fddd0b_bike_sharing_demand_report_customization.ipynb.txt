@@ -1,0 +1,48 @@
+```python
+    import os
+    import cv2
+    import numpy as np
+    import pandas as pd
+
+    from sklearn.model_selection import train_test_split 
+    from sklearn.preprocessing import MinMaxScaler
+    from sklearn.preprocessing import LabelEncoder
+    import tensorflow as tf
+    import librosa
+    from scipy.io import wavfile
+
+    from tensorflow.keras.models import Sequential
+    from tensorflow.keras.layers import Conv2D, MaxPooling2D,BatchNormalization, Dense, Dropout, Flatten
+    from tensorflow.keras.optimizers import Adam
+
+    import matplotlib.pyplot as plt
+
+    from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, ConfusionMatrixDisplay
+
+    dir25 = "Dataset25/MER_Extra25"
+    data25 = os.listdir(dir25)
+    file_dir25 = []
+    count = 0
+
+    for mooddir25 in data25:
+        if(not r'.' in mooddir25):
+            moodDirName25 = os.path.join(dir25,mooddir25)
+            mooddir25=np.array(os.listdir(moodDirName25))
+            for audio in mooddir25:
+                if(audio[-3:]=='mp3'):
+                    count+=1
+                    fn=os.path.join(moodDirName25,audio)
+                    file_dir25.append(fn)
+                    print(str(count),fn)
+
+    #add noise
+    def add_noise(data):
+        wn = np.random.normal(0, 1, len(data))
+        return np.where(data != 0.0, data.astype('float64') + 0.02 * wn, 0.0).astype(np.float32)
+
+    #time shift
+    def time_shift(data, shift):
+        # shift: shifting length
+        return np.roll(data, int(shift))
+
+    for

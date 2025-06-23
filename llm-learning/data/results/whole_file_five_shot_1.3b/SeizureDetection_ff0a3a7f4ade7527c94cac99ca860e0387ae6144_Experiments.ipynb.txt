@@ -1,0 +1,22 @@
+```python
+    from imblearn.under_sampling import RandomUnderSampler
+
+    # Initialize Random Under Sampler
+    rus = RandomUnderSampler(random_state=0)
+
+    # Fit and transform the data
+    X_res, y_res = rus.fit_resample(X, y)
+
+    # Create a new classifier
+    clf = svm.SVC(kernel='linear', C=1.0)
+
+    # Fit the classifier
+    clf.fit(X_res, y_res)
+
+    # Predict the labels
+    y_pred = clf.predict(X)
+
+    # Print the accuracy
+    print("Accuracy:",metrics.accuracy_score(y, y_pred))
+    ```
+    This code uses the RandomUnderSampler from the imblearn library to undersample the majority class. The classifier is then trained on the resampled data. The accuracy of the classifier is then printed.

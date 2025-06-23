@@ -1,0 +1,6 @@
+!nvcc --version
+pip install torch==1.7.1+cu101 torchvision==0.8.2+cu101 torchaudio===0.7.2 -f https://download.pytorch.org/whl/torch_stable.html
+!python demo/demo.py\
+    --config-file projects/OneNet/configs/onenet.res50.dcn.yaml \
+    --input path/to/images --output path/to/save_images --confidence-threshold 0.4 \
+    --opts MODEL.WEIGHTS path/to/model.pth

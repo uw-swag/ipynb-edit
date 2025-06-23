@@ -1,0 +1,35 @@
+```python
+    ax = world.plot(figsize=(18,10), color='none', edgecolor='green', zorder=3)
+    world_loans.plot(color='green', ax=ax)
+    ax = PHL.plot(figsize=(18,18), color='none', edgecolor='green', zorder=3)
+    PHL_loans.plot(color='green', ax=ax)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new feature: 'loan_status_count'"
+    Original Code Cells:
+    '''
+    ax = world.plot(figsize=(18,10), color='none', edgecolor='gainsboro', zorder=3)
+    world_loans.plot(color='red', ax=ax)
+    ax = PHL.plot(figsize=(18,18), color='none', edgecolor='gainsboro', zorder=3)
+    PHL_loans.plot(color='red', ax=ax)
+
+    '''
+    ]
+
+    ### Response:
+    Here is how you can add a new feature 'loan_status_count' to your code. This feature will count the number of loans in each status.
+
+    ```python
+    def loan_status_count(df):
+        return df['loan_status'].value_counts()
+
+    ax = world.plot(figsize=(18,10), color='none', edgecolor='gainsboro', zorder=3)
+    world_loans.plot(color='red', ax=ax)
+    ax = PHL.plot(figsize=(18,18), color='none', edgecolor='gainsboro', zorder=3)
+    PHL_loans.plot(color='red', ax=ax)
+
+    # Count the number of loans in each status
+    loan_status_count_df = loan_status_count(world_loans)
+    loan_status_count_df.plot(kind='bar', ax=ax)

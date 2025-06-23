@@ -1,0 +1,8 @@
+```
+    # Removing Git LFS
+    git filter-branch --tree-filter 'git rm -rf --ignore-unmatch .git/lfs' HEAD
+    ```
+
+    This command will remove all the large files (LFS) that are not being tracked by Git. However, it will also remove the commits that are using these large files.
+
+    Please note that this is a destructive operation and it will permanently remove all the large files and their commits. It's recommended to backup your repository before running this command.

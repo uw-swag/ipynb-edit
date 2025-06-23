@@ -1,0 +1,35 @@
+```
+    import operator
+
+def test(a, b, cmp, cname=None):
+    if cname is None: cname=cmp.__name__
+    assert cmp(a, b), f"{cname}:\n{a}\n{b}"
+
+def test_eq(a,b): test(a, b, operator.eq, '==')
+from pathlib import Path
+from IPython.core.debugger import set_trace
+from fastai import datasets
+import pickle, gzip, math, torch, matplotlib as mpl
+import matplotlib.pyplot as plt
+from torch import tensor
+x_train, y_train, x_valid, y_valid = map(tensor, (x_train, y_train, x_valid, y_valid))
+n, c = x_train.shape
+x_train, x_train.shape, y_train, y_train.shape, y_train.min(), y_train.max()
+mpl.rcParams['image.cmap'] = 'gray'
+def matmul(a, b):
+    # a row, a column
+    ar, ac = a.shape
+    # b row, b column
+    br, bc = b.shape
+    assert ac == br
+    c = torch.zeros(ar, bc)
+    
+    for i in range(ar):
+        for j in range(bc):
+            for k in range(ac):
+                c[i, j] += a[i, k] * b[k, j]
+    return c
+m1 = x_valid[:5]
+m2 = weights
+%time t1 = matmul(m1, m2)
+```

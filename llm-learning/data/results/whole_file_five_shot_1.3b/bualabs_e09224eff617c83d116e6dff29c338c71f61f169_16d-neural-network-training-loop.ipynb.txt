@@ -1,0 +1,39 @@
+```python
+    # Show input image and prediction section
+    # This section is for visualizing the input image and the prediction made by the model
+
+    # Load the image
+    from PIL import Image
+    import io
+
+    img_path = 'path_to_your_image.jpg'  # replace with the path to your image
+    img = Image.open(img_path)
+
+    # Resize the image
+    img = img.resize((28, 28))
+
+    # Convert the image to grayscale
+    img = img.convert('L')
+
+    # Convert the image to a numpy array
+    img_array = np.array(img)
+
+    # Normalize the image
+    img_array = (img_array - np.mean(img_array)) / np.std(img_array)
+
+    # Add a dimension for the channel
+    img_array = np.expand_dims(img_array, axis=0)
+    img_array = np.expand_dims(img_array, axis=-1)
+
+    # Predict the image
+    prediction = model(torch.tensor(img_array))
+
+    # Print the prediction
+    print('Prediction:', prediction.numpy()[0])
+
+    # Show the image
+    plt.imshow(img_array[0], cmap='gray')
+    plt.show()
+    ```
+
+    This code will load an image from a file, resize it to 28x28 pixels, convert it to grayscale, normalize it, and then pass it through the model to get a prediction. The prediction is then printed and the image is displayed.

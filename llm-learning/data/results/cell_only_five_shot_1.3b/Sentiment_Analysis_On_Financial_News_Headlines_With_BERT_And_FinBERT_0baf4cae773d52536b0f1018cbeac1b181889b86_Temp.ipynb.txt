@@ -1,0 +1,39 @@
+```python
+    import os
+    import shutil
+    import tempfile
+    from werkzeug.utils import secure_filename
+
+    def save_uploaded_file(file, destination):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(destination, filename))
+
+    def upload_file(request):
+        if 'file' not in request.files:
+            return 'No file part'
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            destination = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            save_uploaded_file(file, destination)
+            return 'File uploaded successfully'
+        else:
+            return 'Invalid file type'
+
+    def allowed_file(filename):
+        return '.' in filename and \
+            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    ```
+    This code defines a function `upload_file` that takes a Werkzeug `request` object as input. It checks if a file is present in the request, and if it is, it saves it to the specified destination. The function also checks if the file is of an allowed type.
+
+    The function `save_uploaded_file` is a helper function that saves a file to a specified destination. It uses the `secure_filename` function to ensure that the file name is safe to use in a URL.
+
+    The function `allowed_file` checks if a file's extension is in the list of allowed extensions.
+
+    The `upload_file` function is then used in a route handler to handle file uploads.
+
+    Please note that you need to set the `UPLOAD_FOLDER` configuration variable to the directory where you want to save the uploaded files.
+
+    Also, the `ALLOWED_EXTENSIONS` variable should be a list of allowed file extensions.
+
+    This code is a simple example and may not cover all edge cases.

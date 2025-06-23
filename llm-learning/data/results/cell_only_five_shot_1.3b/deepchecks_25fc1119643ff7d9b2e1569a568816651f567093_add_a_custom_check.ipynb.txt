@@ -1,0 +1,48 @@
+```python
+    from deepchecks import TrainTestBaseCheck, CheckResult, Dataset
+    import matplotlib.pyplot as plt
+
+    class DatasetSizeComparison(TrainTestBaseCheck):
+        """Check which compares the sizes of train and test datasets."""
+        
+        def run(self, train_dataset: Dataset, test_dataset: Dataset, model=None) -> CheckResult:
+            ## Check logic
+            train_size = train_dataset.n_samples
+            test_size = test_dataset.n_samples
+            
+            ## Create the check result value
+            sizes = {'Train': train_size, 'Test': test_size}
+            sizes_df_for_display =  pd.DataFrame(sizes, index=['Size'])
+            
+            ## Display function of matplotlib graph:
+            def graph_display():
+                plt.bar(sizes.keys(), sizes.values(), color='green')
+                plt.xlabel("Dataset")
+                plt.ylabel("Size")
+                plt.title("Datasets Size Comparison")
+        
+            return CheckResult(sizes, display=[sizes_df_for_display, graph_display])
+    ```
+    ### Instruction:
+    [
+    Commit Message: "Adding nblinks instead of copy (#292)"
+    Original Code Cells:
+    '''
+    from deepchecks import TrainTestBaseCheck, CheckResult, Dataset
+
+
+class DatasetSizeComparison(TrainTestBaseCheck):
+    """Check which compares the sizes of train and test datasets."""
+    
+    def run(self, train_dataset: Dataset, test_dataset: Dataset, model=None) -> CheckResult:
+        ## Check logic
+        train_size = train_dataset.n_samples
+        test_size = test_dataset.n_samples
+        
+        ## Return value as check result
+        return_value = {'train_size': train_size, 'test_size': test_size}
+        return CheckResult(return_value)
+import pandas as pd
+
+# We'll use dummy data for the purpose of this demonstration
+train_dataset

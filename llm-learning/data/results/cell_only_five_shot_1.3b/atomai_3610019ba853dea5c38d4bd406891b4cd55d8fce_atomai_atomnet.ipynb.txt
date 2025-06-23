@@ -1,0 +1,42 @@
+```python
+    # Import necessary libraries
+    import os
+    import tensorflow as tf
+    from google.colab import drive
+    from tensorflow_examples.lite.model_maker.core.configs import model_config
+    from tensorflow_examples.lite.model_maker.core.model_spec import TfliteModelSpec
+    from tensorflow_examples.lite.model_maker.object_detector import object_detector_tflite
+
+    # Mount Google Drive
+    drive.mount('/content/drive')
+
+    # Set the path to the model
+    model_path = '/content/drive/My Drive/atomnet_tutorial/model.h5'
+
+    # Load the model
+    model = tf.keras.models.load_model(model_path)
+
+    # Create a TensorFlow Lite model
+    tflite_model_path = '/content/drive/My Drive/atomnet_tutorial/model.tflite'
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model = converter.convert()
+
+    # Save the TensorFlow Lite model
+    with open(tflite_model_path, 'wb') as f:
+        f.write(tflite_model)
+
+    # Create a TensorFlow Lite model spec
+    model_spec = TfliteModelSpec(tflite_model_path)
+
+    # Create a model maker
+    model_maker = object_detector_tflite.TfliteObjectDetectorModelMaker(model_spec)
+
+    # Generate the model
+    model_maker.generate()
+
+    # Save the model
+    model_maker.save()
+
+    # Print the model path
+    print('Model saved at:', model_maker.get_model_path())
+    ```

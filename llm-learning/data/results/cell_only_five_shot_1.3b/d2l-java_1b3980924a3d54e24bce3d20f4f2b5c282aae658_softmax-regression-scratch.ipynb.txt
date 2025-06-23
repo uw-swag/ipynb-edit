@@ -1,0 +1,17 @@
+```python
+    import matplotlib.pyplot as plt
+
+    def display_images(images, labels, width, height, scale):
+        fig, axs = plt.subplots(1, len(images), figsize=(scale*width, scale*height))
+        for ax, img, label in zip(axs, images, labels):
+            ax.imshow(img.reshape(width, height), cmap='gray')
+            ax.set_title(f'Label: {label}')
+        plt.show()
+
+    # Uncomment the following line to display the images
+    # display_images(images, labels, WIDTH, HEIGHT, SCALE)
+    ```
+
+    The code above is a function that displays the images. The function takes the images, their labels, the width, height, and scale as parameters. It then creates a subplot with the number of images equal to the length of the images list. For each image, it reshapes the image to the specified width and height, and displays it in grayscale. The title of each image is set to the label of the image. Finally, it displays the plot.
+
+    The commented out line of code is the function call that displays the images. Uncommenting it will display the images with their corresponding labels.

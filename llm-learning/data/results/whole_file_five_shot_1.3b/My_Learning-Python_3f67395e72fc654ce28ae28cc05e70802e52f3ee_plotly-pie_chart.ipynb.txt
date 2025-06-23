@@ -1,0 +1,66 @@
+
+    ### Instruction:
+    [
+    Commit Message: "added line chart, pie chart"
+    Original Code Cells:
+    '''
+<Cell_0>
+import pandas as pd
+import plotly
+from plotly.graph_objs import layout, pie
+<\Cell_0>
+<Cell_1>
+# Read data
+stores = pd.read_csv('./data/stores.csv')
+<\Cell_1>
+<Cell_2>
+stores.head()
+<\Cell_2>
+<Cell_3>
+types = stores['Type'].value_counts()
+labels = types.index
+values = types
+<\Cell_3>
+<Cell_4>
+labels_store = labels.tolist()
+values_store = values
+<\Cell_4>
+<Cell_5>
+trace_store = Pie(
+    values= values_store,
+    labels= labels_store,
+    domain= {"column":0},
+    name= "ABC Store",
+    hoverinfo= "label+value+percent+name",
+    hole= 0.2
+)
+<\Cell_5>
+<Cell_6>
+# Layout for both the pie charts in {row:1, col:2}
+layout_store = {
+    "title": "Total wafers run in A,B,C Shifts",
+    "grid": {"rows": 1, "columns": 3},
+    "annotations": [
+        {
+            "font": {"size": 20},
+            "showarrow": False,
+            "text": "A",
+            "x": 0.15,
+            "y": 0.5
+        },
+        {
+            "font": {"size": 20},
+            "showarrow": False,
+            "text": "B",
+            "x": 0.5,
+            "y": 0.5
+        }
+    ]
+}
+
+<\Cell_6>
+<Cell_7>
+# Pie Chart Plot
+# For plotting within the notebook.
+# plotly.offline.init_notebook_mode(connected=True)
+# plotly.off

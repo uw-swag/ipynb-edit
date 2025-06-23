@@ -1,0 +1,26 @@
+```python
+    class TestSuite:
+        def __init__(self):
+            self.tests = []
+
+        def add_test(self, test_func, description=''):
+            self.tests.append((test_func, description))
+
+        def run(self):
+            for test_func, description in self.tests:
+                try:
+                    test_func()
+                    print(f'Test "{description}" passed.')
+                except AssertionError as e:
+                    print(f'Test "{description}" failed. Error: {str(e)}')
+    ```
+
+    ### Example:
+    ```python
+    def test_addition():
+        assert add(1, 2) == 3
+
+    test_suite = TestSuite()
+    test_suite.add_test(test_addition, 'Test addition function')
+    test_suite.run()
+    ```

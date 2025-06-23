@@ -1,0 +1,11 @@
+```
+    with tf.variable_scope('loss'):
+    # Compute mean cross entropy loss for each output.
+    Y_true_flat = tf.reshape(tf.concat([1, Y], axis=0), [-1])
+    # logits are [batch_size x timesteps, n_chars] and
+    # Y_true_flat are [batch_size x timesteps]
+    loss = tf.nn.sparse_softmax_cross_entropy_with_logits(logits, Y_true_flat)
+    # Compute the mean over our `batch_size` x `timesteps` number of observations
+    mean_loss = tf.reduce_mean(loss)
+    ```
+    The `axis=0` argument in `tf.concat` is used to concatenate along the 0th axis, which is the first dimension.

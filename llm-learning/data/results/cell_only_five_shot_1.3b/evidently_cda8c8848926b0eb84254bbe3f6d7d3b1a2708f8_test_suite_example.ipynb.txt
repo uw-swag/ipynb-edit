@@ -1,0 +1,25 @@
+
+The code you provided is using the evidently library to compare two datasets. The visualization is created using matplotlib. The code is trying to compare the 'education-num' column in the 'adult' dataset. The 'education-num' column is a categorical variable, and the 'preds' column is a numerical variable with some noise.
+
+Here's a simple visualization of the comparison:
+
+```python
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Assuming that the 'preds' column in the current dataframe is the predicted values
+# and the 'target' column in the reference dataframe is the actual values
+
+# Create a histogram of the predicted values
+plt.hist(curr['preds'], bins=10, alpha=0.5, label='Predicted')
+
+# Create a histogram of the actual values
+plt.hist(ref['target'], bins=10, alpha=0.5, color='r', label='Actual')
+
+plt.legend()
+plt.show()
+```
+
+This code will create a histogram of the predicted values and a histogram of the actual values. The predicted values are on the left side of the histogram, and the actual values are on the right side. The histograms are normalized, which means they represent the proportion of data points that fall into each bin.
+
+Please note that the code you provided is not complete and does not run as expected. It is missing the part where the results of the comparison are stored and used to create the visualization.

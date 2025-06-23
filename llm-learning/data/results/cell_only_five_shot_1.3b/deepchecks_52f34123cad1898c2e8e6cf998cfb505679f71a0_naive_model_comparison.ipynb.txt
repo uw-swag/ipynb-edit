@@ -1,0 +1,51 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Mlc 171 fixes to naive and some more (#114)"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.datasets import load_iris
+
+    # Load iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Gaussian Naive Bayes model
+    gnb = GaussianNB()
+
+    # Train the model
+    gnb.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = gnb.predict(X_test)
+
+    # Print the confusion matrix
+    print(confusion_matrix(y_test, y_pred))
+
+    # Print the classification report
+    print(classification_report(y_test, y_pred))
+
+    # Plot the confusion matrix
+    plt.figure(figsize=(9,9))
+    plt.imshow(confusion_matrix(y_test, y_pred), interpolation='nearest', cmap=plt.cm.Blues)
+    plt.title('Confusion Matrix')
+    plt.show()
+
+    # Plot the classification report
+    plt.figure(figsize=(10,10))
+    plt.matshow(confusion_matrix(y_test, y_pred))
+    plt.title('Confusion Matrix')
+    plt.show()
+
+    # Plot the ROC curve
+    plt.figure(figsize=(10,10))
+    plt.plot([0

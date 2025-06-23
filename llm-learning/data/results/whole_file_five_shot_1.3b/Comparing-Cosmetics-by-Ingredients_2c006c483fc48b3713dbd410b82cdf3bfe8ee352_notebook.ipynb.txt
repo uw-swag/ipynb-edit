@@ -1,0 +1,19 @@
+```python
+    # Adding files via upload
+    from flaml.autogen.agent import UserProxyAgent
+
+    # Define a function to upload files
+    def upload_files(user, file_list):
+        for file in file_list:
+            user.upload(file)
+
+    # Define a function to download files
+    def download_files(user, file_list):
+        for file in file_list:
+            user.download(file)
+
+    # Use the function
+    upload_files(user, ["file1.txt", "file2.txt"])
+    download_files(user, ["file1.txt"])
+    ```
+    This code will upload the files "file1.txt" and "file2.txt" to the user's workspace, and then download the file "file1.txt" from the user's workspace.

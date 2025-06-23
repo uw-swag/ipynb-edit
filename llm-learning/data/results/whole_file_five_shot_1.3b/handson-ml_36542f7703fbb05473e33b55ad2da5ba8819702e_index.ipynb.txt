@@ -1,0 +1,41 @@
+
+    ## Achieving Reproducibility with TensorFlow
+
+    TensorFlow is a powerful open-source library developed by Google Brain Team. It is used for machine learning and deep learning tasks. However, achieving reproducibility in TensorFlow can be challenging due to the randomness and variability inherent in machine learning algorithms.
+
+    One way to achieve reproducibility in TensorFlow is by using a seed for the random number generator. This can be done using the `tf.set_random_seed()` function. The seed is a number that is used to initialize the random number generator. By setting a seed, you can ensure that the same random numbers are generated every time the code is run.
+
+    Here is an example of how to set a seed in TensorFlow:
+
+    ```python
+    import tensorflow as tf
+
+    tf.set_random_seed(0)
+
+    a = tf.constant([1, 2, 3], name='a')
+    b = tf.constant([4, 5, 6], name='b')
+    c = a + b
+
+    sess = tf.Session()
+    print(sess.run(c))
+    ```
+
+    In this example, the output will be the same every time the code is run, because the seed is set to 0.
+
+    Another way to achieve reproducibility in TensorFlow is by using the `tf.get_default_graph()` function. This function returns the default graph of the TensorFlow session. By setting the graph to `None`, you can ensure that the operations in the graph are not executed.
+
+    Here is an example of how to set the graph to `None` in TensorFlow:
+
+    ```python
+    import tensorflow as tf
+
+    a = tf.constant([1, 2, 3], name='a')
+    b = tf.constant([4, 5, 6], name='b')
+    c = a + b
+
+    sess = tf.Session()
+    sess.run(tf.global_variables_initializer())
+
+    print(sess.run(c))
+
+    tf.get_default_graph().as_graph_

@@ -1,0 +1,32 @@
+```python
+    # Univariate Gradient Descent
+    def univariate_gradient_descent(x_start, learning_rate, num_iterations):
+        x = x_start
+        history = []
+
+        for i in range(num_iterations):
+            gradient = compute_gradient(x)  # compute gradient at current point
+            x = x - learning_rate * gradient  # update point
+            history.append(x)
+
+        return history
+
+    # Compute gradient at current point
+    def compute_gradient(x):
+        # This is a placeholder. Replace it with your actual computation.
+        return 2 * x
+
+    # Test the function
+    x_start = 5
+    learning_rate = 0.01
+    num_iterations = 1000
+    history = univariate_gradient_descent(x_start, learning_rate, num_iterations)
+
+    # Plot the history
+    import matplotlib.pyplot as plt
+    plt.plot(history)
+    plt.xlabel('Iteration')
+    plt.ylabel('Value')
+    plt.show()
+    ```
+    This code demonstrates the univariate version of gradient descent. The `univariate_gradient_descent` function takes an initial point `x_start`, a `learning_rate`, and a number of `num_iterations`, and returns a list of the values at each iteration. The `compute_gradient` function is a placeholder for your actual computation of the gradient at a given point. The history of the gradient descent is then plotted.

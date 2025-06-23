@@ -1,0 +1,54 @@
+
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "modify to include outliers"
+    Original Code Cells:
+    '''
+    class ViolinPlot:
+
+    bb=1
+
+    def __init__(self,title):
+        #–  A list of lists
+        self.violinList=[]
+        self.violinListAc=[]
+        #– Values = true values
+        self.values= np.array([])
+        self.acvalues= np.array([])
+        #
+        self.title=title
+        self.axis_label=[]
+        # Max age
+        self.maxa=0
+
+        #– Prediction values
+        self.prediction= np.array([])
+        self.acprediction= np.array([])
+        #– Count is a list of #n predictions for each true value (class)
+        self.count= []
+        #– The maximum predicted value in each list (age class)
+        self.maxv=[]
+        #– MSE
+        self.mse=[]
+        #– Accuracy
+        self.accuracy=[]
+
+    #– – – – – – – – – – – – – – – – – – – –  – – – – – – – – – – – – – – – – – – – – –
+    def calculateAccuracy(self):
+
+        # Each bin of ages
+        for i in range(self.maxa):
+            age= int(i)+1
+            ac=0
+            a=0
+            # Loop through predictions in each bin
+            for x in range(self.count[i]):
+                pred= self.violinList[i][x]
+                d= pred - age
+                a=  int(abs(round(pred) - age)==0)
+                #print("age=",age, " prediction= ",pred, " accuracy = ",a)
+                ac+= a
+            # average
+            ac/=self

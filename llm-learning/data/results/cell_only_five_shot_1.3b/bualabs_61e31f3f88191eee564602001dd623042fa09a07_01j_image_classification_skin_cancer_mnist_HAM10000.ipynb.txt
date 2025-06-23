@@ -1,0 +1,22 @@
+```python
+    class WrapperClassForFocalLost:
+        def __init__(self, dls, resnet50, pretrained=True, alpha=0.5, gamma=2.0, reduction='mean'):
+            self.dls = dls
+            self.resnet50 = resnet50
+            self.pretrained = pretrained
+            self.alpha = alpha
+            self.gamma = gamma
+            self.reduction = reduction
+            self.loss_func = focal.FocalLoss(alpha=self.alpha, gamma=self.gamma, reduction=self.reduction)
+            self.learn = cnn_learner(dls, resnet50, pretrained=self.pretrained, 
+                                    loss_func=self.loss_func, 
+                                    cbs=[ShowGraphCallback]).to_fp16()
+
+        def fit_one_cycle(self, n_epochs):
+            self.learn.fit_one_cycle(n_epochs)
+
+        def fine_tune(self, n_epochs):
+            self.learn.fine_tune(n_epochs)
+    ```
+
+    This wrapper class `WrapperClassForFocalLost` is used to encapsulate the functionality of the `focal.FocalLoss` and `cnn_learner`. The `fit_one_cycle` and `fine_tune` methods are used to fit the model and fine-tune the model respectively.

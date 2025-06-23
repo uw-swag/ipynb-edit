@@ -1,0 +1,49 @@
+```
+    import pandas as pd
+    import warnings
+
+    warnings.filterwarnings('ignore')
+    warnings.simplefilter('ignore')
+
+    from sklearn import datasets
+    iris = datasets.load_iris()
+    iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+    iris_frame['target'] = iris.target
+    reference_data = iris_frame[:75]
+    current_data = iris_frame[75:]
+
+    from evidently.options import ColorOptions
+
+    color_scheme = ColorOptions()
+    color_scheme.primary_color = "#5a86ad"
+    color_scheme.fill_color = "#fff4f2"
+    color_scheme.zero_line_color = "#016795"
+    color_scheme.current_data_color = "#c292a1" 
+    color_scheme.reference_data_color = "#017b92"
+
+    from evidently.dashboard import Dashboard
+    from evidently.dashboard.tabs import CatTargetDriftTab
+    from evidently.dashboard.tabs import DataDriftTab
+
+    iris_data_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[color_scheme])
+    iris_data_drift_dashboard.calculate(reference_data, current_data, column_mapping=None)
+    iris_data_drift_dashboard.show()
+
+    from evidently.metric_preset import DataDriftPreset
+    from evidently.report import Report
+
+    report = Report(metrics=[DataDriftPreset()], options=[color_scheme])
+    report.run(current_data=current_data, reference_data=reference_data)
+    report
+
+    from evidently.test_preset import DataDriftTestPreset
+    from evidently.test_suite import TestSuite
+
+    data_quality_suite = TestSuite(
+        tests=[
+            DataDriftTestPreset(),
+        ],
+        options=[color_scheme],
+    )
+
+    data_quality_suite.run

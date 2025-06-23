@@ -1,0 +1,10 @@
+```
+    iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+    test_len = round(0.33*len(iris_df))
+    df_train = iris_df[:train_len]
+    df_test = iris_df[train_len:train_len+test_len]
+    df_val = iris_df[train_len+test_len:]
+    IntegrityCheckSuite.run(train_dataset=df_train, validation_dataset=df_val, check_datasets_policy='both')
+    ```
+
+    The commit message "Renamed validation to test" is a change in the code that changes the name of the validation dataset from "validation" to "test". This is a common practice in machine learning to separate the data into training, validation, and testing sets.

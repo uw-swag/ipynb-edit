@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.compose import ColumnTransformer
+    from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
+
+    # Define the preprocessing steps
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())
+    ])
+
+    categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+        ('onehot', OneHotEncoder(handle_unknown='ignore'))
+    ])
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, ['column1', 'column2', 'column3']),
+            ('cat', categorical_transformer, ['column4', 'column5', 'column6']),
+        ])
+
+    # Apply the preprocessing to the dataframe
+    df_processed = pd.DataFrame()
+    for df_batch in pd.read_csv('data.csv', chunksize=10000):
+        df_batch = preprocessor.fit_transform(df_batch)
+        df_processed = pd.concat([df_processed, df_batch])
+
+    # Save the processed dataframe
+    df_processed.to_csv('processed_data.csv', index=False)
+    ```

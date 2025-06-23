@@ -1,0 +1,31 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import psycopg2
+    from sqlalchemy import create_engine
+
+    # Establish a connection to the Postgres database
+    conn = psycopg2.connect(
+        dbname="your_database",
+        user="your_username",
+        password="your_password",
+        host="your_host",
+        port="your_port"
+    )
+
+    # Create an engine to interact with the database
+    engine = create_engine(conn)
+
+    # Read the user_friends table into a pandas DataFrame
+    user_friends_df = pd.read_sql_table("user_friends", engine)
+
+    # Read the checkins_expanded table into a pandas DataFrame
+    checkins_df = pd.read_sql_table("checkins_expanded", engine)
+
+    # Perform EDA on the data
+    # This will depend on the specifics of your data and what you're trying to achieve
+    # For example, you might want to check for missing values, outliers, etc.
+
+    # Close the connection to the database
+    conn.close()
+    ```

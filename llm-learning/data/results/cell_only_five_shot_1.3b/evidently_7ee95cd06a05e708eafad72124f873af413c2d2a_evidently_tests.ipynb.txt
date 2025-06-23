@@ -1,0 +1,25 @@
+```python
+    # Dataset for binary label and probabilistic classification
+    bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+    bcancer = bcancer_data.frame
+
+    bcancer_ref = bcancer.sample(n=300, replace=False)
+    bcancer_cur = bcancer.sample(n=200, replace=False)
+
+    bcancer_label_ref = bcancer_ref.copy(deep=True)
+    bcancer_label_cur = bcancer_cur.copy(deep=True)
+
+    model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+    model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+    bcancer_ref['prediction'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+    bcancer_cur['prediction'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+
+    bcancer_label_ref['prediction'] = model.predict(bcancer_label_ref[bcancer_data.feature_names.tolist()])
+    bcancer_label_cur['prediction'] = model.predict(bcancer_label_cur[bcancer_data.feature_names.tolist()])
+
+    # Adjusted code for color options
+    bcancer_label_ref.style.background_gradient(cmap='coolwarm')
+    bcancer_label_cur.style.background_gradient(cmap='coolwarm')
+    ```
+    The code above is adjusted to use a gradient color map for the prediction labels. The color map 'coolwarm' is used here, but you can replace it with any other color map that suits your needs.

@@ -1,0 +1,33 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from scipy.signal import argrelextrema
+
+    # Generating a simple signal
+    t = np.linspace(0, 10, 1000)
+    signal = np.sin(2 * np.pi * t) + np.sin(2 * np.pi * 2 * t)
+
+    # Finding local maxima and minima
+    maxima = argrelextrema(signal, np.greater)
+    minima = argrelextrema(signal, np.less)
+
+    # Plotting the signal
+    plt.figure(figsize=(10, 6))
+    plt.plot(t, signal, label='Signal')
+
+    # Plotting the local maxima
+    for i in maxima[0]:
+        plt.plot(t[i], signal[i], 'ro')
+
+    # Plotting the local minima
+    for i in minima[0]:
+        plt.plot(t[i], signal[i], 'go')
+
+    plt.title('Segmentation of Signals')
+    plt.xlabel('Time')
+    plt.ylabel('Signal')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    ```

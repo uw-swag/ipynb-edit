@@ -1,0 +1,30 @@
+```python
+    # Crop the output of a cell to make it easier to visualize on GitHub
+    from IPython.display import display, HTML
+
+    def crop_output(cell):
+        if cell.output_type == 'display_data':
+            if 'text/plain' in cell.data:
+                text = cell.data['text/plain']
+                if len(text) > 1000:
+                    text = text[:1000] + '...'
+                cell.data['text/plain'] = text
+            elif 'text/markdown' in cell.data:
+                text = cell.data['text/markdown']
+                if len(text) > 1000:
+                    text = text[:1000] + '...'
+                cell.data['text/markdown'] = text
+        return cell
+
+    for cell in notebook.cells:
+        display(crop_output(cell))
+    ```
+    This code will crop the output of a cell to 1000 characters if it's a text cell. If it's a code cell, it will crop the output to 1000 characters if it's a Python code cell.
+
+    Please note that this code will only work if the output of the cell is a text or markdown cell. If the output is an image, audio, or any other type of cell, this code will not work.
+
+    Also, this code will not work if the output of the cell is a rich text cell. If you want to crop the output of a rich text cell, you will need to use a different method.
+
+    Finally, this code will not work if the output of the cell is a display data cell. If you want to crop the output of a display data cell, you will need to use a different method.
+
+    This code is a simple way to crop the output of a cell to 1000 characters. If you want to crop the output of a cell to a different length, you will need to modify the code.

@@ -1,0 +1,45 @@
+```
+    The code you've provided is a rework of the `TargetDriftPreset` from the `evidently` library. The `TargetDriftPreset` is a class that provides a set of default metrics for target drift. The `remove_old_target_drift_presets` method is not part of the `TargetDriftPreset` class, so it's not included in the code you've provided.
+
+    However, if you're looking to remove the old target drift presets, you can do so by using the `remove_preset` method from the `Report` class. Here's an example:
+
+    ```python
+    from evidently.report import Report
+
+    # ...
+
+    # Create a report
+    report = Report(metrics=[
+        DataDriftPreset(),
+    ])
+
+    # Run the report
+    report.run(reference_data=adult_ref, current_data=adult_cur)
+
+    # Remove the old target drift preset
+    report.remove_preset('TargetDriftPreset')
+
+    # Run the report again
+    report.run(reference_data=adult_ref, current_data=adult_cur)
+    ```
+
+    This will remove the old target drift preset from the report, and the new one will be used.
+
+    Please note that the `remove_preset` method is not available in the current version of `evidently`. You may need to upgrade to the latest version of the library for this functionality.
+
+    Also, the `remove_preset` method is not part of the `TargetDriftPreset` class, so it's not included in the code you've provided.
+
+    If you're looking to remove the old target drift presets, you can do so by using the `remove_preset` method from the `Report` class. Here's an example:
+
+    ```python
+    from evidently.report import Report
+
+    # ...
+
+    # Create a report
+    report = Report(metrics=[
+        DataDriftPreset(),
+    ])
+
+    # Run the report
+    report.run(reference_data=adult_ref, current_data=adult_cur)

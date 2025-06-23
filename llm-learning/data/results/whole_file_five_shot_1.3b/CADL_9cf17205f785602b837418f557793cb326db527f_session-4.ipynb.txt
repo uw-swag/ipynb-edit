@@ -1,0 +1,50 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding more details to the code"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# First, let's get an image:
+og = plt.imread('clinton.png')[..., :3]
+plt.imshow(og)
+print(og.min(), og.max())
+<\Cell_0>
+<Cell_1>
+# Now call the preprocess function.  This will preprocess our
+# image ready for being input to the network, except for changes
+# to the dimensions.  I.e., we will still need to convert this
+# to a 4-dimensional Tensor once we input it to the network.
+img = net['preprocess'](og)[np.newaxis]
+print(img.min(), img.max())
+<\Cell_1>
+<Cell_2>
+deprocessed = ...
+plt.imshow(deprocessed)
+plt.show()
+<\Cell_2>
+<Cell_3>
+nb_utils.show_graph(net['graph_def'])
+<\Cell_3>
+<Cell_4>
+net['labels']
+<\Cell_4>
+<Cell_5>
+# Load the VGG network.  Scroll back up to where we loaded the inception
+# network if you are unsure.  It is inside the "vgg16" module...
+net = ..
+
+assert(net['labels'][0] == (0, 'n01440764 tench, Tinca tinca'))
+<\Cell_5>
+<Cell_6>
+# Let's get the softmax layer
+print(names[-2])
+layer = g.get_tensor_by_name(names[-2] + ":0")
+
+# And find its shape
+with tf.Session(graph=g) as sess, g.device(device):
+    layer_shape = tf.shape(layer).eval(feed_dict={x:img})
+
+# We can find out how many neurons it has by feeding it an image and
+# calculating the shape.  The number of output channels is

@@ -1,0 +1,47 @@
+```python
+    # Import necessary libraries
+    import torch
+    from torch.utils.data import DataLoader, Dataset
+    from torchvision import transforms
+    from torchvision.datasets import MNIST
+
+    # Define a custom dataset
+    class CustomDataset(Dataset):
+        def __init__(self, data, targets, transform=None):
+            self.data = data
+            self.targets = targets
+            self.transform = transform
+
+        def __len__(self):
+            return len(self.data)
+
+        def __getitem__(self, idx):
+            x = self.data[idx]
+            y = self.targets[idx]
+
+            if self.transform:
+                x = self.transform(x)
+
+            return x, y
+
+    # Define transformations
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.1307,), (0.3081,))
+    ])
+
+    # Load the dataset
+    train_set = CustomDataset(MNIST(root='./data', train=True, download=True, transform=transform),
+                              MNIST(root='./data', train=True, download=True, transform=transform).targets)
+    test_set = CustomDataset(MNIST(root='./data', train=False, download=True, transform=transform),
+                             MNIST(root='./data', train=False, download=True, transform=transform).targets)
+
+    # Create data loaders
+    train_loader = DataLoader(train_set, batch_size=64, shuffle=True)
+    test_loader = DataLoader(test_set, batch_size=64, shuffle=False)
+
+    # Create a DataBunch
+    from fastai.data.core import DataBunch
+    data_bunch = DataBunch(train_loader, test_loader)
+    ```
+    This refactoring creates a `DataBunch` object, which is a PyTorch-based abstraction for handling data in machine learning models. It provides a simple and efficient way to handle data in PyTorch models

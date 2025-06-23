@@ -1,0 +1,40 @@
+
+    def select_features(df, correlation, variance, unique_vals):
+        target = 'SalePrice'
+        features = []
+    
+        # Drop the columns due to colinearity
+        dropped_colinearity = ['1st Flr SF', 'TotRms AbvGrd', 'Full Bath', 
+                           'Half Bath', 'Garage Cars', 'Bsmt Full Bath', '2nd Flr SF']
+        df = df.drop(dropped_colinearity.index, axis=1)
+    
+        # Drop each column that fails the correlation threshold
+        corrmat = df.select_dtypes(include=['int64','float64']).corr()
+        corrs = corrmat[target].abs()
+        weak_corrs = corrs[corrs < correlation]
+        df = df.drop(weak_corrs.index, axis=1)
+    
+        # Drop each column that fails the variance threshold
+        sorted_vars = corrmat[target].sort_values(ascending=False)
+        drop_vars = sorted_vars[sorted_vars < variance]
+        df = df.drop(drop_vars.index, axis=1)
+    
+        # Drop each column that has too many unique values
+        unique_counts = df.select_dtypes(include=['int64','float64']).nunique()
+        drop_vars = unique_counts[unique_counts > unique_vals].index
+        df = df.drop(drop_vars, axis=1)
+    
+        return df
+
+    # Quick Check that we get the same results as above
+    df = select_features(data, 0.05, 0.015, 16)
+    print(df.isnull().sum())
+    df.info()
+    # Display the variance for each numerical training feature
+    # Of the remaining features, a variance check will be done
+    # Those with low variance (<0.015) will be dropped
+
+    numerical = df.select_dtypes(include=['int64','float64'])
+
+    # Rescale the numerical columns
+    unit = (numerical - numerical.min()) / (numer

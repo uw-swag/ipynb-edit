@@ -1,0 +1,14 @@
+```python
+    from multiprocessing import Pool
+
+    def f(x):
+        return x*x
+
+    if __name__ == '__main__':
+        with Pool(5) as p:
+            print(p.map(f, [1, 2, 3, 4, 5]))
+    ```
+
+    This code will create a pool of 5 workers and use them to apply the function `f` to the list [1, 2, 3, 4, 5]. The result will be printed out.
+
+    Please note that this is a simple example and real-world usage may require more complex setup and handling.

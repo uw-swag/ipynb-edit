@@ -1,0 +1,23 @@
+
+The code you provided is splitting the VisionData and removing the formatters. The VisionData class in Deepchecks is used to load and manage datasets for machine learning models. It automatically infers the number of classes and label map from the dataset, and it also provides a way to format the images and labels.
+
+However, the code you provided is not actually splitting the VisionData. The VisionData class in Deepchecks is designed to load and manage datasets for machine learning models. It automatically infers the number of classes and label map from the dataset, and it also provides a way to format the images and labels.
+
+If you want to split the VisionData, you can use the `train_test_split` function from the `sklearn.model_selection` module. Here's an example:
+
+```python
+from sklearn.model_selection import train_test_split
+
+# Assuming `train_ds` is your VisionData object
+X_train, X_test, y_train, y_test = train_test_split(train_ds.images, train_ds.labels, test_size=0.2, random_state=42)
+
+# Now, `X_train` and `y_train` are your training images and labels, and `X_test` and `y_test` are your testing images and labels
+```
+
+In this example, `train_ds.images` and `train_ds.labels` are the images and labels from your original VisionData object, respectively. The `test_size` parameter is used to specify the proportion of the dataset to include in the test split, and `random_state` is used to make the split reproducible.
+
+After splitting, you can then use the `VisionData` class to create new datasets for training and testing:
+
+```python
+train_ds = VisionData(X_train, y_train, num_classes=80, label_map=coco.LABEL_MAP, image_formatter=ImageFormatter(coco.yolo_image_formatter))
+test_ds = VisionData(X_test, y_test, num_classes=80, label_map=coco.LABEL_MAP, image_formatter=ImageFormatter(coco.y

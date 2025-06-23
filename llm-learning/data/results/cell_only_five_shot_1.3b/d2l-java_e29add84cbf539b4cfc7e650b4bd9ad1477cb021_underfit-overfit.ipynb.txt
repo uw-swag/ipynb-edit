@@ -1,0 +1,42 @@
+```
+    int numEpochs = 400;
+    int logInterval = 20;
+
+    public ArrayDataset loadArray(NDArray features, NDArray labels, int batchSize, boolean shuffle) {
+        return new ArrayDataset.Builder()
+                .setData(features) // set the features
+                .optLabels(labels) // set the labels
+                .setSampling(batchSize, shuffle) // set the batch size and random sampling
+                .build();
+    }
+
+    double[] trainLoss = new double[numEpochs/logInterval];
+    double[] testLoss = new double[numEpochs/logInterval];
+    double[] epochCount = new double[numEpochs/logInterval];
+
+    int epochCountIndex = 0;
+
+    for (int i = 0; i < numEpochs; i++) {
+        // Training logic here
+        double loss = train(i);
+        trainLoss[epochCountIndex] = loss;
+
+        if (i % logInterval == 0) {
+            double testLoss = test(i);
+            testLoss[epochCountIndex] = testLoss;
+            epochCount[epochCountIndex] = i;
+            epochCountIndex++;
+        }
+    }
+
+    // You can also use the following code to plot the loss over epochs
+    // This is just an example and may not work as expected
+    LineChartDataSet trainLossDataSet = new LineChartDataSet(Arrays.asList(epochCount, trainLoss), "Train Loss", "Epoch");
+    LineChartDataSet testLossDataSet = new LineChartDataSet(Arrays.asList(epochCount, testLoss), "Test Loss", "Epoch");
+
+    LineChartData data = new LineChartData(Arrays.asList(trainLossDataSet, testLossDataSet));
+    ChartUtils.addAnnotations(data, Arrays.asList("Train Loss", "Test Loss"));
+    ChartUtils.saveChartAsPNG(data, "loss.png");
+    ```
+
+    This code will train your model for a number of epochs and log the training and test

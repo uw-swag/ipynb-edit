@@ -1,0 +1,28 @@
+```python
+    import numpy as np
+    import pandas as pd
+
+    # Assuming you have a DataFrame df with some NaN values
+    df = pd.DataFrame({
+        'A': [1, 2, np.nan, 4, 5],
+        'B': [5, np.nan, 3, 6, np.nan],
+        'C': [7, 8, 9, np.nan, 10]
+    })
+
+    # Checking for NaN values
+    print(df.isnull().sum())
+
+    # Fill NaN values with a specific value
+    df.fillna(value=0, inplace=True)
+
+    # Checking for NaN values again
+    print(df.isnull().sum())
+
+    # Adding more NaN values
+    df.loc[2, 'A'] = np.nan
+    df.loc[3, 'B'] = np.nan
+    df.loc[4, 'C'] = np.nan
+
+    # Checking for NaN values again
+    print(df.isnull().sum())
+    ```

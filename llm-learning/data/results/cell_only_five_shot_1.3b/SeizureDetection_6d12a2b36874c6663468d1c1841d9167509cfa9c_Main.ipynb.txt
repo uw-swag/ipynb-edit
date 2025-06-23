@@ -1,0 +1,62 @@
+```python
+    import numpy as np
+
+    # Assuming df is your DataFrame and it contains some numerical data
+    df = np.random.rand(10, 10)
+
+    # Dividing by zero is a common mistake in programming. Here's how you can handle it.
+    # We'll use np.nan to represent the division by zero.
+    df = np.where(df == 0, np.nan, df / df.sum(axis=1)[:, np.newaxis])
+
+    # Now, df should not contain any division by zero warnings.
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the mean of a list"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_mean(lst):
+        return sum(lst) / len(lst)
+
+    # Example usage:
+    numbers = [1, 2, 3, 4, 5]
+    mean = calculate_mean(numbers)
+    print(mean)  # Output: 3.0
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the median of a list"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def calculate_median(lst):
+        sorted_lst = sorted(lst)
+        length = len(sorted_lst)
+        if length % 2 == 0:
+            return (sorted_lst[length // 2 - 1] + sorted_lst[length // 2]) / 2
+        else:
+            return sorted_lst[length // 2]
+
+    # Example usage:
+    numbers = [1, 2, 3, 4, 5]
+    median = calculate_median(numbers)
+    print(median)  # Output: 3
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the mode of a list"
+   

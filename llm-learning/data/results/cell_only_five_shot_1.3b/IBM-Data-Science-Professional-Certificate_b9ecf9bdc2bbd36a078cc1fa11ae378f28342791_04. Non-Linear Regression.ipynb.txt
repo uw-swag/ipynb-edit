@@ -1,0 +1,30 @@
+```python
+    import os
+    import shutil
+
+    # Define the directory where the files are located
+    directory = '02. Regression'
+
+    # Define the new names for the files
+    new_names = {
+        'old_file1.py': 'new_file1.py',
+        'old_file2.py': 'new_file2.py',
+        # Add more files here
+    }
+
+    # Iterate over the files in the directory
+    for old_file in os.listdir(directory):
+        # Check if the file is in the new_names dictionary
+        if old_file in new_names:
+            # Get the new name
+            new_name = new_names[old_file]
+
+            # Get the full path of the old file
+            old_file_path = os.path.join(directory, old_file)
+
+            # Get the full path of the new file
+            new_file_path = os.path.join(directory, new_name)
+
+            # Rename the file
+            os.rename(old_file_path, new_file_path)
+    ```

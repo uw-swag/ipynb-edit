@@ -1,0 +1,60 @@
+```
+    [
+    Commit Message: "Finished labeling label_by_func, categorize."
+    Original Code Cells:
+    '''
+    <Cell_0>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.IMAGENETTE_160)
+path
+<\Cell_2>
+<Cell_3>
+import PIL, os, mimetypes
+Path.ls = lambda x : list(x.iterdir())
+<\Cell_3>
+<Cell_4>
+path.ls()
+<\Cell_4>
+<Cell_5>
+(path/'val').ls()
+<\Cell_5>
+<Cell_6>
+path_tench = path/'val'/'n01440764'
+<\Cell_6>
+<Cell_7>
+img_fn = path_tench.ls()[0]
+img_fn
+<\Cell_7>
+<Cell_8>
+plt.imshow(img)
+<\Cell_8>
+<Cell_9>
+imga = np.array(img)
+<\Cell_9>
+<Cell_10>
+imga.shape
+<\Cell_10>
+<Cell_11>
+imga[:10, :10, 0]
+<\Cell_11>
+<Cell_12>
+image_extensions = set(k for k, v in mimetypes.types_map.items() if v.startswith('image/'))
+<\Cell_12>
+<Cell_13>
+' '.join(image_extensions)
+<\Cell_13>
+<Cell_14>
+get_files(path_tench, image_extensions, recurse=True)[100:110]
+<\Cell_14>
+<Cell_15>
+get_files(path, image_extensions,

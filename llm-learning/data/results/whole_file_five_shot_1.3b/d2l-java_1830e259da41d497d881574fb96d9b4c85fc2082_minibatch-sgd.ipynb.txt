@@ -1,0 +1,40 @@
+```python
+    from pyspark.ml.feature import MinMaxScaler
+    from pyspark.ml.feature import VectorAssembler
+    from pyspark.ml.classification import LogisticRegression
+    from pyspark.ml.evaluation import BinaryClassificationEvaluator
+    from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+    from pyspark.ml.param import Param, IntegerParam, DoubleParam
+
+    # Load data
+    data = spark.read.format("libsvm").load("data/mllib/sample_libsvm_data.txt")
+
+    # Split the data into training and test sets (30% held out for testing)
+    (trainingData, testData) = data.randomSplit([0.7, 0.3])
+
+    # Specify the hyperparameter grid
+    grid = ParamGridBuilder()
+    grid = grid.addGrid(clf.regParam, [0.1, 0.01, 0.001])
+    grid = grid.addGrid(clf.fitIntercept, [True, False])
+    grid = grid.build()
+
+    # Create cross validator
+    cv = CrossValidator()
+    cv.setEstimator(clf)
+    cv.setEstimatorParamMaps(grid)
+    cv.setEvaluator(BinaryClassificationEvaluator())
+
+    # Perform cross-validation
+    cvModel = cv.fit(trainingData)
+
+    # Make predictions on test data
+    predictions = cvModel.transform(testData)
+
+    # Select (prediction, true label) and compute test error
+    evaluator = BinaryClassificationEvaluator()
+    testError = evaluator.evaluate(predictions)
+    print("Test Error = %g" % (1.0 - testError))
+
+    # Shutdown the Spark session
+    spark.stop()
+    ```

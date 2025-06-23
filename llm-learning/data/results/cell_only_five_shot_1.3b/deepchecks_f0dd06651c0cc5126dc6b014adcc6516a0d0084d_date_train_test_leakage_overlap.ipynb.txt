@@ -1,0 +1,37 @@
+```python
+    from deepchecks.tabular.checks.methodology import DateTrainTestLeakageOverlap
+    from deepchecks.tabular.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    def dataset_from_dict(d: dict, datetime_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, datetime_name=datetime_name)
+
+    # Split the data into train and test sets
+    train_data, test_data = data.train_test_split(test_size=0.2, random_state=42)
+
+    # Create a suite from the train data
+    suite_train = Suite(dataset_from_dict(train_data))
+
+    # Create a suite from the test data
+    suite_test = Suite(dataset_from_dict(test_data))
+
+    # Run the date train test leakage overlap check
+    date_train_test_leakage_overlap_check = DateTrainTestLeakageOverlap(suite_train, suite_test)
+    date_train_test_leakage_overlap_check.run()
+
+    # Run the date train test leakage overlap check
+    date_train_test_leakage_overlap_check = DateTrainTestLeakageOverlap(suite_train, suite_test)
+    date_train_test_leakage_overlap_check.run()
+
+    # Run the date train test leakage overlap check
+    date_train_test_leakage_overlap_check = DateTrainTestLeakageOverlap(suite_train, suite_test)
+    date_train_test_leakage_overlap_check.run()
+
+    # Run the date train test leakage overlap check
+    date_train_test_leakage_overlap_check = DateTrainTestLeakageOverlap(suite_train, suite_test)
+    date_train_test_leakage_overlap_check.run()
+
+    # Run the date train test leakage overlap check
+    date_train_test_le

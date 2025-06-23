@@ -1,0 +1,33 @@
+
+blob = np.zeros((28,28))
+blob[:2, :2 ] =1
+blob[-2:, :2] = 1
+blob[:2, -2: ] =1
+blob[-2:, -2:] = 1
+plt.imshow(blob)
+colors = np.linspace(10, 255, num =10)[::-1]
+colors
+colors = np.linspace(10, 255, num =10)
+colors
+x_train = np.load(oj("../data/ColorMNIST", "train_x_decoy.npy"))
+y_train = np.load(oj("../data/ColorMNIST", "train_y.npy"))
+y_train[2]
+x_train[3][0,0,0]
+plt.imshow(x_train[3][0])
+x_train[2][0,-1,-1]
+colors = np.linspace(10, 255, num =10)
+colors
+x_test = np.load(oj("../data/ColorMNIST", "test_x_decoy.npy"))
+y_test = np.load(oj("../data/ColorMNIST", "test_y.npy"))
+x_test[5][0,0,0]
+np.random.choice(255)
+plt.imshow(x_test[5][0])
+y_test
+train_x_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "train_x_decoy.npy")))
+train_y_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "train_y.npy"))).type(torch.int64)
+plt.imshow(train_x_tensor[0,0])
+train_x_tensor.numpy()
+test_x_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "test_x_decoy.npy")))
+test_y_tensor = torch.Tensor(np.load(oj("../data/ColorMNIST", "test_y.npy"))).type(torch.int64)
+plt.imshow(test_x_tensor[0,0])
+

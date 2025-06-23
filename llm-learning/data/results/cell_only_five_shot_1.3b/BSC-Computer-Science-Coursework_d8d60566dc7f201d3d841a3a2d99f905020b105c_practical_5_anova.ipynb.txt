@@ -1,0 +1,18 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from scipy import stats
+
+    # Load the dataset
+    data = pd.read_csv('your_data.csv')
+
+    # Perform ANOVA
+    aov_result = stats.f_oneway(data['column1'], data['column2'], data['column3'])
+
+    # Print the ANOVA result
+    print('ANOVA Result:', aov_result)
+    ```
+
+    In this code, replace 'your_data.csv' with the path to your actual data file, and 'column1', 'column2', and 'column3' with the names of the columns you want to analyze. The `f_oneway` function from the `scipy.stats` module is used to perform the ANOVA.
+
+    The ANOVA result is printed out at the end. The p-value is the significance level at which we reject the null hypothesis that all the groups have the same mean. If the p-value is less than the chosen significance level (usually 0.05), we reject the null hypothesis and conclude that at least one of the groups has a significantly different mean.

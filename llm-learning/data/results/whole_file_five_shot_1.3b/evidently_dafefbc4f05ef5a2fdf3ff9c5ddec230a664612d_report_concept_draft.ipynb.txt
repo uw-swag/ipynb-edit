@@ -1,0 +1,15 @@
+```
+    The error message you're seeing is because the `probability_distribution` function from the `evidently` library is used with wrong data. The function expects a 2D numpy array or a pandas DataFrame with two columns: 'probability' and 'distribution'. If the data is not in the correct format, the function will raise an error.
+
+    To fix this error, you need to ensure that your data is in the correct format. You can do this by using the `pd.DataFrame` function to create a DataFrame from your data, and then passing this DataFrame to the `probability_distribution` function.
+
+    Here's an example of how you can do this:
+
+    ```python
+    df = pd.DataFrame(data=adult_cur.iloc[:2000, 3:5], columns=['probability', 'distribution'])
+    df['probability_distribution'] = evidently.utils.probability_distribution(df['probability'], df['distribution'])
+    ```
+
+    This will create a new column 'probability_distribution' in your DataFrame, which is a 2D numpy array with the same shape as your data.
+
+    If you're still getting an error, please provide the data you're using and the specific error message you're seeing.

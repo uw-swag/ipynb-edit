@@ -1,0 +1,37 @@
+```python
+    ### Cell_0
+    import sys
+    sys.path.append("../../")
+    from reco_utils.recommender.deeprec.deeprec_utils import *
+    from reco_utils.recommender.deeprec.models.dkn import *
+    from reco_utils.recommender.deeprec.IO.dkn_iterator import *
+
+    ### Cell_1
+    import pandas as pd
+    import numpy as np
+    import torch, fastai
+    from fastai.collab import EmbeddingDotBias, collab_learner, CollabDataBunch, load_learner
+    from reco_utils.common.timer import Timer
+    from reco_utils.dataset import movielens
+    from reco_utils.dataset.python_splitters import python_stratified_split
+    from reco_utils.recommender.fastai.fastai_utils import cartesian_product, score
+    from reco_utils.evaluation.python_evaluation import map_at_k, ndcg_at_k, precision_at_k, recall_at_k
+    from reco_utils.evaluation.python_evaluation import rmse, mae, rsquared, exp_var
+
+    ### Cell_2
+    USER, ITEM, RATING, TIMESTAMP, PREDICTION, TITLE = 'UserId', 'MovieId', 'Rating', 'Timestamp', 'Prediction', 'Title'
+
+    ### Cell_3
+    TOP_K = 10
+    MOVIELENS_DATA_SIZE = '100k'
+    N_FACTORS = 40
+    EPOCHS = 5
+
+    ### Cell_4
+    ratings_df = movielens.load_pandas_df(
+        size=MOVIELENS_DATA_SIZE,
+        header=[USER,ITEM,RATING,TIMESTAMP]
+    )
+
+    ratings_df[USER] = ratings_df[USER].astype('str')
+    ratings_df[ITEM] = ratings_df[ITEM].astype('str')

@@ -1,0 +1,32 @@
+```python
+    # Importing necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Defining the function for convexity
+    def convexity(x, y):
+        n = len(x)
+        if n < 3:
+            return "Not enough points"
+        else:
+            # Calculating the convexity
+            convexity_val = (n * np.sum(x * y) - np.sum(x) * np.sum(y)) / ((n - 1) * np.sum(x**2) - np.sum(x)**2)
+            return convexity_val
+
+    # Defining the function for plotting the convexity
+    def plot_convexity(x, y):
+        convexity_val = convexity(x, y)
+        plt.figure(figsize=(10, 6))
+        plt.plot(x, y, label='y = %.2f' %convexity_val)
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.title('Convexity plot')
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+    # Testing the function
+    x = np.array([1, 2, 3, 4, 5])
+    y = np.array([2, 3, 4, 5, 6])
+    plot_convexity(x, y)
+    ```

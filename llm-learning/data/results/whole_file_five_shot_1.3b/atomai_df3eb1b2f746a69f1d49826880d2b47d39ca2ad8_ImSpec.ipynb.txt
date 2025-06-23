@@ -1,0 +1,15 @@
+```
+    ## Code: convert_images_to_jpeg.py
+    import os
+    import matplotlib.pyplot as plt
+
+    def convert_images_to_jpeg(input_folder, output_folder):
+        for filename in os.listdir(input_folder):
+            if filename.endswith(".png") or filename.endswith(".jpg"):
+                img = plt.imread(os.path.join(input_folder, filename))
+                plt.imsave(os.path.join(output_folder, filename), img)
+
+    convert_images_to_jpeg("input_folder_path", "output_folder_path")
+    ```
+    ## End of Code
+    ```

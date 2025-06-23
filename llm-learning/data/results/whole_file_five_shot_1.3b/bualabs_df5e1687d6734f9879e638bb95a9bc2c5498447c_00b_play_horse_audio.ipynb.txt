@@ -1,0 +1,50 @@
+```python
+    <Cell_0>
+    # Importing Libraries
+    import librosa
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import symphony
+    from symphony.audio import Audio
+    from symphony.audio.io import AudioFile
+    from symphony.midi import MidiFile
+    from symphony.midi.io import MidiFileWriter
+    from symphony.midi.midi_file import MIDI_EVENT_NOTE_ON, MIDI_EVENT_NOTE_OFF
+
+    # Loading Audio File
+    y, sr = librosa.load('path_to_your_audio_file.mp3')
+
+    # Displaying Audio Signal
+    plt.figure(figsize=(14, 5))
+    plt.plot(np.linspace(0, len(y), len(y)), y)
+    plt.title('Audio Signal')
+    plt.show()
+
+    # Playing Audio
+    audio = Audio(y, sr)
+    audio.play()
+
+    # Loading and Playing MIDI File
+    midi_file = MidiFile.read('path_to_your_midi_file.mid')
+    midi_events = midi_file.tracks[0].events
+    for event in midi_events:
+        print(event)
+    midi_file.play()
+
+    # Symphony No. 5 (Beethoven)
+    symphony.set_instrument('guitar')
+    symphony.play_note('E4')
+    time.sleep(1)
+    symphony.play_note('A4')
+    time.sleep(1)
+    symphony.play_note('D4')
+    time.sleep(1)
+    symphony.play_note('C4')
+    time.sleep(1)
+    symphony.play_note('B3')
+    time.sleep(1)
+    symphony.play_note('A3')
+    time.sleep(1)
+    symphony.play_note('G3')
+    time.sleep(1)
+    symphony.play_note('

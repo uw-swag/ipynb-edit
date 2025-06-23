@@ -1,0 +1,50 @@
+<Cell_0>
+current_temp = !xadc_get_value_temp
+<\Cell_0>
+<Cell_1>
+temp_value = float(current_temp[0][:5])
+<\Cell_1>
+<Cell_2>
+import time
+from IPython.display import display, clear_output
+
+temp_list = [temp_value] #Store the values here
+minutes = 10 # Time to record the temerature values
+rate = 5 # Record every 15 seconds
+
+t_end = time.time() + minutes * 60
+timer = int(t_end-time.time())
+while time.time() < t_end:
+    temp_value = float(current_temp[0][:5])
+    #Add a temperature to the list every 15 seconds
+    if (timer % rate) == 0:
+        temp_list.append(temp_value)
+        
+    clear_output(wait=True)
+    display('Collecting temperatures. Time left: '+str(timer)+' Seconds. '+str(len(temp_list)) + ' value(s) recorded.')
+    timer = int(t_end-time.time())
+    time.sleep(1)
+temp_list.append(temp_value)
+
+clear_output(wait=True)
+display('Collecting temperature finished ' + str(len(temp_list)) + ' values recorded.')
+<\Cell_2>
+<Cell_3>
+import matplotlib.pyplot as plt
+import numpy as np
+
+N = len(temp_list)
+t_vec = np.append(np.arange(0,minutes,minutes/4),minutes) # time vector for plotting
+
+plt.plot(t_vec,temp_list)  # Plot some data on the (implicit) axes.
+plt.xlabel('Time (Minutes)')
+plt.ylabel('Temprature (C)')
+plt.title("Temperature - Arcylic Case with Fan")
+plt.show()
+<\Cell_3>
+<Cell_4>
+
+<\Cell_4>
+<Cell_5>
+temp_list
+<\Cell_5>

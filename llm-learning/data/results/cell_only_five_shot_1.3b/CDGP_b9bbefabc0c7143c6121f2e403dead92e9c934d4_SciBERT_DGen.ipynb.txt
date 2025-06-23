@@ -1,0 +1,61 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Add fine-tune code"
+    Original Code Cells:
+    '''
+    from google.colab import drive
+drive.mount('/content/drive')
+cd /content/drive/My Drive/ML
+ls -l
+from tqdm.notebook import tqdm
+import json
+import re
+import os
+import nltk
+nltk.download('punkt')
+import json
+
+with open(r"./datasets/DGen/total_new_cleaned_train.json", "r") as file:
+    questions = json.load(file)
+
+print("train:", len(questions))
+
+input_list = list()
+label_list = list()
+
+for question in tqdm(questions):
+    sent = question["sentence"] + " [SEP] " + question["answer"]
+    dis_input = sent.replace("**blank**", "[MASK]")
+    diss = question["distractors"]
+
+    for dis in diss:
+        dis_label = sent.replace("**blank**", dis)
+
+        input_list.append(dis_input)
+        label_list.append(dis_label)
+
+        # print(dis_input)
+        # print(dis_label)
+        # print("-"*50)
+print(len(input_list))
+print(len(label_list))
+print(input_list[:10])
+print(label_list[:10])
+max_len = 0
+
+# For every sentence...
+for input in input_list:
+
+    # Tokenize the text and add `[CLS]` and `[SEP]` tokens.
+    input_ids = tokenizer.encode(input, add_special_tokens=True)
+
+    # Update the maximum sentence length.
+    max_len = max(max_len, len(input_ids))
+
+print('Max sentence length: ', max_len)
+!pip install transformers datasets
+MAX_LENGTH = 32
+BATCH_SIZE = 128
+EPOCH = 1
+data_dic = {"input": input_list, "label": label_list}

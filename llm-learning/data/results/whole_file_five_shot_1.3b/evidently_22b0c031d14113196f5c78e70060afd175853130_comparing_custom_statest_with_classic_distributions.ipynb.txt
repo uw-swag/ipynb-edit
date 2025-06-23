@@ -1,0 +1,48 @@
+
+    ### Instruction:
+    [
+    Commit Message: "update presets and data drift parameters (#43)"
+    Original Code Cells:
+    '''
+    import boto3
+    import pandas as pd
+    import numpy as np
+
+    from scipy import stats
+
+    from sklearn import datasets, ensemble, model_selection
+
+    from plotly import graph_objs as go
+
+    data_drift_dataset_tests = TestSuite(tests=[
+        TestColumnValueDrift(column_name="test_group"),
+        TestColumnValueDrift(column_name="test_group"),
+    ])
+
+    data_drift_dataset_tests.run(reference_data=smp_df, current_data=cntr_df)
+
+    df = pd.DataFrame()
+
+    for n in range(100,2100,100):
+        
+        data_drift_dataset_tests.run(reference_data=smp_df[0:n], current_data=cntr_df[0:n])
+        df = create_test_result_dataset(data_drift_dataset_tests)
+        df['data_length'] = n
+        df_n=pd.concat([df_n, df])
+<\Cell_24>
+<Cell_25>
+#Your distrubution
+fig = go.Figure()
+fig.add_trace(go.Histogram(x=normal, nbinsx=40, name='normal'))
+fig.add_trace(go.Histogram(x=normal2, nbinsx=40, name='normal2'))
+
+fig.show()
+<\Cell_25>
+<Cell_26>
+#Your distrubution
+df_n=pd.DataFrame()
+
+for n in range(100,2100,100):
+    
+    data_drift_dataset_tests.run(reference_data=smp_df[0:n], current_data=cntr_df[0:n])
+    df = create_test_result_dataset(data_drift_dataset_tests

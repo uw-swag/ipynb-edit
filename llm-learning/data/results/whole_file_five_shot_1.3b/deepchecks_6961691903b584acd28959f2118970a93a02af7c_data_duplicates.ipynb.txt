@@ -1,0 +1,30 @@
+```python
+    from deepchecks.checks.integrity.data_duplicates import DataDuplicates
+    from deepchecks.base import Dataset, Suite
+    from datetime import datetime
+    import pandas as pd
+
+    # Create a DataFrame
+    df = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],"col2":[1,2,1,2,1,2,1,2,1,2],"col3":[2,3,4,4,4,3,4,5,6,4]})
+
+    # Create a Suite
+    suite = Suite(df)
+
+    # Add the DataDuplicates check
+    suite.add_check(DataDuplicates())
+
+    # Run the Suite
+    suite.run()
+
+    # Create a DataFrame without duplicates
+    df_no_dups = pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],"col2":[1,2,1,2,1,2,1,2,1,2],"col3":[1,2,3,4,5,6,7,8,9,0]})
+
+    # Create a Suite with the new DataFrame
+    suite_no_dups = Suite(df_no_dups)
+
+    # Add the DataDuplicates check
+    suite_no_dups.add_check(DataDuplicates(ignore_columns=["col3"]))
+
+    # Run the Suite
+    suite_no_dups.run()
+    ```

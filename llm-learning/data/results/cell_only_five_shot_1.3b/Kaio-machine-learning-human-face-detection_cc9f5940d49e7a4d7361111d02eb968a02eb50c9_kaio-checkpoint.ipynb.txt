@@ -1,0 +1,17 @@
+```
+    df_sad.loc[:, 'rate_blink'] = df_sad.apply(lambda x: (x['rate_blink_left'] + x['rate_blink_right'] ) / 2, axis=1)
+    df_angry.loc[:, 'rate_blink'] = df_angry.apply(lambda x : (x['rate_blink_left'] + x['rate_blink_right'] ) / 2, axis=1)
+    df_happy.loc[:, 'rate_blink'] = df_happy.apply(lambda x : (x['rate_blink_left'] + x['rate_blink_right'] ) / 2, axis=1)
+
+    fig, ax = plt.subplots(nrows=1, ncols=3, figsize=(15,4))
+
+    df_sad.plot.scatter(x='rate_blink', y='rate_smile_or_not', color='b', label='sad', ax=ax[0])
+    df_angry.plot.scatter(x='rate_blink', y='rate_smile_or_not', color='r', label='angry', ax=ax[1])
+    df_happy.plot.scatter(x='rate_blink', y='rate_smile_or_not', color='g', label='happy', ax=ax[2])
+
+    cor_sad = df_sad[['rate_blink', 'rate_smile_or_not']].corr(method='pearson').values[0][1]
+    cor_angry = df_angry[['rate_blink', 'rate_smile_or_not']].corr(method='pearson').values[0][1]
+    cor_happy = df_happy[['rate_blink', 'rate_smile_or_not']].corr(method='pearson').values[0][1]
+
+    print("Corr Sad: {:.2f}".format(cor_sad))
+    print("Corr Angry:

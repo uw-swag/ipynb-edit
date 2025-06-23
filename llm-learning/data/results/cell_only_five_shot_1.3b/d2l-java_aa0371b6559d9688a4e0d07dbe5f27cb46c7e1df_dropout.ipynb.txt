@@ -1,0 +1,40 @@
+```java
+    import java.nio.file.*;
+
+    import ai.djl.Device;
+    import ai.djl.*;
+    import ai.djl.engine.Engine;
+    import ai.djl.metric.*;
+    import ai.djl.ndarray.*;
+    import ai.djl.ndarray.types.*;
+    import ai.djl.ndarray.index.*;
+    import ai.djl.nn.*;
+    import ai.djl.nn.core.*;
+    import ai.djl.training.*;
+    import ai.djl.training.initializer.*;
+    import ai.djl.training.loss.*;
+    import ai.djl.training.listener.*;
+    import ai.djl.training.evaluator.*;
+    import ai.djl.training.optimizer.*;
+    import ai.djl.training.optimizer.learningrate.*;
+    import ai.djl.training.dataset.*;
+    import ai.djl.util.*;
+    import java.util.Random;
+    import ai.djl.training.listener.TrainingListener;
+    import ai.djl.basicdataset.FashionMnist;
+    import ai.djl.training.dataset.Dataset;
+    import ai.djl.nn.norm.Dropout;
+    tech.tablesaw.api.*;
+    tech.tablesaw.plotly.api.*;
+    tech.tablesaw.plotly.components.*;
+    tech.tablesaw.plotly.Plot;
+    tech.tablesaw.plotly.components.Figure;
+    org.apache.commons.lang3.ArrayUtils;
+    Map<String, double[]> evaluatorMetrics = new HashMap<>();
+
+    LearningRateTracker lrt = LearningRateTracker.fixedLearningRate(0.5f);
+    Optimizer sgd = Optimizer.sgd().setLearningRateTracker(lrt).build();
+
+    Loss loss = Loss.softmaxCrossEntropyLoss();
+
+    DefaultTrainingConfig config = new

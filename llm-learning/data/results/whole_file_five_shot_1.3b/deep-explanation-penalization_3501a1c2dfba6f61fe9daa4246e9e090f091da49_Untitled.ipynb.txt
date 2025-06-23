@@ -1,0 +1,24 @@
+```python
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import LabelEncoder
+
+    # Load the dataset
+    df = pd.read_csv('ISIC_2018_Task_2_Patch_Images.csv')
+
+    # Wrangle the data
+    # This step depends on the specifics of your data and the problem you're trying to solve.
+    # For example, you might need to handle missing values, normalize numerical data,
+    # convert categorical data to numerical, etc.
+
+    # For the sake of this example, let's just drop the 'target' column
+    df = df.drop('target', axis=1)
+
+    # Split the data into training and testing sets
+    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+
+    # Encode the categorical variables
+    le = LabelEncoder()
+    train_df['target'] = le.fit_transform(train_df['target'])
+    test_df['target'] = le.transform(test_df['target'])
+    ```

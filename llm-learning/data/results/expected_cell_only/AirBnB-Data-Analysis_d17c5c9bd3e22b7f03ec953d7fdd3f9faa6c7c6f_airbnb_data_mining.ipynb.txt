@@ -1,0 +1,74 @@
+# Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For random selection 
+import random
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Communicating with operating and file system
+import os
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+DATASET = "./data/train.csv"
+df = pd.read_csv(DATASET)
+df.info()
+df.head()
+neighbourhoods = df['neighbourhood'].value_counts().keys().tolist()
+months = df['month'].value_counts().keys().tolist()
+
+for neighbourhood in neighbourhoods:
+    for month in reversed(months):
+        print("{} in {}: {}".format(neighbourhood, month, 
+            df.loc[(df['neighbourhood'] == neighbourhood) & (df['month'] == month)]['month'].value_counts().tolist()[0]))
+    print("----------------------------")
+rand_neighbourhoods = random.choices(neighbourhoods, k=4)
+
+fig = plt.figure()
+
+for idx, rand_neighbourhood in enumerate(rand_neighbourhoods):
+    ax = fig.add_subplot(2, 2, idx+1)
+    df.loc[df['neighbourhood'] == rand_neighbourhood]['month'].value_counts().sort_values().plot(kind = 'bar', color = ['orange', 'dodgerblue', 'gray'], figsize = (8, 6))
+    ax.set_title(rand_neighbourhood)
+
+plt.tight_layout()
+plt.show()
+df['neighbourhood'].value_counts().plot(kind = 'bar', color = ['red','black'], figsize = (8, 6))
+plt.title('Histogram of variable neighbourhood', fontsize = 20)
+plt.xlabel('Neighbourhood')
+plt.ylabel('Number of entries')
+plt.show()
+list_of_neighs = scores.keys().tolist()
+n_scores = scores.tolist()
+# And print its members
+print("Top 5 neighbourhoods are: \n")
+for i,n in enumerate(list_of_neighs):
+    print('{} with {:.2f} review score'.format(n, n_scores[i]))

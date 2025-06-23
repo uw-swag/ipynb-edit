@@ -1,0 +1,21 @@
+```python
+    plt.figure(figsize=(6, 5))
+
+    X_inverse = pca.inverse_transform(X_reduced_rbf)
+
+    ax = plt.subplot(111, projection='3d')
+    ax.view_init(10, -70)
+    ax.scatter(X_inverse[:, 0], X_inverse[:, 1], X_inverse[:, 2], c=t, cmap=plt.cm.hot, marker="x")
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    ax.set_zlabel("")
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    ax.set_zticklabels([])
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.set_zticks([])
+
+    save_fig("preimage_plot", tight_layout=False)
+    plt.show()
+    ```

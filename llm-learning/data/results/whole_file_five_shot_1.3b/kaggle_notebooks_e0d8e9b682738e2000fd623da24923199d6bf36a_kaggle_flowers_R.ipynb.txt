@@ -1,0 +1,44 @@
+
+
+
+
+
+
+    ### Instruction:
+    [
+    Commit Message: "del old files"
+    Original Code Cells:
+    '''
+    <Cell_0>
+library(IRdisplay)
+library(repr)
+library(tensorflow)
+library(keras)
+library(imager)
+<\Cell_0>
+<Cell_1>
+display_html("<style> 
+@import url('https://fonts.googleapis.com/css?family=Orbitron|Roboto');
+body {background-color: gainsboro;} 
+a {color: #37c9e1; font-family: 'Roboto';} 
+h1 {color: #37c9e1; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #ccc;} 
+h2, h3 {color: slategray; font-family: 'Orbitron'; text-shadow: 4px 4px 4px #ccc;}
+h4 {color: #818286; font-family: 'Roboto';}
+span {text-shadow: 4px 4px 4px #ccc;}
+div.output_prompt, div.output_area pre {color: slategray;}
+div.input_prompt, div.output_subarea {color: #37c9e1;}      
+div.output_stderr pre {background-color: gainsboro;}  
+div.output_stderr {background-color: slategrey;}     
+</style>")
+<\Cell_1>
+<Cell_2>
+flowers <- read.csv("/Users/olgabelitskaya/cookbooks/flower_images/flower_labels.csv")
+head(flowers)
+<\Cell_2>
+<Cell_3>
+flower_targets <- as.matrix(flowers["label"])
+flower_targets <- keras::to_categorical(flower_targets, 10)
+head(flower_targets)
+<\Cell_3>
+<Cell_4>
+image_paths <- list.files("/Users/olgabelitskaya/cookbooks

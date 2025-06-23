@@ -1,0 +1,33 @@
+```python
+    # Importing necessary libraries
+    from azure.identity import DefaultAzureCredential
+    from azure.storage.blob import BlobServiceClient, BlobClient, ContainerClient
+
+    # Set up the Azure Blob Storage client
+    credential = DefaultAzureCredential()
+    blob_service_client = BlobServiceClient(account_url="your_storage_account_url", credential=credential)
+    container_client = blob_service_client.get_container_client("your_container_name")
+
+    # Upload an image to Azure Blob Storage
+    blob_client = container_client.get_blob_client("your_blob_name")
+    with open("path_to_your_image_file", "rb") as data:
+        blob_client.upload_blob(data)
+
+    # Download an image from Azure Blob Storage
+    blob_client = container_client.get_blob_client("your_blob_name")
+    with open("path_to_save_image_file", "wb") as data:
+        download_stream = blob_client.download_blob().readall()
+        data.write(download_stream)
+    ```
+
+    This code snippet shows how to use Azure Blob Storage to store and retrieve images. The `DefaultAzureCredential` class is used to authenticate the client to the Azure Storage account. The `BlobServiceClient` and `BlobClient` classes are used to interact with the Azure Blob Storage.
+
+    Please replace `"your_storage_account_url"`, `"your_container_name"`, `"your_blob_name"`, `"path_to_your_image_file"`, and `"path_to_save_image_file"` with your actual values.
+
+    Also, make sure that the Azure SDK is installed in your environment. If not, you can install it using pip:
+
+    ```bash
+    pip install azure-storage-blob
+    ```
+
+    This code assumes that you have the necessary permissions to read and write to the specified Azure Blob Storage container.

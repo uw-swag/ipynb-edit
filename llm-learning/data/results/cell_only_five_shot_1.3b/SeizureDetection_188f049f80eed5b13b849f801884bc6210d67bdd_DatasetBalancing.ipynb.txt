@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+from keras.models import Sequential
+from keras.layers import LSTM, Dense, Dropout, Bidirectional
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from imblearn.over_sampling import SMOTE
+
+# Load the data
+df = pd.read_csv('data.csv')
+
+# Preprocess the data
+smote = SMOTE()
+X, y = smote.fit_resample(df.drop('target', axis=1), df['target'])
+
+# Normalize the data
+scaler = MinMaxScaler()
+X = scaler.fit_transform(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create the first LSTM model
+model1 = Sequential()
+model1.add(Bidirectional(LSTM(50, activation='relu'), input_shape=(X_train.shape[1], 1)))
+model1.add(Dropout(0.2))
+model1.add(Dense(1, activation='sigmoid'))
+model1.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Fit the model
+history1 = model1.fit(X_train, y_train, epochs=10, validation_data=(X_test, y_test), verbose=0)
+
+# Create the second LSTM model
+model2 = Sequential()
+model2.add(Bidirectional(LSTM(50, activation='relu'), input_shape=(X_train.shape[1], 1)))
+model2.add(Dropout(0.2))
+model2.add(Dense(1, activation='sigmoid'))
+model2.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+
+# Fit the model
+history2 = model

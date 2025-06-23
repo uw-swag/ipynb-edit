@@ -1,0 +1,44 @@
+```python
+    # Importing the required libraries
+    import pytest
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Load the iris dataset
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+
+    # Split the dataset into a training set and a test set
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Create a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=42)
+
+    # Train the classifier
+    clf.fit(X_train, y_train)
+
+    # Define a test function
+    def test_model():
+        # Use the trained classifier to make predictions on the test set
+        y_pred = clf.predict(X_test)
+
+        # Check if the predictions match the true labels
+        assert np.array_equal(y_pred, y_test)
+
+    # Define a test preset
+    def test_preset():
+        # Use the trained classifier to make predictions on the test set
+        y_pred = clf.predict(X_test)
+
+        # Check if the predictions match the true labels
+        assert np.array_equal(y_pred, y_test)
+
+    # Run the test function
+    test_model()
+
+    # Run the test preset
+    test_preset()
+    ```
+    This code will test the model using the iris dataset and the RandomForestClassifier. The test function tests if the model's predictions match the true labels, and the test preset tests if the model's predictions match the true labels.

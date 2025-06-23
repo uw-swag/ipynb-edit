@@ -1,0 +1,50 @@
+
+    ### Instruction:
+    [
+    Commit Message: "rename parameters in simple metrics/tests presets (#456)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import numpy as np
+
+    from scipy.stats import mannwhitneyu
+    from sklearn import datasets
+
+    from evidently.calculations.stattests import StatTest
+    from evidently.test_suite import TestSuite
+    from evidently.tests import *
+<\Cell_11>
+<Cell_2>
+data_drift_column_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(all_features_stattest='psi'),
+])
+
+data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_column_tests
+<\Cell_2>
+<Cell_3>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(per_feature_stattest=per_feature_stattest),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_3>
+<Cell_4>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest='psi'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_4>
+<Cell_5>
+data_drift_dataset_tests = TestSuite(tests=[
+    TestShareOfDriftedColumns(num_features_stattest='psi'),
+])
+
+data_drift_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_drift_dataset_tests
+<\Cell_5>
+<Cell_6>
+data_drift_

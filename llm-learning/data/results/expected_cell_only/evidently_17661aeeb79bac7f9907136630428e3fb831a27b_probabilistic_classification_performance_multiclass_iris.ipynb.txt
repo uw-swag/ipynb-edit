@@ -1,0 +1,64 @@
+import pandas as pd
+
+from sklearn import datasets, model_selection, linear_model, neighbors
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import ProbClassificationPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import ProbClassificationPerformanceProfileSection
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+iris = datasets.load_iris()
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+iris_frame['target'] = iris.target
+train_data, test_data = model_selection.train_test_split(iris_frame, random_state=0)
+target = 'target'
+prediction = 'prediction'
+
+numerical_features = iris.feature_names
+categorical_features = []
+
+features = numerical_features + categorical_features
+model = linear_model.LogisticRegression()
+model.fit(train_data[features], train_data.target)
+# make a data frame with predictions for each class
+
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = iris.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = iris.target_names
+train_probas.head()
+# get labels for target: [0, 1, 0, 2] -> ['setosa', 'versicolor', 'setosa', 'virginica']
+
+train_data['target'] = [iris.target_names[x] for x in train_data['target']]
+test_data['target'] = [iris.target_names[x] for x in test_data['target']]
+# merge train and test data with predictions
+
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+merged_train_data.head()
+iris_column_mapping = ColumnMapping()
+
+iris_column_mapping.target = 'target'
+iris_column_mapping.prediction = iris.target_names.tolist()
+iris_column_mapping.numerical_features = iris.feature_names
+iris_prob_classification_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=1)])
+iris_prob_classification_dashboard.calculate(merged_train_data, merged_test_data, 
+                                             column_mapping = iris_column_mapping)
+iris_prob_classification_dashboard.show()
+# iris_prob_classification_dashboard.save('iris_prob_classification_dashboard.html')
+iris_prob_classification_dashboard = Dashboard(tabs=[ProbClassificationPerformanceTab(verbose_level=0)])
+iris_prob_classification_dashboard.calculate(merged_train_data, merged_test_data, 
+                                             column_mapping = iris_column_mapping)
+iris_prob_classification_dashboard.show()
+# iris_prob_classification_dashboard.save('iris_prob_classification_dashboard.html')
+iris_prob_classification_profile = Profile(sections=[ProbClassificationPerformanceProfileSection()])
+iris_prob_classification_profile.calculate(merged_train_data, merged_test_data, 
+                                           column_mapping = iris_column_mapping)
+iris_prob_classification_profile.json() 

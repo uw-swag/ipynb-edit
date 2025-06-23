@@ -1,0 +1,22 @@
+```python
+    class Model():
+        def __init__(self, n_in, nh, n_out):
+            self.layers = [nn.Linear(n_in, nh), nn.ReLU(), nn.Linear(nh, n_out)]
+            self.model = nn.Sequential(*self.layers)
+        def __call__(self, x):
+            return self.model(x)
+        def backward(self):
+            self.loss.backward()        
+            for l in reversed(self.layers):
+                l.backward()
+
+    class Model(nn.Module):
+        def __init__(self, n_in, nh, n_out):
+            super().__init__()
+            self.layers = [nn.Linear(n_in, nh), nn.Linear(nh, n_out)]
+            self.model = nn.Sequential(*self.layers)
+        def __call__(self, x):
+            return self.model(x)
+    ```
+
+    The refactored code is to move the layers into an instance variable of the class, and to use a sequential model instead of a linear layer. This is a common practice in PyTorch to avoid the need to manually implement the forward pass of a neural network.

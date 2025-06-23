@@ -1,0 +1,42 @@
+```python
+    from evidently import ColumnMapping
+    from evidently.report import Report
+    from evidently.test_suite import TestSuite
+
+    from evidently.metrics import ColumnCorrelationsMetric
+    from evidently.metrics import ColumnDistributionMetric
+    from evidently.metrics import ColumnDriftMetric
+    from evidently.metrics import ColumnValueRangeMetric
+
+    from evidently.tests import TestColumnDrift
+    from evidently.tests import TestValueRange
+    from evidently.tests import TestNumberOfOutRangeValues
+    from evidently.tests import TestShareOfOutRangeValues
+
+    from evidently.descriptors import TextLength, TriggerWordsPresence, OOV, NonLetterCharacterPercentage
+
+    # Assuming reviews is your DataFrame and it has columns: Rating, Review_Text
+    reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42) 
+    reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+
+    column_mapping = ColumnMapping(
+        reference_data=reviews_ref,
+        current_data=reviews_cur,
+        reference_column_mapping={
+            "Rating": "Rating",
+            "Review_Text": "Review_Text"
+        },
+        current_column_mapping={
+            "Rating": "Rating",
+            "Review_Text": "Review_Text"
+        }
+    )
+
+    table_column_test_suite = TestSuite(tests=[
+        TestColumnDrift(column_name=TextLength().for_column("Review_Text")),
+        TestValueRange(column_name=TextLength().for_column("Review_Text")),
+        TestNumberOfOutRangeValues(column_name=TextLength().for_column("Review_Text")),
+        TestShareOfOutRangeValues(column_name=TextLength().for_column("Review_Text"))
+    ])
+
+    table_column_test_suite.run(column_mapping=column_mapping)

@@ -1,0 +1,44 @@
+```
+    [
+    Commit Message: "format done, renamed folder"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from bs4 import BeautifulSoup
+    <\Cell_0>
+    <Cell_1>
+    # create a object containing the string with tags
+    soup = BeautifulSoup('<tr><th scope="col">Date</th><th scope="col">HS Code</th><th scope="col">Description</th><th scope="col">Origin Country</th><th scope="col">Port of Discharge</th><th scope="col">Unit</th><th scope="col">Quantity</th><th scope="col">Value (INR)</th><th scope="col">Per Unit (INR)</th></tr>')
+    <\Cell_1>
+    <Cell_2>
+    # create the list with all <th> tags
+    list_th=soup.find_all('th')
+    print(list_th)
+    <\Cell_2>
+    <Cell_3>
+    for th in list_th:
+        print(f'{th.text},')
+    <\Cell_3>
+    <Cell_4>
+    # open a file and if doesn't exist, creates one in the same directory
+    f = open("text.csv", "w+")
+    <\Cell_4>
+    <Cell_5>
+    # write the content
+    for th in list_th:
+        f.write(f'{th.text} \n')  # along a column
+    <\Cell_5>
+    <Cell_6>
+    # Don't forget to close the opened file
+    f.close()
+    <\Cell_6>
+    <Cell_7>
+    from bs4 import BeautifulSoup
+    import requests
+    import json
+    <\Cell_7>
+    <Cell_8>
+    URL = "https://dog.ceo/api/breed/labrador/images/random"
+    <\Cell_8>
+    <Cell_9>
+    response = requests.get(URL, verify= False

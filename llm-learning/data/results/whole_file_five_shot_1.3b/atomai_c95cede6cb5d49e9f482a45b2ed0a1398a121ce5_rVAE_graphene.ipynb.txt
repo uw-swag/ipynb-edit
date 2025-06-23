@@ -1,0 +1,50 @@
+```
+    ## Download dataset
+    !gdown https://drive.google.com/uc?id=1-JZSRjIjNjkR0ZQ8ffRDAZ2FID53Yhon
+    !gdown https://drive.google.com/uc?id=1-84vLdGFsimD1jaTcGcMzNRCSvjId7-Y
+    !gdown https://drive.google.com/uc?id=1-Lowglj7fwEFaJoC9EBKDyfCIsMgOnyu
+    ```
+
+    ## Install necessary packages
+    ```
+    !pip install -q atomai
+    ```
+
+    ## Import necessary libraries
+    ```
+    import matplotlib.gridspec as gridspec
+    import matplotlib.pyplot as plt
+    import numpy as np
+    import cv2
+    import atomai as aoi
+    ```
+
+    ## Load dataset
+    ```
+    STEM_real = np.load('3DStack13-1-exp.npy')
+    decoded_imgs = np.load('3DStack13-1-dec.npy')
+    lattice_coord = np.load('3DStack13-1-coord.npy', allow_pickle=True)[()]
+    ```
+
+    ## Plotting
+    ```
+    i = 10 # Choose movie frame
+    # ...
+    ```
+
+    ## Training model
+    ```
+    in_dim = (window_size, window_size)
+    rvae = aoi.models.rVAE(in_dim)
+    rvae.fit(X_train=imstack_train, X_test=imstack_test, training_cycles=200, batch_size=200)
+    ```
+
+    ## Visualization
+    ```
+    # ...
+    ```
+
+    ## Save model
+    ```
+    aoi.save(rvae, 'rvae.pkl')
+    ```

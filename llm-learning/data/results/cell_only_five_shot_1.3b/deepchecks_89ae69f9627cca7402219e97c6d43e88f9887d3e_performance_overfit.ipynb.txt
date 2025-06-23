@@ -1,0 +1,34 @@
+```python
+    # Create a Dataset from the iris data
+    dataset = Dataset.from_dataframe(iris.frame)
+
+    # Create a train-test split
+    train, test = dataset.train_test_split(test_size=0.2)
+
+    # Create a DeepChecks check
+    check = TrainTestDifferenceOverfit(train, test)
+
+    # Run the check
+    result = check.run()
+
+    # Print the result
+    print(result)
+
+    # Plot the result
+    result.plot()
+
+    # Show the plot
+    plt.show()
+
+    # Create a AdaBoost classifier
+    clf = AdaBoostClassifier()
+
+    # Train the classifier
+    clf.fit(train.X, train.y)
+
+    # Predict on the test set
+    preds = clf.predict(test.X)
+
+    # Print the accuracy
+    print("Accuracy:", (preds == test.y).mean())
+    ```

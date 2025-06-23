@@ -1,0 +1,23 @@
+
+    The code you provided is missing the parameter `experiment`. The function `Experiment` requires a parameter `experiment`, but it's not defined in the provided code. 
+
+    If you want to add a new `experiment` parameter, you can do it like this:
+
+    ```python
+    from ipynb.fs.full.EdfManipulation import read_and_store_data
+    from ipynb.fs.full.Experiments import Experiment
+    for experiment in experiments:
+        res = Experiment (df, channels, sample_rate, time_window, test_ratio, pca_tolerance, undersampling_method, undersampling_rate, undersampling_neighbors, oversampling_method, oversampling_neighbors, k_fold, epochs, batch, dropout_percentage, loss_function, metric, step, perfInd, experiment)
+        res.to_csv(experiment + '.csv')
+    ```
+
+    However, if `experiment` is a parameter of the `Experiment` class, you don't need to add it. The `Experiment` class should be able to handle a `experiment` parameter.
+
+    If `experiment` is a parameter of the `read_and_store_data` function, you can add it like this:
+
+    ```python
+    from ipynb.fs.full.EdfManipulation import read_and_store_data
+    from ipynb.fs.full.Experiments import Experiment
+    for experiment in experiments:
+        df, channels, sample_rate, time_window, test_ratio, pca_tolerance, undersampling_method, undersampling_rate, undersampling_neighbors, oversampling_method, oversampling_neighbors, k_fold, epochs, batch, dropout_percentage, loss_function, metric, step, perfInd = read_and_store_data(experiment)
+        res = Experiment (df, channels, sample_rate, time_window, test_ratio, pca_tolerance, undersampling_method, undersampling_rate, undersampling_neighbors, oversampling_method, oversampling_

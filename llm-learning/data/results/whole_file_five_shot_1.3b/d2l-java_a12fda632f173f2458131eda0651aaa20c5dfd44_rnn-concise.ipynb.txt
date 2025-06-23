@@ -1,0 +1,47 @@
+```python
+    <Cell_0>
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from torch.autograd import Variable
+    <\Cell_0>
+    <Cell_1>
+    class RNN(nn.Module):
+        def __init__(self, input_size, hidden_size, output_size):
+            super(RNN, self).__init__()
+            self.hidden_size = hidden_size
+            self.i2h = nn.Linear(input_size + hidden_size, hidden_size)
+            self.i2o = nn.Linear(input_size + hidden_size, output_size)
+            self.relu = nn.ReLU()
+
+        def forward(self, input, hidden):
+            combined = torch.cat((input, hidden), 1)
+            hidden = self.i2h(combined)
+            output = self.i2o(combined)
+            output = self.relu(output)
+            return output, hidden
+
+        def initHidden(self):
+            return torch.zeros(1, self.hidden_size)
+    <\Cell_1>
+    <Cell_2>
+    rnn = RNN(input_size=10, hidden_size=50, output_size=10)
+    criterion = nn.MSELoss()
+    optimizer = torch.optim.SGD(rnn.parameters(), lr=0.01)
+    <\Cell_2>
+    <Cell_3>
+    for i in range(100):
+        hidden = rnn.initHidden()
+        for j in range(len(train_data)):
+            rnn.zero_grad()
+            output, hidden = rnn(train_data[j], hidden)
+            loss = criterion(output, train_labels[j])
+            loss.backward()
+            optimizer.step()
+    <\Cell_3>
+    <Cell_4>
+    rnn.eval()
+    total = 0
+    correct = 0
+    for i in range(len(test_data)):
+        hidden = rnn.initHidden()

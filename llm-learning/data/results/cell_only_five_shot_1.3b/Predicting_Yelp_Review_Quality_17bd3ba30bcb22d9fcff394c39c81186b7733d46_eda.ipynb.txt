@@ -1,0 +1,33 @@
+```python
+    def autolabel(rects, axe, xpos='center'):
+        """
+        Attach a text label above each bar in *rects*, displaying its height.
+
+        xpos indicates which side to place the text w.r.t. the center of
+        the bar. It can be one of the following {'center', 'right', 'left'}.
+        """
+
+        xpos = xpos.lower()  # normalize the case of the parameter
+        ha = {'center': 'center', 'right': 'left', 'left': 'right'}
+        offset = {'center': 0.5, 'right': 0.57, 'left': 0.43}  # x_txt = x + w*off
+
+        for idx, rect in enumerate(rects):
+            height = rect.get_height()
+            label = round(height * 100) if height >= 0.01 else round(height * 100, 2)
+            axe.text(rect.get_x() + rect.get_width()*offset[xpos], 1.01*height,
+                     f'{label}%', ha=ha[xpos], va='bottom', fontsize=28,
+                     weight='bold', fontname='Arial')
+
+    plt.rcParams.update({'font.size': 24, 'font.family': 'Arial', 'font.weight': 'normal'})
+
+    fig, ax = plt.subplots(figsize=(16, 9))
+
+    data = df.loc[:, 'T1_REG_review_total_ufc']
+
+    total = len(data)
+
+    bin_0 = len([i for i in data if i == 0]) / total
+    bin_1 = len([i for i in data if i == 1]) / total
+    bin_2_5 = len([i for i in data if i >= 2 and i <= 5]) / total
+    bin_6_10 = len([i for i in data if i >= 6 and i <= 10]) / total
+    bin_11_100 = len([i for i in data if

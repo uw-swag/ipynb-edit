@@ -1,0 +1,45 @@
+```python
+    from sklearn.ensemble import VotingClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    import pandas as pd
+    import numpy as np
+
+    # Load your data
+    data = pd.read_csv('your_data.csv')
+
+    # Split your data into features and target
+    X = data.drop('target', axis=1)
+    y = data['target']
+
+    # Split your data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Standardize your data
+    scaler = StandardScaler()
+    X_train = scaler.fit_transform(X_train)
+    X_test = scaler.transform(X_test)
+
+    # Define your models
+    models = []
+    for i in range(1, 42):
+        model = load_model(f'model_{i}.h5')
+        models.append(model)
+
+    # Ensemble the models
+    ensemble = VotingClassifier(estimators=models, voting='soft')
+
+    # Train the ensemble model
+    ensemble.fit(X_train, y_train)
+
+    # Evaluate the ensemble model
+    y_pred = ensemble.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    print(f'Accuracy: {accuracy}')
+
+    # Save the ensemble model
+    ensemble.save('ensemble_model.h5')
+    ```
+
+    This script uses the sklearn library to ensemble multiple models. The ensemble is created by loading the models from different files (model_1.h5, model_2.h5, ..., model_41.h5) and adding them to a list. The 'voting' parameter in the VotingClassifier is set to 'soft', which means that the class with the highest score is selected. The ensemble model is then trained and evaluated. The accuracy

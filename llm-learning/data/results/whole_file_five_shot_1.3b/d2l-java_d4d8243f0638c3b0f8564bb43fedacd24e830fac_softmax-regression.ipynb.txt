@@ -1,0 +1,60 @@
+```java
+    // FashionMnistUtils.java
+    public class FashionMnistUtils {
+        // Method to load FashionMnist dataset
+        public static Dataset<Row> loadFashionMnist() {
+            // Load FashionMnist dataset
+            Dataset<Row> fashionMnist = ...
+
+            // Return the dataset
+            return fashionMnist;
+        }
+
+        // Method to preprocess the dataset
+        public static Dataset<Row> preprocessFashionMnist(Dataset<Row> fashionMnist) {
+            // Preprocess the dataset
+            Dataset<Row> preprocessedFashionMnist = ...
+
+            // Return the preprocessed dataset
+            return preprocessedFashionMnist;
+        }
+
+        // Method to split the dataset into training and testing sets
+        public static Dataset<Row> splitFashionMnist(Dataset<Row> preprocessedFashionMnist) {
+            // Split the dataset into training and testing sets
+            Dataset<Row> trainingSet = ...
+            Dataset<Row> testingSet = ...
+
+            // Return the training and testing sets
+            return trainingSet, testingSet;
+        }
+
+        // Method to train a softmax regression model
+        public static Model trainSoftmaxRegressionModel(Dataset<Row> trainingSet) {
+            // Train a softmax regression model
+            Model softmaxRegressionModel = ...
+
+            // Return the trained model
+            return softmaxRegressionModel;
+        }
+
+        // Method to classify images using the trained model
+        public static Dataset<Row> classifyImages(Model trainedModel, Dataset<Row> testingSet) {
+            // Classify images using the trained model
+            Dataset<Row> classifiedImages = ...
+
+            // Return the classified images
+            return classifiedImages;
+        }
+    }
+    ```
+
+    ```python
+    # SoftmaxRegression.ipynb
+    import tensorflow as tf
+
+    class SoftmaxRegression:
+        def __init__(self, input_dim, output_dim):
+            self.input_dim = input_dim
+            self.output_dim = output_dim
+            self.W = tf

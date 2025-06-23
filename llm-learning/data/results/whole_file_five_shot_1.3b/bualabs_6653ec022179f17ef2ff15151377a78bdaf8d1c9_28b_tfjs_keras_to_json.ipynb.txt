@@ -1,0 +1,12 @@
+```python
+    import tensorflow as tf
+    import tensorflow_js as tfjs
+    import json
+
+    # Convert the TensorFlow Keras model to a TensorFlow.js model
+    tfjs_model = tfjs.convert_keras_model(keras_model)
+
+    # Export the TensorFlow.js model to a JSON file
+    with open('model.json', 'w') as f:
+        json.dump(tfjs_model.to_json(), f)
+    ```

@@ -1,0 +1,14 @@
+```
+    batchsize = 64
+    np.random.seed(4200)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+    data = ImageDataBunch.from_name_re(path_images, filenames, 
+                                       regex_pattern, ds_tfms=get_transforms(), 
+                                       size=224, bs=batchsize).normalize(imagenet_stats)
+    learner.save('stage-1')
+    # learn.load('stage-1')
+    learner.save('stage-2')
+    # learn.load('stage-2')
+    ```
+
+    The `normalize` function in the `ImageDataBunch` class is used to normalize the images in the dataset. The `imagenet_stats` is a tuple containing the mean and standard deviation of the ImageNet dataset. The `normalize` function will subtract this mean and divide by this standard deviation, which is why we use `imagenet_stats` instead of `mean` and `std`.

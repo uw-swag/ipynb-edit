@@ -1,0 +1,35 @@
+```python
+    import pandas as pd
+import numpy as np
+# read in data, create dataframe and show;  note column count
+df = pd.read_csv("data/boardgames1.csv")
+bg_df = pd.DataFrame(df)
+bg_df.head()
+# find names of columns
+bg_df.columns
+bg_df = bg_df.drop(['minage', 'sortindex', 'min_community','max_community', 'totalvotes', 'playerage', 'languagedependence',
+       'stddev', 'numweights', 'numgeeklists', 'numtrading', 'numwanting', 'numcomments',
+       'numplays', 'numplays_month', 'news', 'blogs', 'weblink',
+       'podcast', 'label', 'boardgamedesigner_cnt', 'boardgameartist_cnt',
+       'boardgamepublisher_cnt', 'boardgamecategory_cnt',
+       'boardgamemechanic_cnt', 'boardgameexpansion_cnt', 'boardgamefamily_cnt', 'boardgamedesigner',
+       'boardgameartist', 'boardgamehonor','boardgameversion', 'boardgamepublisher',
+       'boardgameexpansion', 'boardgamefamily', 'description', 'gamelink'], axis=1)
+bg_df.head()
+#bg_df
+bg_df['minplaytime'] = bg_df['minplaytime']/60
+bg_df['maxplaytime'] = bg_df['maxplaytime']/60
+bg_df.head()
+bg_df.to_csv('data/boardgame0.csv')
+
+    ## Data Cleaning and Preprocessing
+    ## Removing unnecessary columns
+    ## Converting categorical data to numerical data
+    ## Normalizing numerical data
+    ## Splitting the data into training and testing sets
+    ## Implementing the softmax loss function
+    ## Training the model
+    ## Evaluating the model
+    ## Predicting the results
+    ## Converting the predictions to the original form
+    ## Converting the actual results to the original form

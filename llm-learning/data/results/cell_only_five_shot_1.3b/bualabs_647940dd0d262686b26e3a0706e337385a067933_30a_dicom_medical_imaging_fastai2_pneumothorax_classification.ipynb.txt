@@ -1,0 +1,13 @@
+```
+    def label_func(fn):        
+        return str(df[df['ImageId'] == fn.stem].label.to_numpy())
+
+    learn = cnn_learner(dls, xresnet50, opt_func=ranger, 
+                        loss_func=WeightedLoss(nn.CrossEntropyLoss(), 
+                                              label_func, 
+                                              reduction='none'), 
+                        metrics=accuracy, cbs=[ShowGraphCallback])
+    learn.fine_tune(16, freeze_epochs=4)
+    ```
+
+    In the code above, I have changed the architecture to ResNet34 with a weighted loss function. The `WeightedLoss` function is used to create a weighted loss function that takes into account the label of the image. The `label_func` is a function that maps the image file name to the corresponding label. The `reduction='none'` argument in the `WeightedLoss` function is used to apply the loss function to each sample independently, without any reduction.

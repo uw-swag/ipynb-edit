@@ -1,0 +1,57 @@
+
+    [
+    Commit Message: "Added interpretation plotting for the top losses and confusion matrix"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    %reload_ext autoreload
+    %autoreload 2
+    %matplotlib inline
+<\Cell_0>
+<Cell_1>
+from fastai import *
+from fastai.vision import *
+from fastai.metrics import accuracy
+<\Cell_1>
+<Cell_2>
+path = untar_data(URLs.PETS)
+path.ls()
+<\Cell_2>
+<Cell_3>
+path_annotations = path/'annotations'
+path_images = path/'images'
+<\Cell_3>
+path_annotations.ls()
+<\Cell_4>
+<Cell_5>
+filenames = get_image_files(path_images)
+filenames[:10]
+<\Cell_5>
+<Cell_6>
+batchsize = 64
+np.random.seed(42)
+regex_pattern = r'/([^/]+)_\d+.jpg$'
+<\Cell_6>
+<Cell_7>
+databunch = ImageDataBunch.from_name_re(path_images, filenames, 
+                                   regex_pattern, ds_tfms=get_transforms(), 
+                                   size=224, bs=batchsize).normalize(imagenet_stats)
+<\Cell_7>
+<Cell_8>
+len(databunch.train_ds), len(databunch.valid_ds)
+<\Cell_8>
+<Cell_9>
+databunch.show_batch(rows=3, figsize=(12, 9))
+<\Cell_9>
+<Cell_10>
+print(databunch.classes)
+<\Cell_10>
+<Cell_11>
+print(databunch.c)
+<\Cell_11>
+<Cell_12>
+len(databunch.classes)
+<\Cell_12>
+<Cell_13>
+learner.unfreeze()
+<\Cell

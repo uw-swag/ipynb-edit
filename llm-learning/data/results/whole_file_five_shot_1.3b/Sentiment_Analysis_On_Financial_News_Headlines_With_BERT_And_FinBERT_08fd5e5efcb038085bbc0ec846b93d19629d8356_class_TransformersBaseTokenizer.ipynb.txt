@@ -1,0 +1,54 @@
+```python
+    import argparse
+    import json
+    import numpy as np
+    import PIL
+    import tensorflow
+
+    # hack for local file system
+    import os
+    import sys
+    module_path = os.path.abspath(os.path.join('..'))
+    if module_path not in sys.path:
+        sys.path.append(module_path)
+
+    # the pipeline modules loaded from local filesystem
+    import grid
+    import pipeline
+    import render_tile
+
+    tensorflow.gfile.MakeDirs("data")
+
+    # the layout has an x and y coordinate numpy array for each datapoint
+    layout = np.load("data/face-released-umap-32-50-0.1.npz")
+    print(len(layout["x"]))
+    layout.files
+
+    # metadata should be a dictionary of numpy arrays with the corresponding metadata
+    metadatanpz = np.load("data/face-released-meta.npz")
+    metadata = {}
+    for f in metadatanpz.files:
+        metadata[f] = list(metadatanpz[f])
+    metadatanpz.files
+
+    params = {
+        "name": "faces",
+        "directory": "data/quickdraw",
+        "n_cells": [16, 32, 64],
+        "n_tile": 16,
+        "cell_size": 100,
+        "scale_density": True,
+        "scale_type": PIL.Image.LANCZOS
+    }
+
+    def get_line(x1, y1, x2, y2):
+        points = []
+        issteep = abs(y2-y1) > abs(x2-x1)
+        if issteep:
+            x1, y1 = y1, x1
+            x2, y2 = y2, x2
+        rev = False
+        if x1 > x2:
+            x1, x2 = x2, x1
+            y1, y2 = y2, y1
+            rev = True

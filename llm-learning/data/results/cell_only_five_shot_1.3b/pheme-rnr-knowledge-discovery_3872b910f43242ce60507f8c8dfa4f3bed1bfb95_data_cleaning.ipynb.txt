@@ -1,0 +1,17 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from datetime import datetime, timedelta
+
+    # Assuming df is your DataFrame and it has a column named 'event_date'
+    df['event_date'] = pd.to_datetime(df['event_date'])
+
+    # Convert the 'event_date' column to UTC
+    df['event_date_utc'] = df['event_date'].dt.tz_convert('UTC')
+
+    # If you want to get the UTC offset of a specific date, you can use the following line
+    specific_date = df['event_date_utc'][0]
+    utc_offset = specific_date.utcoffset()
+
+    print(f"The UTC offset for the first event is: {utc_offset}")
+    ```

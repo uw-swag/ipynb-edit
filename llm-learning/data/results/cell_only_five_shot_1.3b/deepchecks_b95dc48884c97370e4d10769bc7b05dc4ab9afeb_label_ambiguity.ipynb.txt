@@ -1,0 +1,24 @@
+
+    The code you provided is creating two datasets, `dataset` and `clean_dataset`, with the same data but different labels. The `label_name` parameter in the `Dataset` constructor is used to specify the name of the label column.
+
+    The `label_name` parameter in the `Dataset` constructor is used to specify the name of the label column. This is useful when you want to use the label column as a column in your dataframe, but also when you want to use the label column in your dataset.
+
+    However, the `label_name` parameter in the `Dataset` constructor is not used when you are creating a new `Dataset` object. The `label_name` parameter in the `Dataset` constructor is used to specify the name of the label column, but it is not used when you are creating a new `Dataset` object.
+
+    If you want to create a new `Dataset` object with a different label column, you should use the `label_name` parameter in the `Dataset` constructor. For example:
+
+    ```python
+    new_dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                        "col2":[1,2,1,2,5,2,5,2,3,2]}),
+                          label_name="new_label",
+                          label_type="classification_label")
+    ```
+
+    In this case, the `new_label` column in the dataframe is used as the label column, and the `new_label` column in the `Dataset` object is used as the label column.
+
+    If you want to use the `label_name` parameter in the `Dataset` constructor to specify the name of the label column, you should use the `label_name` parameter in the `Dataset` constructor. For example:
+
+    ```python
+    dataset = Dataset(pd.DataFrame({"col1":[1,2,1,2,1,2,1,2,1,2],
+                                    "col2":[1,2,1,2,5,2,5,2,3,2],
+                                    "my_label":[2,3,2

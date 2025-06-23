@@ -1,0 +1,25 @@
+```python
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.model_selection import train_test_split
+    from preamble import *
+    import matplotlib.pyplot as plt
+
+    %matplotlib inline
+
+    cancer = load_breast_cancer()
+
+    X_train, X_test, y_train, y_test = train_test_split(cancer.data, cancer.target, stratify=cancer.target, random_state = 42)
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+
+    # Plotting the confusion matrix
+    from sklearn.metrics import plot_confusion_matrix
+    plot_confusion_matrix(knn, X_test, y_test)
+    plt.show()
+
+    # Evaluating the model
+    from sklearn.metrics import classification_report
+    print(classification_report(y_test, knn.predict(X_test)))
+
+    ```

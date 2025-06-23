@@ -1,0 +1,30 @@
+```python
+    # Feed Forward Algorithm
+    class NeuralNetwork:
+        def __init__(self, x, y):
+            self.input      = x
+            self.weights1   = np.random.rand(self.input.shape[1],4) 
+            self.weights2   = np.random.rand(4,1)                 
+            self.y          = y
+            self.output     = np.zeros(self.y.shape)
+
+        def sigmoid(self, x):
+            return 1.0/(1+ np.exp(-x))
+
+        def sigmoid_der(self, x):
+            return x * (1.0 - x)
+
+        def feedforward(self):
+            self.layer1 = self.sigmoid(np.dot(self.input, self.weights1))
+            self.output = self.sigmoid(np.dot(self.layer1, self.weights2))
+
+        def backprop(self):
+            # application of the chain rule to find derivative of the loss function with respect to weights2 and weights1
+            d_weights2 = np.dot(self.layer1.T, (2*(self.y - self.output) * self.sigmoid_der()))
+            d_weights1 = np.dot(self.input.T,  (np.dot(2*(self.y - self.output) * self.sigmoid_der(), self.weights2.T) * self.sigmoid_der()))
+
+            # update the weights with the derivative (slope) of the loss function
+            self.weights1 += d_weights1
+            self.weights2 += d_weights2
+    ```
+    This is a simple implementation of a feed forward neural network. The network takes an input, applies a sigmoid function to it, and then applies another sigmoid function to the result. The output of the network is the result of the final sigmoid function. The weights of the network are updated using backpropagation, which is a method for adjusting the weights of a neural network based on the difference between the network's prediction and the actual value.

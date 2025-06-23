@@ -1,0 +1,54 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "additional changes for 1.0"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # Now let's add some more preprocessing to our data
+    X = tf.reshape(X, [batch_size, sequence_length, 1])
+    Y = tf.reshape(Y, [batch_size, sequence_length, 1])
+    X_padded = tf.pad_sequences(X, padding='post')
+    Y_padded = tf.pad_sequences(Y, padding='post')
+    <\Cell_0>
+    '''
+    # Now we can feed these into our model
+    feed = {X: X_padded, Y: Y_padded}
+    <\Cell_1>
+    '''
+    # And then we can run our training step
+    sess.run(train_step, feed)
+    <\Cell_1>
+    '''
+    # And then we can print out the loss
+    print(sess.run(loss, feed))
+    <\Cell_2>
+    '''
+    # And then we can print out the accuracy
+    print(sess.run(accuracy, feed))
+    <\Cell_2>
+    '''
+    # And then we can print out the prediction
+    print(sess.run(Y_pred, feed))
+    <\Cell_3>
+    '''
+    # And then we can print out the true label
+    print(sess.run(Y, feed))
+    <\Cell_3>
+    '''
+    # And then we can print out the true label
+    print(sess.run(Y_pred, feed))
+    <\Cell_4>
+    '''
+    # And then we can print out the true label
+    print(sess.run(Y, feed))
+    <\Cell_4>
+    '''
+    # And then we can print out the true label
+    print(sess.run(Y_pred, feed))
+    <\Cell_5>
+    '''
+    # And then we can print out the true label
+    print(sess.run(Y, feed))
+    <\

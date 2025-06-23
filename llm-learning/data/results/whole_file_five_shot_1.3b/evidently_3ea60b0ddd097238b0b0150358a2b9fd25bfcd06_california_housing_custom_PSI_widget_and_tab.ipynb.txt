@@ -1,0 +1,57 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Updated data stories"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import RegressionPerformanceTab
+<\Cell_0>
+<Cell_1>
+dataset = fetch_california_housing(as_frame=True)
+df = dataset.frame
+<\Cell_1>
+<Cell_2>
+df.head()
+<\Cell_2>
+<Cell_3>
+target = 'MedHouseVal'
+prediction = 'prediction'
+
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+<\Cell_3>
+<Cell_4>
+ref_data = df[:15000]
+prod_data = df[15000:]
+<\Cell_4>
+<Cell_5>
+model = RandomForestRegressor(random_state=0)
+<\Cell_5>
+<Cell_6>
+model.fit(ref_data[features], ref_data[target])
+<\Cell_6>
+<Cell_7>
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+<\Cell_7>
+<Cell_8>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+<\Cell_8>
+<Cell_9>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0)])
+<\Cell_9>
+<Cell_10>

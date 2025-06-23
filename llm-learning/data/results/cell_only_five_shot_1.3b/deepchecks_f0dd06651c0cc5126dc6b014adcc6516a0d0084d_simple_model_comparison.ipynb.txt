@@ -1,0 +1,20 @@
+```python
+    from deepchecks.vision.base import VisionData
+    from deepchecks.vision.checks.performance import SimpleModelComparison
+
+    # Load your data
+    data = VisionData.load_from_folder("path_to_your_data")
+
+    # Split the data into core and base
+    core_data, base_data = data.split(0.8)
+
+    # Create a SimpleModelComparison check
+    check = SimpleModelComparison(core_data, base_data)
+
+    # Run the check
+    report = check.run()
+
+    # Print the report
+    print(report)
+    ```
+    This code will split your data into a core dataset (80% of your data) and a base dataset (20% of your data). Then, it will create a SimpleModelComparison check and run it on the core and base datasets. The result will be printed out.

@@ -1,0 +1,155 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import pandas as pd
+import numpy as np
+
+import io
+import os
+import zipfile
+
+import requests
+<\Cell_1>
+<Cell_2>
+!pip install implicit
+<\Cell_2>
+<Cell_3>
+content = requests.get("http://files.grouplens.org/datasets/movielens/ml-100k.zip").content
+
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+  train = arc.read("ml-100k/ua.base").decode().split("\n")
+  test = arc.read("ml-100k/ua.test").decode().split("\n")
+  movies = arc.read("ml-100k/u.item").decode(encoding='latin-1').split("\n")
+  users = arc.read("ml-100k/u.user").decode(encoding='latin-1').split("\n")
+<\Cell_3>
+<Cell_4>
+columns = ['user_id', 'movie_id', 'rating', 'timestamp']
+
+data = [[x for x in e.split('\t')] for e in train]
+train = pd.DataFrame(data, columns=columns).dropna().astype(int)
+
+data = [[x for x in e.split('\t')] for e in test]
+test = pd.DataFrame(data, columns=columns).dropna().astype(int)
+
+columns = ['user_id', 'age', 'gender', 'occupation', 'zip_code']
+
+data = [[x for x in e.split('|')] for e in users]
+users = pd.DataFrame(data, columns=columns).dropna().astype({'user_id': int, 'age': int})
+
+genres = ['unknown', 'action', 'adventure', 'animation', 'children', 'comedy', 'crime', 'documentary', 'drama', 'fantasy', 'noir',
+          'horror', 'musical', 'mystery', 'romance', 'sci-fi', 'thriller', 'war', 'western']
+columns = ['movie_id', 'title', 'year', '-', 'url'] + genres
+data = [[x for x in e.split('|')] for e in movies]
+movies = pd.DataFrame(data, columns=columns).dropna().astype({'movie_id': int})
+movies.drop(columns=['-', 'url'], inplace=True)
+movies[genres] = movies[genres].astype(int)
+movies['moive_age'] = (pd.to_datetime(movies.year).max() - pd.to_datetime(movies.year)).dt.days / 365
+<\Cell_4>
+<Cell_5>
+def transform_predictions(k, user_ids, item_ids):
+  return pd.DataFrame(
+      data=np.c_[np.repeat(user_ids, k), item_ids.flatten(), [i + 1 for i in range(k)] * len(user_ids)],
+      columns=['user_id', 'movie_id', 'rank']
+  )
+
+
+def prepare_prediction_df(k, user_ids, item_ids, true):
+  preds = transform_predictions(k, user_ids, item_ids)
+  preds = preds.merge(true, on=['user_id', 'movie_id'], how='outer')
+  preds['rank'] = preds.groupby('user_id')['rank'].transform(lambda x: x.fillna(x.max() + 1))
+  return preds
+
+
+def get_embeddings(model, movies_list, users_list, factors):
+  item_factors = pd.DataFrame(
+      data=np.column_stack((movies_list, model.item_factors)),
+      columns=['movie_id'] + [f'item_factor_{i+1}' for i in range(factors)]
+  )
+  user_factors = pd.DataFrame(
+      data=np.column_stack((users_list, model.user_factors)),
+      columns=['user_id'] + [f'user_factor_{i+1}' for i in range(factors)]
+  )
+  return item_factors, user_factors
+
+
+def get_full_df(df, item_factors, user_factors):
+  df = df.merge(movies, on=['movie_id'], how='left')
+  df = df.merge(users, on=['user_id'], how='left')
+  df = df.merge(item_factors, on=['movie_id'], how='left')
+  df = df.merge(user_factors, on=['user_id'], how='left')
+  return df
+<\Cell_5>
+<Cell_6>
+from implicit.cpu.als import AlternatingLeastSquares
+from scipy.sparse import csr_matrix
+pivot_table = train.pivot_table(index=['user_id'], columns=['movie_id'], values="rating").fillna(0)
+
+als_model = AlternatingLeastSquares(factors=20, iterations=5, random_state=0)
+als_model.fit(csr_matrix(pivot_table))
+<\Cell_6>
+<Cell_7>
+ids, scores = als_model.recommend(test.user_id.unique() - 1, csr_matrix(pivot_table.loc[test.user_id.unique()]), N=30, filter_already_liked_items=True)
+als_df = prepare_prediction_df(30, test.user_id.unique(), ids, test)
+<\Cell_7>
+<Cell_8>
+most_popular_top = list(train.movie_id.value_counts()[:30])
+rec_array = np.array([most_popular_top] * len(test.user_id.unique()))
+most_popular_df = prepare_prediction_df(30, test.user_id.unique(), rec_array, test)
+<\Cell_8>
+<Cell_9>
+item_factors, user_factors = get_embeddings(als_model, pivot_table.columns, pivot_table.index, 20)
+als_df = get_full_df(als_df, item_factors, user_factors)
+most_popular_df = get_full_df(most_popular_df, item_factors, user_factors)
+train = get_full_df(train, item_factors, user_factors)
+<\Cell_9>
+<Cell_10>
+item_features = [f'item_factor_{i+1}' for i in range(20)]
+<\Cell_10>
+<Cell_11>
+from evidently.metrics import PrecisionTopKMetric
+from evidently.metrics import RecallTopKMetric
+from evidently.metrics import FBetaTopKMetric
+from evidently.metrics import MAPKMetric
+from evidently.metrics import NDCGKMetric
+from evidently.metrics import DiversityMetric
+from evidently.metrics import ItemBiasMetric
+from evidently.metrics import NoveltyMetric
+from evidently.metrics import PersonalisationMetric
+from evidently.metrics import PopularityBias
+from evidently.metrics import SerendipityMetric
+from evidently.metrics import UserBiasMetric
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+<\Cell_11>
+<Cell_12>
+report = Report(metrics=[
+    PrecisionTopKMetric(k=5),
+    RecallTopKMetric(k=5),
+    FBetaTopKMetric(k=5),
+    MAPKMetric(k=5),
+    NDCGKMetric(k=5),
+    DiversityMetric(k=5, item_features=item_features),
+    NoveltyMetric(k=5),
+    PersonalisationMetric(k=5),
+    SerendipityMetric(k=5, item_features=item_features),
+    PopularityBias(k=5),
+    ItemBiasMetric(k=5, column_name='moive_age'),
+    ItemBiasMetric(k=5, column_name='crime'),
+    UserBiasMetric(column_name='age'),
+    UserBiasMetric(column_name='gender')
+
+
+])
+column_mapping=ColumnMapping(recommendations_type='rank', target='rating', prediction='rank', item_id='title', user_id='user_id')
+report.run(
+    reference_data=most_popular_df.dropna(subset=['title', 'user_id']).fillna(0),
+    current_data=als_df.dropna(subset=['title', 'user_id']).fillna(0),
+    column_mapping=column_mapping,
+    additional_datasets={'current_train_data': train.dropna(subset=['title', 'user_id'])}
+  )
+report
+<\Cell_12>

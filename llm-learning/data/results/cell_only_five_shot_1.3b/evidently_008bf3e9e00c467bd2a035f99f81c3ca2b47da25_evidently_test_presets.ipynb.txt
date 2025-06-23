@@ -1,0 +1,31 @@
+```python
+    from pymatgen.core.structure import Structure
+    from pymatgen.symmetry.analyzer import SpacegroupAnalyzer
+    from pymatgen.io.vasp.outputs import Vasprun
+
+    # Load a structure
+    struct = Structure.from_str(
+        """
+        O
+        Si
+        """
+    )
+
+    # Get the spacegroup
+    sg = SpacegroupAnalyzer(struct).get_spacegroup()
+    print(f"Spacegroup: {sg}")
+
+    # Load a Vasprun object
+    vr = Vasprun("./vasprun.xml")
+    print(f"Energy: {vr.final_energy}")
+    print(f"Structure: {vr.final_structure}")
+
+    # Update the structure
+    struct.update_structure({"C": 2, "O": 1})
+    print(f"Updated structure: {struct}")
+
+    # Get the updated Vasprun object
+    vr_updated = Vasprun("./vasprun_updated.xml")
+    print(f"Energy: {vr_updated.final_energy}")
+    print(f"Structure: {vr_updated.final_structure}")
+    ```

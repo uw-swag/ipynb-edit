@@ -1,0 +1,63 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding missing imports"
+    Original Code Cells:
+    '''
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn import metrics
+    '''
+    '''
+    ]
+
+    ### Response:
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning"
+    Original Code Cells:
+    '''
+    ## Data Cleaning
+    ## Removing outliers
+    df = df[(df['total_bedrooms'] >= 10) & (df['total_bedrooms'] <= 300)]
+    df = df.dropna(subset=['total_bedrooms'])
+    df = df.drop(['longitude'], axis=1)
+    df = df.drop(['latitude'], axis=1)
+    '''
+    '''
+
+    ### Response:
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Data Visualization"
+    Original Code Cells:
+    '''
+    ## Data Visualization
+    ## Correlation Matrix
+    correlation_matrix = df.corr()
+    sns.heatmap(correlation_matrix, annot=True)
+    plt.show()
+    '''
+    '''
+
+    ### Response:
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Model Training"
+    Original Code Cells:
+    '''
+    ## Model Training
+    X = df.drop('median_house_value', axis=1)
+    y = df['median_house_value']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    '''
+   

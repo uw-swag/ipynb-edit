@@ -1,0 +1,39 @@
+```
+    The warning you're seeing is because you're trying to divide a number by zero. This is a common issue when you're using a loop or a conditional statement. In this case, it's a common practice to avoid division by zero in your code.
+
+    Here's how you can fix the warning:
+
+    In your code, you're using the `config.getint()` function to get an integer value from the `config` object. If the value is not a valid integer, `config.getint()` will raise a `ValueError`.
+
+    You can use a try-except block to catch this exception and handle it gracefully. Here's how you can do it:
+
+    ```python
+    try:
+        channels = config.getint('channels')
+    except ValueError:
+        channels = 0
+    ```
+
+    This will set `channels` to 0 if the 'channels' key is not found in the configuration file or if it's not a valid integer.
+
+    You can do the same for other keys in the configuration file.
+
+    This way, you're ensuring that your code doesn't crash when it encounters a configuration value that it can't interpret as an integer.
+
+    Also, it's a good practice to handle exceptions in a way that makes sense for your application. In this case, you might want to log the error or display a user-friendly error message to the user.
+
+    Here's an example of how you can do this:
+
+    ```python
+    try:
+        channels = config.getint('channels')
+    except ValueError:
+        print("Error: 'channels' key not found in the configuration file or not a valid integer. Defaulting to 0.")
+        channels = 0
+    ```
+
+    This will print a message to the user if the 'channels' key is not found in the configuration file or if it's not a valid integer.
+
+    This way, you're notifying the user of the issue and allowing them to continue running the program.
+
+    This is a simple example, but it should give you a good idea of how to handle exceptions in your code.

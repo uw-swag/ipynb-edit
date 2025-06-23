@@ -1,0 +1,28 @@
+```python
+    # Added by User
+    ## Importing necessary libraries
+    import tensorflow as tf
+    import keras
+    import keras.backend as K
+
+    ## Checking for GPU availability
+    if tf.test.gpu_device_name():
+        print('Default GPU Device: {}'.format(tf.test.gpu_device_name()))
+    else:
+        print("Please install a GPU version of TensorFlow.")
+
+    ## Checking for GPU utilization
+    def gpu_memory_usage():
+        gpu_info = tf.config.list_physical_devices('GPU')
+        if gpu_info:
+            try:
+                gpu_memory = tf.config.experimental.get_memory_info(gpu_info[0])
+                return gpu_memory[0]/1024.0/1024.0
+            except:
+                return 0
+        else:
+            return 0
+
+    print("GPU memory usage: {} MB".format(gpu_memory_usage()))
+    ```
+    This code checks for GPU availability and its utilization. If GPU is available, it prints the name of the GPU device and its memory usage. If GPU is not available, it prints a message indicating that a GPU version of TensorFlow is required.

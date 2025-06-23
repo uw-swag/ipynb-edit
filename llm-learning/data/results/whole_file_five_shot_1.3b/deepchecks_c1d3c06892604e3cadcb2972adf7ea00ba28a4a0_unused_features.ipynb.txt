@@ -1,0 +1,39 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#339)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    from deepchecks.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from deepchecks.checks import UnusedFeatures
+    import pandas as pd
+    <\Cell_0>
+    <Cell_1>
+    from urllib.request import urlopen
+    from sklearn.preprocessing import LabelEncoder
+
+    name_data = urlopen('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.names')
+    lines = [l.decode("utf-8") for l in name_data if ':' in l.decode("utf-8") and '|' not in l.decode("utf-8")]
+
+    features = [l.split(':')[0] for l in lines]
+    label_name = 'income'
+
+    cat_features = [l.split(':')[0] for l in lines if 'continuous' not in l]
+
+    train_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data',
+                           names=features + [label_name])
+    test_df = pd.read_csv('http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test',
+                          names=features + [label_name], skiprows=1)
+
+    test_df[label_name] = test_df [label_name].str[:-1]
+
+    encoder = LabelEncoder()
+    encoder.fit(train_df[label_name])
+    train_df[label_name] = encoder.transform(train_df[label_name])
+    test_df[label_name] = encoder.transform(test_df[label_name])
+    <\Cell_1>
+    <Cell_2>
+    from deepchecks

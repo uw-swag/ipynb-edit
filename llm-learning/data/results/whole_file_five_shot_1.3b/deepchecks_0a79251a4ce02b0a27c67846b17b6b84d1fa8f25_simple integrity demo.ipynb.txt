@@ -1,0 +1,18 @@
+```
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+train_len = round(0.67*len(iris_df))
+df_train = iris_df[:train_len]
+df_test = iris_df[train_len:]
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import integrity_check_suite
+<\Cell_2>
+<Cell_3>
+integrity_check_suite().run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both')
+<\Cell_3>
+```

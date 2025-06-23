@@ -1,0 +1,35 @@
+in2 = fpga.osc(0, 1.0)
+# data rate decimation 
+in2.decimation = 41667 #125 Msps / 41667 = 3 Ksps
+
+# trigger timing [sample periods]
+N = in2.buffer_size
+in2.trigger_pre  = 0
+in2.trigger_post = N
+
+# disable hardware trigger sources - the Jupyter notebook will trigger the start of audio recording
+in2.trig_src = 0
+sr = 3000 # sample rate 3 Ksps
+ipd.Audio(data, rate=sr) # load a NumPy array
+sr2 = 43999 # sample rate 48 Ksps
+ipd.Audio('/tmp/stream_files/data_file_2022-05-21_11-37-06.wav', rate=sr2) # load a NumPy array
+import pydub 
+from pydub import AudioSegment
+import numpy as np
+
+def read(file):
+    """MP3 to numpy array"""
+    a = pydub.AudioSegment.from_wav(file)
+    y = np.array(a.get_array_of_samples())
+    if a.channels == 2:
+        y = y.reshape((-1, 2))
+    return np.float32(y) / 2**15
+np_sound = read('/tmp/stream_files/data_file_2022-05-21_15-38-39.wav')
+ipd.Audio(np_sound, rate=43999)
+#Plotting the data allows us to check for clipping
+data = np_sound
+plt.plot(data)
+plt.show()
+wav_audio = AudioSegment.from_file("/tmp/stream_files/data_file_2022-05-21_20-58-25.wav", format="wav")
+frames_per_second = wav_audio.frame_rate
+frames_per_second

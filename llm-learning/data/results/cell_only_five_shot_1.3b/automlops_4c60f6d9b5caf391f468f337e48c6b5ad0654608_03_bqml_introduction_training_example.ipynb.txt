@@ -1,0 +1,31 @@
+```
+    from kfp.v2 import dsl
+    from kfp.v2.dsl import Artifact, Metrics, Model, Output
+    from google_cloud_automlops import AutoMLOps
+    AutoMLOps.clear_cache()
+
+    @dsl.component(
+        packages_to_install=[
+            'google-cloud-bigquery'
+        ],
+        output_component_file=f'{AutoMLOps.OUTPUT_DIR}/create_dataset.yaml'
+    )
+    def create_dataset(
+        bq_table: str,
+        project_id: str
+    ):
+        """Custom component that creates an empty dataset resource.
+
+        Args:
+            bq_table: The source biquery table.
+            project_id: The project ID.
+        """
+        from google.cloud import bigquery
+        bq_client = bigquery.Client(project=project_id)
+        bq_data_name = bq_table.split('.')[-1]
+
+        dataset_query = f'''CREATE SCHEMA {bq_data_name}'''
+        job = bq_client.query(dataset_query)
+
+    # Continue with the rest of the components...
+    ```

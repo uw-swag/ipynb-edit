@@ -1,0 +1,46 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.neighbors import KNeighborsRegressor
+    from copy import deepcopy
+
+    # Function to scale features between 0 and 1
+    def scale_0_1(ser, minimum=None, maximum=None):
+        if minimum is not None:
+            pass
+        else:
+            minimum = ser.min()
+            maximum = ser.max()
+        return (ser-minimum).div(maximum-minimum)
+
+    # Function to normalize features
+    def normalize_features(df, feature="Monthly"):
+        df[feature_map[feature]] = scale_0_1(df[feature_map[feature]])
+        return df
+
+    # Function to find the best feature and K for KNN
+    def find_best_feature_K(df, appliance, feature="Monthly"):
+        if appliance =="hvac":
+            start, stop=7, 10
+        else:
+            start, stop=7, 10
+
+        np.random.seed(42)
+        appliance_df = df.ix[all_homes[appliance]]
+
+        # Adding new features
+        appliance_df = appliance_df.ix[appliance_df[feature_map[feature]].dropna().index]
+
+        test_homes = [home for home in appliance_df.index.values]
+        train_homes = [home for home in appliance_df.index.values if home not in test_homes]
+        all_home_appliance = deepcopy(all_homes)
+        all_home_appliance[appliance] = train_homes
+
+        # Cross validation on inner loop to find best feature, K
+        train_size = len(train_homes)
+        l = LeaveOneOut(train_size)
+        out = OrderedDict()
+        for cv_train, cv_test in l:
+            cv_train_home = appliance_df

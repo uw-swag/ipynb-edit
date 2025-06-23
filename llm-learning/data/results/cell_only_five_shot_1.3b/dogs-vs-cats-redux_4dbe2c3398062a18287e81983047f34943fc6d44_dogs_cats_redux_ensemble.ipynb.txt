@@ -1,0 +1,32 @@
+```
+    #Ensemble Xception and ResNet50
+    from keras.models import Model
+    from keras.layers import concatenate
+
+    # Load pre-trained Xception model
+    xception_model = keras.applications.xception.Xception(include_top=False, weights='imagenet', input_tensor=None, input_shape=(299, 299, 3), pooling='avg')
+
+    # Load pre-trained ResNet50 model
+    resnet50_model = keras.applications.resnet50.ResNet50(include_top=False, weights='imagenet', input_tensor=None, input_shape=(224, 224, 3), pooling='avg')
+
+    # Ensemble the pre-trained models
+    ensemble_model = Model(inputs=[xception_model.input, resnet50_model.input], outputs=[xception_model.output, resnet50_model.output])
+
+    # Compile the ensemble model
+    ensemble_model.compile(optimizer='adam', loss=['categorical_crossentropy', 'categorical_crossentropy'])
+
+    # Train the ensemble model
+    ensemble_model.fit([train_features, train_features], [train_labels, train_labels], batch_size=10000, epochs=1, validation_data=([valid_features, valid_features], [valid_labels, valid_labels]), callbacks=[tb_cb])
+
+    # Evaluate the ensemble model
+    ensemble_model.evaluate([test_features, test_features], [test_labels, test_labels])
+
+    # Use the ensemble model to make predictions
+    test_preds = ensemble_model.predict([test_features, test_features])
+    valid_preds = ensemble_model.predict([valid_features, valid_features])
+
+    # Calculate the log loss
+    log_loss = log_loss([test_labels, valid_labels], test_preds)
+
+    # Save the ensemble model
+    ensemble_model.save('ensemble_model.h

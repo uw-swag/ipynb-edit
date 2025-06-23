@@ -1,0 +1,31 @@
+```
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    from deepchecks.checks.methodology import *
+    from deepchecks.base import Dataset
+    <\Cell_0>
+    <Cell_1>
+    df = pd.DataFrame(np.random.randn(100, 3), columns=['x1', 'x2', 'x3'])
+    df['x4'] = df['x1'] * 0.5 + df['x2']
+    df['label'] = df['x2'] + 0.1 * df['x1']
+    df['x5'] = df['label'].apply(lambda x: 'v1' if x < 0 else 'v2')
+    ds = Dataset(df, label_name='label')
+
+    df_test = df.copy()
+    df_test['x2'] = df['x2'] + 0.5 * df['x1']
+    df_test['x3'] = 0.3 * df['x3'] + df['label']
+    ds_test = Dataset(df_test, label_name='label')
+    <\Cell_1>
+    <Cell_2>
+    SingleFeatureContributionTrainTest().run(train_dataset=ds, test_dataset=ds_test)
+    <\Cell_2>
+    <Cell_3>
+    my_check = SingleFeatureContributionTrainTest(ppscore_params={'sample': 10})
+    my_check.run(train_dataset=ds, test_dataset=ds_test)
+    <\Cell_3>
+    ```
+
+    The code above is a simple example of how to use the `SingleFeatureContributionTrainTest` check in the Deepchecks library. This check is used to evaluate the contribution of a single feature to the model's performance. The `ppscore_params` parameter is used to specify the parameters for the PPScore method, which is a method for comparing the performance of different machine learning models.

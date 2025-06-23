@@ -1,0 +1,28 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Implemented RNN for prediction"
+    Original Code Cells:
+    '''
+    from keras.models import Sequential
+    from keras.layers import SimpleRNN, Dense
+
+    model = Sequential()
+    model.add(SimpleRNN(units=50, input_shape=(1, 1), activation='relu'))
+    model.add(Dense(1))
+    model.compile(optimizer='adam', loss='mse')
+    model.fit(X_train, y_train, epochs=100, verbose=0)
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is a simple implementation of a Recurrent Neural Network (RNN) using Keras. This RNN is used to predict the next value in a sequence. The model is trained on the training data and then it can be used to predict the next value in the sequence.
+
+    The model is a Sequential model, which is a linear stack of layers. The input shape is (1, 1) because the input to the RNN is a 1D array. The activation function is 'relu', and the output layer has 1 neuron because we are predicting a single value.
+
+    The model is compiled with the Adam optimizer and the mean squared error loss function, which is a common choice for regression problems. The model is then trained for 100 epochs.
+
+    After training, the model can be used to predict the next value in the sequence. For example, if the input sequence is [1, 2, 3, 4, 5], the model will output the predicted value [1.5, 2.5, 3.5, 4.5, 5.5].
+
+    Please note that this is a very basic example. In a real-world scenario, you would need to preprocess your data, normalize it, and possibly use a more complex model architecture.

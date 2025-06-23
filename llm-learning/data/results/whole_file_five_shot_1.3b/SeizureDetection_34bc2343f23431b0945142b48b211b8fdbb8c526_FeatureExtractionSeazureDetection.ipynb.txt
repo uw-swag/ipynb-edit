@@ -1,0 +1,21 @@
+```
+    # Adding configuration file
+    import configparser
+
+    config = configparser.ConfigParser()
+    config['DEFAULT'] = {
+        'sample_rate': str(sample_rate),
+        'time_window': str(time_window),
+        'step': str(step),
+        'pca_tolerance': str(pca_tolerance),
+        'dataset': str(dataset),
+        'smote_neighbors': str(smote_neighbors),
+        'test_ratio': str(test_ratio),
+        'k_fold': str(k_fold),
+        'knn_neighbors': str(knn_neighbors)
+    }
+
+    with open('config.ini', 'w') as configfile:
+        config.write(configfile)
+    ```
+    This code will create a configuration file named 'config.ini' in the same directory as your Jupyter notebook. The configuration file will contain the values of the variables defined in the code.

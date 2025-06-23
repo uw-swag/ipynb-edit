@@ -1,0 +1,31 @@
+```python
+    # Adding metrics and metric presets usage
+    from prefect import Metric, metric_set
+
+    @metric_set(key_prefix="my_metrics")
+    class MyMetric(Metric):
+        def compute(self):
+            return 10
+
+    # Adding tests and test presets usage
+    from prefect import TestResult, Test, TestPreset
+
+    class MyTest(Test):
+        def run(self, flow):
+            return TestResult(passed=True)
+
+    class MyTestPreset(TestPreset):
+        name = "My Test Preset"
+        tests = [MyTest]
+
+    # Removing outdated example with metrics
+    from prefect import Flow, FlowSpec
+
+    class MyFlowSpec(FlowSpec):
+        def process(self, data):
+            return data
+
+    flow = Flow(flow_spec=MyFlowSpec())
+    flow.run()
+    ```
+    This code snippet demonstrates how to use metrics, test presets, and test presets in Prefect.

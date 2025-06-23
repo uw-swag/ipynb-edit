@@ -1,0 +1,13 @@
+# given an image path or the image url
+
+# img_fp = 'examples/inputs/emma.jpg'
+# img = cv2.imread(img_fp)
+# plt.imshow(img[..., ::-1])
+
+img_url = 'https://c8.alamy.com/comp/KY3E6K/mosaic-of-different-portraits-of-the-same-cute-girl-mixed-emotions-KY3E6K.jpg'
+img = io.imread(img_url)
+plt.imshow(img)
+
+img = img[..., ::-1]  # RGB -> BGR
+!python3 demo_video.py -f examples/inputs/videos/214.avi --onnx
+

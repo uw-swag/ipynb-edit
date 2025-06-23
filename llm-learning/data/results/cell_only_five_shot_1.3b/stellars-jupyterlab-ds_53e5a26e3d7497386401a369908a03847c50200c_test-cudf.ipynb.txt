@@ -1,0 +1,25 @@
+```
+    # disable cudf
+%load_ext cudf.pandas # this extension further replaces pandas with cudf
+# import cudf as pd # another way of using cudf
+import pandas as pd # pandas is going to be replaced thanks to the extension
+import requests
+from io import StringIO
+# show which implementation is used
+print(pd)
+%%time
+
+url = "https://github.com/plotly/datasets/raw/master/tips.csv"
+content = requests.get(url).content.decode("utf-8")
+
+tips_df = pd.read_csv(StringIO(content))
+tips_df["tip_percentage"] = tips_df["tip"] / tips_df["total_bill"] * 100
+
+# display average tip by dining party size
+print(tips_df.groupby("size").tip_percentage.mean())
+    ```
+    '''
+
+    '''
+
+    '''

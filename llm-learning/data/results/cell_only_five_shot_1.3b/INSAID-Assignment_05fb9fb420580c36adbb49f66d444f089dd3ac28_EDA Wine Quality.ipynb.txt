@@ -1,0 +1,71 @@
+
+    ## Restructuring and Adding EDA notebooks
+
+    ### Step 1: Importing necessary libraries
+
+    # Importing necessary libraries
+
+    ```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.decomposition import PCA
+    from sklearn.cluster import KMeans
+    import warnings
+    warnings.filterwarnings("ignore")
+    ```
+
+    ### Step 2: Loading the dataset
+
+    # Load the dataset
+
+    ```python
+    df = pd.read_csv('your_data.csv')
+    ```
+
+    ### Step 3: Exploratory Data Analysis (EDA)
+
+    # Perform EDA on the dataset
+
+    ```python
+    # Checking the first few rows of the dataframe
+    df.head()
+
+    # Checking the statistical summary of the dataframe
+    df.describe()
+
+    # Checking the number of missing values in each column
+    df.isnull().sum()
+
+    # Checking the distribution of the target variable
+    sns.countplot(df['target_variable'])
+
+    # Checking the correlation between different features
+    sns.heatmap(df.corr())
+    ```
+
+    ### Step 4: Data Preprocessing
+
+    # Preprocess the data
+
+    ```python
+    # Removing outliers
+    df = df[(np.abs(stats.zscore(df)) < 3).all(axis=1)]
+
+    # Handling missing values
+    df.fillna(df.mean(), inplace=True)
+
+    # Scaling the features
+    sc = StandardScaler()
+    df = pd.DataFrame(sc.fit_transform(df), columns=df.columns)
+    ```
+
+    ### Step 5: Dimensionality Reduction
+
+    # Reduce the dimensionality of the data using PCA
+
+    ```python
+    pca = PCA(n_components=2)
+    df_pca = pca.fit_transform(df)

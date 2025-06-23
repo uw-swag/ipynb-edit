@@ -1,0 +1,35 @@
+```python
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from keras.models import load_model
+    from gtsrb_loader.get_folderpath import get_folderpath
+    from gtsrb_loader.load_data import load_data
+
+    %matplotlib inline
+
+    # Carrega o modelo de classificação
+    model = load_model('01-07-17_convnet.h5')
+
+    # Carrega os dados de teste
+    path = get_folderpath(subset='test', original_images=False)
+    X_test, y_test = load_data(path)
+
+    # Normaliza os dados de teste
+    X_test = np.array(X_test, dtype=np.float32) / 255
+
+    # Gera as imagens de teste
+    pics = X_test[:10]
+    for idx, pic in enumerate(pics):
+        plt.subplot(2, 5, idx+1)
+        plt.axis('off')
+        plt.imshow(pic)
+    plt.show()
+
+    # Faz as prediç�es
+    predictions = model.predict(pics, verbose=1)
+
+    # Exibe as prediç�es
+    scores = [np.argmax(i) for i in predictions]
+    for idx, score in enumerate(scores):
+        print("Prediction for image", idx, "is", score)
+    ```

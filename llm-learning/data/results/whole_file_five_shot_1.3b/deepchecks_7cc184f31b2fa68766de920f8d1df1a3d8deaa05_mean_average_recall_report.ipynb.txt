@@ -1,0 +1,15 @@
+```
+    # Split VisionData and remove Formatters
+    # (#966)
+    yolo = coco.load_model(pretrained=True)
+
+    test_ds = coco.load_dataset(train=False, object_type='VisionData')
+
+    # Remove Formatters
+    # (#966)
+    test_ds = coco.remove_formatters(test_ds)
+
+    # Run the check
+    result = check.run(test_ds, yolo, prediction_formatter=det_formatter)
+    result.show(show_additional_outputs=False)
+    ```

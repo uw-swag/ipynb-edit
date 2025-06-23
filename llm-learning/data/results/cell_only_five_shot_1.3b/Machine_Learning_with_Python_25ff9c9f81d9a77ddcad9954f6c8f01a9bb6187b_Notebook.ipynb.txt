@@ -1,0 +1,29 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Generate some data
+    np.random.seed(0)
+    x = np.random.rand(100, 1)
+    y = 2 + 3 * x + np.random.rand(100, 1)
+
+    # Calculate the coefficients
+    x_mean = np.mean(x)
+    y_mean = np.mean(y)
+
+    num = 0
+    den = 0
+    for i in range(len(x)):
+        num += (x[i] - x_mean) * (y[i] - y_mean)
+        den += (x[i] - x_mean) ** 2
+    m = num / den
+    b = y_mean - m * x_mean
+
+    # Plot the data and the regression line
+    plt.scatter(x, y)
+    plt.plot([min(x), max(x)], [m * min(x) + b, m * max(x) + b])
+    plt.show()
+
+    # Print the coefficients
+    print(f"Coefficients: m = {m}, b = {b}")
+    ```

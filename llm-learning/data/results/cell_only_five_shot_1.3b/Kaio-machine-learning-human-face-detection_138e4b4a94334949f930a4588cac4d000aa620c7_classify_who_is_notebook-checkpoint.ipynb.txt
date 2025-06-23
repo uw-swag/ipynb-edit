@@ -1,0 +1,61 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Corrigido a mensagem de surpresa detectada, agora é substituida pela mensagem de raiva"
+    Original Code Cells:
+    '''
+    from confusion_matrix import plot
+
+features = np.array(X)
+target = np.array(Y)
+
+plot(features, target, vencedor, ['feliz', 'surpreso', 'triste'])
+from collections import Counter
+
+# 3 emoç�es (triste, surpreso e feliz) o melhor algoritmo de classficação foi o 
+# OneVsOneClassifier com precisão no mundo real de 55% 
+
+# 2 emoç�es (triste e feliz) o melhor algoritmo de classificação foi o
+# AdaBoostClassifier com precisão no mundo real de 92.50% 
+
+modelo = vencedor
+
+X_who_is, Y_who_is, df = get_who_is()
+
+modelo.fit(X, Y)
+
+#display(X_who_is)
+
+predict = modelo.predict(X_who_is)
+
+result = Counter(predict)
+
+who_is = result.most_common()[0][0]
+
+print result
+
+switcher = {
+        0: "Vc parece estar triste! :(",
+        1: "Vc parece estar surpreso! :o",
+        2: "Vc parece estar feliz! :)"
+}
+msg = switcher.get(who_is, "Normal")
+    
+print msg
+
+    '''
+    ]
+
+    ### Response:
+    
+    ### Instruction:
+    [
+    Commit Message: "Corrigido a mensagem de surpresa detectada, agora é substituida pela mensagem de raiva"
+    Original Code Cells:
+    '''
+    from confusion_matrix import plot
+
+features = np.array(X)
+target = np.array(Y)
+
+plot(features, target, vencedor, ['f

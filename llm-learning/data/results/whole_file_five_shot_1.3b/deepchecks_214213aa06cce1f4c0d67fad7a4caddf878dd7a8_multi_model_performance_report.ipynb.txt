@@ -1,0 +1,51 @@
+
+# Documentation and Readme
+
+# ## Overview
+
+The project is about using deep learning and machine learning algorithms to analyze and predict various types of datasets. The main goal is to improve the efficiency and accuracy of data analysis and prediction.
+
+# ## Installation
+
+To install the project, you can use pip:
+
+```bash
+pip install deepchecks
+```
+
+# ## Usage
+
+Here is a basic usage of the project:
+
+```python
+from deepchecks.base import Dataset
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from deepchecks.checks.performance import MultiModelPerformanceReport
+
+iris = load_iris(as_frame=True)
+train, test = train_test_split(iris.frame, test_size=0.33, random_state=42)
+
+train_ds = Dataset(train, label="target")
+test_ds = Dataset(test, label="target")
+
+clf1 = AdaBoostClassifier().fit(train_ds.features_columns, train_ds.label_col)
+clf2 = RandomForestClassifier().fit(train_ds.features_columns, train_ds.label_col)
+clf3 = DecisionTreeClassifier().fit(train_ds.features_columns, train_ds.label_col)
+
+MultiModelPerformanceReport().run(train_ds, test_ds, [clf1, clf2, clf3])
+```
+
+# ## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+# ## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details
+
+# ## Acknowledgments
+
+This project was inspired by the great work of the Deepchecks team and the many great resources available online.

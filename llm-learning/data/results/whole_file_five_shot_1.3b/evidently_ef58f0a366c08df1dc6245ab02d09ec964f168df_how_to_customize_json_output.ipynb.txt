@@ -1,0 +1,55 @@
+```
+    ## This code cell will not be shown in the HTML version of this notebook
+    ## Miscellaneous documentation updates
+
+    ## Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    from sklearn import datasets
+
+    from evidently import ColumnMapping
+    from evidently.report import Report
+    from evidently.test_suite import TestSuite
+    from evidently.metric_preset import DataDriftPreset
+    from evidently.test_preset import DataDriftTestPreset
+    from evidently.core import AllDict
+
+    ## Fetching the California housing dataset
+    data = datasets.fetch_california_housing(as_frame=True)
+    housing_data = data.frame
+
+    ## Renaming the target column
+    housing_data.rename(columns={'MedHouseVal': 'target'}, inplace=True)
+
+    ## Adding a random normal noise to the target column
+    housing_data['prediction'] = housing_data['target'].values + np.random.normal(0, 5, housing_data.shape[0])
+
+    ## Creating a reference and current dataframe
+    reference = housing_data.sample(n=5000, replace=False)
+    current = housing_data.sample(n=5000, replace=False)
+    current.iloc[:20, 3:5] = np.nan
+
+    ## Creating a report
+    report = Report(metrics=[
+        DataDriftPreset(), 
+    ])
+
+    ## Running the report
+    report.run(reference_data=reference, current_data=current)
+
+    ## Converting the report to json
+    report.json()
+
+    ## Converting the report to json without the render
+    report.json(include_render=False)
+
+    ## Converting the report to a dictionary
+    report.as_dict(include={
+        "DataDriftTable": {
+            "drift_by_columns":{
+                "target":{
+                    "column_name", "column_type", "drift_score"
+                }}}})
+
+    ##

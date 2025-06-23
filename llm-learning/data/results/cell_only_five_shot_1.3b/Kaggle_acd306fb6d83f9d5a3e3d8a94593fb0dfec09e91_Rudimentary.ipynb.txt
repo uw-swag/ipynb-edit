@@ -1,0 +1,60 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    # Load the European Soccer Database
+    euro_df = pd.read_csv('euro_data.csv')
+
+    # Check the data
+    print(euro_df.head())
+    print(euro_df.info())
+
+    # Clean the data
+    # Remove any rows with missing values
+    euro_df = euro_df.dropna()
+
+    # Convert data types
+    euro_df['Date'] = pd.to_datetime(euro_df['Date'])
+    euro_df['HomeTeam'] = euro_df['HomeTeam'].astype('category')
+    euro_df['AwayTeam'] = euro_df['AwayTeam'].astype('category')
+
+    # Save the cleaned data
+    euro_df.to_csv('cleaned_euro_data.csv', index=False)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Working- Soccer Stats Database"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import pandas as pd
+    import numpy as np
+
+    # Load the Soccer Stats Database
+    soccer_df = pd.read_csv('soccer_data.csv')
+
+    # Check the data
+    print(soccer_df.head())
+    print(soccer_df.info())
+
+    # Clean the data
+    # Remove any rows with missing values
+    soccer_df = soccer_df.dropna()
+
+    # Convert data types
+    soccer_df['Date'] = pd.to_datetime(soccer_df['Date'])
+    soccer_df['HomeTeam'] = soccer_df['HomeTeam'].astype('category')
+    soccer_df['AwayTeam'] = soccer_df['AwayTeam'].astype('category')
+
+    # Save the cleaned data
+    soccer_df.to_csv('cleaned_soccer_data.csv', index=False)
+    ```
+
+    ### Instruction:
+    [

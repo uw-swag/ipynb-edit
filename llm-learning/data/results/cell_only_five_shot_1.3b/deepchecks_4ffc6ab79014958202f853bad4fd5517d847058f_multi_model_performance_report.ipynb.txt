@@ -1,0 +1,50 @@
+```python
+    # Example 1:
+    # Let's say we have a dataset with two features, 'x' and 'y', and we want to use PCA to reduce the dimensionality of the data.
+
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+
+    # Assume we have the following data
+    X = [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
+
+    # Standardize the features
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+
+    # Create a PCA object
+    pca = PCA(n_components=2)
+
+    # Fit and transform the data
+    X_pca = pca.fit_transform(X_scaled)
+
+    print(X_pca)
+
+    # Example 2:
+    # Let's say we have a dataset with two features, 'x' and 'y', and we want to use a logistic regression model to predict the class of a data point.
+
+    from sklearn.linear_model import LogisticRegression
+
+    # Assume we have the following data
+    X = [[1, 2], [3, 4], [5, 6], [7, 8], [9, 10]]
+    y = [0, 0, 1, 1, 1]
+
+    # Create a logistic regression object
+    logistic_regression = LogisticRegression()
+
+    # Fit the model
+    logistic_regression.fit(X, y)
+
+    # Predict the class of a new data point
+    new_data = [[6, 7]]
+    new_data_scaled = scaler.transform(new_data)
+    new_data_pca = pca.transform(new_data_scaled)
+    prediction = logistic_regression.predict(new_data_pca)
+
+    print(prediction)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Code Refactoring (#582)"
+    Original Code Cells

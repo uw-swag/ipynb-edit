@@ -1,0 +1,32 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+    from sklearn.decomposition import LatentDirichletAllocation
+
+    # Feature Engineering
+    def create_features(df, text_col):
+        # Count Vectorizer
+        cv = CountVectorizer(stop_words='english', max_df=0.7)
+        count_data = cv.fit_transform(df[text_col].values)
+        cv_data = pd.DataFrame(count_data.toarray(), columns=cv.get_feature_names_out())
+
+        # TF-IDF Vectorizer
+        tfidf_vectorizer = TfidfVectorizer(stop_words='english', max_df=0.7)
+        tfidf_data = tfidf_vectorizer.fit_transform(df[text_col].values)
+        tfidf_data = pd.DataFrame(tfidf_data.toarray(), columns=tfidf_vectorizer.get_feature_names_out())
+
+        return cv_data, tfidf_data
+
+    # Topic Modeling
+    def create_topics(data, num_topics, num_words):
+        lda = LatentDirichletAllocation(n_components=num_topics, max_iter=5, learning_method='online', learning_offset=50., random_state=0)
+        lda.fit(data)
+
+        feature_names = tfidf_vectorizer.get_feature_names_out()
+
+        topics = {}
+        for topic_idx, topic in enumerate(lda.components_):
+            topics[topic_idx] = [feature_names[i] for i in topic.argsort()[:-num_words - 1:-1]]
+
+        return topics
+    ```

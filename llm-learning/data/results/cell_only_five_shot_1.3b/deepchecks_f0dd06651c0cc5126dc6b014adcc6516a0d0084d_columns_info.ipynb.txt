@@ -1,0 +1,28 @@
+```python
+    import pandas as pd
+import numpy as np
+from deepchecks.tabular.checks.overview import ColumnsInfo
+from deepchecks.tabular.base import Dataset
+
+# Load your data
+df = pd.read_csv('your_data.csv')
+
+# Split the data into base and core
+base_df = df.iloc[:1000]
+core_df = df.iloc[1000:]
+
+# Create a Dataset object for the base data
+base_ds = Dataset(base_df, label='label')
+
+# Create a Dataset object for the core data
+core_ds = Dataset(core_df, label='label')
+
+# Run the ColumnsInfo check on both datasets
+base_check = ColumnsInfo(base_ds)
+core_check = ColumnsInfo(core_ds)
+
+# Run the checks
+base_check.run()
+core_check.run()
+
+    ```

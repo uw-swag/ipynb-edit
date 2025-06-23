@@ -1,0 +1,51 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    from datetime import datetime
+    from sklearn.datasets import fetch_openml
+
+    from evidently import ColumnMapping
+    from evidently.test_suite import TestSuite
+    from evidently.tests import *
+
+    from evidently.test_preset import NoTargetPerformance, DataQuality, DataStability, DataDrift
+
+    data = fetch_openml(name='adult', version=2, as_frame='auto')
+    df = data.frame
+
+    #target and prediction
+    df['target'] = df['education-num']
+    df['prediction'] = df['education-num'].values + np.random.normal(0, 6, df.shape[0])
+
+    #reference data
+    ref = df[~df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+    #current data
+    curr = df[df.education.isin(['Some-college', 'HS-grad', 'Bachelors'])]
+
+    dataset_tests = TestSuite(tests=[
+        TestNumberOfColumns(),
+        TestNumberOfRows(),
+        TestNumberOfConstantColumns(),
+        TestNumberOfDuplicatedColumns(),
+        TestNumberOfDuplicatedRows(),
+        TestColumnsType(),
+        TestTargetFeaturesCorrelations(),
+        TestHighlyCorrelatedFeatures(),
+        TestShareOfDriftedFeatures() ,
+        TestNumberOfDriftedFeatures(),
+    ])
+
+    dataset_tests.run(reference_data=ref, current_data=curr)
+    dataset_tests
+
+    feature_level_tests = TestSuite(tests=[
+        TestMeanInNSigmas(column_name='hours-per-week'),
+        TestShareOfOutRangeValues(column_name='hours-per-week'),
+        TestNumberOfOutListValues(column_name='education'),
+        TestColumnNANShare(column_name='education'),
+        TestFeatureValueDrift(column_name='education')
+    ])
+
+    feature_level_tests.run(reference_data

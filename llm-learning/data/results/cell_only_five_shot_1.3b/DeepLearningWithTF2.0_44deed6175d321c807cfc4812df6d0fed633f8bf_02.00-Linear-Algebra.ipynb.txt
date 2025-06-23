@@ -1,0 +1,44 @@
+```python
+    # Installs
+    !pip install -q tensorflow==2.0.0-alpha0
+
+    # Numerical computation
+    import numpy as np
+    from scipy.optimize import minimize
+
+    # Optimization
+    def objective(x):
+        return -x[0]**2 - x[1]**2
+
+    res = minimize(objective, [1, 1], bounds=[(0, None)])
+    print(res.x)
+
+    # Machine Learning
+    import tensorflow as tf
+    from tensorflow import keras
+    from tensorflow.keras import layers
+
+    # Model
+    model = keras.Sequential([
+        layers.Dense(64, activation='relu'),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(2)
+    ])
+
+    # Compile
+    model.compile(optimizer='adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
+
+    # Training
+    X_train = np.random.rand(1000, 2)
+    y_train = np.random.randint(0, 2, (1000, 1))
+
+    model.fit(X_train, y_train, epochs=10)
+
+    # Prediction
+    X_test = np.random.rand(2, 2)
+    y_pred = model.predict(X_test)
+
+    print(y_pred)
+    ```

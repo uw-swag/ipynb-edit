@@ -1,0 +1,48 @@
+```python
+    from deepchecks.tabular.base import Dataset
+    import matplotlib.pyplot as plt
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+    from deepchecks.tabular.checks import UnusedFeatures
+    import pandas as pd
+
+    # Load the iris dataset
+    iris = load_iris()
+    df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+    df['target'] = iris.target
+
+    # Create a dataset from the DataFrame
+    dataset = Dataset(df)
+
+    # Perform the check
+    check = UnusedFeatures(dataset)
+    report = check.run()
+
+    # Print the report
+    print(report)
+
+    # Plot the report
+    report.plot()
+    plt.show()
+
+    # Split the dataset into a base and core
+    base_dataset = dataset.split(by_column='target')
+
+    # Create a base model
+    base_model = AdaBoostClassifier()
+
+    # Train the base model
+    base_model.fit(base_dataset.X, base_dataset.y)
+
+    # Now you can use the base model to make predictions on the core dataset
+    core_dataset = dataset.exclude(by_column='target')
+    core_model = AdaBoostClassifier()
+    core_model.fit(core_dataset.X, core_dataset.y)
+
+    # Now you can use the core model to make predictions on the base dataset
+    base_predictions = base_model.predict(base_dataset.X)
+    core_predictions = core_model.predict(core_dataset.X)
+
+    # You can then compare the predictions from the base and core datasets
+    # This will depend on what you are trying to achieve
+    ```

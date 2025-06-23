@@ -1,0 +1,38 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "Finished main code."
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import scipy.sparse as sp
+    from scipy.sparse import csc_matrix as csc
+    import pandas as pd
+    from sklearn.metrics import (
+        mean_squared_error,
+        mean_absolute_error,
+        r2_score,
+        explained_variance_score,
+        roc_auc_score,
+        log_loss,
+    )
+    from sklearn.preprocessing import minmax_scale
+
+    from constants import (SEED, EVENT_THRESHOLD, DEFAULT_K, DEFAULT_THRESHOLD, LOG_DIR, 
+                           DATA_DIR, TEST_DATA_PATH, DATA_OCT, DATA_NOV, USECOLS, USER, ITEM, RATING, PREDICTION)
+    from utilities.ms_evaluation import (rmse, auc, logloss, precision_at_k, recall_at_k, ndcg_at_k, map_at_k)
+    <\Cell_0>
+    <Cell_1>
+    NAME = r'BasicMatrixFactorization' 
+    Y_HAT_PATH = DATA_DIR+r'/'+NAME+r'-y_hat.npz'
+    TEST_RESULTS_PATH = LOG_DIR+'\\'+NAME+'\\test-results.csv'
+    <\Cell_1>
+    <Cell_2>
+    log = pd.Series(dtype='float64')
+    y_hat = sp.load_npz(Y_HAT_PATH)
+    y = sp.load_npz(TEST_DATA_PATH)
+    assert y_hat.shape == y.shape, 'The shape of Y and Y_hat must match, otherwise they are not comparable.'
+    print(f"Shape of the matrices: {y.shape}")
+    print("Number of non-zero values:")
+    print(f"Y: {y.nnz:8,}

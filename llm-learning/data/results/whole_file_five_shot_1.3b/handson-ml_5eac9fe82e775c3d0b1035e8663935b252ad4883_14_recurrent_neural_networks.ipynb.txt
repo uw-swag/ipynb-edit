@@ -1,0 +1,45 @@
+
+    ###
+<\Cell_69>
+<Cell_70>
+tf.reset_default_graph()
+
+n_steps = 50
+n_neurons = 200
+n_layers = 3
+num_encoder_symbols = 20000
+num_decoder_symbols = 20000
+embedding_size = 150
+learning_rate = 0.01
+
+W = tf.placeholder(tf.float32, [None, n_steps - 1, 1])
+Y_input = Y[:, :-1]
+Y_target = Y[:, 1:]
+
+W_flat = tf.reshape(W, [-1])
+xentropy = W_flat * tf.nn.sparse_softmax_cross_entropy_with_logits(labels=Y_target_flat, logits=W_flat)
+loss = tf.reduce_mean(xentropy)
+optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+training_op = optimizer.minimize(loss)
+
+init = tf.global_variables_initializer()
+<\Cell_70>
+<Cell_71>
+tf.reset_default_graph()
+
+n_steps = 50
+n_neurons = 200
+n_layers = 3
+num_encoder_symbols = 20000
+num_decoder_symbols = 20000
+embedding_size = 150
+learning_rate = 0.01
+
+W = tf.placeholder(tf.float32, [None, n_steps - 1, 1])
+Y_input = Y[:, :-1]
+Y_target = Y[:, 1:]
+
+W_flat = tf.reshape(W, [-1])
+xentropy = W_flat * tf.nn.sparse_softmax_cross_entropy_with_logits(labels=Y_target_flat, logits=W_flat)
+loss = tf.reduce_mean(xentropy)
+optimizer = tf.train.Ad

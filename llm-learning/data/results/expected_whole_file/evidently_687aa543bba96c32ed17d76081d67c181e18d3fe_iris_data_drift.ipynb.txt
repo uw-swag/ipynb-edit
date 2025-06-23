@@ -1,0 +1,34 @@
+<Cell_0>
+import pandas as pd
+
+from sklearn import datasets
+
+from evidently.dashboard import Dashboard
+from evidently.tabs import DataDriftTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import DataDriftProfileSection
+<\Cell_0>
+<Cell_1>
+iris = datasets.load_iris()
+<\Cell_1>
+<Cell_2>
+iris_frame = pd.DataFrame(iris.data, columns = iris.feature_names)
+<\Cell_2>
+<Cell_3>
+iris_data_drift_dashboard = Dashboard(tabs=[DataDriftTab()])
+iris_data_drift_dashboard.calculate(iris_frame, iris_frame, column_mapping = None)
+<\Cell_3>
+<Cell_4>
+iris_data_drift_dashboard.show()
+<\Cell_4>
+<Cell_5>
+#iris_data_drift_dashboard.save('iris_data_drift.html')
+<\Cell_5>
+<Cell_6>
+iris_data_drift_profile = Profile(sections=[DataDriftProfileSection()])
+iris_data_drift_profile.calculate(iris_frame, iris_frame, column_mapping = None)
+<\Cell_6>
+<Cell_7>
+iris_data_drift_profile.json()
+<\Cell_7>

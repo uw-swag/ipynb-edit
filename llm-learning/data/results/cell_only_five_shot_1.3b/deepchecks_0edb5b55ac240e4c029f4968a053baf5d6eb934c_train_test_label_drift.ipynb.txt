@@ -1,0 +1,17 @@
+```python
+    from deepchecks.vision.dataset import VisionDataset
+    from torchvision import models
+    import torchvision
+    import torch
+    from deepchecks.vision.utils.classification_formatters import ClassificationLabelFormatter, ClassificationPredictionFormatter
+    train_ds = VisionDataset(mnist_dataloader_train, label_transformer=ClassificationLabelFormatter(lambda x: x))
+    test_ds = VisionDataset(mnist_dataloader_test, label_transformer=ClassificationLabelFormatter(lambda x: x))
+    from deepchecks.vision.utils.detection_formatters import DetectionLabelFormatter, DetectionPredictionFormatter
+
+    train_ds = VisionDataset(dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+    test_ds = VisionDataset(dataloader, label_transformer=DetectionLabelFormatter(lambda x: x))
+
+    ```
+
+    ### Explanation:
+    The code is renaming the `VisionDataset` class to `VisionData`. This change is done to make the code more readable and to avoid any potential confusion with the original `VisionDataset` class.

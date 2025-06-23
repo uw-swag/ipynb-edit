@@ -1,0 +1,23 @@
+```python
+    # Create a new notebook
+    from IPython.display import display, HTML
+    display(HTML('<style>.container { width:80% !important; }</style>'))
+    display(HTML('<div class="container">'))
+    display(HTML('<h1>My First Jupyter Notebook</h1>'))
+    display(HTML('<p>This is my first notebook.</p>'))
+    display(HTML('</div>'))
+
+    # Import data
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+
+    # Load data
+    data = pd.read_csv('data.csv')
+
+    # Split data into features and target
+    X = data.drop('target', axis=1)
+    y = data['target']
+
+    # Split data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    ```

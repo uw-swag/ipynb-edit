@@ -1,0 +1,36 @@
+```python
+    # Fix typo
+    DEFECT_PARAMETERS = {
+    "TYPE": "vacancy",  # Type of defect to create
+    "SITE": 0, # Site index of the defect
+    "SPECIE": None, # Specie to be 
+    }
+    import sys
+
+    if sys.platform == "emscripten":
+        import micropip
+        await micropip.install('mat3ra-api-examples', deps=False)
+        from utils.jupyterlite import install_packages
+        await install_packages("create_interface_with_min_strain_zsl.ipynb", "../../config.yml")
+    from mat3ra.made.material import Material
+    from utils.jupyterlite import get_data
+
+    # Get the list of input materials and load them into `materials_in` variable
+    get_data("materials_in", globals())
+    materials = list(map(Material, globals()["materials_in"]))
+    material = materials[0]
+    from utils.visualize import visualize_materials as visualize
+    visualize(material, repetitions=[3, 3, 3], rotation="0x")
+    from mat3ra.made.tools.build.defect import PointDefectBuilder,PointDefectBuilderParameters, PointDefectConfiguration
+
+    v = PointDefectConfiguration(material=material, defect_type="vacancy", specie=None, min_distance=3.0)
+    s = PointDefectConfiguration(material=material, defect_type="substitution", specie="Ge", min_distance=3.0)
+    i = PointDefectConfiguration(material=material, defect_type="interstitial", specie="Ge", min_distance=3.0)
+
+    dp = PointDefectBuilderParameters(target_site=0, center_defect=False)
+
+    d = PointDefectBuilder(build_parameters=dp)
+
+    mv = d.get_material(configuration=v)
+    ms = d.get_material(configuration=s)
+    mi = d

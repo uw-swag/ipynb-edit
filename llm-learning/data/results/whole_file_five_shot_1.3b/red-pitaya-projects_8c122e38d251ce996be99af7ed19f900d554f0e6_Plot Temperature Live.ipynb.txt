@@ -1,0 +1,63 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Update live plotting with serial data"
+    Original Code Cells:
+    '''
+    <Cell_0>
+%matplotlib notebook
+import matplotlib
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from matplotlib.animation import FuncAnimation
+from IPython.display import display, clear_output
+from datetime import datetime, date
+import time
+import pandas as pd
+
+headers = ["Temperature (oC)","Time(Minutes)"]
+<\Cell_0>
+<Cell_1>
+df = pd.DataFrame() #Create an empty data frame to append to later
+
+def animate(i):
+    global df
+    global plt
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    current_temp = df['Time(Minutes)
+    plt.cla()
+    plt.plot(x,y1)
+    plt.gcf().autofmt_xdate()
+    plt.xlabel('Time (Minutes)')
+    plt.ylabel('Temprature (C)')
+    plt.title("Temperature - Arcylic Case with Fan")
+    plt.ylim(ymin=0,ymax=85)
+
+plt.show()
+<\Cell_1>
+<Cell_2>
+ani = FuncAnimation(plt.gcf(), animate,interval=1000)
+
+plt.show()
+<\Cell_2>
+<Cell_3>
+filename = str(date.today()) + " temperature data.csv"
+try:
+    df[headers] #Make sure the DataFrame is in the correct order
+    df.to_csv(filename,names=headers)
+except:
+    df = pd.DataFrame() #Create an empty data frame to append to later
+df
+<\Cell_3>
+
+'''
+    ]
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Update live plotting

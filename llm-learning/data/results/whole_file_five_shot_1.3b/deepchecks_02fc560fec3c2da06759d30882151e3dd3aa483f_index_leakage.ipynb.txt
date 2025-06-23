@@ -1,0 +1,31 @@
+```python
+    #thread ;;
+    #require "tensorflow" ;;
+    open Tensorflow ;;
+    let forty_two = Ops.(f 40. + f 2.) in
+    let y = Session.run (Session.Output.scalar_float forty_two) in
+    assert(abs_float (y -. 42.) < 1e-9)
+
+    #thread ;;
+    #require "deepchecks" ;;
+    open Deepchecks ;;
+    let train_ds = Dataset.from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1') in
+    let test_ds = Dataset.from_dict({'col1': [4, 3, 5, 6, 7]}, 'col1') in
+    let check_obj = IndexTrainTestLeakage() in
+    check_obj.run(train_ds, test_ds)
+
+    #thread ;;
+    #require "deepchecks" ;;
+    open Deepchecks ;;
+    let train_ds = Dataset.from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1') in
+    let test_ds = Dataset.from_dict({'col1': [4, 3, 5, 6, 7]}, 'col1') in
+    let check_obj = IndexTrainTestLeakage(n_index_to_show=1) in
+    check_obj.run(train_ds, test_ds)
+
+    #thread ;;
+    #require "deepchecks" ;;
+    open Deepchecks ;;
+    let train_ds = Dataset.from_dict({'col1': [1, 2, 3, 4, 10, 11]}, 'col1') in
+    let test_ds = Dataset.from_dict({'col1': [20, 21, 5, 6, 7]}, 'col1') in
+    let check_obj = IndexTrainTestLeakage() in
+    check

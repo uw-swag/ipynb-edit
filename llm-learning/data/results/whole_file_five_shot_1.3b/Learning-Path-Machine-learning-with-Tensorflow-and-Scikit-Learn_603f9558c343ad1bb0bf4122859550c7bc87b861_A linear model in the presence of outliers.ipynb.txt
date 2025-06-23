@@ -1,0 +1,51 @@
+
+<Cell_0>
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+<\Cell_0>
+<Cell_1>
+df = pd.read_csv('data.csv')
+df.head()
+<\Cell_1>
+<Cell_2>
+df.describe()
+<\Cell_2>
+<Cell_3>
+df.columns
+<\Cell_3>
+<Cell_4>
+df.info()
+<\Cell_4>
+<Cell_5>
+df.corr()
+<\Cell_5>
+<Cell_6>
+X = df.iloc[:, :-1].values
+y = df.iloc[:, -1].values
+<\Cell_6>
+<Cell_7>
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+<\Cell_7>
+<Cell_8>
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+<\Cell_8>
+<Cell_9>
+y_pred = regressor.predict(X_test)
+<\Cell_9>
+<Cell_10>
+plt.scatter(X_test, y_test, color = 'red')
+plt.plot(X_test, y_pred, color = 'blue')
+plt.title('Test Set Results')
+plt.xlabel('Test Set')
+plt.ylabel('Actual Results')
+plt.show()
+<\Cell_10>
+<Cell_11>
+print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, y_pred))
+print('Mean Squared Error:', metrics.mean_squared_error(y_test, y_pred))
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error

@@ -1,0 +1,39 @@
+```python
+    import pandas as pd
+    import numpy as np
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.impute import SimpleImputer
+
+    # Load data
+    train_data = pd.read_csv('train.csv')
+    test_data = pd.read_csv('test.csv')
+
+    # Preprocess data
+    # For simplicity, we'll just drop the rows with missing values
+    train_data = train_data.dropna()
+    test_data = test_data.dropna()
+
+    # Convert categorical variables to numerical
+    for column in train_data.columns:
+        if train_data[column].dtype == 'object':
+            train_data[column] = pd.Categorical(train_data[column]).codes
+            test_data[column] = pd.Categorical(test_data[column]).codes
+
+    # Handle missing values
+    imputer = SimpleImputer(strategy='mean')
+    train_data = pd.DataFrame(imputer.fit_transform(train_data), columns=train_data.columns)
+    test_data = pd.DataFrame(imputer.transform(test_data), columns=test_data.columns)
+
+    # Standardize numerical variables
+    scaler = StandardScaler()
+    train_data = pd.DataFrame(scaler.fit_transform(train_data), columns=train_data.columns)
+    test_data = pd.DataFrame(scaler.transform(test_data), columns=test_data.columns)
+
+    # Save preprocessed data
+    train_data.to_csv('train_preprocessed.csv', index=False)
+    test_data.to_csv('test_preprocessed.csv', index=False)
+    ```
+
+    This code will load your data, drop rows with missing values, convert categorical variables to numerical, handle missing values, and standardize numerical variables. It will then save the preprocessed data to new CSV files.
+
+    Please note that this is a very basic preprocessing pipeline. Depending on your specific use case, you may need to adjust

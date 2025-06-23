@@ -1,0 +1,56 @@
+```python
+    import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from helpers.data import summary
+from helpers import constants as C
+
+# Load the data
+df = pd.read_csv('data.csv')
+
+# Check the summary of the data
+summary(df)
+
+# Plotting the data
+sns.pairplot(df)
+plt.show()
+
+# Correlation matrix
+corr = df.corr()
+sns.heatmap(corr, annot=True, cmap='coolwarm')
+plt.show()
+
+# Boxplot for each feature
+for column in df.columns:
+    sns.boxplot(df[column])
+    plt.show()
+
+# Histogram for each feature
+for column in df.columns:
+    sns.distplot(df[column])
+    plt.show()
+
+# Scatter plot for each pair of features
+sns.pairplot(df, hue="target")
+plt.show()
+
+# Correlation heatmap for each pair of features
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+plt.show()
+
+# Correlation heatmap for each pair of features with target
+sns.heatmap(df.corr()[['target', 'feature1', 'feature2']], annot=True, cmap='coolwarm')
+plt.show()
+
+# Correlation heatmap for each pair of features with target
+sns.heatmap(df.corr()[['target', 'feature1', 'feature2']], annot=True, cmap='coolwarm')
+plt.show()
+
+# Correlation heatmap for each pair of features with target
+sns.heatmap(df.corr()[['target', 'feature1', 'feature2']], annot=True, cmap='coolwarm')
+plt.show()
+
+# Correlation heatmap for each pair of features with target
+sns.heatmap(df.corr()[['target', 'feature1', 'feature2']], annot

@@ -1,0 +1,44 @@
+```python
+    ## Code: FinBERT_English_Comments.py
+    ## Purpose: This script is used to comment on English text using FinBERT.
+    ## Author: Your Name
+    ## Date: 01/01/2022
+
+    # Import necessary libraries
+    import torch
+    from transformers import BertForSequenceClassification, BertTokenizer
+
+    # Initialize the BERT model and tokenizer
+    model = BertForSequenceClassification.from_pretrained("bert-base-uncased")
+    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
+
+    # Define a function to comment on English text
+    def comment_on_text(text):
+        # Tokenize the text
+        inputs = tokenizer(text, return_tensors="pt")
+
+        # Get the model's predictions
+        outputs = model(**inputs)
+
+        # The model's predictions are logits, we need to convert them to probabilities
+        probabilities = torch.nn.functional.softmax(outputs.logits, dim=1)
+
+        # The model's prediction for the text is the one with the highest probability
+        prediction = torch.argmax(probabilities, dim=1)
+
+        # Return the prediction
+        return prediction
+
+    # Test the function
+    text = "This is a test text for the FinBERT model."
+    print(f"Prediction: {comment_on_text(text)}")
+    ```
+    This script uses the FinBERT model from the Hugging Face transformers library to comment on English text. The function `comment_on_text` takes a string of text as input and returns the prediction of the model. The model's prediction is the one with the highest probability.
+
+    Please note that you need to have the necessary libraries installed and the model weights need to be downloaded from the Hugging Face model hub.
+
+    Also, this is a simple example and might not work perfectly for all types of text. For more accurate results, you might need to fine-tune the model on a specific task.
+
+    This script is written in Python and uses the PyTorch library.
+
+    ##

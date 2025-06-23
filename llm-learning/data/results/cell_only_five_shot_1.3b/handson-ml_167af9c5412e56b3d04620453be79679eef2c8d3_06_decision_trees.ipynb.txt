@@ -1,0 +1,40 @@
+```python
+    from sklearn.datasets import load_iris
+    from sklearn.tree import DecisionTreeClassifier, export_graphviz
+
+    iris = load_iris()
+    X = iris.data[:, 2:] # petal length and width
+    y = iris.target
+
+    tree_clf = DecisionTreeClassifier(max_depth=2, random_state=42)
+    tree_clf.fit(X, y)
+    export_graphviz(
+            tree_clf,
+            out_file=image_path("iris_tree.dot"),
+            feature_names=iris.feature_names[2:],
+            class_names=iris.target_names,
+            rounded=True,
+            filled=True
+    )
+
+    from sklearn.tree import DecisionTreeRegressor
+
+    # Quadratic training set + noise
+    rnd.seed(42)
+    m = 200
+    X = rnd.rand(m, 1)
+    y = 4 * (X - 0.5) ** 2
+    y = y + rnd.randn(m, 1) / 10
+
+    tree_reg1 = DecisionTreeRegressor(random_state=42, max_depth=2)
+    tree_reg2 = DecisionTreeRegressor(random_state=42, max_depth=3)
+    tree_reg1.fit(X, y)
+    tree_reg2.fit(X, y)
+
+    def plot_regression_predictions(tree_reg, X, y, axes=[0, 1, -0.2, 1], ylabel="$y$"):
+        x1 = np.linspace(axes[0], axes[1], 500).reshape(-1, 1)
+        y_pred = tree_reg.predict(x1)
+        plt.axis(axes)
+        plt.xlabel("$x_1$", fontsize=18)
+        if ylabel:
+            plt.ylabel(ylabel, fontsize=18,

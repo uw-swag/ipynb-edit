@@ -1,0 +1,13 @@
+```
+    #options
+    stat_test_option = DataDriftOptions(all_features_stattest='psi')
+
+    data_drift_column_tests = TestSuite(tests=[
+        TestColumnValueDrift(column_name='education-num', options=stat_test_option)
+    ])
+
+    data_drift_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+    data_drift_column_tests
+    ```
+
+    The above code is an example of how to update the examples with the respect to the last fixes. The 'education-num' column is being tested for statistical significance using the 'psi' option. The 'run' function is used to execute the tests and the 'data_drift_column_tests' object is then printed to the console.

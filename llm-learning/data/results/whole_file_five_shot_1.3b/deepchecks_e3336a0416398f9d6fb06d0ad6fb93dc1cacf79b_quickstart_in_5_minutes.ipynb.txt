@@ -1,0 +1,42 @@
+```python
+    # If you don't have deepchecks installed yet:
+    import sys
+    !{sys.executable} -m pip install deepchecks -U --quiet #--user
+
+    from deepchecks.vision.datasets.detection import coco
+
+    import torch
+    device = torch.device('cuda') if torch.cuda.is_available() else 'cpu'
+
+    yolo = coco.load_model(pretrained=True, device=device)
+
+    coco_train_loader = coco.load_dataset(train=True)
+    coco_test_loader = coco.load_dataset(train=False)
+
+    from deepchecks.vision import VisionData
+    from deepchecks.vision.utils import DetectionLabelFormatter
+
+    label_formatter=DetectionLabelFormatter(coco.yolo_label_formatter)
+
+    # The num_classes is explicitly declared to aid computation, but would be inferred automatically otherwise.
+    train_ds = VisionData(coco_train_loader, label_formatter=label_formatter, num_classes=80, label_map=coco.LABEL_MAP)
+    test_ds = VisionData(coco_test_loader, label_formatter=label_formatter, num_classes=80, label_map=coco.LABEL_MAP)
+
+    from deepchecks.vision.suites import full_suite
+
+    suite = full_suite()
+
+    from deepchecks.vision.utils.detection_formatters import DetectionPredictionFormatter
+
+    det_formatter = DetectionPredictionFormatter(coco.yolo_prediction_formatter)
+
+    result = suite.run(train_dataset=train_ds, test_dataset=test_ds, model=yolo, prediction_formatter=det_formatter, device=device)
+
+    result.save_as_html('full_suite_result.html')
+
+    result
+
+    from deepchecks.vision.checks import TrainTestLabelDrift
+
+    check = TrainTestLabelDrift()
+    result = check.

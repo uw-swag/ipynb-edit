@@ -1,0 +1,39 @@
+```python
+    class Homework:
+        def __init__(self, id, problem, solution, due_date):
+            self.id = id
+            self.problem = problem
+            self.solution = solution
+            self.due_date = due_date
+
+    class HomeworkManager:
+        def __init__(self):
+            self.homeworks = []
+
+        def add_homework(self, homework):
+            self.homeworks.append(homework)
+
+        def get_homework(self, id):
+            for homework in self.homeworks:
+                if homework.id == id:
+                    return homework
+            return None
+
+    homework_manager = HomeworkManager()
+
+    homework_1 = Homework(1, "Problem 1", "Solution 1", "2022-12-31")
+    homework_2 = Homework(2, "Problem 2", "Solution 2", "2022-12-31")
+    homework_3 = Homework(3, "Problem 3", "Solution 3", "2022-12-31")
+
+    homework_manager.add_homework(homework_1)
+    homework_manager.add_homework(homework_2)
+    homework_manager.add_homework(homework_3)
+
+    homework_1_retrieved = homework_manager.get_homework(1)
+    homework_2_retrieved = homework_manager.get_homework(2)
+    homework_3_retrieved = homework_manager.get_homework(3)
+
+    print(f"Homework 1: {homework_1_retrieved.problem}")
+    print(f"Homework 2: {homework_2_retrieved.problem}")
+    print(f"Homework 3: {homework_3_retrieved.problem}")
+    ```

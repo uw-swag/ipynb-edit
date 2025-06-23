@@ -1,0 +1,10 @@
+```python
+    # Preprocess data
+    bins = (2, 6.5, 8)
+    group_names = ['bad','good']
+    wine['quality'] = pd.cut(wine['quality'],bins = bins, labels = group_names)
+
+    # Plotting the distribution of quality
+    sns.countplot(x='quality', data=wine)
+    plt.show()
+    ```

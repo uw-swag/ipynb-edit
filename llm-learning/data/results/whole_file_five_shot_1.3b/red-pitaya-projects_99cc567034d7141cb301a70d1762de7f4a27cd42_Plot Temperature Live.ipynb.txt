@@ -1,0 +1,50 @@
+
+    The code you provided is already set up to create a live plot of temperature data. The plot updates every second as new data is collected. The plot is displayed in the Jupyter notebook.
+
+    However, if you want to update the plot in real-time, you can use the `ani.event_source.stream` function. This function returns a generator that yields the current frame of the animation.
+
+    Here's how you can modify your code to use this:
+
+    ```python
+    from IPython.display import display, clear_output
+    from datetime import datetime, date
+    import time
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    import matplotlib.animation as animation
+    import pandas as pd
+    import numpy as np
+    import ipywidgets as widgets
+    import threading
+
+    filename = str(date.today()) + " temperature data.csv"
+
+    headers = ["Temperature (oC)","Date"]
+    try:
+        df = pd.read_csv(filename,names=headers,skiprows = 1)
+    except:
+        df = pd.DataFrame() #Create an empty data frame to append to later
+
+    keep_running = True
+
+    def collect_data():
+        while keep_running == True:
+            global df
+            clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+            current_temp = !xadc_get_value_temp
+            temp_value = float(current_temp[0][:5])
+            clear_output(wait=True)
+            display('Collecting temperatures. '+ str(len(df.index)) +' value(s) recorded.')
+            clean_data_table['Temperature (oC)'] = [temp_value]
+            clean_data_table['Date'] = [datetime.now()]
+            df = df.append(clean_data_table)
+            time.sleep(1)
+
+    t1=threading.Thread(target=collect_data)
+    t1.start()
+
+    keep_running = False
+
+    df
+
+    df[headers] #Make sure the

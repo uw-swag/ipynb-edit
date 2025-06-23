@@ -1,0 +1,67 @@
+```python
+    # Python Practical 4: Advanced Python
+    # Semester 2, Advanced Python Practical
+
+    # Problem 1: Write a Python function to find the factorial of a number.
+
+    def factorial(n):
+        if n == 0:
+            return 1
+        else:
+            return n * factorial(n-1)
+
+    print(factorial(5))
+
+    # Problem 2: Write a Python function to find the Fibonacci series up to n.
+
+    def fibonacci(n):
+        if n <= 0:
+            return []
+        elif n == 1:
+            return [0]
+        elif n == 2:
+            return [0, 1]
+        else:
+            fib_seq = [0, 1]
+            while len(fib_seq) < n:
+                fib_seq.append(fib_seq[-1] + fib_seq[-2])
+            return fib_seq
+
+    print(fibonacci(10))
+
+    # Problem 3: Write a Python function to check if a number is prime.
+
+    def is_prime(n):
+        if n <= 1:
+            return False
+        elif n <= 3:
+            return True
+        elif n % 2 == 0 or n % 3 == 0:
+            return False
+        i = 5
+        while i * i <= n:
+            if n % i == 0 or n % (i + 2) == 0:
+                return False
+            i += 6
+        return True
+
+    print(is_prime(17))
+
+    # Problem 4: Write a Python function to find the GCD of two numbers.
+
+    def gcd(a, b):
+        if b == 0:
+            return a
+        else:
+            return gcd(b, a % b)
+
+    print(gcd(24, 36))
+
+    # Problem 5: Write a Python function to find the LCM of two numbers.
+
+    def lcm(a, b):
+        return a * b // gcd(a, b)
+
+    print(lcm(24, 36))
+
+    # Problem 

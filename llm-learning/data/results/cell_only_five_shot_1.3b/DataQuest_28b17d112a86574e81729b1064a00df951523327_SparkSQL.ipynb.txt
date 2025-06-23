@@ -1,0 +1,61 @@
+```
+    # Load data from a CSV file
+    df = sqlCtx.read.csv('hdfs://localhost:9000/user/hadoop/data.csv', header='true', inferSchema='true')
+
+    # Show the data
+    df.show()
+
+    # Save the data to a new CSV file
+    df.write.csv('hdfs://localhost:9000/user/hadoop/new_data.csv')
+
+    # Stop the SparkContext
+    sc.stop()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Spark Streaming, 5/8 Done"
+    Original Code Cells:
+    '''
+    # Find path to PySpark
+    import findspark
+    findspark.init()
+
+    # Import PySpark & initalize SparkContext object
+    import pyspark
+    sc = pyspark.SparkContext()
+
+    # Import SQLContext
+    from pyspark.sql import SQLContext
+
+    # Pass in the SparkContext object `sc`
+    sqlCtx = SQLContext(sc)
+
+    # Import necessary libraries
+    from pyspark.streaming import StreamingContext
+    from pyspark.streaming.kafka import KafkaUtils
+
+    # Create a StreamingContext with the batch interval of 1 second
+    ssc = StreamingContext(sc, 1)
+
+    # Create a Kafka consumer
+    kafkaStream = KafkaUtils.createDirectStream(ssc, ["mytopic"], {"metadata.broker.list": "localhost:9092"})
+
+    # Process the stream
+    lines = kafkaStream.map(lambda (k, v): v)
+
+    # Stop the SparkContext
+    sc.stop()
+    ```
+    ]
+
+    ### Response:
+    ```
+    # Create a DataFrame from the Kafka stream
+    df = kafkaStream.toDF()
+
+    # Show the DataFrame
+    df.show()
+
+    # Save the DataFrame to a new CSV file
+    df.write.csv('hdfs://localhost:9000/

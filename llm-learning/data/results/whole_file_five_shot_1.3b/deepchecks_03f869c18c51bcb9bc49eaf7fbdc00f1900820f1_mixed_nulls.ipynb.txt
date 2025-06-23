@@ -1,0 +1,44 @@
+```python
+    # 0.4.0 version bump
+    # (#766)
+
+    # Description:
+    # This version of Deepchecks includes a new check for detecting mixed nulls in the data.
+    # The check is based on the concept of null values in pandas DataFrame.
+    # A mixed nulls is a combination of null values in a column.
+
+    # Changes:
+    # - Added a new check for detecting mixed nulls in the data.
+    # - The check is based on the concept of null values in pandas DataFrame.
+    # - The check now also considers the data type of the column.
+
+    # New Features:
+    # - The check now also considers the data type of the column.
+
+    # Bug Fixes:
+    # - Fixed a bug where the check was not correctly identifying mixed nulls.
+
+    # Improvements:
+    # - The check is now more accurate and user-friendly.
+    # - The check now also considers the data type of the column.
+
+    # Documentation:
+    # - Added more detailed documentation for the check.
+
+    # Dependencies:
+    # - Dependency on Deepchecks: 0.4.0
+    ```
+
+    ### Code:
+    ```python
+    from deepchecks.checks import MixedNulls
+    import pandas as pd
+
+    data = {'col1': ['sog', '1', 'cat', None, None]}
+    dataframe = pd.DataFrame(data=data)
+    MixedNulls().run(dataframe)
+
+    data = {'col1': ['nan', None, 'null', 'Nan', '1', 'cat'], 'col2':['', '', 'None', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+    dataframe = pd.DataFrame(data=data)
+    MixedNulls().run(dataframe)
+    ```

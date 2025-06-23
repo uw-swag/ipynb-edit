@@ -1,0 +1,34 @@
+```python
+    from deepchecks import TrainTestBaseCheck, CheckResult, Dataset
+
+    class DatasetSizeComparison(TrainTestBaseCheck):
+        """Check which compares the sizes of train and test datasets."""
+
+        def run(self, train_dataset: Dataset, test_dataset: Dataset, model=None) -> CheckResult:
+            ## Check logic
+            train_size = train_dataset.n_samples
+            test_size = test_dataset.n_samples
+
+            ## Return value as check result
+            return_value = {'train_size': train_size, 'test_size': test_size}
+            return CheckResult(return_value)
+
+    import pandas as pd
+
+    # We'll use dummy data for the purpose of this demonstration
+    train_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3,4,5,6,7,8,9]}), label=None)
+    test_dataset = Dataset(pd.DataFrame(data={'x': [1,2,3]}), label=None)
+
+    result = DatasetSizeComparison().run(train_dataset, test_dataset)
+    result
+    ```
+
+    The code above is a simple example of a custom DeepChecks check. It compares the sizes of the train and test datasets and returns the sizes in a dictionary. The check also displays a bar graph of the sizes.
+
+    Please note that you need to have the DeepChecks library installed in your environment to run this code. You can install it using pip:
+
+    ```bash
+    pip install deepchecks
+    ```
+
+    Also, please replace the dummy data with your actual data.

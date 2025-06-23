@@ -1,0 +1,40 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn import metrics
+
+    # Load the dataset
+    df = pd.read_csv('car_data.csv')
+
+    # Preprocess the data
+    df = df.dropna()
+
+    # Select features and target
+    X = df[['feature1', 'feature2', 'feature3']]
+    y = df['price']
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    predictions = model.predict(X_test)
+
+    # Evaluate the model
+    print('Mean Absolute Error:', metrics.mean_absolute_error(y_test, predictions))
+    print('Mean Squared Error:', metrics.mean_squared_error(y_test, predictions))
+    print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(y_test, predictions)))
+
+    # Save the model
+    import joblib
+    joblib.dump(model, 'car_price_model.pkl')
+    ```
+    This is a simple example of a guided project. The project involves predicting car prices based on a set of features. The data is loaded from a CSV file, preprocessed, and then split into a training set and a test set. A linear regression model is created and trained on the training set. The model's predictions are evaluated and printed. Finally, the model is saved to a file for future use.

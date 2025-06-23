@@ -1,0 +1,54 @@
+
+    '''
+    Commit Message: "Added 3rd practical "Dicisio Tree(Artificial Intelligence)""
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    print("Libraries imported ")
+    <\Cell_0>
+    <Cell_1>
+    df = pd.read_csv('heart-disease-dataset.csv')
+    print("dataframe of dataset created")
+    <\Cell_1>
+    <Cell_2>
+    df.head()
+    <\Cell_2>
+    <Cell_3>
+    df = df[['id','age','sex','chest_pain_type','resting_blood_presure', 'serum_cholesterol', 'fasting_blood_sugar', 'heart_disease_diagnosis']]
+    <\Cell_3>
+    <Cell_4>
+    df.head()
+    <\Cell_4>
+    <Cell_5>
+    #finding NULL instances
+    df.isnull().sum()
+    <\Cell_5>
+    <Cell_6>
+    df.groupby('sex')['age'].mean()
+    <\Cell_6>
+    <Cell_7>
+    # Substituting NULL with MEAN values
+    df['age']=df.groupby("sex")['age'].transform(lambda x: x.fillna(x.mean()))
+    <\Cell_7>
+    <Cell_8>
+    df.head()
+    <\Cell_8>
+    <Cell_9>
+    from sklearn.preprocessing import LabelEncoder
+    <\Cell_9>
+    <Cell_10>
+    le = LabelEncoder()
+    <\Cell_10>
+    <Cell_11>
+    df['sex'] = le.fit_transform(df.sex)
+    <\Cell_11>
+    <Cell_12>
+    df.head()
+    <\Cell_12>
+    <Cell_13>
+    X = df[['Pclass','Sex','Age','Fare']]
+    y= df

@@ -1,0 +1,39 @@
+```python
+    class ConvolutionalLayer(layers.LayerWithParameters):
+        """Layer implementing a 2D convolution-based transformation of its inputs.
+
+        The layer is parameterised by a set of 2D convolutional kernels, a four
+        dimensional array of shape
+            (num_output_channels, num_input_channels, kernel_dim_1, kernel_dim_2)
+        and a bias vector, a one dimensional array of shape
+            (num_output_channels,)
+        i.e. one shared bias per output channel.
+
+        Assuming no-padding is applied to the inputs so that outputs are only
+        calculated for positions where the kernel filters fully overlap with the
+        inputs, and that unit strides are used the outputs will have spatial extent
+            output_dim_1 = input_dim_1 - kernel_dim_1 + 1
+            output_dim_2 = input_dim_2 - kernel_dim_2 + 1
+        """
+
+        def __init__(self, num_input_channels, num_output_channels,
+                     input_dim_1, input_dim_2,
+                     kernel_dim_1, kernel_dim_2,
+                     kernels_init=init.UniformInit(-0.01, 0.01),
+                     biases_init=init.ConstantInit(0.),
+                     kernels_penalty=None, biases_penalty=None):
+            """Initialises a parameterised convolutional layer.
+
+            Args:
+                num_input_channels (int): Number of channels in inputs to
+                    layer (this may be number of colour channels in the input
+                    images if used as the first layer in a model, or the
+                    number of output channels, a.k.a. feature maps, from a
+                    a previous convolutional layer).
+            """
+            self.num_input_channels = num_input_channels
+            self.num_output_channels = num_output_channels
+            self.input_dim_1 = input_dim_1
+            self.input_dim_2 = input_dim_2
+            self.kernel_dim_1 = kernel_dim_1
+            self.kernel_dim_2 = kernel_dim_2

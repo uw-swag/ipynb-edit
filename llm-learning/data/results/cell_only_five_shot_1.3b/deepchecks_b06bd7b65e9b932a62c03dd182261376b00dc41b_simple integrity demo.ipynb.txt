@@ -1,0 +1,30 @@
+```python
+    """
+    This function is used to calculate the mean squared error between two lists of numbers.
+
+    Parameters:
+    ----------
+    y_true : list
+        The list of true values.
+    y_pred : list
+        The list of predicted values.
+
+    Returns:
+    -------
+    float
+        The mean squared error between the true and predicted values.
+
+    """
+    def mean_squared_error(y_true, y_pred):
+        if len(y_true) != len(y_pred):
+            raise ValueError("The true and predicted values lists must be the same length.")
+        return sum((y_true[i] - y_pred[i]) ** 2 for i in range(len(y_true))) / len(y_true)
+    ```
+    The function calculates the mean squared error between two lists of numbers. The mean squared error is a measure of the difference between the predicted and actual values. The function takes two parameters: `y_true` and `y_pred`, which are the true and predicted values, respectively. The function returns the mean squared error between the two lists.
+
+    The function first checks if the true and predicted values lists have the same length. If they don't, it raises a `ValueError`. Then, it calculates the mean squared error by summing the squared differences between the true and predicted values, and dividing by the number of elements.
+
+    The docstring of the function includes a description of the function, its parameters, and its return value.
+    """
+    ```
+    This is a docstring for the `mean_squared_error` function. It provides a description of the function, its parameters, and its return value.

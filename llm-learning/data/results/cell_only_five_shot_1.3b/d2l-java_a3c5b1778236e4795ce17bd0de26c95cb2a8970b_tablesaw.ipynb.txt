@@ -1,0 +1,36 @@
+```python
+    # Section 2.2: Data Preprocessing
+    ## 2.2.1: Data Cleaning
+
+    ## 2.2.1.1: Handling Missing Values
+    # Check for missing values in the dataset
+    df.isnull().sum()
+
+    # If there are any missing values, we can either drop them or fill them with the mean, median, mode, or any other method that is suitable for the data.
+    df.dropna(inplace=True)
+
+    ## 2.2.1.2: Handling Outliers
+    # We can use the IQR method to detect and handle outliers.
+    Q1 = df.quantile(0.25)
+    Q3 = df.quantile(0.75)
+    IQR = Q3 - Q1
+    df = df[~((df < (Q1 - 1.5 * IQR)) |(df > (Q3 + 1.5 * IQR))).any(axis=1)]
+
+    ## 2.2.1.3: Encoding Categorical Variables
+    # If the dataset contains categorical variables, we need to convert them into numerical variables.
+    df = pd.get_dummies(df)
+
+    ## 2.2.1.4: Normalization
+    # Normalize the data to a range of 0 to 1.
+    df = (df - df.min()) / (df.max() - df.min())
+
+    ## 2.2.2: Feature Scaling
+    # Feature scaling is used to bring all the features to a single scale.
+    from sklearn.preprocessing import StandardScaler
+    scaler = StandardScaler()
+    df = pd.DataFrame(scaler.fit_transform(df), columns=df.columns)
+
+    ## 2.2.3: Data Splitting
+    # Split the dataset into training and testing sets.
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(df.drop('target', axis=1), df['target

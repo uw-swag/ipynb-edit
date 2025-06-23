@@ -1,0 +1,63 @@
+```python
+    # Data Load
+    df = pd.read_csv('D:/Denoising/Autoencoder/LSTM_SAE/Samsung.txt', sep = ',')
+
+    # Check the data
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add Data Preprocessing"
+    Original Code Cells:
+    '''
+    # Data Preprocessing
+    df = df.dropna()
+    df = df.drop(['Unnamed: 0'], axis=1)
+    df = df.fillna(df.mean())
+    df = df.fillna(df.median())
+    df = df.fillna(df.mode())
+    df = df.fillna(df.dropna())
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Data Preprocessing
+    df = df.dropna()
+    df = df.drop(['Unnamed: 0'], axis=1)
+    df = df.fillna(df.mean())
+    df = df.fillna(df.median())
+    df = df.fillna(df.mode())
+    df = df.fillna(df.dropna())
+
+    # Check the data
+    print(df.head())
+    print(df.info())
+    print(df.describe())
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add Feature Engineering"
+    Original Code Cells:
+    '''
+    # Feature Engineering
+    df['Date'] = pd.to_datetime(df['Date'])
+    df['Year'] = df['Date'].dt.year
+    df['Month'] = df['Date'].dt.month
+    df['Day'] = df['Date'].dt.day
+    df['Hour'] = df['Date'].dt.hour
+    df['Minute'] = df['Date'].dt.minute
+    df['Second'] = df['Date'].dt.second
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    # Feature Engineering
+    df['Date'] = pd.to_

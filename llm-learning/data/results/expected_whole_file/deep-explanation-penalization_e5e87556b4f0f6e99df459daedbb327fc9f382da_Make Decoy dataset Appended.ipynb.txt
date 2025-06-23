@@ -1,0 +1,110 @@
+<Cell_0>
+%matplotlib inline
+import os
+from os.path import join as oj
+import sys, time
+
+import csv
+
+import numpy as np
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from copy import deepcopy
+import pickle as pkl
+import pandas as pd
+from os.path import join
+import torch
+import torch
+import numpy as np
+import seaborn as sns
+from copy import deepcopy
+from model import LSTMSentiment
+import matplotlib.pyplot as plt
+from os.path import isdir
+
+
+# check out how two models differ
+import torch.optim as O
+import torch.nn as nn
+from torchtext import data
+from torchtext import datasets
+from tqdm import tqdm_notebook, tqdm 
+import pickle
+<\Cell_0>
+<Cell_1>
+np.random.seed(123)
+<\Cell_1>
+<Cell_2>
+inputs = data.Field(lower= True)
+answers = data.Field(sequential=False, unk_token=None)
+pos_train, pos_dev, pos_test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label == 'positive')
+<\Cell_2>
+<Cell_3>
+neg_train, neg_dev, neg_test = datasets.SST.splits(inputs, answers, fine_grained=False, train_subtrees=True,
+                                       filter_pred=lambda ex: ex.label == 'negative')
+<\Cell_3>
+<Cell_4>
+def get_appended_dataset( dataset, stop_word):
+    # load test set
+    list_of_idx = np.arange(len(test))
+    list_of_idx = np.random.permutation(list_of_idx)
+    list_of_new_train_pos =[]
+    for i in tqdm_notebook(range(len(dev))):
+        list_of_new_train_pos.append(' '.join(test[i].text)+ ' '+' '.join(test[list_of_idx[i]].text))
+    return list_of_new_train_pos
+<\Cell_4>
+<Cell_5>
+my_positive_list = get_appended_dataset( pos_train)
+my_neg_list = get_appended_dataset(neg_train)
+file_path = "../data"
+file_name = 'train_appended_SST.csv'
+
+<\Cell_5>
+<Cell_6>
+with open(os.path.join(file_path, file_name), 'w') as csv_file:
+    writer = csv.writer(csv_file)
+    for line in my_positive_list:
+        writer.writerow((line,0))
+    for line in my_neg_list:
+        writer.writerow((line,1))
+
+<\Cell_6>
+<Cell_7>
+# for dev, this will be with conflicting emotions
+def get_conflicting( true, conflict):
+    list_of_new_train = []
+    for i in range(len(true)):
+        idx_of_conflict =np.random.randint(len(conflict))
+        list_of_new_train.append(' '.join(true[i].text) + ' '+' '.join(conflict[idx_of_conflict].text) )
+    return list_of_new_train
+<\Cell_7>
+<Cell_8>
+my_positive_list = get_conflicting( pos_dev, neg_dev)
+my_neg_list = get_conflicting(neg_dev, pos_dev)
+file_path = "../data"
+file_name = 'dev_appended_SST.csv'
+with open(os.path.join(file_path, file_name), 'w') as csv_file:
+    writer = csv.writer(csv_file)
+    for line in my_positive_list:
+        writer.writerow((line,0))
+    for line in my_neg_list:
+        writer.writerow((line,1))
+
+<\Cell_8>
+<Cell_9>
+my_positive_list = get_conflicting( pos_test, neg_test)
+my_neg_list = get_conflicting(neg_test, pos_test)
+file_path = "../data"
+file_name = 'test_appended_SST.csv'
+with open(os.path.join(file_path, file_name), 'w') as csv_file:
+    writer = csv.writer(csv_file)
+    for line in my_positive_list:
+        writer.writerow((line,0))
+    for line in my_neg_list:
+        writer.writerow((line,1))
+
+<\Cell_9>
+<Cell_10>
+
+<\Cell_10>

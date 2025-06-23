@@ -1,0 +1,38 @@
+```python
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.metrics import classification_report, confusion_matrix
+    import pandas as pd
+
+    # Assuming you have a dataset in a csv file named 'data.csv'
+    df = pd.read_csv('data.csv')
+
+    # Split the data into features and target variable
+    X = df.iloc[:, :-1].values
+    y = df.iloc[:, -1].values
+
+    # Split the data into training and test sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Feature scaling
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+
+    # Training the K-NN model
+    classifier = KNeighborsClassifier(n_neighbors=5)
+    classifier.fit(X_train, y_train)
+
+    # Predicting the test set results
+    y_pred = classifier.predict(X_test)
+
+    # Evaluating the model
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+
+    # Predicting a new result
+    new_result = [[60, 1]]
+    new_result = sc.transform(new_result)
+    print(classifier.predict(new_result))
+    ```

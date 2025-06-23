@@ -1,0 +1,39 @@
+```python
+    # Importing necessary libraries
+    from deepchecks.base import Dataset
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RocReport
+    import pandas as pd
+    import warnings
+
+    # Custom format warning function
+    def custom_formatwarning(msg, *args, **kwargs):
+        # Ignore everything except the message
+        return str(msg) + '\n'
+
+    warnings.formatwarning = custom_formatwarning
+
+    # Loading iris dataset
+    iris = load_iris(as_frame=True)
+    clf = LogisticRegression(max_iter=1)
+    frame = iris.frame
+    X = iris.data
+    y = iris.target
+
+    # Splitting the dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=55)
+
+    # Training the classifier
+    clf.fit(X_train, y_train)
+
+    # Creating a dataset
+    ds = Dataset(pd.concat([X_test, y_test], axis=1), 
+                features=iris.feature_names,
+                label_name='target')
+
+    # Running the ROC report check
+    check = RocReport()
+    check.run(ds, clf)
+    ```

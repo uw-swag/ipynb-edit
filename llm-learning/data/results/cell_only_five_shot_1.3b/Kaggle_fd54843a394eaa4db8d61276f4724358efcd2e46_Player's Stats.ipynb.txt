@@ -1,0 +1,33 @@
+
+    Here is the code to perform t-SNE on the player stats.
+
+    ```python
+    from sklearn.manifold import TSNE
+    from sklearn.preprocessing import StandardScaler
+
+    # Standardize the data
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(players[stats])
+
+    # Perform t-SNE
+    tsne = TSNE(n_components=2, random_state=0)
+    transformed_data = tsne.fit_transform(scaled_data)
+
+    # Create a DataFrame for Bokeh
+    df = pd.DataFrame(transformed_data, columns=['x', 'y'])
+    df['player_name'] = players['player_name']
+
+    # Create a Bokeh plot
+    source = ColumnDataSource(df)
+    p = figure(title="t-SNE of Player Stats", x_axis_label='x', y_axis_label='y')
+
+    p.circle(x='x', y='y', source=source)
+
+    # Add a hover tool
+    p.add_tools(HoverTool(tooltips=[('Player', '@player_name'), ('x', '@x'), ('y', '@y')]))
+
+    # Show the plot
+    show(p)
+    ```
+
+    This code will create a t-SNE plot of the player stats. The x and y coordinates are the t-SNE coordinates, and the player names are displayed when you hover over the points.

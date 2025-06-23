@@ -1,0 +1,26 @@
+
+    The code you've provided is a Python script that uses the Red Pitaya FPGA (Field-Programmable Gate Array) to read data from two temperature and VOC sensors, and then plots these readings over time. The data is then stored in a pandas DataFrame and saved to a CSV file.
+
+    Here's a brief explanation of the code:
+
+    - The script starts by importing necessary libraries and modules.
+    - It then defines the FPGA and the pins used for the temperature and VOC sensors.
+    - A function `work` is defined that reads the sensor data and calculates the ratio of alcohol to gas. This function is run in a separate thread.
+    - The main part of the script creates an animation of the sensor data. The animation updates every 2 seconds, and the data is stored in a pandas DataFrame.
+    - The DataFrame is then saved to a CSV file.
+
+    The sensor data is plotted over time using matplotlib, and the plot is continuously updated. The script also includes a function to clean the data and save it to a CSV file.
+
+    Please note that the code is a simplified example and may not work as expected in all environments or with all sensors. It's always a good idea to test the code in a safe environment before using it in a production setting.
+
+    Also, the code uses the `redpitaya` library, which is a Python library for interfacing with the Red Pitaya FPGA. This library is not included in the standard Python library, so you may need to install it using pip:
+
+    ```
+    pip install redpitaya
+    ```
+
+    Finally, the code uses the `pandas` library, which is a powerful data manipulation library. This library is not included in the standard Python library, so you may need to install it using pip:
+
+    ```
+    pip install pandas
+    ```

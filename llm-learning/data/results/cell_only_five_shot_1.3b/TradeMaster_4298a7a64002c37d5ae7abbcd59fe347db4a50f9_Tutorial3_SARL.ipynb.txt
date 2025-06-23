@@ -1,0 +1,47 @@
+```
+    # Update market dynamics testing of agents
+
+    # Import necessary libraries
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from scipy.optimize import minimize
+    from sklearn.metrics import mean_squared_error
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from keras.models import Sequential
+    from keras.layers import Dense
+    from keras.optimizers import Adam
+    from keras.wrappers.scikit_learn import KerasRegressor
+
+    # Load data
+    data = pd.read_csv('market_data.csv')
+
+    # Define the market dynamics
+    market_dynamics = pd.DataFrame()
+    market_dynamics['Time'] = data['Time']
+    market_dynamics['Market_Price'] = data['Market_Price']
+    market_dynamics['Consumer_Price'] = data['Consumer_Price']
+    market_dynamics['Supply_Demand'] = data['Supply_Demand']
+    market_dynamics['Interest_Rate'] = data['Interest_Rate']
+    market_dynamics['Inflation'] = data['Inflation']
+
+    # Define the agent
+    class Agent:
+        def __init__(self, learning_rate, discount_factor, iterations):
+            self.learning_rate = learning_rate
+            self.discount_factor = discount_factor
+            self.iterations = iterations
+            self.gamma = discount_factor
+            self.model = self.build_model()
+
+        def build_model(self):
+            model = Sequential()
+            model.add(Dense(24, input_dim=7, activation='relu'))
+            model.add(Dense(24, activation='relu'))
+            model.add(Dense(1, activation='linear'))
+            model.compile(loss='mean_squared_error', optimizer=Adam(lr=self.learning_rate))
+            return model
+
+        def train_model(self

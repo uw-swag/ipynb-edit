@@ -1,0 +1,51 @@
+```python
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.decomposition import PCA
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Load the dataset
+    df = pd.read_csv('device_data.csv')
+
+    # Check for missing values
+    df.isnull().sum()
+
+    # Data preprocessing
+    df = df.dropna()
+
+    # Standardize the features
+    scaler = StandardScaler()
+    df_scaled = scaler.fit_transform(df)
+
+    # Apply PCA
+    pca = PCA(n_components=2)
+    df_pca = pca.fit_transform(df_scaled)
+
+    # Create a DataFrame for the PCA results
+    pca_df = pd.DataFrame(data = df_pca, columns = ['PC1', 'PC2'])
+
+    # Concatenate the original dataset with the PCA component
+    final_df = pd.concat([df, pca_df], axis = 1)
+
+    # Show the final DataFrame
+    print(final_df.head())
+
+    # Split the dataset into training and testing sets
+    X = final_df.drop('Device', axis = 1)
+    y = final_df['Device']
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+
+    # Train a Random Forest Classifier
+    clf = RandomForestClassifier(n_estimators=100)
+    clf.fit(X_train, y_train)
+
+    # Make predictions
+    y_pred = clf.predict(X_test)
+
+    # Evaluate the model
+    print(confusion_matrix(y_test, y_pred))

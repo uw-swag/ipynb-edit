@@ -1,0 +1,20 @@
+```python
+    import pandas as pd
+    import matplotlib.pyplot as plt
+
+    # Load the data
+    df = pd.read_csv('honey_col.csv')
+
+    # Get the top 10 states with the highest honey producing colonies
+    top_10_states = df.sort_values('Honey Producing Colonies', ascending=False).head(10)
+
+    # Print the top 10 states
+    print(top_10_states[['State', 'Honey Producing Colonies']])
+
+    # Plot the top 10 states
+    top_10_states[['State', 'Honey Producing Colonies']].plot(kind='bar', x='State', y='Honey Producing Colonies', figsize=(10,5))
+    plt.title('Top 10 States with Highest Honey Producing Colonies')
+    plt.xlabel('State')
+    plt.ylabel('Honey Producing Colonies')
+    plt.show()
+    ```

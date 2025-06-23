@@ -1,0 +1,54 @@
+```python
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.pipeline import Pipeline
+
+    # Load the breast cancer dataset
+    data = load_breast_cancer()
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(data.data, data.target, test_size=0.2, random_state=42)
+
+    # Define a pipeline that standardizes the data, then applies the Random Forest classifier
+    pipeline = Pipeline([
+        ('scaler', StandardScaler()),
+        ('classifier', RandomForestClassifier(random_state=42))
+    ])
+
+    # Train the pipeline
+    pipeline.fit(X_train, y_train)
+
+    # Make predictions on the test set
+    y_pred = pipeline.predict(X_test)
+
+    # Print the accuracy of the model
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Added demonstration of feature selection techniques"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from sklearn.datasets import load_breast_cancer
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import accuracy_score
+    from sklearn.pipeline import Pipeline
+    from sklearn.feature_selection import SelectKBest, chi2
+
+    # Load the breast cancer dataset
+    data = load_breast_cancer()
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_

@@ -1,0 +1,41 @@
+```python
+    # Network parameters
+    X = tf.placeholder(tf.float32, name='X')
+    y = tf.placeholder(tf.float32, name='Y')
+    W = tf.Variable(tf.random_normal([1], dtype=tf.float32, stddev=0.1), name='weight')
+    b = tf.Variable(tf.constant([0], dtype=tf.float32), name='bias')
+
+    # computation
+    y_pred = W*X+b
+
+    # cost definition
+    def cost_fun(y, y_pred):
+        return tf.abs(y-y_pred)
+
+    cost = tf.reduce_mean(cost_fun(y, y_pred))
+
+    # optimizer
+    optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01).minimize(cost)
+
+    n_iters = 10000
+
+    with tf.Session() as sess:
+        sess.run(tf.global_variables_initializer())
+    
+        for i in range(n_iters):
+            sess.run(optimizer, feed_dict={X: x_data, y: y_data})
+            training_cost = sess.run(cost, feed_dict={X: x_data, y: y_data})
+
+            if i%100 == 0:
+                print(training_cost)
+    
+        ys_pred = y_pred.eval(feed_dict={X: x_data}, session=sess)
+
+    # Plot SGD animation
+    from matplotlib import pyplot as plt, animation
+    fig = sns.plt.figure(dpi=100, figsize=(5, 4))
+    # original data
+    sns.regplot(x_data, y_data, fit_reg=False, ax=ax)
+    # initial parameters
+    init_slope, init_intercept = theta_history[0]
+    line, = plt.plot([0, 

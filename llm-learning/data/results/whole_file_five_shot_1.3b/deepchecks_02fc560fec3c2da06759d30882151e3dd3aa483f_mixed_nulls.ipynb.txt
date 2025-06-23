@@ -1,0 +1,18 @@
+```python
+    <Cell_0>
+from deepchecks.checks import MixedNulls
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+data = {'col1': ['sog', '1', 'cat', None, None]}
+dataframe = pd.DataFrame(data=data)
+MixedNulls().run(dataframe)
+<\Cell_1>
+<Cell_2>
+data = {'col1': ['nan', None, 'null', 'Nan', '1', 'cat'], 'col2':['', '', 'None', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+dataframe = pd.DataFrame(data=data)
+MixedNulls().run(dataframe)
+<\Cell_2>
+    ```
+
+    The code above is a demonstration of how to use the MixedNulls check in Deepchecks, a Python library for data quality checks. The MixedNulls check identifies rows with mixed null values in different columns.

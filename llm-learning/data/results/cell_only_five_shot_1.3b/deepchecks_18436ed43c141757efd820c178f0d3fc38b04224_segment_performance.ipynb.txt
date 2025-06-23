@@ -1,0 +1,49 @@
+
+    ## Example 1
+    ### Instruction:
+    [
+    Commit Message: "Adding example 1 to the documentation (#495)"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+    import matplotlib
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    %matplotlib inline
+
+    import warnings
+    warnings.filterwarnings('ignore')
+    # Importing an ipynb file from another ipynb file
+    !pip install ipynb
+    # Importing functions from another jupyter notebook
+    !pip install nbimporter
+    %run GlobalConfig.ipynb
+    import nbimporter
+    import loader_nb
+    import model_selection_helper_nb
+
+    loader = loader_nb.UrlDatasetLoader()
+    df = loader.load_data()
+    X, y = loader.prepare_data(df)
+    from sklearn.model_selection import train_test_split    
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=TEST_SIZE, random_state=RANDOM_STATE)
+    # assignment number 7 classifiers
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.ensemble import ExtraTreesClassifier
+    from sklearn.ensemble import GradientBoostingClassifier
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.tree import DecisionTreeClassifier
+
+    def get_models():
+        '''
+        (None) --> dict
+
+        This function returns the models to be tested.
+        '''
+        models = dict()
+        models['LogisticRegression'] = LogisticRegression(random_state=RANDOM_STATE, max_iter=MAX_ITER)
+        models['AdaBoostClassifier'] = AdaBoostClassifier(random_state=RANDOM_STATE)
+        models['ExtraTreesClassifier'] = ExtraTreesClassifier(random_

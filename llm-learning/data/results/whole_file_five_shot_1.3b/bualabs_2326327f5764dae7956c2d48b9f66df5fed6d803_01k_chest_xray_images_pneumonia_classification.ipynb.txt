@@ -1,0 +1,65 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding Data Augmentation"
+    Original Code Cells:
+    '''
+    <Cell_0>
+! nvidia-smi
+<\Cell_0>
+<Cell_1>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_1>
+<Cell_2>
+# ## Colab
+# ! pip install fastai2 kornia -q
+<\Cell_2>
+<Cell_3>
+import gc
+
+from fastai2.basics import *
+from fastai2.callback.all import *
+from fastai2.metrics import *
+from fastai2.vision.all import *
+
+import kornia
+
+import pandas as pd
+from sklearn.metrics import *
+<\Cell_3>
+<Cell_4>
+seed=123456
+set_seed(seed)
+<\Cell_4>
+<Cell_5>
+dataset = 'paultimothymooney/chest-xray-pneumonia'
+
+# Google Colab
+config_path = Path('/content/drive')
+learner_path = config_path/"My Drive"
+data_path_base = Path('/content/datasets/')
+
+path = data_path_base/dataset
+
+from google.colab import drive
+
+drive.mount(str(config_path))
+os.environ['KAGGLE_CONFIG_DIR'] = f"{config_path}/My Drive/.kaggle"
+<\Cell_5>
+<Cell_6>
+# !kaggle datasets download {dataset} -p "{path}" --unzip
+<\Cell_6>
+<Cell_7>
+path.ls()
+<\Cell_7>
+<Cell_8>
+(path/'chest_xray').ls()
+<\Cell_8>
+<Cell_9>
+(path/'chest_xray/train').ls()
+<\Cell_9>
+<Cell_10>
+(path/'chest_xray/train/PNEUMONIA').ls()
+<\Cell_1

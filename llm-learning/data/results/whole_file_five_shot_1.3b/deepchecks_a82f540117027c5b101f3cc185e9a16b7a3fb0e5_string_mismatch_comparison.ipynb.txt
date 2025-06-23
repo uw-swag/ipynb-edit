@@ -1,0 +1,13 @@
+```python
+    from mlchecks.checks import string_mismatch_comparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    result = string_mismatch_comparison(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+
+    print(result)
+    ```
+
+    The output of the function will be a dictionary where the keys are the column names and the values are the count of mismatched strings.

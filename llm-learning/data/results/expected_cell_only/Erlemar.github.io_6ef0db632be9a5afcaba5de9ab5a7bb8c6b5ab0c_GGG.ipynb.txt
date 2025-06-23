@@ -1,0 +1,56 @@
+import numpy as np
+import pandas as pd
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+sns.set_style('whitegrid')
+
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.feature_selection import SelectFromModel
+from sklearn.linear_model import LogisticRegression
+from sklearn import svm
+import xgboost as xgb
+from sklearn.ensemble import VotingClassifier
+from sklearn.naive_bayes import GaussianNB
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+col = 'color'
+dummies = pd.get_dummies(train[col], drop_first=False)
+dummies = dummies.add_prefix("{}_".format(col))
+train.drop(col, axis=1, inplace=True)
+train = train.join(dummies)
+dummies = pd.get_dummies(test[col], drop_first=False)
+dummies = dummies.add_prefix("{}_".format(col))
+test.drop(col, axis=1, inplace=True)
+test = test.join(dummies)
+X_train = train.drop('type', axis=1)
+le = LabelEncoder()
+Y_train = le.fit_transform(train.type.values)
+X_test = test
+clf = RandomForestClassifier(n_estimators=200)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+print('Feature ranking:')
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]],
+                                      clf.feature_importances_[indices[f]]))
+best_features = X_train.columns[indices[0:7]]
+X = X_train[best_features]
+Xt = X_test[best_features]
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, Y_train, test_size=0.20, random_state=36)
+#Optimal parameters
+clf = RandomForestClassifier(n_estimators=20, n_jobs=-1, criterion = 'gini', max_features = 'sqrt',
+                             min_samples_split=2, min_weight_fraction_leaf=0.0,
+                             max_leaf_nodes=40, max_depth=100)
+
+calibrated_clf = CalibratedClassifierCV(clf, method='sigmoid', cv=5)
+calibrated_clf.fit(Xtrain, ytrain)
+y_val = calibrated_clf.predict_proba(Xtest)
+
+print("Validation accuracy: ", sum(pd.DataFrame(y_val, columns=le.classes_).idxmax(axis=1).values
+                                   == le.inverse_transform(ytest))/len(ytest))

@@ -1,0 +1,26 @@
+```
+    import os
+    import shutil
+
+    # Get the list of all notebooks
+    notebooks = [nb for nb in os.listdir('.') if nb.endswith('.ipynb')]
+
+    # Create the folders
+    os.makedirs('notebooks', exist_ok=True)
+    os.makedirs('images', exist_ok=True)
+    os.makedirs('videos', exist_ok=True)
+
+    # Move the notebooks into the folders
+    for nb in notebooks:
+        shutil.move(nb, 'notebooks')
+
+    # Move the images into the images folder
+    for img in os.listdir('.'):
+        if img.endswith('.png') or img.endswith('.jpg') or img.endswith('.jpeg'):
+            shutil.move(img, 'images')
+
+    # Move the videos into the videos folder
+    for video in os.listdir('.'):
+        if video.endswith('.mp4') or video.endswith('.avi') or video.endswith('.mkv'):
+            shutil.move(video, 'videos')
+    ```

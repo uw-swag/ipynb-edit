@@ -1,0 +1,54 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "[Automatic] Examples Update (#511)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
+
+# Load the data
+data = pd.read_csv('https://raw.githubusercontent.com/jbrownlee/Datasets/master/housing.csv')
+
+# Preprocess the data
+for column in data.columns:
+    if data[column].dtype == type(object):
+        encoder = LabelEncoder()
+        data[column] = encoder.fit_transform(data[column])
+
+# Split the data into features and target
+X = data.iloc[:, :-1]
+y = data.iloc[:, -1]
+
+# Split the data into training and testing sets
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train the model
+from sklearn.ensemble import RandomForestRegressor
+model = RandomForestRegressor(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# Make predictions
+predictions = model.predict(X_test)
+
+# Evaluate the model
+from sklearn.metrics import mean_squared_error
+mse = mean_squared_error(y_test, predictions)
+print(f'Mean Squared Error: {mse}')
+
+# Save the model
+import joblib
+joblib.dump(model, 'housing_model.pkl')
+
+# Load the model
+loaded_model = joblib.load('housing_model.pkl')
+
+# Make predictions with the loaded model
+loaded_predictions = loaded_model.predict(X_test)
+
+# Evaluate the loaded model
+loaded_mse = mean_squared_error(y_test, loaded_predictions)
+print(f

@@ -1,0 +1,43 @@
+```python
+    # Install the necessary dependencies
+    import os
+    import sys
+    !{sys.executable} -m pip install --quiet pandas scikit-learn numpy matplotlib jupyterlab_myst ipython python_utils
+
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.integrity import DominantFrequencyChange
+    from deepchecks.base import Dataset
+
+    # Load iris dataset
+    iris = load_iris(return_X_y=False, as_frame=True)
+    X = iris.data
+    y = iris.target
+
+    # Split the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=55)
+
+    # Create a dataset from the training data
+    train_dataset = Dataset(pd.concat([X_train, y_train], axis=1), 
+                            features=iris.feature_names,
+                            label_name='target')
+
+    # Create a dataset from the testing data
+    test_df = pd.concat([X_test, y_test], axis=1)
+
+    # Make some changes in the testing data
+    test_df.loc[test_df.index % 2 == 0, 'petal length (cm)'] = 5.1
+    test_df.loc[test_df.index / 3 > 8, 'sepal width (cm)'] = 2.7
+
+    validation_dataset = Dataset(test_df, 
+                                features=iris.feature_names,
+                                label_name='target')
+
+    # Create a check for the DominantFrequencyChange
+    check = DominantFrequencyChange()
+
+    # Run the check on the validation dataset with the training dataset
+    check.run(validation_dataset, train_dataset)
+    ```

@@ -1,0 +1,41 @@
+```python
+    # This code cell will not be shown in the HTML version of this notebook
+    # append path for local library, data, and image import
+    import sys
+    sys.path.append('./chapter_10_library') 
+    sys.path.append('./chapter_10_images') 
+    sys.path.append('./chapter_10_datasets') 
+
+    # import section helper
+    import section_10_4_helpers
+
+    # dataset paths
+    data_path_1 = "chapter_10_datasets/2d_classification_data_v1.csv"
+    data_path_2 = "chapter_10_datasets/signed_projectile.csv"
+    data_path_3 = "chapter_10_datasets/ellipse_2class_data.csv"
+
+    # image paths
+    image_path_1 = "chapter_10_images/10_3.png"
+    image_path_2 = "chapter_10_images/1d_logistic_linear.png"
+    image_path_3 = "chapter_10_images/1d_logistic_quadratic.png"
+
+    # standard imports
+    import matplotlib.pyplot as plt
+    from matplotlib import gridspec
+    import IPython, copy
+
+    # import autograd-wrapped numpy
+    import autograd.numpy as np
+
+    # this is needed to compensate for matplotlib notebook's tendancy to blow up images when plotted inline
+    %matplotlib inline
+    from matplotlib import rcParams
+    rcParams['figure.autolayout'] = True
+
+    %load_ext autoreload
+    %autoreload 2
+    IPython.display.HTML('''<img src="''' + image_path_1 + '''" width="100%" height="auto" alt=""/>''')
+
+    ## This code cell will not be shown in the HTML version of this notebook
+    # load data
+    data = np.loadtxt(data_

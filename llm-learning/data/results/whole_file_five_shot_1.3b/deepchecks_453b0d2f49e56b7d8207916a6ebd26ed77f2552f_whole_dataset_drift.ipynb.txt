@@ -1,0 +1,25 @@
+```python
+    class MLC225DomainClassifier:
+        def __init__(self, model, feature_set, target_variable):
+            self.model = model
+            self.feature_set = feature_set
+            self.target_variable = target_variable
+
+        def fit(self, X, y):
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+            self.model.fit(X_train, y_train)
+            self.predictions = self.model.predict(X_test)
+            self.evaluate()
+
+        def evaluate(self):
+            print(f'Model Accuracy: {accuracy_score(y_test, self.predictions)}')
+            print(f'Model Precision: {precision_score(y_test, self.predictions)}')
+            print(f'Model Recall: {recall_score(y_test, self.predictions)}')
+            print(f'F1 Score: {f1_score(y_test, self.predictions)}')
+
+        def predict(self, X):
+            return self.model.predict(X)
+
+        def score(self, X, y):
+            return self.model.score(X, y)
+    ```

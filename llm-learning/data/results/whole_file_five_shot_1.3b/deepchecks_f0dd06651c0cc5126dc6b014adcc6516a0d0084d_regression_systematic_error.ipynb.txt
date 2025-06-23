@@ -1,0 +1,30 @@
+```
+    #@title Split many files in core and base
+    #@param {type:"string"}
+    CORE_FILES = "core_files.txt" #@param {type:"string"}
+    BASE_FILES = "base_files.txt" #@param {type:"string"}
+
+    # The below execution sets up runtime using code stored remotely in a url
+    exec(urllib.request.urlopen('https://raw.githubusercontent.com/Exabyte-io/exabyte-api-examples/feature/SOF-4685/examples/utils/initialize_settings.py').read())
+
+    # Split the code into core and base files
+    with open(CORE_FILES, 'r') as core_file:
+        core_code = core_file.read()
+
+    with open(BASE_FILES, 'r') as base_file:
+        base_code = base_file.read()
+
+    # Execute the core and base code
+    exec(core_code)
+    exec(base_code)
+
+    # Execute the main code
+    exec(deepchecks.tabular.base.Dataset)
+    exec(sklearn.ensemble.GradientBoostingRegressor)
+    exec(sklearn.datasets.load_diabetes)
+    exec(sklearn.model_selection.train_test_split)
+    exec(deepchecks.tabular.checks.performance.RegressionSystematicError)
+    exec(<Cell_1>)
+    exec(<Cell_2>)
+    exec(<Cell_3>)
+    ```

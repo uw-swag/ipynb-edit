@@ -1,0 +1,44 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Plotting the distribution of the target variable
+    plt.figure(figsize=(10,6))
+    sns.countplot(x='target', data=curr)
+    plt.title('Distribution of Target Variable')
+    plt.show()
+
+    # Plotting the distribution of the predicted variable
+    plt.figure(figsize=(10,6))
+    sns.distplot(curr['preds'], bins=30)
+    plt.title('Distribution of Predicted Variable')
+    plt.show()
+
+    # Plotting the correlation matrix
+    plt.figure(figsize=(10,8))
+    sns.heatmap(curr.corr(), annot=True, cmap='coolwarm')
+    plt.title('Correlation Matrix')
+    plt.show()
+
+    # Plotting the distribution of the 'education-num' feature
+    plt.figure(figsize=(10,6))
+    sns.distplot(curr['education-num'], bins=30)
+    plt.title('Distribution of Education-Num')
+    plt.show()
+
+    # Plotting the distribution of the 'age' feature
+    plt.figure(figsize=(10,6))
+    sns.distplot(curr['age'], bins=30)
+    plt.title('Distribution of Age')
+    plt.show()
+
+    # Plotting the distribution of the 'fnlwgt' feature
+    plt.figure(figsize=(10,6))
+    sns.distplot(curr['fnlwgt'], bins=30)
+    plt.title('Distribution of Fnlwgt')
+    plt.show()
+
+    # Plotting the distribution of the 'education' feature
+    plt.figure(figsize=(10,6))
+    sns.countplot(x='education', data=curr)
+    plt.title('Dist

@@ -1,0 +1,25 @@
+```python
+    from sklearn.metrics import roc_auc_score
+    import matplotlib.pyplot as plt
+    # add ground truth to analysis
+    analysis_full = pd.merge(analysis, analysis_targets, on = 'identifier')
+    df_all = pd.concat([reference, analysis_full]).reset_index(drop=True)
+    df_all['timestamp'] = pd.to_datetime(df_all['timestamp'])
+    # calculate actual ROC AUC
+    target_col = cbpe.y_true
+    pred_score_col = 'y_pred_proba'
+    actual_performance = []
+    for idx in est_perf_data.index:
+        start_date, end_date = est_perf_data.loc[idx, ('chunk', 'start_date')], est_perf_data.loc[idx, ('chunk', 'end_date')]
+        sub = df_all[df_all['timestamp'].between(start_date, end_date)]
+        actual_perf = roc_auc_score(sub[target_col], sub[pred_score_col])
+        est_perf_data.loc[idx, ('roc_auc', 'realized')] = actual_perf
+    # plot
+    first_analysis = est_perf_data[('chunk', 'key')].values[0]
+    plt.figure(figsize=(10,5))
+    plt.plot(est_perf_data[('chunk', 'key')], est_perf_data[('roc_auc', 'value')], label='estimated AUC')
+    plt.plot(est_perf_data[('chunk', 'key')], est_perf_data[('roc_auc', 'realized')], label='actual ROC AUC')
+    plt.xticks(rotation=90)
+    plt.axvline(x=first_analysis, label='First analysis chunk', linestyle=':', color='grey')
+    plt.ylabel('ROC AUC')
+    plt.legend()

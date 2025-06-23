@@ -1,0 +1,30 @@
+```python
+    # import necessary libraries
+    import gensim
+    from gensim.models import TfidfModel
+    from gensim.corpora import Dictionary
+    from nltk.tokenize import word_tokenize
+    import nltk
+    nltk.download('punkt')
+
+    # define a function to convert text into TF-IDF vectors
+    def convert_text_to_tfidf(text):
+        tokens = word_tokenize(text)
+        dictionary = Dictionary(tokens)
+        corpus = [dictionary.doc2bow(tokens)]
+        tfidf = TfidfModel(corpus)
+        return tfidf[dictionary.doc2bow(tokens)]
+
+    # define a function to convert TF-IDF vectors into GloVe vectors
+    def convert_tfidf_to_glove(tfidf_vector):
+        glove_vector = np.zeros(100)
+        for i, val in enumerate(tfidf_vector):
+            glove_vector[i] = val[1]
+        return glove_vector
+
+    # example usage
+    text = "This is an example sentence for TF-IDF conversion."
+    tfidf_vector = convert_text_to_tfidf(text)
+    glove_vector = convert_tfidf_to_glove(tfidf_vector)
+    print(glove_vector)
+    ```

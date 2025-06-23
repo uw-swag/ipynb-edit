@@ -1,0 +1,85 @@
+#This cell make sure the bme680 is heated up
+while True:
+    if air_data.bme_680.get_sensor_data():
+        output = '{0:.2f} C,{1:.2f} hPa,{2:.2f} %RH'.format(
+            air_data.bme_680.data.temperature,
+            air_data.bme_680.data.pressure,
+            air_data.bme_680.data.humidity)
+        #Only print gas data if the heater is stable
+        if air_data.bme_680.data.heat_stable:
+            print('{0},{1} Ohms'.format(
+                output,
+                air_data.bme_680.data.gas_resistance))
+            break
+        else:
+            print(output)
+    time.sleep(1)
+#Reset all the reference values to their current value
+pms5003_data = air_data.pms5003.read()
+pms_ref_0_3 = pms5003_data.pm_per_1l_air(0.3)
+pms_ref_0_5 = pms5003_data.pm_per_1l_air(0.5)
+pms_ref_1_0 = pms5003_data.pm_per_1l_air(1.0)
+air_data.reset_ref_values()
+df = pd.DataFrame() #Create an empty data frame to append to later
+def animate(i):
+    global df
+    clean_data_table = pd.DataFrame() #Create an empty data frame to append to later
+    clean_data_table['Analog Temperature (oC)'] = [air_data.analog_temp()]
+    clean_data_table['Analog VOC in Air'] = [air_data.analog_voc_ratio()]
+    clean_data_table['Analog Alcohol in Air'] = [air_data.analog_alcohol_ratio()]
+    pms5003_data = air_data.pms5003.read()
+    clean_data_table['0.3um in 0.1L air'] = [pms5003_data.pm_per_1l_air(0.3)/pms_ref_0_3]
+    clean_data_table['0.5um in 0.1L air'] = [pms5003_data.pm_per_1l_air(0.5)/pms_ref_0_5]
+    clean_data_table['1.0um in 0.1L air'] = [pms5003_data.pm_per_1l_air(1.0)/pms_ref_1_0]
+    clean_data_table['GM102B VOC'] = [air_data.GM102B_ratio()]
+    clean_data_table['GM302B VOC'] = [air_data.GM302B_ratio()]
+    clean_data_table['GM502B VOC'] = [air_data.GM502B_ratio()]
+    clean_data_table['GM702B VOC'] = [air_data.GM702B_ratio()]
+    bme_680_latest = air_data.bme_680.get_sensor_data()
+    clean_data_table['Digital Temperature (oC)'] = [bme_680_latest.temperature]
+    clean_data_table['Air Pressure (hPa)'] = [bme_680_latest.pressure]
+    clean_data_table['Humidity %'] = [bme_680_latest.humidity]
+    if bme_680_latest.heat_stable:
+        clean_data_table['BM680 VOC'] = [bme_680_latest.gas_rel]
+    df = df.append(clean_data_table, ignore_index = True)
+    df.index.name = 'timestamp'
+    
+    x = df.index
+    y1 = df['BM680 VOC']
+    y2 = df['Analog VOC in Air']
+    y3 = df['Analog Alcohol in Air']
+    y4 = df['0.3um in 0.1L air']
+    y5 = df['0.5um in 0.1L air']
+    y6 = df['1.0um in 0.1L air']
+    y7 = df['GM102B VOC']
+    y8 = df['GM302B VOC']
+    y9 = df['GM502B VOC']
+    y10 = df['GM702B VOC']
+    y14 = df['BM680 VOC']
+    
+    plt.cla()
+    plt.plot(x,y1,label='BM680 VOC')
+    plt.plot(x,y2,label='Analog VOC in Air')
+    plt.plot(x,y3,label='Analog Alcohol in Air')
+    plt.plot(x,y4,label='0.3um in 0.1L air')
+    plt.plot(x,y5,label='0.5um in 0.1L air')
+    plt.plot(x,y6,label='1.0um in 0.1L air')
+    plt.plot(x,y7,label='GM102B VOC')
+    plt.plot(x,y8,label='GM302B VOC')
+    plt.plot(x,y9,label='GM502B VOC')
+    plt.plot(x,y10,label='GM702B VOC')
+    
+    plt.xlabel('Timestamp')
+    plt.ylabel('Temprature (C) / VOC / Particles')
+    plt.title("Room Temperature & Air Quality")
+    plt.gcf().autofmt_xdate()
+    plt.ticklabel_format(useOffset=False,axis='y')
+    plt.legend(bbox_to_anchor=(0.6, 0.7))
+    plt.show()
+    
+ani = FuncAnimation(plt.gcf(), animate,interval=2000)
+plt.show()
+#Save the data frame to a CSV file
+df.index.name = 'timestamp'
+filename = "CSV-Data/Vicks " + str(datetime.now()) + ".csv"
+df.to_csv(filename)

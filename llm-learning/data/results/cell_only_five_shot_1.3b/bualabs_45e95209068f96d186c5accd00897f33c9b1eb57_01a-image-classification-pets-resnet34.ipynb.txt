@@ -1,0 +1,24 @@
+
+    # Change the batch size to 32
+    batchsize = 32
+    databunch = DataBunch.create(
+        path,
+        valid_pct=0.1,
+        seed=42,
+        ds_tfms=[*get_transforms(), Normalize.from_stats(*imagenet_stats)],
+        batch_size=batchsize,
+        imsize=im_size,
+        **kwargs
+    )
+
+    # Rest of the code remains the same
+    batchsize = 32
+    np.random.seed(0)
+    regex_pattern = r'/([^/]+)_\d+.jpg$'
+    databunch.show_batch(rows=3, figsize=(12, 9))
+    learner.save('resnet34-2')
+    interpretation.plot_top_losses(9, figsize=(12,9))
+
+    '''
+
+    The batch size is now 32.

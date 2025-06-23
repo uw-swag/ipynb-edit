@@ -1,0 +1,47 @@
+```
+    # Update imports
+    :import "fmt"
+    :import "github.com/sjwhitworth/golearn/base"
+    :import "github.com/sjwhitworth/golearn/evaluation"
+    :import "github.com/sjwhitworth/golearn/knn"
+
+    // Load in a dataset, with headers. Header attributes will be stored.
+    // Think of instances as a Data Frame structure in R or Pandas.
+    // You can also create instances from scratch.
+    rawData, err := base.ParseCSVToInstances("datasets/iris.csv", false)
+
+    //Initialises a new KNN classifier
+    cls := knn.NewKnnClassifier("euclidean", 2)
+
+    //Do a training-test split
+    trainData, testData := base.InstancesTrainTestSplit(rawData, 0.50)
+    cls.Fit(trainData)
+
+    //Calculates the Euclidean distance and returns the most popular label
+    predictions := cls.Predict(testData)
+
+    // Calculate precision/recall metrics, and summarize results
+    confusionMat, err := evaluation.GetConfusionMatrix(testData, predictions)
+    fmt.Println(evaluation.GetSummary(confusionMat))
+    ```
+
+    ### Update Dockerfile
+    ```
+    # Use an official Python runtime as a parent image
+    FROM python:3.7-slim
+
+    # Set the working directory in the container to /app
+    WORKDIR /app
+
+    # Add the current directory contents into the container at /app
+    ADD . /app
+
+    # Install any needed packages specified in requirements.txt
+    RUN pip install --trusted-host pypi.python.org -r requirements.txt
+
+    # Make port 80 available to the world outside this container
+    EXPOSE 80
+
+    # Run app.py when the container launches
+    CMD ["python", "app.py"]
+    ```

@@ -1,0 +1,47 @@
+
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.feature_selection import SelectKBest, f_classif
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+
+    # Loading the dataset
+    data = pd.read_csv('data.csv')
+
+    # Feature Selection
+    X = data.drop('target', axis=1)
+    y = data['target']
+
+    # Applying SelectKBest class to extract top 10 best features
+    bestfeatures = SelectKBest(score_func=f_classif, k=10)
+    fit = bestfeatures.fit(X,y)
+
+    # Creating a dataframe with the scores of the features
+    dfscores = pd.DataFrame(fit.scores_)
+    dfcolumns = pd.DataFrame(X.columns)
+
+    # Concatenating two dataframes for better visualization
+    featureScores = pd.concat([dfcolumns,dfscores],axis=1)
+    featureScores.columns = ['Specs','Score']
+
+    # Print the best features
+    print(featureScores.nlargest(10,'Score'))
+
+    # Plotting the feature scores
+    plt.figure(figsize=(10,5))
+    plt.title('Feature Importance')
+    plt.barh(featureScores['Specs'], featureScores['Score'], color='b', align='center')
+    plt.xlabel('Score')
+    plt.show()
+
+    # Splitting the dataset into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Training the logistic regression model
+    logmodel = LogisticRegression()
+    logmodel.fit(X_train,y_train)
+
+    # Predicting the test set results
+    y_pred = logmodel.

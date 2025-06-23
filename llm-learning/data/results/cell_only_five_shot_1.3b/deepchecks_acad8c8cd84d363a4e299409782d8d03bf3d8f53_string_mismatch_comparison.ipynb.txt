@@ -1,0 +1,12 @@
+```
+    from deepchecks.checks import StringMismatchComparison
+    import pandas as pd
+
+    data = {'col1': ['Deep', 'deep', 'deep!!!', 'earth', 'foo', 'bar', 'foo?']}
+    compared_data = {'col1': ['Deep', 'deep', '$deeP$', 'earth', 'foo', 'bar', 'foo?', '?deep']}
+
+    StringMismatchComparison().run(pd.DataFrame(data=data), pd.DataFrame(data=compared_data))
+    ```
+
+    ### Explanation:
+    The commit message "Renaming MLChecks to deepchecks" suggests that the code is being renamed from the MLChecks library to the deepchecks library. The deepchecks library is a more general-purpose library for data validation and quality checks.

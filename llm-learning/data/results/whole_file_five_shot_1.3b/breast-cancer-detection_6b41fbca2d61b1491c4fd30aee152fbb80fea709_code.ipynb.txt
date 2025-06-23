@@ -1,0 +1,51 @@
+```
+    ## Implementing XGBoost Classifier for improved model performance
+
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    # Dataset for the project
+    from sklearn.datasets import load_breast_cancer
+
+    # Tools for splitting data and preprocessing
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+
+    # Metrics for evaluating model performance
+    from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
+
+    # Machine learning models for classification
+    from sklearn.svm import SVC
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.naive_bayes import GaussianNB
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.ensemble import AdaBoostClassifier
+
+    from xgboost import XGBClassifier
+
+    # Load the dataset
+    cancer_dataset = load_breast_cancer()
+
+    # Create a DataFrame
+    cancer_df = pd.DataFrame(
+        np.c_[cancer_dataset["data"], cancer_dataset["target"]],
+        columns=np.append(cancer_dataset["feature_names"], ["target"]),
+    )
+
+    # Split the data into training and testing sets
+    X = cancer_df.drop(["target"], axis=1)
+    y = cancer_df["target"]
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=5)
+
+    # Standardize the features
+    sc = StandardScaler()
+    X_train_sc = sc.fit_transform(X_train)
+    X_test_sc = sc.transform(X_test)
+
+    # Train the XGBoost classifier
+    xgb_

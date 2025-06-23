@@ -1,0 +1,23 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding files via upload"
+    Original Code:
+    '''
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+
+    # Load the data
+    file_path = "Resources/clean_new_rats_JUNE09.csv"
+    restaurant_list_df = pd.read_csv(file_path)
+
+    # Drop unnecessary columns
+    rats2_ml_df = restaurant_list_df.drop(["Unnamed: 0","ACTIVITY_DATE","ACTIVITY_DATE_MONTHYEAR","serial_number","FACILITY_ID","FACILITY_NAME","PROGRAM_NAME","PROGRAM_STATUS","FACILITY_ADDRESS","FACILITY_STATE","FACILITY_CITY","GRADE","violation_status","violation_code","violation_description","GEONAME","Pop_Tot","Prop_18y","Prop_64y","Prop_65y+","Prop_Blk","Prop_Lat","Prop_Whi","Prop_Asi","Prop_Asi","Prop_Ami","Prop_NHO","Prop_FPL1","Prop_FPL2","Prop_forb", "Prop_Eng", "Prop_edLH", "Prop_edHG", "Prop_edSC", "Prop_edCG","MHI","Prop_groc", "Prop_60mi", "No_farm", "Prop_obse", "Prop_DM","Rte_CVD","Prop_ownr","Prop_rentr","No_hless", "Rte_crim","Rte_alco","Propt_envi","Prop_depr","Propt_HPI","Prop_fru","Prop_bev","Prop_hyp","Prop_marj"],1)
+
+    # Define the features set.
+    X = rats2_ml_df.copy()
+    X

@@ -1,0 +1,18 @@
+```python
+    from deepchecks.vision.base import VisionData
+    from deepchecks.vision.checks.performance import ClassPerformance
+
+    from deepchecks.vision.datasets.classification import mnist
+
+    mnist_model = mnist.load_model()
+    train_ds = mnist.load_dataset(train=True, object_type='VisionData')
+    test_ds = mnist.load_dataset(train=False, object_type='VisionData')
+
+    from deepchecks.vision.utils.classification_formatters import ClassificationPredictionFormatter
+    from torch import nn
+
+    pred_formatter = ClassificationPredictionFormatter(mnist.mnist_prediction_formatter)
+
+    check = ClassPerformance()
+    check.run(train_ds, test_ds, mnist_model, prediction_formatter=pred_formatter)
+    ```

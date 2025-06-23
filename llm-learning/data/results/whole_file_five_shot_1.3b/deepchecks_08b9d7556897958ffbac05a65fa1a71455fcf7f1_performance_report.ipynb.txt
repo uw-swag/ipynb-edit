@@ -1,0 +1,53 @@
+```
+    ## Code: base_vision.py
+    """
+    Base vision package for the project.
+    """
+
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.externals import joblib
+
+    class BaseVision:
+        def __init__(self, data):
+            self.data = data
+            self.features = data.columns.tolist()
+            self.target = self.features.pop(0)
+            self.X = data[self.features]
+            self.y = data[self.target]
+
+        def preprocess_data(self):
+            # Preprocess the data
+            pass
+
+        def train_model(self):
+            # Split the data into training and testing sets
+            X_train, X_test, y_train, y_test = train_test_split(self.X, self.y, test_size=0.2, random_state=42)
+
+            # Standardize the features
+            sc = StandardScaler()
+            X_train = sc.fit_transform(X_train)
+            X_test = sc.transform(X_test)
+
+            # Train a Random Forest Classifier
+            classifier = RandomForestClassifier(n_estimators=200, random_state=42)
+            classifier.fit(X_train, y_train)
+
+            # Save the trained model
+            joblib.dump(classifier, 'base_vision_model.pkl')
+
+        def predict(self, new_data):
+            # Load the trained model
+            loaded_model = joblib.load('base_vision_model.pkl')
+
+            # Preprocess the new data
+            new_data = sc.transform(new_data)
+
+            # Predict the target for the new data
+            prediction = loaded_model.predict(new_

@@ -1,0 +1,33 @@
+```python
+    import tensorboard
+    import tensorboard.compat.tensorflow as tb
+
+    tb.compat.v1.disable_eager_execution()
+
+    # Start TensorBoard
+    writer = tb.FileWriter(logdir)
+    writer.set_graph(tf.get_default_graph())
+
+    # Log scalar values
+    for i in range(100):
+        writer.add_scalar('Test/Loss', loss.eval(), i)
+        writer.add_scalar('Test/Accuracy', accuracy.eval(), i)
+
+    writer.close()
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add a function to get the latest model weights"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def get_latest_model_weights(model_path):
+        latest_model_path = max(Path(model_path).glob('model.*.h5'), key=os.path.getctime)
+        return latest_model_path
+    ```

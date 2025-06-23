@@ -1,0 +1,27 @@
+```python
+    import fftw3
+
+    # Create a 3D array of complex numbers
+    N = 100
+    complex_array = fftw3.malloc_complex(N*N*N)
+
+    # Fill the array with some data
+    for i in range(N):
+        for j in range(N):
+            for k in range(N):
+                complex_array[i*N*N + j*N + k] = (i+j+k, i*j*k)
+
+    # Perform the FFT
+    fftw3.execute(complex_array)
+
+    # Print the result
+    for i in range(N):
+        for j in range(N):
+            for k in range(N):
+                real, imag = fftw3.real(complex_array[i*N*N + j*N + k]), fftw3.imag(complex_array[i*N*N + j*N + k])
+                print(f"({i+j+k}, {real}, {imag})")
+
+    # Free the memory
+    fftw3.free(complex_array)
+    ```
+    This code demonstrates how to use the FFTW3 library to perform a 3D FFT on a complex array. The FFT is a fast Fourier transform that computes the one-dimensional discrete Fourier transform (DFT) of a function of time.

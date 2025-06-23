@@ -1,0 +1,29 @@
+```python
+    <Cell_0>
+import pandas as pd
+from sklearn.datasets import load_iris
+<\Cell_0>
+<Cell_1>
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+train_len = round(0.67*len(iris_df))
+df_train = iris_df[:train_len]
+df_test = iris_df[train_len:]
+<\Cell_1>
+<Cell_2>
+from deepchecks.suites import integrity_check_suite
+<\Cell_2>
+<Cell_3>
+# Add a new condition to the integrity check suite
+integrity_check_suite().add_condition(
+    "dominant_value_condition",
+    lambda df: df.apply(lambda x: x == x.mode().values[0]) > (0.5 * len(df)),
+    "The dataset contains a dominant value",
+)
+<\Cell_3>
+<Cell_4>
+# Run the integrity check suite with the new condition
+integrity_check_suite().run(train_dataset=df_train, test_dataset=df_test, check_datasets_policy='both', conditions=["dominant_value_condition"])
+<\Cell_4>
+    ```
+
+    The new condition "dominant_value_condition" checks if the dataset contains a value that is more than 50% of the dataset's size. This is a simple example, but it can be extended to check more complex conditions.

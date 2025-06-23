@@ -1,0 +1,19 @@
+```python
+    import sqlalchemy as db
+    from sqlalchemy import create_engine, Table, MetaData
+
+    engine = create_engine('sqlite:///:memory:')
+    metadata = MetaData()
+
+    course = Table('course', metadata, autoload_with=engine)
+
+    metadata.create_all(engine)
+
+    connection = engine.connect()
+
+    connection.execute(course.insert(), [
+        {'name': 'DB', 'description': 'Database Course'},
+        {'name': 'AI', 'description': 'Artificial Intelligence Course'},
+        {'name': 'ML', 'description': 'Machine Learning Course'}
+    ])
+    ```

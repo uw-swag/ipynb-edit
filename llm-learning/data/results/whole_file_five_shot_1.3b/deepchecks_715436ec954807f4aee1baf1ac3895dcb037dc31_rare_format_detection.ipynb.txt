@@ -1,0 +1,29 @@
+```python
+    from deepchecks.checks.integrity.rare_format_detection import RareFormatDetection
+
+    class RareFormatDetection(RareFormatDetection):
+        def _run_checks(self, dataset):
+            # Add conditions to the 'RareFormatDetection' check
+            if 'date' in self.target_column:
+                if not isinstance(self.target_column, pd.Series):
+                    raise ValueError("The target column should be a Series.")
+                if not isinstance(self.target_column.dtype, pd.CategoricalDtype):
+                    raise ValueError("The target column should be a categorical column.")
+                if len(self.target_column.unique()) > 2:
+                    raise ValueError("The target column should have at most 2 unique values.")
+            if 'email' in self.target_column:
+                if not isinstance(self.target_column, pd.Series):
+                    raise ValueError("The target column should be a Series.")
+                if not self.target_column.str.contains(r'\@').any():
+                    raise ValueError("The target column should contain at least one '@' symbol.")
+
+            return super()._run_checks(dataset)
+
+    # Rest of the code remains the same
+    ```
+
+    The conditions in the `RareFormatDetection` class are added to the `_run_checks` method. The conditions are:
+    - The 'date' column should be a categorical column.
+    - The 'email' column should contain at least one '@' symbol.
+
+    The conditions are added to ensure that the 'RareFormatDetection' check is not run on the 'date' and 'email' columns.

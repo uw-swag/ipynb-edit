@@ -1,0 +1,29 @@
+```python
+    # refactor code into folders
+    import os
+
+    # get the list of all files in the current directory
+    files = os.listdir()
+
+    # create a dictionary to store the files in their respective folders
+    folders = {}
+
+    # iterate over all files
+    for file in files:
+        # check if the file is a directory
+        if os.path.isdir(file):
+            # if the directory is not in the dictionary, add it
+            if file not in folders:
+                folders[file] = []
+
+            # add the file to the appropriate folder
+            folders[file].append(file)
+
+    # print the folders
+    for folder, files in folders.items():
+        print(f"Folder: {folder}")
+        for file in files:
+            print(f"\tFile: {file}")
+    ```
+
+    This code will create a dictionary where the keys are the names of the directories and the values are lists of the files in those directories. The `os.listdir()` function is used to get the list of all files in the current directory. The `os.path.isdir()` function is used to check if a file is a directory. The `if` statement is used to check if the directory is already in the dictionary. If it is not, it is added to the dictionary with an empty list as its value. The `append()` method is used to add a file to a list. Finally, the code prints the names of the directories and the files in each directory.

@@ -1,0 +1,30 @@
+```python
+    # Import necessary libraries
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    # Define the function to generate the data
+    def generate_data(n_samples=100, noise=0.1, random_state=1):
+        np.random.seed(random_state)
+        X = np.random.normal(size=(n_samples, 2))
+        y = np.where(X[:, 0] > 0, 1, -1)
+        X = np.c_[X, np.ones(n_samples)]
+        return X, y, np.array([-1, 1])
+
+    # Generate the data
+    X, y, target = generate_data(n_samples=100, noise=0.1, random_state=1)
+
+    # Fit the data
+    w = np.linalg.inv(X.T.dot(X)).dot(X.T).dot(y)
+
+    # Plot the decision surface
+    x_min, x_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    y_min, y_max = X[:, 2].min() - 1, X[:, 2].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02), np.arange(y_min, y_max, 0.02))
+    Z = (-w[0] - w[1] * xx - w[2] * yy) / w[3]
+
+    plt.figure(figsize=(8, 6))
+    plt.contourf(xx, yy, Z, alpha=0.8, cmap=plt.cm.RdBu)
+    plt.scatter(X[:, 1], X[:, 2], c=y, s=20, edgecolor='k', linewidths=1)
+    plt.xlim(x_min, x_max)
+    plt.ylim(y_min, y

@@ -1,0 +1,77 @@
+#Dataset for regression
+housing_data = datasets.fetch_california_housing(as_frame=True)
+housing = housing_data.frame
+
+housing['pred'] = housing['MedHouseVal'].values + np.random.normal(0, 3, housing.shape[0])
+housing['number_of_rooms'] = np.random.randint(low=4, high=11, size=len(housing))
+housing['house_id'] = [uuid.uuid1().hex[:8] for _ in range(len(housing))]
+
+housing_ref = housing.sample(n=5000, replace=False)
+housing_cur = housing.sample(n=5000, replace=False)
+#Dataset for Binary and Binary Probabilistic Classification
+bcancer_data = datasets.load_breast_cancer(as_frame=True)
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+bcancer_label_ref = bcancer_ref.copy(deep=True)
+bcancer_label_cur = bcancer_cur.copy(deep=True)
+
+target_classes = ['Benign','Malignant']
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+#Reference and current data for Binary classification, option 1 and 2
+bcancer_label_ref['prediction'] = model.predict(bcancer_label_ref[bcancer_data.feature_names.tolist()])
+bcancer_label_cur['prediction'] = model.predict(bcancer_label_cur[bcancer_data.feature_names.tolist()])
+
+#Reference and current data for Binary probabilistic classification, option 3
+bcancer_ref['prediction'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_cur['prediction'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+
+#Reference and current data for Binary probabilistic classification, option 1 and 2
+bcancer_ref12 = bcancer_ref.copy()
+bcancer_cur12 = bcancer_cur.copy()
+
+bcancer_ref12 = bcancer_ref12.rename({'prediction': 'Malignant'}, axis=1)
+bcancer_cur12 = bcancer_cur12.rename({'prediction': 'Malignant'}, axis=1)
+
+bcancer_ref12['Benign'] = bcancer_ref12.Malignant.apply(lambda x: 1-x)
+bcancer_cur12['Benign'] = bcancer_cur12.Malignant.apply(lambda x: 1-x)
+
+bcancer_ref12['target'] = bcancer_ref12.target.apply(lambda x: target_classes[x])
+bcancer_cur12['target'] = bcancer_cur12.target.apply(lambda x: target_classes[x])
+
+#Dataset for Multiclass Classification
+iris_data = datasets.load_iris(as_frame=True)
+iris = iris_data.frame
+
+iris_ref = iris.sample(n=150, replace=False)
+iris_cur = iris.sample(n=150, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=3)
+model.fit(iris_ref[iris_data.feature_names], iris_ref.target)
+
+#Reference and current data for Multiclass classification, option 1
+iris_ref['pred'] = model.predict(iris_ref[iris_data.feature_names])
+iris_cur['pred'] = model.predict(iris_cur[iris_data.feature_names])
+
+#Reference and current data for Multiclass classification, option 2
+target_classes = ['Setosa', 'Versicolor', 'Virginica']
+
+iris_ref2 = iris_ref.copy()
+iris_cur2 = iris_cur.copy()
+
+iris_ref2['pred'] = iris_ref.pred.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_ref2['target'] = iris_ref.target.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_cur2['pred'] = iris_cur.pred.apply(lambda x: iris_data.target_names[x].capitalize())
+iris_cur2['target'] = iris_cur.target.apply(lambda x: iris_data.target_names[x].capitalize())
+#Dataset for Text Features
+reviews_data = datasets.fetch_openml(name='Womens-E-Commerce-Clothing-Reviews', version=2, as_frame=True)
+reviews = reviews_data.frame
+
+reviews['prediction'] = reviews['Rating']
+reviews_ref = reviews[reviews.Rating > 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)
+reviews_cur = reviews[reviews.Rating < 3].sample(n=5000, replace=True, ignore_index=True, random_state=42)

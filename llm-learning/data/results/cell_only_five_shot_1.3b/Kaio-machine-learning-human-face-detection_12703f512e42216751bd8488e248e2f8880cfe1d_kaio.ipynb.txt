@@ -1,0 +1,26 @@
+
+    '''
+    # Representation examples
+    #http://felipegalvao.com.br/blog/2016/03/08/visualizacao-de-dados-com-python-matplotlib/
+    # Another links
+    # http://www.dummies.com/programming/big-data/data-science/how-to-visualize-the-classifier-in-an-svm-supervised-learning-model/
+    # http://scikit-learn.org/stable/auto_examples/svm/plot_iris.html#sphx-glr-auto-examples-svm-plot-iris-py
+    # http://scikit-learn.org/stable/auto_examples/plot_multilabel.html#sphx-glr-auto-examples-plot-multilabel-py
+    #http://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#sphx-glr-auto-examples-classification-plot-classifier-comparison-py
+    def display_features(X, Y):
+        from collections import Counter
+        
+        fig, eixos = plt.subplots(nrows=1, ncols=3, figsize=(15,4))
+        
+        # Dados do grafico de piscadas do olho esquerdo aberto
+        y_axis = X['rate_blink_left'].copy()
+        x_axis = range(len(y_axis))
+        width_n = 0.5
+        bar_color = 'orange'
+        y_axis.fillna(y_axis.mean(), inplace=True)
+        eixos[0].set_xlabel('Probabilidade (rate_blink_left)')
+        eixos[0].set_ylabel('Ocorrencia')
+        eixos[0].hist(y_axis, bins=15, color=bar_color)
+        eixos[0].set_title('Probabilidade do olho esquerdo aberto')
+        
+        # Dados do

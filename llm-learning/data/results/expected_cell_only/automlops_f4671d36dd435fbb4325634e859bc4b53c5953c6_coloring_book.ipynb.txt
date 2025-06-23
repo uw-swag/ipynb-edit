@@ -1,0 +1,33 @@
+!python3 -m data.load_data_to_bq --project automlops-sandbox --file data/Dry_Beans_Dataset.csv
+AutoMLOps.generate(project_id=PROJECT_ID, pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule_pattern='0 */12 * * *')
+# .go() calls .generate() and runs the code
+AutoMLOps.go(project_id=PROJECT_ID, pipeline_params=pipeline_params, use_kfp_spec=False, run_local=False, schedule_pattern='0 */12 * * *')
+AutoMLOps.go(project_id=PROJECT_ID, # required
+             pipeline_params=pipeline_params, # required
+             af_registry_location='us-central1', # default
+             af_registry_name='vertex-mlops-af', # default
+             cb_trigger_location='us-central1', # default
+             cb_trigger_name='automlops-trigger', # default
+             cloud_run_location='us-central1', # default
+             cloud_run_name='run-pipeline', # default
+             csr_branch_name='automlops', # default
+             csr_name='AutoMLOps-repo', # default
+             gs_bucket_location='us-central1', # default
+             gs_bucket_name=None, # default
+             parameter_values_path='pipelines/runtime_parameters/pipeline_parameter_values.json', # default
+             pipeline_job_spec_path='scripts/pipeline_spec/pipeline_job.json', # default
+             pipeline_runner_sa=None, # default
+             run_local=True, # default
+             schedule_location='us-central1', # default
+             schedule_name='AutoMLOps-schedule', # default
+             schedule_pattern='No Schedule Specified', # default
+             use_kfp_spec=False # default
+)
+pipeline_params = {
+    "bq_table": f"{PROJECT_ID}.test_dataset.dry-beans",
+    "output_model_directory": f"gs://{PROJECT_ID}-bucket/trained_models/{datetime.datetime.now()}",
+    "project": f"{PROJECT_ID}",
+    "region": "us-central1"
+}
+AutoMLOps.go(project_id=PROJECT_ID, pipeline_params=pipeline_params, use_kfp_spec=True, run_local=False, schedule_pattern='0 */12 * * *')
+

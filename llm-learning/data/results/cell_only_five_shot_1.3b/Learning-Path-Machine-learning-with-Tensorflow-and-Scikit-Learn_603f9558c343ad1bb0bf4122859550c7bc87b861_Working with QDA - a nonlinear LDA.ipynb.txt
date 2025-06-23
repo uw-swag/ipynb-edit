@@ -1,0 +1,56 @@
+
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+
+    # Creating a DataFrame
+    df = pd.DataFrame({
+        'Name': ['John', 'Anna', 'Peter', 'Linda'],
+        'Age': [28, 24, 35, 32],
+        'Country': ['USA', 'Sweden', 'USA', 'Sweden']
+    })
+
+    # Saving the DataFrame to a CSV file
+    df.to_csv('people.csv', index=False)
+
+    # Importing the DataFrame from the CSV file
+    df_imported = pd.read_csv('people.csv')
+
+    # Printing the imported DataFrame
+    print(df_imported)
+
+    # Adding a new column to the DataFrame
+    df['Job'] = ['Engineer', 'Doctor', 'Teacher', 'Nurse']
+
+    # Printing the updated DataFrame
+    print(df)
+
+    # Adding a new row to the DataFrame
+    new_row = {'Name': 'Mike', 'Age': 30, 'Country': 'USA', 'Job': 'Engineer'}
+    df = df.append(new_row, ignore_index=True)
+
+    # Printing the updated DataFrame
+    print(df)
+
+    # Removing a row from the DataFrame
+    df = df.drop(df.index[0])
+
+    # Printing the updated DataFrame
+    print(df)
+
+    # Exporting the DataFrame to a SQLite database
+    df.to_sql('people', con='sqlite:///people.db', if_exists='replace', index=False)
+
+    # Closing the connection to the SQLite database
+    con.close()
+
+    # Importing the DataFrame from the SQLite database
+    df_sql = pd.read_sql_query("SELECT * FROM people", con)
+
+    # Printing the imported DataFrame
+    print(df_sql)
+
+    # Closing the connection to the SQLite database
+    con.close()
+
+    # Exporting the

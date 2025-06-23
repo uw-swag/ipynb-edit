@@ -1,0 +1,31 @@
+```python
+    #@title Mask2RLE
+    #@param {type:"string"}
+    MASK_IMAGE = "MASK_IMAGE" #@param {type:"string"}
+
+    import cv2
+    import numpy as np
+    from skimage.measure import label, regionprops
+    from skimage.morphology import closing, square
+
+    def mask2rle(mask_image):
+        '''
+        Convert binary mask image to RLE (Run Length Encoding)
+        '''
+        mask_image = np.array(mask_image, dtype=bool)
+        labeled_mask, num_features = label(mask_image, return_num=True)
+        rle = []
+
+        for i in range(1, num_features + 1):
+            binary_mask = np.zeros(mask_image.shape, dtype=bool)
+            binary_mask[mask_image == i] = True
+            if np.sum(binary_mask) > 0:
+                rle.append(f'{i} {np.sum(binary_mask)}')
+
+        return ' '.join(rle)
+
+    # Test the function
+    mask_image = cv2.imread(MASK_IMAGE, 0)
+    rle = mask2rle(mask_image)
+    print(rle)
+    ```

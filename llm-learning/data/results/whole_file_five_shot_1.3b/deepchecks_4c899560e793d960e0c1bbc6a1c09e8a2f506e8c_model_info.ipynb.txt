@@ -1,0 +1,14 @@
+```python
+    from sklearn.ensemble import AdaBoostClassifier
+    from sklearn.datasets import load_iris
+
+    clf = AdaBoostClassifier(n_estimators=100, learning_rate=1.2)
+    iris = load_iris()
+    X = iris.data
+    Y = iris.target
+    clf.fit(X, Y)
+
+    from deepchecks.checks.overview import ModelInfo
+
+    ModelInfo().run(clf)
+    ```

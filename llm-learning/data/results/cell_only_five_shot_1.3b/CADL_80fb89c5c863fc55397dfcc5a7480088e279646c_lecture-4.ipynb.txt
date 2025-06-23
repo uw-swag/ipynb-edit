@@ -1,0 +1,28 @@
+
+    The code you provided is a TensorFlow code snippet that uses a VGG-19 model to extract activations from the style image. The code is designed to run in a TensorFlow session and uses a GPU for computation.
+
+    The issue you're facing is related to the size of the initializer for the dropout layers. The dropout layers in the VGG-19 model are initialized with a uniform random number between 0 and 1. However, the size of these initializers is not fixed.
+
+    The code you've provided is using a fixed size of 1.0 for the dropout layers, which is not recommended. A better approach would be to initialize the dropout layers with a different size, such as 0.5 or 0.3, depending on your specific needs.
+
+    Here's how you can modify the code to initialize the dropout layers with a different size:
+
+    ```python
+    style_layers = ['vgg/conv1_1/conv1_1:0',
+                    'vgg/conv2_1/conv2_1:0',
+                    'vgg/conv3_1/conv3_1:0',
+                    'vgg/conv4_1/conv4_1:0',
+                    'vgg/conv5_1/conv5_1:0']
+    style_activations = []
+
+    with tf.Session(graph=g) as sess, g.device('/cpu:0'):
+        for style_i in style_layers:
+            style_activation_i = g.get_tensor_by_name(style_i).eval(
+                feed_dict={
+                    x: style_img_4d,
+                    'vgg/dropout_1/random_uniform:0': [[0.5]],  # Initialize with a different size
+                    'vgg/dropout/random_uniform:0': [[0.5]]})  # Initialize with a different size
+            style_activations.append(style_activation_i)
+    ```
+
+    In this code, the dropout layers are initialized with a size of 0.5, which is a common choice for many applications. You can adjust this size to better suit your needs.

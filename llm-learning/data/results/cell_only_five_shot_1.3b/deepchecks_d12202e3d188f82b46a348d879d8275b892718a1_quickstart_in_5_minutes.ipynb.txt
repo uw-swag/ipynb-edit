@@ -1,0 +1,9 @@
+```
+    from deepchecks import Dataset
+
+# We explicitly state that this dataset has no categorical features, otherwise they will be automatically inferred
+# If the dataset has categorical features, the best practice is to pass a list with their names
+
+ds_train = Dataset(df_train, label_name=label_col, cat_features=[], use_default_index=False)
+ds_test =  Dataset(df_test,  label_name=label_col, cat_features=[])
+    ```

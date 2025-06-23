@@ -1,0 +1,35 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Adding download path for image files"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    # You can use the following code to download the image files.
+    # This code assumes that the image files are located in a directory named 'images'.
+    # If the image files are not in the 'images' directory, you can change the path accordingly.
+
+    import urllib.request
+
+    download_url = 'http://example.com/image.jpg'  # replace with your image URL
+    file_name = 'image.jpg'  # replace with your desired file name
+
+    urllib.request.urlretrieve(download_url, file_name)
+
+    # Now, you can include the image files in your code.
+    # For example, if you have an image in the 'images' directory, you can load it like this:
+
+    import matplotlib.pyplot as plt
+
+    plt.imshow(plt.imread('images/' + file_name))
+    plt.show()
+
+    # If the image files are not in the 'images' directory, you can change the path accordingly.
+    # For example, if you have an image in a subdirectory named 'subdir' in the 'images' directory, you can load it like this:
+
+    plt.imshow(plt.imread('images/subdir/' + file_name))
+    plt.show()

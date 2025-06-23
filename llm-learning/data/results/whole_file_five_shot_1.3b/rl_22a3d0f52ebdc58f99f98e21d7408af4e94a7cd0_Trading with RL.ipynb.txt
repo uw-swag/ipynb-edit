@@ -1,0 +1,68 @@
+```python
+    ### Instruction:
+    [
+    Commit Message: "Add Trading with RL notebook"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import random
+
+import numpy as np
+import pandas as pd
+
+import plotly.graph_objects as go
+
+# set seeds for reproducibility
+# np.random.uniform(0,10000) 4465
+random.seed(4465)
+np.random.seed(4465)
+#tf.random.set_seed(4465)
+
+<\Cell_0>
+<Cell_1>
+# simulate market data
+
+# 2) make data, acceleration toward trend, starts a little off
+# 3) add random perturbation
+# 4) make that series the acceleration so acceleration is random around a trend
+# 5) make data with that acceleration
+
+
+startindex = 100
+amplitude = 1
+stockprice = startindex + amplitude
+trend = 0.001
+forcemult = 0.0001
+stocktrend = 0.0
+
+trendindex = startindex
+trendseries = []
+stockseries = []
+date = []
+for i in range(1000):
+    acceleration = trendindex - stockprice
+    stocktrend = stocktrend + acceleration * forcemult
+    stockprice *= (1+stocktrend)
+    stockseries.append(stockprice)
+    
+    trendseries.append(trendindex)
+    date.append(i)
+    trendindex *= (1 + trend)
+    
+trendseries = pd.DataFrame({'dateindex': date, 'trend' : trendseries, 'stock': stockseries})
+
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(y=trendseries['trend'], x=trendseries['dateindex'],))
+fig.add_trace(go.Scatter(y=trendseries['stock'], x=trendseries['dateindex'],))
+
+fig.show()
+<\Cell_1>
+<Cell_2>
+
+<\Cell_2>
+
+    '''
+    ]
+
+    #

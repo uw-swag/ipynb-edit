@@ -1,0 +1,20 @@
+```python
+    from sklearn.ensemble import RandomForestClassifier
+
+    # Create a random forest Classifier
+    clf = RandomForestClassifier(n_estimators=100)
+
+    # Train the model using the training sets
+    clf.fit(X_train, y_train)
+
+    # Predict the response for test dataset
+    y_pred = clf.predict(X_test)
+
+    # Feature importance
+    feature_importance = pd.DataFrame(clf.feature_importances_,
+                                   index = X_train.columns,
+                                   columns=['importance']).sort_values('importance', ascending=False)
+
+    print(feature_importance)
+    ```
+    This code will print the feature importances in descending order. The higher, the more important the feature.

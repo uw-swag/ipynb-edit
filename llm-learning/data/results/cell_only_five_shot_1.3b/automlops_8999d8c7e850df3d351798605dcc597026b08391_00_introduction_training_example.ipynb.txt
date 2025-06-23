@@ -1,0 +1,49 @@
+```python
+    from google.cloud import automl
+    from google.oauth2 import service_account
+    from google.auth.transport.requests import Request
+
+    # Set up the credentials
+    credentials = service_account.Credentials.from_service_account_file(
+        'path/to/your/service-account-file.json')
+    scoped_credentials = credentials.with_scopes(['https://www.googleapis.com/auth/cloud-platform'])
+
+    # Get the request object
+    request = Request()
+
+    # Refresh the token
+    scoped_credentials.refresh(request)
+
+    # Create the AutoML client
+    client = automl.AutoMlClient(credentials=scoped_credentials)
+
+    # Define the project ID and compute location
+    project_id = 'your-project-id'
+    compute_region = 'compute-region'
+
+    # Define the model parameters
+    model_id = 'your-model-id'
+    dataset_id = 'your-dataset-id'
+    pipeline_id = 'your-pipeline-id'
+
+    # Create the model
+    model = client.get_model(project_id, model_id)
+
+    # Create the dataset
+    dataset = client.get_dataset(project_id, dataset_id)
+
+    # Create the pipeline
+    pipeline = client.get_pipeline(project_id, pipeline_id)
+
+    # Update the model with the new dataset
+    response = client.update_model(project_id, model, dataset)
+
+    # Get the updated model
+    updated_model = client.get_model(project_id, model_id)
+
+    # Create the pipeline with the updated model
+    pipeline = client.create_pipeline(project_id, pipeline, updated_model)
+
+    # Get the created pipeline
+    created_pipeline = client.get_pipeline(project_id, pipeline_id)
+    ```

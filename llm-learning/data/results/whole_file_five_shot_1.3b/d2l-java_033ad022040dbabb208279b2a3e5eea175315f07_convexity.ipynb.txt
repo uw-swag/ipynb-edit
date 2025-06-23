@@ -1,0 +1,45 @@
+```
+    %maven ai.djl:api:0.6.0-SNAPSHOT
+    %maven org.slf4j:slf4j-api:1.7.26
+    %maven org.slf4j:slf4j-simple:1.7.26
+
+    %maven ai.djl.mxnet:mxnet-engine:0.6.0-SNAPSHOT
+    %maven ai.djl.mxnet:mxnet-native-auto:1.7.0-a
+
+    %load ../utils/plot-utils
+    %load ../utils/Functions.java
+
+    import ai.djl.ndarray.*;
+    import tech.tablesaw.plotly.traces.ScatterTrace;
+    import tech.tablesaw.plotly.components.Axis.Spikes;
+
+    public double[] floatToDoubleArray(float[] x) {
+        double[] ret = new double[x.length];
+        for (int i = 0; i < x.length; i++) {
+            ret[i] = x[i];
+        }
+        return ret;
+    }
+
+    public Figure plotLineAndSegment(float[] x, float[] y, float[] segment, Function<Float, Float> func, 
+                                     int width, int height) {
+        ScatterTrace trace = ScatterTrace.builder(floatToDoubleArray(x), floatToDoubleArray(y))
+            .mode(ScatterTrace.Mode.LINE)
+            .build();
+
+        ScatterTrace trace2 = ScatterTrace.builder(floatToDoubleArray(segment), 
+                                                   new double[]{func.apply(segment[0]), 
+                                                   func.apply(segment[1])})
+            .mode(ScatterTrace.Mode.LINE)
+            .build();
+
+        Layout layout = Layout.builder()
+            .height(height)
+            .width(width)
+            .showLegend(false)
+            .build();
+
+        return new Figure(layout, trace, trace2);
+    }
+
+    Function<Float, Float> f = x -> 0.5f * x *

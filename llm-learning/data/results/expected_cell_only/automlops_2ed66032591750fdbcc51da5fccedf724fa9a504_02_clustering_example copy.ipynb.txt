@@ -1,0 +1,103 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+!pip3 install google-cloud-automlops --user
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+! gcloud config set project $PROJECT_ID
+from AutoMLOps import AutoMLOps
+@AutoMLOps.component
+def create_dataset(data_path: str):
+    """Custom component that loads the sklearn Iris dataset and writes it to GCS.
+
+    Args:
+        data_path: The gcs location to write the Iris data.
+    """
+    import pandas as pd
+    from sklearn import datasets
+
+    # Load data
+    iris = datasets.load_iris()
+    data = pd.DataFrame(data=iris.data, columns=iris.feature_names)  
+    target = pd.DataFrame(data=iris.target, columns=['Species'])
+    df = pd.concat([data, target], axis=1)
+
+    # Calculate petal and sepal area and save dataset
+    df['sepal_area'] = df['sepal length (cm)'] * df['sepal width (cm)']
+    df['petal_area'] = df['petal length (cm)'] * df['petal width (cm)']
+    df.to_csv(data_path, index=False)
+@AutoMLOps.component
+def fit_kmeans(
+    data_path: str,
+    cluster_path: str
+):
+    """Custom component that determines KMeans clusters.
+
+    Args:
+        data_path (str): The gcs location of the Iris data.
+        cluster_path (str): The gcs location of the Iris dataset augmented with clusters.
+    """
+    from sklearn.cluster import KMeans
+    import pandas as pd
+
+    # Load data
+    df = pd.read_csv(data_path)
+
+    # Fit KMeans with 3 clusters to the sepal and petal area
+    kmeans = KMeans(n_clusters=3, n_init='auto')
+    df['Cluster'] = kmeans.fit_predict(df[['sepal_area', 'petal_area']])
+
+    df[['sepal_area', 'petal_area', 'Species', 'Cluster']].to_csv(cluster_path, index=False)
+@AutoMLOps.pipeline #(name='automlops-pipeline', description='This is an optional description')
+def pipeline(data_path: str,
+             cluster_path: str,
+            ):
+
+    create_dataset_task = create_dataset(
+        data_path=data_path
+    )
+
+    fit_kmeans_task = fit_kmeans(
+        data_path=data_path,
+        cluster_path=cluster_path
+    ).after(create_dataset_task)
+import datetime
+date_bucket = datetime.datetime.now()
+pipeline_params = {
+    'data_path': f'gs://{PROJECT_ID}-bucket/kmeans/{date_bucket}/iris.csv',
+    'cluster_path': f'gs://{PROJECT_ID}-bucket/kmeans/{date_bucket}/iris_clusters.csv',
+}
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=False,
+                   schedule_pattern='0 */12 * * *' # retrain every 12 hours
+)
+AutoMLOps.go(project_id=PROJECT_ID,
+             pipeline_params=pipeline_params,
+             run_local=False,
+             schedule_pattern='0 */12 * * *'
+)

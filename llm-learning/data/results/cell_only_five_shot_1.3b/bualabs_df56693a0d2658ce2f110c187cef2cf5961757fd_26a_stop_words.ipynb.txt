@@ -1,0 +1,42 @@
+```python
+    # Importing necessary libraries
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize
+    from nltk.stem import PorterStemmer
+    from nltk.stem import WordNetLemmatizer
+
+    # Define stop words
+    stop_words = set(stopwords.words('english'))
+
+    # Define lemmatizer and stemmer
+    lemmatizer = WordNetLemmatizer()
+    stemmer = PorterStemmer()
+
+    # Define a function to process text
+    def process_text(text):
+        # Tokenize the text
+        tokenized_text = word_tokenize(text)
+
+        # Remove stop words
+        filtered_text = [word for word in tokenized_text if word not in stop_words]
+
+        # Stem the words
+        stemmed_text = [stemmer.stem(word) for word in filtered_text]
+
+        # Lemmatize the words
+        lemmatized_text = [lemmatizer.lemmatize(word) for word in stemmed_text]
+
+        return lemmatized_text
+
+    # Test the function
+    text = "This is an example sentence for the function to test."
+    print(process_text(text))
+
+    # Pros and cons of using stop words:
+    # Pros:
+    # 1. They help to reduce the vocabulary size by removing common words that do not contribute to the meaning of a sentence.
+    # 2. They can improve the performance of the model by reducing the complexity of the model.
+    # Cons:
+    # 1. They can also be misleading, as they can cause the model to learn to ignore important words that are not actually important.
+    # 2. They can also be a source of noise in the data, as they can make the text harder to understand.
+    ```

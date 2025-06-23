@@ -1,0 +1,98 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.calibration import CalibratedClassifierCV
+from sklearn.model_selection import StratifiedKFold, train_test_split, GridSearchCV
+from sklearn.metrics import classification_report
+<\Cell_0>
+<Cell_1>
+data = pd.read_csv('/file.csv')
+<\Cell_1>
+<Cell_2>
+data.info()
+<\Cell_2>
+<Cell_3>
+data.head()
+<\Cell_3>
+<Cell_4>
+data.fired.unique()
+<\Cell_4>
+<Cell_5>
+print('There are {:.2f}% zero values in "fired" column.'.format((1 - sum(data.fired) / 2100) * 100))
+<\Cell_5>
+<Cell_6>
+X_train = data.drop(['fired', 'employee_id'], axis=1)
+Y_train = data.fired
+<\Cell_6>
+<Cell_7>
+#Evaluating feature importance.
+clf = RandomForestClassifier(n_estimators=200)
+clf = clf.fit(X_train, Y_train)
+indices = np.argsort(clf.feature_importances_)[::-1]
+
+print('Feature ranking:')
+
+for f in range(X_train.shape[1]):
+    print('%d. feature %d %s (%f)' % (f + 1, indices[f], X_train.columns[indices[f]],
+                                      clf.feature_importances_[indices[f]]))
+<\Cell_7>
+<Cell_8>
+
+Xtrain, Xtest, ytrain, ytest = train_test_split(X_train, Y_train, test_size=0.20, stratify = Y_train)
+<\Cell_8>
+<Cell_9>
+clf = RandomForestClassifier(n_estimators=150, n_jobs=-1, criterion = 'gini', max_features = 'sqrt',
+                             min_samples_split=7, min_weight_fraction_leaf=0.0,
+                             max_leaf_nodes=40, max_depth=10)
+
+calibrated_clf = CalibratedClassifierCV(clf, method='sigmoid', cv=5)
+calibrated_clf.fit(Xtrain, ytrain)
+y_val = calibrated_clf.predict_proba(Xtest)
+<\Cell_9>
+<Cell_10>
+print("Accuracy {0}%".format(round(sum(pd.DataFrame(y_val).idxmax(axis=1).values == ytest)/len(ytest)*100, 4)))
+<\Cell_10>
+<Cell_11>
+print(classification_report(ytest, pd.DataFrame(y_val).idxmax(axis=1).values, target_names=['0', '1'], digits=4))
+<\Cell_11>
+<Cell_12>
+y_threshold = np.zeros(ytest.shape).astype(int)
+for i in range(len(y_val)):
+    if y_val[i][1] > 0.1:
+        y_threshold[i] = 1
+print(classification_report(ytest, y_threshold, target_names=['0', '1'], digits=4))
+<\Cell_12>
+<Cell_13>
+def optimal_threshold(do):
+    threshold = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+    f1 = []
+    for j in range(len(threshold)):
+        y_threshold = np.zeros(ytest.shape).astype(int)
+        for i in range(len(y_val)):
+            if y_val[i][1] > threshold[j]:
+                y_threshold[i] = 1
+        f1.append(classification_report(ytest, y_threshold, target_names=['0', '1'], digits=4).split()[19])
+        
+    if do == 'print':
+        print('Maximum value of F1-score is {0} with threshold {1}.'.format(max(f1), threshold[f1.index(max(f1))]))
+    elif do == 'calc':
+        return max(f1)
+<\Cell_13>
+<Cell_14>
+optimal_threshold('print')
+<\Cell_14>
+<Cell_15>
+j = 0
+score = []
+while j < 10:
+    Xtrain, Xtest, ytrain, ytest = train_test_split(X_train, Y_train, test_size=0.20, stratify = Y_train)
+    calibrated_clf.fit(Xtrain, ytrain)
+    y_val = calibrated_clf.predict_proba(Xtest)
+    y_ = np.zeros(ytest.shape).astype(int)
+    score_max = optimal_threshold('calc')
+    score.append(float(score_max))
+    j = j + 1
+print('Average value of F1-score is {0} with standard deviation of {1}'.format(round(np.mean(score), 4),
+                                                                                                 round(np.std(score), 4)))
+<\Cell_15>

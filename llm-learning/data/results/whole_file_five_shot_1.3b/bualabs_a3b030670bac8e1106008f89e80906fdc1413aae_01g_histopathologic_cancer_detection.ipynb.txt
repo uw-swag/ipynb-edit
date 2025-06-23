@@ -1,0 +1,47 @@
+```
+    ### Instruction:
+    [
+    Commit Message: "densenet161 sz=64-96 zoom1.35 rotate0 2lin_ftrs wd1e-4-4-1 ps08 labelSmoothLoss Ranger no fine-tuned TTA scale12 50"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    # ## Colab
+    # ! curl -s https://course.fast.ai/setup/colab | bash
+    # ! pip install kaggle --upgrade
+    <\Cell_0>
+    <Cell_1>
+    # ## Check GPU
+    # ! nvidia-smi
+    <\Cell_1>
+    <Cell_2>
+    import math
+    import numpy as np
+    import pandas as pd
+
+    from pathlib import Path
+    from matplotlib import cm
+    from matplotlib import pyplot as plt
+    import seaborn as sns
+
+    import fastai
+    from fastai.vision import *
+    from fastai.callbacks import *
+    from fastai.metrics import *
+    from fastai.models import *
+
+    print("System version: {}".format(sys.version))
+    print("Pandas version: {}".format(pd.__version__))
+    <\Cell_2>
+    <Cell_3>
+    densenet161 = models.densenet161
+    learn = cnn_learner(data, densenet161, metrics=[accuracy, AUROC()], 
+                        model_dir=config_path/'My Drive/models', 
+                        loss_func=LabelSmoothCrossEntropy(), 
+                        opt_func=Ranger, 
+                        callbacks=[SaveModelCallback(learn, every='epoch', monitor='auroc')])
+    <\Cell_3>
+    <Cell_4>
+    learn.fit_one_cycle(4, max_lr=1e-1, wd=1e-4)
+    <\Cell_4>
+    <Cell_5>
+    learn.save('01g-densenet161-

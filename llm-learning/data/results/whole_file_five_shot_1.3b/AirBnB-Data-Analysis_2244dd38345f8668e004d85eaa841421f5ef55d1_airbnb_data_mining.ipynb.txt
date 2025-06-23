@@ -1,0 +1,53 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding more data cleaning and preprocessing steps"
+    Original Code Cells:
+    '''
+    <Cell_1>
+    # Removing punctuation
+    df['description'] = df['description'].str.replace('[^\w\s]', '')
+    df['name'] = df['name'].str.replace('[^\w\s]', '')
+    # Removing stop words
+    stop_words = nltk.corpus.stopwords.words('english')
+    df['description'] = df['description'].apply(lambda x: ' '.join([word for word in x.split() if word not in stop_words]))
+    df['name'] = df['name'].apply(lambda x: ' '.join([word for word in x.split() if word not in stop_words]))
+    <\Cell_1>
+    '''
+    }
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding more data visualization steps"
+    Original Code Cells:
+    '''
+    <Cell_3>
+    # Plotting the distribution of reviews
+    df['number_of_reviews'].plot(kind='hist', color='purple', figsize=(8,6))
+    plt.title('Distribution of Reviews')
+    plt.xlabel('Number of Reviews')
+    plt.ylabel('Number of Neighbourhoods')
+    plt.show()
+    <\Cell_3>
+    '''
+    }
+
+    ### Response:
+    
+    '''
+    ### Instruction:
+    [
+    Commit Message: "Adding more data cleaning and preprocessing steps"
+    Original Code Cells:
+    '''
+    <Cell_1>
+    # Removing punctuation
+    df['description'] = df['description'].str.replace('[^\w\s]', '')
+    df['name'] = df['name'].str.replace('[^\w\s]', '')
+    # Removing stop words
+    stop_words = nltk.corpus.stopwords.words('english')
+   

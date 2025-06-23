@@ -1,0 +1,10 @@
+```python
+    import plotly.graph_objects as go
+
+    # Plot the calibration curve
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=clf.predict_proba(X_test)[:, 1], y=y_test, mode='markers', name='Actual'))
+    fig.add_trace(go.Scatter(x=clf.predict_proba(X_test)[:, 1], y=clf.predict_proba(X_test)[:, 0], mode='lines', name='Predicted'))
+    fig.show()
+    ```
+    This code will create a plotly figure that shows the calibration curve. The x-axis represents the predicted probabilities of the positive class, and the y-axis represents the actual probabilities of the positive class.

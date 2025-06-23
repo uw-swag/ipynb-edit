@@ -1,0 +1,35 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+    # Loading the data
+    df = pd.read_csv('movie_data.csv')
+
+    # Preprocessing the data
+    df['combined_features'] = df['genres'] + ' ' + df['keywords']
+
+    # Converting the text data to numerical data
+    vectorizer = CountVectorizer()
+    count_matrix = vectorizer.fit_transform(df['combined_features'])
+
+    # Computing the cosine similarity
+    cosine_sim = cosine_similarity(count_matrix, count_matrix)
+
+    # Function to get movie recommendations
+    def get_recommendations(title, cosine_sim=cosine_sim):
+        idx = df[df['title'] == title].index[0]
+        sim_scores = list(enumerate(cosine_sim[idx]))
+        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+        sim_scores = sim_scores[1:11]
+        movie_indices = [i[0] for i in sim_scores]
+        return df['title'].iloc[movie_indices]
+
+    # Testing the function
+    print(get_recommendations('The Dark Knight'))
+    ```
+
+    This script uses content-based filtering to recommend movies to a user based on their viewing history. The script first loads a dataset of movie titles and their genres and keywords, then combines these into a single feature for each movie. The script then uses the cosine similarity between these features to recommend movies to the user.
+
+    Please note that you need to have a 'movie_data.csv' file in the same directory as your script for this to work. The 'movie_data.csv' file should have at least two columns: 'title' and 'combined_features'. The 'title' column should contain the title of each movie, and the 'combined_features' column should contain a string of all the genres and keywords of

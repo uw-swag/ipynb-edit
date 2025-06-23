@@ -1,0 +1,40 @@
+
+Here is the modified version of your code:
+
+```python
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently import ColumnMapping
+from evidently.options import ColorOptions
+from evidently.test_suite import TestSuite
+from evidently.tests import *
+#Dataset for Binary Probabilistic Classifcation
+bcancer_data = datasets.load_breast_cancer(as_frame='auto')
+bcancer = bcancer_data.frame
+
+bcancer_ref = bcancer.sample(n=300, replace=False)
+bcancer_cur = bcancer.sample(n=200, replace=False)
+
+model = ensemble.RandomForestClassifier(random_state=1, n_estimators=10)
+model.fit(bcancer_ref[bcancer_data.feature_names.tolist()], bcancer_ref.target)
+
+bcancer_ref['prediction'] = model.predict_proba(bcancer_ref[bcancer_data.feature_names.tolist()])[:, 1]
+bcancer_cur['prediction'] = model.predict_proba(bcancer_cur[bcancer_data.feature_names.tolist()])[:, 1]
+#column-level tests
+data_integrity_column_tests = TestSuite(tests=[
+    TestColumnNumberOfMissingValues(column_name='education'),
+    TestColumnShareOfMissingValues(column_name='education'),
+    TestColumnNumberOfDifferentMissingValues(column_name='education'),
+    TestColumnAllConstantValues(column_name='education'),
+    TestColumnAllUniqueValues(column_name='education'),
+    TestColumnValueRegExp(column_name='education',reg_exp='^[0-9]')
+])
+
+data_integrity_column_tests.run(reference_data=bcancer_ref, current_data=bcancer_cur)
+data_integrity_column_tests
+#column-level tests
+data_quality_column_tests = TestSuite(tests=[
+    Test

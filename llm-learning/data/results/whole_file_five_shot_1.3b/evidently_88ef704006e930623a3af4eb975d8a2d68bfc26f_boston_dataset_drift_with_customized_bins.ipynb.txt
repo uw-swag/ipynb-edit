@@ -1,0 +1,43 @@
+```python
+    import pandas as pd
+
+    from sklearn import datasets
+
+    from plotly.graph_objects import histogram
+
+    from evidently.dashboard import Dashboard
+    from evidently.pipeline.column_mapping import ColumnMapping
+    from evidently.tabs import DataDriftTab
+
+    from evidently.model_profile import Profile
+    from evidently.profile_sections import DataDriftProfileSection
+
+    boston = datasets.load_boston()
+
+    boston_frame = pd.DataFrame(boston.data, columns = boston.feature_names)
+    boston_frame['target'] = boston.target
+
+    column_mapping = ColumnMapping()
+
+    column_mapping.target = 'target'
+    column_mapping.prediction = None
+    column_mapping.datetime = None
+
+    column_mapping.numerical_features = ['CRIM', 'ZN', 'INDUS', 'NOX', 'RM', 'AGE', 'DIS', 'TAX',
+                                        'PTRATIO', 'B', 'LSTAT']
+    column_mapping.categorical_features = ['CHAS', 'RAD']
+
+    data_drift_opts = DataDriftOptions()
+    data_drift_opts.confidence = 0.99
+    data_drift_opts.drift_share = 0.5
+
+    data_drift_opts.xbins = {
+        'CRIM': dict(start=-10., end=100.,size=5.), # OPTION 1
+        'NOX': histogram.XBins(start=-0.5, end=1.5, size=.05).to_plotly_json() #transform'XBins' to JSON serializable fromat
+    }
+
+    data_drift_opts.nbinsx = {'TAX': 3, 'PTRATIO': 5}
+
+    boston_data_and_target_drift_dashboard = Dashboard(tabs=[DataDriftTab()], options=[data_drift_opts])
+
+    boston_data_and_target_drift_dashboard.calculate(boston_frame[:200

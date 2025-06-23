@@ -1,0 +1,48 @@
+```python
+    import pandas as pd
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import make_pipeline
+
+    class fit_predict:
+        def __init__(self):
+            self.model = None
+
+        def train_model(self):
+            # Assuming you have a DataFrame df with 'text' and 'label' columns
+            X_train, X_test, y_train, y_test = train_test_split(df['text'], df['label'], test_size=0.2, random_state=42)
+            self.model = LogisticRegression()
+            self.model.fit(X_train, y_train)
+
+        def load_model(self):
+            if self.model is not None:
+                joblib.dump(self.model, 'model.pkl')
+
+        def predict_comments(self, comments):
+            # Assuming you have a trained model
+            pipeline = make_pipeline(TfidfVectorizer(), LogisticRegression())
+            pipeline.fit(df['text'], df['label'])
+            predictions = pipeline.predict(comments)
+            return predictions
+
+        def predict_one_comment(self, comment):
+            # Assuming you have a trained model
+            prediction = self.model.predict([comment])
+            return prediction[0]
+
+        def dump_best_data(self):
+            joblib.dump(self.model, 'best_model.pkl')
+
+        def load_best_data(self):
+            return joblib.load('best_model.pkl')
+
+    # Usage:
+    fit_predict = fit_predict()
+    fit_predict.train_model()
+    fit_predict.load_model()
+    my_coms = ['купи права',
+               'автомобиль в студию',
+               'а ты сфоткай побольше мест)',
+               'Собчак в президенты😂',
+               'поэтому бери копейку👍',
+              

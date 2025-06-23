@@ -1,0 +1,29 @@
+```python
+    import matplotlib.pyplot as plt
+
+    # Show input image
+    plt.imshow(xb.numpy().squeeze())
+    plt.title('Input Image')
+    plt.show()
+
+    # Show prediction
+    plt.imshow(yb.numpy().squeeze())
+    plt.title('Prediction')
+    plt.show()
+
+    # Show loss
+    plt.plot(loss_func.history['loss'])
+    plt.title('Loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.show()
+
+    # Show accuracy
+    plt.plot(accuracy_func.history['accuracy'])
+    plt.title('Accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.show()
+    ```
+
+    Please note that the above code assumes that you have a model that returns two tensors: `xb` and `yb`, and that you have a loss function and an accuracy function. If your model and loss/accuracy functions are different, you will need to adjust the code accordingly.

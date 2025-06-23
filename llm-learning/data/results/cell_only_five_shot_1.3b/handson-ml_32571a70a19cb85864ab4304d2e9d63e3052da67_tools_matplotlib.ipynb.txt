@@ -1,0 +1,37 @@
+
+    ### Instruction:
+    [
+    Commit Message: "add submodule: deeplearning.ai -tensorflow"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import tensorflow as tf
+    from tensorflow import keras
+    # data
+    xs = np.array([-1, 0, 1, 2, 3, 4], dtype=float)
+    ys = np.array([-3, -1, 1, 3, 5, 7], dtype=float) # actually: y=2x-1
+    model = keras.Sequential([
+        keras.layers.Dense( # Dense -> fully connected neurons
+            units=1,
+            input_shape=[1] # very simple, 1 value
+        ) # 1 layer
+    ])
+    model.compile( # 2 functions should be awared of
+        optimizer='sgd', # how good / bad algo guesses?; 'sgd' = sctochastic gradient descent
+        loss='mean_squared_error' # guess based on this
+    )
+    model.fit(xs, ys, epochs=500) # how to fit xs' values to ys' values?
+    # epoches=500 -> go through the training loops 500 times
+    #     loop = guess > evaluate bad/good? based on loss function > use optimizer + data to make another guess
+    print(model.predict([10.0]))
+    # not 19 because
+    # 1. little data (only 6 points)
+    # 2. NN: when they try to answer to everything -> they deal with probabilities!
+
+    '''
+    ]
+
+    ### Response:
+    The code you provided is correct. It imports the necessary libraries, defines the data, creates a simple neural network model, compiles the model, and then fits the model to the data. Finally, it predicts a value and prints the result.
+
+    If you have any specific issues or questions about this code, feel free to ask.

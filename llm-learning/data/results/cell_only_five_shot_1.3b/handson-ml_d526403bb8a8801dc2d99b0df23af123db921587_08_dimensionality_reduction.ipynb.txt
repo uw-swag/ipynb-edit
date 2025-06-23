@@ -1,0 +1,29 @@
+
+    The code you provided is for upgrading the notebook to TensorFlow 1.0.0. However, it seems like there is a mistake in the code. The code is for PCA (Principal Component Analysis) and Randomized PCA (Randomized Principal Component Analysis). TensorFlow 1.0.0 is a newer version of TensorFlow and it does not support PCA and Randomized PCA.
+
+    The code you provided is for comparing the time complexity of PCA and Randomized PCA. However, it seems like you are trying to compare the time complexity of PCA and Randomized PCA, which is not the correct approach.
+
+    The time complexity of PCA and Randomized PCA is not the same. PCA uses the SVD method to compute the principal components, which has a time complexity of O(n^2). On the other hand, Randomized PCA uses the randomized SVD method, which has a time complexity of O(n^2/k).
+
+    If you want to compare the time complexity of PCA and Randomized PCA, you should use the time complexity of the algorithm itself, not the number of samples or features.
+
+    Here is the corrected code:
+
+    ```python
+    import time
+    from sklearn.decomposition import PCA, IncrementalPCA
+
+    sizes = [1000, 2000, 3000, 4000, 5000, 6000]
+    for n_features in sizes:
+        X = rnd.randn(2000, n_features)
+        pca = PCA(n_components = 2)
+        t1 = time.time()
+        pca.fit(X)
+        t2 = time.time()
+        print(f"PCA with {n_features} features took {t2 - t1} seconds")
+
+    for n_components in (2, 10, 154):
+        print("n_components =", n_components)
+        regular_pca = PCA(n_components=n_components)
+        inc_pca = IncrementalPCA(n_components=154, batch_size=500)
+        rnd_

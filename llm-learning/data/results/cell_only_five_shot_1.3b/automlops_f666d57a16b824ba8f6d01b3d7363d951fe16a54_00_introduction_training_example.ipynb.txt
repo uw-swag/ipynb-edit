@@ -1,0 +1,18 @@
+```python
+    import warnings
+
+    warnings.filterwarnings("ignore", category=UserWarning, module="AutoML")
+
+    AutoMLOps.monitor(
+        alert_emails=[],  # update if you would like to receive email alerts
+        target_field=TARGET_COLUMN,
+        model_endpoint=endpoint_name,
+        monitoring_interval=1,
+        auto_retraining_params=pipeline_params,
+        drift_thresholds={'Area': 0.000001, 'Perimeter': 0.000001},
+        skew_thresholds={'Area': 0.000001, 'Perimeter': 0.000001},
+        training_dataset=f'bq://{TRAINING_DATASET}'
+    )
+    ```
+
+    This code will ignore any warnings that are raised by the `AutoMLOps.monitor` function. This is a simple way to suppress warnings in your code.

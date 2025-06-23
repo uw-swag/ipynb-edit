@@ -1,0 +1,33 @@
+
+    The code you provided is for a classification problem and it uses the TabularDataset for training and testing. The code calculates the performance of the model using the ProbClassificationPerformanceTab.
+
+    The new Tab/Section interface is not directly supported in the evidently library. The code is using the old TabularDataset for training and testing. The new interface is designed for tabular data and it's not clear how to use it with the Dashboard.
+
+    If you want to use the new Tab/Section interface, you will need to create a custom Dashboard and Tab. Here is a basic example of how you can do it:
+
+    ```python
+    from evidently.dashboard import Dashboard
+    from evidently.tabs import TabDataDriftTab, TabFeatureImportanceTab, TabROCAUC
+    from evidently.data_entity import DataEntity
+
+    class CustomDashboard(Dashboard):
+        def calculate(self, X_train: pd.DataFrame, X_test: pd.DataFrame, y_train: pd.Series, y_test: pd.Series) -> None:
+            # calculate the performance of the model using the ProbClassificationPerformanceTab
+            super().calculate(X_train, X_test, y_train, y_test)
+
+            # create a custom tab
+            data_drift_tab = TabDataDriftTab()
+            data_drift_tab.calculate(X_train, X_test)
+            self.add_tab(data_drift_tab)
+
+            feature_importance_tab = TabFeatureImportanceTab()
+            feature_importance_tab.calculate(X_train, X_test)
+            self.add_tab(feature_importance_tab)
+
+            rocauc_tab = TabROCAUC()
+            rocauc_tab.calculate(X_train, y_train, X_test, y_test)
+            self.add_tab(rocauc_tab)
+
+    custom_dashboard = CustomDashboard(tabs=[ProbClassificationPerformanceTab])
+    custom_dashboard.calculate(rf_merged_train, rf_merged_test, column_mapping = column_mapping)
+    custom

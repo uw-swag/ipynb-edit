@@ -1,0 +1,40 @@
+!git clone https://github.com/mmaithani/DeOldify.git DeOldify 
+cd DeOldify
+#NOTE:  This must be the first call in order to work properly!
+from deoldify import device
+from deoldify.device_id import DeviceId
+#choices:  CPU, GPU0...GPU7
+device.set(device=DeviceId.GPU0)
+
+import torch
+
+if not torch.cuda.is_available():
+    print('GPU not available.')
+!pip install -r colab_requirements.txt
+import fastai
+from deoldify.visualize import *
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, message=".*?Your .*? set is empty.*?")
+!mkdir 'models'
+!wget https://data.deepai.org/deoldify/ColorizeArtistic_gen.pth -O ./models/ColorizeArtistic_gen.pth
+!wget https://media.githubusercontent.com/media/jantic/DeOldify/master/resource_images/watermark.png -O ./resource_images/watermark.png
+colorizer = get_image_colorizer(artistic=True)
+source_url = 'https://images.pexels.com/photos/3031397/pexels-photo-3031397.jpeg' #@param {type:"string"}
+render_factor = 35  #@param {type: "slider", min: 7, max: 40}
+watermarked = True #@param {type:"boolean"}
+
+if source_url is not None and source_url !='':
+    image_path = colorizer.plot_transformed_image_from_url(url=source_url, render_factor=render_factor, compare=True, watermarked=watermarked)
+    show_image_in_notebook(image_path)
+else:
+    print('Provide an image url :) ')
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/vic-P8Fxe0J8Flo-unsplash.jpg', render_factor=i, display_render_factor=True, figsize=(8,8))
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/mvf78f3j7z961.png', render_factor=i, display_render_factor=True, figsize=(8,8))
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/black-and-white-landscapes.jpg', render_factor=i, display_render_factor=True, figsize=(8,8))
+url="image url" #@param {type:"string"}
+for i in range(10,40,2):
+    colorizer.plot_transformed_image('/content/DeOldify/test_images/68747470733a2f2f692e696d6775722e636f6d2f427430766e6b652e6a7067 (2).jpg', render_factor=i, display_render_factor=True, figsize=(8,8))
+

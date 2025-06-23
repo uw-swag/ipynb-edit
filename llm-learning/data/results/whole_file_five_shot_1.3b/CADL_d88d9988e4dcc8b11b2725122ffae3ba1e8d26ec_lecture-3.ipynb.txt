@@ -1,0 +1,56 @@
+
+    ### Instruction:
+    [
+    Commit Message:" added bias term to fully connected autoencoder"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# imports
+%matplotlib inline
+# %pylab osx
+import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as colors
+import matplotlib.cm as cmx
+# Some additional libraries which we'll use just
+# to produce some visualizations of our training
+from libs.utils import montage
+from libs import gif
+import IPython.display as ipyd
+plt.style.use('ggplot')
+
+# Bit of formatting because I don't like the default inline code style:
+from IPython.core.display import HTML
+HTML("""<style> .rendered_html code { 
+    padding: 2px 4px;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+} </style>""")
+<\Cell_0>
+<Cell_1>
+from libs.datasets import MNIST
+ds = MNIST()
+<\Cell_1>
+<Cell_2>
+# ds.<tab>
+<\Cell_2>
+<Cell_3>
+print(ds.X.shape)
+<\Cell_3>
+<Cell_4>
+plt.imshow(ds.X[0].reshape((28, 28)))
+<\Cell_4>
+<Cell_5>
+# Let's get the first 1000 images of the dataset and reshape them
+imgs = ds.X[:1000].reshape((-1, 28, 28))
+
+# Then create a montage and draw the montage
+plt.imshow(montage(imgs), cmap='gray')
+<\Cell_5>
+<Cell_6>
+# Take the mean across all images
+mean_img = np.mean(ds.X, axis=0)
+
+# Then plot the mean image.

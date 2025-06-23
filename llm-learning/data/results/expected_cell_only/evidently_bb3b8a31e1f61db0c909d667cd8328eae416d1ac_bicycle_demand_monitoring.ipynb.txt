@@ -1,0 +1,9 @@
+regression_performance_report = Report(metrics=[RegressionPreset()])
+
+regression_performance_report.run(
+    reference_data=reference,
+    current_data=current.loc[CUR_WEEK_START:CUR_WEEK_END],
+    column_mapping=column_mapping
+)
+model_performance_report_path = reports_dir / 'model_performance.html'
+regression_performance_report.save_html(model_performance_report_path)

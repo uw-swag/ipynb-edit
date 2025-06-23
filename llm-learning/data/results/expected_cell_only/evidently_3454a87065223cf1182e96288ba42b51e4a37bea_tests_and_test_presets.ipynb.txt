@@ -1,0 +1,34 @@
+data_integrity_dataset_tests = TestSuite(tests=[
+    TestNumberOfColumns(),
+    TestNumberOfRows(),
+    TestNumberOfNulls(),
+    TestNumberOfColumnsWithNulls(),
+    TestNumberOfRowsWithNulls(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfEmptyRows(),
+    TestNumberOfEmptyColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+])
+
+data_integrity_dataset_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_dataset_tests
+data_integrity_column_tests = TestSuite(tests=[
+    TestColumnShareOfNulls(column_name='education'),
+    TestColumnAllConstantValues(column_name='education'),
+    TestColumnAllUniqueValues(column_name='education'),
+    TestColumnValueRegExp(column_name='education',reg_exp='^[0..9]')
+])
+
+data_integrity_column_tests.run(reference_data=adult_ref, current_data=adult_cur)
+data_integrity_column_tests
+feature_level_tests = TestSuite(tests=[
+    TestMeanInNSigmas(column_name='hours-per-week', n_sigmas=3),
+    TestShareOfOutRangeValues(column_name='hours-per-week', lte=0),
+    TestColumnShareOfNulls(column_name='education', lt=0.2),
+])
+
+feature_level_tests.run(reference_data=adult_ref, current_data=adult_cur)
+feature_level_tests
+

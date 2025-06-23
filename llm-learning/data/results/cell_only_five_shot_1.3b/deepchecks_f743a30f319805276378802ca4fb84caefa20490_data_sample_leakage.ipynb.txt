@@ -1,0 +1,32 @@
+```python
+    import pandas as pd
+    import numpy as np
+
+    # Create a sample dataframe
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [10, 20, 30, 40, 50],
+        'C': [100, 200, 300, 400, 500]
+    })
+
+    # Create a sample dataframe for the condition
+    condition_df = pd.DataFrame({
+        'A': [2, 3, 4],
+        'B': [20, 30, 40],
+        'C': [200, 300, 400]
+    })
+
+    # Check for data sample leakage
+    if set(df['A']) != set(condition_df['A']):
+        print("Data sample leakage detected!")
+
+    # Check for data sample leakage
+    if set(df['B']) != set(condition_df['B']):
+        print("Data sample leakage detected!")
+
+    # Check for data sample leakage
+    if set(df['C']) != set(condition_df['C']):
+        print("Data sample leakage detected!")
+    ```
+
+    The above code checks for data sample leakage. If any of the columns in the 'df' dataframe are not the same as the 'condition_df' dataframe, it prints a message indicating that data sample leakage has occurred.

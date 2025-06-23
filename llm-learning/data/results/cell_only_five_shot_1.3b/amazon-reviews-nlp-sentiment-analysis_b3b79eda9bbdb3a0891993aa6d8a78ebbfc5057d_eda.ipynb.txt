@@ -1,0 +1,39 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.cluster import KMeans
+    from sklearn.metrics import silhouette_score
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+
+    # Load the data
+    data = pd.read_csv('your_data.csv')
+
+    # Perform clustering
+    kmeans = KMeans(n_clusters=4, init='k-means++', random_state=69)
+    kmeans.fit(data)
+
+    # Assign cluster labels to the data
+    data['Cluster'] = kmeans.labels_
+
+    # Sort the data by the cluster
+    sorted_data = data.sort_values('Cluster')
+
+    # Display the sorted data
+    print(sorted_data)
+
+    # Create a scatter plot for White win rate vs. Black win rate
+    sns.set(font_scale=1.5)
+    scatter = sns.scatterplot(x="1-0", y="0-1", hue="Cluster", data=sorted_data, palette="viridis", s=50, edgecolor="k", alpha=0.8)
+    scatter.set(xlabel="White Win Rate (%)", ylabel="Black Win Rate (%)")
+    plt.show()
+
+    # Create a scatter plot for White win rate vs. draw rate
+    sns.set(font_scale=1.5)
+    scatter = sns.scatterplot(x="1-0", y="1/2-1/2", hue="Cluster", data=sorted_data, palette="viridis", s=50, edgecolor="k", alpha=0.8)
+    scatter.set(xlabel="White Win Rate (%)", ylabel="Draw Rate (%)")
+    plt.show()
+
+    # Print the silhouette score and within-cluster sum of squares
+    print(f"Silhouette Score: {silhouette_score(data, kmeans.

@@ -1,0 +1,12 @@
+```python
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from sklearn import datasets
+
+    iris = datasets.load_iris()
+    df = pd.DataFrame(data= np.c_[iris['data'], iris['target']],
+                     columns= iris['feature_names'] + ['target'])
+
+    sns.pairplot(df, hue='target')
+    plt.show()
+    ```

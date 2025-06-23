@@ -1,0 +1,53 @@
+```python
+    from databricks.koalas import KOALAS_DATAFRACES
+    from databricks.koalas.dataframe import DataFrame
+    from databricks.koalas.config import DataFrameConfig
+
+    # Define a DataFrame
+    df = DataFrame({
+        "A": [1, 2, 3, 4, 5],
+        "B": [10, 20, 30, 40, 50],
+        "C": [100, 200, 300, 400, 500]
+    })
+
+    # Define a DataFrameConfig
+    config = DataFrameConfig(
+        name="df",
+        description="A DataFrame with some data",
+        tags=["example", "datatype"],
+        version=1,
+        preset="DataQualityPreset"
+    )
+
+    # Add a DataFrame to the KOALAS_DATAFRACES registry
+    KOALAS_DATAFRACES.add(config, df)
+
+    # Now, you can access the DataFrame by its name
+    df_from_registry = KOALAS_DATAFRACES.get("df")
+
+    print(df_from_registry)
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add DataQualityPreset (#406)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    from databricks.koalas import KOALAS_DATAFRACES
+    from databricks.koalas.dataframe import DataFrame
+    from databricks.koalas.config import DataFrameConfig
+
+    # Define a DataFrame
+    df = DataFrame({
+        "A": [1, 2, 3, 4, 5],
+        "B": [10, 20, 30, 40, 50],
+        "C": [100, 200, 300, 400, 500]
+    })
+
+   

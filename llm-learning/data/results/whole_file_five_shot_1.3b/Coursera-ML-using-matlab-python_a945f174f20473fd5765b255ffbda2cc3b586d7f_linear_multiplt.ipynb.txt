@@ -1,0 +1,61 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Add VAE section"
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+#load data from file
+def load_data(filename):
+    data = []
+    file = open(filename)
+    for line in file.readlines():
+        lineArr = line.strip().split(',')
+        col_num = len(lineArr)
+        temp = []
+        for i in xrange(col_num):
+            temp.append(int(lineArr[i]))
+        data.append(temp)
+    return np.array(data)
+
+    
+data = load_data('ex1data2.txt')
+print data.shape
+print data[:5]
+
+X = data[:,:-1]
+y = data[:,-1:]
+print X.shape
+print y.shape
+print X[:5]
+print y[:5]
+
+#feature normalize
+def featureNormalize(X):
+    X_norm = X
+    scaler = StandardScaler()
+    X_norm = scaler.fit_transform(X)
+    return X_norm,scaler
+    
+X_norm,scaler = featureNormalize(data[:,:-1])
+num_train = X.shape[0]
+one = np.ones((num_train,1))
+X = np.hstack((one,X_norm))#add one
+
+#train VAE
+def train_VAE(X,y,num_clusters):
+    kmeans = KMeans(n_clusters=num_clusters, random_state=0).fit(X)
+    X_recon = kmeans.cluster_centers_[kmeans.labels_]
+    return X_recon,kmeans
+
+#plot the t-SNE
+def plot_TSNE(X_recon):
+    tsne = TSNE(n_components=2, random_state=0)
+    X_

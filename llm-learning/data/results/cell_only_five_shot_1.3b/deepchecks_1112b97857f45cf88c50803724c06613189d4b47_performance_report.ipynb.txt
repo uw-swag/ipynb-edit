@@ -1,0 +1,28 @@
+```python
+    # Import necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.metrics import classification_report
+
+    # Load your data
+    df = pd.read_csv('your_data.csv')
+
+    # Assume that 'label' is the column you want to fix
+    df['label'] = df['label'].apply(lambda x: 'fixed_label' if x == 'original_label' else x)
+
+    # Now, you can compare your simple model with the performance report
+    simple_model = 'your_simple_model'
+    performance_report = 'your_performance_report'
+
+    # Load the performance report
+    report = pd.read_csv(performance_report)
+
+    # Compare the simple model with the performance report
+    comparison = pd.DataFrame(classification_report(df['label'], simple_model, output_dict=True))
+    report = pd.concat([report, comparison], axis=1)
+
+    # Save the updated performance report
+    report.to_csv('updated_performance_report.csv', index=False)
+    ```
+
+    This script assumes that you have a simple model and a performance report. It fixes the string labels in the performance report by replacing 'original_label' with 'fixed_label'. The comparison is done using the `classification_report` function from `sklearn.metrics`. The updated performance report is then saved to a new CSV file.

@@ -1,0 +1,9 @@
+```python
+    X_flat = tf.reshape(X, [-1, n_output], name="X_flat")
+    squared_difference = tf.square(X_flat - decoder_output,
+                                   name="squared_difference")
+    reduction_mean = tf.reduce_mean(squared_difference,
+                                    name="reconstruction_loss")
+    reconstruction_loss = tf.reduce_sum(reduction_mean,
+                                       name="reconstruction_loss")
+    ```

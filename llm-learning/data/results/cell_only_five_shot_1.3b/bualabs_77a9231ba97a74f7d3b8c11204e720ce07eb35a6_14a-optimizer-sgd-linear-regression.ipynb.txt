@@ -1,0 +1,30 @@
+```
+    import torch
+
+    a = torch.tensor([-2., 4.], requires_grad=True)
+
+    b = torch.tensor([1., 2.], requires_grad=True)
+
+    y = a * b
+
+    loss = y.sum()
+
+    loss.backward()
+
+    print(a.grad)
+
+    a.data.add_(0.01, alpha=0.01)
+
+    print(a.grad)
+
+    a.grad.zero_()
+
+    y = a * b
+
+    loss = y.sum()
+
+    loss.backward()
+
+    print(a.grad)
+
+    ```

@@ -1,0 +1,55 @@
+
+    '''
+    Commit Message: "Added progressive resizing to 320."
+    Original Code Cells:
+    '''
+    <Cell_0>
+
+<\Cell_0>
+<Cell_1>
+! nvidia-smi
+<\Cell_1>
+<Cell_2>
+%reload_ext autoreload
+%autoreload 2
+%matplotlib inline
+<\Cell_2>
+<Cell_3>
+
+<\Cell_3>
+<Cell_4>
+# # Colab
+# ! pip install fastai2 -q
+# ! pip install pydicom -q
+# ! pip install kornia -q
+<\Cell_4>
+<Cell_5>
+path.ls()
+<\Cell_5>
+<Cell_6>
+(path/'dicom-images-train').ls()
+<\Cell_6>
+<Cell_7>
+items = get_dicom_files(path/'dicom-images-train')
+items
+<\Cell_7>
+<Cell_8>
+xray_sample = dcmread(items[patient])
+xray_sample.show(figsize=(12, 12))
+<\Cell_8>
+<Cell_9>
+xray_sample.as_dict()
+<\Cell_9>
+<Cell_10>
+xray_sample.pixels.shape
+<\Cell_10>
+<Cell_11>
+xray_sample.pixels.min(), xray_sample.pixels.max(), xray_sample.scaled_px.min(), xray_sample.scaled_px.max()
+<\Cell_11>
+<Cell_12>
+xray_sample.pixels[300:310, 400:410]
+<\Cell_12>
+<Cell_13>
+wind = xray_sample.windowed(*dicom_windows.lungs)
+mask1 = xray_sample.mask_from_blur(dicom_windows.lungs)
+mask2 = xray_sample.mask_from_blur(dicom_windows.spine

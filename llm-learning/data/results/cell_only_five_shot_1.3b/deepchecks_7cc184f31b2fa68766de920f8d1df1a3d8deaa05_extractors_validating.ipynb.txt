@@ -1,0 +1,20 @@
+```python
+    # Split VisionData and remove Formatters
+    from visiondata import VisionData
+    from visiondata.formatters import Formatter
+
+    # Create a new VisionData object
+    new_data = VisionData()
+
+    # Iterate over the old VisionData object
+    for key, value in VisionData.items():
+        # If the value is a Formatter, remove it
+        if isinstance(value, Formatter):
+            del VisionData[key]
+        # Otherwise, add it to the new VisionData object
+        else:
+            new_data[key] = value
+
+    # Now, VisionData is a new VisionData object without the formatters
+    VisionData = new_data
+    ```

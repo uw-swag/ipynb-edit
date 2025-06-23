@@ -1,0 +1,32 @@
+```
+    # Import necessary libraries
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LinearRegression
+    from sklearn.metrics import mean_squared_error
+
+    # Load the data
+    raw_data = pd.read_csv('~/Dev/evidently/train.csv', header=0, sep=',', parse_dates=['datetime'], index_col='datetime')
+
+    # Add new features
+    raw_data['month'] = raw_data.index.map(lambda x : x.month)
+    raw_data['hour'] = raw_data.index.map(lambda x : x.hour)
+    raw_data['weekday'] = raw_data.index.map(lambda x : x.weekday() + 1)
+
+    # Split the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(raw_data[numerical_features + categorical_features], raw_data[target], test_size=0.2, random_state=42)
+
+    # Create a linear regression model
+    model = LinearRegression()
+
+    # Train the model
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    predictions = model.predict(X_test)
+
+    # Calculate the mean squared error of the predictions
+    mse = mean_squared_error(y_test, predictions)
+
+    print('Mean Squared Error:', mse)
+    ```

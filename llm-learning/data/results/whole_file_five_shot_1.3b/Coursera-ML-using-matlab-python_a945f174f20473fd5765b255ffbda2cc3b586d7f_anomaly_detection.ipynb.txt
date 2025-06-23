@@ -1,0 +1,61 @@
+
+    '''
+    ### Instruction:
+    [
+    Commit Message:" Implemented Gaussian Mixture Models"
+    Original Code Cells:
+    '''
+    <Cell_0>
+#load data set 
+import scipy.io as sio
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = sio.loadmat('ex8data1.mat')
+X = data['X']
+Xval = data['Xval']
+yval = data['yval']
+print X.shape,Xval.shape,yval.shape
+print X[:5]
+print yval[:5]
+
+plt.plot(X[:,0],X[:,1],'bx')
+plt.xlim(0, 30)
+plt.ylim(0, 30)
+plt.xlabel('Latency (ms)')
+plt.ylabel('Throughput (mb/s)')
+plt.show()
+
+
+
+<\Cell_0>
+<Cell_1>
+#高斯分布
+from scipy import stats
+
+def estimateGaussian(x):
+    #train set x fit the mu,sigma2
+    m,n = x.shape
+    mu = np.mean(x,axis=0).reshape(1,-1)
+    sigma2 = np.var(x,axis=0).reshape(1,-1)
+    
+    return mu,sigma2
+    
+def p(x,mu,sigma2):
+    #x is a new example:[m*n]
+    m,n = x.shape
+    p_list=[]
+    
+    for j in xrange(m):
+        p = 1
+        for i in xrange(n):
+            p *= stats.norm.pdf(x[j,i], mu[0,i], np.sqrt(sigma2[0,i]))
+        p_list.append(p)
+    p_array = np.array(p_list).reshape(-1,1)
+    return p_array
+
+mu,sigma2 = estimateGaussian(X)
+print mu.shape,sigma2.shape
+print mu,sigma2
+
+p_train =

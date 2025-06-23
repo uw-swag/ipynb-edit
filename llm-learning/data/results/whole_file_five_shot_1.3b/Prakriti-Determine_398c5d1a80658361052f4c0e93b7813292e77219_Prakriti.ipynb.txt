@@ -1,0 +1,51 @@
+```python
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+
+    ## variables that need to be updated
+
+    ## Personal access token for the existing databricks workspace
+    ##     NOTE: If this is left blank, it will then look for a .env file to load 
+    ##           using dotenv, and then attempt to load this variable from an environment
+    ##           variable. 
+    ##           If a token is not found, then this notebook will fail.
+    TOKEN = "" 
+
+    ## location of the recommenders repository root directory.
+    ## If you have downloaded the Recommenders repository and are running this notebook 
+    ## manually with Jupyter, then the relative path default should be accurate.
+    ## If you have downloaded this file separately
+    ## then you need to adjust the value.
+    ## If you are running this with papermill, the value is relative to where you invoke papermill
+    path_to_recommenders_repo_root = "../../" 
+
+    ## Cluster settings:
+    ## ...
+
+    ## run time version for databricks
+    ## you can identify appropriate version strings via REST API: 
+    ## https://docs.azuredatabricks.net/api/latest/clusters.html#spark-versions
+    spark_version = "4.1.x-scala2.11" 
+
+    ## cluster name
+    cluster_name = 'reco-db%s-api' %(spark_version[0:3]) 
+    print(cluster_name)
+
+    ## record data and outcomes for testing?
+    record_for_tests = False
+
+    ## should be available on a standard python install
+    import os
+    import json
+    import base64
+    import sys
+    import shutil
+
+    ## installed for this project:
+    import requests
+
+    ## add to log results with papermill, only use if it's a test
+    if record_for_tests:
+        import papermill as pm
+
+    print('\n**** Current working directory ****\

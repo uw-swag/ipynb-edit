@@ -1,0 +1,33 @@
+```python
+    import os
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from PIL import Image
+
+    # Assuming that you have a function to load images
+    def load_image(image_path):
+        img = Image.open(image_path)
+        img = img.resize((224, 224))  # Resize the image to match the input size of the model
+        img = np.array(img)
+        img = np.expand_dims(img, axis=0)  # Add an extra dimension for the batch size
+        return img
+
+    # Assuming that you have a function to save images
+    def save_image(image_path, image):
+        image = image[0]  # Remove the extra dimension added by np.expand_dims
+        plt.imsave(image_path, image)
+
+    # Load broken images
+    broken_images = [...]  # List of paths to the broken images
+
+    # Load and fix the images
+    for image_path in broken_images:
+        image = load_image(image_path)
+        save_image(image_path, image)
+    ```
+
+    This code assumes that you have a function to load images and a function to save images. The `load_image` function opens an image, resizes it to match the input size of the model, and converts it to a numpy array. The `save_image` function saves the image to a file.
+
+    The `broken_images` list should contain the paths to the broken images. The code then loads each image, fixes it, and saves it.
+
+    Please replace `[...]` with your actual broken image paths.

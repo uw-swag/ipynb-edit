@@ -1,0 +1,71 @@
+```
+    ## Examples
+
+    ### Exercise 1
+    #### Description
+    Write a SQL query to find the top 10 most popular taxis in terms of rides.
+
+    #### SQL Query
+    ```sql
+    SELECT taxi_id, COUNT(*) as num_rides
+    FROM rides
+    WHERE taxi_id IS NOT NULL
+    GROUP BY taxi_id
+    ORDER BY num_rides DESC
+    LIMIT 10;
+    ```
+
+    ### Exercise 2
+    #### Description
+    Write a SQL query to find the average speed of all taxis.
+
+    #### SQL Query
+    ```sql
+    SELECT AVG(speed) as average_speed
+    FROM taxis;
+    ```
+
+    ### Exercise 3
+    #### Description
+    Write a SQL query to find the total number of taxis in each city.
+
+    #### SQL Query
+    ```sql
+    SELECT city, COUNT(*) as num_taxis
+    FROM taxis
+    GROUP BY city;
+    ```
+
+    ### Exercise 4
+    #### Description
+    Write a SQL query to find the total number of taxis in each region.
+
+    #### SQL Query
+    ```sql
+    SELECT region, COUNT(*) as num_taxis
+    FROM taxis
+    GROUP BY region;
+    ```
+
+    ### Exercise 5
+    #### Description
+    Write a SQL query to find the top 10 most popular taxis in terms of rides in a specific city.
+
+    #### SQL Query
+    ```sql
+    SELECT taxi_id, COUNT(*) as num_rides
+    FROM rides
+    WHERE taxi_id IS NOT NULL AND city = 'your_city'
+    GROUP BY taxi_id
+    ORDER BY num_rides DESC
+    LIMIT 10;
+    ```
+    Replace 'your_city' with the name of the city you are interested in.
+
+    ### Exercise 6
+    #### Description
+    Write a SQL query to find the top 10 most popular taxis in terms of rides in a specific region.
+
+    #### SQL Query
+    ```sql
+    SELECT taxi_id, COUNT(*)

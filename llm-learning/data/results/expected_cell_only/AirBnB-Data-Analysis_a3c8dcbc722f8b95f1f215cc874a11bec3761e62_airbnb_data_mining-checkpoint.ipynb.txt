@@ -1,0 +1,91 @@
+# Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For Map vizualization
+import folium
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+nltk.download('wordnet')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For random selection 
+import random
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Communicating with operating and file system
+import os
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+df['room_type'].value_counts().plot(kind = 'pie', colors=['green', 'gold', 'black'], figsize = (8, 8))
+plt.title('Pie Chart for Room Type Distribution', fontsize = 20)
+plt.xlabel('Room Type')
+plt.ylabel('Number of entries')
+plt.show()
+neighs = df.groupby('neighbourhood')
+reviews = neighs['number_of_reviews'].sum().sort_values().tail(5)
+
+reviews.plot(kind = 'bar', color=['#e59e6d', '#ba9653', '#963821', 'black', '#007a33'], figsize = (8, 6))
+plt.xlabel('Neighbourhood')
+plt.ylabel('Reviews')
+plt.title('Distribution of reviews in the top neighbourhoods')
+df['neighbourhood'].value_counts().plot(kind = 'bar', color = ['purple','gold'], figsize = (8, 6))
+plt.title('Histogram of variable neighbourhood', fontsize = 20)
+plt.xlabel('Neighbourhood')
+plt.ylabel('Number of entries')
+plt.show()
+# Group the data by the room type
+room_types = df.groupby('room_type')
+# FInd out the mean value of the prices in each room type
+prices = room_types['price'].mean().sort_values(ascending = False)
+prices.plot(kind = 'bar', color=['#00471b', '#eee1c6', '#0077c0'] ,figsize = (8, 6))
+plt.title('Cost per room type', fontsize = 20)
+plt.xlabel('Room Type')
+plt.ylabel('Cost in $')
+plt.show()
+df['neighbourhood'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540, background_color="white").generate(' '.join(df['neighbourhood'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+df['transit'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540, background_color="black").generate(' '.join(df['transit'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+df['description'].dropna(inplace=True)
+wordcloud = WordCloud(max_words=1000,width=840, height=540, background_color="white").generate(' '.join(df['description'].tolist()))
+plt.imshow(wordcloud)
+plt.axis('off')
+plt.show()
+# Concatenate name and description in one column and perform preprocessing
+df['info'] = df['name'] + df['description']
+df['processed_info'] = df['info'].apply(lambda row : preprocess_text(row))
+df.head()
+tfidf_vec = TfidfVectorizer(ngram_range=(1, 2)).fit_transform(df.processed info)
+tfidf_data = pd.DataFrame(tfidf_vec.toarray())
+tfidf_data.head()

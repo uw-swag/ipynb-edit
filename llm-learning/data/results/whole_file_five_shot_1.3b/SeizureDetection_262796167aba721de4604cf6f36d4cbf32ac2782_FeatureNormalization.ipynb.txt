@@ -1,0 +1,9 @@
+```
+    def featureNormalization(ft):
+        seizures = ft['seizure'].copy()
+        scaler = preprocessing.StandardScaler()
+        scaled_ft = scaler.fit_transform(ft.iloc[:, ft.shape[1]-1])
+        norm_ft = pd.DataFrame(scaled_ft, columns=ft.columns)
+        norm_ft['seizure'] = seizures
+        return norm_ft
+    ```

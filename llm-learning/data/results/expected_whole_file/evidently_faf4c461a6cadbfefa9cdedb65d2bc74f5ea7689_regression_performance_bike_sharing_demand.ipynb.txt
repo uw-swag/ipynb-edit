@@ -1,0 +1,92 @@
+<Cell_0>
+import pandas as pd
+import requests
+import zipfile
+import io
+
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.tabs import RegressionPerformanceTab
+
+from evidently.model_profile import Profile
+from evidently.profile_sections import RegressionPerformanceProfileSection
+<\Cell_0>
+<Cell_1>
+content = requests.get("https://archive.ics.uci.edu/ml/machine-learning-databases/00275/Bike-Sharing-Dataset.zip").content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("day.csv"), header=0, sep=',', parse_dates=['dteday'], index_col='dteday')
+<\Cell_1>
+<Cell_2>
+ref_data = raw_data[:120]
+prod_data = raw_data[120:150]
+<\Cell_2>
+<Cell_3>
+ref_data
+<\Cell_3>
+<Cell_4>
+target = 'cnt'
+prediction = 'prediction'
+datetime = 'dteday'
+
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', 'weathersit']
+
+features = numerical_features + categorical_features
+<\Cell_4>
+<Cell_5>
+model = RandomForestRegressor(random_state = 0)
+<\Cell_5>
+<Cell_6>
+model.fit(ref_data[features], ref_data[target])
+<\Cell_6>
+<Cell_7>
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+<\Cell_7>
+<Cell_8>
+column_mapping = ColumnMapping(target,
+                               'prediction',
+                               numerical_features=numerical_features,
+                               categorical_features=categorical_features)
+<\Cell_8>
+<Cell_9>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=1)])
+<\Cell_9>
+<Cell_10>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+<\Cell_10>
+<Cell_11>
+dashboard.show()
+<\Cell_11>
+<Cell_12>
+# dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_12>
+<Cell_13>
+dashboard = Dashboard(tabs=[RegressionPerformanceTab(verbose_level=0)])
+<\Cell_13>
+<Cell_14>
+dashboard.calculate(ref_data, prod_data, column_mapping=column_mapping)
+<\Cell_14>
+<Cell_15>
+dashboard.show()
+<\Cell_15>
+<Cell_16>
+# dashboard.save('bike_sharing_demand_model_perfomance.html')
+<\Cell_16>
+<Cell_17>
+bike_regression_performance_profile = Profile(sections=[RegressionPerformanceProfileSection()])
+<\Cell_17>
+<Cell_18>
+bike_regression_performance_profile.calculate(ref_data, prod_data, column_mapping=column_mapping)
+<\Cell_18>
+<Cell_19>
+regression_profile = bike_regression_performance_profile.json() 
+<\Cell_19>
+<Cell_20>
+regression_profile
+<\Cell_20>
+<Cell_21>
+
+<\Cell_21>

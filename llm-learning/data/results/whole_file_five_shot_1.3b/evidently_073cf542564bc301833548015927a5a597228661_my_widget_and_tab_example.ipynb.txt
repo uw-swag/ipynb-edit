@@ -1,0 +1,55 @@
+
+    [
+    Commit Message: "Removed examples with an old api"
+    Original Code Cells:
+    '''
+    <Cell_0>
+import pandas as pd
+
+from sklearn.datasets import fetch_california_housing
+from sklearn.ensemble import RandomForestRegressor
+
+from evidently import ColumnMapping
+from evidently.dashboard import Dashboard
+from evidently.dashboard.tabs import RegressionPerformanceTab
+<\Cell_0>
+<Cell_1>
+dataset = fetch_california_housing(as_frame=True)
+df = dataset.frame
+<\Cell_1>
+<Cell_2>
+target = 'MedHouseVal'
+prediction = 'prediction'
+
+numerical_features = ['MedInc', 'HouseAge', 'AveRooms', 'AveBedrms', 'Population', 'AveOccup',
+                      'Latitude', 'Longitude']
+categorical_features = []
+features = numerical_features 
+<\Cell_2>
+<Cell_3>
+ref_data = df[:15000]
+prod_data = df[15000:]
+<\Cell_3>
+<Cell_4>
+model = RandomForestRegressor(random_state=0)
+<\Cell_4>
+<Cell_5>
+model.fit(ref_data[features], ref_data[target])
+<\Cell_5>
+<Cell_6>
+ref_data['prediction']  = model.predict(ref_data[features])
+prod_data['prediction'] = model.predict(prod_data[features])
+<\Cell_6>
+<Cell_7>
+import plotly.figure_factory as ff
+
+hist_data = [ref_data[target], prod_data[target]]
+
+group_labels = ['reference', 'production']
+
+colors = ['#333F44', '#37AA9C'] 
+
+fig = ff.create_distplot(hist_data, group_labels, colors=colors, show_hist=False, show_rug=False)
+
+fig.update_layout(   
+    xaxis_title=

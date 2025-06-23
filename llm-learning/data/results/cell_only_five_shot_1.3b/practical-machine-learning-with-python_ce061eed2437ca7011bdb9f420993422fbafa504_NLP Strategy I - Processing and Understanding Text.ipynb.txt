@@ -1,0 +1,50 @@
+
+    # Importing necessary libraries
+    import pandas as pd
+    from sklearn.feature_extraction.text import CountVectorizer
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import classification_report, confusion_matrix
+
+    # Loading the dataset
+    data = pd.read_csv('data.csv')
+
+    # Preprocessing the data
+    # Here we are assuming that the text data is in a column named 'text'
+    X = data['text']
+    y = data['label']
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Vectorizing the text data
+    vectorizer = CountVectorizer()
+    X_train_vectorized = vectorizer.fit_transform(X_train)
+    X_test_vectorized = vectorizer.transform(X_test)
+
+    # Training the model
+    model = MultinomialNB()
+    model.fit(X_train_vectorized, y_train)
+
+    # Evaluating the model
+    y_pred = model.predict(X_test_vectorized)
+    print(classification_report(y_test, y_pred))
+    print(confusion_matrix(y_test, y_pred))
+
+    # Predicting on new data
+    new_data = ["This is a new post"]
+    new_data_vectorized = vectorizer.transform(new_data)
+    prediction = model.predict(new_data_vectorized)
+    print(prediction)
+
+    # Saving the model
+    import joblib
+    joblib.dump(model, 'model.pkl')
+
+    # Loading the model
+    loaded_model = joblib.load('model.pkl')
+
+    # Predicting on new data
+    new_data = ["This is a new post"]
+    new_data_vectorized = vectorizer.transform(new_data)
+   

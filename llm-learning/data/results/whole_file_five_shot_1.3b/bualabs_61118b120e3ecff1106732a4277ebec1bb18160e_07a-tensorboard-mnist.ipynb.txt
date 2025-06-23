@@ -1,0 +1,17 @@
+```
+    # Append time to writer name
+    from datetime import datetime
+
+    # Get current time
+    current_time = datetime.now().strftime("%H:%M:%S")
+
+    # Append current time to writer name
+    tboard_path = Path('data/tensorboard/' + proj_id + "_" + current_time)
+
+    # Append current time to tensorboard path
+    learner.callback_fns.append(partial(LearnerTensorboardWriter, 
+                                        base_dir=tboard_path, 
+                                        name=f'Learner{time.time()}'))
+
+    print(f"tensorboard --logdir={tboard_path}")
+    ```

@@ -1,0 +1,15 @@
+import numpy as np
+import pandas as pd
+import random
+from scipy.special import expit
+import scipy.optimize
+from scipy.optimize import minimize
+train = pd.read_csv('../input/train.csv')
+test = pd.read_csv('../input/test.csv')
+X = np.array(train.drop(['id', 'color', 'type'], axis=1))
+X = np.insert(X,0,1,axis=1)
+X_test = np.array(test.drop(['id', 'color'], axis=1))
+X_test = np.insert(X_test,0,1,axis=1)
+Y_train = np.array((pd.get_dummies(train['type'], drop_first=False)).astype(float))
+#I'll need this for predictions.
+monsters = (pd.get_dummies(train['type'], drop_first=False)).columns

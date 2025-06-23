@@ -1,0 +1,32 @@
+```
+    # Preprocessing
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import sqlite3
+    import matplotlib.pyplot as plt
+    import matplotlib
+    import seaborn as sns
+    sns.set_style('darkgrid')
+    %matplotlib inline
+
+    # Connecting to the database
+    conn = sqlite3.connect('/Users/sominwadhwa/database.sqlite')
+    cur = conn.cursor()
+
+    # Reading data from the database
+    countries = pd.read_sql_query("SELECT id,name from Country",conn)
+    matches = pd.read_sql_query("SELECT * from Match", conn)
+    leagues = pd.read_sql_query("SELECT * from League",conn)
+    teams = pd.read_sql_query("SELECT * from Team",conn)
+    players = pd.read_sql_query("Select * from Player", conn)
+    player_attr = pd.read_sql_query("Select * from Player_Attributes",conn)
+
+    # Preprocessing
+    player_attr = players.merge(player_attr,on='player_fifa_api_id', suffixes='_y')
+    player_attr.drop(['id_','player_fifa_api_id','date','attacking_work_rate','defensive_work_rate'], axis=1,inplace=True)
+    player_attr=player_attr.drop_duplicates(subset='player_api_id_', keep='first')
+    player_attr.head()
+    player_attr = player_attr.fillna(0)
+    player_attr.info()
+    ```

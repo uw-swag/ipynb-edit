@@ -1,0 +1,12 @@
+```
+    from colour import Color
+    import numpy as np
+
+    red = Color("red")
+    colors = list(red.range_to(Color("purple"),10))
+    colors = [x.get_rgb() for x in colors]
+    colors = np.asarray(colors)[:,:, None, None]
+
+    x_train = np.load(os.path.join("../data", "ColorMNIST", "train_x.npy"))
+    y_train = np.load(os.path.join("../data", "ColorMNIST", "train_y.npy"))
+    ```

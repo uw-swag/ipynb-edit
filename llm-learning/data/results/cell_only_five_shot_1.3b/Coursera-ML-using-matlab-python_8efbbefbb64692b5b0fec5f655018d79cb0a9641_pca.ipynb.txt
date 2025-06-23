@@ -1,0 +1,62 @@
+
+    # Upload the file
+    from google.colab import files
+    uploaded = files.upload()
+
+    # Load the file
+    import cv2
+    import numpy as np
+    from PIL import Image
+
+    for fn in uploaded:
+        img = Image.open(uploaded[fn])
+        img_cv = np.array(img)
+        img_cv = cv2.cvtColor(img_cv, cv2.COLOR_RGB2BGR)
+        plt.imshow(img_cv)
+        plt.show()
+
+    # Add files via upload
+    # You can upload any file to your Google Colab notebook.
+    # After uploading, you can use the following code to read the file.
+
+    ## Read a file
+    from google.colab import files
+    uploaded = files.upload()
+
+    ## Read a text file
+    with open('file.txt', 'r') as f:
+        data = f.read()
+        print(data)
+
+    ## Read a CSV file
+    import pandas as pd
+    df = pd.read_csv('file.csv')
+    print(df.head())
+
+    ## Read a JSON file
+    import json
+    with open('file.json') as f:
+        data = json.load(f)
+        print(data)
+
+    ## Read a binary file
+    with open('file.bin', 'rb') as f:
+        data = f.read()
+        print(data)
+
+    ## Read a text file in a specific directory
+    with open('/content/drive/My Drive/file.txt', 'r') as f:
+        data = f.read()
+        print(data)
+
+    ## Read a file from a URL
+    import requests
+    response = requests.get('https://www.example.com/file.txt')
+    data = response.text
+    print(data)
+
+    ## Read a file from a Google Drive directory
+    from google.colab import drive
+    drive.mount('/content/drive')
+    path = '/content/drive/My Drive/file.txt'
+    with open(path, 'r

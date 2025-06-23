@@ -1,0 +1,334 @@
+# Copyright 2023 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+!git config --global user.email 'you@example.com'
+!git config --global user.name 'Your Name'
+!pip3 install google-cloud-automlops --user
+import os
+
+if not os.getenv('IS_TESTING'):
+    # Automatically restart kernel after installs
+    import IPython
+
+    app = IPython.Application.instance()
+    app.kernel.do_shutdown(True)
+PROJECT_ID = '[your-project-id]'  # @param {type:"string"}
+if PROJECT_ID == '' or PROJECT_ID is None or PROJECT_ID == '[your-project-id]':
+    # Get your GCP project id from gcloud
+    shell_output = !gcloud config list --format 'value(core.project)' 2>/dev/null
+    PROJECT_ID = shell_output[0]
+    print('Project ID:', PROJECT_ID)
+! gcloud config set project $PROJECT_ID
+ALERT_EMAILS = ['srastatter@google.com']  #ALERT_EMAILS = ['noreply@google.com']
+from AutoMLOps import AutoMLOps
+AutoMLOps.clear_cache()
+@AutoMLOps.component(
+    packages_to_install=[
+        'explainable_ai_sdk',
+        'google-cloud-aiplatform'
+    ]
+)
+def deploy_and_test_model(
+    model_directory: str,
+    project_id: str,
+    region: str
+):
+    """Custom component that uploads a saved model from GCS to Vertex Model Registry
+       and deploys the model to an endpoint for online prediction. Runs a prediction
+       and explanation test as well.
+
+    Args:
+        model_directory: GS location of saved model.
+        project_id: Project_id.
+        region: Region.
+    """
+    from google.cloud import aiplatform
+    from google.cloud.aiplatform.explain.metadata.tf.v2 import \
+    saved_model_metadata_builder
+    import pprint as pp
+
+    aiplatform.init(project=project_id, location=region)
+
+    MODEL_NAME = 'churn'
+    IMAGE = "us-docker.pkg.dev/cloud-aiplatform/prediction/tf2-cpu.2-5:latest"
+    params = {"sampled_shapley_attribution": {"path_count": 10}}
+    EXPLAIN_PARAMS = aiplatform.explain.ExplanationParameters(params)
+    builder = saved_model_metadata_builder.SavedModelMetadataBuilder(
+        model_path=model_directory, outputs_to_explain=["churned_probs"]
+    )
+    EXPLAIN_META = builder.get_metadata_protobuf()
+    DEFAULT_INPUT = {
+        "cnt_ad_reward": 0,
+        "cnt_challenge_a_friend": 0,
+        "cnt_completed_5_levels": 1,
+        "cnt_level_complete_quickplay": 3,
+        "cnt_level_end_quickplay": 5,
+        "cnt_level_reset_quickplay": 2,
+        "cnt_level_start_quickplay": 6,
+        "cnt_post_score": 34,
+        "cnt_spend_virtual_currency": 0,
+        "cnt_use_extra_steps": 0,
+        "cnt_user_engagement": 120,
+        "country": "Denmark",
+        "dayofweek": 3,
+        "julianday": 254,
+        "language": "da-dk",
+        "month": 9,
+        "operating_system": "IOS",
+        "user_pseudo_id": "104B0770BAE16E8B53DF330C95881893",
+    }
+
+    model = aiplatform.Model.upload(
+        display_name=MODEL_NAME,
+        artifact_uri=model_directory,
+        serving_container_image_uri=IMAGE,
+        explanation_parameters=EXPLAIN_PARAMS,
+        explanation_metadata=EXPLAIN_META,
+        sync=True
+    )
+
+    endpoint = model.deploy(
+        machine_type='n1-standard-4',
+        deployed_model_display_name='deployed-churn-model')
+
+    # Test predictions
+    print('running prediction test...')
+    try:
+        resp = endpoint.predict([DEFAULT_INPUT])
+        for i in resp.predictions:
+            vals = i["churned_values"]
+            probs = i["churned_probs"]
+        for i in range(len(vals)):
+            print(vals[i], probs[i])
+        pp.pprint(resp)
+    except Exception as ex:
+        print("prediction request failed", ex)
+
+    # Test explanations
+    print('\nrunning explanation test...')
+    try:
+        features = []
+        scores = []
+        resp = endpoint.explain([DEFAULT_INPUT])
+        for i in resp.explanations:
+            for j in i.attributions:
+                for k in j.feature_attributions:
+                    features.append(k)
+                    scores.append(j.feature_attributions[k])
+        features = [x for _, x in sorted(zip(scores, features))]
+        scores = sorted(scores)
+        for i in range(len(scores)):
+            print(scores[i], features[i])
+        pp.pprint(resp)
+    except Exception as ex:
+        print("explanation request failed", ex)
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-aiplatform'
+    ]
+)
+def create_monitoring_job(
+    alert_emails: list,
+    cnt_user_engagement_threshold_value: float,
+    country_threshold_value: float,
+    data_source: str,
+    log_sampling_rate: float,
+    monitor_interval: int,
+    project_id: str,
+    region: str,
+    target: str
+):
+    """Custom component that uploads a saved model from GCS to Vertex Model Registry
+       and deploys the model to an endpoint for online prediction. Runs a prediction
+       and explanation test as well.
+
+    Args:
+        alert_emails: List of emails to send monitoring alerts.
+        cnt_user_engagement_threshold_value: Threshold value for the cnt_user_engagement feature.
+        country_threshold_value: Threshold value for the country feature.
+        data_source: BQ training data table.        
+        log_sampling_rate: Sampling rate.
+        monitor_interval: Monitoring interval in hours.
+        project_id: Project_id.
+        region: Region.
+        target: Prediction target column name in training dataset.
+    """
+    from google.cloud import aiplatform
+    from google.cloud.aiplatform import model_monitoring
+
+    aiplatform.init(project=project_id, location=region)
+
+    JOB_NAME = 'churn'
+    SKEW_THRESHOLDS = {
+        "country": country_threshold_value,
+        "cnt_user_engagement": cnt_user_engagement_threshold_value,
+    }
+    DRIFT_THRESHOLDS = {
+        "country": country_threshold_value,
+        "cnt_user_engagement": cnt_user_engagement_threshold_value,
+    }
+    ATTRIB_SKEW_THRESHOLDS = {
+        "country": country_threshold_value,
+        "cnt_user_engagement": cnt_user_engagement_threshold_value,
+    }
+    ATTRIB_DRIFT_THRESHOLDS = {
+        "country": country_threshold_value,
+        "cnt_user_engagement": cnt_user_engagement_threshold_value,
+    }
+
+    skew_config = model_monitoring.SkewDetectionConfig(
+        data_source=data_source,
+        skew_thresholds=SKEW_THRESHOLDS,
+        attribute_skew_thresholds=ATTRIB_SKEW_THRESHOLDS,
+        target_field=target,
+    )
+
+    drift_config = model_monitoring.DriftDetectionConfig(
+        drift_thresholds=DRIFT_THRESHOLDS,
+        attribute_drift_thresholds=ATTRIB_DRIFT_THRESHOLDS,
+    )
+
+    explanation_config = model_monitoring.ExplanationConfig()
+    objective_config = model_monitoring.ObjectiveConfig(
+        skew_config, drift_config, explanation_config
+    )
+
+    # Create sampling configuration
+    random_sampling = model_monitoring.RandomSampleConfig(sample_rate=log_sampling_rate)
+
+    # Create schedule configuration
+    schedule_config = model_monitoring.ScheduleConfig(monitor_interval=monitor_interval)
+
+    # Create alerting configuration.
+    alerting_config = model_monitoring.EmailAlertConfig(
+        user_emails=alert_emails, enable_logging=True
+    )
+
+    # Create the monitoring job.
+    job = aiplatform.ModelDeploymentMonitoringJob.create(
+        display_name=JOB_NAME,
+        logging_sampling_strategy=random_sampling,
+        schedule_config=schedule_config,
+        alert_config=alerting_config,
+        objective_configs=objective_config,
+        project=project_id,
+        location=region,
+        endpoint=endpoint,
+    )
+@AutoMLOps.component(
+    packages_to_install=[
+        'google-cloud-bigquery',
+        'google-cloud-aiplatform'
+    ]
+)
+def test_monitoring_job(
+    data_source: str,
+    project_id: str,
+    region: str,
+    target: str
+):
+    """Custom component that uploads a saved model from GCS to Vertex Model Registry
+       and deploys the model to an endpoint for online prediction. Runs a prediction
+       and explanation test as well.
+
+    Args:
+        data_source: BQ training data table.
+        project_id: Project_id.
+        region: Region.
+        target: Prediction target column name in training dataset.
+    """
+    import time
+
+    from google.cloud import aiplatform
+    from google.cloud import bigquery
+
+    bq_client = bigquery.Client(project=project_id)
+    # Download the table.
+    table = bigquery.TableReference.from_string(data_source[5:])
+
+    rows = bq_client.list_rows(table, max_results=1000)
+
+    instances = []
+    for row in rows:
+        instance = {}
+        for key, value in row.items():
+            if key == target:
+                continue
+            if value is None:
+                value = ""
+            instance[key] = value
+        instances.append(instance)
+
+    print(len(instances))
+
+    endpoint = aiplatform.Endpoint.list(filter='display_name="churn_endpoint"')[0]
+    response = endpoint.predict(instances=instances)
+    prediction = response[0]
+    # print the predictions
+    print(prediction)
+
+    # Pause a bit for the baseline distribution to be calculated
+    time.sleep(120)
+@AutoMLOps.pipeline(
+    name='automlops-monitoring-pipeline',
+    description='This is an example model monitoring pipeline')
+def pipeline(alert_emails: list,
+             cnt_user_engagement_threshold_value: float,
+             country_threshold_value: float,
+             data_source: str,
+             log_sampling_rate: float,
+             model_directory: str,
+             monitor_interval: int,
+             project_id: str,
+             region: str,
+             target: str):
+
+    deploy_and_test_model_task = deploy_and_test_model(
+        model_directory=model_directory,
+        project_id=project_id,
+        region=region)
+    
+    create_monitoring_job_task = create_monitoring_job(
+        alert_emails=alert_emails,
+        cnt_user_engagement_threshold_value=cnt_user_engagement_threshold_value,
+        country_threshold_value=country_threshold_value,
+        data_source=data_source,
+        log_sampling_rate=log_sampling_rate,
+        monitor_interval=monitor_interval,
+        project_id=project_id,
+        region=region,
+        target=target).after(deploy_and_test_model_task)
+    
+    test_monitoring_job_task = test_monitoring_job(
+        data_source=data_source,
+        project_id=project_id,
+        region=region,
+        target=target).after(create_monitoring_job_task)
+pipeline_params = {
+    'alert_emails': ALERT_EMAILS,
+    'cnt_user_engagement_threshold_value': 0.001,
+    'country_threshold_value': 0.001,
+    'data_source': 'bq://mco-mm.bqmlga4.train',
+    'log_sampling_rate': 0.8,
+    'model_directory': 'gs://mco-mm/churn',
+    'monitor_interval': 1,
+    'project_id': PROJECT_ID,
+    'region': 'us-central1',
+    'target': 'churned'
+}
+AutoMLOps.generate(project_id=PROJECT_ID,
+                   pipeline_params=pipeline_params,
+                   run_local=True)
+AutoMLOps.go(project_id=PROJECT_ID,
+             pipeline_params=pipeline_params,
+             run_local=True)

@@ -1,0 +1,60 @@
+```python
+    def dominant_value_condition(df, column):
+        """
+        This function calculates the dominant value in a column of a DataFrame.
+
+        Parameters:
+        df (pandas.DataFrame): The DataFrame to search.
+        column (str): The column to search.
+
+        Returns:
+        float: The dominant value in the column.
+        """
+        # Calculate the dominant value
+        dominant_value = df[column].value_counts().idxmax()
+
+        return dominant_value
+
+    # Test the function
+    df = pd.DataFrame({
+        'A': [1, 2, 2, 3, 3, 3, 4, 4, 4, 4],
+        'B': [5, 5, 6, 6, 6, 7, 7, 8, 8, 9]
+    })
+
+    dominant_value = dominant_value_condition(df, 'A')
+    print(f'The dominant value in column A is: {dominant_value}')
+
+    dominant_value = dominant_value_condition(df, 'B')
+    print(f'The dominant value in column B is: {dominant_value}')
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "add new dominant value condition (#184)"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    def dominant_value_condition(df, column):
+        """
+        This function calculates the dominant value in a column of a DataFrame.
+
+        Parameters:
+        df (pandas.DataFrame): The DataFrame to search.
+        column (str): The column to search.
+
+        Returns:
+        float: The dominant value in the column.
+        """
+        # Calculate the dominant value
+        dominant_value = df[column].value_counts().idxmax()
+
+        return dominant_value
+
+    # Test the function
+    df = pd.DataFrame({
+        'A': [1, 2, 2, 3, 3, 3, 4,

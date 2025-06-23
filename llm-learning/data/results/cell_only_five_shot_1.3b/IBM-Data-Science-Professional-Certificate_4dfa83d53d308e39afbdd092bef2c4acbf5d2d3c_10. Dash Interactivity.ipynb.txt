@@ -1,0 +1,63 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Update 10. Dash Interactivity.ipynb"
+    Original Code Cells:
+    '''
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Dropdown(
+            id='my-dropdown',
+            options=[
+                {'label': 'Option 1', 'value': 'Option 1'},
+                {'label': 'Option 2', 'value': 'Option 2'},
+                {'label': 'Option 3', 'value': 'Option 3'}
+            ],
+            value='Option 1'
+        ),
+        html.Div(id='my-output-div')
+    ])
+
+    @app.callback(
+        Output('my-output-div', 'children'),
+        [Input('my-dropdown', 'value')]
+    )
+    def update_output(value):
+        return 'You selected: {}'.format(value)
+
+    if __name__ == '__main__':
+        app.run_server(debug=True)
+    '''
+    ]
+
+    ### Response:
+    ### Instruction:
+    [
+    Commit Message: "Update 10. Dash Interactivity.ipynb"
+    Original Code Cells:
+    '''
+    import dash
+    import dash_core_components as dcc
+    import dash_html_components as html
+    from dash.dependencies import Input, Output
+
+    app = dash.Dash(__name__)
+
+    app.layout = html.Div([
+        dcc.Dropdown(
+            id='my-dropdown',
+            options=[
+                {'label': 'Option 1', 'value': 'Option 1'},
+                {'label': 'Option 2', 'value': 'Option 2'},
+                {'label': 'Option 3', 'value': 'Option 3'}
+            ],
+            value='Option 1'
+        ),
+        html.Div(id='my-output-div')
+    

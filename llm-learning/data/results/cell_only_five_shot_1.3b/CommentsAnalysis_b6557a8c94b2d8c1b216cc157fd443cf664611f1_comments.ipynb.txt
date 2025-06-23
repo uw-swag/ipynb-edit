@@ -1,0 +1,53 @@
+
+    # Experimenting with Neural Networks and XGBoost
+
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+    from sklearn import linear_model as lm
+    from sklearn.cross_validation import cross_val_score
+    import seaborn as sns
+    from stop_words import get_stop_words
+    import Stemmer
+    import pymorphy2
+    from segtok import segmenter
+    import re
+    from functools import partial
+    import pickle
+    from gensim import corpora, models
+    from gensim.models import word2vec
+    %matplotlib inline
+
+    # Vectorization
+    vectorizer = CountVectorizer(max_features=1000, ngram_range=(3, 3), analyzer='char_wb', min_df=100)
+    X = vectorizer.fit_transform(comments.text.values)
+    y = comments.is_gum.values
+
+    # Training a linear model
+    lr = lm.LinearRegression()
+    lr.fit(X, y)
+    lr.score(X, y)
+
+    # Checking the coefficients
+    lr.coef_.argmax()
+
+    # Experimenting with XGBoost
+    from xgboost import XGBClassifier
+
+    # Creating a XGBoost classifier
+    xgb = XGBClassifier(use_label_encoder=False, eval_metric='mlogloss')
+    xgb.fit(X, y)
+
+    # Checking the accuracy
+    y_pred = xgb.predict(X)
+    print("Accuracy:", accuracy_score(y, y_pred))
+
+    # Experimenting with Neural Networks
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Activation
+
+    # Creating a Neural Network model
+    model = Sequential()
+    model.add

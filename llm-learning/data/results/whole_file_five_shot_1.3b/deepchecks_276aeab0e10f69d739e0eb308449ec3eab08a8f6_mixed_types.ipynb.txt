@@ -1,0 +1,22 @@
+```python
+    <Cell_0>
+from mlchecks.checks import mixed_types
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+data = {'col1': ['str', '1.0', 1, 2 , 2.61 , 'timtam'], 'col2':['', '', '1.0', 'a', 'b', 'c'], 'col3': [1,2,3,4,5,6]}
+dataframe = pd.DataFrame(data=data)
+mixed_types(dataframe)
+<\Cell_1>
+<Cell_2>
+data = {'col1': ['foo', 'bar', 'cat']}
+dataframe = pd.DataFrame(data=data)
+mixed_types(dataframe)
+<\Cell_2>
+    ```
+
+    The `mixed_types` function in the `mlchecks.checks` module checks if the dataframe contains mixed data types. If it does, it returns a list of column names that contain mixed data types.
+
+    The first cell checks a dataframe with mixed data types. The second cell checks a dataframe with a single column of mixed data types.
+
+    The `mixed_types` function will return a list of column names that contain mixed data types. If no such columns exist, it will return an empty list.

@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+    from deepchecks.base import Dataset
+    from sklearn.ensemble import GradientBoostingRegressor
+    from sklearn.datasets import load_diabetes
+    from sklearn.model_selection import train_test_split
+    from deepchecks.checks.performance import RegressionErrorDistribution
+
+    # Load the dataset
+    diabetes_df = load_diabetes(return_X_y=False, as_frame=True).frame
+
+    # Split the dataset into training and testing sets
+    train_df, test_df = train_test_split(diabetes_df, test_size=0.33, random_state=42)
+
+    # Create a Dataset object for training and testing
+    train = Dataset(train_df, label_name='target', cat_features=['sex'])
+    test = Dataset(test_df, label_name='target', cat_features=['sex'])
+
+    # Create a GradientBoostingRegressor model
+    clf = GradientBoostingRegressor(random_state=0)
+
+    # Train the model
+    _ = clf.fit(train.features_columns, train.label_col)
+
+    # Create a RegressionErrorDistribution check
+    check = RegressionErrorDistribution()
+
+    # Run the check on the test set
+    _ = check.run(test, clf)
+
+    # Add a new column 'prediction' to the test set
+    test.data['prediction'] = clf.predict(test.features_columns)
+
+    # Create a new check for the updated test set
+    check_new = RegressionErrorDistribution()
+
+    # Run the new check on the updated test set
+    _ = check_new.run(test, clf)
+    ```
+
+    The code above first loads the diabetes dataset, splits it into a training set and a testing set, and creates a `Dataset` object for both. It then trains a `GradientBoostingRegressor` model on the training set. The `RegressionErrorDistribution` check is then run on the testing set to see the error distribution

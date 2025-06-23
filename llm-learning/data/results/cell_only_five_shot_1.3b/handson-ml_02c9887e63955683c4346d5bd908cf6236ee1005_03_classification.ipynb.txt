@@ -1,0 +1,22 @@
+
+    The code you provided is already correct. The precision and recall scores are printed in the correct format. The precision_score and recall_score functions from sklearn.metrics module are used to calculate the precision and recall scores. The format in the print statement is "{:.2f}%", which means the result should be displayed with 2 decimal places.
+
+    If you want to change the format, you can simply change the "{:.2f}" part to "{:.2%}". This will display the result as a percentage.
+
+    Here is the corrected code:
+
+    ```python
+    from sklearn.metrics import precision_score, recall_score
+
+    X_test_transformed = preprocess_pipeline.transform(X_test)
+
+    log_clf = LogisticRegression()
+    log_clf.fit(X_train_transformed, y_train)
+
+    y_pred = log_clf.predict(X_test_transformed)
+
+    print("Precision: {:.2%}".format(precision_score(y_test, y_pred)))
+    print("Recall: {:.2%}".format(recall_score(y_test, y_pred)))
+    ```
+
+    This will print the precision and recall scores in a percentage format.

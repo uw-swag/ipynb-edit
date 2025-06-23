@@ -1,0 +1,32 @@
+```python
+    ## Wrapper Class for FocalLost
+    class FocalLost:
+        def __init__(self, n_classes, alpha, gamma, reduction='mean'):
+            self.n_classes = n_classes
+            self.alpha = alpha
+            self.gamma = gamma
+            self.reduction = reduction
+
+        def focal_loss(self, y_true, y_pred):
+            pt_1 = tf.where(tf.equal(y_true, 1), y_pred, tf.ones_like(y_pred))
+            pt_0 = tf.where(tf.equal(y_true, 0), y_pred, tf.zeros_like(y_pred))
+            return -K.mean(self.alpha * K.pow(1. - pt_1, self.gamma) * K.log(pt_1)) - K.mean((1 - self.alpha) * K.pow(pt_0, self.gamma) * K.log(1. - pt_0))
+
+        def compute_loss(self, y_true, y_pred):
+            return self.focal_loss(y_true, y_pred)
+
+        def compute_metric(self, y_true, y_pred):
+            return self.focal_loss(y_true, y_pred)
+
+        def compute_auc(self, y_true, y_pred):
+            return self.focal_loss(y_true, y_pred)
+
+        def compute_f1_score(self, y_true, y_pred):
+            return self.focal_loss(y_true, y_pred)
+
+        def compute_recall(self, y_true, y_pred):
+            return self.focal_loss(y_true, y_pred)
+
+        def compute_precision(self, y_true, y_pred):
+            return self.focal_loss(y_true, y_pred)
+    ```

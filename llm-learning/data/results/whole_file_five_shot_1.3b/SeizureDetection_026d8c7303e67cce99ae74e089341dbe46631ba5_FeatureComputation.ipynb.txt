@@ -1,0 +1,21 @@
+
+    The error in your code is that you're missing the colon (:) at the end of the else statement. In Python, the colon is used to define the body of an if, elif, or else statement. Here's the corrected code:
+
+    ```python
+    if x.mean() != 0:
+        cv = variation(x)
+    else:
+        cv = math.nan
+    ```
+
+    The code you provided is a function that computes time-domain features for an EEG signal. It uses the `welch` function from the `scipy.signal` module to compute the power spectral density (PSD) of the signal, and the `simps` function from the `scipy.integrate` module to compute the Simpson's rule integration of the PSD. The PSD is then averaged over a range of frequencies.
+
+    The function `computeTimeDomainFeatures` computes these features for a given signal. It takes as input a numpy array `x` representing the signal. The function returns a tuple of the computed features.
+
+    The function `psd` computes the power spectral density of an EEG signal. It takes as input a numpy array `x` representing the signal, a sample rate `fs`, and a window size `win`. The function returns a tuple of the computed power spectral density.
+
+    The function `computeCorrelation` computes the correlation between two signals. It takes as input two numpy arrays `left` and `right` representing the signals. The function returns the maximum correlation between the two signals.
+
+    The function `featureExtractionLeftRight` computes the time-domain and frequency-domain features for a subset of the EEG data. It takes as input a pandas DataFrame `df` representing the EEG data, a sample rate `sample_rate`, and a step size `step`. The function returns a pandas DataFrame containing the computed features.
+
+    The function `featureExtractionAverage` computes the time-domain and frequency-domain features for a subset of the EEG data. It takes as input a pandas DataFrame `df` representing the EEG data, a sample rate `sample_rate`, and a step size `step`. The function returns a pandas DataFrame containing

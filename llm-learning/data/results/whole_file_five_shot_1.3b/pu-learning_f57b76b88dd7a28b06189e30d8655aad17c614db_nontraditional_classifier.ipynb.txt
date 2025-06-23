@@ -1,0 +1,21 @@
+```
+    ## Updating the notebook to learn a non-traditional classifier
+    from sklearn.ensemble import RandomForestClassifier
+
+    ## Initialize the classifier
+    clf = RandomForestClassifier(n_estimators=100, random_state=0, criterion='gini')
+
+    ## Fit the classifier
+    clf.fit(x, s)
+
+    ## Predict the labels
+    s_hat = clf.predict(x)
+
+    ## Predict the probabilities
+    s_prob_hat = clf.predict_proba(x)[:, 1]
+
+    ## Visualize the data
+    visualize_pu_data(x, s)
+    visualize_pu_data(x, s_hat)
+    visualize_pu_data_proba(x, s_prob_hat)
+    ```

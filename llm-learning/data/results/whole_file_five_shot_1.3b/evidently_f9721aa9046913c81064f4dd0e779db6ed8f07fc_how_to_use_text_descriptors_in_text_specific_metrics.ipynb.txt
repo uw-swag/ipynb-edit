@@ -1,0 +1,47 @@
+```python
+    # Add display_name parameter to descriptor and feature.
+
+    class MyDescriptor(TextDescriptorsDriftMetric):
+        display_name = "My Descriptor"
+
+    class MyFeature(TextLength):
+        display_name = "Review Text Length"
+
+    # Use new descriptors and features in the report.
+
+    text_specific_metrics_report = Report(metrics=[
+        MyDescriptor(column_name="Review_Text"),
+        TextDescriptorsDistribution(column_name="Review_Text"),
+        TextDescriptorsCorrelationMetric(column_name="Review_Text"),
+    ])
+
+    text_specific_metrics_report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+    text_specific_metrics_report
+
+    # Use new descriptors and features in the report.
+
+    report = Report(metrics=[
+        MyDescriptor("Review_Text", descriptors={
+            "My Descriptor" : MyFeature(),
+            "My Feature" : TriggerWordsPresence(words_list=['blouse', 'shirt']),
+        }),
+        TextDescriptorsCorrelationMetric(column_name="Title", descriptors={
+            "Title OOV" : OOV(),
+            "Title Non Letter %" : NonLetterCharacterPercentage(),
+            "Title Length" : TextLength(),
+            "Title Sentence Count" : SentenceCount(),
+            "Title Word Count" : WordCount(),
+            "Title Sentiment" : Sentiment(),
+            "Title questions": RegExp(reg_exp=r'.*\?.*'),
+        }),
+    ])
+
+    report.run(reference_data=reviews_ref, current_data=reviews_cur, column_mapping=column_mapping)
+    report
+
+    # Use new descriptors and features in the report.
+
+    text_overview_report = Report(metrics=[
+        TextOverviewPreset(column_name="Review_Text", descriptors={
+            "Review Text OOV" : OOV(),
+            "Review Text Non Letter

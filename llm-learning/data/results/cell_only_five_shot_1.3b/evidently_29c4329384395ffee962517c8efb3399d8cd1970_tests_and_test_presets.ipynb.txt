@@ -1,0 +1,41 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from datetime import datetime
+from sklearn.datasets import fetch_openml
+
+from evidently import ColumnMapping
+from evidently.v2.test_suite import TestSuite
+from evidently.v2.tests import *
+
+from evidently.v2.test_preset import NoTargetPerformance, DataQuality, DataStability, DataDrift
+
+dataset_tests = TestSuite(tests=[
+    TestNumberOfColumns(),
+    TestNumberOfRows(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestColumnsType(),
+    TestTargetFeaturesCorrelations(),
+    TestHighlyCorrelatedFeatures(),
+    TestShareOfDriftedFeatures() ,
+    TestNumberOfDriftedFeatures(),
+])
+
+dataset_tests.run(reference_data=ref, current_data=curr)
+
+feature_level_tests = TestSuite(tests=[
+    TestMeanInNSigmas(column_name='hours-per-week'),
+    TestShareOfOutRangeValues(column_name='hours-per-week'),
+    TestColumnNANShare(column_name='education'),
+    TestFeatureValueDrift(column_name='education')
+])
+
+feature_level_tests.run(reference_data=ref, current_data=curr)
+
+    # Add visualisations for metrics
+    dataset_tests.visualize(column_mapping=column_mapping)
+    feature_level_tests.visualize(column_mapping=column_mapping)
+    ```

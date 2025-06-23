@@ -1,0 +1,70 @@
+```python
+    import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import NumTargetDrift
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataQuality, DataStability
+from evidently.tests import *
+data_stability = TestSuite(tests=[
+    DataStability(),
+])
+
+data_stability.run(reference_data=reference, current_data=current)
+data_stability
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithNulls(),
+    TestNumberOfRowsWithNulls(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplicatedRows(),
+    TestNumberOfDuplicatedColumns(),
+    TestColumnsType(),
+    TestNumberOfDriftedFeatures(), 
+])
+
+tests.run(reference_data=reference, current_data=current)
+
+#show HTML
+tests
+#get JSON
+tests.json()
+
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Add missing imports (#403)"
+    Original Code Cells:
+    '''
+    import pandas as pd
+import numpy as np
+
+from sklearn.datasets import fetch_california_housing
+
+from evidently import ColumnMapping
+
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
+from evidently.metric_preset import NumTargetDrift
+
+from evidently.test_suite import TestSuite
+from evidently.test_preset import DataQuality, DataStability
+from evidently.tests import *
+data_stability = TestSuite(tests=[
+    DataStability(),
+])
+
+data_stability.run(reference_data=reference, current_data=current)
+data_stability
+tests = TestSuite(tests=[
+    TestNumberOfColumnsWithNulls(),
+    TestNumberOfRowsWithNulls(),
+    TestNumberOfConstantColumns(),
+    TestNumberOfDuplic

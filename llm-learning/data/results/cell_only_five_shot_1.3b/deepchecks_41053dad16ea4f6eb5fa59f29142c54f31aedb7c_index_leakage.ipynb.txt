@@ -1,0 +1,24 @@
+```python
+    from deepchecks.base import Dataset
+    from deepchecks.checks import IndexTrainTestLeakage
+    import pandas as pd
+    %load_ext autoreload
+    %autoreload 2
+
+    def dataset_from_dict(d: dict, index_name: str = None) -> Dataset:
+        dataframe = pd.DataFrame(data=d)
+        return Dataset(dataframe, index=index_name)
+
+    # Update dataset properties
+    dataset = dataset_from_dict({"A": [1, 2, 3, 4, 5], "B": [1, 2, 3, 4, 5]}, index_name="id")
+    print(dataset)
+
+    # Adding a check
+    check = IndexTrainTestLeakage(train_data=dataset.train_data, test_data=dataset.test_data)
+    result = check.run()
+    print(result)
+
+    # Update dataset properties
+    dataset.update_properties(check_result=result)
+    print(dataset)
+    ```

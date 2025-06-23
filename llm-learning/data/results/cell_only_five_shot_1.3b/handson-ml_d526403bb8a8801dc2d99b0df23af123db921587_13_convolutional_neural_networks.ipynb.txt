@@ -1,0 +1,36 @@
+
+The code you provided is already using TensorFlow 1.0.0. TensorFlow 1.0.0 is the latest version and it's backward-compatible with TensorFlow 0.9.0. 
+
+If you want to upgrade your notebooks to TensorFlow 1.0.0, you can simply replace the import statements and the code inside the cell with the code from TensorFlow 1.0.0. 
+
+Here is the updated code:
+
+```python
+import os
+import sys
+import tarfile
+import urllib.request
+
+TF_MODELS_URL = "http://download.tensorflow.org/models"
+INCEPTION_V3_URL = TF_MODELS_URL + "/inception_v3_2016_08_28.tar.gz"
+INCEPTION_PATH = os.path.join("datasets", "inception")
+INCEPTION_V3_CHECKPOINT_PATH = os.path.join(INCEPTION_PATH, "inception_v3.ckpt")
+
+def download_progress(count, block_size, total_size):
+    percent = count * block_size * 100 // total_size
+    sys.stdout.write("\rDownloading: {}%".format(percent))
+    sys.stdout.flush()
+
+def fetch_pretrained_inception_v3(url=INCEPTION_V3_URL, path=INCEPTION_PATH):
+    if os.path.exists(INCEPTION_V3_CHECKPOINT_PATH):
+        return
+    os.makedirs(path, exist_ok=True)
+    tgz_path = os.path.join(path, "inception_v3.tgz")
+    urllib.request.urlretrieve(url, tgz_path, reporthook=download_progress)
+    inception_tgz = tarfile.open(tgz_path)
+    inception_tgz.extractall(path=path)
+    inception_tgz.close()
+    os.remove(tgz_path)
+
+import tensorflow as tf
+from nets.inception_v3 import inception

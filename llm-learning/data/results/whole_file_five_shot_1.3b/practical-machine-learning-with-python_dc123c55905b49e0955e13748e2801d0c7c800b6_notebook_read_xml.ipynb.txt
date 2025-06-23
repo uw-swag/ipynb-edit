@@ -1,0 +1,32 @@
+
+    The code you provided is already clean and does not contain any unnecessary or redundant lines. The function `read_xml` and `read_xml2dict_xml` are well-written and do not contain any unnecessary operations. However, if you want to remove the unnecessary lines, you can do so by commenting them out or removing them.
+
+    Here is the code without the unnecessary lines:
+
+    ```python
+    def read_xml(file_name):
+        try:
+            tree = ET.parse(file_name)
+            root = tree.getroot()
+            print("Root tag:{0}".format(root.tag))
+            print("Attributes of Root:: {0}".format(root.attrib))
+            print_xml_tree(root)
+        except IOError:
+            raise IOError("File path incorrect/ File not found")
+        except Exception:
+            raise
+
+    def read_xml2dict_xml(file_name):
+        try:
+            xml_filedata = open(file_name).read() 
+            ordered_dict = xmltodict.parse(xml_filedata)
+            print_nested_dicts(ordered_dict)
+        except IOError:
+            raise IOError("File path incorrect/ File not found")
+        except ValueError:
+            ValueError("XML file has errors")
+        except Exception:
+            raise 
+    ```
+
+    Please note that the `read_xml2dict_xml` function is not used in the provided code. If you want to use it, you need to define it according to your needs.

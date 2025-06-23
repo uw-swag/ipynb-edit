@@ -1,0 +1,20 @@
+```
+    bs, size = 64, 384
+
+    pneumonia = DataBlock(blocks=(ImageBlock(), CategoryBlock), 
+                         get_items=partial(get_image_files, folders=['train', 'val']), 
+                         get_y=parent_label, 
+                         splitter=RandomSplitter(valid_pct=0.05), 
+                         item_tfms=RandomResizedCrop(size, min_scale=0.9), 
+                         batch_tfms=[
+                             *aug_transforms(min_scale=0.9, max_scale=1.0, min_translate=0.0, max_translate=0.0,
+                                             rotate=True, flip_vert=False, flip_horz=True,
+                                             rescale=None, rescale_mode='divideonly', do_random_flip=True),
+                             Normalize.from_stats(*imagenet_stats)
+                         ]
+                         )
+    # pneumonia.summary(path/'chest_xray')
+    dls = pneumonia.dataloaders(path/'chest_xray', bs=bs)
+    ```
+
+    This code adjusts the Data Augmentation to only resize and no crop. The `RandomResizedCrop` transform is used to resize the image, but it does not crop the image. The `aug_transforms` function is used to apply a list of augmentation transformations to the image. The `min_scale` and `max_scale` parameters of `RandomResizedCrop` determine the range of the random cropping.

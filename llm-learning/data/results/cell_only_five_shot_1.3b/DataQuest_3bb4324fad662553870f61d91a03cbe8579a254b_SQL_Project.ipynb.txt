@@ -1,0 +1,40 @@
+
+    ## Step 1: Create a new table for the normalized data
+    normalized_data = pd.DataFrame(index=df.index)
+
+    ## Step 2: Normalize the data
+    for column in df.columns:
+        if df[column].dtype != 'O':
+            normalized_data[column] = (df[column] - df[column].min()) / (df[column].max() - df[column].min())
+        else:
+            normalized_data[column] = df[column]
+
+    ## Step 3: Create a new table for the table relations
+    table_relations = pd.DataFrame(index=normalized_data.index)
+
+    ## Step 4: Create a function to calculate table relations
+    def calculate_table_relation(df, column1, column2):
+        return df[column1].corr(df[column2])
+
+    ## Step 5: Calculate table relations
+    for column1 in normalized_data.columns:
+        for column2 in normalized_data.columns:
+            if column1 != column2:
+                table_relation = calculate_table_relation(normalized_data, column1, column2)
+                table_relations[column1 + '_' + column2] = table_relation
+
+    ## Step 6: Print the table relations
+    print(table_relations)
+
+    ## Step 7: Normalize the table relations
+    normalized_table_relations = (table_relations - table_relations.min()) / (table_relations.max() - table_relations.min())
+
+    ## Step 8: Print the normalized table relations
+    print(normalized_table_relations)
+
+    ## Step 9: Create a new table for the normalized table relations
+    normalized_table_relations_df = pd.DataFrame(index=normalized_table_relations.index)
+
+    ## Step 10: Normalize the normalized table relations
+    for column in normalized_table_relations.columns:
+        normalized_table_relations_df[column] = (normalized_table_relations[column] - normalized_table_relations[column].min()) / (normalized_table_relations[column].

@@ -1,0 +1,61 @@
+```python
+    <Cell_0>
+    # Checking for duplicates
+    duplicates = train_df.duplicated()
+    print(duplicates.sum())
+
+    # Removing duplicates
+    train_df.drop_duplicates(inplace=True)
+    print(train_df.shape)
+    <\Cell_0>
+    ```
+
+    ### Instruction:
+    [
+    Commit Message: "Data Cleaning and Preprocessing"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    ```python
+    <Cell_0>
+    # Checking for missing values
+    print(train_df.isnull().sum())
+
+    # Filling missing values
+    train_df.fillna(method='ffill', inplace=True)
+
+    # Checking for duplicates
+    duplicates = train_df.duplicated()
+    print(duplicates.sum())
+
+    # Removing duplicates
+    train_df.drop_duplicates(inplace=True)
+
+    # Checking for outliers
+    for col in train_df.columns:
+        plt.figure(figsize=(10,4))
+        plt.title(f'{col} distribution')
+        plt.hist(train_df[col], bins=30, color='c')
+        plt.show()
+
+    # Removing outliers
+    # Here, we'll remove the outliers in 'cont1' column
+    train_df = train_df[(np.abs(stats.zscore(train_df['cont1'])) < 3).all(axis=1)]
+
+    # Checking for duplicates
+    duplicates = train_df.duplicated()
+    print(duplicates.sum())
+
+    # Removing duplicates
+    train_df.drop_duplicates(inplace=True)
+
+    # Checking for duplicates in test data
+    duplicates = test_df.duplicated()
+    print(duplicates.sum())
+
+    # Removing duplicates in test data
+    test_df.drop_duplicates(inplace=

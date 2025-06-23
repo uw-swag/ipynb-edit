@@ -1,0 +1,27 @@
+```
+    <Cell_0>
+import pandas as pd
+<\Cell_0>
+<Cell_1>
+from mlchecks import CheckSuite
+from mlchecks.checks import *
+
+suite = CheckSuite('My Single Suite',
+    IsSingleValue(),
+    MixedNulls(),
+    MixedTypes(),
+    StringMismatch()
+)
+<\Cell_1>
+<Cell_2>
+from sklearn.datasets import load_iris
+
+df = load_iris(return_X_y=False, as_frame=True)
+df = pd.concat([df.data, df.target], axis=1)
+
+train = df[:100]
+val = df[100:]
+
+suite.run(train_dataset=train, validation_dataset=val, check_datasets_policy='both')
+<\Cell_2>
+```

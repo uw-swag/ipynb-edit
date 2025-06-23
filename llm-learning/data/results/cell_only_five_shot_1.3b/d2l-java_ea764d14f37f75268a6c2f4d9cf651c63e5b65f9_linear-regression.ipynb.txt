@@ -1,0 +1,17 @@
+```python
+    # Cleaning up files
+    import os
+    import glob
+
+    # Get a list of all files in the current directory
+    files = glob.glob("*")
+
+    # Loop through each file
+    for file in files:
+        # If the file is a directory, remove it
+        if os.path.isdir(file):
+            os.rmdir(file)
+        else:
+            # If the file is a regular file, remove it
+            os.remove(file)
+    ```

@@ -1,0 +1,28 @@
+```python
+    from keras.callbacks import Callback
+
+    class MyCallback(Callback):
+        def on_epoch_end(self, epoch, logs=None):
+            if logs is not None and logs['loss'] < 0.01:
+                print('\nLoss is lower than 0.01, ending training.')
+                self.model.stop_training = True
+
+    learn = keras_rl.keras_rl.SARSA(
+        model=model,
+        nb_steps=10000,
+        callbacks=[MyCallback()],
+        max_steps=10000,
+        time_horizon=1,
+        gamma=0.99,
+        lr=slice(3e-4),
+        target_model_update_freq=1e3,
+        policy_kwargs=dict(
+            features_extractor_class=features_extractor,
+            features_extractor_kwargs=dict(
+                model=model,
+                nb_filters=32,
+                size=(3, 3)
+            )
+        )
+    )
+    ```

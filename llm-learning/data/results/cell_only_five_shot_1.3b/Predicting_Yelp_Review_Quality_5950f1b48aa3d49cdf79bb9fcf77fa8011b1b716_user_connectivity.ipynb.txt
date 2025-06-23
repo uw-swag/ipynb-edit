@@ -1,0 +1,47 @@
+```python
+    import pandas as pd
+    import psycopg2
+    from sqlalchemy import create_engine
+
+    # Connect to your postgres DB
+    conn = psycopg2.connect(
+        dbname="your_dbname",
+        user="your_username",
+        password="your_password",
+        host="your_host"
+    )
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    # Execute SQL command to create user_friends table
+    cur.execute("""
+        CREATE TABLE user_friends (
+            user_id INT,
+            friend_id INT
+        )
+    """)
+
+    # Execute SQL command to create checkins_expanded table
+    cur.execute("""
+        CREATE TABLE checkins_expanded (
+            id INT PRIMARY KEY,
+            user_id INT,
+            latitude FLOAT,
+            longitude FLOAT,
+            checkin_text TEXT,
+            checkin_date TIMESTAMP
+        )
+    """)
+
+    # Commit the transaction
+    conn.commit()
+
+    # Close the cursor and connection
+    cur.close()
+    conn.close()
+    ```
+
+    This script connects to a PostgreSQL database, creates two tables: `user_friends` and `checkins_expanded`, and commits the changes. Please replace `"your_dbname"`, `"your_username"`, `"your_password"`, and `"your_host"` with your actual PostgreSQL database credentials.
+
+    Please note that this is a simple example and may not work as expected in a real-world scenario. You may need to adjust the SQL commands to match your actual database schema.

@@ -1,0 +1,23 @@
+```python
+    def _anderson_stat_test(reference_data: pd.Series, current_data: pd.Series, threshold: float):
+        p_value = anderson_ksamp(np.array([reference_data, current_data]))[2]
+        return p_value, p_value < threshold
+
+    anderson_stat_test = StatTest(
+        name="anderson",
+        display_name="Anderson test (p_value)",
+        func=_anderson_stat_test,
+        allowed_feature_types=["num"]
+    )
+    ```
+
+    The `_anderson_stat_test` function is a wrapper around the `anderson_ksamp` function from the `scipy.stats` module. It calculates the p-value of the Anderson-Darling test, which is a non-parametric test for the equality of two or more distributions.
+
+    The `anderson_stat_test` object is a `StatTest` object that is registered with the `StatTestRegistry`. The `name`, `display_name`, `func`, and `allowed_feature_types` attributes of the `anderson_stat_test` object are set as follows:
+
+    - `name`: The name of the test, which is "anderson".
+    - `display_name`: The display name of the test, which is "Anderson test (p_value)".
+    - `func`: The function that performs the test, which is `_anderson_stat_test`.
+    - `allowed_feature_types`: A list of feature types that are allowed in the `reference_data` and `current_data` parameters of the `_anderson_stat_test` function. The list contains "num" which means that the data types of `reference_data` and `current_data` should be numeric.
+
+    The `anderson_stat_test` object can be used to perform the Anderson-Darling test on two data series. The function `_anderson_stat_test` takes as input the two data series and a threshold, and returns a tuple of the p-value and a boolean indicating whether the p-value is less than the threshold.

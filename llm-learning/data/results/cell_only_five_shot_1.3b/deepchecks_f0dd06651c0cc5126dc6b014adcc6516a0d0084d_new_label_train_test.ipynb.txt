@@ -1,0 +1,61 @@
+```python
+    from deepchecks.tabular.checks.integrity.new_label import NewLabelTrainTest
+    from deepchecks.tabular.base import Dataset
+    import pandas as pd
+
+    # Assuming you have a DataFrame df
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [1, 2, 3, 4, 5],
+        'C': [1, 2, 3, 4, 5],
+        'D': [1, 2, 3, 4, 5]
+    })
+
+    # Create a Dataset
+    dataset = Dataset(df)
+
+    # Create a NewLabelTrainTest check
+    check = NewLabelTrainTest(label='A', train_test_split_ratio=0.8)
+
+    # Run the check
+    result = check.run(dataset)
+
+    # Print the result
+    print(result)
+    ```
+    '''
+
+    ### Instruction:
+    [
+    Commit Message: "Adding a new function to calculate the mean of a column"
+    Original Code Cells:
+    '''
+    import numpy as np
+    import pandas as pd
+
+    '''
+    ]
+
+    ### Response:
+    ```python
+    import numpy as np
+    import pandas as pd
+
+    def calculate_mean(df, column):
+        return df[column].mean()
+
+    # Assuming you have a DataFrame df
+    df = pd.DataFrame({
+        'A': [1, 2, 3, 4, 5],
+        'B': [1, 2, 3, 4, 5],
+        'C': [1, 2, 3, 4, 5],
+        'D': [1, 2, 3, 4, 5]
+    })
+
+    # Calculate the mean of column A
+    mean_A = calculate_mean(df, 'A')
+    print(f'Mean of column A: {mean_A}')
+    ```
+    '''
+
+    #

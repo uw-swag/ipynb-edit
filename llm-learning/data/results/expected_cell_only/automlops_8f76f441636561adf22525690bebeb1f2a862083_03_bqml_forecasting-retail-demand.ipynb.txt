@@ -1,0 +1,34 @@
+df_actual_90d.sort_values(by=['product_id', 'date'], inplace=True)
+df_actual_90d.reset_index(drop=True, inplace=True)
+dfforecast.sort_values(by=['product_id', 'forecast_timestamp'], inplace=True)
+dfforecast.reset_index(drop=True, inplace=True)
+errors = {'product_id': [], 'MAE': [], 'MAPE': [], 'MSE': [], 'RMSE': []}
+for i in product_id_list:
+    mae = mean_absolute_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+    )
+    mape = mean_absolute_percentage_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+    )
+
+    mse = mean_squared_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+        squared=True,
+    )
+
+    rmse = mean_squared_error(
+        df_actual_90d[df_actual_90d['product_id'] == i]['sales_count'],
+        dfforecast[dfforecast['product_id'] == i]['forecast_value_rnd'],
+        squared=False,
+    )
+
+    errors['product_id'].append(i)
+    errors['MAE'].append(mae)
+    errors['MAPE'].append(mape)
+    errors['MSE'].append(mse)
+    errors['RMSE'].append(rmse)
+errors = pd.DataFrame(errors)
+errors

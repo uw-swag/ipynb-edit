@@ -1,0 +1,32 @@
+```python
+    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis as LDA
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, matthews_corrcoef, cohen_kappa_score
+
+    def SVM(train_dat, train_ind, test_dat, test_ind, results):
+        svm = SVC(probability=True)
+        svm.fit(train_dat, train_ind)
+        pred = svm.predict(test_dat)
+        results.loc['SVM'] = [accuracy_score(test_ind, pred), 
+                               recall_score(test_ind, pred), 
+                               precision_score(test_ind, pred), 
+                               f1_score(test_ind, pred), 
+                               matthews_corrcoef(test_ind, pred), 
+                               cohen_kappa_score(test_ind, pred)]
+
+    def KNN(train_dat, train_ind, test_dat, test_ind, knn_neighbors, results):
+        knn = KNeighborsClassifier(n_neighbors=knn_neighbors)
+        knn.fit(train_dat, train_ind)
+        pred = knn.predict(test_dat)
+        results.loc['KNN'] = [accuracy_score(test_ind, pred), 
+                               recall_score(test_ind, pred), 
+                               precision_score(test_ind, pred), 
+                               f1_score(test_ind, pred), 
+                               matthews_corrcoef(test_ind, pred), 
+                               cohen_kappa_score(test_ind, pred)]
+
+    def NaiveBayes(train_dat, train_ind, test_dat, test_ind, results):
+        gnb = GaussianNB()
+        gnb.fit(train_dat, train_ind)
+        pred = gnb.predict(test_dat)
+        results.loc['NaiveBayes'] = [accuracy_score(test_ind, pred),

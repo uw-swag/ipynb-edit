@@ -1,0 +1,30 @@
+```
+    from deepchecks import Dataset
+from deepchecks.checks.methodology.boosting_overfit import BoostingOverfit
+
+train_ds = Dataset(train_df, label='target')
+validation_ds = Dataset(val_df, label='target')
+
+# Split the dataset into train and validation
+train_ds, validation_ds = train_ds.split(0.8)
+
+# Create a BoostingOverfit check
+bof_check = BoostingOverfit(train_ds, validation_ds)
+
+# Run the check
+bof_check.run()
+    ```
+
+    The above code splits the dataset into 80% for training and 20% for validation. Then, it creates a BoostingOverfit check and runs it on the training dataset.
+
+    The `BoostingOverfit` check is a methodology check that measures the overfitting in a boosting model. It measures the model's ability to make accurate predictions on unseen data.
+
+    The `run` method of the `BoostingOverfit` check returns a report of the check. This report includes the model's performance on the training and validation datasets, and the number of trees used.
+
+    The `split` method of the `Dataset` class is used to split the dataset into a training set and a validation set. The split is done randomly, but you can also use other methods to split the dataset.
+
+    The `Dataset` class is a high-level interface for working with datasets. It provides methods for loading data, performing transformations, and splitting the data.
+
+    The `deepchecks` package is a collection of customizable, reusable, and scalable checks for deep learning and data science.
+
+    The `BoostingOverfit` check is part of the `deepchecks` package.

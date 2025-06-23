@@ -1,0 +1,17 @@
+```python
+    from sklearn.model_selection import cross_val_score
+
+    scores = cross_val_score(svm_clf, X_train, y_train, cv=10)
+    scores.mean()
+    from sklearn.ensemble import RandomForestClassifier
+
+    forest_clf = RandomForestClassifier(random_state=42)
+    scores = cross_val_score(forest_clf, X_train, y_train, cv=10)
+    scores.mean()
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    sns.boxplot(data=scores)
+    plt.show()
+    ```

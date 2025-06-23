@@ -1,0 +1,34 @@
+```python
+    import numpy as np
+    import matplotlib.pyplot as plt
+    %matplotlib inline
+
+    # Create a 2D grid
+    size = 100
+    dx = 2. / size
+    x = np.linspace(0, 2, size)
+
+    # Create a function
+    def f(x):
+        return np.sin(x)
+
+    # Create a function
+    def g(x):
+        return np.cos(x)
+
+    # Create a function
+    def h(x):
+        return np.sin(x) + np.cos(x)
+
+    # Plot the functions
+    plt.figure(figsize=(10, 5))
+    plt.plot(x, f(x), label='sin(x)')
+    plt.plot(x, g(x), label='cos(x)')
+    plt.plot(x, h(x), label='sin(x) + cos(x)')
+    plt.legend()
+    plt.xlabel('x')
+    plt.ylabel('f(x)')
+    plt.title('Plot of the functions f(x), g(x), and h(x)')
+    plt.grid(True)
+    plt.show()
+    ```

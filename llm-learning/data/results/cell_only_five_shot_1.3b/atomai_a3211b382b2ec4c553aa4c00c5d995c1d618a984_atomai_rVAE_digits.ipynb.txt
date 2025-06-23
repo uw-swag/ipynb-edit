@@ -1,0 +1,35 @@
+
+    '''
+    #@title Image creation
+
+    #@markdown `batch_name`: name for subfolder and filenames<br>
+    #@markdown `width_height`: image dimensions<br>
+    #@markdown `guidance_scale`: strength of text prompt<br>
+    #@markdown `steps`: number of diffusion steps<br>
+    #@markdown `num_batch_images`: how many images you want to generate in this batch<br>
+    #@markdown `sampler`: KLMS is recommended<br>
+    #@markdown `ddim_eta`: scale of variance from 0.0 to 1.0<br>
+    #@markdown `seed`: use -1 for random seed or specify number manually<br>
+    #@markdown `init_image_or_folder`: url or path to an image, or path to a folder to pick random images from<br>
+    #@markdown `init_strength`: from 0.0 to 1.0 how much the init image is used<br>
+
+    #@markdown 
+
+    #@markdown Batch settings
+    from pathlib import Path
+    outputs_path = Path.home() / 'Documents/generated_data/stable_diffusion'
+    batch_name = "" #@param {type:"string"}
+    width_height = [512, 512] #@param{type: 'raw'}
+    guidance_scale = 7.5 #@param {type:"number"}
+    steps = 100 #@param {type:"integer"}
+    samples_per_batch = 1 # not exposed, you can do 2 or more based on GPU ram, if get CUDA out of memory need to restart runtime
+    num_batch_images = 5 #@param {type:"integer"}
+    sampler = 'klms' #@param ["klms","plms", "ddim"]
+    ddim_eta = 0.75 #@param {type:"number"}
+    seed = -1 #@param {type:"integer"}
+
+    #@markdown 
+
+    #@markdown Init image
+
+    init_image_or_folder

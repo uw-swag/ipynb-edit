@@ -1,0 +1,14 @@
+```python
+    from pyspark.ml.feature import Factorizer
+
+    # Factorize the categorical features
+    factorizer = Factorizer(inputCol="categorical_column", outputCol="factored_column")
+    factorized_housing_cat = factorizer.transform(housing_cat)
+
+    # Now, let's select the numerical features and the factored features
+    selected_housing_num = housing_num.select("numerical_column")
+    selected_housing_factored = factorized_housing_cat.select("factored_column")
+
+    # Concatenate the numerical and factored features
+    selected_housing = selected_housing_num.join(selected_housing_factored, "index_equal")
+    ```

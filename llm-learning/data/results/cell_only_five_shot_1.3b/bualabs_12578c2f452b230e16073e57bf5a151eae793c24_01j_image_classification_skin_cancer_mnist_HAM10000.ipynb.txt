@@ -1,0 +1,24 @@
+```python
+    # Colab
+
+    ! pip install kaggle --upgrade -q
+    ! pip install fastai2 -q
+    from fastai2.basics import *
+    from fastai2.vision.all import *
+    from fastai2.callback.all import *
+    from fastai2.callback.focal import FocalLoss
+    learn = cnn_learner(dls, resnet50, pretrained=True, metrics=error_rate).to_fp16()
+    learn = Learner(dls, xresnet50(n_out=7), metrics=error_rate, 
+                    loss_func=FocalLoss(alpha=.25, n_classes=7), 
+                    cbs=[ShowGraphCallback, CutMix(alpha=1.)], 
+                    ).to_fp16()
+    learn.show_results()
+    ```
+
+    The FocalLoss function is used in the code above. It is a loss function that is used in the Focal Loss for multi-class classification. The alpha parameter is the focusing parameter, and n_classes is the number of classes.
+
+    The FocalLoss function is a modification of the standard cross-entropy loss function, but it is designed to give more weight to the wrong predictions, which can be useful in cases where the classes are imbalanced.
+
+    The CutMix is a data augmentation technique that is used to increase the diversity of the training set. It works by randomly selecting a small part of a sample and mixing it with a larger part of the sample.
+
+    The code above changes the loss function to FocalLoss and the data augmentation technique to CutMix.

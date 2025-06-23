@@ -1,0 +1,289 @@
+<Cell_0>
+try:
+    import evidently
+except:
+    !pip install git+https://github.com/evidentlyai/evidently.git
+<\Cell_0>
+<Cell_1>
+import datetime
+import pandas as pd
+import numpy as np
+import requests
+import zipfile
+import io
+import json
+
+from sklearn import datasets, ensemble, model_selection
+from scipy.stats import anderson_ksamp
+
+from evidently.metrics import RegressionQualityMetric, RegressionErrorPlot, RegressionErrorDistribution
+from evidently.metric_preset import DataDriftPreset, RegressionPreset
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.report import Report
+<\Cell_1>
+<Cell_2>
+import warnings
+warnings.filterwarnings('ignore')
+warnings.simplefilter('ignore')
+<\Cell_2>
+<Cell_3>
+content = requests.get("https://archive.ics.uci.edu/static/public/275/bike+sharing+dataset.zip", verify=False).content
+with zipfile.ZipFile(io.BytesIO(content)) as arc:
+    raw_data = pd.read_csv(arc.open("hour.csv"), header=0, sep=',', parse_dates=['dteday']) 
+<\Cell_3>
+<Cell_4>
+raw_data.index = raw_data.apply(lambda row: datetime.datetime.combine(row.dteday.date(), datetime.time(row.hr)),
+                                axis=1)
+<\Cell_4>
+<Cell_5>
+raw_data.head()
+<\Cell_5>
+<Cell_6>
+target = 'cnt'
+prediction = 'prediction'
+numerical_features = ['temp', 'atemp', 'hum', 'windspeed', 'mnth', 'hr', 'weekday']
+categorical_features = ['season', 'holiday', 'workingday', ]#'weathersit']
+<\Cell_6>
+<Cell_7>
+reference = raw_data.loc['2011-01-01 00:00:00':'2011-01-28 23:00:00']
+current = raw_data.loc['2011-01-29 00:00:00':'2011-02-28 23:00:00']
+<\Cell_7>
+<Cell_8>
+X_train, X_test, y_train, y_test = model_selection.train_test_split(
+    reference[numerical_features + categorical_features],
+    reference[target],
+    test_size=0.3
+)
+<\Cell_8>
+<Cell_9>
+regressor = ensemble.RandomForestRegressor(random_state = 0, n_estimators = 50)
+<\Cell_9>
+<Cell_10>
+regressor.fit(X_train, y_train)
+<\Cell_10>
+<Cell_11>
+preds_train = regressor.predict(X_train)
+preds_test = regressor.predict(X_test)
+<\Cell_11>
+<Cell_12>
+X_train['target'] = y_train
+X_train['prediction'] = preds_train
+
+X_test['target'] = y_test
+X_test['prediction'] = preds_test
+<\Cell_12>
+<Cell_13>
+column_mapping = ColumnMapping()
+
+column_mapping.target = 'target'
+column_mapping.prediction = 'prediction'
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+<\Cell_13>
+<Cell_14>
+regression_performance_report = Report(metrics=[
+    RegressionPreset(),
+])
+
+regression_performance_report.run(reference_data=X_train.sort_index(), current_data=X_test.sort_index(),
+                                  column_mapping=column_mapping)
+regression_performance_report
+<\Cell_14>
+<Cell_15>
+regressor.fit(reference[numerical_features + categorical_features], reference[target])
+<\Cell_15>
+<Cell_16>
+column_mapping = ColumnMapping()
+
+column_mapping.target = target
+column_mapping.prediction = prediction
+column_mapping.numerical_features = numerical_features
+column_mapping.categorical_features = categorical_features
+<\Cell_16>
+<Cell_17>
+ref_prediction = regressor.predict(reference[numerical_features + categorical_features])
+reference['prediction'] = ref_prediction
+<\Cell_17>
+<Cell_18>
+regression_performance_report = Report(metrics=[
+    RegressionPreset(),
+])
+
+regression_performance_report.run(reference_data=None, current_data=reference,
+                                  column_mapping=column_mapping)
+regression_performance_report
+<\Cell_18>
+<Cell_19>
+current_prediction = regressor.predict(current[numerical_features + categorical_features])
+current['prediction'] = current_prediction
+<\Cell_19>
+<Cell_20>
+regression_performance_report.run(reference_data=reference, current_data=current.loc['2011-01-29 00:00:00':'2011-02-07 23:00:00'],
+                                  column_mapping=column_mapping)
+regression_performance_report
+<\Cell_20>
+<Cell_21>
+regression_performance_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution()
+])
+
+regression_performance_report.run(reference_data=reference, current_data=current.loc['2011-02-07 00:00:00':'2011-02-14 23:00:00'], 
+                                            column_mapping=column_mapping)
+regression_performance_report.show()
+<\Cell_21>
+<Cell_22>
+regression_performance_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution()
+])
+
+regression_performance_report.run(reference_data=reference, current_data=current.loc['2011-02-15 00:00:00':'2011-02-21 23:00:00'], 
+                                            column_mapping=column_mapping)
+regression_performance_report.show()
+<\Cell_22>
+<Cell_23>
+column_mapping_drift = ColumnMapping()
+
+column_mapping_drift.target = target
+column_mapping_drift.prediction = prediction
+column_mapping_drift.numerical_features = numerical_features
+column_mapping_drift.categorical_features = []
+<\Cell_23>
+<Cell_24>
+data_drift_report = Report(metrics=[
+    DataDriftPreset(),
+])
+
+data_drift_report.run(
+    reference_data=reference,
+    current_data=current.loc['2011-02-14 00:00:00':'2011-02-21 23:00:00'],
+    column_mapping=column_mapping_drift,
+)
+data_drift_report
+<\Cell_24>
+<Cell_25>
+from evidently.core import ColumnType
+from evidently.calculations.stattests import StatTest, register_stattest
+
+def _anderson_stat_test(reference_data: pd.Series, current_data: pd.Series, feature_type: ColumnType, threshold: float):
+    p_value = anderson_ksamp([reference_data, current_data])[2]
+    return p_value, p_value < threshold
+
+anderson_stat_test = StatTest(
+    name="anderson",
+    display_name="Anderson test (p_value)",
+    allowed_feature_types=[ColumnType.Numerical]
+)
+
+register_stattest(anderson_stat_test, default_impl=_anderson_stat_test)
+# options = DataDriftOptions(feature_stattest_func=anderson_stat_test, all_features_threshold=0.9, nbinsx=20)
+<\Cell_25>
+<Cell_26>
+the_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution(),
+    DataDriftPreset(stattest=anderson_stat_test, stattest_threshold=0.9),
+])
+
+
+the_report.run(
+    reference_data=reference,
+    current_data=current.loc['2011-02-14 00:00:00':'2011-02-21 23:00:00'], 
+    column_mapping=column_mapping_drift
+)
+the_report
+<\Cell_26>
+<Cell_27>
+try:
+    import mlflow
+except:
+    !pip install mlflow
+<\Cell_27>
+<Cell_28>
+import mlflow
+#import mlflow.sklearn
+from mlflow.tracking import MlflowClient
+<\Cell_28>
+<Cell_29>
+experiment_batches = [
+    ('2011-01-29 00:00:00','2011-02-07 23:00:00'),
+    ('2011-02-07 00:00:00','2011-02-14 23:00:00'),
+    ('2011-02-15 00:00:00','2011-02-21 23:00:00'),  
+]
+<\Cell_29>
+<Cell_30>
+the_report = Report(metrics=[
+    RegressionQualityMetric(),
+    RegressionErrorPlot(),
+    RegressionErrorDistribution(),
+    DataDriftPreset(stattest=anderson_stat_test, stattest_threshold=0.9),
+])
+
+the_report.run(
+    reference_data=reference, 
+    current_data=current.loc[experiment_batches[0][0]:experiment_batches[0][1]],
+    column_mapping=column_mapping_drift
+)
+<\Cell_30>
+<Cell_31>
+logged_json = json.loads(the_report.json())
+<\Cell_31>
+<Cell_32>
+logged_json
+<\Cell_32>
+<Cell_33>
+[x['metric'] for x in logged_json['metrics']]
+<\Cell_33>
+<Cell_34>
+logged_json['metrics'][0]['result']['current']['mean_error']
+<\Cell_34>
+<Cell_35>
+logged_json['metrics'][3]['result']['drift_share']
+<\Cell_35>
+<Cell_36>
+#log into MLflow
+client = MlflowClient()
+
+#set experiment
+mlflow.set_experiment('Model Quality Evaluation')
+
+#start new run
+for date in experiment_batches:
+    with mlflow.start_run() as run: #inside brackets run_name='test'
+        
+        # Log parameters
+        mlflow.log_param("begin", date[0])
+        mlflow.log_param("end", date[1])
+
+        # Get metrics
+        the_report = Report(metrics=[
+            RegressionQualityMetric(),
+            RegressionErrorPlot(),
+            RegressionErrorDistribution(),
+            DataDriftPreset(stattest=anderson_stat_test, stattest_threshold=0.9),
+        ])
+        the_report.run(
+            reference_data=reference, 
+            current_data=current.loc[date[0]:date[1]],
+            column_mapping=column_mapping_drift)
+        logged_json = json.loads(the_report.json())
+        
+        me = logged_json['metrics'][0]['result']['current']['mean_error']
+        mae = logged_json['metrics'][0]['result']['current']["mean_abs_error"]
+        drift_share = logged_json['metrics'][3]['result']['drift_share']
+        
+        # Log metrics
+        mlflow.log_metric('me', round(me, 3))
+        mlflow.log_metric('mae', round(mae, 3))
+        mlflow.log_metric('drift_share', round(drift_share, 3))
+
+        print(run.info)
+<\Cell_36>
+<Cell_37>
+#run MLflow UI (NOT recommended! It will be more convinient to run it directly from the TERMINAL)
+#!mlflow ui
+<\Cell_37>

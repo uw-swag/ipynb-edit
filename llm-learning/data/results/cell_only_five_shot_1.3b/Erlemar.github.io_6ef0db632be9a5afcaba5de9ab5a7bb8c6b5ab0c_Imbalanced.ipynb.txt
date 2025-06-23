@@ -1,0 +1,31 @@
+```
+    # Libraries.
+    import pandas as pd
+    import numpy as np
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.calibration import CalibratedClassifierCV
+    from sklearn.model_selection import StratifiedKFold, train_test_split, GridSearchCV
+    from sklearn.metrics import classification_report
+    # Reading data.
+    data = pd.read_csv('/file.csv')
+    # Data for model. Employee_id is useless.
+    X_train = data.drop(['fired', 'employee_id'], axis=1)
+    Y_train = data.fired
+    # Splitting data with stratification to keep proportion of classes.
+    Xtrain, Xtest, ytrain, ytest = train_test_split(X_train, Y_train, test_size=0.20, stratify = Y_train)
+    
+    def optimal_threshold(do):
+        threshold = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+        f1 = []
+        for j in range(len(threshold)):
+            y_threshold = np.zeros(ytest.shape).astype(int)
+            for i in range(len(y_val)):
+                if y_val[i][1] > threshold[j]:
+                    y_threshold[i] = 1
+            f1.append(classification_report(ytest, y_threshold, target_names=['0', '1'], digits=4).split()[19])
+        if do == 'print':
+            print('Maximum value of F1-score is {0} with threshold {1}.'.format(max(f1), threshold[f1.index(max(f1))]))
+        elif do == 'calc':
+            return max(f1)
+    ```
+    The code has been refactored to make it more readable and maintainable. The function `optimal_threshold`

@@ -1,0 +1,46 @@
+
+    ### Instruction:
+    [
+    Commit Message: "Added mixup and label smoothing."
+    Original Code Cells:
+    '''
+    import numpy as np
+    import torch
+    import torch.nn as nn
+    import torch.optim as optim
+    from torch.autograd import Variable
+
+    class Net(nn.Module):
+        def __init__(self):
+            super(Net, self).__init__()
+            self.fc1 = nn.Linear(10, 10)
+            self.fc2 = nn.Linear(10, 10)
+
+        def forward(self, x):
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            return x
+
+    net = Net()
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+    ### Instruction:
+    [
+    Commit Message: "Added mixup and label smoothing."
+    Original Code Cells:
+    '''
+    # Generate some dummy data
+    from sklearn.datasets import make_classification
+    X, y = make_classification(n_samples=1000, n_features=20, n_informative=15, n_redundant=5, random_state=42)
+    y = y.reshape(-1,1)
+
+    # Split the data into training and test sets
+    from sklearn.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Convert the data to PyTorch tensors
+    X_train = torch.from_numpy(X_train).float()
+    X_test = torch.from_numpy(X_test).float()
+    y_train = torch.from_numpy(y_train).long()
+    y

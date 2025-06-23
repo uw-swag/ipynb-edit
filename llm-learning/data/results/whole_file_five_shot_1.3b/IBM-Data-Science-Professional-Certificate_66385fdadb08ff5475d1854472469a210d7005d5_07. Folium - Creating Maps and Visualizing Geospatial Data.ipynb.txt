@@ -1,0 +1,16 @@
+```python
+    # Importing necessary libraries
+    import folium
+    from folium.plugins import HeatMap
+
+    # Creating a map
+    m = folium.Map(location=[48.8566, 2.3522], zoom_start=13)
+
+    # Adding heatmap to the map
+    heat_data = [[point[1][0], point[0][0]] for point in [[[48.8566, 2.3522], [48.8566, 2.3522], [48.8566, 2.3522]], [[48.8566, 2.3522], [48.8566, 2.3522], [48.8566, 2.3522]]]
+    HeatMap(heat_data).add_to(m)
+
+    # Saving the map
+    m.save('map.html')
+    ```
+    This code will create a map with a heatmap of the coordinates [48.8566, 2.3522] for the location of the map. The heatmap is created by adding a list of coordinates to the `heat_data` list. The `HeatMap` function is used to create the heatmap, and `add_to` is used to add the heatmap to the map. The map is then saved as 'map.html'.

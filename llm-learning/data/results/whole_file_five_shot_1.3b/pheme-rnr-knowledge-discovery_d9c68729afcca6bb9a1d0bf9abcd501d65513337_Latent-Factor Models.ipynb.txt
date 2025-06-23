@@ -1,0 +1,50 @@
+```
+    # Load dependencies for this Jupyter Notebook
+    import pandas as pd
+    import time
+    import numpy as np
+    from functools import reduce
+    from lib.util import fetch_thread
+
+    import matplotlib.pyplot as plt
+
+    #latent-factor modeling:
+    from sklearn.decomposition import PCA,SparsePCA,KernelPCA
+    from sklearn.manifold import TSNE, Isomap
+
+    # PCA:
+    model=PCA(n_components=2)
+    model.fit(X)
+    Z_PCA=model.transform(X)
+    plt.figure()
+    plt.title("PCA")
+    plt.scatter(Z_PCA[:,0],Z_PCA[:,1],c=y)
+    plt.show()
+
+    # TSNE:
+    model=TSNE(n_components=2)
+    Z_TSNE=model.fit_transform(X)
+    plt.figure()
+    plt.title("TSNE")
+    plt.scatter(Z_TSNE[:,0],Z_TSNE[:,1],c=y)
+    plt.show()
+
+    # Isomap:
+    model=Isomap(n_components=2,n_neighbors=4)
+    Z_Isomap=model.fit_transform(X)
+    plt.figure()
+    plt.title("Isomap")
+    plt.scatter(Z_Isomap[:,0],Z_Isomap[:,1],c=y)
+    plt.show()
+
+    # SparsePCA:
+    model=SparsePCA(n_components=2,normalize_components=True)
+    model.fit(X)
+    Z_PCA=model.transform(X)
+    plt.figure()
+    plt.title("SparsePCA")
+    plt.scatter(Z_PCA[:,0],Z_PCA[:,1],c=y)
+    plt.show()
+
+    # KernelPCA:
+    model=KernelPCA

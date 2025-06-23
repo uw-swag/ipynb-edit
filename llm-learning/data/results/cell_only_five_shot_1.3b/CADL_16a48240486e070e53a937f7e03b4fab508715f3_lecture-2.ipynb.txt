@@ -1,0 +1,40 @@
+
+    ### Instruction:
+    [
+    Commit Message: "typo: prediected_label -> predicted_label"
+    Original Code Cells:
+    '''
+    
+    '''
+    ]
+
+    ### Response:
+    def logit(predicted_label): # this is also available as scipy.special.logit()
+        return np.log(predicted_label/(1-predicted_label))
+    logit(0.5)
+    logit(0.1) 
+    logit(0.01) # closer to zero approaches negative infinity
+    logit(0.99) # closer to one approaches positive infinity
+    def expit(predicted_label): # this is also available as scipy.special.expit()
+        return 1/(1+np.exp(-predicted_label))
+    expit(4.59512)
+    np.unique(titanic['survived'], return_counts=True)
+    np.unique(titanic['sex'], return_counts=True)
+    np.unique(titanic['class'], return_counts=True)
+    gender = pd.get_dummies(titanic['sex'])
+    gender
+    clas = pd.get_dummies(titanic['class'])
+    clas
+    y = titanic.survived
+    X = pd.concat([clas.First, clas.Second, gender.female, titanic.age], axis=1)
+    X = sm.add_constant(X)
+    X
+    model = sm.Logit(y, X, missing='drop') # some rows contain NaN
+    result = model.fit()
+    result.summary()
+    beta = result.params
+    beta
+    linear_out = beta[0] + beta[1]*1 + beta[2]*0 + beta[3]*1 + beta[4]*17
+    linear_out
+    expit(linear_out)
+    linear_out = beta[0] + beta[1]*0 + beta[2]*0 + beta[3]*0 + beta[4]*

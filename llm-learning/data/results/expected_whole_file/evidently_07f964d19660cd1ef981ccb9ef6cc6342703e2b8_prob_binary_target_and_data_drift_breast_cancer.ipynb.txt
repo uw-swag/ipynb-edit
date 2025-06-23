@@ -1,0 +1,113 @@
+<Cell_0>
+import pandas as pd
+import numpy as np
+
+from sklearn import datasets, ensemble, model_selection
+
+from evidently.dashboard import Dashboard
+from evidently.pipeline.column_mapping import ColumnMapping
+from evidently.dashboard.tabs import DataDriftTab, CatTargetDriftTab
+
+from evidently.model_profile import Profile
+from evidently.model_profile.sections import DataDriftProfileSection, CatTargetDriftProfileSection 
+<\Cell_0>
+<Cell_1>
+bcancer = datasets.load_breast_cancer()
+bcancer_frame = pd.DataFrame(bcancer.data, columns = bcancer.feature_names)
+bcancer_frame['target'] = bcancer.target
+
+target = 'target'
+prediction = 'prediction'
+numerical_features = bcancer.feature_names
+categorical_features = []
+features = numerical_features.tolist() + categorical_features
+<\Cell_1>
+<Cell_2>
+train_data, test_data = model_selection.train_test_split(bcancer_frame, random_state=0)
+model = ensemble.RandomForestClassifier(random_state=0)
+model.fit(train_data[features], train_data.target)
+<\Cell_2>
+<Cell_3>
+# make a data frame with predictions for each class
+train_probas = pd.DataFrame(model.predict_proba(train_data[features]))
+train_probas.columns = bcancer.target_names
+test_probas = pd.DataFrame(model.predict_proba(test_data[features]))
+test_probas.columns = bcancer.target_names
+<\Cell_3>
+<Cell_4>
+# get labels for target: [0, 1, 0, 2] -> ['setosa', 'versicolor', 'setosa', 'virginica']
+train_data['target'] = [bcancer.target_names[x] for x in train_data['target']]
+test_data['target'] = [bcancer.target_names[x] for x in test_data['target']]
+<\Cell_4>
+<Cell_5>
+# merge train and test data with predictions
+train_data.reset_index(inplace=True, drop=True)
+test_data.reset_index(inplace=True, drop=True)
+
+merged_train_data = pd.concat([train_data, train_probas], axis=1)
+merged_test_data = pd.concat([test_data, test_probas], axis=1)
+<\Cell_5>
+<Cell_6>
+merged_train_data.head()
+<\Cell_6>
+<Cell_7>
+bcancer_column_mapping = ColumnMapping()
+
+bcancer_column_mapping.target = target
+bcancer_column_mapping.prediction = bcancer.target_names.tolist()
+bcancer_column_mapping.numerical_features = numerical_features
+<\Cell_7>
+<Cell_8>
+bcancer_model_performance_dashboard = Dashboard(tabs=[CatTargetDriftTab(verbose_level=1)])
+bcancer_model_performance_dashboard.calculate(merged_train_data, merged_test_data, 
+                                              column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_8>
+<Cell_9>
+bcancer_model_performance_dashboard = Dashboard(tabs=[CatTargetDriftTab(verbose_level=0)])
+bcancer_model_performance_dashboard.calculate(merged_train_data, merged_test_data, 
+                                              column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_9>
+<Cell_10>
+from evidently.options import QualityMetricsOptions
+
+m_options = QualityMetricsOptions(classification_threshold = 0.8)
+
+bcancer_target_drift_dashboard = Dashboard(tabs=[CatTargetDriftTab(verbose_level=1)], options=[m_options])
+bcancer_target_drift_dashboard.calculate(merged_train_data, merged_test_data, 
+                                         column_mapping=bcancer_column_mapping)
+bcancer_target_drift_dashboard.show()
+<\Cell_10>
+<Cell_11>
+bcancer_model_performance_dashboard = Dashboard(tabs=[DataDriftTab()])
+bcancer_model_performance_dashboard.calculate(merged_train_data, merged_test_data, 
+                                              column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_11>
+<Cell_12>
+bcancer_model_performance_dashboard = Dashboard(tabs=[CatTargetDriftTab(verbose_level=0), DataDriftTab()])
+bcancer_model_performance_dashboard.calculate(merged_train_data, merged_test_data, 
+                                              column_mapping = bcancer_column_mapping)
+bcancer_model_performance_dashboard.show()
+<\Cell_12>
+<Cell_13>
+bcancer_target_drift_profile = Profile(sections=[CatTargetDriftProfileSection()], options=[m_options])
+bcancer_target_drift_profile.calculate(merged_train_data, merged_test_data, column_mapping = bcancer_column_mapping) 
+bcancer_target_drift_profile.json()
+<\Cell_13>
+<Cell_14>
+bcancer_target_drift_profile = Profile(sections=[CatTargetDriftProfileSection()])
+bcancer_target_drift_profile.calculate(merged_train_data, merged_test_data, column_mapping = bcancer_column_mapping) 
+bcancer_target_drift_profile.json()
+<\Cell_14>
+<Cell_15>
+bcancer_target_drift_profile = Profile(sections=[DataDriftProfileSection()])
+bcancer_target_drift_profile.calculate(merged_train_data, merged_test_data, column_mapping = bcancer_column_mapping) 
+bcancer_target_drift_profile.json()
+<\Cell_15>
+<Cell_16>
+bcancer_target_drift_profile = Profile(sections=[CatTargetDriftProfileSection(), DataDriftProfileSection()])
+bcancer_target_drift_profile.calculate(merged_train_data, merged_test_data, column_mapping = bcancer_column_mapping) 
+bcancer_target_drift_profile.json()
+<\Cell_16>

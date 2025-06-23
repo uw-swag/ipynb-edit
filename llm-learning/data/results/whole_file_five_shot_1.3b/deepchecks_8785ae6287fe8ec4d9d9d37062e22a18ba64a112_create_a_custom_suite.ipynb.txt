@@ -1,0 +1,47 @@
+```
+    [
+    Commit Message: "[Automatic] Examples Update (#321)"
+    Original Code Cells:
+    '''
+    <Cell_0>
+# importing all existing checks for demonstration simplicity
+from deepchecks.checks import *
+from deepchecks import Suite
+from sklearn.metrics import precision_score, recall_score
+
+# The Suite's first argument is its name, and then all of the check objects.
+# Some checks can receive arguments when initialized (all check arguments have default values)
+# Each check can have an optional condition(/s)
+# Multiple conditions can be applied subsequentially
+new_custom_suite = Suite('Simple Suite For Model Performance',
+    ModelInfo(),
+#   PerformanceReport(alternative_metrics={'Recall': recall_score, 'Precision': precision_score}),
+    PerformanceReport(),
+    TrainTestDifferenceOverfit(\
+                ).add_condition_degradation_ratio_not_greater_than(threshold=0.15\
+                ).add_condition_difference_not_greater_than(0.3),
+    ConfusionMatrixReport(),
+    SimpleModelComparison(simple_model_type='constant').add_condition_ratio_not_less_than(0.9)
+)
+
+# Let's see the suite:
+new_custom_suite
+<\Cell_0>
+<Cell_1>
+# General imports
+import pandas as pd
+import numpy as np
+np.random.seed(22)
+
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+
+# Load Data
+iris_df = load_iris(return_X_y=False, as_frame=True)['frame']
+label_col = 'target'
+df_train, df_test = train_test_split(iris_df, stratify=iris_df[label_col], random_state=0)
+
+# Train Model
+rf_clf = RandomForestClassifier()
+rf_clf.fit(df_train.drop(label_col, axis=1), df_train[

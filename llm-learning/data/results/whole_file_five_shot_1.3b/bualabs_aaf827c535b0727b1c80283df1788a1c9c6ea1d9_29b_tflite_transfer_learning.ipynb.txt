@@ -1,0 +1,23 @@
+```
+    ## Quantization
+
+    Quantization is the process of reducing the precision of the model weights,
+    thus making the model more memory-efficient and faster to run.
+
+    Quantization can be done using TensorFlow's tf.lite.TFLiteConverter.
+    The converter can be set to use quantization by setting the `experimental_new_converter=True`.
+
+    The `representative_dataset` method can be used to specify a function that generates
+    a dataset of representative inputs for quantization.
+
+    The `target_spec.supported_ops` can be set to specify the operations that the model
+    can support for quantization.
+
+    Finally, the model can be converted to a TFLite model using the `convert` method.
+
+    The TFLite model can then be used for inference in a TensorFlow Lite model interpreter.
+
+    For more information, please refer to the TensorFlow's official guide on how to quantize a model.
+
+    [Link to Quantization Article](https://www.tensorflow.org/guide/quantization)
+    ```

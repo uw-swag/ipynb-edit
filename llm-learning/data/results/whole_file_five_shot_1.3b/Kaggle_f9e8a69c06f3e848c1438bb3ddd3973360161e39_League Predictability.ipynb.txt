@@ -1,0 +1,38 @@
+```
+    import numpy as np
+    import pandas as pd
+    import sqlite3
+
+    conn = sqlite3.connect('/Users/sominwadhwa/database.sqlite')
+    cur = conn.cursor()
+
+    countries = pd.read_sql_query("SELECT id,name from Country",conn)
+    matches = pd.read_sql_query("SELECT * from Match", conn)
+    leagues = pd.read_sql_query("SELECT * from League",conn)
+    teams = pd.read_sql_query("SELECT * from Team",conn)
+
+    major_league_countries = ['England','France','Germany','Italy','Spain']
+    countries = countries[countries.name.isin(major_league_countries)]
+    countries.head()
+
+    leagues = countries.merge(leagues,on='id', suffixes=('','_y'))
+    leagues.head()
+
+    matches = matches[matches.league_id.isin(leagues.id)]
+    matches = matches[['id', 'country_id' ,'league_id', 'season', 'stage', 'date','match_api_id', 'home_team_api_id', 'away_team_api_id','B365H', 'B365D' ,'B365A']]
+    matches.dropna(inplace=True)
+    matches.head()
+
+    from scipy.stats import entropy
+    def match_entropy(match):
+        odds = [match['B365H'], match['B365D'], match['B365A']]
+        probs = [1/o for o in odds]
+        norm = sum(probs)
+        probs = [p/norm for p in probs]
+        return entropy(probs)
+    matches['entropy'] = matches.apply(match_entropy,axis=1)
+
+    entropy_season = matches.groupby(['season','league_id']).entropy.mean()
+    entropy_season.head(10)
+
+    entropy_season = entropy_season.reset_index

@@ -1,0 +1,48 @@
+
+    [
+    Commit Message: "[DEL] Irrelevant files"
+    Original Code Cells:
+    '''
+    <Cell_0>
+from theano.sandbox import cuda
+cuda.use('gpu0')
+<\Cell_0>
+<Cell_1>
+%matplotlib inline
+import utils; reload(utils)
+from utils import *
+from __future__ import division, print_function
+<\Cell_1>
+<Cell_2>
+path = "data/dogscats/"
+model_path = path + 'models/'
+if not os.path.exists(model_path): os.mkdir(model_path)
+
+batch_size=64
+<\Cell_2>
+<Cell_3>
+batches = get_batches(path+'train', shuffle=False, batch_size=batch_size)
+val_batches = get_batches(path+'valid', shuffle=False, batch_size=batch_size)
+<\Cell_3>
+<Cell_4>
+(val_classes, trn_classes, val_labels, trn_labels, 
+    val_filenames, filenames, test_filenames) = get_classes(path)
+<\Cell_4>
+<Cell_5>
+model = Vgg16().model
+conv_layers,fc_layers = split_at(model, Convolution2D)
+<\Cell_5>
+<Cell_6>
+val_features = conv_model.predict_generator(val_batches, val_batches.nb_sample)
+trn_features = conv_model.predict_generator(batches, batches.nb_sample)
+<\Cell_6>
+<Cell_7>
+save_array(model_path + 'train_convlayer_features.bc', trn_features)
+save_array(model_path + 'valid_convlayer_features.bc', val_features)
+<\Cell_7>
+<Cell_8>
+trn = get_data(path+'train')
+val = get_data(path+'valid')
+<\Cell_8>
+<Cell_9>
+save_array

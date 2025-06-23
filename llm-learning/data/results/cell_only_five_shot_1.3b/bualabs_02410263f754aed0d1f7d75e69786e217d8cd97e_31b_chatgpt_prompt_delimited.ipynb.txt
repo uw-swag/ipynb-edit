@@ -1,0 +1,19 @@
+```python
+    # Python code to demonstrate prompt injection
+
+    import os
+
+    # Function to execute command
+    def execute_command(command):
+        os.system(command)
+
+    # Sample command
+    command = "whoami"
+
+    # Prompt injection
+    command += "'"
+
+    # Execute command
+    execute_command(command)
+    ```
+    This code will execute the command "whoami" which will print the username of the current user. The command is then appended with a single quote, which is a common technique used to inject a command into a system.

@@ -1,0 +1,38 @@
+```python
+    # Importing necessary libraries
+    import pandas as pd
+    import numpy as np
+    from sklearn.model_selection import train_test_split
+    from sklearn.linear_model import LogisticRegression
+    from sklearn import metrics
+
+    # Loading the dataset
+    df = pd.read_csv('data.csv')
+
+    # Preprocessing the data
+    # This step depends on the nature of the data and the problem at hand
+    # For example, you might need to handle missing values, normalize or scale data,
+    # convert categorical data to numerical, etc.
+
+    # Splitting the data into features and target variable
+    X = df.drop('target_variable', axis=1)
+    y = df['target_variable']
+
+    # Splitting the data into training and testing sets
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+    # Creating a Logistic Regression model
+    model = LogisticRegression()
+
+    # Training the model
+    model.fit(X_train, y_train)
+
+    # Making predictions
+    y_pred = model.predict(X_test)
+
+    # Evaluating the model
+    print('Accuracy:', metrics.accuracy_score(y_test, y_pred))
+    print('Precision:', metrics.precision_score(y_test, y_pred))
+    print('Recall:', metrics.recall_score(y_test, y_pred))
+
+    ```

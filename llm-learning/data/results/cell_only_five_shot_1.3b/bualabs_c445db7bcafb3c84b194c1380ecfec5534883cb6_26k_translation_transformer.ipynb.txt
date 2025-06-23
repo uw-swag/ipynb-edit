@@ -1,0 +1,40 @@
+```python
+    import tensorflow as tf
+    from tensorflow.keras.models import Sequential
+    from keras.layers import Conv2D, MaxPooling2D, Dropout, Flatten, Dense, Activation, BatchNormalization
+    from tensorflow.keras.preprocessing.image import ImageDataGenerator
+    from sklearn.metrics import classification_report,confusion_matrix
+    from tensorflow import keras
+    from PIL import Image
+    from pathlib import Path
+    import scipy
+    import os
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from torchvision.datasets import ImageFolder
+    import torchvision.transforms as T
+
+    print("Done with library declaration, Current version of Tensorflow is: ", tf.__version__)
+    # collect directory
+    data_dir = Path('Garbage\original_images')
+
+    transformer = T.Compose([T.Resize((32, 32)), T.ToTensor()])
+    dataset = ImageFolder(data_dir, transform = transformer)
+
+    # display class names
+    print(dataset.classes)
+    # display class distribution
+    fig = plt.figure()
+    ax = fig.add_axes([0,0,1,1])
+    counts = [393,491,400,584,472,127]
+    ax.bar(dataset.classes,counts)
+    plt.title('Class Distribution')
+    plt.show()
+    PATH_TEST = r"Garbage\original_images"
+    PATH_TRAIN = r"Garbage\processed_images"
+    class_names = ['cardboard', 'glass', 'metal','paper','plastic','trash']
+    imagepath_cardboard = r"Garbage\original_images\cardboard"
+    graypath_cardboard = r"Garbage\processed_images\cardboard"
+    File_listing = os.listdir(imagepath_cardboard)
+    for file in File_listing:
+        im = Image.open(imagepath_cardboard + '\\

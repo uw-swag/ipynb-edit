@@ -1,0 +1,37 @@
+
+    [
+    Commit Message: "AutoML and Base Models Complete"
+    Original Code Cells:
+    '''
+    <Cell_0>
+    import numpy as np
+    import pandas as pd
+    from pycaret.classification import *
+    !mlflow ui
+
+    pd.set_option('display.float_format', lambda x: '%.5f' % x)
+    pd.set_option("display.max_columns", 200)
+    pd.set_option("display.max_rows", 200)
+<\Cell_0>
+<Cell_1>
+train = pd.read_csv(f"{filepath_prefix}train.csv", nrows=train_records_to_load,
+                    true_values=["True"], false_values=["False"], dtype=datatypes)
+test = pd.read_csv(f"{filepath_prefix}test.csv", nrows=test_records_to_load,
+                   true_values=["True"], false_values=["False"], dtype=datatypes)
+<\Cell_1>
+<Cell_2>
+X_train = train.drop(columns=['review_id', 'target_clf', 'target_reg'])
+X_test = test.drop(columns=['review_id', 'target_clf', 'target_reg'])
+y_train = train['target_clf']
+y_test = test['target_clf']
+<\Cell_2>
+<Cell_3>
+pycaret_clf = setup(experiment_name="PyCaret_Clf_10K",
+                    data=train.drop(columns=['review_id', 'target_reg']),
+                    test_data=test.drop(columns=['review_id', 'target_reg']),
+                    target='target_clf',
+                    silent=True, preprocess=True, fold=5,
+                    n_jobs=-1, log_experiment=True, session_id=7,
+                    normalize=False,
+                    transformation=False,
+                    pca=False, pca_components=10,

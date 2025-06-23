@@ -1,0 +1,22 @@
+```python
+    # Import necessary libraries
+    import os
+    import shutil
+
+    # Define the source and destination directories
+    source_dir = 'C:\\Py37\\py37\\visualizer'
+    dest_dir = 'C:\\Py37\\py37\\notebooks'
+
+    # Get a list of all files in the source directory
+    files = os.listdir(source_dir)
+
+    # Create the destination directory if it doesn't exist
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+
+    # Move each file from the source directory to the destination directory
+    for file in files:
+        shutil.move(os.path.join(source_dir, file), dest_dir)
+    ```
+
+    This script will move all the files from the source directory to the destination directory. Please ensure to replace the source and destination directories with your actual paths.
